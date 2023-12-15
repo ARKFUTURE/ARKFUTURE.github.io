@@ -279,3 +279,10 @@
        sendpass="mypassword"
        recvpass="mypassword">
 <uline server="" silent="yes">
+<module name="hideoper">
+<module name="hostcycle">
+<module name="nickflood">
+<nickflood duration="60s">
+<module name="operchans">
+<module name="operlog">
+
