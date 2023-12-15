@@ -267,7 +267,7 @@
 <cban glob="yes">
 <module name="sasl">
 <sasl requiressl="no"
-      target="">
+      target="localhost">
 # 连接于第三方服务,如ANOPE
 <module name="hidechans">
 <module name="services_account">
