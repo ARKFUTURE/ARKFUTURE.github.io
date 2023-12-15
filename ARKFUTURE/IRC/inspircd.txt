@@ -13,10 +13,10 @@
 #-#-#-#-#-#-#-#-#-#-#-#-服务器描述-#-#-#-#-#-#-#-#-#-#-#-#-#
 #<server>标签定义了本地服务器的设置.此标记只能定义一次.
 # network 的值应该在忘了上所有的服务器上都应该相同
-<server name="irc.arkfuture.cn"
-       description="ARKFUTUREirc"
-       network="ARKFUTURE"
-       id="1AF">
+<server name=""
+        description="ARKFUTUREirc"
+        network="ARKFUTURE"
+        id="1AF">
  # ARKFUTURE irc id从1AF开始，依次往后推到9AF;0AF作为特别id
 
 #-#-#-#-#-#-#-#-#-#-#-#-管理员信息-#-#-#-#-#-#-#-#-#-#-#-#-#
@@ -29,22 +29,22 @@
 #<bind>标签定义了一个监听连接的端点.这个标签可以根据需要定义多次.
 # 这里我们监听 6667-6669
 <bind address=""
-       port="6667-6669"
-       type="clients"
-       free="yes">
+      port="6667-6669"
+      type="clients"
+      free="yes">
 
 #-#-#-#-#-#-#-#-#-#-#-#-连接配置-#-#-#-#-#-#-#-#-#-#-#-#-#
 #<connect>标签定义了一个类，当用户连接到服务器时，可以将用户过滤到这个类中.此标记可以根据需要定义多次.
 <connect allow="*"
-       timeout="60"
-       threshold="20"
-       pingfreq="120"
-       hardsendq="262144"
-       softsendq="8192"
-       recvq="8192"
-       localmax="3"
-       globalmax="3"
-       fakelag="yes">
+         timeout="60"
+         threshold="20"
+         pingfreq="120"
+         hardsendq="262144"
+         softsendq="8192"
+         recvq="8192"
+         localmax="3"
+         globalmax="3"
+         fakelag="yes">
 
 #-#-#-#-#-#-#-#-#-#-#-#-操作员配置-#-#-#-#-#-#-#-#-#-#-#-#-#
 #<class>标签定义了一组服务器操作员特权.此标记可以根据需要定义多次
@@ -74,17 +74,17 @@
 #<oper>标签定义了一个服务器操作员帐户.此标记可以根据需要定义多次.
 # 这里必要的话请限制登录主机 "host" 字段
 <oper name="arkfuturenetadmin"
-       password="P03iZjRtmpqXPv3"
-       host="*@*"
-       type="NetAdmin">
+      password="P03iZjRtmpqXPv3"
+      host="*@*"
+      type="NetAdmin">
 <oper name="arkfutureglobalop"
-       password="P03iZjRtmpqXPv3"
-       host="*@*"
-       type="GlobalOp">
+      password="P03iZjRtmpqXPv3"
+      host="*@*"
+      type="GlobalOp">
 <oper name="arkfuturehelper"
-       password="P03iZjRtmpqXPv3"
-       host="*@*"
-       type="Helper">
+      password="P03iZjRtmpqXPv3"
+      host="*@*"
+      type="Helper">
 
 #-#-#-#-#-#-#-#-#-#-杂项配置-#-#-#-#-#-#-#-#-#-#
 #<files>标签读取一个或多个文件.此标记只能定义一次.这些文件的用途取决于它们在哪个字段中定义.请注意，文件只在缓存器上读取，因此不会自动检测更改.
@@ -94,8 +94,8 @@
 
 #<dns>标签定义了在查找主机名时要使用的DNS服务器.此标记只能定义一次.
 <dns enabled="yes"
-       server="8.8.8.8"
-       timeout="5s">
+     server="8.8.8.8"
+     timeout="5s">
 
 #<pid>标签定义了pid文件的位置.此标记只能定义一次.
 <pid file="/var/run/inspircd/inspircd.pid">
@@ -105,43 +105,43 @@
 
 ## 最用户及最大操作员
 <channels users=""
-       opers="">
+          opers="">
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-服务器选项-#-#-#-#-#-#-#-#-#-#-#-#-#
 #<options>标签定义了常规配置选项.此标记只能定义一次.
 <options prefixquit="Quit: "
-       syntaxhints="no"
-       announcets="yes"
-       hostintopic="yes"
-       pingwarning="15"
-       splitwhois="splitmsg"
-       exemptchanops=""
-       xlinemessage="您被禁止，请联系管理员获取帮助"
-       nosnoticestack="yes">
+         syntaxhints="no"
+         announcets="yes"
+         hostintopic="yes"
+         pingwarning="15"
+         splitwhois="splitmsg"
+         exemptchanops=""
+         xlinemessage="您被禁止，请联系管理员获取帮助"
+         nosnoticestack="yes">
 
 #-#-#-#-#-#-#-#-#-#-#-#安全配置#-#-#-#-#-#-#-#-#-#-#-#
 #<security>标签定义了与服务器安全相关的配置选项.此标记只能定义一次.
 <security hideserver=""
-       userstats="Pu"
-       customversion=""
-       flatlinks="no"
-       hidesplits="no"
-       hideulines="no"
-       hidebans="no"
-       maxtargets="20">
+          userstats="Pu"
+          customversion=""
+          flatlinks="no"
+          hidesplits="no"
+          hideulines="no"
+          hidebans="no"
+          maxtargets="20">
 
 #-#-#-#-#-#-#-#-#-#-#-#性能配置#-#-#-#-#-#-#-#-#-#-#
 #<performance>标签定义了与服务器性能相关的配置选项.此标记只能定义一次.
 <performance quietbursts="yes"
-       softlimit="15000"
-       somaxconn="128"
-       netbuffersize="10240">
+             softlimit="15000"
+             somaxconn="128"
+             netbuffersize="10240">
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-WHOWAS选项-#-#-#-#-#-#-#-#-#-#-#-#-#
 #<whowas>标签定义了/WHOWAS数据库的配置.此标记只能定义一次.
 <whowas groupsize="10"
-       maxgroups="10240"
-       maxkeep="3d">
+        maxgroups="10240"
+        maxkeep="3d">
 
 #<badnick>标签定义了永久Q线.此标记可以根据需要定义多次.
 <badnick nick="ChanServ" reason="Reserved For Services">
@@ -153,15 +153,15 @@
 #-#-#-#-#-#-#-#-#-#-#-#-#限制配置#-#-#-#-#-#-#-#-#-#-#-#
  
 <limits maxaway="200"
-       maxchan="60"
-       maxhost="70"
-       maxident="10"
-       maxkick="300"
-       maxmodes="20"
-       maxnick="30"
-       maxquit="300"
-       maxreal="130"
-       maxtopic="330">
+        maxchan="60"
+        maxhost="70"
+        maxident="10"
+        maxkick="300"
+        maxmodes="20"
+        maxnick="30"
+        maxquit="300"
+        maxreal="130"
+        maxtopic="330">
 
 # 具体解释
 #maxaway:away消息的最大长度
@@ -267,15 +267,15 @@
 <cban glob="yes">
 <module name="sasl">
 <sasl requiressl="no"
-      target="irc.arkfuture.cn">
+      target="">
 # 连接于第三方服务,如ANOPE
 <module name="hidechans">
 <module name="services_account">
 <module name="spanningtree">
-<bind address="127.0.0.1" port="7000" type="servers">
-<link name="irc.arkfuture.cn"
-       ipaddr="127.0.0.1"
+<bind address="" port="7000" type="servers">
+<link name=""
+       ipaddr=""
        port="7000"
        sendpass="mypassword"
        recvpass="mypassword">
-<uline server="irc.arkfuture.cn" silent="yes">
+<uline server="" silent="yes">
