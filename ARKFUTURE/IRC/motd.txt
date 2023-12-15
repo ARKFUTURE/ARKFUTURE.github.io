@@ -1,1 +1,5 @@
-1
+Welcome to ARKFUTURE irc
+欢迎进入ARKFUTURE irc(互联网中继聊天)服务
+
+Help /RULES
+查看规则 使用 /RULES 命令
