@@ -11,6 +11,7 @@ USE UTF-8
 
 Welcome to ARKFUTURE irc
 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
+端口6667-6669(一个端口连接不上请连接其他端口)
 
 IRC 完全匿名，可以挂代理使用
 建议使用者 使用 "代理连接" 或 "隐藏主机(/mode username +x)" 名来达到完全隐藏的目的
