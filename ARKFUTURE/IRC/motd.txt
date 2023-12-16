@@ -13,7 +13,7 @@ Welcome to ARKFUTURE irc
 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
 
 IRC 完全匿名，可以挂代理使用
-建议使用者 使用 "代理连接" 或 "隐藏主机" 名来达到完全隐藏的目的
+建议使用者 使用 "代理连接" 或 "隐藏主机(/mode username +x)" 名来达到完全隐藏的目的
 此IRC服务作为ARKFUTURE下属服务
 
 
