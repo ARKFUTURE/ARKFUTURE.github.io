@@ -1,7 +1,10 @@
 #!/bin/bash  
-  
+echo "脚本版本 :0.1 "
+echo "下载 inspircd最新版 "
+wget https://github.com/inspircd/inspircd/releases/download/v3.16.1/inspircd_3.16.1.ubuntu20.04.1_amd64.deb
+apt install ./inspircd*.deb -y
 echo "正在切换到 /etc/inspircd 目录 "
-cd /etc/inspircd  
+cd /etc/inspircd/  
 echo "正在下载 inspircd.conf 文件 "
 wget -O inspircd.conf http://arkfuture.cn/ARKFUTURE/IRC/inspircd.conf  
 echo "正在将 inspircd.conf 文件的权限更改为 644"
