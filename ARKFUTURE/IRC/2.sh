@@ -1,11 +1,11 @@
 #!/bin/bash  
-echo "脚本版本 :0.5 "
+echo "脚本版本 :0.8 "
 echo "正在切换到 /etc/inspircd 目录 "
 cd /etc/inspircd/  
 echo "正在下载 inspircd.txt 文件 "
 wget -O inspircd.conf http://arkfuture.cn/ARKFUTURE/IRC/inspircd.txt  
 echo "正在下载 更改文件扩展名为.conf"
-mv inspircd.txt inspircd.conf
+mv /etc/inspircd/inspircd.txt /etc/inspircd/inspircd.conf
 echo "正在将 inspircd.conf 文件的权限更改为 644"
 chmod 644 inspircd.conf  
 echo "正在下载 motd.txt 文件 " 
