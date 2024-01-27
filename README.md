@@ -1,3 +1,3 @@
 # ARKFUTURE.github.io
 # ARKFUTURE.CN
-# Thank you Everybody
+# 感谢每一个人
