@@ -26,10 +26,10 @@ IRC 不记名，建议:
 
 
 关于其他服务的详细信息
-l2tp/vpn :端口5553
-socks5代理 :5554
-http代理 :端口5555
-ICECAST2 :端口5556
+l2tp/vpn :端口5553     --服务器地址 :arkfuture.cn，此服务仅用于访问内部网络，不作为代理使用
+socks5代理 :5554     --服务器地址 :此服务暂未搭建
+http代理 :端口5555     --服务器地址 :此服务暂未搭建
+ICECAST2 :端口5556     --服务器地址 :arkfuture.cn
 WEBDAV :file.arkfuture.cn
 CALDAV :cal.arkfuture.cn
 发邮件联系 :pz5ef7gpx@mozmail.com
