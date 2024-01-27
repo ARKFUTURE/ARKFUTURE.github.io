@@ -11,7 +11,6 @@ ARKFUTURE 服务
 
 Welcome to ARKFUTURE irc
 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
-端口6667-6669(一个端口连接不上请连接其他端口)
 
 IRC 不记名，建议:
 请使用 "代理" 连接
@@ -24,4 +23,14 @@ IRC 不记名，建议:
 输入 /RULES 查看此irc规则
 输入 /HELP <命令名> 或者 /HELP -l 以获取更多信息
 命令大全 引用网址:https://www.gxlsystem.com/hulianwang-1160257.html
+
+
+关于其他服务的详细信息
+l2tp/vpn :端口5553
+socks5代理 :5554
+http代理 :端口5555
+ICECAST2 :端口5556
+WEBDAV :file.arkfuture.cn
+CALDAV :cal.arkfuture.cn
+发邮件联系 :pz5ef7gpx@mozmail.com
 #####################################################
