@@ -94,7 +94,7 @@ while True:
                 print("PRIVMSG " + user1 + " " + "https://neko-warp.nloli.xyz/"  + "\r\n", file=handle)
             if message == "V2":  
                 print("PRIVMSG " + user1 + " " + "待添加"  + "\r\n", file=handle)
-            if message == "1-3":  
+            if message == "KHD":  
                 print("PRIVMSG " + user1 + " " + "https://github.com/getsurfboard/surfboard/"  + "\r\n", file=handle)
 
 
