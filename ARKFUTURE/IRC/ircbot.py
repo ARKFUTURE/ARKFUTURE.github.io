@@ -45,7 +45,7 @@ if password != None:
 while True: 
     for line in handle:  
         line = line.strip('\n\r')   # 去除接收消息的行尾换行符
-        #print(line)
+        print(line)
         
 
 
@@ -55,6 +55,7 @@ while True:
             print("PONG :" + line.split(':')[1], file=handle)
             print('MODE AFLBOT +B', file=handle)
             print('MODE AFLBOT +x', file=handle)
+            print('MODE AFLBOT +I', file=handle)
             print('JOIN ' + channel, file=handle)
 
             
