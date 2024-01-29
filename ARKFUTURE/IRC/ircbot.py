@@ -6,7 +6,7 @@ import re
 
   
 # IRC服务器地址  
-server = '192.168.0.12'  
+server = '172.20.67.181'  
 # 聊天频道  
 channel = '#arkfuture'  
 # 用户昵称  
@@ -28,7 +28,7 @@ global message
 # 连接
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 创建一个socket对象 
 ircsock.connect((server, port))  # 连接到指定的IRC服务器和端口  
-handle = ircsock.makefile(mode='rw', buffering=1, encoding='utf-8', newline='\r\n')  # 创建一个文件对象，用于读写socket连接
+handle = ircsock.makefile(mode='rw', buffering=1, encoding='utf-8', errors='ignore', newline='\r\n')  # 创建一个文件对象，用于读写socket连接
 
 
 
@@ -53,11 +53,11 @@ while True:
         ## 您必须先用PONG响应PING，然后才能实际执行任何操作
         if "PING" in line:
             print("PONG :" + line.split(':')[1], file=handle)
-        ## 加入频道
+            print('MODE AFLBOT +B', file=handle)
+            print('MODE AFLBOT +x', file=handle)
             print('JOIN ' + channel, file=handle)
-            print('MODE AFLBOT +b' , file=handle)
-            print("PRIVMSG " + channel + " " + "发送 'list' 获取功能列表，之后发送对应的的 数字 执行" + "\r\n", file=handle)
 
+            
 
 
         # 频道消息处理
@@ -70,13 +70,9 @@ while True:
             chchannel = cm.group(4)
             message = cm.group(5)  
             print("用户:" + user + "\n\r" + "客户端:" + cl + "\n\r" + "主机名:" + hosts + "\n\r" + "频道:" + chchannel + "\n\r" + "消息:" + message + "\n\r" )
-            # 自动回复
-            if message == "list":
-                print("PRIVMSG " + channel + " " + "1.测试" + "\r\n", file=handle)
-            if message == "1":
-                print("PRIVMSG " + channel + " " + "测试" + "\r\n", file=handle)
-                
-
+            # 自动回复###################################
+            if message != "":
+                print("PRIVMSG " + channel + " " + "你好，请私聊我" + "\r\n", file=handle)
 
 
 
@@ -90,14 +86,19 @@ while True:
             user2 = sm.group(4)
             message = sm.group(5)  
             print("私聊用户:" + user1 + "\n\r" + "客户端:" + cl + "\n\r" + "主机名:" + hosts + "\n\r" + "被私聊用户:" + user2 + "\n\r" + "消息:" + message + "\n\r" )
-            # 自动回复
+            # 自动回复###################################
+            if message != "":
+                print("PRIVMSG " + user1 + " " + "发送 'list' 获取详细列表，之后发送对应 [] 中的命令执行，如[1-]，您只需要发送 1- 即可" + "\r\n", file=handle)
             if message == "list":
-                print("PRIVMSG " + user1 + " " + "1.测试" + "\r\n", file=handle)
-            if message == "1":
-                print("PRIVMSG " + user1 + " " + "测试" + "\r\n", file=handle)
-            
-
-
+                print("PRIVMSG " + user1 + " " + "[1-].获取代理连接 [2-].空" + "\r\n", file=handle)
+            if message == "1-":
+                print("PRIVMSG " + user1 + " " + "[1-1].获取CLASH代理连接 [1-2].获取V2代理连接 [1-3].获取代理客户端"  + "\r\n", file=handle)
+            if message == "1-1":  
+                print("PRIVMSG " + user1 + " " + "https://neko-warp.nloli.xyz/"  + "\r\n", file=handle)
+            if message == "1-2":  
+                print("PRIVMSG " + user1 + " " + "待添加"  + "\r\n", file=handle)
+            if message == "1-3":  
+                print("PRIVMSG " + user1 + " " + "https://github.com/getsurfboard/surfboard/"  + "\r\n", file=handle)
 
 
     else:  # 如果handle没有新的行，等待一段时间后再次检查  
