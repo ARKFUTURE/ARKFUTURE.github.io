@@ -6,7 +6,7 @@ import re
 
   
 # IRC服务器地址  
-server = ''  
+server = '192.168.0.12'  
 # 聊天频道  
 channel = '#arkfuture'  
 # 用户昵称  
