@@ -26,10 +26,11 @@ IRC 不记名，建议:
 
 
 关于其他服务的详细信息
-l2tp/vpn :端口5553
-socks5代理 :5554
-http代理 :端口5555
-ICECAST2 :端口5556
+l2tp/vpn :端口5553 ——关于此服务，此服务并没有上线
+socks5代理 :5554 ——关于此服务，此服务并没有上线，您可私聊afebot机器人获取免费的代理分享连接
+http代理 :端口5555 ——关于此服务，此服务并没有上线，您可私聊afebot机器人获取免费的代理分享连接
+ICECAST2 :端口5556 ——关于此服务，此服务即将上线，敬请期待
+
 WEBDAV :file.arkfuture.cn
 CALDAV :cal.arkfuture.cn
 发邮件联系 :pz5ef7gpx@mozmail.com
