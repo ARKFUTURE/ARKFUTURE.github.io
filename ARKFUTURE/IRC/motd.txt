@@ -36,7 +36,7 @@ CALDAV :cal.arkfuture.cn
 
 以上服务的详细信息只作为标注作用，服务不一定上线
 
-您可IRC中输入/MSG AFEBOT clash获取免费的Clash代理分享连接
-您可在IRC中输入/MSG AFEBOT V2获取免费的代理分享连接
-您可在IRC中输入/MSG AFEBOT KHD获取开源的代理客户端
+您可在IRC中私聊 AFLBOT 后发送 clash 获取免费的Clash代理分享连接
+您可在IRC中私聊 AFLBOT 后发送 V2 获取免费的代理分享连接
+您可在IRC中私聊 AFLBOT 后发送 KHD 获取开源的代理客户端
 #####################################################
