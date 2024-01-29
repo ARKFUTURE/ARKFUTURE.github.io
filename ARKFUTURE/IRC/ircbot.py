@@ -55,6 +55,7 @@ while True:
             print("PONG :" + line.split(':')[1], file=handle)
         ## 加入频道
             print('JOIN ' + channel, file=handle)
+            print('MODE AFLBOT +b' , file=handle)
             print("PRIVMSG " + channel + " " + "发送 'list' 获取功能列表，之后发送对应的的 数字 执行" + "\r\n", file=handle)
 
 
