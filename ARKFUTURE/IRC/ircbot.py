@@ -60,7 +60,7 @@ while True:
 
 
 
-
+        # 频道消息处理
         if "PRIVMSG" in line and channel in line:    
             cm = re.search(r'(\w+)!(\w+)@(\d+\.\d+\.\d+\.\d+) PRIVMSG #(\w+) :(.*)', line)
             # 分割 
