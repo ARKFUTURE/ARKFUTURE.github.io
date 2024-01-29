@@ -89,14 +89,10 @@ while True:
             print("私聊用户:" + user1 + "\n\r" + "客户端:" + cl + "\n\r" + "主机名:" + hosts + "\n\r" + "被私聊用户:" + user2 + "\n\r" + "消息:" + message + "\n\r" )
             # 自动回复###################################
             if message != "":
-                print("PRIVMSG " + user1 + " " + "发送 'list' 获取详细列表，之后发送对应 [] 中的命令执行，如[1-]，您只需要发送 1- 即可" + "\r\n", file=handle)
-            if message == "list":
-                print("PRIVMSG " + user1 + " " + "[1-].获取代理连接 [2-].空" + "\r\n", file=handle)
-            if message == "1-":
-                print("PRIVMSG " + user1 + " " + "[1-1].获取CLASH代理连接 [1-2].获取V2代理连接 [1-3].获取代理客户端"  + "\r\n", file=handle)
-            if message == "1-1":  
+                print("PRIVMSG " + user1 + " " + "发送 'list' 获取详细列表" + "\r\n", file=handle)
+            if message == "clash":  
                 print("PRIVMSG " + user1 + " " + "https://neko-warp.nloli.xyz/"  + "\r\n", file=handle)
-            if message == "1-2":  
+            if message == "V2":  
                 print("PRIVMSG " + user1 + " " + "待添加"  + "\r\n", file=handle)
             if message == "1-3":  
                 print("PRIVMSG " + user1 + " " + "https://github.com/getsurfboard/surfboard/"  + "\r\n", file=handle)
