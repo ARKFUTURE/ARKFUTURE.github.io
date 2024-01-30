@@ -89,8 +89,6 @@ while True:
             print("私聊用户:" + user1 + "\n\r" + "客户端:" + cl + "\n\r" + "主机名:" + hosts + "\n\r" + "被私聊用户:" + user2 + "\n\r" + "消息:" + message + "\n\r" )
             # 自动回复###################################
             if message != "":
-                print("PRIVMSG " + user1 + " " + "发送 'list' 获取详细列表" + "\r\n", file=handle)
-            if message != "list":
                 print("PRIVMSG " + user1 + " " + "11.Clash代理连接 12.V2ray代理连接 13.代理客户端 [请回复数字]" + "\r\n", file=handle)               
             if message == "11":  
                 print("PRIVMSG " + user1 + " " + "Clash代理连接 :https://neko-warp.nloli.xyz/"  + "\r\n", file=handle)
