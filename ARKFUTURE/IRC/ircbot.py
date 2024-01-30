@@ -91,12 +91,12 @@ while True:
             if message != "":
                 print("PRIVMSG " + user1 + " " + "发送 'list' 获取详细列表" + "\r\n", file=handle)
             if message != "list":
-                print("PRIVMSG " + user1 + " " + "1.Clash代理连接 2.V2ray代理连接 3.代理客户端 [请回复数字]" + "\r\n", file=handle)               
-            if message == "1":  
+                print("PRIVMSG " + user1 + " " + "11.Clash代理连接 12.V2ray代理连接 13.代理客户端 [请回复数字]" + "\r\n", file=handle)               
+            if message == "11":  
                 print("PRIVMSG " + user1 + " " + "Clash代理连接 :https://neko-warp.nloli.xyz/"  + "\r\n", file=handle)
-            if message == "2":  
+            if message == "12":  
                 print("PRIVMSG " + user1 + " " + "V2ray代理连接 :"  + "\r\n", file=handle)
-            if message == "3":  
+            if message == "13":  
                 print("PRIVMSG " + user1 + " " + "代理客户端下载 :https://github.com/getsurfboard/surfboard/"  + "\r\n", file=handle)
 
 
