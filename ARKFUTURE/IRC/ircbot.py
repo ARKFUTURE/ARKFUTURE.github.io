@@ -6,7 +6,7 @@ import re
 
   
 # IRC服务器地址  
-server = '172.20.67.181'  
+server = '192.168.0.13'  
 # 聊天频道  
 channel = '#arkfuture'  
 # 用户昵称  
@@ -90,12 +90,14 @@ while True:
             # 自动回复###################################
             if message != "":
                 print("PRIVMSG " + user1 + " " + "发送 'list' 获取详细列表" + "\r\n", file=handle)
-            if message == "clash":  
-                print("PRIVMSG " + user1 + " " + "https://neko-warp.nloli.xyz/"  + "\r\n", file=handle)
-            if message == "V2":  
-                print("PRIVMSG " + user1 + " " + "待添加"  + "\r\n", file=handle)
-            if message == "KHD":  
-                print("PRIVMSG " + user1 + " " + "https://github.com/getsurfboard/surfboard/"  + "\r\n", file=handle)
+            if message != "list":
+                print("PRIVMSG " + user1 + " " + "1.Clash代理连接 2.V2ray代理连接 3.代理客户端 [请回复数字]" + "\r\n", file=handle)               
+            if message == "1":  
+                print("PRIVMSG " + user1 + " " + "Clash代理连接 :https://neko-warp.nloli.xyz/"  + "\r\n", file=handle)
+            if message == "2":  
+                print("PRIVMSG " + user1 + " " + "V2ray代理连接 :"  + "\r\n", file=handle)
+            if message == "3":  
+                print("PRIVMSG " + user1 + " " + "代理客户端下载 :https://github.com/getsurfboard/surfboard/"  + "\r\n", file=handle)
 
 
     else:  # 如果handle没有新的行，等待一段时间后再次检查  
