@@ -12,6 +12,8 @@ ARKFUTURE 服务
 Welcome to ARKFUTURE irc
 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
 
+您有建议或意见，发送邮件到ARKFUTURE@FOXMAIL.COM(团队运营)
+
 IRC 不记名，建议:
 请使用 "代理" 连接
 隐藏主机名,命令 "/mode 您的用户名 +x"
