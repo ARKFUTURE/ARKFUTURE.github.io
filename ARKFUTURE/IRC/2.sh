@@ -2,6 +2,8 @@
 echo "脚本版本 :1.0 "
 echo "正在切换到 /etc/inspircd 目录 "
 cd /etc/inspircd/  
+echo "删除 /etc/inspircd 下的文件 "
+rm -rf /etc/inspircd/*
 echo "正在下载 inspircd.txt 文件 "
 wget -N -O inspircd.conf http://arkfuture.cn/ARKFUTURE/IRC/inspircd.conf  
 echo "正在将 inspircd.conf 文件的权限更改为 644"
