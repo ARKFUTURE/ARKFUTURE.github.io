@@ -14,6 +14,9 @@ Welcome to ARKFUTURE irc
 
 您有建议或意见，发送邮件到ARKFUTURE@FOXMAIL.COM(团队运营)
 
+应急联系人
+@arkfuture(区分大小写)
+
 IRC 不记名，建议:
 请使用 "代理" 连接
 隐藏主机名,命令 "/mode 您的用户名 +x"
@@ -34,7 +37,6 @@ http代理 :端口5555
 ICECAST2 :端口5556
 WEBDAV :file.arkfuture.cn
 CALDAV :cal.arkfuture.cn
-发邮件联系 :pz5ef7gpx@mozmail.com
 
 以上服务的详细信息只作为标注作用，服务不一定上线
 
