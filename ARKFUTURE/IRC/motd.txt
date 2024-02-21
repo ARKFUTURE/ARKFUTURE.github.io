@@ -15,7 +15,7 @@ IRC 不记名，匿名建议:
 3.使用"OTR" 技术(部分程序会有)
 
 加入我们/联系我们
- [IRC](irc://irc.arkfuture.cn:6667/#arkfuture)
+ [IRC](irc://irc.arkfuture.cn:6667/#arkfuture_studio)
  [Telegram](https://t.me/arkfuture_studio)
  [Matrix](https://matrix.to/#/#arkfuture:matrix.org)
  [Matrix](https://matrix.to/#/#arkfuture_studio:matrix.org)
@@ -33,4 +33,4 @@ IRC 不记名，匿名建议:
 @AFEBOT(bot机器人,用于自动回复/代理分发/资源分发)
 
 #arkfuture [需要手动加入的中转频道，您可以通过这里中转到其他推荐频道或添加好友]
-
+#arkfuture_studio [工作室内部群]
