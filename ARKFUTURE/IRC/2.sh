@@ -1,7 +1,7 @@
 #!/bin/bash  
 echo "脚本版本 :2.0 "
 service inspircd stop
-systemctl stop inspircd
+#systemctl stop inspircd
 sleep 15s
 echo "关闭INSPIRCD服务完成 "
 echo "正在切换到 /etc/inspircd 目录 "
