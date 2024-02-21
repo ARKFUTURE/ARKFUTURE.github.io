@@ -29,4 +29,4 @@ wget -N  rules.txt http://arkfuture.cn/ARKFUTURE/IRC/rules.txt
 echo "正在将 rules.txt 文件的权限更改为 644 " 
 chmod 644 rules.txt
 clear
-head -n 1 /etc/inspircd/inspircd.conf
+head -n 1 inspircd.conf
