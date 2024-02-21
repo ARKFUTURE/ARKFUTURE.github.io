@@ -1,5 +1,5 @@
 #!/bin/bash  
-echo "脚本版本 :3 "
+echo "脚本版本 :4 "
 service inspircd stop
 #systemctl stop inspircd
 sleep 15s
@@ -28,5 +28,9 @@ echo "下载 rules.txt 文件  "
 wget -N  rules.txt http://arkfuture.cn/ARKFUTURE/IRC/rules.txt  
 echo "正在将 rules.txt 文件的权限更改为 644 " 
 chmod 644 rules.txt
+echo "下载 helpop.conf 文件  "
+wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/helpop.conf  
+echo "正在将 helpop.conf 文件的权限更改为 644 " 
+chmod 644 helpop.conf
 clear
 head -n 1 inspircd.conf
