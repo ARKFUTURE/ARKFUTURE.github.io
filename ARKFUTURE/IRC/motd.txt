@@ -15,7 +15,7 @@ IRC 不记名，匿名建议:
 3.使用"OTR" 技术(部分程序会有)
 
 加入我们/联系我们
- [IRC](irc://irc.arkfuture.cn:6667/#arkfuture_studio)
+ * [IRC](irc://irc.arkfuture.cn:6667/#arkfuture_studio)
  [Telegram](https://t.me/arkfuture_studio)
  [Matrix](https://matrix.to/#/#arkfuture:matrix.org)
  [Matrix](https://matrix.to/#/#arkfuture_studio:matrix.org)
@@ -25,7 +25,7 @@ IRC 不记名，匿名建议:
 !! 您可以创建自己的频道，没有任何限制 !!
 
 输入 /RULES 查看此irc规则
-输入 /HELP <命令名> 或者 /HELP -l 以获取更多信息
+输入 /HELP  以获取更多IRC帮助信息
 命令大全 引用网址:https://www.gxlsystem.com/hulianwang-1160257.html
 
 ####################频道列表##########################
