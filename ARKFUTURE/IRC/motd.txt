@@ -1,4 +1,4 @@
-#motd<18> -- UTF-8 
+#motd<19> -- UTF-8 
 
 \b Welcome to ARKFUTURE irc
 \c12 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
@@ -23,9 +23,9 @@
 \c06 命令大全 引用网址:https://www.gxlsystem.com/hulianwang-1160257.html
 
 \b 频道列表
-\c10 @arkfuture(应急联系人)
-\c10 @AFEBOT(bot机器人,用于自动回复/代理分发/资源分发)
-\c10 #arkfuture [需要手动加入的中转频道，您可以通过这里中转到其他推荐频道或添加好友]
-\c10 #arkfuture_studio [工作室内部群]
+\c73 @arkfuture(应急联系人)
+\c73 @AFEBOT(bot机器人,用于自动回复/代理分发/资源分发)
+\c73 #arkfuture [需要手动加入的中转频道，您可以通过这里中转到其他推荐频道或添加好友]
+\c73 #arkfuture_studio [工作室内部群]
 
-\b\i\x\r\u\c07,10 感谢所有人
+\b\i\x\r\u\c10 感谢所有人
