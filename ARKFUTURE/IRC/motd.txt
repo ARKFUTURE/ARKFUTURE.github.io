@@ -5,15 +5,15 @@
 \c84 有关IRC的详细信息请参考/MOTD或https://arkfuture.cn/#IRC
 
 \b IRC 不记名，匿名建议:
-\c07 1.使用 "代理" 连接
-\c07 2.隐藏主机名,命令 "/mode 您的用户名 +x"
-\c07 3.使用"OTR" 技术(部分程序会有)
+\c07 1.使用 "\c52代理\c07" 连接
+\c07 2.隐藏主机名,命令 "\c52/mode 您的用户名 +x\c07"
+\c07 3.使用 "\c52OTR\c07" 技术(部分程序会有)
 
 \b 加入我们/联系我们
-\c72 [\c52*IRC\c72](irc://irc.arkfuture.cn:6667/#arkfuture_studio)
-\c72 [\c52Telegram\c72](https://t.me/arkfuture_studio)
-\c72 [\c52Matrix\c72](https://matrix.to/#/#arkfuture:matrix.org)
-\c72 [\c52Matrix\c72](https://matrix.to/#/#arkfuture_studio:matrix.org)
+\c80 [\c52*IRC*\c80](irc://irc.arkfuture.cn:6667/#arkfuture_studio)
+\c80 [\c52Telegram\c80](https://t.me/arkfuture_studio)
+\c80 [\c52Matrix\c80](https://matrix.to/#/#arkfuture:matrix.org)
+\c80 [\c52Matrix\c80](https://matrix.to/#/#arkfuture_studio:matrix.org)
  
 \b 关于频道及帮助
 \c86 输入 /JOIN #频道名 加入您想加入的频道
