@@ -1,11 +1,11 @@
 #!/bin/bash  
-echo "脚本版本 :5 "
+echo "脚本版本 :7 "
 echo "从源码构建INSPIRCD "
 echo "适用于Debian系统 "
 echo "更新软件包 "
 apt update && apt upgrade -y
 echo "安装依赖 "
-apt install wget curl git build-essential openssl gnutls-bin -y
+apt install git build-essential openssl gnutls-bin -y
 apt reinstall cmake -y
 echo "cd到~ "
 cd ~
