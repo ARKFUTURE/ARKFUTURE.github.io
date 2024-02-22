@@ -1,5 +1,5 @@
 #!/bin/bash  
-echo "脚本版本 :3 "
+echo "脚本版本 :5 "
 echo "从源码构建INSPIRCD "
 echo "适用于Debian系统 "
 echo "更新软件包 "
@@ -21,6 +21,8 @@ echo "如果您在上一步中启用了TLS(SSL)模块,则系统将询问您是�
 sleep 4s
 make install
 echo "安装完成,您可继续配置 "
+clear
+echo "若要卸载,在源代码的构建目录(通常是build目录)下执行make uninstall命令 "
 
 
 
