@@ -7,6 +7,7 @@ apt update && apt upgrade -y
 echo "安装依赖 "
 apt install git build-essential openssl gnutls-bin -y
 apt reinstall cmake -y
+apt clean
 echo "cd到~ "
 cd ~
 echo "获取源代码 "
