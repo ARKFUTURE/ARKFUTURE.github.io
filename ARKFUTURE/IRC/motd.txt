@@ -9,13 +9,13 @@ Welcome to ARKFUTURE irc
 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
 有关IRC的详细信息请参考/MOTD或https://arkfuture.cn/#IRC
 
-IRC 不记名，匿名建议:
-1.使用 "代理" 连接
-2.隐藏主机名,命令 "/mode 您的用户名 +x"
-3.使用"OTR" 技术(部分程序会有)
+\b\c07 IRC 不记名，匿名建议:
+\b\c07 1.使用 "代理" 连接
+\b\c07 2.隐藏主机名,命令 "/mode 您的用户名 +x"
+\b\c07 3.使用"OTR" 技术(部分程序会有)
 
 加入我们/联系我们
- * [IRC](irc://irc.arkfuture.cn:6667/#arkfuture_studio)
+\b\c72 [IRC](irc://irc.arkfuture.cn:6667/#arkfuture_studio)
  [Telegram](https://t.me/arkfuture_studio)
  [Matrix](https://matrix.to/#/#arkfuture:matrix.org)
  [Matrix](https://matrix.to/#/#arkfuture_studio:matrix.org)
