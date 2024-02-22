@@ -1,5 +1,5 @@
 #!/bin/bash  
-echo "脚本版本 :9 "
+echo "脚本版本 :11 "
 service inspircd stop
 systemctl stop inspircd
 sleep 1s
