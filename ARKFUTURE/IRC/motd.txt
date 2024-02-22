@@ -1,4 +1,4 @@
-#motd<16> -- UTF-8 
+#motd<17> -- UTF-8 
 
 \b Welcome to ARKFUTURE irc
 \c12 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
