@@ -16,10 +16,10 @@
 \c80 [\c52Matrix\c80](https://matrix.to/#/#arkfuture_studio:matrix.org)
  
 \b 关于频道及帮助
-\c86 输入 /JOIN #频道名 加入您想加入的频道
+\c86 输入 \c52/JOIN #频道名\c86 加入您想加入的频道
 \c86 !! \c52您可以创建自己的频道，没有任何限制\c86 !!
-\c86 输入 /RULES 查看此irc规则
-\c86 输入 /HELP  以获取更多IRC帮助信息
+\c86 输入 \c52/RULES\c86 查看此irc规则
+\c86 输入 \c52/HELP\c86  以获取更多IRC帮助信息
 \c86 命令大全 引用网址:https://www.gxlsystem.com/hulianwang-1160257.html
 
 \b 频道列表
