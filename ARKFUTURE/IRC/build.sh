@@ -1,5 +1,5 @@
 #!/bin/bash  
-echo "脚本版本 :1 "
+echo "脚本版本 :3 "
 echo "从源码构建INSPIRCD "
 echo "适用于Debian系统 "
 echo "更新软件包 "
