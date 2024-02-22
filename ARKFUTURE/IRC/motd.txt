@@ -1,12 +1,12 @@
-#motd<4> -- UTF-8 
+#motd<7> -- UTF-8 
 
-\c52 ╔═╗╦═╗╦╔═╔═╗╦ ╦╔╦╗╦ ╦╦═╗╔═╗
-\c56 ╠═╣╠╦╝╠╩╗╠╣ ║ ║ ║ ║ ║╠╦╝║╣ 
-\c59 ╩ ╩╩╚═╩ ╩╚  ╚═╝ ╩ ╚═╝╩╚═╚═╝
+\c52 ╔═╗ ╦═╗ ╦╔═ ╔═╗ ╦ ╦ ╔╦╗ ╦ ╦ ╦═╗ ╔═╗
+\c56 ╠═╣ ╠╦╝ ╠╩╗ ╠╣  ║ ║  ║  ║ ║ ╠╦╝ ║╣ 
+\c59 ╩ ╩ ╩╚═ ╩ ╩ ╚   ╚═╝  ╩  ╚═╝ ╩╚═ ╚═╝
 
 \b Welcome to ARKFUTURE irc
-\h#ff9c9c 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
-\h#ff9c9c 有关IRC的详细信息请参考/MOTD或https://arkfuture.cn/#IRC
+\c84 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
+\c84 有关IRC的详细信息请参考/MOTD或https://arkfuture.cn/#IRC
 
 \b IRC 不记名，匿名建议:
 \c07 1.使用 "代理" 连接
@@ -27,7 +27,7 @@
 \c86 命令大全 引用网址:https://www.gxlsystem.com/hulianwang-1160257.html
 
 \b 频道列表
-\c64 @arkfuture(应急联系人)
-\c64 @AFEBOT(bot机器人,用于自动回复/代理分发/资源分发)
-\c64 #arkfuture [需要手动加入的中转频道，您可以通过这里中转到其他推荐频道或添加好友]
-\c64 #arkfuture_studio [工作室内部群]
+\c82 @arkfuture(应急联系人)
+\c82 @AFEBOT(bot机器人,用于自动回复/代理分发/资源分发)
+\c82 #arkfuture [需要手动加入的中转频道，您可以通过这里中转到其他推荐频道或添加好友]
+\c82 #arkfuture_studio [工作室内部群]
