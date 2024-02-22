@@ -14,7 +14,7 @@
 \c07 3.使用"OTR" 技术(部分程序会有)
 
 \b 加入我们/联系我们
-\c72 [IRC](irc://irc.arkfuture.cn:6667/#arkfuture_studio)
+\c72 [*IRC](irc://irc.arkfuture.cn:6667/#arkfuture_studio)
 \c72 [Telegram](https://t.me/arkfuture_studio)
 \c72 [Matrix](https://matrix.to/#/#arkfuture:matrix.org)
 \c72 [Matrix](https://matrix.to/#/#arkfuture_studio:matrix.org)
