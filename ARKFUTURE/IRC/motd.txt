@@ -1,4 +1,4 @@
-#motd<11> -- UTF-8 
+#motd<14> -- UTF-8 
 
 \b Welcome to ARKFUTURE irc
 \c84 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
@@ -17,7 +17,7 @@
  
 \b 关于频道及帮助
 \c86 输入 /JOIN #频道名 加入您想加入的频道
-\c86 !! 您可以创建自己的频道，没有任何限制 !!
+\c86 !! \c52您可以创建自己的频道，没有任何限制\c86 !!
 \c86 输入 /RULES 查看此irc规则
 \c86 输入 /HELP  以获取更多IRC帮助信息
 \c86 命令大全 引用网址:https://www.gxlsystem.com/hulianwang-1160257.html
