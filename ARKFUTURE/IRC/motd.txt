@@ -23,7 +23,9 @@
 \c06 命令大全 引用网址:https://www.gxlsystem.com/hulianwang-1160257.html
 
 \b 频道列表
-\c13 @arkfuture(应急联系人)
-\c13 @AFEBOT(bot机器人,用于自动回复/代理分发/资源分发)
-\c13 #arkfuture [需要手动加入的中转频道，您可以通过这里中转到其他推荐频道或添加好友]
-\c13 #arkfuture_studio [工作室内部群]
+\c12 @arkfuture(应急联系人)
+\c12 @AFEBOT(bot机器人,用于自动回复/代理分发/资源分发)
+\c12 #arkfuture [需要手动加入的中转频道，您可以通过这里中转到其他推荐频道或添加好友]
+\c12 #arkfuture_studio [工作室内部群]
+
+\b 感谢所有人
