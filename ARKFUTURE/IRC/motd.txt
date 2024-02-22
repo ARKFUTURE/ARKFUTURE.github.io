@@ -1,8 +1,4 @@
-#motd<9> -- UTF-8 
-
-\c52 ╔═╗ ╔═╗ ╔═╗
-\c56 ╠═╣ ╠╣  ║╣ 
-\c59 ╩ ╩ ╚   ╚═╝
+#motd<10> -- UTF-8 
 
 \b Welcome to ARKFUTURE irc
 \c84 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
