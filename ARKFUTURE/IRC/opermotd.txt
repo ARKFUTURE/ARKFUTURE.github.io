@@ -12,12 +12,10 @@ USE UTF-8
 应急联系人
 @arkfuture(区分大小写)
 
-Bold:          \b
-Color:         \c<fg>[,<bg>]
-Hex Color:     \h<fg>[,<bg>]
-Italic:        \i
-Monospace:     \m  (not widely supported)
-Reset:         \x
-Reverse:       \r
-Strikethrough: \s  (not widely supported)
-Underline:     \u
+粗体：\b
+颜色：\c<fg>[,<bg>]
+十六进制颜色：\h<fg>[,<bg>]
+斜体：\i
+重置：\x
+反向：\r
+下划线：\u
