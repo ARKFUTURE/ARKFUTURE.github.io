@@ -1,3 +1,4 @@
-USE UTF-8
+rules<3> -- UTF-8 
+
 团队规则
 HTTPS://ARKFUTURE.CN/ARKFUTURE/ARKFUTURE.pdf
