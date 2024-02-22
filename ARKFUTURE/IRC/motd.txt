@@ -1,4 +1,4 @@
-#motd<10> -- UTF-8 
+#motd<11> -- UTF-8 
 
 \b Welcome to ARKFUTURE irc
 \c84 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
@@ -10,10 +10,10 @@
 \c07 3.使用"OTR" 技术(部分程序会有)
 
 \b 加入我们/联系我们
-\c72 [*IRC](irc://irc.arkfuture.cn:6667/#arkfuture_studio)
-\c72 [Telegram](https://t.me/arkfuture_studio)
-\c72 [Matrix](https://matrix.to/#/#arkfuture:matrix.org)
-\c72 [Matrix](https://matrix.to/#/#arkfuture_studio:matrix.org)
+\c72 [\c52*IRC\c72](irc://irc.arkfuture.cn:6667/#arkfuture_studio)
+\c72 [\c52Telegram\c72](https://t.me/arkfuture_studio)
+\c72 [\c52Matrix\c72](https://matrix.to/#/#arkfuture:matrix.org)
+\c72 [\c52Matrix\c72](https://matrix.to/#/#arkfuture_studio:matrix.org)
  
 \b 关于频道及帮助
 \c86 输入 /JOIN #频道名 加入您想加入的频道
