@@ -2,16 +2,19 @@
 echo "脚本版本 :7 "
 echo "从源码构建INSPIRCD "
 echo "适用于Debian系统 "
+read -p "请输入要编译INSPIRCD的版本号(如:3.17.0)： " versi
 echo "更新软件包 "
 apt update && apt upgrade -y
 echo "安装依赖 "
 apt install git build-essential openssl gnutls-bin -y
-apt reinstall cmake -y
 apt clean
 echo "cd到~ "
 cd ~
-echo "获取源代码 "
-git clone --branch insp3 "https://github.com/inspircd/inspircd.git"
+echo "获取源代码 解压 删除下载文件"
+wget https://github.com/inspircd/inspircd/archive/refs/tags/v$versi.tar.gz
+tar -xvf "v$versi.tar.gz"
+rm -rf v$versi.tar.gz
+mv inspircd-$versi inspircd
 chmod 777 ./inspircd/ -R
 cd ./inspircd
 echo "启用使用第三方依赖的模组 "
