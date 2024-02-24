@@ -1,4 +1,4 @@
-#opermotd<6> -- UTF-8 
+#opermotd<10> -- UTF-8 
 
 此 IRC 无规则
 但禁止滥用

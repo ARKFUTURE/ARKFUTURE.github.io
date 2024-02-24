@@ -1,5 +1,5 @@
 #!/bin/bash  
-echo "脚本版本 :17 "
+echo "脚本版本 :10 "
 echo "从源码构建INSPIRCD ,请您修改脚本为您合适之后使用"
 echo "适用于Debian系统 INSPIRCD版本为 [v3.17.0]"
 #给与5秒显示时间
