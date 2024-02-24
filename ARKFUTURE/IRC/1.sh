@@ -1,5 +1,5 @@
 #!/bin/bash  
-echo "脚本版本 :26 "
+echo "脚本版本 :30 "
 echo "Debian"
 service inspircd stop
 systemctl stop inspircd
