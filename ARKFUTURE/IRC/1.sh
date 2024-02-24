@@ -1,5 +1,5 @@
 #!/bin/bash  
-echo "脚本版本 :30 "
+echo "脚本版本 :35 "
 echo "Debian"
 service inspircd stop
 systemctl stop inspircd
@@ -13,36 +13,31 @@ echo "正在下载 INSPIRCD 配置文件 "
 wget -N  inspircd.conf http://arkfuture.cn/ARKFUTURE/IRC/inspircd.conf 
 chmod 644 /etc/inspircd/inspircd.conf
 
-mkdir /etc/inspircd/.md/
-chmod 777 /etc/inspircd/.md/
-cd /etc/inspircd/.md/
+mkdir /etc/inspircd/conf/
+chmod 777 /etc/inspircd/conf/
+cd /etc/inspircd/conf/
 echo "正在下载 MOTD 配置文件 "
-wget -N  motd.txt http://arkfuture.cn/ARKFUTURE/IRC/.md/motd.txt  
-wget -N  opermotd.txt http://arkfuture.cn/ARKFUTURE/IRC/.md/opermotd.txt  
-wget -N  quotes.txt http://arkfuture.cn/ARKFUTURE/IRC/.md/quotes.txt  
-wget -N  rules.txt http://arkfuture.cn/ARKFUTURE/IRC/.md/rules.txt  
+wget -N  motd.txt http://arkfuture.cn/ARKFUTURE/IRC/conf/motd.txt  
+wget -N  opermotd.txt http://arkfuture.cn/ARKFUTURE/IRC/conf/opermotd.txt  
+wget -N  quotes.txt http://arkfuture.cn/ARKFUTURE/IRC/conf/quotes.txt  
+wget -N  rules.txt http://arkfuture.cn/ARKFUTURE/IRC/conf/rules.txt  
 chmod 644 /etc/inspircd/.md/ -R
 cd ~
-
-mkdir /etc/inspircd/.cf/
-chmod 777 /etc/inspircd/.cf/
-cd /etc/inspircd/.cf/
 echo "正在下载 插件 配置文件 "
-wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/.cf/helpop.conf  
-wget -N  opers.conf http://arkfuture.cn/ARKFUTURE/IRC/.cf/opers.conf  
-wget -N  ssl.conf http://arkfuture.cn/ARKFUTURE/IRC/.cf/ssl.conf  
-wget -N  permchannels.conf http://arkfuture.cn/ARKFUTURE/IRC/.cf/permchannels.conf 
-chmod 644 /etc/inspircd/.cf/ -R
+wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/conf/helpop.conf  
+wget -N  opers.conf http://arkfuture.cn/ARKFUTURE/IRC/conf/opers.conf  
+wget -N  ssl.conf http://arkfuture.cn/ARKFUTURE/IRC/conf/ssl.conf  
+wget -N  permchannels.conf http://arkfuture.cn/ARKFUTURE/IRC/conf/permchannels.conf 
+chmod 644 /etc/inspircd/conf/ -R
 cd ~
 
 echo "显示文件版本  "
 cd /etc/inspircd/
 head -n 1 inspircd.conf
-cd /etc/inspircd/.md/
+cd /etc/inspircd/conf/
 head -n 1 motd.txt
 head -n 1 opermotd.txt
 head -n 1 rules.txt
-cd /etc/inspircd/.cf/
 head -n 1 opers.conf 
 head -n 1 ssl.conf 
 head -n 1 helpop.conf
