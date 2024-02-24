@@ -32,18 +32,23 @@ echo "下载 helpop.conf 文件  "
 wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/.helpop.conf  
 echo "正在将 helpop.conf 文件的权限更改为 644 " 
 chmod 644 helpop.conf
-echo "下载 opers.conf 文件  "
+echo "下载 .opers.conf 文件  "
 wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/.opers.conf  
 echo "正在将 opers 文件的权限更改为 644 " 
-chmod 644 opers.conf 
+chmod 644 .opers.conf 
+echo "下载 ssl.conf 文件  "
+wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/.ssl.conf  
+echo "正在将 ssl.conf 文件的权限更改为 644 " 
+chmod 644 .ssl.conf
 clear
 echo "显示文件版本  "
 head -n 1 inspircd.conf
-head -n 1 helpop.conf
+head -n 1 .helpop.conf
 head -n 1 motd.txt
 head -n 1 opermotd.txt
 head -n 1 rules.txt
-head -n 1 opers.conf 
+head -n 1 .opers.conf 
+head -n 1 .ssl.conf 
 echo "结束脚本  "
 cd ~
 
