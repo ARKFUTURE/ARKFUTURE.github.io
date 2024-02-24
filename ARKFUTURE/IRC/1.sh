@@ -1,5 +1,5 @@
 #!/bin/bash  
-echo "脚本版本 :25 "
+echo "脚本版本 :26 "
 echo "Debian"
 service inspircd stop
 systemctl stop inspircd
@@ -81,15 +81,7 @@ if [ "$input" = "yes" ]; then
 
 
 elif [ "$input" = "no" ]; then
-    echo "下载默认空的测试证书  "
-    mkdir /etc/inspircd/.ca/
-    chmod 777 /etc/inspircd/.ca/ -R
-    cd /etc/inspircd/.ca/
-    wget -N  ca.pem http://arkfuture.cn/ARKFUTURE/IRC/.ca/ca.pem 
-    wget -N  csr.pem http://arkfuture.cn/ARKFUTURE/IRC/.ca/csr.pem
-    wget -N  dhparams.pem http://arkfuture.cn/ARKFUTURE/IRC/.ca/dhparams.pem
-    wget -N  key.pem http://arkfuture.cn/ARKFUTURE/IRC/.ca/key.pem
-    chmod 644 /etc/inspircd/.ca/ -R
+    echo "结束脚本  "
     cd ~
 else
     echo "结束脚本  "
