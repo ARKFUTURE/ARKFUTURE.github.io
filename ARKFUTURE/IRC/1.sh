@@ -5,10 +5,12 @@ service inspircd stop
 systemctl stop inspircd
 sleep 1s
 echo "关闭INSPIRCD服务完成 "
+
 echo "正在切换到 /etc/inspircd 目录 "
 cd /etc/inspircd/  
 echo "删除 /etc/inspircd 下的文件 "
 rm -rf /etc/inspircd/*
+
 echo "正在下载 inspircd.txt 文件 "
 wget -N  inspircd.conf http://arkfuture.cn/ARKFUTURE/IRC/inspircd.conf  
 echo "正在将 inspircd.conf 文件的权限更改为 644"
@@ -45,6 +47,7 @@ mv ssl.conf .ssl.conf
 echo "正在将 ssl.conf 文件的权限更改为 644 " 
 chmod 644 .ssl.conf
 clear
+
 echo "显示文件版本  "
 head -n 1 inspircd.conf
 head -n 1 motd.txt
