@@ -81,7 +81,7 @@ if [ "$input" = "yes" ]; then
     echo "生成Diffie-Hellman参数 dhparams.pem,部分操作您需要手动执行"
     openssl dhparam -out dhparams.pem 2048
 
-    echo "所有证书生成完毕,正在执行剩下的脚本"
+    echo "所有证书生成完毕,正在执行剩下的命令"
     chmod 644 /etc/inspircd/.ca/ -R
     echo "结束脚本  "
     cd ~
