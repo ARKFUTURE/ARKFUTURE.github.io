@@ -1,65 +1,57 @@
 #!/bin/bash  
-echo "脚本版本 :20 "
+echo "脚本版本 :25 "
 echo "Debian"
 service inspircd stop
 systemctl stop inspircd
 sleep 1s
 echo "关闭INSPIRCD服务完成 "
 
-echo "正在切换到 /etc/inspircd 目录 "
 cd /etc/inspircd/  
-echo "删除 /etc/inspircd 下的文件 "
 rm -rf /etc/inspircd/*
 
-echo "正在下载 inspircd.txt 文件 "
-wget -N  inspircd.conf http://arkfuture.cn/ARKFUTURE/IRC/inspircd.conf  
-echo "正在将 inspircd.conf 文件的权限更改为 644"
-chmod 644 inspircd.conf  
-echo "正在下载 motd.txt 文件 " 
-wget -N  motd.txt http://arkfuture.cn/ARKFUTURE/IRC/motd.txt  
-echo "正在将 motd.txt 文件的权限更改为 644  "
-chmod 644 motd.txt  
-echo "正在下载 opermotd.txt 文件  "
-wget -N  opermotd.txt http://arkfuture.cn/ARKFUTURE/IRC/opermotd.txt  
-echo "正在将 opermotd.txt 文件的权限更改为 644  "
-chmod 644 opermotd.txt   
-echo "正在下载 quotes.txt 文件  "
-wget -N  quotes.txt http://arkfuture.cn/ARKFUTURE/IRC/quotes.txt  
-echo "正在将 quotes.txt 文件的权限更改为 644  "
-chmod 644 quotes.txt  
-echo "下载 rules.txt 文件  "
-wget -N  rules.txt http://arkfuture.cn/ARKFUTURE/IRC/rules.txt  
-echo "正在将 rules.txt 文件的权限更改为 644 " 
-chmod 644 rules.txt
-echo "下载 helpop.conf 文件  "
-wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/helpop.conf  
-mv helpop.conf .helpop.conf
-echo "正在将 helpop.conf 文件的权限更改为 644 " 
-chmod 644 .helpop.conf
-echo "下载 .opers.conf 文件  "
-wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/opers.conf  
-echo "正在将 opers 文件的权限更改为 644 " 
-mv opers.conf .opers.conf
-chmod 644 .opers.conf 
-echo "下载 ssl.conf 文件  "
-wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/ssl.conf  
-mv ssl.conf .ssl.conf
-echo "正在将 ssl.conf 文件的权限更改为 644 " 
-chmod 644 .ssl.conf
-clear
+echo "正在下载 INSPIRCD 配置文件 "
+wget -N  inspircd.conf http://arkfuture.cn/ARKFUTURE/IRC/inspircd.conf 
+chmod 644 /etc/inspircd/inspircd.conf
+
+mkdir /etc/inspircd/.md/
+chmod 777 /etc/inspircd/.md/
+cd /etc/inspircd/.md/
+echo "正在下载 MOTD 配置文件 "
+wget -N  motd.txt http://arkfuture.cn/ARKFUTURE/IRC/.md/motd.txt  
+wget -N  opermotd.txt http://arkfuture.cn/ARKFUTURE/IRC/.md/opermotd.txt  
+wget -N  quotes.txt http://arkfuture.cn/ARKFUTURE/IRC/.md/quotes.txt  
+wget -N  rules.txt http://arkfuture.cn/ARKFUTURE/IRC/.md/rules.txt  
+chmod 644 /etc/inspircd/.md/ -R
+cd ~
+
+mkdir /etc/inspircd/.cf/
+chmod 777 /etc/inspircd/.cf/
+cd /etc/inspircd/.cf/
+echo "正在下载 插件 配置文件 "
+wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/.cf/helpop.conf  
+wget -N  opers.conf http://arkfuture.cn/ARKFUTURE/IRC/.cf/opers.conf  
+wget -N  ssl.conf http://arkfuture.cn/ARKFUTURE/IRC/.cf/ssl.conf  
+wget -N  permchannels.conf http://arkfuture.cn/ARKFUTURE/IRC/.cf/permchannels.conf 
+chmod 644 /etc/inspircd/.cf/ -R
+cd ~
 
 echo "显示文件版本  "
+cd /etc/inspircd/
 head -n 1 inspircd.conf
+cd /etc/inspircd/.md/
 head -n 1 motd.txt
 head -n 1 opermotd.txt
 head -n 1 rules.txt
-head -n 1 .opers.conf 
-head -n 1 .ssl.conf 
-head -n 1 .helpop.conf
+cd /etc/inspircd/.cf/
+head -n 1 opers.conf 
+head -n 1 ssl.conf 
+head -n 1 helpop.conf
+head -n 1 permchannels.conf
+cd ~
 
 
 #证书生成
-read -p "是否生成证书(yes/no): " input
+read -p "是否生成证书 yes/no(空证书)/其他(结束): " input
 if [ "$input" = "yes" ]; then
     echo "开始下载openssl"
     apt update && apt upgrade -y && apt install openssl
@@ -89,7 +81,15 @@ if [ "$input" = "yes" ]; then
 
 
 elif [ "$input" = "no" ]; then
-    echo "结束脚本  "
+    echo "下载默认空的测试证书  "
+    mkdir /etc/inspircd/.ca/
+    chmod 777 /etc/inspircd/.ca/ -R
+    cd /etc/inspircd/.ca/
+    wget -N  ca.pem http://arkfuture.cn/ARKFUTURE/IRC/.ca/ca.pem 
+    wget -N  csr.pem http://arkfuture.cn/ARKFUTURE/IRC/.ca/csr.pem
+    wget -N  dhparams.pem http://arkfuture.cn/ARKFUTURE/IRC/.ca/dhparams.pem
+    wget -N  key.pem http://arkfuture.cn/ARKFUTURE/IRC/.ca/key.pem
+    chmod 644 /etc/inspircd/.ca/ -R
     cd ~
 else
     echo "结束脚本  "
