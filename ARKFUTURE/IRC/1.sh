@@ -21,8 +21,6 @@ wget -N  motd.txt http://arkfuture.cn/ARKFUTURE/IRC/conf/motd.txt
 wget -N  opermotd.txt http://arkfuture.cn/ARKFUTURE/IRC/conf/opermotd.txt  
 wget -N  quotes.txt http://arkfuture.cn/ARKFUTURE/IRC/conf/quotes.txt  
 wget -N  rules.txt http://arkfuture.cn/ARKFUTURE/IRC/conf/rules.txt  
-chmod 644 /etc/inspircd/.md/ -R
-cd ~
 echo "正在下载 插件 配置文件 "
 wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/conf/helpop.conf  
 wget -N  opers.conf http://arkfuture.cn/ARKFUTURE/IRC/conf/opers.conf  
