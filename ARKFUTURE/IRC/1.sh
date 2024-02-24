@@ -1,5 +1,5 @@
 #!/bin/bash  
-echo "脚本版本 :11 "
+echo "脚本版本 :13 "
 service inspircd stop
 systemctl stop inspircd
 sleep 1s
@@ -29,15 +29,18 @@ wget -N  rules.txt http://arkfuture.cn/ARKFUTURE/IRC/rules.txt
 echo "正在将 rules.txt 文件的权限更改为 644 " 
 chmod 644 rules.txt
 echo "下载 helpop.conf 文件  "
-wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/.helpop.conf  
+wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/helpop.conf  
+mv helpop.conf .helpop.conf
 echo "正在将 helpop.conf 文件的权限更改为 644 " 
-chmod 644 helpop.conf
+chmod 644 .helpop.conf
 echo "下载 .opers.conf 文件  "
-wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/.opers.conf  
+wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/opers.conf  
 echo "正在将 opers 文件的权限更改为 644 " 
+mv opers.conf .opers.conf
 chmod 644 .opers.conf 
 echo "下载 ssl.conf 文件  "
-wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/.ssl.conf  
+wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/ssl.conf  
+mv ssl.conf .ssl.conf
 echo "正在将 ssl.conf 文件的权限更改为 644 " 
 chmod 644 .ssl.conf
 clear
