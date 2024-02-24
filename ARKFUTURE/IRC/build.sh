@@ -6,7 +6,7 @@ read -p "请输入要编译INSPIRCD的版本号(如:3.17.0)： " versi
 echo "更新软件包 "
 apt update && apt upgrade -y
 echo "安装依赖 "
-apt install git build-essential autoconf openssl gnutls-bin -y
+apt install git build-essential autoconf libevent-dev openssl gnutls-bin -y
 apt clean
 echo "cd到~ "
 cd ~
