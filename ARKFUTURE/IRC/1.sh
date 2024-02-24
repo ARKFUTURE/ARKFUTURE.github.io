@@ -1,5 +1,5 @@
 #!/bin/bash  
-echo "脚本版本 :13 "
+echo "脚本版本 :14 "
 service inspircd stop
 systemctl stop inspircd
 sleep 1s
@@ -46,12 +46,12 @@ chmod 644 .ssl.conf
 clear
 echo "显示文件版本  "
 head -n 1 inspircd.conf
-head -n 1 .helpop.conf
 head -n 1 motd.txt
 head -n 1 opermotd.txt
 head -n 1 rules.txt
 head -n 1 .opers.conf 
 head -n 1 .ssl.conf 
+head -n 1 .helpop.conf
 echo "结束脚本  "
 cd ~
 
