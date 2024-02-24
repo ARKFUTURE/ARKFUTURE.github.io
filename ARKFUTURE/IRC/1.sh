@@ -29,11 +29,11 @@ wget -N  rules.txt http://arkfuture.cn/ARKFUTURE/IRC/rules.txt
 echo "正在将 rules.txt 文件的权限更改为 644 " 
 chmod 644 rules.txt
 echo "下载 helpop.conf 文件  "
-wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/helpop.conf  
+wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/.helpop.conf  
 echo "正在将 helpop.conf 文件的权限更改为 644 " 
 chmod 644 helpop.conf
 echo "下载 opers.conf 文件  "
-wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/opers.conf  
+wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/.opers.conf  
 echo "正在将 opers 文件的权限更改为 644 " 
 chmod 644 opers.conf 
 clear
