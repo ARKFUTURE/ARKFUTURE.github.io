@@ -243,14 +243,9 @@
 <badnick nick="MemoServ" reason="为网络服务保留">
 
 
-#-#-#-#-#-#-#-#-#-#-#-#-#MOD(模组)#-#-#-#-#-#-#-#-#-#-#-#(v4更改！)
+#-#-#-#-#-#-#-#-#-#-#-#-#MOD(模组)#-#-#-#-#-#-#-#-#-#-#-#
 # 请阅读https://docs.inspircd.org/3/modules/
-# 其他模块配置请自行修改使用
-# 我们使用:导入MOD后立即跟MOD配置文件 的方式配置
-
-# 示例:
-# <module name="模块名">
-# 模块配置
+# 我们的配置只能保证您的服务器不报错可以基础使用,若您需要其他模块配置请自行修改使用
 
 ######TLS/SSL模块(请看官网说明,使用时需要自行删除#)
 #<include file="&ConfPath;/ssl.conf">
@@ -322,6 +317,10 @@
 <module name="hidemode">
 <module name="hideoper">
 <module name="hostcycle">
+#<module name="httpd">
+#<module name="httpd_acl">
+#<module name="httpd_config">
+#<module name="httpd_stats">
 <module name="ident">
 <module name="inviteexception">
 <module name="ircv3">
@@ -421,8 +420,9 @@
 <module name="websocket">
 #<module name="xline_db">
 
+######配置模块
 #我们加载了可以使用的所有模块,部分模块没有正确配置会报错,报错的我们会及时注释掉,不影响正常使用
-#由于INSPIRCDv4的模块复杂性,我们引入一个模块配置文件,单独存放模块的配置,模块配置为基础配置,其目的是不报错正常使用
+#由于INSPIRCDv4的模块复杂性,我们引入一个模块配置文件,单独存放模块的配置,模块配置为基础配置,其目的是不报错可以正常使用
 #请自行修改为自己的配置使用
-<include file="&ConfPath;/modulesconf">
+<include file="&ConfPath;/modulesconf.conf">
 
