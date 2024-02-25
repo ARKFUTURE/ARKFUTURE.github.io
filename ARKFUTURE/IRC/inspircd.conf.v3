@@ -1,8 +1,7 @@
-#inspircd<10> -- UTF-8 --INSPIRCD v3
+#inspircd<10.v3> -- UTF-8 --INSPIRCD v3
 # 这只是一个或多或少可以使用的配置文件示例,此配置为ARKFUTURE-IRC使用
 # 注意:在配置文件<10+>之后,我们将做好迁移到v4的准备,mod也随之替换,之后,我们将分为两个版本的配置文件
-# 
-# 汉化配置文件由ARKFUTURE翻译,使用UTF-8编码
+# ARKFUTURE翻译,使用UTF-8编码
 # 添加部分说明,并完善主要功能,需要自行定制
 # 注意 ：nick为昵称,在IRC中您需要定义多个称呼(用户名和昵称)
 # 此配置文件中所有的密码均为随机生成,不作为固定密码使用
@@ -11,7 +10,7 @@
 ###我们尽可能少用 "#" 来注释说明,因为这样可以使得下面的文档变得美观 
 # 您可以在以下文档中查询详细配置来完善此配置
 # 请参阅中的示例(更具体的) /usr/share/doc/inspircd/examples/
-# 以及官方的InspIRCd文档(更详细的) https://docs.inspircd.org/
+# 以及官方的InspIRCd文档(更详细的) https://docs.inspircd.org/3/configuration
 # 进行详细配置
 
 
