@@ -1,0 +1,465 @@
+#inspircd<10> -- UTF-8 --INSPIRCD v4
+# 这只是一个或多或少可以使用的配置文件示例,此配置为ARKFUTURE-IRC使用
+# 
+# 汉化配置文件由ARKFUTURE翻译,使用UTF-8编码
+# 添加部分说明,并完善主要功能,需要自行定制
+# 注意 ：nick为昵称,在IRC中您需要定义多个称呼(用户名和昵称)
+# 此配置文件中所有的密码均为随机生成,不作为固定密码使用
+# 配置文件基本使用标签格式化,部分标签没对齐不影响使用
+#
+###我们尽可能少用 "#" 来注释说明,因为这样可以使得下面的文档变得美观 
+# 您可以在以下文档中查询详细配置来完善此配置
+# 请参阅中的示例(更具体的) /usr/share/doc/inspircd/examples/
+# 以及官方的InspIRCd文档(更详细的) https://docs.inspircd.org/
+# 进行详细配置
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-定义-#-#-#-#-#-#-#-#-#-#-#-#-#
+# <path> 标记定义 config、data、log 和 module 目录的位置.此标签只能定义一次
+<path configdir="/etc/inspircd/"
+      datadir="&dir.data;"
+      logdir="&dir.log;"
+      moduledir="&dir.module;"
+      runtimedir="&dir.runtime;">
+# <define> 标记允许您定义 XML 样式的实体(定义服务器变量)
+<define name="ConfPath"
+        value="&dir.config;/conf/">
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-服务器描述-#-#-#-#-#-#-#-#-#-#-#-#-#
+#<server>标签定义了本地服务器的设置.此标记只能定义一次.
+
+<server name=""
+        description="ARKFUTURE-IRC"
+        network="ARKFUTURE"
+        id="1AF">
+# ARKFUTURE irc id从1AF开始,依次往后推到9AF;0AF作为特别id
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-管理员信息-#-#-#-#-#-#-#-#-#-#-#-#-#
+#<admin>标签定义了服务器管理员的联系方式.此标记只能定义一次. (v4更改！)
+<admin name="arkfutureadmin"
+       nick="arkfutureadmin"
+       email="ADMIN@ARKFUTURE.CN">
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-端口配置-#-#-#-#-#-#-#-#-#-#-#-#-#
+#<bind>标签定义了一个监听连接的端点.这个标签可以根据需要定义多次.
+#监听器,监听客户端;若使用TLS/SSL,请在.ssl.conf中修改相关配置
+<bind address=""
+      port="6667-6669"
+      type="clients"
+      free="yes">
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-连接配置-#-#-#-#-#-#-#-#-#-#-#-#-#
+#<connect>标签定义了一个类,当用户连接到服务器时,可以将用户过滤到这个类中.此标记可以根据需要定义多次.
+#如果需要为私人的irc,可以设置密码,使用password字段
+<connect name="Main"
+         allow="*"
+         commandrate="1000"
+         fakelag="yes"
+         globalmax="3"
+         hardsendq="262144"
+         limit="5000"
+         localmax="3"
+         maxchans="30"
+         maxconnwarn="no"
+         pingfreq="2m"
+         recvq="8K"
+         resolvehostnames="yes"
+         softsendq="8192"
+         threshold="20"
+         timeout="60"
+         uniqueusername="no"
+         password=""
+         hash="">
+
+#标记定义定位克隆时应查看的IP地址位数.此标记只能定义一次.
+<cidr ipv4clone="32"
+      ipv6clone="128">
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-操作员配置-#-#-#-#-#-#-#-#-#-#-#-#-#
+#<class>标签定义了一组服务器操作员特权.此标记可以根据需要定义多次
+<class name="Shutdown"
+       commands="DIE RESTART REHASH LOADMODULE UNLOADMODULE RELOADMODULE">
+<class name="SACommands" 
+       commands="SAJOIN SAPART SANICK SAQUIT SATOPIC SAKICK SAMODE OJOIN">
+<class name="ServerLink"
+       commands="CONNECT SQUIT RCONNECT RSQUIT MKPASSWD">
+<class name="BanControl"
+       commands="KILL GLINE KLINE ZLINE QLINE ELINE">
+<class name="OperChat"
+       commands="WALLOPS GLOBOPS SETIDLE SPYLIST SPYNAMES">
+<class name="HostCloak"
+       commands="SETHOST SETIDENT CHGNAME CHGHOST CHGIDENT">
+
+#<type>标签定义了服务器操作员的类型.此标记可以根据需要定义多次. (v4更改！)
+# 这里必要的话请限制登录主机 "host" 字段
+<type name="NetAdmin"
+       classes="OperChat BanControl HostCloak Shutdown ServerLink"
+       host=""
+       vhost="iadm.arkfuture.cn">
+<type name="GlobalOp"
+       classes="OperChat BanControl HostCloak ServerLink"
+       host=""
+       vhost="igop.arkfuture.cn">
+<type name="Helper"
+       classes="HostCloak"
+       host=""
+       vhost="ihep.arkfuture.cn">
+
+#<oper>标签定义了一个服务器操作员帐户.此标记可以根据需要定义多次.
+# 这里必要的话请限制登录主机 "host" 字段
+# NetAdmin：服务器管理；GlobalOp：服务器操作员；Helper：帮助员
+# 使用include来加载一个单独的操作员账户配置文件
+<include file="&ConfPath;/opers.conf">
+
+
+#-#-#-#-#-#-#-#-#-#-杂项配置-#-#-#-#-#-#-#-#-#-#
+#<files><execfiles>标签读取一个或多个文件.这两个标记只能定义一次.这些文件的用途取决于它们在哪个字段中定义.请注意,文件只在缓存器上读取,因此不会自动检测更改.
+#部分命令如果没有权限就停止使用<files>标签
+#使用时请注释其中一个标签
+<files motd="&ConfPath;/motd.txt"
+       opermotd="&ConfPath;/opermotd.txt"
+       quotes="&ConfPath;/quotes.txt"
+       rules="&ConfPath;/rules.txt">
+
+#<dns>标签定义了在查找主机名时要使用的DNS服务器.此标记只能定义一次.
+<dns enabled="yes"
+     server="8.8.8.8"
+     timeout="5s"
+     sourceip=""
+     sourceport="0">
+
+#<pid>标签定义了pid文件的位置.此标记只能定义一次.
+<pid file="/var/run/inspircd/inspircd.pid">
+
+# 关机&重启的密码
+<power diepass="P03iZjRtmpqXPv3" restartpass="P03iZjRtmpqXPv3">
+
+## 最用户及最大操作员
+<channels users=""
+          opers="">
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-服务器选项-#-#-#-#-#-#-#-#-#-#-#-#-#
+#<options>标签定义了常规配置选项.此标记只能定义一次.(v4更改！)
+<options prefixquit="Quit: "
+         syntaxhints="no"
+         announcets="yes"
+         hostintopic="yes"
+         pingwarning="15"
+         splitwhois="splitmsg"
+         exemptchanops=""
+         xlinemessage="您被禁止,联系电子邮件 ADMIN@ARKFUTURE.CN 获取帮助"
+         nosnoticestack="yes"
+         defaultbind="auto">
+
+
+#-#-#-#-#-#-#-#-#-#-#-#安全配置#-#-#-#-#-#-#-#-#-#-#-#
+#<security>标签定义了与服务器安全相关的配置选项.此标记只能定义一次.
+#此配置参照(基于)官方文档修改,可自行修改
+<security allowcoreunload="no"
+          announceinvites="dynamic"
+          customversion="ARKFUTURE-IRC"
+          genericoper="no"
+          hidebans="yes"
+          hidekills=""
+          hideserver="ARKFUTURE-IRC"
+          hideulinekills="yes"
+          maxtargets="20"
+          restrictbannedusers="yes"
+          runasgroup=""
+          runasuser=""
+          flatlinks="no"
+          hidesplits="no"
+          hideulines="no"
+          userstats="Pu"
+          maphide="https://arkfuture.cn/#IRC">
+
+
+#-#-#-#-#-#-#-#-#-#-#-#性能配置#-#-#-#-#-#-#-#-#-#-#
+#<performance>标签定义了与服务器性能相关的配置选项.此标记只能定义一次.(v4更改！)
+<performance clonesonconnect="yes"
+             quietbursts="yes"
+             softlimit="15000"
+             somaxconn="128"
+             netbuffersize="10240">
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-WHOWAS选项-#-#-#-#-#-#-#-#-#-#-#-#-#
+#<whowas>标签定义了/WHOWAS数据库的配置.此标记只能定义一次.
+<whowas groupsize="10"
+        maxgroups="10240"
+        maxkeep="3d">
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-#限制配置#-#-#-#-#-#-#-#-#-#-#-#
+#<limits> 标记定义用户可配置字段的最大长度
+<limits maxaway="200"
+        maxchan="60"
+        maxhost="70"
+        maxident="10"
+        maxkick="300"
+        maxmodes="20"
+        maxnick="30"
+        maxquit="300"
+        maxreal="130"
+        maxtopic="330">
+#maxaway:away消息的最大长度
+#maxchan:通道名称的最大长度
+#maxhost:主机名的最大长度
+#maxident:标识/用户名的最大长度
+#maxkick:kick消息的最大长度
+#maxmodes:每行模式更改的最大次数
+#maxnick:昵称的最大长度
+#maxquit:退出消息的最大长度
+#maxreal:实名的最大长度
+#maxtopic:频道主题的最大长度
+
+#<insane>标记定义了限制,以防止创建过宽的X线.此标记只能定义一次.
+<insane hostmasks="no"
+        ipmasks="no"
+        nickmasks="no"
+        trigger="95.5">
+
+#<badnick>标签定义了永久Q线.此标记可以根据需要定义多次.
+<badnick nick="ChanServ" reason="Reserved For Services">
+<badnick nick="NickServ" reason="Reserved For Services">
+<badnick nick="OperServ" reason="Reserved For Services">
+<badnick nick="MemoServ" reason="Reserved For Services">
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-#MOD(模组)#-#-#-#-#-#-#-#-#-#-#-#(v4更改！)
+# 请阅读https://docs.inspircd.org/3/modules/
+# 其他模块配置请自行修改使用
+# 我们使用:导入MOD后立即跟MOD配置文件 的方式配置
+
+# 示例:
+# <module name="模块名">
+# 模块配置
+
+######禁用模块
+# <module name="globalload"> 管理员重载/卸载模块的模块,非必要不装
+# <module name="ldapauth">
+# <module name="ldapoper">
+# <module name="sqlauth">
+# <module name="sqloper">
+# <module name="xline_db">
+# <module name="codepage">
+
+######TLS/SSL模块(请看官网说明,使用时需要自行删除#)
+#<include file="&ConfPath;/ssl.conf">
+
+######启用模块
+<module name="sasl">
+<module name="alltime">
+<module name="blockcolor">
+<module name="blockamsg">
+<module name="botmode">
+<botmode forcenotice="no">
+<module name="cap">
+<module name="callerid">
+<module name="chancreate">
+<module name="chanhistory">
+<chanhistory bots="yes"
+             enableumode="yes"
+             maxlines="50"
+             prefixmsg="yes">
+<module name="check">
+<module name="clearchan">
+<module name="cloaking">
+<cloak mode="full"
+       key="PO3ZF0hD2NA2CSpXquBdrZW1I4S1O3ZF52NA2CS"
+       prefix="AFE-"
+       suffix="-EFA"
+       ignorecase="yes">
+<module name="dccallow">
+<banfile action="allow"
+         pattern="*">
+<dccallow action="allow"
+          blockchat="no"
+          length="0"
+          maxentries="20">
+<module name="ircv3">
+<ircv3 accountnotify="yes"
+       awaynotify="yes"
+       extendedjoin="yes"
+       standardreplies="yes">
+<module name="ircv3_accounttag">
+<module name="ircv3_batch">
+<module name="ircv3_capnotify">
+<module name="ircv3_chghost">
+<module name="ircv3_echomessage">
+<module name="ircv3_invitenotify">
+<module name="ircv3_labeledresponse">
+<module name="ircv3_ctctags">
+<ctctags allowclientonlytags="yes">
+<module name="ircv3_msgid">
+<module name="ircv3_servertime">
+<module name="joinflood">
+<joinflood bootwait="30s"
+           duration="1m"
+           splitwait="30s">
+<module name="kicknorejoin">
+<module name="maphide">
+<module name="md5">
+<module name="messageflood">
+<messageflood notice="1.0"
+              privmsg="1.0"
+              tagmsg="0.2">
+<module name="monitor">
+<monitor maxentries="32">
+<module name="namesx">
+<module name="noctcp">
+<module name="nokicks">
+<module name="nonicks">
+<module name="nonotice">
+<module name="opermotd">
+<module name="password_hash">
+<mkpasswd operonly="no">
+<module name="redirect">
+<module name="randquote">
+<randquote file="quotes"
+           prefix=""
+           suffix="">
+<module name="regex_glob">
+<module name="saquit">
+<module name="servprotect">
+<module name="sha1">
+<module name="sha256">
+<module name="showfile">
+<showfile name="RULES"
+          file="rules"
+          introtext="服务器规则:"
+          endtext="服务器规则结束.">
+<module name="stripcolor">
+<module name="uhnames">
+<module name="watch">
+<watch maxwatch="32">
+<module name="uninvite">
+<module name="channelban">
+<module name="rmode">
+<module name="serverban">
+<module name="cban">
+<cban glob="yes">
+<module name="hideoper">
+<module name="hostcycle">
+<module name="nickflood">
+<nickflood duration="60s">
+<module name="operchans">
+<module name="operlog">
+<module name="hidechans">
+<module name="services_account">
+<module name="spanningtree">
+<module name="sasl">
+<sasl requiressl="no"
+      target="localhost">
+<module name="autoop">
+<module name="knock">
+<knock notify="notice">
+<module name="inviteexception">
+<inviteexception bypasskey="yes">
+<module name="helpop">
+<helpmsg nohelp="您搜索的主题没有任何帮助.请再试一次.">
+<include file="&ConfPath;/helpop.conf">
+<module name="geoclass">
+<module name="exemptchanops">
+<module name="sslmodes">
+<module name="starttls">
+<module name="sslinfo">
+<module name="operprefix">
+<operprefix prefix="!">
+<module name="ojoin">
+<module name="customprefix">
+<module name="conn_umodes">
+<module name="conn_join">
+<module name="cycle">
+<module name="globops">
+<module name="inviteexception">
+<module name="namedmodes">
+<module name="muteban">
+<module name="nicklock">
+<module name="remove">
+<module name="rline">
+<module name="sakick">
+<module name="sapart">
+<module name="samode">
+<module name="satopic">
+<module name="seenicks">
+<module name="cgiirc">
+<module name="chanlog">
+<module name="chancreate">
+<module name="cban">
+<module name="abbreviation">
+<module name="alias">
+<module name="allowinvite">
+<module name="anticaps">
+<module name="auditorium">
+<module name="banexception">
+<module name="banredirect">
+<module name="bcrypt">
+<module name="filter">
+<module name="chanfilter">
+<module name="commonchans">
+<module name="conn_waitpong">
+<module name="connectban">
+<connectban threshold=""
+            banmessage="您的IP范围在太短的时间内尝试连接太多次.稍等片刻,您将能够连接."
+            banduration="15s"
+            ipv4cidr="32"
+            ipv6cidr="128"
+            bootwait="10s"
+            splitwait="10s">
+<module name="connflood">
+<module name="customtitle">
+<module name="denychans">
+<module name="disable">
+<module name="dnsbl">
+<module name="geoclass">
+<module name="geoban">
+<module name="haproxy">
+<module name="ident">
+<module name="override">
+<module name="passforward">
+<module name="pbkdf2">
+<module name="permchannels">
+<permchanneldb filename="&ConfPath;/permchannels.conf"
+               listmodes="yes"
+               operonly="yes"
+               saveperiod="5s">
+<module name="serverban">
+<module name="sethost">
+<module name="setidle">
+<module name="setname">
+<module name="showwhois">
+<module name="silence">
+<module name="vhost">
+<module name="watch">
+<module name="topiclock">
+<module name="sajoin">
+<module name="operlevels">
+<module name="opermodes">
+<module name="swhois">
+<module name="tline">
+<module name="timedbans">
+<module name="shun">
+<module name="svshold">
+<module name="securelist">
+<module name="operjoin">
+<operjoin channel="#OP_OP"
+          override="yes">
+<module name="mlock">
+<module name="hidemode">
+<module name="hidelist">
+<module name="gecosban">
+<module name="chgident">
+<module name="chgname">
+<module name="classban">
+<module name="channames">
+<module name="clones">
+<module name="hostchange">
+<module name="nopartmsg">
+<module name="userip">

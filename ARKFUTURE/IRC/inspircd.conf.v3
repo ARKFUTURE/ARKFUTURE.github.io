@@ -1,6 +1,6 @@
-#inspircd<10> -- UTF-8 
+#inspircd<10> -- UTF-8 --INSPIRCD v3
 # 这只是一个或多或少可以使用的配置文件示例,此配置为ARKFUTURE-IRC使用
-# 在配置文件<10+>之后，我们将做好迁移到v4的准备
+# 注意:在配置文件<10+>之后,我们将做好迁移到v4的准备,mod也随之替换,之后,我们将分为两个版本的配置文件
 # 
 # 汉化配置文件由ARKFUTURE翻译,使用UTF-8编码
 # 添加部分说明,并完善主要功能,需要自行定制
@@ -16,7 +16,7 @@
 
 
 #-#-#-#-#-#-#-#-#-#-#-#-定义-#-#-#-#-#-#-#-#-#-#-#-#-#
-# <path> 标记定义 config、data、log 和 module 目录的位置。此标签只能定义一次
+# <path> 标记定义 config、data、log 和 module 目录的位置.此标签只能定义一次
 <path configdir="/etc/inspircd/"
       datadir="&dir.data;"
       logdir="&dir.log;"
@@ -38,7 +38,7 @@
 
 
 #-#-#-#-#-#-#-#-#-#-#-#-管理员信息-#-#-#-#-#-#-#-#-#-#-#-#-#
-#<admin>标签定义了服务器管理员的联系方式.此标记只能定义一次. (v4更改！)
+#<admin>标签定义了服务器管理员的联系方式.此标记只能定义一次. 
 <admin name="arkfutureadmin"
        nick="arkfutureadmin"
        email="ADMIN@ARKFUTURE.CN">
@@ -96,7 +96,7 @@
 <class name="HostCloak"
        commands="SETHOST SETIDENT CHGNAME CHGHOST CHGIDENT">
 
-#<type>标签定义了服务器操作员的类型.此标记可以根据需要定义多次. (v4更改！)
+#<type>标签定义了服务器操作员的类型.此标记可以根据需要定义多次. 
 # 这里必要的话请限制登录主机 "host" 字段
 <type name="NetAdmin"
        classes="OperChat BanControl HostCloak Shutdown ServerLink"
@@ -146,7 +146,7 @@
 
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-服务器选项-#-#-#-#-#-#-#-#-#-#-#-#-#
-#<options>标签定义了常规配置选项.此标记只能定义一次.(v4更改！)
+#<options>标签定义了常规配置选项.此标记只能定义一次.
 <options prefixquit="Quit: "
          syntaxhints="no"
          announcets="yes"
@@ -182,7 +182,7 @@
 
 
 #-#-#-#-#-#-#-#-#-#-#-#性能配置#-#-#-#-#-#-#-#-#-#-#
-#<performance>标签定义了与服务器性能相关的配置选项.此标记只能定义一次.(v4更改！)
+#<performance>标签定义了与服务器性能相关的配置选项.此标记只能定义一次.
 <performance clonesonconnect="yes"
              quietbursts="yes"
              softlimit="15000"
@@ -233,7 +233,7 @@
 <badnick nick="MemoServ" reason="Reserved For Services">
 
 
-#-#-#-#-#-#-#-#-#-#-#-#-#MOD(模组)#-#-#-#-#-#-#-#-#-#-#-#(v4更改！)
+#-#-#-#-#-#-#-#-#-#-#-#-#MOD(模组)#-#-#-#-#-#-#-#-#-#-#-#
 # 请阅读https://docs.inspircd.org/3/modules/
 # 其他模块配置请自行修改使用
 # 我们使用:导入MOD后立即跟MOD配置文件 的方式配置
@@ -408,7 +408,7 @@
 <module name="conn_waitpong">
 <module name="connectban">
 <connectban threshold=""
-            banmessage="您的IP范围在太短的时间内尝试连接太多次。稍等片刻，您将能够连接."
+            banmessage="您的IP范围在太短的时间内尝试连接太多次.稍等片刻,您将能够连接."
             banduration="15s"
             ipv4cidr="32"
             ipv6cidr="128"
@@ -460,8 +460,6 @@
 <module name="chgname">
 <module name="classban">
 <module name="channames">
-
-######在INSPIRCDv4中即将修改或废弃迁移的模块特别标注
 <module name="clones">
 <module name="hostchange">
 <module name="nopartmsg">

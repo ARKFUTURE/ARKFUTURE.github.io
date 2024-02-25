@@ -1,5 +1,5 @@
 #!/bin/bash  
-echo "脚本版本 :10 "
+echo "脚本版本 :11 "
 echo "Debian"
 service inspircd stop
 systemctl stop inspircd
@@ -9,9 +9,24 @@ echo "关闭INSPIRCD服务完成 "
 cd /etc/inspircd/  
 rm -rf /etc/inspircd/*
 
+read -p "INSPIRCD版本(请输入数字) 3/4: " vsss
+if [ "$vsss" = "3" ]; then
 echo "正在下载 INSPIRCD 配置文件 "
-wget -N  inspircd.conf http://arkfuture.cn/ARKFUTURE/IRC/inspircd.conf 
+wget -N  inspircd.conf http://arkfuture.cn/ARKFUTURE/IRC/inspircd.conf.v3
+mv  inspircd.conf.v3 inspircd.conf
 chmod 644 /etc/inspircd/inspircd.conf
+elif [ "$vsss" = "4" ]; then
+echo "正在下载 INSPIRCD 配置文件 "
+wget -N  inspircd.conf http://arkfuture.cn/ARKFUTURE/IRC/inspircd.conf.v4
+mv  inspircd.conf.v4 inspircd.conf
+chmod 644 /etc/inspircd/inspircd.conf
+else
+echo "输入的版本有误,默认下载版本为v3"
+echo "正在下载 INSPIRCD 配置文件 "
+wget -N  inspircd.conf http://arkfuture.cn/ARKFUTURE/IRC/inspircd.conf.v3
+mv  inspircd.conf.v3 inspircd.conf
+chmod 644 /etc/inspircd/inspircd.conf
+fi
 
 mkdir /etc/inspircd/conf/
 chmod 777 /etc/inspircd/conf/
