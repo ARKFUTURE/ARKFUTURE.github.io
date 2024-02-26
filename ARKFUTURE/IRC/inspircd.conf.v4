@@ -422,6 +422,6 @@
 #-#-#-#-#-#-#-#-#-#-#-#-#LOG(日志)#-#-#-#-#-#-#-#-#-#-#-#
 <log method="file"
      type="*"
-     level="warning"
+     level="normal"
      target="&ConfPath;/ircd.log"
-     flush="100">
+     flush="300">
