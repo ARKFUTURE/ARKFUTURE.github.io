@@ -1,4 +1,4 @@
-#inspircd<10.v4> -- UTF-8 --INSPIRCD v4
+#inspircd<11.v4> -- UTF-8 --INSPIRCD v4
 # 这只是一个或多或少可以使用的配置文件示例,此配置为ARKFUTURE-IRC使用
 # ARKFUTURE翻译
 # 添加部分说明,并完善主要功能,需要自行定制
@@ -423,5 +423,5 @@
 <log method="file"
      type="*"
      level="warning"
-     target="&ConfPath;ircd.log"
+     target="&ConfPath;/ircd.log"
      flush="100">
