@@ -22,7 +22,7 @@
       runtimedir="&dir.runtime;">
 # <define> 标记允许您定义 XML 样式的实体(定义服务器变量)
 <define name="ConfPath"
-        value="&dir.config;/conf/">
+        value="&dir.config;/conf">
 
 
 #-#-#-#-#-#-#-#-#-#-#-#-服务器描述-#-#-#-#-#-#-#-#-#-#-#-#-#
@@ -281,7 +281,7 @@
 <module name="classban">
 <module name="clearchan">
 <module name="cloak">
-<module name="cloak_md5">
+#此模块将被弃用<module name="cloak_md5">
 <module name="cloak_sha256">
 <module name="cloak_static">
 <module name="cloak_user">
@@ -334,7 +334,7 @@
 <module name="ircv3_labeledresponse">
 <module name="ircv3_msgid">
 <module name="ircv3_servertime">
-<module name="ircv3_sts">
+#<module name="ircv3_sts">
 <module name="joinflood">
 <module name="kicknorejoin">
 <module name="knock">
@@ -417,8 +417,8 @@
 <module name="uninvite">
 <module name="vhost">
 <module name="watch">
-<module name="websocket">
-#<module name="xline_db">
+#<module name="websocket">
+<module name="xline_db">
 
 ######配置模块
 #我们加载了可以使用的所有模块,部分模块没有正确配置会报错,报错的我们会及时注释掉,不影响正常使用

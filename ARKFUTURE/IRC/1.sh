@@ -1,5 +1,5 @@
 #!/bin/bash  
-echo "脚本版本 :11 "
+echo "脚本版本 :15 "
 echo "Debian"
 service inspircd stop
 systemctl stop inspircd
@@ -40,7 +40,10 @@ echo "正在下载 插件 配置文件 "
 wget -N  helpop.conf http://arkfuture.cn/ARKFUTURE/IRC/conf/helpop.conf  
 wget -N  opers.conf http://arkfuture.cn/ARKFUTURE/IRC/conf/opers.conf  
 wget -N  ssl.conf http://arkfuture.cn/ARKFUTURE/IRC/conf/ssl.conf  
+wget -N  permchannels.conf http://arkfuture.cn/ARKFUTURE/IRC/conf/modulesconf.conf
+echo "正在下载 插件 数据库文件 "
 wget -N  permchannels.conf http://arkfuture.cn/ARKFUTURE/IRC/conf/permchannels.conf 
+wget -N  xline.db http://arkfuture.cn/ARKFUTURE/IRC/conf/xline.db
 chmod 644 /etc/inspircd/conf/ -R
 cd ~
 
