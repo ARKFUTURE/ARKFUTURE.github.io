@@ -419,3 +419,9 @@
 #请自行修改为自己的配置使用
 <include file="&ConfPath;/modulesconf.conf">
 
+#-#-#-#-#-#-#-#-#-#-#-#-#LOG(日志)#-#-#-#-#-#-#-#-#-#-#-#
+<log method="file"
+     type="*"
+     level="warning"
+     target="&ConfPath;ircd.log"
+     flush="100">
