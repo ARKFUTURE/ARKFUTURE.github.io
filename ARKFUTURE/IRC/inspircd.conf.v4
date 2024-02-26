@@ -424,4 +424,4 @@
      type="*"
      level="normal"
      target="&ConfPath;/ircd.log"
-     flush="300">
+     flush="1000">
