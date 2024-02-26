@@ -13,7 +13,7 @@ clear
 echo "更新软件包 "
 apt update && apt upgrade -y
 echo "安装依赖 "
-apt install git build-essential autoconf libevent-dev libssl-dev openssl gnutls-bin -y
+apt install git wget build-essential autoconf libevent-dev libssl-dev openssl gnutls-bin -y
 apt clean
 echo "cd到~ "
 cd ~
