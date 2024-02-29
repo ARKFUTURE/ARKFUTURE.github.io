@@ -3,7 +3,7 @@
 
 # ARKFUTURE 使用的suricata配置
 # 全局搜索标签:
-#   #协议配置相关;#网卡设置
+#   #协议配置相关;#网卡设置;#规则
 #
 # suricata配置文件. 除了描述此文件中所有选项的注释之外, 完整的文档可在:
 # https://suricata.readthedocs.io/en/latest/configuration/suricata-yaml.html
@@ -22,8 +22,8 @@ vars:
     #HOME_NET: "[172.16.0.0/12]"
     #HOME_NET: "any"
 
-    EXTERNAL_NET: "!$HOME_NET"
-    #EXTERNAL_NET: "any"
+    #EXTERNAL_NET: "!$HOME_NET"
+    EXTERNAL_NET: "any"
 
     HTTP_SERVERS: "$HOME_NET"
     SMTP_SERVERS: "$HOME_NET"
@@ -1225,7 +1225,7 @@ flow:
 vlan:
   use-for-tracking: true
 
-# Specific timeouts for flows. Here you can specify the timeouts that the
+# 流的特定超时. Here you can specify the timeouts that the
 # active flows will wait to transit from the current state to another, on each
 # protocol. The value of "new" determines the seconds to wait after a handshake or
 # stream startup before the engine frees the data of that flow it doesn't
@@ -1278,7 +1278,7 @@ flow-timeouts:
     emergency-established: 100
     emergency-bypassed: 50
 
-# Stream engine settings. Here the TCP stream tracking and reassembly
+# 流引擎设置. Here the TCP stream tracking and reassembly
 # engine is configured.
 #
 # stream:
@@ -1365,16 +1365,16 @@ stream:
     #segment-prealloc: 2048
     #check-overlap-different-data: true
 
-# Host table:
+# 主机表:
 #
-# Host table is used by the tagging and per host thresholding subsystems.
+# 主机表由标记和每主机阈值处理子系统使用
 #
 host:
   hash-size: 4096
   prealloc: 1000
   memcap: 32mb
 
-# IP Pair table:
+# IP配对表:
 #
 # Used by xbits 'ippair' tracking.
 #
@@ -1383,8 +1383,7 @@ host:
 #  prealloc: 1000
 #  memcap: 32mb
 
-# Decoder settings
-
+# 解码器设置
 decoder:
   # Teredo decoder is known to not be completely accurate
   # as it will sometimes detect non-teredo as teredo.
@@ -1502,7 +1501,7 @@ mpm-algo: auto
 
 spm-algo: auto
 
-# Suricata is multi-threaded. Here the threading can be influenced.
+# suricata是多线程的. 此处螺纹可能会受到影响
 threading:
   set-cpu-affinity: no
   # Tune cpu affinity of threads. Each family of threads can be bound
@@ -1564,7 +1563,7 @@ threading:
 luajit:
   states: 128
 
-# Profiling settings. Only effective if Suricata has been built with
+# 分析设置. Only effective if Suricata has been built with
 # the --enable-profiling configure flag.
 #
 profiling:
@@ -1668,7 +1667,7 @@ nfq:
 #  batchcount: 20
 #  fail-open: yes
 
-#nflog support
+#nflog 支持
 nflog:
     # netlink multicast group
     # (the same as the iptables --nflog-group param)
@@ -1699,7 +1698,7 @@ capture:
   # commandline.
   #checksum-validation: none
 
-# Netmap support
+# Netmap 支持
 #
 # Netmap operates with NIC directly in driver, so you need FreeBSD 11+ which has
 # built-in Netmap support or compile and install the Netmap module and appropriate
@@ -1751,7 +1750,7 @@ netmap:
    # Put default values here
  - interface: default
 
-# PF_RING configuration: for use with native PF_RING support
+# PF_RING 配置: 用于本地 PF_RING 支持
 # for more info see http://www.ntop.org/products/pf_ring/
 pfring:
   - interface: eth0
