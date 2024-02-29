@@ -1710,7 +1710,7 @@ capture:
 # You can find more information at https://github.com/luigirizzo/netmap
 #
 netmap:
-   # To specify OS endpoint add plus sign at the end (e.g. "eth0+")
+   # 要指定OS端点，请在端点处添加加号 (e.g. "eth0+") #网卡设置
  - interface: eth2
    # Number of capture threads. "auto" uses number of RSS queues on interface.
    # Warning: unless the RSS hashing is symmetrical, this will lead to
@@ -1750,7 +1750,7 @@ netmap:
    # Put default values here
  - interface: default
 
-# PF_RING 配置: 用于本地 PF_RING 支持
+# PF_RING 配置: 用于本地 PF_RING 支持 #网卡设置
 # for more info see http://www.ntop.org/products/pf_ring/
 pfring:
   - interface: eth0
