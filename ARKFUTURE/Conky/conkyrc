@@ -1,0 +1,2 @@
+    own_window_type = 'normal',
+    own_window_hint = 'undecorated,below,sticky,skip_taskbar,skip_pager'
