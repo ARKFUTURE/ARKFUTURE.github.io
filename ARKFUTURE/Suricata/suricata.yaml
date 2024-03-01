@@ -84,6 +84,11 @@ outputs:
       append: yes
       #filetype: regular # 'regular', 'unix_stream' or 'unix_dgram'
 
+  - msmtp:
+      enabled: yes
+      filename: suricata_alerts.txt
+      msmtprc: /etc/msmtp/msmtprc
+
   # json格式的可扩展事件格式(昵称为eve)事件日志
   - eve-log:
       enabled: yes
