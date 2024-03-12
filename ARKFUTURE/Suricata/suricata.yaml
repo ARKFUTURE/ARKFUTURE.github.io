@@ -3,7 +3,7 @@
 
 # ARKFUTURE 使用的suricata配置
 # 全局搜索标签:
-#   #协议配置相关;#网卡设置;#规则
+#   #协议配置相关;#网卡设置;#规则;#网络设置;#日志相关
 #
 # suricata配置文件. 除了描述此文件中所有选项的注释之外, 完整的文档可在:
 # https://suricata.readthedocs.io/en/latest/configuration/suricata-yaml.html
@@ -14,7 +14,7 @@
 ##
 
 vars:
-  # 越具体 警报的准确性和性能越好
+  # 越具体 警报的准确性和性能越好; vars为变量的意思; 将HOME_NET修改为你要监测的网段; EXTERNAL_NET为!$HOME_NET 则代表排除的网段为非HOME_NET网段的IP  #网络设置
   address-groups:
     HOME_NET: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
     #HOME_NET: "[192.168.0.0/16]"
@@ -23,7 +23,7 @@ vars:
     #HOME_NET: "any"
 
     #EXTERNAL_NET: "!$HOME_NET"
-    EXTERNAL_NET: "any"
+    #EXTERNAL_NET: "any"
 
     HTTP_SERVERS: "$HOME_NET"
     SMTP_SERVERS: "$HOME_NET"
@@ -75,7 +75,7 @@ stats:
   # Add stream events as stats.
   #stream-events: false
 
-# 配置您想要的警报(和其他)日志记录的类型
+# 配置您想要的警报(和其他)日志记录的类型 #日志相关
 outputs:
   # 类似于snort的快速日志的基于行的警报日志 fast.log
   - fast:
@@ -586,7 +586,7 @@ logging:
 ## 
 ##
 
-# Linux高速捕获支持 #网卡设置
+# Linux高速捕获支持; 将interface修改为你需要捕获的网卡即可 这里支持同时捕获多张网卡 按照yaml格式插入到interface: default之前即可 #网卡设置
 af-packet:
   - interface: eth0
     # Number of receive threads. "auto" uses the number of cores
@@ -1956,3 +1956,10 @@ threshold-file: /etc/suricata/threshold.config
 # 导入其他文件,可以使用绝对路径跟相对路径
 #include: include1.yaml
 #include: include2.yaml
+
+##
+## 实时重载
+##
+
+detect-engine:
+  - rule-reload: true
