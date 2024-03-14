@@ -10,10 +10,11 @@
 <!-------------正文-------> 
 <body>
 <h1 class="welcome">Welcome to ARKFUTURE</h1>
+<img class="logo" src="https://arkfuture.cn/ARKFUTURE/RES/sa.png">
 
 <br>
 
-<div class="zww">
+<div class="zww" name="1">
     <h1>欢迎</h1>
     
     <h2>公约</h2>
@@ -39,7 +40,7 @@
     </p>
 </div>
 <br>
-<div class="zww">
+<div class="zww" name="2">
     <h1>服务及说明[代理/资源库/日历/IRC等服务]</h1>
 
     <h2>WEB</h2>
@@ -116,7 +117,7 @@
 
 </div>
 <br>
-<div class="zww">
+<div class="zww" name="3">
     <h1>一些链接</h1>
 
     <p>
@@ -171,9 +172,8 @@
         [Opendns DoH](<a href="https://doh.opendns.com/dns-query">https://doh.opendns.com/dns-query</a>)
     </p>
 </div>
-
-
-<div class="zww">
+<br>
+<div class="zww" name="4">
     <h1>License/开源软件证书/知识共享开放许可</h1>
 
     <h2>资源使用及版权说明</h2>
@@ -204,9 +204,8 @@
     </p>
     </center>
 </div>
-
-
-<div class="zww">
+<br>
+<div class="zww" name="5">
     <h1>写在最后</h1>
 
     <h2>我们崇尚黑客精神</h2>
@@ -237,13 +236,24 @@ body {
     height: 100%;
     min-height: 100vh;
     width: 100%;
-    background: var(--main-bg-color, linear-gradient(50deg, hsl(204, 91%, 86%), rgb(217, 157, 240)));
     overflow-x: hidden;
     justify-content: center;
-    background-image: url("https://w.wallhaven.cc/full/72/wallhaven-72yzje.jpg");
+    background: var(--main-bg-color, linear-gradient(50deg, hsl(204, 91%, 86%), rgb(217, 157, 240)));
+    /*
+    background-image: url("");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
+    */
+}
+.logo {
+    display: flex;
+    width: 20%;
+    height: 20%;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 .welcome {
     margin: 30px;
@@ -267,15 +277,15 @@ body {
     transition: all 0.5s;
 }
 .zww h1 {
-    text-shadow: 0px 0px 12px white;
-    margin: 20px;
+    text-shadow: 0px 0px 12px rgba(255, 255, 255, 0.5);
+    margin: 30px;
     overflow: hidden;
     justify-content: center;
     align-items: center;
     text-align: center;
 }
 .zww h2 {
-    text-shadow: 0px 0px 12px white;
+    text-shadow: 0px 0px 12px rgba(255, 255, 255, 0.5);
     margin: 20px;
     overflow: hidden;
     justify-content: center;
@@ -283,7 +293,7 @@ body {
     text-align: left;
 }
 .zww p {
-    text-shadow: 0px 0px 12px white;
+    text-shadow: 0px 0px 12px rgba(255, 255, 255, 0.5);
     margin: 20px;
     white-space: pre;
     overflow: hidden;
