@@ -266,8 +266,6 @@
         justify-content: center;
         /* 设置元素的所有属性变化时的过渡效果,持续时间为0.5秒 */
         transition: all 0.5s;
-    
-        transform-origin: center;
     }
 
     .zww h1 {
@@ -293,6 +291,12 @@
         justify-content: center;
         align-items: left;
     }
+
+
+    @media screen and (max-width: 768px) {
+    .zww {
+        width: 100%;
+    }
 </style>
 
 <!-------------JS------->
@@ -313,25 +317,6 @@
     });
 
 
-    var scale = 1;
-    var initialDistance = 0;
-    document.querySelector('.zww').addEventListener('touchstart', function (event) {
-        if (event.touches.length === 2) {
-            initialDistance = getDistance(event.touches[0], event.touches[1]);
-        }
-    });
-    document.querySelector('.zww').addEventListener('touchmove', function (event) {
-        if (event.touches.length === 2) {
-            var currentDistance = getDistance(event.touches[0], event.touches[1]);
-            scale = currentDistance / initialDistance;
-            this.style.transform = 'scale(' + scale + ')';
-        }
-    });
-    function getDistance(point1, point2) {
-        var x = point1.clientX - point2.clientX;
-        var y = point1.clientY - point2.clientY;
-        return Math.sqrt(x * x + y * y);
-    }
 
 </script>
 
