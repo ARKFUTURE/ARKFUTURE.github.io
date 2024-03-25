@@ -1711,7 +1711,7 @@ capture:
 #
 netmap:
    # 要指定OS端点，请在端点处添加加号 (e.g. "eth0+") #网卡设置
- - interface: eth2
+ - interface: eth0
    # Number of capture threads. "auto" uses number of RSS queues on interface.
    # Warning: unless the RSS hashing is symmetrical, this will lead to
    # accuracy issues.
