@@ -1,20 +1,20 @@
 function FindProxyForURL(url, host) {
-    const basic = [".twitter.com", ".youtube.com", ".telegram.org", ".instagram.com", ".tiktok.com", ".facebook.com", ".discord.com" ,".github.com"];
-    const search = [".duckduckgo.com", ".google.com", ".yandex.com"]
-    const other = [".pornhub.com", ".xvideos.com", ".xnxx.com", ".xhamster.com"];
 
-    if (basic.some(domain => dnsDomainIs(host, domain))) {
-        return "PROXY 192.168.0.2:5555; SOCKS5 192.168.0.2:5554; DIRECT";
-    } 
-    else if (search.some(domain => dnsDomainIs(host, domain))){
-        return "PROXY 192.168.0.2:5555; SOCKS5 192.168.0.2:5554; DIRECT";
+    if (dnsDomainIs(host, ".twitter.com") || dnsDomainIs(host, ".youtube.com") || dnsDomainIs(host, ".telegram.org") || dnsDomainIs(host, ".instagram.com") || dnsDomainIs(host, ".tiktok.com") || dnsDomainIs(host, ".facebook.com") || dnsDomainIs(host, ".discord.com") || dnsDomainIs(host, ".github.com")) {
+        return "SOCKS5 192.168.0.2:5554; PROXY 192.168.0.2:5555; DIRECT";
     }
-    else if (other.some(domain => dnsDomainIs(host, domain))){
-        return "PROXY 192.168.0.2:5555; SOCKS5 192.168.0.2:5554; DIRECT";
+
+    else if (dnsDomainIs(host, ".duckduckgo.com") || dnsDomainIs(host, ".google.com") || dnsDomainIs(host, ".yandex.com")) {
+        return "SOCKS5 192.168.0.2:5554; PROXY 192.168.0.2:5555; DIRECT";
     }
+
+    else if (dnsDomainIs(host, ".pornhub.com") || dnsDomainIs(host, ".xvideos.com") || dnsDomainIs(host, ".xnxx.com") || dnsDomainIs(host, ".xhamster.com")) {
+        return "SOCKS5 192.168.0.2:5554; PROXY 192.168.0.2:5555; DIRECT";
+    }
+
     else {
         return "DIRECT";
     }
 }
 
-  
+
