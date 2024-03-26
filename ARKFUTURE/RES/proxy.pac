@@ -1,15 +1,15 @@
 function FindProxyForURL(url, host) {
-    // 主要站点
-    if (dnsDomainIs(host, ".twitter.com") || dnsDomainIs(host, ".youtube.com") || dnsDomainIs(host, ".telegram.org") || dnsDomainIs(host, ".instagram.com") || dnsDomainIs(host, ".tiktok.com") || dnsDomainIs(host, ".facebook.com") || dnsDomainIs(host, ".discord.com") || dnsDomainIs(host, ".github.com")) {
+
+    if (shExpMatch(host, "*.com")) {
         return "SOCKS5 192.168.0.2:5554; PROXY 192.168.0.2:5555; DIRECT";
     }
-    // 搜索引擎
-    else if (dnsDomainIs(host, ".duckduckgo.com") || dnsDomainIs(host, ".google.com") || dnsDomainIs(host, ".yandex.com")) {
-        return "SOCKS5 192.168.0.2:5554; PROXY 192.168.0.2:5555; DIRECT";
-    }
-    // 其他网站
+
     else if (dnsDomainIs(host, ".pornhub.com") || dnsDomainIs(host, ".xvideos.com") || dnsDomainIs(host, ".xnxx.com") || dnsDomainIs(host, ".xhamster.com")) {
         return "SOCKS5 192.168.0.2:5554; PROXY 192.168.0.2:5555; DIRECT";
+    }
+
+    else if (shExpMatch(host, "*.cn") || shExpMatch(host, "*.gov.cn") || shExpMatch(host, "*.org.cn") || shExpMatch(host, "*.edu.cn") ) {
+        return "DIRECT";
     }
 
     else {
