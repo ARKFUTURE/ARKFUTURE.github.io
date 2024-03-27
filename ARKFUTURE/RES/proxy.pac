@@ -3,7 +3,7 @@ function FindProxyForURL(url, host) {
 
     var proxyServer = "DIRECT; SOCKS5 192.168.0.2:5554; PROXY 192.168.0.2:5555";
 
-    if (shExpMatch(host, "*.com") || shExpMatch(host, "*.org") || shExpMatch(host, "*.net")) {
+    if (shExpMatch(host, "*.*")) {
         return proxyServer;
     }
 
