@@ -1,7 +1,7 @@
 // ARKFUTURE
 function FindProxyForURL(url, host) {
 
-    var proxyServer = "SOCKS5 192.168.0.2:5554; PROXY 192.168.0.2:5555; DIRECT";
+    var proxyServer = "DIRECT; SOCKS5 192.168.0.2:5554; PROXY 192.168.0.2:5555";
 
     if (shExpMatch(host, "*.com") || shExpMatch(host, "*.org") || shExpMatch(host, "*.net")) {
         return proxyServer;
