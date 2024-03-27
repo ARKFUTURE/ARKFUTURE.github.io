@@ -11,10 +11,6 @@ function FindProxyForURL(url, host) {
         return proxyServer;
     }
 
-    else if (shExpMatch(host, "*.cn") || shExpMatch(host, "*.gov.cn") || shExpMatch(host, "*.org.cn") || shExpMatch(host, "*.edu.cn") ) {
-        return "DIRECT";
-    }
-
     else {
         return "DIRECT";
     }
