@@ -8,7 +8,7 @@ function FindProxyForURL(url, host) {
         return proxyServer1;
     }
 
-    else if (dnsDomainIs(host, ".pornhub.com") || dnsDomainIs(host, ".xvideos.com") || dnsDomainIs(host, ".xnxx.com") || dnsDomainIs(host, ".xhamster.com")) {
+    else if (dnsDomainIs(host, ".pornhub.com") || dnsDomainIs(host, ".xvideos.com") || dnsDomainIs(host, ".xnxx.com") || dnsDomainIs(host, ".xhamster.com") || dnsDomainIs(host, ".twitter.com")) {
         return proxyServer2;
     }
 
