@@ -11,20 +11,21 @@
             <outline text="V2EX" type="rss" htmlUrl="https://www.v2ex.com/" xmlUrl="https://www.v2ex.com/feed/tab/tech.xml"/>
         </outline>
         <outline text="组织">
-            <outline text="openmediavault" type="rss" htmlUrl="https://www.openmediavault.org" xmlUrl="https://www.openmediavault.org/?feed=atom"/>
+            <outline text="Openmediavault" type="rss" htmlUrl="https://www.openmediavault.org" xmlUrl="https://www.openmediavault.org/?feed=atom"/>
             <outline text="Debian" type="rss" htmlUrl="https://www.debian.org/News/" xmlUrl="https://www.debian.org/News/news"/>
             <outline text="InspIRCd" type="rss" htmlUrl="http://www.inspircd.org" xmlUrl="https://www.inspircd.org/atom.xml"/>
             <outline text="RtlSdr" type="rss" htmlUrl="https://www.rtl-sdr.com" xmlUrl="https://www.rtl-sdr.com/feed/"/>
             <outline text="Phoronix" type="rss" htmlUrl="https://www.phoronix.com/" xmlUrl="https://www.phoronix.com/rss.php"/>
             <outline text="OBS" type="rss" htmlUrl="https://obsproject.com/forum/" xmlUrl="https://obsproject.com/forum/list/-/index.rss"/>
             <outline text="KiCad" type="rss" htmlUrl="https://www.kicad.org/blog/" xmlUrl="https://www.kicad.org/blog/index.xml"/>
-            <outline text="postmarketOS" type="rss" htmlUrl="https://postmarketos.org/blog/" xmlUrl="https://postmarketos.org/blog/feed.atom"/>
+            <outline text="PostmarketOS" type="rss" htmlUrl="https://postmarketos.org/blog/" xmlUrl="https://postmarketos.org/blog/feed.atom"/>
             <outline text="Kali Linux" type="rss" htmlUrl="https://www.kali.org/" xmlUrl="https://www.kali.org/rss.xml"/>
             <outline text="LinuxGSM" type="rss" htmlUrl="https://linuxgsm.com" xmlUrl="https://linuxgsm.com/feed/"/>
             <outline text="FreeBSD" type="rss" htmlUrl="https://www.freebsd.org/news/" xmlUrl="https://www.freebsd.org/news/feed.xml"/>
             <outline text="IRCv3" type="rss" htmlUrl="https://ircv3.net" xmlUrl="https://ircv3.net/feed.xml"/>
             <outline text="Linux内核" type="rss" htmlUrl="http://www.kernel.org" xmlUrl="https://www.kernel.org/feeds/kdist.xml"/>
             <outline text="GNU" type="rss" htmlUrl="https://planet.gnu.org/" xmlUrl="https://planet.gnu.org/rss20.xml"/>
+            <outline text="DefCon" type="rss" htmlUrl="https://defcon.org/" xmlUrl="https://defcon.org/defconrss.xml"/>
         </outline>
         <outline text="影视/文创">
             <outline text="爱恋动漫" type="rss" htmlUrl="http://www.kisssub.org" xmlUrl="http://www.kisssub.org/rss.xml"/>
@@ -46,7 +47,7 @@
             <outline text="半岛电视台" type="rss" htmlUrl="https://www.aljazeera.com" xmlUrl="https://www.aljazeera.com/xml/rss/all.xml"/>
             <outline text="俄罗斯卫星社" type="rss" htmlUrl="https://sputnikglobe.com" xmlUrl="https://sputnikglobe.com/export/rss2/archive/index.xml"/>
         </outline>
-        <outline text="漏洞更新">
+        <outline text="漏洞">
             <outline text="Exploit-DB.com RSS Feed" type="rss" htmlUrl="https://www.exploit-db.com" xmlUrl="https://www.exploit-db.com/rss.xml"/>
             <outline text="Sploitus" type="rss" htmlUrl="https://sploitus.com/rss" xmlUrl="https://sploitus.com/rss"/>
             <outline text="exp库" type="rss" htmlUrl="http://www.expku.com" xmlUrl="http://www.expku.com/rss/rss.xml"/>
