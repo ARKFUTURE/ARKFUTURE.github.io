@@ -414,7 +414,7 @@ outputs:
 
   # Stats.log包含来自Suricata引擎的各种计数器的数据
   - stats:
-      enabled: yes
+      enabled: no
       filename: stats.log
       append: yes       # append to file (yes) or overwrite it (no)
       totals: yes       # stats for all threads merged together
