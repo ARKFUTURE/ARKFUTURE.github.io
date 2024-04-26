@@ -27,7 +27,7 @@
             <outline text="Kali" type="rss" htmlUrl="https://www.kali.org/" xmlUrl="https://www.kali.org/rss.xml"/>
             <outline text="FreeBSD" type="rss" htmlUrl="https://www.freebsd.org/" xmlUrl="https://www.freebsd.org/news/feed.xml"/>
             <outline text="PostmarketOS" type="rss" htmlUrl="https://postmarketos.org/" xmlUrl="https://postmarketos.org/blog/feed.atom"/>
-            <outline text="Openmediavault" type="rss" htmlUrl="https://www.openmediavault.org" xmlUrl="https://www.openmediavault.org/?feed=atom"/>
+            <outline text="Openmediavault" type="rss" htmlUrl="https://www.openmediavault.org/" xmlUrl="https://www.openmediavault.org/?feed=atom"/>
         </outline>
         <outline text="影视/文创">
             <outline text="爱恋动漫" type="rss" htmlUrl="http://www.kisssub.org/" xmlUrl="http://www.kisssub.org/rss.xml"/>
