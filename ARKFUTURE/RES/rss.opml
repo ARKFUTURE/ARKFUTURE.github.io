@@ -18,6 +18,7 @@
             <outline text="KiCad" type="rss" htmlUrl="https://www.kicad.org/blog/" xmlUrl="https://www.kicad.org/blog/index.xml"/>
             <outline text="LinuxGSM" type="rss" htmlUrl="https://linuxgsm.com/" xmlUrl="https://linuxgsm.com/feed/"/>
             <outline text="IRCv3" type="rss" htmlUrl="https://ircv3.net/" xmlUrl="https://ircv3.net/feed.xml"/>
+            <outline text="Suricata" type="rss" htmlUrl="https://suricata.io/" xmlUrl="https://suricata.io/feed/"/>
             <outline text="Linux内核" type="rss" htmlUrl="http://www.kernel.org/" xmlUrl="https://www.kernel.org/feeds/kdist.xml"/>
             <outline text="GNU" type="rss" htmlUrl="https://planet.gnu.org/" xmlUrl="https://planet.gnu.org/rss20.xml"/>
             <outline text="DefCon" type="rss" htmlUrl="https://defcon.org/" xmlUrl="https://defcon.org/defconrss.xml"/>
