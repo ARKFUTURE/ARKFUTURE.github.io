@@ -10,7 +10,7 @@
             <outline text="吾爱破解" type="rss" htmlUrl="https://www.52pojie.cn/" xmlUrl="https://www.52pojie.cn/forum.php?mod=rss"/>
             <outline text="V2EX" type="rss" htmlUrl="https://www.v2ex.com/" xmlUrl="https://www.v2ex.com/feed/tab/tech.xml"/>
         </outline>
-        <outline text="组织">
+        <outline text="社区/组织">
             <outline text="InspIRCd" type="rss" htmlUrl="http://www.inspircd.org/" xmlUrl="https://www.inspircd.org/atom.xml"/>
             <outline text="RtlSdr" type="rss" htmlUrl="https://www.rtl-sdr.com/" xmlUrl="https://www.rtl-sdr.com/feed/"/>
             <outline text="Phoronix" type="rss" htmlUrl="https://www.phoronix.com/" xmlUrl="https://www.phoronix.com/rss.php"/>
@@ -22,6 +22,7 @@
             <outline text="Linux内核" type="rss" htmlUrl="http://www.kernel.org/" xmlUrl="https://www.kernel.org/feeds/kdist.xml"/>
             <outline text="GNU" type="rss" htmlUrl="https://planet.gnu.org/" xmlUrl="https://planet.gnu.org/rss20.xml"/>
             <outline text="DefCon" type="rss" htmlUrl="https://defcon.org/" xmlUrl="https://defcon.org/defconrss.xml"/>
+            <outline text="GoDot" type="rss" htmlUrl="https://godotengine.org/" xmlUrl="https://godotengine.org/rss.xml"/>
         </outline>
         <outline text="系统">
             <outline text="Debian" type="rss" htmlUrl="https://www.debian.org/" xmlUrl="https://www.debian.org/News/news"/>
