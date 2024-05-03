@@ -24,7 +24,7 @@
             <outline text="DefCon" type="rss" htmlUrl="https://defcon.org/" xmlUrl="https://defcon.org/defconrss.xml"/>
             <outline text="GoDot" type="rss" htmlUrl="https://godotengine.org/" xmlUrl="https://godotengine.org/rss.xml"/>
         </outline>
-        <outline text="系统">
+        <outline text="系统博客">
             <outline text="Debian" type="rss" htmlUrl="https://www.debian.org/" xmlUrl="https://www.debian.org/News/news"/>
             <outline text="Kali" type="rss" htmlUrl="https://www.kali.org/" xmlUrl="https://www.kali.org/rss.xml"/>
             <outline text="Blackarch." type="rss" htmlUrl="https://blackarch.org/" xmlUrl="https://blackarch.org/rss.xml"/>
