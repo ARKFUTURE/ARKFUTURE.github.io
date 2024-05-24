@@ -23,6 +23,7 @@
             <outline text="GNU" type="rss" htmlUrl="https://planet.gnu.org/" xmlUrl="https://planet.gnu.org/rss20.xml"/>
             <outline text="DefCon" type="rss" htmlUrl="https://defcon.org/" xmlUrl="https://defcon.org/defconrss.xml"/>
             <outline text="GoDot" type="rss" htmlUrl="https://godotengine.org/" xmlUrl="https://godotengine.org/rss.xml"/>
+            <outline text="Bleepingcomputer" type="rss" htmlUrl="https://www.bleepingcomputer.com/" xmlUrl="https://www.bleepingcomputer.com/feed/"/>
         </outline>
         <outline text="系统博客">
             <outline text="Debian" type="rss" htmlUrl="https://www.debian.org/" xmlUrl="https://www.debian.org/News/news"/>
