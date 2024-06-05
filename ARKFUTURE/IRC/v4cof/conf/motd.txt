@@ -1,0 +1,29 @@
+#motd<10> -- UTF-8 
+
+\b Welcome to ARKFUTURE irc
+\c12 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
+\c12 有关IRC的详细信息请参考/MOTD或https://arkfuture.cn/#IRC
+
+\b IRC 不记名，匿名建议:
+\c07 1.使用 "\c04代理\c07" 连接
+\c07 2.隐藏主机名,命令 "\c04/mode 您的用户名 +x\c07"
+\c07 3.使用 "\c04OTR\c07" 技术(部分程序会有)
+
+\b 加入我们/联系我们
+\c03 [\c04*IRC*\c03](irc://irc.arkfuture.cn:6667/#arkfuture_studio)
+\c03 [\c04Telegram\c03](https://t.me/arkfuture_studio)
+\c03 [\c04Matrix\c03](https://matrix.to/#/#arkfuture:matrix.org)
+\c03 [\c04Matrix\c03](https://matrix.to/#/#arkfuture_studio:matrix.org)
+ 
+\b 关于频道及帮助
+\c06 输入 \c04/JOIN #频道名\c06 加入您想加入的频道
+\c06 !! \c04您可以创建自己的频道，没有任何限制\c06 !!
+\c06 输入 \c04/RULES\c06 查看此irc规则
+\c06 输入 \c04/HELP\c06  以获取更多IRC帮助信息
+\c06 命令大全 引用网址:https://www.gxlsystem.com/hulianwang-1160257.html
+
+\b 频道列表
+\c04#arkfuture_studio \c02[工作室群]
+
+
+\b测 \i测 \x测 \r测 \u测 \c08测 \c09,01测 \h#cfff60测 \h#cfff60,#ff5959测
