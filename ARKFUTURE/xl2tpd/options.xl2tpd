@@ -15,9 +15,8 @@ connect-delay 5000
 +mschap-v2
 lcp-echo-failure 4
 lcp-echo-interval 30
-lock
 #debug
 dump
 logfd 2
-#logfile /var/log/xl2tpd.log
+logfile /var/log/xl2tpd/xl2tpd.log
 nomppe
