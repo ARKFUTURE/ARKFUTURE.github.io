@@ -22,8 +22,9 @@
 \c06 输入 \c04/HELP\c06  以获取更多IRC帮助信息
 \c06 命令大全 引用网址:https://www.gxlsystem.com/hulianwang-1160257.html
 
-\b 频道列表
+\b 主要频道
 \c04#arkfuture_studio \c02[工作室群]
+管理员 :arkfuture
 
 
-\b测 \i测 \x测 \r测 \u测 \c08测 \c09,01测 \h#cfff60测 \h#cfff60,#ff5959测
+\b测  \i测  \x测  \r测  \u测  \c08测  \c09,01测  \h#cfff60测  \h#cfff60,#ff5959测 
