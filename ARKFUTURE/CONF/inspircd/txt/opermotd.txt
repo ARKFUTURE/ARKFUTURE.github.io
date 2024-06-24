@@ -4,7 +4,7 @@
 但禁止滥用
 
 应急联系人
-@arkfutureadmin(区分大小写)
+@arkfuture(区分大小写)
 OP默认联系频道 #OP_OP_OP_OP
 
 粗体：\b 测

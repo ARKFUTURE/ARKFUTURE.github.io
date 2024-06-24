@@ -1,11 +1,11 @@
 #rules<10> -- UTF-8 
 
 公约
-HTTPS://ARKFUTURE.CN/ARKFUTURE/RES/ARKFUTURE.pdf
+HTTPS://ARKFUTURE.GITHUB.IO/ARKFUTURE/RES/ARKFUTURE.pdf
 
 IRC频道规则
 
     可以发文件
     可以加好友
     不可以发广告
-    举报攻击IRC/乱发/持续发送/BOT发送 联系管理: arkfutureadmin 封号
+    举报攻击IRC/乱发/持续发送/BOT发送 联系管理: arkfuture 封号
