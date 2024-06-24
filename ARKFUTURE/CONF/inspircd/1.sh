@@ -2,10 +2,10 @@ timestamp=$(date +%s)
 apt update && apt upgrade && apt install curl
 cd /etc/inspircd
 rm -rf *
+curl https://arkfuture.github.io/CONF/inspircd/inspircd.conf
 mkdir conf
 cd /etc/inspircd/conf
 echo "下载配置文件"
-curl https://arkfuture.github.io/CONF/inspircd/inspircd.conf
 curl https://arkfuture.github.io/CONF/inspircd/conf/helpop.conf
 curl https://arkfuture.github.io/CONF/inspircd/conf/opers.conf
 curl https://arkfuture.github.io/CONF/inspircd/conf/permchannels.conf
