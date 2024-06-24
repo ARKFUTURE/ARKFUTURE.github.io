@@ -5,9 +5,7 @@ HTTPS://ARKFUTURE.CN/ARKFUTURE/RES/ARKFUTURE.pdf
 
 IRC频道规则
 
-    #arkfuture_studio 工作室内部频道
-        发文件是点对点的,请接收文件前询问文件作用,以免为病毒文件
-        不限制文件扩展名
-        非内部成员不能进入
-
-    管理: arkfuture
+    可以发文件
+    可以加好友
+    不可以发广告
+    举报攻击IRC/乱发/持续发送/BOT发送 联系管理: arkfuture 封号
