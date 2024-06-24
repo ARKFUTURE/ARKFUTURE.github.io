@@ -3,7 +3,7 @@ apt update && apt upgrade && apt install curl
 cd /etc/inspircd
 rm -rf *
 echo "下载配置文件1"
-curl https://arkfuture.github.io/CONF/inspircd/inspircd.conf
+curl https://arkfuture.github.io/CONF/inspircd/inspircd.conf -o inspircd.conf
 mkdir conf
 cd /etc/inspircd/conf
 echo "下载配置文件2"
