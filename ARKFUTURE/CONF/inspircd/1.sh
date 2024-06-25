@@ -19,6 +19,6 @@ wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/txt/quotes.txt
 wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/txt/rules.txt
 cd /etc/inspircd/
 echo "$timestamp" >> updatetime
-chmod -x -R /etc/inspircd/
-chmod -x -R /etc/inspircd/*
+chmod 644 /etc/inspircd/ -R 
+chmod 644 /etc/inspircd/* -R
 exit
