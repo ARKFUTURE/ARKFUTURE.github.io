@@ -13,12 +13,18 @@
 
 <!-- body -->
 
-<body>
-    <div id="clock"></div> 
+<body> 
     <center>
         <header>
             <h1>ARKFUTURE Guide Page</h1>
-            <h1>引导页</h1>
+
+            <div class="marquee">  
+                <div class="marquee-content">  
+            
+                    当前：INSPIRCD4 正式启用啦，我们将使用INSPIRCD4来作为我们的IRC服务器      <br><br><div id="clock"></div>
+            
+                </div>  
+            </div>  
         </header>
     </center>
 
@@ -39,7 +45,7 @@
             <li><a href="https://t.me/arkfuture_studio">Telegram [arkfuture_studio]</a></li>
             <li><a href="https://matrix.to/#/#arkfuture_studio:matrix.org">Matrix [#arkfuture_studio:matrix.org]</a></li>
             <li><a href="mailto:ARKFUTURE@FOXMAIL.COM">订阅邮件列表 [ARKFUTURE@FOXMAIL.COM]</a></li>
-            <p>所有群信息均不同步，我们诚挚邀请您加入Telegram群</p>
+            <p>所有群信息均不同步，主要使用Telegram群和IRC</p>
         </div>
         <br>
         <div>
@@ -203,8 +209,9 @@
             clockElement.textContent = formattedTime; 
         }         
     updateClock();  
-    setInterval(updateClock, 1);
+    setInterval(updateClock, 100);
 </script>
+
 
 <style>
     h2 {
@@ -250,6 +257,27 @@
         border-bottom: 1px dotted;
         color: #fcb045;
     }
+    /* 跑马灯 */  
+.marquee {  
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;  
+    position: relative;  
+}  
+.marquee-content {  
+    display: inline-block;  
+    padding-left: 100%;
+    animation: marquee 25s linear infinite;
+}  
+@keyframes marquee {  
+    from {  
+        transform: translateX(0);  
+    }  
+    to {  
+        transform: translateX(-100%);
+    }  
+}
 </style>
 
 </body>
