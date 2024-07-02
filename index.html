@@ -197,7 +197,7 @@
             var minutes = now.getUTCMinutes();  
             var seconds = now.getUTCSeconds();  
             var milliseconds = now.getUTCMilliseconds();  
-            var formattedTime = `国家授时中心标准时间 ${now.getUTCFullYear()}-${('0' + (now.getUTCMonth() + 1)).slice(-2)}-${('0' + now.getUTCDate()).slice(-2)} ${('0' + hours).slice(-2)}:${('0' + minutes).slice(-2)}:${('0' + seconds).slice(-2)}:${('00' + milliseconds).slice(-3)}(UTC+08:00)`;  
+            var formattedTime = `时间: ${now.getUTCFullYear()}-${('0' + (now.getUTCMonth() + 1)).slice(-2)}-${('0' + now.getUTCDate()).slice(-2)} ${('0' + hours).slice(-2)}:${('0' + minutes).slice(-2)}:${('0' + seconds).slice(-2)}:${('00' + milliseconds).slice(-3)}(UTC+08:00)`;  
             clockElement.textContent = formattedTime;  
         }         
     updateClock();  
