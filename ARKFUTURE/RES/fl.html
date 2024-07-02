@@ -174,6 +174,71 @@
     <input type="submit" value="搜索"><i><--点击</i>
 </form>
 
+<button id="loadStations">加载电台列表(测试代码)</button>  
+
+<script>  
+
+    document.getElementById('loadStations').addEventListener('click', function() {  
+
+        fetch('http://at1.api.radio-browser.info/xml/stations')  
+
+            .then(response => {  
+
+                if (!response.ok) {  
+
+                    throw new Error('Network response was not ok');  
+
+                }  
+
+                return response.text(); // 获取XML文本  
+
+            })  
+
+            .then(data => {  
+
+                const parser = new DOMParser();  
+
+                const xmlDoc = parser.parseFromString(data, "text/xml");  
+
+
+
+                // 假设我们想要列出所有电台的名称和URL  
+
+                let stations = xmlDoc.getElementsByTagName('station');  
+
+                let stationsListHTML = '<ul>';  
+
+                stations.forEach(station => {  
+
+                    let name = station.getElementsByTagName('name')[0]?.textContent || 'Unknown Name';  
+
+                    let url = station.getElementsByTagName('url')[0]?.textContent || 'No URL Available';  
+
+                    stationsListHTML += `<li>Name: ${name}, URL: <a href="${url}" target="_blank">${url}</a></li>`;  
+
+                });  
+
+                stationsListHTML += '</ul>';  
+
+
+
+                // 展示结果  
+
+                document.getElementById('stationsList').innerHTML = stationsListHTML;  
+
+            })  
+
+            .catch(error => {  
+
+                console.error('There was a problem with your fetch operation:', error);  
+
+                document.getElementById('stationsList').innerHTML = '<p>加载数据失败</p>';  
+
+            });  
+
+    });  
+
+</script>  
 
 
 </body>
