@@ -156,43 +156,19 @@
         <input type="submit" value="搜索"><i><--点击</i>
     </form>
 
-<!-------------测试,包括js-------> 
-document.getElementById('loadStations').addEventListener('click', function() {  
-    fetch('http://at1.api.radio-browser.info/xml/stations')  
-        .then(response => {  
-            if (!response.ok) {  
-                throw new Error('Network response was not ok');  
-            }  
-            return response.text(); // 获取XML文本  
-        })  
-        .then(data => {  
-            // 由于直接操作XML字符串比较复杂，这里假设我们已经有了解析XML的库  
-            // 但在纯JS中，我们可以使用DOMParser来解析XML  
-            const parser = new DOMParser();  
-            const xmlDoc = parser.parseFromString(data, "text/xml");  
-  
-            // 假设我们想展示所有电台的名称  
-            let stations = xmlDoc.getElementsByTagName('station');  
-            let resultHTML = '<ul>';  
-            stations.forEach(station => {  
-                // 假设每个电台都有一个name标签  
-                let name = station.getElementsByTagName('name')[0].textContent;  
-                resultHTML += `<li>${name}</li>`;  
-            });  
-            resultHTML += '</ul>';  
-  
-            // 展示结果  
-            document.getElementById('result').innerHTML = resultHTML;  
-        })  
-        .catch(error => {  
-            console.error('There was a problem with your fetch operation:', error);  
-            document.getElementById('result').innerHTML = '加载数据失败';  
-        });  
-});
-    <br>
-    <h2>测试用例(不会对您的计算机造成危害)</h2>
-    <button id="loadStations">单击</button>
-    <button ondblclick="get_radiobrowser_base_urls()">双击</button>
+<br>
+<h2>电台搜索,使用radio-browser.info</h2>
+
+<form action="http://at1.api.radio-browser.info/xml/stations/search"_blank">
+    <input type="text" name="name" size="30" autocomplete="off" placeholder="电台名字搜索">
+    <input type="submit" value="搜索"><i><--点击</i>
+</form>
+
+<form action="http://at1.api.radio-browser.info/xml/stations/byuuid "_blank">
+    <input type="text" name="uuids" size="30" autocomplete="off" placeholder="uuid搜索">
+    <input type="submit" value="搜索"><i><--点击</i>
+</form>
+
 
 
 </body>
