@@ -6,7 +6,6 @@
 #
 # suricata配置文件. 除了描述此文件中所有选项的注释之外, 完整的文档可在:
 # https://suricata.readthedocs.io/en/latest/configuration/suricata-yaml.html
-#suricata-version: "7.0"
 
 ##
 ## Step 1: 配置网络
