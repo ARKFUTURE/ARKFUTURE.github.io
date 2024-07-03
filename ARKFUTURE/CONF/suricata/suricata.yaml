@@ -8,7 +8,7 @@
 # suricata配置文件. 除了描述此文件中所有选项的注释之外, 完整的文档可在:
 # https://suricata.readthedocs.io/en/latest/configuration/suricata-yaml.html
 #
-# 适配7.0,需要解除注释
+# 适配Suricata7+版本,需要解除注释
 #suricata-version: "7.0"
 
 ##
