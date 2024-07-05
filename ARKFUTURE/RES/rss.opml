@@ -2,7 +2,7 @@
 <opml version="2.0">
     <head>
         <title>ARKFUTURErss</title>
-        <dateModified>2024</dateModified>
+        <dateModified>∞</dateModified>
     </head>
     <body>
         <outline text="技术">
@@ -24,6 +24,7 @@
             <outline text="DefCon" type="rss" htmlUrl="https://defcon.org/" xmlUrl="https://defcon.org/defconrss.xml"/>
             <outline text="GoDot" type="rss" htmlUrl="https://godotengine.org/" xmlUrl="https://godotengine.org/rss.xml"/>
             <outline text="Bleepingcomputer" type="rss" htmlUrl="https://www.bleepingcomputer.com/" xmlUrl="https://www.bleepingcomputer.com/feed/"/>
+            <outline text="Distrowatch.com" type="rss" htmlUrl="https://distrowatch.com/" xmlUrl="https://distrowatch.com/news/dw.xml"/>
         </outline>
         <outline text="系统博客">
             <outline text="Debian" type="rss" htmlUrl="https://www.debian.org/" xmlUrl="https://www.debian.org/News/news"/>
