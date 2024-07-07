@@ -1,5 +1,6 @@
 #rules<10> -- UTF-8 
 
+\b Welcome to ARKFUTURE ANON irc
 公约
 HTTPS://ARKFUTURE.GITHUB.IO/ARKFUTURE/RES/ARKFUTURE.pdf
 

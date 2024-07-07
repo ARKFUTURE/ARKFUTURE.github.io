@@ -1,12 +1,12 @@
 #motd<10> -- UTF-8 
 
-\b Welcome to ARKFUTURE irc
+\b Welcome to ARKFUTURE ANON irc
 \c12 欢迎进入ARKFUTURE irc(互联网中继聊天)服务
 \c12 有关IRC的详细信息请参考/MOTD
 
 \b IRC 不记名，匿名建议:
-\c07 1.使用 "\c04代理\c07" 连接
-\c07 2.隐藏主机名,命令 "\c04/mode 您的用户名 +x\c07"
+\c07 1.使用 "\c04代理\c07" 连接 *
+\c07 2.隐藏自己的命令,命令 "\c04/mode 您的用户名 +x\c07" *
 \c07 3.使用 "\c04OTR\c07" 技术(部分程序会有)
 
  

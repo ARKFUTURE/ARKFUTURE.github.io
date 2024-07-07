@@ -1,5 +1,6 @@
 #opermotd<10> -- UTF-8 
 
+\b Welcome to ARKFUTURE ANON irc
 此 IRC 无规则
 但禁止滥用
 
