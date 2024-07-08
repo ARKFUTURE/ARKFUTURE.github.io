@@ -10,7 +10,6 @@ wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/conf/helpop.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/conf/opers.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/conf/permchannels.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/conf/ssl.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/conf/ascii.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/conf/xline.db
 cd /etc/inspircd/txt
 wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/txt/motd.txt
