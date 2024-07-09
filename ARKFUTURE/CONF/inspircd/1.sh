@@ -19,4 +19,7 @@ wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/txt/rules.txt
 cd /etc/inspircd/
 echo "$timestamp" >> updatetime
 chmod 644 /etc/inspircd/ -R 
+echo "启动inspircd 服务器"
+inspircd
+echo "inspircd 服务器启动完成"
 exit
