@@ -1,13 +1,15 @@
 #opermotd -- UTF-8 
 
+----------
 \b Welcome to ARKFUTURE ANON irc
 此 IRC 无规则
 但禁止滥用
 
+----------
 应急联系人
 @arkfuture(区分大小写)
 OP默认联系频道 #OP_OP_OP_OP
 
 
-
+----------显示测试
 \b测  \i测  \x测  \r测  \u测  \c08测  \c09,01测  \h#cfff60测  \h#cfff60,#ff5959测 
