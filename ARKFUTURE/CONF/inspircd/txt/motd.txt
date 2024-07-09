@@ -23,12 +23,12 @@
 \b 加入我们/联系我们
 \c03 [\c04*Admin/管理员*\c03](arkfuture,联系管理请使用命令/msg arkfuture 消息内容)
 \c03 [\c04Telegram\c03] https://t.me/arkfuture_studio
-\c03 [\c04Matrix\c03] https://matrix.to/#/#arkfuture_studio:matrix.org 
+\c03 [\c04Matrix\c03] https://matrix.to/#/#arkfuture_studio:matrix.org
 \c03 [\c04IRC\c03] #arkfuture_studio
 
 ----------主要频道
-\c03 [\c04用户大厅,需要自行进入\c03](#lobby)
-\c03 [\c04交易大厅,需要自行进入\c03](#trade)
+\c03 [\c04用户大厅,需要自行进入\c03] #lobby
+\c03 [\c04交易大厅,需要自行进入\c03] #trade
 
 
 ----------显示测试
