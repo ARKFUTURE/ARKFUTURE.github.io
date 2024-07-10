@@ -18,7 +18,6 @@ wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/txt/quotes.txt
 wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/txt/rules.txt
 cd /etc/inspircd/
 echo "$timestamp" >> updatetime
-chmod 644 /etc/inspircd/ -R 
 
 read -p "是否启动INSPIRCD服务? (输入 y 或 n) " input 
 if [ "$input" = "y" ]; then
