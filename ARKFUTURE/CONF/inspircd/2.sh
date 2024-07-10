@@ -4,18 +4,20 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/inspircd.conf
+
+wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/inspircd.conf
 cd /etc/inspircd/conf
-wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/conf/helpop.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/conf/opers.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/conf/permchannels.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/conf/ssl.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/conf/xline.db
+wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/conf/helpop.conf
+wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/conf/opers.conf
+wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/conf/permchannels.conf
+wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/conf/ssl.conf
+wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/conf/xline.db
 cd /etc/inspircd/txt
-wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/txt/motd.txt
-wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/txt/opermotd.txt
-wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/txt/quotes.txt
-wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/txt/rules.txt
+wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/txt/motd.txt
+wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/txt/opermotd.txt
+wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/txt/quotes.txt
+wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/txt/rules.txt
 cd /etc/inspircd/
 echo "$timestamp" >> updatetime
 chmod 644 /etc/inspircd/ -R
+
