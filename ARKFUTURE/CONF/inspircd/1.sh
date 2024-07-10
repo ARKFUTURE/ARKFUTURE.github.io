@@ -18,13 +18,4 @@ wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/txt/quotes.txt
 wget https://arkfuture.github.io/ARKFUTURE/CONF/inspircd/txt/rules.txt
 cd /etc/inspircd/
 echo "$timestamp" >> updatetime
-
-read -p "是否启动INSPIRCD服务? (输入 y 或 n) " input 
-if [ "$input" = "y" ]; then
-echo "启动inspircd 服务器"
-inspircd
-echo "inspircd 服务器启动完成"
-else
-echo "取消启动inspircd 服务器"
-fi
-exit
+chmod 644 /etc/inspircd/ -R
