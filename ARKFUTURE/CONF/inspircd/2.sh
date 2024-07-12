@@ -1,3 +1,5 @@
+#!/bin/bash 
+
 timestamp=$(date +%s)  
 apt update && apt upgrade && apt install wget
 cd /etc/inspircd
