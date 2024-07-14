@@ -21,5 +21,4 @@ wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKF
 wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/txt/rules.txt
 cd /etc/inspircd/
 echo "$timestamp" >> updatetime
-chmod 644 /etc/inspircd/ -R
 
