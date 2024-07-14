@@ -6,6 +6,6 @@ auth.token = "freefrp.net"
 [[proxies]]
 name = "AIFREC"
 type = "tcp"
-localIp = "127.0.0.1"
-localPort = "6667"
-remotePort = "55555"
+localIP = "127.0.0.1"
+localPort = 6667
+remotePort = 
