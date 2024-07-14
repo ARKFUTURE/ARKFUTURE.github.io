@@ -6,6 +6,7 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
+mkdir ca
 
 wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/inspircd.conf
 cd /etc/inspircd/conf
