@@ -3,7 +3,7 @@ serverPort = "7000"
 auth.method = "token"
 auth.token = "freefrp.net"
 
-[proxiex]
+[[proxiex]]
 name = "AIFREC"
 type = "tcp"
 localIp = "127.0.0.1"
