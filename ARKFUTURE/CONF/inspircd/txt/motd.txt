@@ -18,7 +18,7 @@
 \c06 输入 \c04/RULES\c06 查看此irc规则
 \c06 输入 \c04/HELP\c06  以获取更多IRC帮助信息
 \c06 命令大全 引用网址:https://www.gxlsystem.com/hulianwang-1160257.html
-\c06 若您在Windows上使用IRC的DCC功能请,请给您所用的客户端使用管理员权限运行并确保您的防火墙允许客户端连接
+\c06 若您在Windows上使用IRC的DCC功能请,请给您所用的客户端使用管理员权限运行并确保防火墙允许客户端
 
 ----------THIRD
 \b 加入我们/联系我们
