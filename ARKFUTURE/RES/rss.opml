@@ -32,6 +32,7 @@
             <outline text="Blackarch." type="rss" htmlUrl="https://blackarch.org/" xmlUrl="https://blackarch.org/rss.xml"/>
             <outline text="FreeBSD" type="rss" htmlUrl="https://www.freebsd.org/" xmlUrl="https://www.freebsd.org/news/feed.xml"/>
             <outline text="PostmarketOS" type="rss" htmlUrl="https://postmarketos.org/" xmlUrl="https://postmarketos.org/blog/feed.atom"/>
+            <outline text="OpenWrt" type="rss" htmlUrl="https://openwrt.org/" xmlUrl="https://openwrt.org/feed.php"/>
             <outline text="Openmediavault" type="rss" htmlUrl="https://www.openmediavault.org/" xmlUrl="https://www.openmediavault.org/?feed=atom"/>
         </outline>
         <outline text="影视/文创">
@@ -51,7 +52,6 @@
             <outline text="今日俄罗斯" type="rss" htmlUrl="https://inosmi.ru/" xmlUrl="https://inosmi.ru/export/rss2/index.xml?page_type=google_newsstand"/>
             <outline text="朝日新聞" type="rss" htmlUrl="http://www.asahi.com/" xmlUrl="http://www3.asahi.com/rss/index.rdf"/>
             <outline text="印度时报" type="rss" htmlUrl="https://timesofindia.indiatimes.com/" xmlUrl="https://timesofindia.indiatimes.com/rssfeedmostrecent.cms"/>
-            <outline text="美联社" type="rss" htmlUrl="https://apnews.com/hub/ap-top-news/" xmlUrl="https://apnews.com/hub/ap-top-news.rss"/>
             <outline text="半岛电视台" type="rss" htmlUrl="https://www.aljazeera.com/" xmlUrl="https://www.aljazeera.com/xml/rss/all.xml"/>
             <outline text="俄罗斯卫星社" type="rss" htmlUrl="https://sputnikglobe.com/" xmlUrl="https://sputnikglobe.com/export/rss2/archive/index.xml"/>
         </outline>
