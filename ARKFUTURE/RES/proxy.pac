@@ -1,9 +1,7 @@
 // ARKFUTURE
 function FindProxyForURL(url, host) {
 
-    var NSite = dnsDomainIs(host, ".pornhub.com") || dnsDomainIs(host, ".xvideos.com") || dnsDomainIs(host, ".xnxx.com") || dnsDomainIs(host, ".xhamster.com");
-
-    if (NSite) {
+    if (dnsDomainIs(host, ".pornhub.com") || dnsDomainIs(host, ".xvideos.com") || dnsDomainIs(host, ".xnxx.com") || dnsDomainIs(host, ".xhamster.com")) {
         return "SOCKS5 192.168.0.2:5554; PROXY 192.168.0.2:5555";
     }
 
