@@ -7,7 +7,7 @@
     <body>
         <outline text="技术">
             <outline text="先知安全" type="rss" htmlUrl="https://xz.aliyun.com/" xmlUrl="https://xz.aliyun.com/feed"/>
-            <outline text="吾爱破解" type="rss" htmlUrl="https://www.52pojie.cn/" xmlUrl="https://www.52pojie.cn/forum.php?mod=rss"/>
+            <outline text="FreeBuf" type="rss" htmlUrl="https://www.freebuf.com/" xmlUrl="https://www.freebuf.com/feed"/>
             <outline text="V2EX" type="rss" htmlUrl="https://www.v2ex.com/" xmlUrl="https://www.v2ex.com/feed/tab/tech.xml"/>
         </outline>
         <outline text="社区/组织">
