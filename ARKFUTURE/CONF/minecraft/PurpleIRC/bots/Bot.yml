@@ -195,14 +195,14 @@ channels:
     # Essentials helpop messages (/helpop /amsg /ac)
     - ess-helpop
     # DeathMessagesPrime
-    - death-messages
+    #- death-messages
     # Prism
-    - prism-rollback
-    - prism-drain
-    - prism-extinguish
-    - prism-custom
+    #- prism-rollback
+    #- prism-drain
+    #- prism-extinguish
+    #- prism-custom
     # The game-afk message type is not functional yet.
-    - game-afk
+    #- game-afk
     # These messages are sent from IRC to game (see permissions)
     - irc-action
     - irc-chat
@@ -215,8 +215,8 @@ channels:
     - irc-nickchange
     - irc-mode
     - irc-notice
-    - invalid-irc-commmand
-    - irc-console-chat
+    #- invalid-irc-commmand
+    #- irc-console-chat
     # Dynmap Web Chat to IRC
     - dynmap-web-chat
     # IRC to Dynmap Web Chat
@@ -242,16 +242,16 @@ channels:
     - hero-chat
     - hero-action
     # Specific HC channel
-    - hero-[CHANNEL]-chat
-    - hero-[CHANNEL]-action
+    #- hero-[CHANNEL]-chat
+    #- hero-[CHANNEL]-action
     # Various IRC messages that are sent to Herochat channel. Receiving HC
     # channel name is configured per hero-channel: 'CHANNEL NAME'
-    - irc-hero-action
-    - irc-hero-chat
-    - irc-hero-kick
-    - irc-hero-join
-    - irc-hero-part
-    - irc-hero-topic
+    #- irc-hero-action
+    #- irc-hero-chat
+    #- irc-hero-kick
+    #- irc-hero-join
+    #- irc-hero-part
+    #- irc-hero-topic
     # Venture chat. Uncomment these to enable venture chat 
     # Replace [CHANNEL] with the channel name from Venture Chat
     #venture-[CHANNEL]-chat
@@ -274,12 +274,12 @@ channels:
     - ultimatechat-chat
     - towny-chat
     # Specific TownyChat channel or tag
-    - towny-[CHANNEL]-chat
-    - towny-[CHANNELTAG]-chat
+    #- towny-[CHANNEL]-chat
+    #- towny-[CHANNELTAG]-chat
     # Specific TitanChat channel
-    - titan-[CHANNEL]-chat
+    #- titan-[CHANNEL]-chat
     # Specific UltimateChat channel
-    - ultimatechat-[CHANNEL]-chat
+    #- ultimatechat-[CHANNEL]-chat
     # ReportRTS ticket notifications to irc
     - rts-notify
     # SimpleTicketManager notifications to irc
@@ -293,14 +293,14 @@ channels:
     # Messages from IRC to discord
     - irc-discord-chat
     # Catch /broadcast messages
-    - broadcast-console-message
-    - broadcast-message
+    #- broadcast-console-message
+    #- broadcast-message
     # RedditStream
-    - reddit-messages
+    #- reddit-messages
     # AdminPrivateChat messages game to IRC
-    - game-a-chat
+    #- game-a-chat
     # AdminPrivateChat messages IRC to game
-    - irc-a-chat
+    #- irc-a-chat
     # Hero channel destination for IRC messages
     hero-channel: admin
     # Venture channel destination for IRC messages
