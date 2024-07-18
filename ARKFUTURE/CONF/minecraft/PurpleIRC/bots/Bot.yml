@@ -35,13 +35,13 @@ bind: ''
 max-line-length: 440
 # Character encoding. Leave blank for Java default.
 charset: ''
-# show irc server motd on connect
+# 显示 irc server motd 在连接时
 show-motd: true
-# autoconnect - Connect automatically on startup
+# autoconnect - 启动时自动连接
 autoconnect: 'true'
-# password - Server password if needed
+# password - 服务器密码（如果需要）
 password: ''
-# identify password (sent to NickServ)
+# 识别密码 (sent to NickServ)
 ident-password: ''
 # Attempt sasl connection
 sasl: false
@@ -57,24 +57,24 @@ command-prefix: '.'
 quit-message: '&r[&5PurpleIRC&r] &再见'
 # 消息延迟（毫秒） (be careful when changing this)
 message-delay: 1000
-# CTCP finger reply
+# CTCP 手动回复
 finger-reply: ''
 # 在连接时发送原始消息
 raw-message-on-connect: false
-# the raw message
+# 原始信息
 raw-message: auth name pass
-# Additional raw messages to send
+# 要发送的其他原始消息
 raw-message-list: []
-# relay-private-chat - Allow private chat to the bot to relay to the game
+# relay-private-chat - 允许与机器人进行私人聊天以转发到游戏
 relay-private-chat: false
-# Log private chat messages
+# 记录私人聊天消息
 log-private-chat: true
 # 当玩家使用命令时通知频道或用户
 command-notify:
   enabled: false
-  # valid modes: msg, ctcp
+  # 有效模式: msg, ctcp
   mode: msg
-  # recipients can be channels or users
+  # 收件人可以是频道或用户
   recipients:
     - '#ms'
   ignore:
@@ -88,8 +88,8 @@ file-tailer:
     extra_files: []
     recipient: '#ms'
     ctcp: false
-    # If a line matches then it is excluded from being sent to IRC.
-    # Place slashes around a pattern to use regular expressions. 
+    # 如果行匹配，则将其排除在发送之外 IRC.
+    # 在模式周围放置斜线以使用正则表达式. 
     excludes:
         - '/\s+\[PurpleIRC\]\s+/'
 # 信息防洪 (game and IRC)
@@ -102,11 +102,11 @@ flood-control:
     time-interval: 1000
     # Cooldown in milliseconds. If user is spamming then this cooldown takes effect.
     cooldown: 60000
-# 自动分割无效通道
+# 自动分效通道
 part-invalid-channels: false
-# 离开无效频道时的消息
+# 离开频道时的消息
 part-invalid-channels-message: 'I should not be here! Bye!'
-# Insert zero width space into nicks of IRC output to prevent client pings
+# I将零宽度空间插入切口 IRC 输出以防止客户端ping
 zero-width-space: false
 # Channel auto join delay in server ticks (20 ticks = 1 second)
 channel-auto-join-delay: 20
@@ -115,9 +115,9 @@ channel-auto-join-delay: 20
 custom-prefixes:
     - 'AFEMCBOT [AwesomePrefix]'
     - '*!*@* [Owner]'
-# Default if no match is found
+# 如果未找到匹配项，则默认
 custom-prefix-default: '[IRC]'
-# Similar to custom-prefixe above. Search and replace first occurrence of : and replace with &r:
+# 与上面的自定义前缀类似. 搜索并替换第一次出现的 : 并替换为 &r:
 replace-first-occurrences:
     - 'AFEMCBOT : &r:'
     - '*!*@* : &r:'
@@ -129,7 +129,7 @@ action-commands:
 bot-linking-enabled: false
 # 远程链接的机器人和代码地图. Use /irc link and /irc linkaccept
 bot-links:
-#    - remotebot: 249505593790847552435733176657146971496
+# - remotebot: 249505593790847552435733176657146971496
 # 如果被踢出频道，请重新加入
 join-on-kick: true
 # channels - 在此处列出您的机器人将加入的频道
@@ -159,7 +159,7 @@ channels:
     modes: ''
     # password - 频道密码
     password: ''
-    # topic - Channel topic
+    # topic - 频道主题
     topic: ARKFUTURE minecraft server channel
     # topic-protect - 防止他人改变话题
     topic-protect: false
@@ -175,8 +175,8 @@ channels:
     # 要从聊天中过滤掉的派系标签列表
     faction-tag-filters:
        - FactionNameToFilter
-    # enabled-messages - These are the message types that are either sent to the game or IRC
-    # config.yml. Remove or comment the messages you don't want.
+    # 已启用的消息 - 这些是发送到游戏或 IRC
+    # config.yml. 删除或评论您不想要的消息.
     enabled-messages:
     # 这些消息从游戏发送到 IRC (see permissions)
     - console-chat
@@ -195,14 +195,14 @@ channels:
     # Essentials helpop messages (/helpop /amsg /ac)
     - ess-helpop
     # DeathMessagesPrime
-    #- death-messages
+    - death-messages
     # Prism
-    #- prism-rollback
-    #- prism-drain
-    #- prism-extinguish
-    #- prism-custom
+    - prism-rollback
+    - prism-drain
+    - prism-extinguish
+    - prism-custom
     # The game-afk message type is not functional yet.
-    #- game-afk
+    - game-afk
     # These messages are sent from IRC to game (see permissions)
     - irc-action
     - irc-chat
@@ -215,8 +215,8 @@ channels:
     - irc-nickchange
     - irc-mode
     - irc-notice
-    #- invalid-irc-commmand
-    #- irc-console-chat
+    - invalid-irc-commmand
+    - irc-console-chat
     # Dynmap Web Chat to IRC
     - dynmap-web-chat
     # IRC to Dynmap Web Chat
@@ -242,16 +242,16 @@ channels:
     - hero-chat
     - hero-action
     # Specific HC channel
-    #- hero-[CHANNEL]-chat
-    #- hero-[CHANNEL]-action
+    - hero-[CHANNEL]-chat
+    - hero-[CHANNEL]-action
     # Various IRC messages that are sent to Herochat channel. Receiving HC
     # channel name is configured per hero-channel: 'CHANNEL NAME'
-    #- irc-hero-action
-    #- irc-hero-chat
-    #- irc-hero-kick
-    #- irc-hero-join
-    #- irc-hero-part
-    #- irc-hero-topic
+    - irc-hero-action
+    - irc-hero-chat
+    - irc-hero-kick
+    - irc-hero-join
+    - irc-hero-part
+    - irc-hero-topic
     # Venture chat. Uncomment these to enable venture chat 
     # Replace [CHANNEL] with the channel name from Venture Chat
     #venture-[CHANNEL]-chat
@@ -274,12 +274,12 @@ channels:
     - ultimatechat-chat
     - towny-chat
     # Specific TownyChat channel or tag
-    #- towny-[CHANNEL]-chat
-    #- towny-[CHANNELTAG]-chat
+    - towny-[CHANNEL]-chat
+    - towny-[CHANNELTAG]-chat
     # Specific TitanChat channel
-    #- titan-[CHANNEL]-chat
+    - titan-[CHANNEL]-chat
     # Specific UltimateChat channel
-    #- ultimatechat-[CHANNEL]-chat
+    - ultimatechat-[CHANNEL]-chat
     # ReportRTS ticket notifications to irc
     - rts-notify
     # SimpleTicketManager notifications to irc
@@ -293,14 +293,14 @@ channels:
     # Messages from IRC to discord
     - irc-discord-chat
     # Catch /broadcast messages
-    #- broadcast-console-message
-    #- broadcast-message
+    - broadcast-console-message
+    - broadcast-message
     # RedditStream
-    #- reddit-messages
+    - reddit-messages
     # AdminPrivateChat messages game to IRC
-    #- game-a-chat
+    - game-a-chat
     # AdminPrivateChat messages IRC to game
-    #- irc-a-chat
+    - irc-a-chat
     # Hero channel destination for IRC messages
     hero-channel: admin
     # Venture channel destination for IRC messages
