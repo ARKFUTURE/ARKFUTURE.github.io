@@ -1,0 +1,305 @@
+save-on-shutdown: false
+update-checker: true
+update-checker-mode: stable
+conn-check-interval: 1000
+reconnect-fail-message-count: 10
+enable-ident-server: false
+channel-check-interval: 100
+override-msg-cmd: false
+join-delay: 20
+quit-delay: 20
+smsg-alias: /m
+smsg-reply-alias: /r
+chat-ping-fix: false
+message-format:
+  # Message templates for game to IRC messages
+  console-chat: '[&dServer&r] %MESSAGE%'
+  # Cross server chatting via linked bots
+  cross-chat: '[&4%SERVER%&r] %MESSAGE%'
+  # Command sent notification. Blank this to disable this message.
+  command-sent: 'Command sent: %COMMAND%'
+  game-achievement: '[&2%WORLD%&r] %NAME% 刚刚取得了成就 [%MESSAGE%]'
+  game-advancement: '[&2%WORLD%&r] %NAME% 刚刚获得了晋升 [%MESSAGE%]'
+  game-mode: '[&2%WORLD%&r] %NAME% 已更改游戏模式: [%MESSAGE%]'
+  game-action: '[&2%WORLD%&r]***%NAME% %MESSAGE%'
+  game-pchat: '[&2%WORLD%] <%NAME%> %MESSAGE%'
+  # death-messages - http://dev.bukkit.org/bukkit-plugins/death-messages
+  death-messages: '[&2%WORLD%&r]%MESSAGE%'
+  # Notification to player when sending a private message to an IRC user
+  game-pchat-response: ' &6-> &7%TARGET%: %MESSAGE%'
+  game-chat: '[&2%WORLD%&r] <%NAME%> %MESSAGE%'
+  game-death: '[&2%WORLD%&r] %MESSAGE%'
+  game-kick: '[&2%WORLD%&r] %MESSAGE%: %REASON%'
+  game-join: '[&2%WORLD%&r] %NAME% 加入游戏.'
+  game-first-join: '[&2%WORLD%&r] %NAME% 第一次加入游戏.'
+  game-quit: '[&2%WORLD%&r] %NAME% 退出游戏.'
+  fake-join: '[&2%WORLD%&r] %NAME% 加入游戏.'
+  fake-quit: '[&2%WORLD%&r] %NAME% 退出游戏.'
+  game-command: '[&2%WORLD%&r] 使用命令 %NAME%: %COMMAND% %PARAMS%'
+  # Message template for "/irc send" to IRC message
+  game-send: '[&2%WORLD%&r]<%NAME%> %MESSAGE%'
+  # Essentials messages
+  ess-player-afk: '[&2%WORLD%&r] %NAME% 现在是 AFK'
+  ess-player-not-afk: '[&2%WORLD%&r] %NAME% 不再是 AFK'
+  ess-helpop: '&4[HelpOp] %DISPLAYNAME%&r: %MESSAGE%'
+  irc-ess-helpop: '&4[HelpOp] %DISPLAYNAME%&r: %MESSAGE%'
+  # Message templates for IRC to game messages
+  irc-action: '[&4IRC&r] ***%NAME% %MESSAGE%'
+  irc-chat: '[&4IRC&r]<%NAME%> %MESSAGE%'
+  # Response message when using @chat or @ochat
+  irc-chat-response: ' &6-> &7我的世界: %MESSAGE%'
+  irc-pchat: '&d私人留言: [&4IRC&r]<%NAME%> %MESSAGE%'
+  # Notification to user when sending a private message to a player
+  irc-pchat-response: ' &6-> &7%TARGET%: %MESSAGE%'
+  # Notification to user when sending a message to a specific hero channel
+  irc-hchat-response: ' &6-> &7%TARGET%: %MESSAGE%'
+  irc-join: '[&4IRC&r] %NAME% 已加入 %CHANNEL%.'
+  irc-kick: '[&4IRC&r] %NAME% 被踢出 %CHANNEL% by %KICKER%. (Reason- %REASON%)'
+  irc-part: '[&4IRC&r] %NAME% 已经离开了 %CHANNEL%.'
+  irc-quit: '[&4IRC&r] %NAME% 已经离开了 %CHANNEL%. (Reason: %REASON%)'
+  irc-topic: '[&4IRC&r] 主题已更改 %NAME%: %TOPIC%.'
+  irc-nickchange: '[&4IRC&r] %OLDNICK% 现在被称为 %NEWNICK%.'
+  irc-mode: '[&4IRC&r] %NAME% %MODE% 在 %CHANNEL%'
+  irc-console-chat: '&f[&5IRC&f]&r<%NAME%> %MESSAGE%'
+  irc-notice: '[&4IRC&r] [notice(%CHANNEL%)] %NOTICE% '
+  # AdminPrivateChat response message in IRC. Set to '' to disable.
+  irc-a-response: ' &6-> &7[AdminChat]: %MESSAGE%'
+  # AdminPrivateChat message from game to IRC
+  game-a-chat: '[%WORLD%] <%NAME%> -> [AdminChat]: %MESSAGE%'
+  # AdminPrivateChat message from IRC to game
+  irc-a-chat: '[AdminChat] [&4IRC&r] %MESSAGE%'
+  # Messages from Discord (Valid tokens: %NAME%, %NICKNAME%, %EFFNAME%, %COLOR%, %CHANNEL%, %MESSAGE%, %RAWMESSAGE%)
+  discord-chat: '[Discord]<%NAME%> %MESSAGE% %ATTACHMENTURLS%'
+  # Messages from IRC to Discord
+  irc-discord-chat: '[IRC]<%NAME%> %MESSAGE%'
+  # Actions from IRC to Discord
+  irc-discord-action: '[IRC] ***%NAME% %MESSAGE%'
+  # Message template for Clevernotch bot to IRC messages
+  clever-send: '[&4BOT]<%NAME%> %MESSAGE%'
+  # Message templates for mcMMO to IRC messages
+  mcmmo-admin-chat: '[admin:%WORLD%]<%NAME%> %MESSAGE%'
+  mcmmo-party-chat: '[party:%PARTY%]<%NAME%> %MESSAGE%'
+  mcmmo-chat: '[mcMMO]<%NAME%> %MESSAGE%'
+  # Message templates for IRC to mcMMO
+  irc-mcmmo-admin-chat: '[&4IRC&r]<%NAME%> %MESSAGE%'
+  irc-mcmmo-party-chat: '[&4IRC&r]<%NAME%> %MESSAGE%'
+  # Message templates for FactionChat to IRC messages
+  faction-public-chat: '[%FACTIONMODE%&r][%FACTIONTAG%]<%NAME%> %MESSAGE%'
+  faction-ally-chat: '[%FACTIONMODE%&r][%FACTIONTAG%]<%NAME%> %MESSAGE%'
+  faction-enemy-chat: '[%FACTIONMODE%&r][%FACTIONTAG%]<%NAME%> %MESSAGE%'
+  # Message template for Herochat to IRC messages
+  hero-chat: '[%CHANNEL%]<%NAME%> %MESSAGE%'
+  hero-action: '[&2%CHANNEL%&r]***%NAME% %MESSAGE%'
+  # Message templates for IRC to Herochat messages
+  irc-hero-action: '[&3IRC&r] ***%NAME% %MESSAGE%'
+  irc-hero-chat: '[&3IRC&r]<%NAME%> %MESSAGE%'
+  irc-hero-join: '[&3IRC&r] %NAME% 已加入 %CHANNEL%.'
+  irc-hero-kick: '[&3IRC&r] %NAME% 被踢出 %CHANNEL% by %KICKER%. (Reason-
+    %REASON%)'
+  irc-hero-part: '[&3IRC&r] %NAME% 已经离开了 %CHANNEL%.'
+  irc-hero-quit: '[&3IRC&r] %NAME% 已经离开了 %CHANNEL%.'
+  irc-hero-topic: '[&3IRC&r] 主题已更改 %NAME%: %TOPIC%.'
+  # Message templates for IRC to VentureChat messages
+  irc-venture-action: '[&3IRC&r] ***%NAME% %MESSAGE%'
+  irc-venture-chat: '[&3IRC&r]<%NAME%> %MESSAGE%'
+  irc-venture-join: '[&3IRC&r] %NAME% 加入 %CHANNEL%.'
+  irc-venture-kick: '[&3IRC&r] %NAME% 被踢出 %CHANNEL% by %KICKER%. (Reason-
+    %REASON%)'
+  irc-venture-part: '[&3IRC&r] %NAME% 已经离开了 %CHANNEL%.'
+  irc-venture-quit: '[&3IRC&r] %NAME% 已经离开了 %CHANNEL%.'
+  irc-venture-topic: '[&3IRC&r] Topic changed by %NAME%: %TOPIC%.'
+  # Message template for TitanChat to IRC messages
+  titan-chat: '[%CHANNEL%]<%NAME%> %MESSAGE%'
+  # Message templates for IRC to TitanChat messages
+  irc-titan-chat: '[&3IRC&r]<%NAME%> %MESSAGE%'
+  # Message template for TitanChat to IRC messages
+  ultimatechat-chat: '[%CHANNEL%]<%NAME%> %MESSAGE%'
+  # Message templates for IRC to TitanChat messages
+  irc-ultimatechat-chat: '[&3IRC&r]<%NAME%> %MESSAGE%'
+  # Help reply message
+  valid-irc-commands: '有效命令: %COMMANDS%'
+  # Invalid IRC command message
+  invalid-irc-command: 我很抱歉 '%NICK%' 我不能那么做. 尝试 '%CMDPREFIX%help'
+    查看我可能响应的命令列表.
+  no-perm-for-irc-command: 我很抱歉 '%NICK%' 你无权这样做. 尝试
+    '%CMDPREFIX%help' 查看我可能响应的命令列表.
+  # ReportRTS tempates
+  rts-notify: '[RTS:New] #%TICKETNUMBER% <%NAME%> %MESSAGE%'
+  rts-complete: '[RTS:Complete] #%TICKETNUMBER% <%NAME%> %MESSAGE%'
+  rts-claim: '[RTS:Claim] #%TICKETNUMBER% <%NAME%> %MESSAGE%'
+  rts-unclaim: '[RTS:Unclaim] #%TICKETNUMBER% <%NAME%> %MESSAGE%'
+  rts-held: '[RTS:Held] #%TICKETNUMBER% <%NAME%> %MESSAGE%'
+  rts-assign: '[RTS:Assign] #%TICKETNUMBER% <%NAME%> %MESSAGE%'
+  rts-reopen: '[RTS:Reopen] #%TICKETNUMBER% <%NAME%> %MESSAGE%'
+  # SimpleTicketManager
+  stm-create: '[STM] 票 #%TICKETNUMBER% 创建于 %NAME%: %REASON% %MESSAGE%'
+  stm-claim: '[STM] 票 #%TICKETNUMBER% 索赔人 %MODNAME%: %REASON% %MESSAGE%'
+  stm-close: '[STM] 票 #%TICKETNUMBER% 关闭于 %MODNAME%: %REASON% %MESSAGE%'
+  stm-comment: '[STM] 票 #%TICKETNUMBER% 新评论由 %MODNAME%: %REASON% %MESSAGE%'
+  # Dynmap Web Chat to IRC
+  dynmap-web-chat: '[Dynmap] <%NAME%> %MESSAGE%'
+  # IRC to Dynmap Chat
+  irc-dynmap-web-chat: '[IRC] %MESSAGE%'
+  # IRC acion to Dynmap Chat (/me)
+  irc-action-dynmap-web-chat: '[IRC] ***%NAME% %MESSAGE%'
+  # IRC to dynmap nick template
+  irc-dynmap-nick: '[IRC] %NICK%'
+  # IRC to dynmap action nick template
+  irc-dynmap-action-nick: '[IRC] ***%NICK%'
+  # OreBroadcast message
+  ore-broadcast: '[OreBroadcast] &l%NAME%&c 已发现 &6&l%COUNT%&c block%PLURAL%
+    属于 [&l&k%ORECOLOR%%ORE%&c]'
+  # Jobs seperator
+  jobs-separator: ', '
+  # Message format per hero channel. From IRC to game.
+  irc-hero-channels:
+    Global: '[G][IRC]%PLAYERPREFIX%%NAME% %MESSAGE%'
+  # Message format per hero channel. From IRC actions to game.
+  irc-hero-action-channels:
+    Global: '[G][IRC]***%PLAYERPREFIX%%NAME% %MESSAGE%'
+  # Message format per hero channel. From game to IRC. Overrides hero-chat template.
+  hero-channels:
+    Global: '[%CHANNEL%]<%NAME%> %MESSAGE%'
+  # Emote message format per HeroChat channel. From game to IRC. Overrides hero-action template.
+  hero-action-channels:
+    Global: '[&2%CHANNEL%&r]***%NAME% %MESSAGE%'
+  # Message format per VentureChat channel. From IRC to game. Overrides venture-chat template.
+  irc-venture-channels:
+    Global: '&f[&2Global&f] [&4IRC&f] <%NAME%>&2: %MESSAGE%'
+    Staff: '&f[&aStaff&f] [&4IRC&f] <%NAME%>&a: %MESSAGE%'
+    Admin: '&f[&cAdmin&f] [&4IRC&f] <%NAME%>&c: %MESSAGE%'
+    Donator: '&f[&dDonator&f] [&4IRC&f] <%NAME%>&d: %MESSAGE%'
+    Help: '&f[&bHelp&f] [&4IRC&f] <%NAME%>&b: %MESSAGE%'
+    Trade: '&f[&3Trade&f] [&4IRC&f] <%NAME%>&3: %MESSAGE%'
+    Local: '&f[&eLocal&f] [&4IRC&f] <%NAME%>&e: %MESSAGE%'
+    Network: '&f[&6Network&f] [&4IRC&f] <%NAME%>&6: %MESSAGE%'
+  # Emote message format per VentureChat channel. From IRC to game. Overrides venture-action template.
+  irc-venture-action-channels:
+    Global: '&f[&2Global&f] [&4IRC&f]***%NAME%&2: %MESSAGE%'
+    Staff: '&f[&aStaff&f] [&4IRC&f]***%NAME%&a: %MESSAGE%'
+    Admin: '&f[&cAdmin&f] [&4IRC&f]***%NAME%&c: %MESSAGE%'
+    Donator: '&f[&dDonator&f] [&4IRC&f]***%NAME%&d: %MESSAGE%'
+    Help: '&f[&bHelp&f] [&4IRC&f]***%NAME%&b: %MESSAGE%'
+    Trade: '&f[&3Trade&f] [&4IRC&f]***%NAME%&3: %MESSAGE%'
+    Local: '&f[&eLocal&f] [&4IRC&f]***%NAME%&e: %MESSAGE%'
+    Network: '&f[&6Network&f] [&4IRC&f]***%NAME%&6: %MESSAGE%'
+  # Message format per VentureChat channel. From game to IRC. Overrides venture-chat template.
+  venture-channels:
+    Global: '&f[&2Global&f] <%NAME%>&2: %MESSAGE%'
+    Staff: '&f[&aStaff&f] <%NAME%>&a: %MESSAGE%'
+    Admin: '&f[&cAdmin&f] <%NAME%>&c: %MESSAGE%'
+    Donator: '&f[&dDonator&f] <%NAME%>&d: %MESSAGE%'
+    Help: '&f[&bHelp&f] <%NAME%>&b: %MESSAGE%'
+    Trade: '&f[&3Trade&f] <%NAME%>&3: %MESSAGE%'
+    Local: '&f[&eLocal&f] <%NAME%>&e: %MESSAGE%'
+    Network: '&f[&6Network&f] <%NAME%>&6: %MESSAGE%'
+  # Emote message format per VentureChat channel. From game to IRC. Overrides venture-action template.
+  venture-action-channels:
+    Global: '&f[&2Global&f]***%NAME%&2: %MESSAGE%'
+    Staff: '&f[&aStaff&f]***%NAME%&a: %MESSAGE%'
+    Admin: '&f[&cAdmin&f]***%NAME%&c: %MESSAGE%'
+    Donator: '&f[&dDonator&f]***%NAME%&d: %MESSAGE%'
+    Help: '&f[&bHelp&f]***%NAME%&b: %MESSAGE%'
+    Trade: '&f[&3Trade&f]***%NAME%&3: %MESSAGE%'
+    Local: '&f[&eLocal&f]***%NAME%&e: %MESSAGE%'
+    Network: '&f[&6Network&f]***%NAME%&6: %MESSAGE%'
+  # Message templates for Towny to IRC messages
+  towny-channel-chat: '%TOWNYCHANNELTAG%[%TOWNYCHANNEL%]<%NAME%> %MESSAGE%'
+  # Message templates for IRC to Towny messages
+  irc-towny-chat: '[&3IRC&r]<%NAME%> %MESSAGE%'
+  # Message format per towny channel. From IRC to game.
+  irc-towny-channels:
+    irc: '[IRC]%PLAYERPREFIX%%NAME% %MESSAGE%'
+  broadcast-message: '[Broadcast] <%NAME%> %MESSAGE%'
+  broadcast-console-message: '[Broadcast] <Console> %MESSAGE%'
+  # Prism templates. See above for token names.
+  prism-rollback: '[PrismRollback] [Player: %NAME%] [Radius: %RADIUS%] [Command: %COMMAND%]
+    [Keyword: %KEYWORD%] [X,Y,Z: %X%,%Y%,%Z%] [World: %PARAMWORLD%]'
+  prism-drain: '[PrismDrain] [Player: %NAME%] [Radius: %RADIUS%] [OrigBlock: %ORIGINALBLOCK%]
+    [NewBlock: %NEWBLOCK%] [X,Y,Z: %X%,%Y%,%Z%] [World: %BLOCKWORLD%]'
+  prism-extinguish: '[PrismExtinguish] [Player: %NAME%] [Radius%: %RADIUS] [OrigBlock:
+    %ORIGINALBLOCK%] [NewBlock: %NEWBLOCK%] [X,Y,Z: %X%,%Y%,%Z%] [World: %BLOCKWORLD%]'
+  prism-custom: '[PrismCustom] [Player: %NAME%] [Action: %ACTION%] [Message: %MESSAGE%]
+    [Plugin: %PLUGIN%]'
+  # RedditStream
+  reddit-messages: '[R] %MESSAGE%'
+  # NTheEndAgain
+  ntheendagain-hard: '[NTheEndAgain] %MESSAGE%'
+  ntheendagain-soft: '[NTheEndAgain]  %MESSAGE%'
+  ntheendagain-crystal: '[NTheEndAgain] %MESSAGE%'
+  # Defaults below take effect when user joins IRC and matching player is offline
+  default-player-suffix: ''
+  default-player-prefix: ''
+  default-group-suffix: ''
+  default-group-prefix: ''
+  default-player-world: world
+  default-player-group: ''
+  # Flood control
+  game-flood-warning: '&3由于垃圾邮件，邮件未发送给IRC. &r冷却: %COOLDOWN%s'
+  irc-flood-warning: '&3由于垃圾邮件，消息未发送到游戏. &r冷却: %COOLDOWN%s'
+  # Log tailer format
+  log-tailer: '[LOG: %FILE%] %LINE%'
+list-format: '[&9Minecraft&r] &2在线 &r(%COUNT%/%MAX%): %PLAYERS%'
+list-separator: ', '
+list-player: '%GROUPPREFIX%%NAME%'
+list-sort-by-name: true
+strip-game-colors: false
+strip-irc-colors: false
+strip-irc-bg-colors: true
+strip-game-colors-from-irc: true
+custom-tab-list: false
+custom-tab-prefix: '[I] '
+custom-tab-gamemode: SPECTATOR
+nick-exact-match: true
+nick-prefixes:
+  ircop: '&4~'
+  owner: '&5@'
+  ircsuperop: '&6&&'
+  op: '&c@'
+  halfop: '&3%'
+  voice: '&2+'
+irc-color-map:
+  AQUA: CYAN
+  BLACK: BLACK
+  BLUE: BLUE
+  BOLD: BOLD
+  DARK_AQUA: TEAL
+  DARK_BLUE: DARK_BLUE
+  DARK_GRAY: DARK_GRAY
+  DARK_GREEN: DARK_GREEN
+  DARK_PURPLE: PURPLE
+  DARK_RED: RED
+  GOLD: OLIVE
+  GRAY: LIGHT_GRAY
+  GREEN: GREEN
+  LIGHT_PURPLE: MAGENTA
+  RED: RED
+  UNDERLINE: UNDERLINE
+  YELLOW: YELLOW
+  WHITE: WHITE
+  RESET: NORMAL
+  ITALIC: ITALIC
+game-color-map:
+  BLACK: BLACK
+  BLUE: BLUE
+  BOLD: BOLD
+  BROWN: GRAY
+  CYAN: AQUA
+  DARK_BLUE: DARK_BLUE
+  DARK_GRAY: DARK_GRAY
+  DARK_GREEN: DARK_GREEN
+  GREEN: GREEN
+  LIGHT_GRAY: GRAY
+  MAGENTA: LIGHT_PURPLE
+  NORMAL: RESET
+  OLIVE: GOLD
+  PURPLE: DARK_PURPLE
+  RED: RED
+  TEAL: DARK_AQUA
+  UNDERLINE: UNDERLINE
+  WHITE: WHITE
+  YELLOW: YELLOW
+  ITALIC: ITALIC
+Debug: false
+ignore-chat-cancel: false
+broadcast-chat-to-console: true
