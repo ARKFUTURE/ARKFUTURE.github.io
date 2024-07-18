@@ -76,7 +76,7 @@ command-notify:
   mode: msg
   # 收件人可以是频道或用户
   recipients:
-    - '#ms'
+    - 'arkfuture'
   ignore:
     - /login
     - /register
