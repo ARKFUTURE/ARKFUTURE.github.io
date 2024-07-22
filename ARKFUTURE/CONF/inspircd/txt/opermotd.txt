@@ -7,10 +7,10 @@
 
 ----------
 \b 团队相关
-\c03 OP默认联系频道 \c04#OP_OP_OP_OP
+\c03 [\c04IRC\c03] #arkfuture_studio
 \c03 [\c04Telegram\c03] https://t.me/arkfuture_studio
 \c03 [\c04Matrix\c03] https://matrix.to/#/#arkfuture_studio:matrix.org
-\c03 [\c04IRC\c03] #arkfuture_studio
+
 
 
 ----------显示测试
