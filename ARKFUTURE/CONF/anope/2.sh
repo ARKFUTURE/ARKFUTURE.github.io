@@ -1,3 +1,5 @@
+#!/bin/bash 
+
 mkdir anopecf
 cd ./anopecf
 wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/ARKFUTURE/CONF/anope/anope.conf
