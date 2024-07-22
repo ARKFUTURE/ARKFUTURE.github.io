@@ -17,12 +17,12 @@
 \c06 !! \c04您可以创建自己的频道，没有任何限制\c06 !!
 \c06 输入 \c04/RULES\c06 查看此irc规则
 \c06 输入 \c04/HELP\c06  以获取更多IRC帮助信息
-\c06 命令大全 引用网址:https://www.gxlsystem.com/hulianwang-1160257.html
+\c06 命令大全 引用网址:https://www.geekshed.net/commands/
 \c06 若您在Windows上使用IRC的DCC功能请,请给您所用的客户端使用管理员权限运行并确保防火墙允许客户端
 
 ----------THIRD
 \b 加入我们/联系我们
-\c03 [\c04*Admin/管理员*\c03](arkfuture,联系管理请使用命令/msg arkfuture 消息内容)
+\c03 [\c04*Admin/管理员*\c03](Nick:arkfuture,命令/Admin 查看详细)
 \c03 [\c04Telegram\c03] https://t.me/arkfuture_studio
 \c03 [\c04Matrix\c03] https://matrix.to/#/#arkfuture_studio:matrix.org
 \c03 [\c04IRC\c03] #arkfuture_studio
