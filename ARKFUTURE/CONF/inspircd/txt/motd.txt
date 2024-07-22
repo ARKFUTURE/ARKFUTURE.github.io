@@ -26,7 +26,7 @@
 
 ----------THIRD
 \b 联系管理员/运营人员
-\c03 [\c04*Admin/管理员*\c03](Nick:arkfuture,请使用命令 \c04 /Admin \c07查看详细)
+\c03 [\c04*Admin/管理员*\c03](Nick:\c04 arkfuture \c03,请使用命令 \c04 /Admin \c03查看详细)
 
 
 ----------主要频道
