@@ -14,7 +14,7 @@ wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKF
 wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/txt/opermotd.txt
 wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/txt/quotes.txt
 wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/txt/rules.txt
-cd /etc/inspircd/txt
+cd /etc/inspircd/ssl
 wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/ssl/ssl.conf
 cd /etc/inspircd/
 chmod 777 /etc/inspircd/ -R
