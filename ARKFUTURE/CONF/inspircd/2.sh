@@ -1,12 +1,9 @@
 #!/bin/bash 
-
-timestamp=$(date +%s)  
 cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
 mkdir ssl
-
 wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/inspircd.conf
 cd /etc/inspircd/conf
 wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/conf/helpop.conf
@@ -21,7 +18,5 @@ wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKF
 cd /etc/inspircd/txt
 wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/ssl/ssl.conf
 cd /etc/inspircd/
-echo "$timestamp" >> updatetime
-
 chmod 777 /etc/inspircd/ -R
 
