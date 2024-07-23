@@ -1,4 +1,3 @@
-#!/bin/bash 
 cd /etc/inspircd
 rm -rf *
 mkdir conf
