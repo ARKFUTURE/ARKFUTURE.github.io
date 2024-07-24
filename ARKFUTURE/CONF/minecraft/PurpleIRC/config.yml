@@ -12,20 +12,20 @@ smsg-alias: /m
 smsg-reply-alias: /r
 chat-ping-fix: false
 message-format:
-  # Message templates for game to IRC messages
+  # 消息模板的游戏到IRC消息
   console-chat: '[&dServer&r] %MESSAGE%'
-  # Cross server chatting via linked bots
+  # 通过链接机器人跨服务器聊天
   cross-chat: '[&4%SERVER%&r] %MESSAGE%'
-  # Command sent notification. Blank this to disable this message.
+  # 命令发送通知. 清空此选项以禁用此消息.
   command-sent: 'Command sent: %COMMAND%'
   game-achievement: '[&2%WORLD%&r] %NAME% 刚刚取得了成就 [%MESSAGE%]'
   game-advancement: '[&2%WORLD%&r] %NAME% 刚刚获得了晋升 [%MESSAGE%]'
   game-mode: '[&2%WORLD%&r] %NAME% 已更改游戏模式: [%MESSAGE%]'
   game-action: '[&2%WORLD%&r]***%NAME% %MESSAGE%'
   game-pchat: '[&2%WORLD%] <%NAME%> %MESSAGE%'
-  # death-messages - http://dev.bukkit.org/bukkit-plugins/death-messages
+  # 死亡的消息 - http://dev.bukkit.org/bukkit-plugins/death-messages
   death-messages: '[&2%WORLD%&r]%MESSAGE%'
-  # Notification to player when sending a private message to an IRC user
+  # 当向IRC用户发送私人消息时通知玩家
   game-pchat-response: ' &6-> &7%TARGET%: %MESSAGE%'
   game-chat: '[&2%WORLD%&r] <%NAME%> %MESSAGE%'
   game-death: '[&2%WORLD%&r] %MESSAGE%'
@@ -36,22 +36,22 @@ message-format:
   fake-join: '[&2%WORLD%&r] %NAME% 加入游戏.'
   fake-quit: '[&2%WORLD%&r] %NAME% 退出游戏.'
   game-command: '[&2%WORLD%&r] 使用命令 %NAME%: %COMMAND% %PARAMS%'
-  # Message template for "/irc send" to IRC message
+  # 消息模板 "/irc send" 到IRC消息
   game-send: '[&2%WORLD%&r]<%NAME%> %MESSAGE%'
-  # Essentials messages
+  # 基本信息
   ess-player-afk: '[&2%WORLD%&r] %NAME% 现在是 AFK'
   ess-player-not-afk: '[&2%WORLD%&r] %NAME% 不再是 AFK'
   ess-helpop: '&4[HelpOp] %DISPLAYNAME%&r: %MESSAGE%'
   irc-ess-helpop: '&4[HelpOp] %DISPLAYNAME%&r: %MESSAGE%'
-  # Message templates for IRC to game messages
+  # M消息模板的IRC游戏消息
   irc-action: '[&4IRC&r] ***%NAME% %MESSAGE%'
   irc-chat: '[&4IRC&r]<%NAME%> %MESSAGE%'
-  # Response message when using @chat or @ochat
+  # 使用时的响应消息 @chat or @ochat
   irc-chat-response: ' &6-> &7我的世界: %MESSAGE%'
   irc-pchat: '&d私人留言: [&4IRC&r]<%NAME%> %MESSAGE%'
-  # Notification to user when sending a private message to a player
+  # 当向玩家发送私人消息时通知用户
   irc-pchat-response: ' &6-> &7%TARGET%: %MESSAGE%'
-  # Notification to user when sending a message to a specific hero channel
+  # 当向特定的英雄通道发送消息时通知用户
   irc-hchat-response: ' &6-> &7%TARGET%: %MESSAGE%'
   irc-join: '[&4IRC&r] %NAME% 已加入 %CHANNEL%.'
   irc-kick: '[&4IRC&r] %NAME% 被踢出 %CHANNEL% by %KICKER%. (Reason- %REASON%)'
@@ -62,35 +62,35 @@ message-format:
   irc-mode: '[&4IRC&r] %NAME% %MODE% 在 %CHANNEL%'
   irc-console-chat: '&f[&5IRC&f]&r<%NAME%> %MESSAGE%'
   irc-notice: '[&4IRC&r] [notice(%CHANNEL%)] %NOTICE% '
-  # AdminPrivateChat response message in IRC. Set to '' to disable.
+  # 在IRC中的管理员私人聊天响应消息. 设置为 '' 禁用.
   irc-a-response: ' &6-> &7[AdminChat]: %MESSAGE%'
-  # AdminPrivateChat message from game to IRC
+  # 管理员私人聊天消息从游戏到IRC
   game-a-chat: '[%WORLD%] <%NAME%> -> [AdminChat]: %MESSAGE%'
-  # AdminPrivateChat message from IRC to game
+  #管理员私人聊天消息从IRC到游戏
   irc-a-chat: '[AdminChat] [&4IRC&r] %MESSAGE%'
-  # Messages from Discord (Valid tokens: %NAME%, %NICKNAME%, %EFFNAME%, %COLOR%, %CHANNEL%, %MESSAGE%, %RAWMESSAGE%)
+  # 来自不和的信息 (有效值: %NAME%, %NICKNAME%, %EFFNAME%, %COLOR%, %CHANNEL%, %MESSAGE%, %RAWMESSAGE%)
   discord-chat: '[Discord]<%NAME%> %MESSAGE% %ATTACHMENTURLS%'
-  # Messages from IRC to Discord
+  # 从IRC到Discord的消息
   irc-discord-chat: '[IRC]<%NAME%> %MESSAGE%'
-  # Actions from IRC to Discord
+  # 从IRC到Discord的动作
   irc-discord-action: '[IRC] ***%NAME% %MESSAGE%'
-  # Message template for Clevernotch bot to IRC messages
+  # 消息模板的Clevernotch机器人到IRC消息
   clever-send: '[&4BOT]<%NAME%> %MESSAGE%'
-  # Message templates for mcMMO to IRC messages
+  # 消息模板mc MMO到IRC消息
   mcmmo-admin-chat: '[admin:%WORLD%]<%NAME%> %MESSAGE%'
   mcmmo-party-chat: '[party:%PARTY%]<%NAME%> %MESSAGE%'
   mcmmo-chat: '[mcMMO]<%NAME%> %MESSAGE%'
-  # Message templates for IRC to mcMMO
+  # IRC的消息模板 mcMMO
   irc-mcmmo-admin-chat: '[&4IRC&r]<%NAME%> %MESSAGE%'
   irc-mcmmo-party-chat: '[&4IRC&r]<%NAME%> %MESSAGE%'
-  # Message templates for FactionChat to IRC messages
+  # 派系聊天到IRC消息的消息模板
   faction-public-chat: '[%FACTIONMODE%&r][%FACTIONTAG%]<%NAME%> %MESSAGE%'
   faction-ally-chat: '[%FACTIONMODE%&r][%FACTIONTAG%]<%NAME%> %MESSAGE%'
   faction-enemy-chat: '[%FACTIONMODE%&r][%FACTIONTAG%]<%NAME%> %MESSAGE%'
-  # Message template for Herochat to IRC messages
+  # 消息模板的Herochat到IRC消息
   hero-chat: '[%CHANNEL%]<%NAME%> %MESSAGE%'
   hero-action: '[&2%CHANNEL%&r]***%NAME% %MESSAGE%'
-  # Message templates for IRC to Herochat messages
+  # IRC到Herochat消息的消息模板
   irc-hero-action: '[&3IRC&r] ***%NAME% %MESSAGE%'
   irc-hero-chat: '[&3IRC&r]<%NAME%> %MESSAGE%'
   irc-hero-join: '[&3IRC&r] %NAME% 已加入 %CHANNEL%.'
