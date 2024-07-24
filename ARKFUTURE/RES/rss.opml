@@ -5,12 +5,21 @@
         <dateModified>∞</dateModified>
     </head>
     <body>
-        <outline text="技术">
-            <outline text="先知安全" type="rss" htmlUrl="https://xz.aliyun.com/" xmlUrl="https://xz.aliyun.com/feed"/>
-            <outline text="FreeBuf" type="rss" htmlUrl="https://www.freebuf.com/" xmlUrl="https://www.freebuf.com/feed"/>
-            <outline text="V2EX" type="rss" htmlUrl="https://www.v2ex.com/" xmlUrl="https://www.v2ex.com/feed/tab/tech.xml"/>
+        <outline text="博客">
+
         </outline>
-        <outline text="社区/组织">
+        <outline text="新闻/资讯">
+            <outline text="百度国内" type="rss" htmlUrl="http://news.baidu.com/" xmlUrl="http://news.baidu.com/n?cmd=4&amp;class=civilnews&amp;tn=rss"/>
+            <outline text="百度国际" type="rss" htmlUrl="http://news.baidu.com/" xmlUrl="http://news.baidu.com/n?cmd=4&amp;class=internews&amp;tn=rss"/>
+            <outline text="中天電視" type="rss" htmlUrl="https://www.ctitv.com.tw/" xmlUrl="https://www.ctitv.com.tw/feed"/>
+            <outline text="知乎每日精选" type="rss" htmlUrl="http://www.zhihu.com/" xmlUrl="https://www.zhihu.com/rss"/>
+            <outline text="今日俄罗斯" type="rss" htmlUrl="https://inosmi.ru/" xmlUrl="https://inosmi.ru/export/rss2/index.xml?page_type=google_newsstand"/>
+            <outline text="朝日新聞" type="rss" htmlUrl="http://www.asahi.com/" xmlUrl="http://www3.asahi.com/rss/index.rdf"/>
+            <outline text="印度时报" type="rss" htmlUrl="https://timesofindia.indiatimes.com/" xmlUrl="https://timesofindia.indiatimes.com/rssfeedmostrecent.cms"/>
+            <outline text="半岛电视台" type="rss" htmlUrl="https://www.aljazeera.com/" xmlUrl="https://www.aljazeera.com/xml/rss/all.xml"/>
+            <outline text="俄罗斯卫星社" type="rss" htmlUrl="https://sputnikglobe.com/" xmlUrl="https://sputnikglobe.com/export/rss2/archive/index.xml"/>
+        </outline>
+        <outline text="软件/社区/组织">
             <outline text="InspIRCd" type="rss" htmlUrl="http://www.inspircd.org/" xmlUrl="https://www.inspircd.org/atom.xml"/>
             <outline text="RtlSdr" type="rss" htmlUrl="https://www.rtl-sdr.com/" xmlUrl="https://www.rtl-sdr.com/feed/"/>
             <outline text="Phoronix" type="rss" htmlUrl="https://www.phoronix.com/" xmlUrl="https://www.phoronix.com/rss.php"/>
@@ -25,8 +34,6 @@
             <outline text="GoDot" type="rss" htmlUrl="https://godotengine.org/" xmlUrl="https://godotengine.org/rss.xml"/>
             <outline text="Bleepingcomputer" type="rss" htmlUrl="https://www.bleepingcomputer.com/" xmlUrl="https://www.bleepingcomputer.com/feed/"/>
             <outline text="Distrowatch.com" type="rss" htmlUrl="https://distrowatch.com/" xmlUrl="https://distrowatch.com/news/dw.xml"/>
-        </outline>
-        <outline text="系统博客">
             <outline text="Debian" type="rss" htmlUrl="https://www.debian.org/" xmlUrl="https://www.debian.org/News/news"/>
             <outline text="Kali" type="rss" htmlUrl="https://www.kali.org/" xmlUrl="https://www.kali.org/rss.xml"/>
             <outline text="Blackarch." type="rss" htmlUrl="https://blackarch.org/" xmlUrl="https://blackarch.org/rss.xml"/>
@@ -35,7 +42,7 @@
             <outline text="OpenWrt" type="rss" htmlUrl="https://openwrt.org/" xmlUrl="https://openwrt.org/feed.php"/>
             <outline text="Openmediavault" type="rss" htmlUrl="https://www.openmediavault.org/" xmlUrl="https://www.openmediavault.org/?feed=atom"/>
         </outline>
-        <outline text="影视/文创">
+        <outline text="影视/文创/播客">
             <outline text="爱恋动漫" type="rss" htmlUrl="http://www.kisssub.org/" xmlUrl="http://www.kisssub.org/rss.xml"/>
             <outline text="SubsPlease" type="rss" htmlUrl="https://subsplease.org/" xmlUrl="https://subsplease.org/rss/?r=1080"/>
             <outline text="紳士漫畫" type="rss" htmlUrl="https://www.wnacg.com/" xmlUrl="https://www.wnacg.com/feed.html"/>
@@ -44,18 +51,10 @@
             <outline text="EHTracker" type="rss" htmlUrl="https://e-hentai.org/" xmlUrl="https://e-hentai.org/rss/ehtracker.xml"/>
             <outline text="Pornhub" type="rss" htmlUrl="https://pornhub.com/" xmlUrl="https://pornhub.com/rss"/> 
         </outline>
-        <outline text="新闻/资讯">
-            <outline text="百度国内" type="rss" htmlUrl="http://news.baidu.com/" xmlUrl="http://news.baidu.com/n?cmd=4&amp;class=civilnews&amp;tn=rss"/>
-            <outline text="百度国际" type="rss" htmlUrl="http://news.baidu.com/" xmlUrl="http://news.baidu.com/n?cmd=4&amp;class=internews&amp;tn=rss"/>
-            <outline text="中天電視" type="rss" htmlUrl="https://www.ctitv.com.tw/" xmlUrl="https://www.ctitv.com.tw/feed"/>
-            <outline text="知乎每日精选" type="rss" htmlUrl="http://www.zhihu.com/" xmlUrl="https://www.zhihu.com/rss"/>
-            <outline text="今日俄罗斯" type="rss" htmlUrl="https://inosmi.ru/" xmlUrl="https://inosmi.ru/export/rss2/index.xml?page_type=google_newsstand"/>
-            <outline text="朝日新聞" type="rss" htmlUrl="http://www.asahi.com/" xmlUrl="http://www3.asahi.com/rss/index.rdf"/>
-            <outline text="印度时报" type="rss" htmlUrl="https://timesofindia.indiatimes.com/" xmlUrl="https://timesofindia.indiatimes.com/rssfeedmostrecent.cms"/>
-            <outline text="半岛电视台" type="rss" htmlUrl="https://www.aljazeera.com/" xmlUrl="https://www.aljazeera.com/xml/rss/all.xml"/>
-            <outline text="俄罗斯卫星社" type="rss" htmlUrl="https://sputnikglobe.com/" xmlUrl="https://sputnikglobe.com/export/rss2/archive/index.xml"/>
-        </outline>
+
         <outline text="POC/EXP">
+            <outline text="先知安全" type="rss" htmlUrl="https://xz.aliyun.com/" xmlUrl="https://xz.aliyun.com/feed"/>
+            <outline text="FreeBuf" type="rss" htmlUrl="https://www.freebuf.com/" xmlUrl="https://www.freebuf.com/feed"/>
             <outline text="Exploit-DB.com RSS Feed" type="rss" htmlUrl="https://www.exploit-db.com/" xmlUrl="https://www.exploit-db.com/rss.xml"/>
             <outline text="Sploitus" type="rss" htmlUrl="https://sploitus.com/" xmlUrl="https://sploitus.com/rss"/>
             <outline text="exp库" type="rss" htmlUrl="http://www.expku.com/" xmlUrl="http://www.expku.com/rss/rss.xml"/>
