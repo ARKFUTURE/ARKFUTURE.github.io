@@ -52,7 +52,7 @@
             <outline text="Pornhub" type="rss" htmlUrl="https://pornhub.com/" xmlUrl="https://pornhub.com/rss"/> 
         </outline>
 
-        <outline text="POC/EXP">
+        <outline text="CyberSec/POC/EXP">
             <outline text="先知安全" type="rss" htmlUrl="https://xz.aliyun.com/" xmlUrl="https://xz.aliyun.com/feed"/>
             <outline text="FreeBuf" type="rss" htmlUrl="https://www.freebuf.com/" xmlUrl="https://www.freebuf.com/feed"/>
             <outline text="Exploit-DB.com RSS Feed" type="rss" htmlUrl="https://www.exploit-db.com/" xmlUrl="https://www.exploit-db.com/rss.xml"/>
