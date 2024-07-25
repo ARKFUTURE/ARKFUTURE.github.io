@@ -16,9 +16,9 @@ login: AFEMCBOT
 # 真实姓名
 realname: 'AFEMCBOT'
 # server - 服务器地址
-server: 192.168.0.12
+server: afeirc.yuun.ink
 # port - 端口
-port: 6667
+port: 6668
 # Enable TLS support via STARTTLS. Must connect to non-SSL port to use this. 验证
 tls: false
 # Attempt ssl connection to IRC server
@@ -137,7 +137,7 @@ channels:
   # 频道名称必须用引号括起来，以符合yaml标准.
   # 使用 %2E 而不是通道名称中的点.
   # 如: minecraft%2Etest == minecraft.test
-  '#ms':
+  '#mcs':
     permissions: 
       chat: 'irc.message.chat'
       kick: 'irc.message.kick'
