@@ -94,23 +94,21 @@ message-format:
   irc-hero-action: '[&3IRC&r] ***%NAME% %MESSAGE%'
   irc-hero-chat: '[&3IRC&r]<%NAME%> %MESSAGE%'
   irc-hero-join: '[&3IRC&r] %NAME% 已加入 %CHANNEL%.'
-  irc-hero-kick: '[&3IRC&r] %NAME% 被踢出 %CHANNEL% by %KICKER%. (Reason-
-    %REASON%)'
+  irc-hero-kick: '[&3IRC&r] %NAME% 被踢出 %CHANNEL% by %KICKER%. (Reason-%REASON%)'
   irc-hero-part: '[&3IRC&r] %NAME% 已经离开了 %CHANNEL%.'
   irc-hero-quit: '[&3IRC&r] %NAME% 已经离开了 %CHANNEL%.'
   irc-hero-topic: '[&3IRC&r] 主题已更改 %NAME%: %TOPIC%.'
-  # Message templates for IRC to VentureChat messages
+  # IRC到Venture Chat消息的消息模板
   irc-venture-action: '[&3IRC&r] ***%NAME% %MESSAGE%'
   irc-venture-chat: '[&3IRC&r]<%NAME%> %MESSAGE%'
   irc-venture-join: '[&3IRC&r] %NAME% 加入 %CHANNEL%.'
-  irc-venture-kick: '[&3IRC&r] %NAME% 被踢出 %CHANNEL% by %KICKER%. (Reason-
-    %REASON%)'
+  irc-venture-kick: '[&3IRC&r] %NAME% 被踢出 %CHANNEL% by %KICKER%. (Reason-%REASON%)'
   irc-venture-part: '[&3IRC&r] %NAME% 已经离开了 %CHANNEL%.'
   irc-venture-quit: '[&3IRC&r] %NAME% 已经离开了 %CHANNEL%.'
   irc-venture-topic: '[&3IRC&r] Topic changed by %NAME%: %TOPIC%.'
-  # Message template for TitanChat to IRC messages
+  # 消息模板为泰坦聊天到IRC消息
   titan-chat: '[%CHANNEL%]<%NAME%> %MESSAGE%'
-  # Message templates for IRC to TitanChat messages
+  # 消息模板的IRC到泰坦聊天消息
   irc-titan-chat: '[&3IRC&r]<%NAME%> %MESSAGE%'
   # Message template for TitanChat to IRC messages
   ultimatechat-chat: '[%CHANNEL%]<%NAME%> %MESSAGE%'
@@ -237,7 +235,7 @@ message-format:
   # Flood control
   game-flood-warning: '&3由于垃圾邮件，邮件未发送给IRC. &r冷却: %COOLDOWN%s'
   irc-flood-warning: '&3由于垃圾邮件，消息未发送到游戏. &r冷却: %COOLDOWN%s'
-  # Log tailer format
+  # 计程仪格式
   log-tailer: '[LOG: %FILE%] %LINE%'
 list-format: '[&9Minecraft&r] &2在线 &r(%COUNT%/%MAX%): %PLAYERS%'
 list-separator: ', '

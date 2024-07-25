@@ -187,23 +187,23 @@ channels:
     - game-first-join
     - game-join
     - game-quit
-    - game-achievement
-    - game-advancement
+    #- game-achievement
+    #- game-advancement
     - game-mode
     - fake-join
     - fake-quit    
-    # Essentials helpop messages (/helpop /amsg /ac)
+    # Essentials帮助消息(/helpop /amsg /ac)
     - ess-helpop
-    # DeathMessagesPrime
+    # 死亡信息
     #- death-messages
     # Prism
     #- prism-rollback
     #- prism-drain
     #- prism-extinguish
     #- prism-custom
-    # The game-afk message type is not functional yet.
+    # game-afk消息类型还没有功能.
     #- game-afk
-    # These messages are sent from IRC to game (see permissions)
+    # 这些消息从IRC发送到游戏 (see permissions)
     - irc-action
     - irc-chat
     - irc-pchat
@@ -217,30 +217,30 @@ channels:
     - irc-notice
     #- invalid-irc-commmand
     #- irc-console-chat
-    # Dynmap Web Chat to IRC
-    - dynmap-web-chat
-    # IRC to Dynmap Web Chat
-    - irc-dynmap-web-chat
-    # IRC acion to Dynmap Chat (/me)
-    - irc-action-dynmap-web-chat
-    # mcMMO messages sent to IRC
-    - mcmmo-admin-chat
-    - mcmmo-party-chat
-    - mcmmo-chat
+    # 动态映射网络聊天到IRC
+    #- dynmap-web-chat
+    # IRC到动态地图网络聊天
+    #- irc-dynmap-web-chat
+    # 动态地图聊天的IRC动作 (/me)
+    #- irc-action-dynmap-web-chat
+    # mc发送到IRC的MMO消息
+    #- mcmmo-admin-chat
+    #- mcmmo-party-chat
+    #- mcmmo-chat
     # mcMMO messages sent from IRC. Replace [PARTY] with destination mcMMO party
-    - irc-mcmmo-admin-chat
-    - irc-mcmmo-party-[PARTY]-chat
+    #- irc-mcmmo-admin-chat
+    #- irc-mcmmo-party-[PARTY]-chat
     # FactionChat messages sent to IRC
-    - faction-public-chat
-    - faction-ally-chat
-    - faction-enemy-chat
+    #- faction-public-chat
+    #- faction-ally-chat
+    #- faction-enemy-chat
     # Hero chat message types that are sent from game to IRC
     # Game messages from Global HC channel
-    - hero-Global-chat
-    - hero-Global-action
+    #- hero-Global-chat
+    #- hero-Global-action
     # Game messages from any HC channel
-    - hero-chat
-    - hero-action
+    #- hero-chat
+    #- hero-action
     # Specific HC channel
     #- hero-[CHANNEL]-chat
     #- hero-[CHANNEL]-action
@@ -266,13 +266,13 @@ channels:
     #irc-venture-part
     #irc-venture-quit
     #irc-venture-topic
-    # CleverNotch bot messages will be sent to the IRC channel
-    - clever-chat
+    # 聪明的Notch机器人消息将被发送到IRC频道
+    #- clever-chat
     # OreBroadcast messages
     #- ore-broadcast
-    - titan-chat
-    - ultimatechat-chat
-    - towny-chat
+    #- titan-chat
+    #- ultimatechat-chat
+    #- towny-chat
     # Specific TownyChat channel or tag
     #- towny-[CHANNEL]-chat
     #- towny-[CHANNELTAG]-chat
@@ -281,17 +281,17 @@ channels:
     # Specific UltimateChat channel
     #- ultimatechat-[CHANNEL]-chat
     # ReportRTS ticket notifications to irc
-    - rts-notify
+    #- rts-notify
     # SimpleTicketManager notifications to irc
-    - stm-create
-    - stm-claim
-    - stm-close
-    - stm-comment
+    #- stm-create
+    #- stm-claim
+    #- stm-close
+    #- stm-comment
     # Messages from Discord
-    - discord-chat
+    #- discord-chat
     #- discord-[CHANNEL]-chat
     # Messages from IRC to discord
-    - irc-discord-chat
+    #- irc-discord-chat
     # Catch /broadcast messages
     #- broadcast-console-message
     #- broadcast-message
