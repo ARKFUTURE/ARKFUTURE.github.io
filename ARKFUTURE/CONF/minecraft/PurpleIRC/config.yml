@@ -37,7 +37,8 @@ message-format:
   fake-quit: '[&2%WORLD%&r] %NAME% 退出游戏.'
   game-command: '[&2%WORLD%&r] 使用命令 %NAME%: %COMMAND% %PARAMS%'
   # 消息模板 "/irc send" 到IRC消息
-  game-send: '[&2%WORLD%&r]<%NAME%> %MESSAGE%'
+  # game-send: '[&2%WORLD%&r]<%NAME%> %MESSAGE%'
+  game-send: '%MESSAGE%'
   # 基本信息
   ess-player-afk: '[&2%WORLD%&r] %NAME% 现在是 AFK'
   ess-player-not-afk: '[&2%WORLD%&r] %NAME% 不再是 AFK'
