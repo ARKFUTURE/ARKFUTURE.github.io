@@ -89,7 +89,7 @@ message-format:
   faction-ally-chat: '[%FACTIONMODE%&r][%FACTIONTAG%]<%NAME%> %MESSAGE%'
   faction-enemy-chat: '[%FACTIONMODE%&r][%FACTIONTAG%]<%NAME%> %MESSAGE%'
   # 消息模板的Herochat到IRC消息
-  hero-chat: '[%CHANNEL%]<%NAME%> %MESSAGE%'
+  hero-chat: '%MESSAGE%'
   hero-action: '[&2%CHANNEL%&r]***%NAME% %MESSAGE%'
   # IRC到Herochat消息的消息模板
   irc-hero-action: '[&3IRC&r] ***%NAME% %MESSAGE%'
@@ -108,11 +108,11 @@ message-format:
   irc-venture-quit: '[&3IRC&r] %NAME% 已经离开了 %CHANNEL%.'
   irc-venture-topic: '[&3IRC&r] Topic changed by %NAME%: %TOPIC%.'
   # 消息模板为泰坦聊天到IRC消息
-  titan-chat: '[%CHANNEL%]<%NAME%> %MESSAGE%'
+  titan-chat: '%MESSAGE%'
   # 消息模板的IRC到泰坦聊天消息
   irc-titan-chat: '[&3IRC&r]<%NAME%> %MESSAGE%'
   # Message template for TitanChat to IRC messages
-  ultimatechat-chat: '[%CHANNEL%]<%NAME%> %MESSAGE%'
+  ultimatechat-chat: '%MESSAGE%'
   # Message templates for IRC to TitanChat messages
   irc-ultimatechat-chat: '[&3IRC&r]<%NAME%> %MESSAGE%'
   # Help reply message
@@ -158,7 +158,7 @@ message-format:
     Global: '[G][IRC]***%PLAYERPREFIX%%NAME% %MESSAGE%'
   # Message format per hero channel. From game to IRC. Overrides hero-chat template.
   hero-channels:
-    Global: '[%CHANNEL%]<%NAME%> %MESSAGE%'
+    Global: '%MESSAGE%'
   # Emote message format per HeroChat channel. From game to IRC. Overrides hero-action template.
   hero-action-channels:
     Global: '[&2%CHANNEL%&r]***%NAME% %MESSAGE%'
