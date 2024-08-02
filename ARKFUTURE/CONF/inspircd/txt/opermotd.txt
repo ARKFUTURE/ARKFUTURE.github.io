@@ -1,9 +1,9 @@
 #opermotd -- UTF-8 
+\b测  \i测  \x测  \r测  \u测  \c08测  \c09,01测 
 
 ----------
 \b ARKFUTURE-IRC
 欢迎加入ARKFUTURE大家庭
-
 
 ----------
 \b 团队相关
@@ -11,6 +11,3 @@
 \c03 [\c04Telegram\c03] https://t.me/arkfuture_studio
 \c03 [\c04Matrix\c03] https://matrix.to/#/#arkfuture_studio:matrix.org
 
-
-----------显示测试
-\b测  \i测  \x测  \r测  \u测  \c08测  \c09,01测 
