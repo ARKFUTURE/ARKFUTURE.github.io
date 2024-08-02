@@ -3,8 +3,9 @@
 
 ----------
 \b Welcome to ARKFUTURE
-\c12 欢迎进入ARKFUTURE 匿名IRC(互联网中继聊天)服务
-\c12 有关IRC的详细信息请参考以下内容
+\c12 欢迎进入 ARKFUTURE-IRC 
+\c12 此服务为 ARKFUTURE NET 的一部分
+\c12 有关此服务的详细信息请参考以下内容
 
 ---------- FIRST
 \b IRC 不记名，匿名建议:
