@@ -20,4 +20,3 @@ cd /etc/inspircd/ssl
 wget https://mirror.ghproxy.com/https://raw.githubusercontent.com/ARKFUTURE/ARKFUTURE.github.io/main/ARKFUTURE/CONF/inspircd/ssl/ssl.conf
 cd /etc/inspircd/
 chmod 777 /etc/inspircd/ -R
-
