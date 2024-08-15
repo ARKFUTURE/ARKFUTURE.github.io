@@ -5,9 +5,6 @@
         <dateModified>∞</dateModified>
     </head>
     <body>
-        <outline text="博客">
-
-        </outline>
         <outline text="新闻/资讯">
             <outline text="百度国内" type="rss" htmlUrl="http://news.baidu.com/" xmlUrl="http://news.baidu.com/n?cmd=4&amp;class=civilnews&amp;tn=rss"/>
             <outline text="百度国际" type="rss" htmlUrl="http://news.baidu.com/" xmlUrl="http://news.baidu.com/n?cmd=4&amp;class=internews&amp;tn=rss"/>
@@ -49,14 +46,6 @@
             <outline text="E-Hentai" type="rss" htmlUrl="https://e-hentai.org/" xmlUrl="https://e-hentai.org/rss/ehg.xml"/>
             <outline text="EHTracker" type="rss" htmlUrl="https://e-hentai.org/" xmlUrl="https://e-hentai.org/rss/ehtracker.xml"/>
             <outline text="Pornhub" type="rss" htmlUrl="https://pornhub.com/" xmlUrl="https://pornhub.com/rss"/> 
-        </outline>
-
-        <outline text="CyberSec/POC/EXP">
-            <outline text="先知安全" type="rss" htmlUrl="https://xz.aliyun.com/" xmlUrl="https://xz.aliyun.com/feed"/>
-            <outline text="FreeBuf" type="rss" htmlUrl="https://www.freebuf.com/" xmlUrl="https://www.freebuf.com/feed"/>
-            <outline text="Exploit-DB.com RSS Feed" type="rss" htmlUrl="https://www.exploit-db.com/" xmlUrl="https://www.exploit-db.com/rss.xml"/>
-            <outline text="Sploitus" type="rss" htmlUrl="https://sploitus.com/" xmlUrl="https://sploitus.com/rss"/>
-            <outline text="exp库" type="rss" htmlUrl="http://www.expku.com/" xmlUrl="http://www.expku.com/rss/rss.xml"/>
         </outline>
     </body>
 </opml>
