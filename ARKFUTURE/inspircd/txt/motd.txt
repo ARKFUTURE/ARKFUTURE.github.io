@@ -30,6 +30,7 @@
 ----------主要频道
 \c03 [\c04大厅,需要自行进入\c03] #lobby
 \c03 [\c04资源交易,需要自行进入\c03] #rtx
+\c03 [\c04ARKFUTURE-IRC工作组\c03] #arkfuture
 
 ----------ARKFUTURE 情报中心 +ps
 \c04 UTC时间 12:00-14:00 集会
