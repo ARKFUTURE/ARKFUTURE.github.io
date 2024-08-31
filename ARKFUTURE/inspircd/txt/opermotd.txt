@@ -4,7 +4,7 @@
 ----------
 \b ARKFUTURE-IRC
 \c12 欢迎加入 ARKFUTURE 管理员组
-\c12 此服务为 ARKFUTURE NET 的一部分
+
 
 ----------
 \b 团队相关
