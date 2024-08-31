@@ -15,7 +15,7 @@
             <outline text="7·packetstormescurity" type="rss" htmlUrl="https://packetstormsecurity.com/" xmlUrl="https://rss.packetstormsecurity.com/"/>
             <outline text="8·secaffairs(news)" type="rss" htmlUrl="https://securityaffairs.com" xmlUrl="https://securityaffairs.com/feed"/>
             <outline text="9·darkreading(news)" type="rss" htmlUrl="https://darkreading.com/" xmlUrl="https://darkreading.com/rss.xml"/>
-            <outline text="10·hackthebox(news)" type="rss" htmlUrl="https://hackthebox.com/" xmlUrl="https://hackthebox.com/rss/blog/all"/
+            <outline text="10·hackthebox(news)" type="rss" htmlUrl="https://hackthebox.com/" xmlUrl="https://hackthebox.com/rss/blog/all"/>
         </outline>
     </body>
 </opml>
