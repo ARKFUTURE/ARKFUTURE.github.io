@@ -5,7 +5,7 @@
         <dateModified>∞</dateModified>
     </head>
     <body>
-        <outline text="CyberSec/News/POC/EXP">
+        <outline text="CyberSec POC/EXP/News">
             <outline text="1·exploitdb" type="rss" htmlUrl="https://exploit-db.com/" xmlUrl="https://exploit-db.com/rss.xml"/>
             <outline text="2·Sploitus" type="rss" htmlUrl="https://sploitus.com/" xmlUrl="https://sploitus.com/rss"/>
             <outline text="3·tenable" type="rss" htmlUrl="https://tenable.com/" xmlUrl="https://tenable.com/security/research/feed"/>
