@@ -147,15 +147,19 @@ certificates = "certs"
 -- Prosody需要至少一个启用的VirtualHost才能运行
 -- 一旦添加了另一个 localhost ,您就可以安全地删除或禁用它
 VirtualHost "localhost"
-
+VirtualHost "example.com"
+ssl = {
+	key = "/etc/prosody/certs/example.com.key";
+	certificate = "/etc/prosody/certs/example.com.crt";
+	}
 
 
 ------ 组件 ------
 -- 您可以指定组件以添加提供特殊服务(如多用户会议和传输)的主机
 -- 请参考 https://prosody.im/doc/components 以下配置不翻译
+--Include "conf.d/*.cfg.lua"
 
-Include "conf.d/*.cfg.lua"
-
+Component "conference.example.com" "muc"
 
 ---------- End of the Prosody Configuration file ----------
 -- 请参阅https://prosody.im/doc/configure 更多信息
