@@ -1,0 +1,8 @@
+Prosody 配置
+===============================
+
+配置文件应仅包含全局设置 /etc/prosody/prosody.cfg.lua 
+
+每个主机的配置文件应放置在 /etc/prosody/conf.avail/,
+and the active ones should be linked in /etc/prosody/conf.d/
+
