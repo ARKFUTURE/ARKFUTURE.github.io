@@ -41,7 +41,7 @@
         </outline>
         <outline text="影视/文创/播客">
             <outline text="爱恋动漫" type="rss" htmlUrl="http://www.kisssub.org/" xmlUrl="http://www.kisssub.org/rss.xml"/>
-            <outline text="SubsPlease" type="rss" htmlUrl="https://subsplease.org/" xmlUrl="https://subsplease.org/rss/?r=1080"/>
+            <outline text="SubsPlease" type="rss" htmlUrl="https://subsplease.org/" xmlUrl="https://subsplease.org/rss/"/>
             <outline text="紳士漫畫" type="rss" htmlUrl="https://www.wnacg.com/" xmlUrl="https://www.wnacg.com/feed.html"/>
             <outline text="E-Hentai" type="rss" htmlUrl="https://e-hentai.org/" xmlUrl="https://e-hentai.org/rss/ehg.xml"/>
             <outline text="EHTracker" type="rss" htmlUrl="https://e-hentai.org/" xmlUrl="https://e-hentai.org/rss/ehtracker.xml"/>
