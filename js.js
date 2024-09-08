@@ -48,20 +48,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }  
     });  
 });
-
-// 时间
-var clockElement = document.getElementById('clock');
-function updateClock() {
-    var now = new Date();
-    var offset = 0;
-    var hours = (now.getUTCHours() + offset) % 24;
-    var minutes = now.getUTCMinutes();
-    var seconds = now.getUTCSeconds();
-    var milliseconds = now.getUTCMilliseconds();
-    var timestamp = `UNIX时间戳: ${new Date().getTime()}`;
-    var formattedTime = `UTC时间: ${now.getUTCFullYear()}-${('0' + (now.getUTCMonth() + 1)).slice(-2)}-${('0' + now.getUTCDate()).slice(-2)} ${('0' + hours).slice(-2)}:${('0' + minutes).slice(-2)}:${('0' + seconds).slice(-2)}:${('00' + milliseconds).slice(-3)} 时间戳: ${new Date().getTime()}`;
-    clockElement.textContent = timestamp;
-    clockElement.textContent = formattedTime;
-}
-updateClock();
-setInterval(updateClock, 1);
