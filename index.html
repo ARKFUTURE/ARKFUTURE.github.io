@@ -7,8 +7,8 @@
     <title>ARKFUTURE</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="">
-    <style></style>
+    <link rel="stylesheet" type="text/css" href="css.css">
+    <script src="js.js"></script>
     <script src=""></script>
 </head>
 
@@ -38,6 +38,12 @@
             <li><a href="https://matrix.to/#/#arkfuture_studio:matrix.org">Matrix [#arkfuture_studio:matrix.org]</a></li>
             <li><a href="mailto:ARKFUTURE@FOXMAIL.COM">订阅邮件列表 [ARKFUTURE@FOXMAIL.COM]</a></li>
         </div>
+    <br>
+        <div>
+            <h2>快捷终端(纯本地js实现)</h2>
+            <div id="terminal"></div>  
+            <input type="text" id="input" placeholder="输入命令...">  
+            <script src="tm.js"></script> 
 
     </div>
 
@@ -132,75 +138,8 @@
         <p>我们是一群追寻自己梦想的人</p>
 
     </div>
+<style>
 
-
-    <!--JS及XSS!!!!!!!!!!!!!!!!!!!!-->
-    <script>
-        var clockElement = document.getElementById('clock');
-        function updateClock() {
-            var now = new Date();
-            var offset = 0;
-            var hours = (now.getUTCHours() + offset) % 24;
-            var minutes = now.getUTCMinutes();
-            var seconds = now.getUTCSeconds();
-            var milliseconds = now.getUTCMilliseconds();
-            var timestamp = `UNIX时间戳: ${new Date().getTime()}`;
-            var formattedTime = `UTC时间: ${now.getUTCFullYear()}-${('0' + (now.getUTCMonth() + 1)).slice(-2)}-${('0' + now.getUTCDate()).slice(-2)} ${('0' + hours).slice(-2)}:${('0' + minutes).slice(-2)}:${('0' + seconds).slice(-2)}:${('00' + milliseconds).slice(-3)} 时间戳: ${new Date().getTime()}`;
-            clockElement.textContent = timestamp;
-            clockElement.textContent = formattedTime;
-        }
-        updateClock();
-        setInterval(updateClock, 1);
-    </script>
-
-
-    <style>
-        h2 {
-            background: linear-gradient(to right, #ff6b81, #fcb045);
-            color: transparent;
-            -webkit-background-clip: text;
-        }
-
-
-        a {
-            color: #428bca;
-            text-decoration: none;
-            font-weight: bold;
-            background: linear-gradient(to right, #00c6ff, #0072ff);
-            -webkit-background-clip: text;
-            color: transparent;
-            transition: all 0.3s ease;
-        }
-
-        a:hover {
-            color: #0072ff;
-            -webkit-background-clip: text;
-        }
-
-        p,
-        pre {
-            background: #3c9291;
-            color: transparent;
-            -webkit-background-clip: text;
-        }
-
-        .footer {
-            background: black;
-            color: transparent;
-            -webkit-background-clip: text;
-        }
-
-        .tit {
-            color: purple;
-            -webkit-background-clip: text;
-        }
-
-        hr {
-            size: 1;
-            position: relative;
-            border-bottom: 1px dotted;
-            color: #fcb045;
-        }
     </style>
     <!--JS及XSS的结束!!!!!!!!!!!!!!!!!!!!-->
 </body>
