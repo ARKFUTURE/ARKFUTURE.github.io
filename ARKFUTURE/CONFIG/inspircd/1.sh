@@ -1,5 +1,5 @@
 apt update && apt upgrade && apt install wget build-essential cmake -y
-wget https://mirror.ghproxy.com/https://github.com/inspircd/inspircd/releases/download/v4.2.0/inspircd_4.2.0.deb12u1_amd64.deb
+wget https://mirror.ghproxy.com/https://github.com/inspircd/inspircd/releases/download/v4.3.0/inspircd_4.3.0.deb12u1_amd64.deb
 cd /etc/inspircd
 rm -rf *
 mkdir conf

@@ -3,7 +3,6 @@
 
 ----------
 \b Welcome to ARKFUTURE
-\c12 欢迎进入 ARKFUTURE-IRC 
 \c12 此服务为 ARKFUTURE NET 的一部分
 \c12 有关此服务的详细信息请参考以下内容
 
@@ -35,7 +34,7 @@
 \c03 [\c04 ARKFUTURE-IRC工作组 \c03] #arkfuture
 
 ----------需要申请的频道  +ps
-\b 请联系 arkfuture 申请,包括内容为网站内容缩写
+\b 请私聊 arkfuture 申请,之后由管理员拉入频道
 \c03 [\c04 ARKFUTURE工作室 \c03]
 \c03 [\c04 安全情报中心 \c03]
 \c03 [\c04 网络安全情报中心 \c03]
