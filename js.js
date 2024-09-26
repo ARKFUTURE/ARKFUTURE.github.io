@@ -1,8 +1,8 @@
 
-  const titles = ["ARKFUTURE", "方舟未来", "欢迎进入", "标题4", "标题5"];  
+  const titles = ["ARKFUTURE", "方舟未来", "欢迎进入", "技术无止,勇于创新", "以史为镜,洞察未来"];  
   let currentIndex = 0;   
   function updateTitle() {   
       currentIndex = (currentIndex + 1) % titles.length;  
       document.title = titles[currentIndex];  
   }    
-  setInterval(updateTitle, 1000);  
+  setInterval(updateTitle, 3000);  
