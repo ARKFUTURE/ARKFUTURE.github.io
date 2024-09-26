@@ -16,29 +16,6 @@
             <outline text="半岛电视台" type="rss" htmlUrl="https://www.aljazeera.com/" xmlUrl="https://www.aljazeera.com/xml/rss/all.xml"/>
             <outline text="俄罗斯卫星社" type="rss" htmlUrl="https://sputnikglobe.com/" xmlUrl="https://sputnikglobe.com/export/rss2/archive/index.xml"/>
         </outline>
-        <outline text="软件/社区/组织">
-            <outline text="InspIRCd" type="rss" htmlUrl="http://www.inspircd.org/" xmlUrl="https://www.inspircd.org/atom.xml"/>
-            <outline text="RtlSdr" type="rss" htmlUrl="https://www.rtl-sdr.com/" xmlUrl="https://www.rtl-sdr.com/feed/"/>
-            <outline text="Phoronix" type="rss" htmlUrl="https://www.phoronix.com/" xmlUrl="https://www.phoronix.com/rss.php"/>
-            <outline text="OBS" type="rss" htmlUrl="https://obsproject.com/forum/" xmlUrl="https://obsproject.com/forum/list/-/index.rss"/>
-            <outline text="KiCad" type="rss" htmlUrl="https://www.kicad.org/blog/" xmlUrl="https://www.kicad.org/blog/index.xml"/>
-            <outline text="LinuxGSM" type="rss" htmlUrl="https://linuxgsm.com/" xmlUrl="https://linuxgsm.com/feed/"/>
-            <outline text="IRCv3" type="rss" htmlUrl="https://ircv3.net/" xmlUrl="https://ircv3.net/feed.xml"/>
-            <outline text="Suricata" type="rss" htmlUrl="https://suricata.io/" xmlUrl="https://suricata.io/feed/"/>
-            <outline text="Linux内核" type="rss" htmlUrl="http://www.kernel.org/" xmlUrl="https://www.kernel.org/feeds/kdist.xml"/>
-            <outline text="GNU" type="rss" htmlUrl="https://planet.gnu.org/" xmlUrl="https://planet.gnu.org/rss20.xml"/>
-            <outline text="DefCon" type="rss" htmlUrl="https://defcon.org/" xmlUrl="https://defcon.org/defconrss.xml"/>
-            <outline text="GoDot" type="rss" htmlUrl="https://godotengine.org/" xmlUrl="https://godotengine.org/rss.xml"/>
-            <outline text="Bleepingcomputer" type="rss" htmlUrl="https://www.bleepingcomputer.com/" xmlUrl="https://www.bleepingcomputer.com/feed/"/>
-            <outline text="Distrowatch.com" type="rss" htmlUrl="https://distrowatch.com/" xmlUrl="https://distrowatch.com/news/dw.xml"/>
-            <outline text="Debian" type="rss" htmlUrl="https://www.debian.org/" xmlUrl="https://www.debian.org/News/news"/>
-            <outline text="Kali" type="rss" htmlUrl="https://www.kali.org/" xmlUrl="https://www.kali.org/rss.xml"/>
-            <outline text="Blackarch." type="rss" htmlUrl="https://blackarch.org/" xmlUrl="https://blackarch.org/rss.xml"/>
-            <outline text="FreeBSD" type="rss" htmlUrl="https://www.freebsd.org/" xmlUrl="https://www.freebsd.org/news/feed.xml"/>
-            <outline text="PostmarketOS" type="rss" htmlUrl="https://postmarketos.org/" xmlUrl="https://postmarketos.org/blog/feed.atom"/>
-            <outline text="OpenWrt" type="rss" htmlUrl="https://openwrt.org/" xmlUrl="https://openwrt.org/feed.php"/>
-            <outline text="Openmediavault" type="rss" htmlUrl="https://www.openmediavault.org/" xmlUrl="https://www.openmediavault.org/?feed=atom"/>
-        </outline>
         <outline text="影视/文创/播客">
             <outline text="爱恋动漫" type="rss" htmlUrl="http://www.kisssub.org/" xmlUrl="http://www.kisssub.org/rss.xml"/>
             <outline text="SubsPlease" type="rss" htmlUrl="https://subsplease.org/" xmlUrl="https://subsplease.org/rss/"/>
