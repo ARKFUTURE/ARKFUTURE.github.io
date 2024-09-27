@@ -5,4 +5,6 @@
       currentIndex = (currentIndex + 1) % titles.length;  
       document.title = titles[currentIndex];  
   }    
-  setInterval(updateTitle, 3000);  
+  setInterval(updateTitle, 1500); 
+
+  //  titles变换程序结束
