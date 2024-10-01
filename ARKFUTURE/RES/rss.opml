@@ -2,7 +2,9 @@
 <opml version="2.0">
     <head>
         <title>ARKFUTURErss</title>
-        <dateModified>∞</dateModified>
+        <dateCreated>2024/05/1</dateCreated>
+        <dateModified>2024/10/1</dateModified>
+        <ownerName>ARKFUTURE</ownerName>
     </head>
     <body>
         <outline text="新闻/资讯">
@@ -15,14 +17,6 @@
             <outline text="印度时报" type="rss" htmlUrl="https://timesofindia.indiatimes.com/" xmlUrl="https://timesofindia.indiatimes.com/rssfeedmostrecent.cms"/>
             <outline text="半岛电视台" type="rss" htmlUrl="https://www.aljazeera.com/" xmlUrl="https://www.aljazeera.com/xml/rss/all.xml"/>
             <outline text="俄罗斯卫星社" type="rss" htmlUrl="https://sputnikglobe.com/" xmlUrl="https://sputnikglobe.com/export/rss2/archive/index.xml"/>
-        </outline>
-        <outline text="影视/文创/播客">
-            <outline text="爱恋动漫" type="rss" htmlUrl="http://www.kisssub.org/" xmlUrl="http://www.kisssub.org/rss.xml"/>
-            <outline text="SubsPlease" type="rss" htmlUrl="https://subsplease.org/" xmlUrl="https://subsplease.org/rss/"/>
-            <outline text="紳士漫畫" type="rss" htmlUrl="https://www.wnacg.com/" xmlUrl="https://www.wnacg.com/feed.html"/>
-            <outline text="E-Hentai" type="rss" htmlUrl="https://e-hentai.org/" xmlUrl="https://e-hentai.org/rss/ehg.xml"/>
-            <outline text="EHTracker" type="rss" htmlUrl="https://e-hentai.org/" xmlUrl="https://e-hentai.org/rss/ehtracker.xml"/>
-            <outline text="Pornhub" type="rss" htmlUrl="https://pornhub.com/" xmlUrl="https://pornhub.com/rss"/> 
         </outline>
     </body>
 </opml>

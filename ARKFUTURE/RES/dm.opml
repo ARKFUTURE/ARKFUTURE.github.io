@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+    <head>
+        <title>ARKFUTURErss</title>
+        <dateCreated>2024/05/1</dateCreated>
+        <dateModified>2024/10/1</dateModified>
+        <ownerName>ARKFUTURE</ownerName>
+    </head>
+    <body>
+        <outline text="影视/文创/播客">
+            <outline text="爱恋动漫" type="rss" htmlUrl="http://www.kisssub.org/" xmlUrl="http://www.kisssub.org/rss.xml"/>
+            <outline text="SubsPlease" type="rss" htmlUrl="https://subsplease.org/" xmlUrl="https://subsplease.org/rss/"/>
+            <outline text="萌番组" type="rss" htmlUrl="https://bangumi.moe/" xmlUrl="https://bangumi.moe/rss/latest"/>
+            <outline text="动漫花园" type="rss" htmlUrl="https://share.dmhy.org/" xmlUrl="https://share.dmhy.org/topics/rss/rss.xml"/>
+            <outline text="普通.nyaa.si" type="rss" htmlUrl="https://nyaa.si/" xmlUrl="https://nyaa.si/?page=rss/"/>
+            <outline text="里番.nyaa.si" type="rss" htmlUrl="https://sukebei.nyaa.si/" xmlUrl="https://sukebei.nyaa.si/?page=rss"/>
+        </outline>
+    </body>
+</opml>
