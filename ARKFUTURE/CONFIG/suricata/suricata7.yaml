@@ -1,12 +1,15 @@
 %YAML 1.1
 ---
 
-#ARKFUTURE Suricata6配置文件
+#ARKFUTURE Suricata7配置文件
 # 全局搜索标签:
-#   #协议配置相关;#网卡设置;#规则;#网络设置;#日志相关
+#   #协议配置相关;#网卡设置;#规则;#网络设置;#日志相关;#改
 #
 # suricata配置文件. 除了描述此文件中所有选项的注释之外, 完整的文档可在:
-# https://suricata.readthedocs.io/en/latest/configuration/suricata-yaml.html
+# https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
+
+suricata-version: "7.0.7"
+
 ##
 ## Step 1: 配置网络
 ##
@@ -72,6 +75,10 @@ stats:
   #decoder-events-prefix: "decoder.event"
   # Add stream events as stats.
   #stream-events: false
+
+# 插件 -- 实验性质 -- 指定每个插件共享对象的文件名
+plugins:
+#   - /path/to/plugin.so
 
 # 配置您想要的警报(和其他)日志记录的类型 #日志相关
 outputs:
@@ -164,6 +171,15 @@ outputs:
             # Enable the logging of tagged packets for rules using the
             # "tag" keyword.
             tagged-packets: yes
+            # Enable logging the final action taken on a packet by the engine
+            # (e.g: the alert may have action 'allowed' but the verdict be
+            # 'drop' due to another alert. That's the engine's verdict)
+            # verdict: yes
+        # app layer frames
+        - frame:
+            # disabled by default as this is very verbose.
+            enabled: no
+            # payload-buffer-size: 4kb # max size of frame payload buffer to output in eve-log
         - anomaly:
             # Anomaly log records describe unexpected conditions such
             # as truncated packets, packets with invalid IP/UDP/TCP
@@ -239,8 +255,11 @@ outputs:
             # output TLS transaction where the session is resumed using a
             # session id
             #session-resumption: no
+            # ja4 hashes in tls records will never be logged unless
+            # the following is set to on. (Default off)
+            # ja4: off
             # custom controls which TLS fields that are included in eve-log
-            #custom: [subject, issuer, session_resumed, serial, fingerprint, sni, version, not_before, not_after, certificate, chain, ja3, ja3s]
+            #custom: [subject, issuer, session_resumed, serial, fingerprint, sni, version, not_before, not_after, certificate, chain, ja3, ja3s, ja4]
         - files:
             force-magic: no   # force logging magic on all logged files
             # force logging of checksums, available hash functions are md5,
@@ -250,6 +269,9 @@ outputs:
         #    alerts: yes      # log alerts that caused drops
         #    flows: all       # start or all: 'start' logs only a single drop
         #                     # per flow direction. All logs each dropped pkt.
+            # Enable logging the final action taken on a packet by the engine
+            # (will show more information in case of a drop caused by 'reject')
+            # verdict: yes
         - smtp:
             #extended: yes # enable this for extended logging information
             # this includes: bcc, message-id, subject, x_mailer, user-agent
@@ -269,12 +291,17 @@ outputs:
         - nfs
         - smb
         - tftp
-        - ikev2
+        - ike
         - dcerpc
         - krb5
+        - bittorrent-dht
         - snmp
         - rfb
         - sip
+        - quic:
+            # ja4 hashes in quic records will never be logged unless
+            # the following is set to on. (Default off)
+            # ja4: off
         - dhcp:
             enabled: yes
             # When extended mode is on, all DHCP messages are logged
@@ -285,10 +312,10 @@ outputs:
         - ssh
         - mqtt:
             # passwords: yes           # enable output of passwords
-        # HTTP2 logging. HTTP2 support is currently experimental and
-        # disabled by default. To enable, uncomment the following line
-        # and be sure to enable http2 in the app-layer section.
-        #- http2
+        - http2
+        - pgsql:
+            enabled: no
+            # passwords: yes           # enable output of passwords. Disabled by default
         - stats:
             totals: yes       # stats for all threads merged together
             threads: no       # per thread stats
@@ -302,6 +329,16 @@ outputs:
         # and will include the pktvars, flowvars, flowbits and
         # flowints.
         #- metadata
+
+        # EXPERIMENTAL per packet output giving TCP state tracking details
+        # including internal state, flags, etc.
+        # This output is experimental, meant for debugging and subject to
+        # change in both config and output without any notice.
+        #- stream:
+        #   all: false                      # log all TCP packets
+        #   event-set: false                # log packets that have a decoder/stream event
+        #   state-update: false             # log packets triggering a TCP state update
+        #   spurious-retransmission: false  # log spurious retransmission packets
 
   # 基于行的HTTP请求日志 无警报
   - http-log:
@@ -393,6 +430,9 @@ outputs:
       #ts-format: usec # sec or usec second format (default) is filename.sec usec is filename.sec.usec
       use-stream-depth: no #If set to "yes" packets seen after reaching stream inspection depth are ignored. "no" logs all packets
       honor-pass-rules: no # If set to "yes", flows in which a pass rule matched will stop being logged.
+      # Use "all" to log all packets or use "alerts" to log only alerted packets and flows or "tag"
+      # to log only flow tagged via the "tag" keyword
+      #conditional: all
 
   # 一个完整的警报日志,包含许多信息,供签名作者或调查可疑的误报
   # 
@@ -401,14 +441,6 @@ outputs:
       filename: alert-debug.log
       append: yes
       #filetype: regular # 'regular', 'unix_stream' or 'unix_dgram'
-
-  # 
-  # 前奏的警报输出(https://www.prelude-siem.org/)仅当使用-enable prelude编译Suricata时可用
-  - alert-prelude:
-      enabled: no
-      profile: suricata
-      log-packet-content: no
-      log-packet-header: yes
 
   # Stats.log包含来自Suricata引擎的各种计数器的数据
   - stats:
@@ -429,7 +461,7 @@ outputs:
       #level: Info ## possible levels: Emergency, Alert, Critical,
                    ## Error, Warning, Notice, Info, Debug
 
-  # 用于在磁盘上存储文件的输出模块. 
+# 用于在磁盘上存储文件的输出模块. 
   # Files are stored in directory names consisting of the first 2 characters 
   # of the SHA256 of the file. Each file is given its SHA256 as a filename.
   #
@@ -524,7 +556,7 @@ outputs:
   # lua输出支持 - 执行lua脚本以生成警报和事件输出
   # output.
   # Documented at:
-  # https://suricata.readthedocs.io/en/latest/output/lua-output.html
+  # https://docs.suricata.io/en/latest/output/lua-output.html
   - lua:
       enabled: no
       #scripts-dir: /etc/suricata/lua-output/
@@ -545,8 +577,11 @@ logging:
   # something reasonable if not provided.  Can be overridden in an
   # output section.  You can leave this out to get the default.
   #
-  # This value is overridden by the SC_LOG_FORMAT env var.
-  #default-log-format: "[%i] %t - (%f:%l) <%d> (%n) -- "
+  # This console log format value can be overridden by the SC_LOG_FORMAT env var.
+  #default-log-format: "%D: %S: %M"
+  #
+  # For the pre-7.0 log format use:
+  #default-log-format: "[%i] %t [%S] - (%f:%l) <%d> (%n) -- "
 
   # A regex to filter output.  Can be overridden in an output section.
   # Defaults to empty (no filter).
@@ -569,6 +604,7 @@ logging:
       enabled: yes
       level: info
       filename: suricata.log
+      # format: "[%i - %m] %z %d: %S: %M"
       # type: json
   - syslog:
       enabled: no
@@ -602,6 +638,7 @@ af-packet:
     #  more info.
     # Recommended modes are cluster_flow on most boxes and cluster_cpu or cluster_qm on system
     # with capture card using RSS (requires cpu affinity tuning and system IRQ tuning)
+    # cluster_rollover has been deprecated; if used, it'll be replaced with cluster_flow.
     cluster-type: cluster_flow
     # In some fragmentation cases, the hash can not be computed. If "defrag" is set
     # to yes, the kernel will do the needed defragmentation before sending the packets.
@@ -663,6 +700,118 @@ af-packet:
     #threads: auto
     #use-mmap: no
     #tpacket-v3: yes
+
+# Linux高速 af-xdp 捕获支持
+af-xdp:
+  - interface: default
+    # Number of receive threads. "auto" uses least between the number
+    # of cores and RX queues
+    #threads: auto
+    #disable-promisc: false
+    # XDP_DRV mode can be chosen when the driver supports XDP
+    # XDP_SKB mode can be chosen when the driver does not support XDP
+    # Possible values are:
+    #  - drv: enable XDP_DRV mode
+    #  - skb: enable XDP_SKB mode
+    #  - none: disable (kernel in charge of applying mode)
+    #force-xdp-mode: none
+    # During socket binding the kernel will attempt zero-copy, if this
+    # fails it will fallback to copy. If this fails, the bind fails.
+    # The bind can be explicitly configured using the option below.
+    # If configured, the bind will fail if not successful (no fallback).
+    # Possible values are:
+    #  - zero: enable zero-copy mode
+    #  - copy: enable copy mode
+    #  - none: disable (kernel in charge of applying mode)
+    #force-bind-mode: none
+    # Memory alignment mode can vary between two modes, aligned and
+    # unaligned chunk modes. By default, aligned chunk mode is selected.
+    # select 'yes' to enable unaligned chunk mode.
+    # Note: unaligned chunk mode uses hugepages, so the required number
+    # of pages must be available.
+    #mem-unaligned: no
+    # The following options configure the prefer-busy-polling socket
+    # options. The polling time and budget can be edited here.
+    # Possible values are:
+    #  - yes: enable (default)
+    #  - no: disable
+    #enable-busy-poll: yes
+    # busy-poll-time sets the approximate time in microseconds to busy
+    # poll on a blocking receive when there is no data.
+    #busy-poll-time: 20
+    # busy-poll-budget is the budget allowed for packet batches
+    #busy-poll-budget: 64
+    # These two tunables are used to configure the Linux OS's NAPI
+    # context. Their purpose is to defer enabling of interrupts and
+    # instead schedule the NAPI context from a watchdog timer.
+    # The softirq NAPI will exit early, allowing busy polling to be
+    # performed. Successfully setting these tunables alongside busy-polling
+    # should improve performance.
+    # Defaults are:
+    #gro-flush-timeout: 2000000
+    #napi-defer-hard-irq: 2
+
+dpdk:
+  eal-params:
+    proc-type: primary
+
+  # DPDK capture support
+  # RX queues (and TX queues in IPS mode) are assigned to cores in 1:1 ratio
+  interfaces:
+    - interface: 0000:3b:00.0 # PCIe address of the NIC port
+      # Threading: possible values are either "auto" or number of threads
+      # - auto takes all cores
+      # in IPS mode it is required to specify the number of cores and the numbers on both interfaces must match
+      threads: auto
+      # interrupt-mode: false # true to switch to interrupt mode 
+      promisc: true # promiscuous mode - capture all packets
+      multicast: true # enables also detection on multicast packets
+      checksum-checks: true # if Suricata should validate checksums
+      checksum-checks-offload: true # if possible offload checksum validation to the NIC (saves Suricata resources)
+      mtu: 1500 # Set MTU of the device in bytes
+      # rss-hash-functions: 0x0 # advanced configuration option, use only if you use untested NIC card and experience RSS warnings,
+      # For `rss-hash-functions` use hexadecimal 0x01ab format to specify RSS hash function flags - DumpRssFlags can help (you can see output if you use -vvv option during Suri startup)
+      # setting auto to rss_hf sets the default RSS hash functions (based on IP addresses)
+
+      # To approximately calculate required amount of space (in bytes) for interface's mempool: mempool-size * mtu
+      # Make sure you have enough allocated hugepages.
+      # The optimum size for the packet memory pool (in terms of memory usage) is power of two minus one: n = (2^q - 1)
+      mempool-size: 65535 # The number of elements in the mbuf pool
+
+      # Mempool cache size must be lower or equal to:
+      #     - RTE_MEMPOOL_CACHE_MAX_SIZE (by default 512) and
+      #     - "mempool-size / 1.5"
+      # It is advised to choose cache_size to have "mempool-size modulo cache_size == 0".
+      # If this is not the case, some elements will always stay in the pool and will never be used.
+      # The cache can be disabled if the cache_size argument is set to 0, can be useful to avoid losing objects in cache
+      # If the value is empty or set to "auto", Suricata will attempt to set cache size of the mempool to a value
+      # that matches the previously mentioned recommendations
+      mempool-cache-size: 257
+      rx-descriptors: 1024
+      tx-descriptors: 1024
+      #
+      # IPS mode for Suricata works in 3 modes - none, tap, ips
+      # - none: IDS mode only - disables IPS functionality (does not further forward packets)
+      # - tap: forwards all packets and generates alerts (omits DROP action) This is not DPDK TAP
+      # - ips: the same as tap mode but it also drops packets that are flagged by rules to be dropped
+      copy-mode: none
+      copy-iface: none # or PCIe address of the second interface
+
+    - interface: default
+      threads: auto
+      promisc: true
+      multicast: true
+      checksum-checks: true
+      checksum-checks-offload: true
+      mtu: 1500
+      rss-hash-functions: auto
+      mempool-size: 65535
+      mempool-cache-size: 257
+      rx-descriptors: 1024
+      tx-descriptors: 1024
+      copy-mode: none
+      copy-iface: none
+
 
 # 跨平台libpcap捕获支持 #网卡设置
 pcap:
@@ -728,11 +877,12 @@ pcap-file:
 app-layer:
   # error-policy: ignore
   protocols:
+    telnet:
+      enabled: yes
     rfb:
       enabled: yes
       detection-ports:
         dp: 5900, 5901, 5902, 5903, 5904, 5905, 5906, 5907, 5908, 5909
-    # MQTT, disabled by default.
     mqtt:
       enabled: yes
       # max-msg-length: 1mb
@@ -742,18 +892,21 @@ app-layer:
       # max-tx: 4096
     krb5:
       enabled: yes
+    bittorrent-dht:
+      enabled: yes
     snmp:
       enabled: yes
-    ikev2:
+    ike:
       enabled: yes
     tls:
       enabled: yes
       detection-ports:
         dp: 443
 
-      # Generate JA3 fingerprint from client hello. If not specified it
+      # Generate JA3/JA4 fingerprints from client hello. If not specified it
       # will be disabled by default, but enabled if rules require it.
       #ja3-fingerprints: auto
+      #ja4-fingerprints: auto
 
       # What to do when the encrypted communications start:
       # - default: keep tracking TLS session, check for protocol anomalies,
@@ -769,24 +922,37 @@ app-layer:
       #
       #encryption-handling: default
 
+    pgsql:
+      enabled: no
+      # Stream reassembly size for PostgreSQL. By default, track it completely.
+      stream-depth: 0
+      # Maximum number of live PostgreSQL transactions per flow
+      # max-tx: 1024
     dcerpc:
       enabled: yes
+      # Maximum number of live DCERPC transactions per flow
+      # max-tx: 1024
     ftp:
       enabled: yes
       # memcap: 64mb
     rdp:
-      enabled: yes
+      #enabled: yes
     ssh:
       enabled: yes
       #hassh: yes
-    # HTTP2: Experimental HTTP 2 support. Disabled by default.
     http2:
-      enabled: no
-      # use http keywords on HTTP2 traffic
-      http1-rules: no
+      enabled: yes
+      # Maximum number of live HTTP2 streams in a flow
+      #max-streams: 4096
+      # Maximum headers table size
+      #max-table-size: 65536
+      # Maximum reassembly size for header + continuation frames
+      #max-reassembly-size: 102400
     smtp:
       enabled: yes
       raw-extraction: no
+      # Maximum number of live SMTP transactions per flow
+      # max-tx: 256
       # Configure SMTP-MIME Decoder
       mime:
         # Decode MIME messages from SMTP transactions
@@ -805,6 +971,12 @@ app-layer:
 
         # Extract URLs and save in state data structure
         extract-urls: yes
+        # Scheme of URLs to extract
+        # (default is [http])
+        #extract-urls-schemes: [http, https, ftp, mailto]
+        # Log the scheme of URLs that are extracted
+        # (default is no)
+        #log-url-scheme: yes
         # Set to yes to compute the md5 of the mail body. You will then
         # be able to journalize it.
         body-md5: no
@@ -819,12 +991,15 @@ app-layer:
       enabled: yes
       detection-ports:
         dp: 139, 445
+      # Maximum number of live SMB transactions per flow
+      # max-tx: 1024
 
       # Stream reassembly size for SMB streams. By default track it completely.
       #stream-depth: 0
 
     nfs:
       enabled: yes
+      # max-tx: 1024
     tftp:
       enabled: yes
     dns:
@@ -838,6 +1013,12 @@ app-layer:
           dp: 53
     http:
       enabled: yes
+
+      # Byte Range Containers default settings
+      # byterange:
+      #   memcap: 100mb
+      #   timeout: 60
+
       # memcap:                   Maximum memory capacity for HTTP
       #                           Default is unlimited, values can be 64mb, e.g.
 
@@ -881,7 +1062,7 @@ app-layer:
            # auto will use http-body-inline mode in IPS mode, yes or no set it statically
            http-body-inline: auto
 
-           # Decompress SWF files.
+           # Decompress SWF files. Disabled by default.
            # Two types: 'deflate', 'lzma', 'both' will decompress deflate and lzma
            # compress-depth:
            # Specifies the maximum amount of data to decompress,
@@ -890,7 +1071,7 @@ app-layer:
            # Specifies the maximum amount of decompressed data to obtain,
            # set 0 for unlimited.
            swf-decompression:
-             enabled: yes
+             enabled: no
              type: both
              compress-depth: 100kb
              decompress-depth: 100kb
@@ -919,6 +1100,10 @@ app-layer:
            #compression-bomb-limit: 1mb
            # Maximum time spent decompressing a single transaction in usec
            #decompression-time-limit: 100000
+           # Maximum number of live transactions per flow
+           #max-tx: 512
+           # Maximum used number of HTTP1 headers in one request or response
+           #headers-limit: 1024
 
          server-config:
 
@@ -982,22 +1167,36 @@ app-layer:
     ntp:
       enabled: yes
 
+    quic:
+      enabled: yes
+
     dhcp:
       enabled: yes
 
     sip:
-      enabled: yes
+      #enabled: yes
 
-# 要解码的最大asn1帧数的限制 (default 256)
+# Limit for the maximum number of asn1 frames to decode (default 256)
 asn1-max-frames: 256
 
 # 数据集默认设置
-# datasets:
-#   # Default fallback memcap and hashsize values for datasets in case these
-#   # were not explicitly defined.
-#   defaults:
-#     memcap: 100mb
-#     hashsize: 2048
+datasets:
+  # Default fallback memcap and hashsize values for datasets in case these
+  # were not explicitly defined.
+  defaults:
+    #memcap: 100mb
+    #hashsize: 2048
+
+  rules:
+    # Set to true to allow absolute filenames and filenames that use
+    # ".." components to reference parent directories in rules that specify
+    # their filenames.
+    #allow-absolute-filenames: false
+
+    # Allow datasets in rules write access for "save" and
+    # "state". This is enabled by default, however write access is
+    # limited to the data directory.
+    #allow-write: true
 
 ##############################################################################
 ##
@@ -1013,6 +1212,27 @@ asn1-max-frames: 256
 #run-as:
 #  user: suri
 #  group: suri
+
+security:
+  # if true, prevents process creation from Suricata by calling
+  # setrlimit(RLIMIT_NPROC, 0)
+  limit-noproc: true
+  # Use landlock security module under Linux
+  landlock:
+    enabled: no
+    directories:
+      #write:
+      #  - #改 改为你的运行目录
+      # /usr and /etc folders are added to read list to allow
+      # file magic to be used.
+      read:
+        - /usr/
+        - /etc/
+        - #改 改为你的配置文件目录
+
+  lua:
+    # Allow Lua rules. Disabled by default.
+    #allow-rules: false
 
 # Some logging modules will use that name in event as identifier. The default
 # value is the hostname
@@ -1068,6 +1288,8 @@ host-mode: auto
 #
 # hash     - Flow assigned to threads using the 5-7 tuple hash.
 # ippair   - Flow assigned to threads using addresses only.
+# ftp-hash - Flow assigned to threads using the hash, except for FTP, so that
+#            ftp-data flows will be handled by the same thread
 #
 #autofp-scheduler: hash
 
@@ -1083,8 +1305,8 @@ host-mode: auto
 # activated in live capture mode. You can use the filename variable to set
 # the file name of the socket.
 unix-command:
-  enabled: yes
-  filename: /var/run/suricata-command.socket
+  enabled: auto
+  #filename: custom.socket
 
 # Magic file. The extension .mgc is added to the value here.
 #magic-file: /usr/share/file/magic
@@ -1113,6 +1335,18 @@ legacy:
 # packet. Default is 15
 #packet-alert-max: 15
 
+# Exception Policies
+#
+# Define a common behavior for all exception policies.
+# In IPS mode, the default is drop-flow. For cases when that's not possible, the
+# engine will fall to drop-packet. To fallback to old behavior (setting each of
+# them individually, or ignoring all), set this to ignore.
+# All values available for exception policies can be used, and there is one
+# extra option: auto - which means drop-flow or drop-packet (as explained above)
+# in IPS mode, and ignore in IDS mode. Exception policy values are: drop-packet,
+# drop-flow, reject, bypass, pass-packet, pass-flow, ignore (disable).
+exception-policy: auto
+
 # IP Reputation
 #reputation-categories-file: /etc/suricata/iprep/categories.txt
 #default-reputation-path: /etc/suricata/iprep
@@ -1136,12 +1370,12 @@ pcre:
   match-limit-recursion: 1500
 
 ##
-## 高级路由跟踪和重建设置 (使用默认选项)
+## Advanced Traffic Tracking and Reconstruction Settings
 ##
 
-# 用于碎片整理和TCP流重组的主机特定策略
-# 主机操作系统查找是使用基数树完成的
-# 就像路由表一样，所以最具体的条目是匹配的
+# Host specific policies for defragmentation and TCP stream
+# reassembly. The host OS lookup is done using a radix tree, just
+# like a routing table so the most specific entry matches.
 host-os-policy:
   # Make the default policy windows.
   windows: [0.0.0.0/0]
@@ -1160,8 +1394,8 @@ host-os-policy:
 
 # Defrag settings:
 
-# The memcap-policy value can be "drop-flow", "pass-flow", "bypass",
-# "drop-packet", "pass-packet", "reject" or "ignore" (which is the default).
+# The memcap-policy value can be "drop-packet", "pass-packet", "reject" or
+# "ignore" (which is the default).
 defrag:
   memcap: 32mb
   # memcap-policy: ignore
@@ -1204,8 +1438,8 @@ defrag:
 # last time seen flows.
 # The memcap can be specified in kb, mb, gb.  Just a number indicates it's
 # in bytes.
-# The memcap-policy can be "drop-flow", "pass-flow", "bypass", "drop-packet",
-# "pass-packet", "reject" or "ignore" (which is the default).
+# The memcap-policy can be "drop-packet", "pass-packet", "reject" or "ignore"
+# (which is the default).
 
 flow:
   memcap: 128mb
@@ -1223,7 +1457,13 @@ flow:
 vlan:
   use-for-tracking: true
 
-# 流的特定超时. Here you can specify the timeouts that the
+# This option controls the use of livedev ids in the flow (and defrag)
+# hashing. This is enabled by default and should be disabled if
+# multiple live devices are used to capture traffic from the same network
+livedev:
+  use-for-tracking: true
+
+# Specific timeouts for flows. Here you can specify the timeouts that the
 # active flows will wait to transit from the current state to another, on each
 # protocol. The value of "new" determines the seconds to wait after a handshake or
 # stream startup before the engine frees the data of that flow it doesn't
@@ -1276,7 +1516,7 @@ flow-timeouts:
     emergency-established: 100
     emergency-bypassed: 50
 
-# 流引擎设置. Here the TCP stream tracking and reassembly
+# Stream engine settings. Here the TCP stream tracking and reassembly
 # engine is configured.
 #
 # stream:
@@ -1294,7 +1534,7 @@ flow-timeouts:
 #                               # of checksum. You can control the handling of checksum
 #                               # on a per-interface basis via the 'checksum-checks'
 #                               # option
-#   prealloc-sessions: 2k       # 2k sessions prealloc'd per stream thread
+#   prealloc-sessions: 2048     # 2k sessions prealloc'd per stream thread
 #   midstream: false            # don't allow midstream session pickups
 #   midstream-policy: ignore    # Can be "drop-flow", "pass-flow", "bypass",
 #                               # "drop-packet", "pass-packet", "reject" or
@@ -1302,10 +1542,13 @@ flow-timeouts:
 #   async-oneside: false        # don't enable async stream handling
 #   inline: no                  # stream inline mode
 #   drop-invalid: yes           # in inline mode, drop packets that are invalid with regards to streaming engine
+#   max-syn-queued: 10          # Max different SYNs to queue
 #   max-synack-queued: 5        # Max different SYN/ACKs to queue
 #   bypass: no                  # Bypass packets when stream.reassembly.depth is reached.
 #                               # Warning: first side to reach this triggers
 #                               # the bypass.
+#   liberal-timestamps: false   # Treat all timestamps as if the Linux policy applies. This
+#                               # means it's slightly more permissive. Enabled by default.
 #
 #   reassembly:
 #     memcap: 256mb             # Can be specified in kb, mb, gb.  Just a number
@@ -1363,16 +1606,16 @@ stream:
     #segment-prealloc: 2048
     #check-overlap-different-data: true
 
-# 主机表:
+# Host table:
 #
-# 主机表由标记和每主机阈值处理子系统使用
+# Host table is used by the tagging and per host thresholding subsystems.
 #
 host:
   hash-size: 4096
   prealloc: 1000
   memcap: 32mb
 
-# IP配对表:
+# IP Pair table:
 #
 # Used by xbits 'ippair' tracking.
 #
@@ -1381,7 +1624,8 @@ host:
 #  prealloc: 1000
 #  memcap: 32mb
 
-# 解码器设置
+# Decoder settings
+
 decoder:
   # Teredo decoder is known to not be completely accurate
   # as it will sometimes detect non-teredo as teredo.
@@ -1397,10 +1641,6 @@ decoder:
     enabled: true
     ports: $VXLAN_PORTS # syntax: '[8472, 4789]' or '4789'.
 
-  # VNTag decode support
-  vntag:
-    enabled: false
-
   # Geneve decoder is assigned to up to 4 UDP ports. By default only the
   # IANA assigned port 6081 is enabled.
   geneve:
@@ -1411,12 +1651,12 @@ decoder:
   # max-layers: 16
 
 ##
-## 性能调整和评测 (使用默认选项)
+## Performance tuning and profiling
 ##
 
-# 检测引擎构建内部签名组. 
-# The engineallows us to specify the profile to use for them, to manage memory 
-# in an efficient way keeping good performance. For the profile keyword you
+# The detection engine builds internal groups of signatures. The engine
+# allows us to specify the profile to use for them, to manage memory in an
+# efficient way keeping good performance. For the profile keyword you
 # can use the words "low", "medium", "high" or "custom". If you use custom,
 # make sure to define the values in the "custom-values" section.
 # Usually you would prefer medium/high/low.
@@ -1499,7 +1739,7 @@ mpm-algo: auto
 
 spm-algo: auto
 
-# suricata是多线程的. 此处螺纹可能会受到影响
+# Suricata is multi-threaded. Here the threading can be influenced.
 threading:
   set-cpu-affinity: no
   # Tune cpu affinity of threads. Each family of threads can be bound
@@ -1561,14 +1801,14 @@ threading:
 luajit:
   states: 128
 
-# 分析设置. Only effective if Suricata has been built with
+# Profiling settings. Only effective if Suricata has been built with
 # the --enable-profiling configure flag.
 #
 profiling:
   # Run profiling for every X-th packet. The default is 1, which means we
-  # profile every packet. If set to 1000, one packet is profiled for every
-  # 1000 received.
-  #sample-rate: 1000
+  # profile every packet. If set to 1024, one packet is profiled for every
+  # 1024 received. The sample rate must be a power of 2.
+  #sample-rate: 1024
 
   # rule profiling
   rules:
@@ -1578,6 +1818,10 @@ profiling:
     enabled: yes
     filename: rule_perf.log
     append: yes
+    # Set active to yes to enable rules profiling at start
+    # if set to no (default), the rules profiling will have to be started
+    # via unix socket commands.
+    #active:no
 
     # Sort options: ticks, avgticks, checks, matches, maxticks
     # If commented out all the sort options will be used.
@@ -1636,11 +1880,11 @@ profiling:
     append: yes
 
 ##
-## 网络过滤器集成
+## Netfilter integration
 ##
 
-# 在NFQ内联模式下运行时,可以使用模拟的非终端NFQUEUE判决.
-# 
+# When running in NFQ inline mode, it is possible to use a simulated
+# non-terminal NFQUEUE verdict.
 # This permits sending all needed packet to Suricata via this rule:
 #        iptables -I FORWARD -m mark ! --mark $MARK/$MASK -j NFQUEUE
 # And below, you can have your standard filtering ruleset. To activate
@@ -1653,7 +1897,7 @@ profiling:
 # accept the packet if Suricata is not able to keep pace.
 # bypass mark and mask can be used to implement NFQ bypass. If bypass mark is
 # set then the NFQ bypass is activated. Suricata will set the bypass mark/mask
-# on packet of a flow that need to be bypassed. The Nefilter ruleset has to
+# on packet of a flow that need to be bypassed. The Netfilter ruleset has to
 # directly accept all packets of a flow once a packet has been marked.
 nfq:
 #  mode: accept
@@ -1665,7 +1909,7 @@ nfq:
 #  batchcount: 20
 #  fail-open: yes
 
-#nflog 支持
+#nflog support
 nflog:
     # netlink multicast group
     # (the same as the iptables --nflog-group param)
@@ -1683,20 +1927,20 @@ nflog:
     max-size: 20000
 
 ##
-## 高级捕获设置
+## Advanced Capture Options
 ##
 
-# 影响数据包捕获的常规设置
+# General settings affecting packet capture
 capture:
   # disable NIC offloading. It's restored when Suricata exits.
   # Enabled by default.
   #disable-offloading: false
   #
   # disable checksum validation. Same as setting '-k none' on the
-  # commandline.
+  # command-line.
   #checksum-validation: none
 
-# Netmap 支持
+# Netmap support
 #
 # Netmap operates with NIC directly in driver, so you need FreeBSD 11+ which has
 # built-in Netmap support or compile and install the Netmap module and appropriate
@@ -1709,7 +1953,7 @@ capture:
 #
 netmap:
    # 要指定OS端点，请在端点处添加加号 (e.g. "eth0+") #网卡设置
- - interface: eth0
+ - interface: eth2
    # Number of capture threads. "auto" uses number of RSS queues on interface.
    # Warning: unless the RSS hashing is symmetrical, this will lead to
    # accuracy issues.
@@ -1762,7 +2006,13 @@ pfring:
     cluster-id: 99
 
     # Default PF_RING cluster type. PF_RING can load balance per flow.
-    # Possible values are cluster_flow or cluster_round_robin.
+    # Possible values are:
+    # - cluster_flow:               6-tuple: <src ip, src_port, dst ip, dst port, proto, vlan>
+    # - cluster_inner_flow:         6-tuple: <src ip, src port, dst ip, dst port, proto, vlan>
+    # - cluster_inner_flow_2_tuple: 2-tuple: <src ip,           dst ip                       >
+    # - cluster_inner_flow_4_tuple: 4-tuple: <src ip, src port, dst ip, dst port             >
+    # - cluster_inner_flow_5_tuple: 5-tuple: <src ip, src port, dst ip, dst port, proto      >
+    # - cluster_round_robin (NOT RECOMMENDED)
     cluster-type: cluster_flow
 
     # bpf filter for this interface
