@@ -8,7 +8,7 @@
 # suricata配置文件. 除了描述此文件中所有选项的注释之外, 完整的文档可在:
 # https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
 
-suricata-version: "7.0.7"
+suricata-version: "7.0"
 
 ##
 ## Step 1: 配置网络
@@ -1222,13 +1222,13 @@ security:
     enabled: no
     directories:
       #write:
-      #  - #改 改为你的运行目录
+      #  - /var/run/
       # /usr and /etc folders are added to read list to allow
       # file magic to be used.
       read:
         - /usr/
         - /etc/
-        - #改 改为你的配置文件目录
+        - /etc/suricata/
 
   lua:
     # Allow Lua rules. Disabled by default.
