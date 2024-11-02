@@ -1,11 +1,7 @@
 // ARKFUTURE
 function FindProxyForURL(url, host) {
 
-    if (dnsDomainIs(host, "*.pornhub.com") || dnsDomainIs(host, "*.xvideos.com") || dnsDomainIs(host, "*.xnxx.com") || dnsDomainIs(host, "*.xhamster.com")) {
-        return "SOCKS5 192.168.0.2:5554";
-    }
-
-    else if (shExpMatch(host, "*.youtube.com")) {
+    if (shExpMatch(host, "*.youtube.com") || dnsDomainIs(host, "*.pornhub.com") || dnsDomainIs(host, "*.xvideos.com") || dnsDomainIs(host, "*.xnxx.com") || dnsDomainIs(host, "*.xhamster.com")) {
         return "SOCKS5 192.168.0.2:5554";
     }
     else if (shExpMatch(host, "*.onion")) {
