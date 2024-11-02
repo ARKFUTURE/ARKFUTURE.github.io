@@ -8,7 +8,7 @@ function FindProxyForURL(url, host) {
         return "SOCKS5 127.0.0.1:5554";  
     }  
     else if (shExpMatch(host, "*.onion")) {  
-        return "SOCKS5 127.0.0.1:9050"; // 确保这是您的 Tor 代理的端口  
+        return "SOCKS5 127.0.0.1:9050";
     }  
     else if (shExpMatch(host, "*.i2p")) {  
         return " SOCKS5 127.0.0.1:4447; PROXY 127.0.0.1:4444";
