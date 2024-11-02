@@ -1,18 +1,19 @@
 // ARKFUTURE
-function FindProxyForURL(url, host) {
-
-    if (shExpMatch(host, "*.youtube.com") || dnsDomainIs(host, "*.pornhub.com") || dnsDomainIs(host, "*.xvideos.com") || dnsDomainIs(host, "*.xnxx.com") || dnsDomainIs(host, "*.xhamster.com")) {
-        return "SOCKS5 192.168.0.2:5554";
+function FindProxyForURL(url, host) {  
+    if (dnsDomainIs(host, "*.pornhub.com") ||  
+        dnsDomainIs(host, "*.xvideos.com") ||  
+        dnsDomainIs(host, "*.xnxx.com") || 
+        dnsDomainIs(host, "*.*.youtube.com") ||  
+        dnsDomainIs(host, "*.xhamster.com")) {  
+        return "SOCKS5 127.0.0.1:5554";  
+    }  
+    else if (shExpMatch(host, "*.onion")) {  
+        return "SOCKS5 127.0.0.1:9050"; // 确保这是您的 Tor 代理的端口  
+    }  
+    else if (shExpMatch(host, "*.i2p")) {  
+        return " SOCKS5 127.0.0.1:4447; PROXY 127.0.0.1:4444";
     }
-    else if (shExpMatch(host, "*.onion")) {
-        return "SOCKS5 127.0.0.1:9050";
-    }
-
-    else if (shExpMatch(host, "*.i2p")) {
-        return "PROXY 127.0.0.1:4444";
-    }
-
-    else {
-        return "DIRECT; SOCKS5 192.168.0.2:5554";
-    }
+    else {    
+        return "DIRECT; SOCKS5 127.0.0.1:5554";  
+    }  
 }
