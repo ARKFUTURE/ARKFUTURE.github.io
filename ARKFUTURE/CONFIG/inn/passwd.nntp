@@ -17,5 +17,5 @@
 ##  USER/PASS authentication.
 ##
 ##  See the passwd.nntp man page for more information.
-#
+##
 *:arkfuture:123456:authinfo
