@@ -12,7 +12,7 @@
             <outline text="SubsPlease" type="rss" htmlUrl="https://subsplease.org/" xmlUrl="https://subsplease.org/rss/"/>
             <outline text="萌番组" type="rss" htmlUrl="https://bangumi.moe/" xmlUrl="https://bangumi.moe/rss/latest"/>
             <outline text="动漫花园" type="rss" htmlUrl="https://share.dmhy.org/" xmlUrl="https://share.dmhy.org/topics/rss/rss.xml"/>
-            <outline text="普通.nyaa.si" type="rss" htmlUrl="https://nyaa.si/" xmlUrl="https://nyaa.si/?page=rss/"/>
+            <outline text="普通.nyaa.si" type="rss" htmlUrl="https://nyaa.si/" xmlUrl="https://nyaa.si/?page=rss"/>
             <outline text="里番.nyaa.si" type="rss" htmlUrl="https://sukebei.nyaa.si/" xmlUrl="https://sukebei.nyaa.si/?page=rss"/>
         </outline>
     </body>
