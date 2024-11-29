@@ -6,7 +6,7 @@
 * Debian 官方的 基础安装教程 https://defuse.ca/inn-private-newsgroup-server-setup.htm
 * 使用INN2服务时，把inn.conf 和readers.conf 放到/etc/news文件夹中，并修改inn.conf服务中的所有域名为您的域名，再根据inn2的debian安装教程搭建基础的news服务
 
-# 主要配置文件
+# 主要配置文件的更改
 ```
 cd /etc/news/
 chown news.news inn.conf
