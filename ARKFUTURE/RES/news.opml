@@ -18,10 +18,10 @@
             <outline text="印度时报" type="rss" htmlUrl="https://timesofindia.indiatimes.com/" xmlUrl="https://timesofindia.indiatimes.com/rssfeedmostrecent.cms"/>
             <outline text="半岛电视台" type="rss" htmlUrl="https://www.aljazeera.com/" xmlUrl="https://www.aljazeera.com/xml/rss/all.xml"/>
             <outline text="纽约时报" type="rss" htmlUrl="https://rss.nytimes.com/" xmlUrl="https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"/>
-            <outline text="BBC" type="rss" htmlUrl="https://feeds.bbci.co.uk" xmlUrl="https://feeds.bbci.co.uk/news/rss.xml"/>
-            <outline text="路透社" type="rss" htmlUrl="https://www.reutersagency.com/" xmlUrl="https://www.reutersagency.com/feed/?taxonomy=best-topics&post_type=best"/>
+            <outline text="BBC" type="rss" htmlUrl="https://feeds.bbci.co.uk/" xmlUrl="https://feeds.bbci.co.uk/news/rss.xml"/>
             <outline text="华盛顿时报" type="rss" htmlUrl="https://www.washingtontimes.com/" xmlUrl="https://www.washingtontimes.com/rss/headlines/news/"/>
             <outline text="雅虎新闻" type="rss" htmlUrl="https://www.yahoo.com/" xmlUrl="https://www.yahoo.com/news/rss"/>
+            <outline text="路透社" type="rss" htmlUrl="https://www.reutersagency.com/" xmlUrl="https://www.reutersagency.com/feed/?taxonomy=best-topics&amp;post_type=best"/>
         </outline>
     </body>
 </opml>
