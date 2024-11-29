@@ -12,10 +12,16 @@
             <outline text="中天電視" type="rss" htmlUrl="https://www.ctitv.com.tw/" xmlUrl="https://www.ctitv.com.tw/feed"/>
             <outline text="今日俄罗斯" type="rss" htmlUrl="https://inosmi.ru/" xmlUrl="https://inosmi.ru/export/rss2/index.xml?page_type=google_newsstand"/>
             <outline text="俄罗斯卫星社" type="rss" htmlUrl="https://sputnikglobe.com/" xmlUrl="https://sputnikglobe.com/export/rss2/archive/index.xml"/>
+            <outline text="RT新闻" type="rss" htmlUrl="https://www.rt.com/" xmlUrl="https://www.rt.com/rss/"/>
             <outline text="朝日新聞" type="rss" htmlUrl="http://www.asahi.com/" xmlUrl="http://www3.asahi.com/rss/index.rdf"/>
             <outline text="NHK新聞" type="rss" htmlUrl="http://www3.nhk.or.jp/" xmlUrl="http://www3.nhk.or.jp/rss/news/cat0.xml"/>
             <outline text="印度时报" type="rss" htmlUrl="https://timesofindia.indiatimes.com/" xmlUrl="https://timesofindia.indiatimes.com/rssfeedmostrecent.cms"/>
             <outline text="半岛电视台" type="rss" htmlUrl="https://www.aljazeera.com/" xmlUrl="https://www.aljazeera.com/xml/rss/all.xml"/>
+            <outline text="纽约时报" type="rss" htmlUrl="https://rss.nytimes.com/" xmlUrl="https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"/>
+            <outline text="BBC" type="rss" htmlUrl="https://feeds.bbci.co.uk" xmlUrl="https://feeds.bbci.co.uk/news/rss.xml"/>
+            <outline text="路透社" type="rss" htmlUrl="https://www.reutersagency.com/" xmlUrl="https://www.reutersagency.com/feed/?taxonomy=best-topics&post_type=best"/>
+            <outline text="华盛顿时报" type="rss" htmlUrl="https://www.washingtontimes.com/" xmlUrl="https://www.washingtontimes.com/rss/headlines/news/"/>
+            <outline text="雅虎新闻" type="rss" htmlUrl="https://www.yahoo.com/" xmlUrl="https://www.yahoo.com/news/rss"/>
         </outline>
     </body>
 </opml>
