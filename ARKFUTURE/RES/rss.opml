@@ -8,7 +8,7 @@
     </head>
     <body>
         <outline text=UPDATE">
-            <outline text="百度国内" type="rss" htmlUrl="http://news.baidu.com/" xmlUrl="http://news.baidu.com/n?cmd=4&amp;class=civilnews&amp;tn=rss"/>
+            <outline text="待更新" type="rss" htmlUrl="待更新" xmlUrl="待更新"/>
         </outline>
     </body>
 </opml>
