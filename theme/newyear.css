@@ -30,11 +30,14 @@ body {
   }
   
   /* 页脚样式 */
-  .footer {
-    background-color: #333333; /* 深灰色背景 */
-    color: #ffd700; /* 金色字体 */
-    padding: 20px;
-    text-align: center;
+  footer {
+    background: black;
+    color: transparent;
+    -webkit-background-clip: text;
+    border: 2px solid #00000009; /* 边框颜色和厚度 */
+    border-radius: 15px; /* 圆角的半径 */
+    padding: 10px; /* 内边距 */
+
   }
   
   /* 标题样式 */

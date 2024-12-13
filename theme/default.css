@@ -26,11 +26,7 @@ pre {
   -webkit-background-clip: text;
 }
 
-.footer {
-  background: black;
-  color: transparent;
-  -webkit-background-clip: text;
-}
+
 
 .tit {
   color: purple;
@@ -43,22 +39,11 @@ hr {
   border-bottom: 1px dotted;
   color: #fcb045;
 }
-
-#terminal {  
-  font-family: monospace;  
-  white-space: pre-wrap;  
-  border: 1px solid #ccc;  
-  padding: 10px;  
-  background-color: #222;  
-  color: #ccc;  
-  overflow-y: scroll;  
-  height: 100px;  
-}  
-
-#input {  
-  width: calc(100% - 22px);  
-  padding: 10px;  
-  font-family: monospace;  
-  border: 1px solid #ccc;  
-  margin-top: 10px;  
-}  
+footer {
+  background: black;
+  color: transparent;
+  -webkit-background-clip: text;
+  border: 2px solid #00000009; /* 边框颜色和厚度 */
+  border-radius: 15px; /* 圆角的半径 */
+  padding: 10px; /* 内边距 */
+}
