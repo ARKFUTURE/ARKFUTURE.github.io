@@ -1,45 +1,64 @@
-h2 {
-    background: linear-gradient(to right, #ff6b81, #fcb045);
-    color: transparent;
-    -webkit-background-clip: text;
-}
-
-a {
-    color: #428bca;
-    text-decoration: none;
-    font-weight: bold;
-    background: linear-gradient(to right, #00c6ff, #0072ff);
-    -webkit-background-clip: text;
-    color: transparent;
-    transition: all 0.3s ease;
-}
-
-a:hover {
-    color: #0072ff;
-    -webkit-background-clip: text;
-}
-
-p,
-pre {
-    background: #3c9291;
-    color: transparent;
-    -webkit-background-clip: text;
-}
-
-.footer {
-    background: black;
-    color: transparent;
-    -webkit-background-clip: text;
-}
-
-.tit {
-    color: purple;
-    -webkit-background-clip: text;
-}
-
-hr {
-    size: 1;
-    position: relative;
-    border-bottom: 1px dotted;
-    color: #fcb045;
+/* 背景颜色和字体颜色 */
+body {
+    background-color: #ff4444cd; /* 节日红色 */
+    color: #ffffff; /* 白色字体 */
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* 标题样式 */
+  h1, h2, h3 {
+    color: #ffffff;
+    text-shadow: 2px 2px 5px #000000; /* 添加一点阴影效果 */
+  }
+  
+  /* 段落样式 */
+  p {
+    color: #ffffff;
+  }
+  
+  /* 预格式化文本样式 */
+  pre {
+    background-color: #282828; /* 深色背景 */
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  /* 水平线样式 */
+  hr {
+    border: 1px solid #ffffff; /* 白色水平线 */
+  }
+  
+  /* 页脚样式 */
+  .footer {
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  /* 标题样式 */
+  .tit {
+    color: #00ff00; /* 绿色标题 */
+    text-shadow: 2px 2px 5px #000000;
+  }
+  
+  /* 添加一些雪花 */
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://www.example.com/snowflakes.png') center center no-repeat;
+    background-size: cover;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  a { 
+    color: #e5ff00e1; 
+    text-decoration: none; 
+    } 
+  a:hover { 
+    color: #06fcfc; 
 }
