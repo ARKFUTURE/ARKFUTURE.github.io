@@ -11,7 +11,6 @@
         const date = getCurrentDate();
         const cssFiles = {
             '12-25': 'theme/christmas.css',   // 圣诞节
-            '10-31': 'theme/halloween.css',  // 万圣节
             '1-1': 'theme/newyear.css'       // 新年
         };
         const dateKey = `${date.month}-${date.day}`;
