@@ -15,106 +15,11 @@ cd inspircd
 #启用插件
 sudo ./configure --enable-extras ssl_openssl
 ``` 
-* 然后使用sudo ./configure 生成 ./.configure/ 配置文件目录
-* 替换./configure/cache.cfg 完成相关目录修改 使用sudo
 
-```
-# 遇到 这些 使用 yes (使用root用户及root用户组)
-Are you sure you want to build as the root group?
-[no] => yes
-
-Are you sure you want to build as the root user?
-[no] => yes
-``` 
-
-
-# 编译时的 ./.configure/cache.cfg 请修修改和您相关的前四项配置
-```
-UID 0
-GID 0
-GROUP root
-USER root
-CXX c++
-BINARY_DIR /usr/bin
-MODULE_DIR /usr/lib/inspircd
-MANUAL_DIR /usr/share/man
-RUNTIME_DIR /var/lib/inspircd
-LOG_DIR /var/log/inspircd
-CONFIG_DIR /etc/inspircd
-DATA_DIR /var/lib/inspircd
-EXAMPLE_DIR /usr/share/doc/inspircd/examples
-SCRIPT_DIR /usr/bin
-BASE_DIR /usr
-DISABLE_OWNERSHIP 0
-HAS_CLOCK_GETTIME 1
-HAS_ARC4RANDOM_BUF 1
-HAS_GETENTROPY 1
-VERSION 1
-SOCKETENGINE epoll
-``` 
+# 配置编译
+* 配置编译时 吧inspircd的conf目录改为 /etc/inspircd
+* 其余的看您自己的需要
 
 # 开始编译
-```
-sudo make
-sudo make install
-```
-
-
-### 编译的时候遇到：这些配置符合 Debian 的 FHS 标准
-```
-
-Currently, InspIRCd is configured with the following paths:
-
-Binary: /home/arkfuture/inspircd/run/bin
-Config: /home/arkfuture/inspircd/run/conf
-Data:   /home/arkfuture/inspircd/run/data
-Log:    /home/arkfuture/inspircd/run/logs
-Manual: /home/arkfuture/inspircd/run/manuals
-Module: /home/arkfuture/inspircd/run/modules
-Script: /home/arkfuture/inspircd/run
-
-Do you want to change these settings?
-
-[no] => yes
-
-In what directory do you wish to install the InspIRCd base?
-[/home/arkfuture/inspircd/run] => /usr
-
-In what directory should the InspIRCd binary be placed?
-[/usr/bin] => /usr/bin
-
-In what directory are configuration files to be stored?
-[/usr/conf] => /etc/inspircd
-
-/etc/inspircd does not exist. Create it?
-[yes] => yes
-
-In what directory are variable data files to be stored?
-[/usr/data] => /var/lib/inspircd
-
-/var/lib/inspircd does not exist. Create it?
-[yes] => yes
-
-In what directory are log files to be stored?
-[/usr/logs] => /var/log/inspircd
-
-/var/log/inspircd does not exist. Create it?
-[yes] => yes
-
-In what directory are manual pages to be placed?
-[/usr/manuals] => /usr/share/man
-
-In what directory are modules to be placed?
-[/usr/modules] => /usr/lib/inspircd
-
-/usr/lib/inspircd does not exist. Create it?
-[yes] => yea
-
-/usr/lib/inspircd does not exist. Create it?
-[yes] => yes
-
-In what directory are scripts to be placed?
-[/usr] => /usr/bin
-
-
-``` 
+`make install -j6`
+即可使用
