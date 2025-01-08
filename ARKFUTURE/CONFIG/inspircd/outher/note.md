@@ -28,10 +28,13 @@ Are you sure you want to build as the root user?
 ``` 
 
 
-# 编译时的 ./.configure/cache.cfg
+# 编译时的 ./.configure/cache.cfg 请修改前四项
 ```
+UID 0
+GID 0
 GROUP root
 USER root
+CXX c++
 BINARY_DIR /usr/bin
 MODULE_DIR /usr/lib/inspircd
 MANUAL_DIR /usr/share/man
@@ -48,9 +51,6 @@ HAS_ARC4RANDOM_BUF 1
 HAS_GETENTROPY 1
 VERSION 1
 SOCKETENGINE epoll
-CXX c++
-UID 0
-GID 0
 ``` 
 
 # 开始编译
