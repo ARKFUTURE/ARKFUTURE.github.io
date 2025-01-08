@@ -28,7 +28,7 @@ Are you sure you want to build as the root user?
 ``` 
 
 
-# 编译时的 ./.configure/cache.cfg 请修改前四项
+# 编译时的 ./.configure/cache.cfg 请修修改和您相关的前四项配置
 ```
 UID 0
 GID 0
