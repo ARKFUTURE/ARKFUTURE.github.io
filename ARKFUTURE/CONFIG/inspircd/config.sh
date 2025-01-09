@@ -1,21 +1,10 @@
 #!/bin/bash
-echo "inspircd 编译安装脚本"
+echo "更新配置文件"
+echo "! 此操作会覆盖掉您的配置文件 !"
+echo "此脚本仅适用测试最新的ARKFUTURE配置 以及 更新ARKFUTURE的默认配置"
 echo "下面进行提权操作 请放心输入您的密码"
 su
-echo "开始执行编译脚本"
-apt-get update
-apt-get install -y build-essential wget libssl-dev libpq-dev
-wget https://github.com/inspircd/inspircd/archive/refs/tags/v4.5.0.tar.gz
-tar -xzf v4.5.0.tar.gz 
-rm -rf v4.5.0.tar.gz
-mv inspircd-4.5.0 inspircd
-cd inspircd
-./configure --enable-extras ssl_openssl 
-./configure --system
-sleep 3
-make install -j6
-sleep 3
-echo "编译安装完成,开始下载初始配置到/etc/inspircd/"
+echo "开始下载配置文件到/etc/inspircd"
 cd /etc/inspircd
 rm -rf *
 mkdir conf
