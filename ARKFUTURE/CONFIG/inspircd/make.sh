@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "inspircd 编译安装脚本"
+echo "inspircd 添加 openssl模块 编译安装 脚本"
 if [ "$(id -u)" -eq 0 ]; then
 echo "现在是root用户权限"
 sleep 3
