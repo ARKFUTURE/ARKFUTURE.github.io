@@ -1,0 +1,13 @@
+Prosody 配置
+===============================
+
+配置文件应仅包含全局设置 /etc/prosody/prosody.cfg.lua 一般的就在这个文件里进行配置就可以了
+您可以根据官网给的文档，进行添加或者删除配置---在prosody.cfg.lua这个配置文件中或做出自己的配置标记
+
+在prosody.cfg.lua中,有一项--Include "conf.d/*.cfg.lua" 被我注释了 我们工作室人少，所以没有庞大的外部配置文件
+平常就放主文件里 
+
+每个主机的未激活配置文件应放置在 /etc/prosody/conf.avail/,
+已激活的配置文件放这里 /etc/prosody/conf.d/ * 此项只有--Include "conf.d/*.cfg.lua" 解除注释了才会生效 
+不然只有migrator.cfg.lua和prosody.cfg.lua 两个文件有效(为基本项目)
+Prosody的配置文件migrator.cfg.lua主要用于配置Prosody的迁移工具（Prosody Migrator），这个迁移工具使得在不同数据存储之间移动XMPP服务器数据（如用户账户、花名册、名片等）变得容易
