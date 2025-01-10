@@ -11,30 +11,12 @@ apt install ./inspircd_4.5.0.deb12u1_amd64.deb -y
 rm -rf ./inspircd_4.5.0.deb12u1_amd64.deb
 sleep 3
 echo "安装完成,开始下载初始配置到/etc/inspircd/"
-cd /etc/inspircd
-rm -rf *
-mkdir conf
-mkdir txt
-mkdir ssl
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/inspircd.conf
-cd /etc/inspircd/conf
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/permchannels.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/xline.db
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modulesconf.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
-cd /etc/inspircd/txt
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/motd.txt
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt
-cd /etc/inspircd/ssl
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/ssl/ssl.conf
-cd /etc/inspircd/
-chmod 777 /etc/inspircd/ -R
-sleep 3
-echo "脚本运行完成 请修改为您自己的配置文件"
+cd ~
+wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh
+chmod 777 ./config.sh
+./config.sh
+echo "若网络不好请手动重新执行./config.sh脚本 他会替换掉配置文件"
+echo "脚本运行完成 请修进入/etc/inspircd改为您自己的配置文件"
 else
     echo "您现在不是root用户权限,请提权后再次执行脚本"
 fi
