@@ -14,7 +14,7 @@ cd inspircd
 ./configure --enable-extras ssl_openssl,ssl_gnutls,argon2,ldap,regex_pcre2,libre2-dev
 ./configure --system
 sleep 3
-make install -j6
+make install -j9
 sleep 3
 echo "编译安装完成,开始下载初始配置到/etc/inspircd/"
 cd /etc/inspircd
