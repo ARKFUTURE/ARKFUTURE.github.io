@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "inspircd 安装脚本 需要root权限"
+echo "inspircd 安装脚本 需要root权限 Debian"
 if [ "$(id -u)" -eq 0 ]; then
 echo "现在是root用户权限"
 sleep 3

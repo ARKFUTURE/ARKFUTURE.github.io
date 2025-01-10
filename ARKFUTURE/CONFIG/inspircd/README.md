@@ -1,13 +1,13 @@
 # 安装
 * 编译安装：[编译安装](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/make.sh)
-* deb包安装: [deb包安装](./install.sh)
-* 更新配置文件: [更新配置文件](./config.sh)
+* deb包安装: [deb包安装](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install.sh)
+* 更新配置文件: [更新配置文件](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh)
 
 # ARKFUTURE inspircd 基础配置
 * 需要将此目录下的所有文件及目录
 * 拷贝到 /etc/inspirc/ 目录下
 * 即: 
-```
+```https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/
 /etc/inspircd
     --inspircd.conf
     --ssl/
