@@ -17,6 +17,7 @@ chmod 777 ./config.sh
 ./config.sh
 echo "若网络不好请手动重新执行./config.sh脚本 他会替换掉配置文件"
 echo "脚本运行完成 请修进入/etc/inspircd改为您自己的配置文件"
+cd ~
 else
     echo "您现在不是root用户权限,请提权后再次执行脚本"
 fi
