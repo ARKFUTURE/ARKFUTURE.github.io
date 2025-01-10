@@ -1,5 +1,5 @@
 # 安装
-* 编译安装：[编译安装](./make.sh)
+* 编译安装：[编译安装](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/make.sh)
 * deb包安装: [deb包安装](./install.sh)
 * 更新配置文件: [更新配置文件](./config.sh)
 
