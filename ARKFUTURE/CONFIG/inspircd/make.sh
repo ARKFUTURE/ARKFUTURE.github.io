@@ -11,7 +11,7 @@ tar -xzf v4.5.0.tar.gz
 rm -rf v4.5.0.tar.gz
 mv inspircd-4.5.0 inspircd
 cd inspircd
-./configure --enable-extras ssl_openssl,ssl_gnutls,argon2,ldap,regex_pcre2,libre2-dev
+./configure --enable-extras ssl_openssl,ssl_gnutls,argon2,ldap,regex_pcre2,regex_re2
 ./configure --system
 sleep 3
 make install -j9
