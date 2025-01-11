@@ -16,6 +16,8 @@ cd inspircd
 sleep 3
 make install -j5
 sleep 3
+cd /lib/systemd/system
+wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/inspircd.service
 echo "编译安装完成,开始下载初始配置到/etc/inspircd/"
 cd ~
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh
