@@ -36,7 +36,7 @@
     function incrementCounter() {
         const now = new Date();
         const utcString = now.toUTCString();
-        console.log(`访问秒: ${counter} ;当前UTC时间: ${utcString}`);
+        console.log(`您已访问网站: ${counter} 秒; 当前浏览器UTC时间: ${utcString}`);
         counter++;
     }
 
