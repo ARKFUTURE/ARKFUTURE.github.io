@@ -46,4 +46,4 @@
         setInterval(updateTitle, 1500);
         setInterval(incrementCounter, 1000);
         setInterval(function() { loadCSS(); }, 60000); 
-    }
+    };
