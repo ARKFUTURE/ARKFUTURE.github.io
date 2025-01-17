@@ -6,12 +6,6 @@
         return { day, month };
     }
 
-    function getCurrentUTCString() {
-        const now = new Date();
-        const utcString = now.toUTCString();
-        return utcString;
-    }
-
     // 根据日期加载不同的CSS
     function loadCSS() {
         const date = getCurrentDate();
@@ -40,7 +34,9 @@
 
     let counter = 0;
     function incrementCounter() {
-        console.log(`访问秒: ${counter} ;UTC时间: ${utcString}`);
+        const now = new Date();
+        const utcString = now.toUTCString();
+        console.log(`访问秒: ${counter} ;当前UTC时间: ${utcString}`);
         counter++;
     }
 
