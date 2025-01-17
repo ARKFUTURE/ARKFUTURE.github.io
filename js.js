@@ -34,13 +34,11 @@
 
     let counter = 0;
     function incrementCounter() {
-        document.cookie = `COUNT=${counter}`;
         const now = new Date();
         const utcString = now.toUTCString();
-        document.cookie = `UTC=${utcString}`;
+        const UTC = now.getTime();
         const localString = now.toString();
-        document.cookie = `LOCAL=${localString}`;
-        console.log(`您已访问网站: ${counter} 秒; 当前浏览器UTC时间字符串: ${utcString}; 当前本地时间字符串: ${localString}`);
+        console.log(`您已访问网站: ${counter} 秒; 本地时间: ${localString}; UTC时间: ${utcString}; 戳: ${UTC}`);
         counter++;
     }
 
@@ -50,4 +48,5 @@
         setInterval(updateTitle, 1500);
         setInterval(incrementCounter, 1000);
         setInterval(function() { loadCSS(); }, 60000); 
+        setInterval(console.log(`当前DOMAN地址: arkfuture.top`), 5000);
     };
