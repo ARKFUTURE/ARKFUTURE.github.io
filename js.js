@@ -36,7 +36,8 @@
     function incrementCounter() {
         const now = new Date();
         const utcString = now.toUTCString();
-        console.log(`您已访问网站: ${counter} 秒; 当前浏览器UTC时间: ${utcString}`);
+        const localString = now.toLocaleString();
+        console.log(`您已访问网站: ${counter} 秒; 当前浏览器UTC时间: ${utcString}; 当前本地时间: ${localString}`);
         counter++;
     }
 
