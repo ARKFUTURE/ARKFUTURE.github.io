@@ -34,10 +34,13 @@
 
     let counter = 0;
     function incrementCounter() {
+        document.cookie = `COUNT=${counter}`;
         const now = new Date();
         const utcString = now.toUTCString();
-        const localString = now.toLocaleString();
-        console.log(`您已访问网站: ${counter} 秒; 当前浏览器UTC时间: ${utcString}; 当前本地时间: ${localString}`);
+        document.cookie = `UTC=${utcString}`;
+        const localString = now.toString();
+        document.cookie = `LOCAL=${localString}`;
+        console.log(`您已访问网站: ${counter} 秒; 当前浏览器UTC时间字符串: ${utcString}; 当前本地时间字符串: ${localString}`);
         counter++;
     }
 
