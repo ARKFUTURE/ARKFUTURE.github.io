@@ -42,11 +42,21 @@
         counter++;
     }
 
+    function changeDomain() {
+        let domain = "example.com";
+        let ircLinkElement = document.getElementById('irc-link');
+        let ircLinkElementssl = document.getElementById('irc-link-ssl');
+        let strongElement = ircLinkElement.querySelector('strong');
+        let strongElementssl = ircLinkElementssl.querySelector('strong');
+        strongElement.href = 'irc://' + domain + ':6667';
+        strongElementssl.href = 'irc://' + domain + ':6667';
+    }
+
     // 页面加载时执行
     window.onload = function() {
         loadCSS();
+        changeDomain();
         setInterval(updateTitle, 1500);
         setInterval(incrementCounter, 1000);
         setInterval(function() { loadCSS(); }, 60000); 
-        setInterval(console.log(`当前DOMAN地址: arkfuture.top`), 5000);
     };
