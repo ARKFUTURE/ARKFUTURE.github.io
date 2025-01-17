@@ -32,22 +32,16 @@
         document.title = titles[currentIndex];
     }
 
+    let counter = 0;
+    function incrementCounter() {
+        console.log(`Counter: ${counter}`);
+        counter++;
+    }
+
     // 页面加载时执行
     window.onload = function() {
         loadCSS();
         setInterval(updateTitle, 1500);
+        setInterval(incrementCounter, 1000);
         setInterval(function() { loadCSS(); }, 60000); 
     };
-
-    (function() {
-
-        let counter = 0;
-        function incrementCounter() {
-    
-            console.log(`Counter: ${counter}`);
-    
-            counter++;
-    
-        }
-            setInterval(incrementCounter, 1000);
-    })();
