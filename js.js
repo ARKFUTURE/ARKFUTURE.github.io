@@ -38,7 +38,7 @@
         const utcString = now.toUTCString();
         const UTC = now.getTime();
         const localString = now.toString();
-        console.log(`您已访问网站: ${counter} 秒; 本地时间: ${localString}; UTC时间: ${utcString}; 戳: ${UTC}; Doman: arkfuture.cn ;);
+        console.log(`您已访问网站: ${counter} 秒; 本地时间: ${localString}; UTC时间: ${utcString}; 戳: ${UTC}; Domain: arkfuture.cn ;);
         counter++;
     }
 
