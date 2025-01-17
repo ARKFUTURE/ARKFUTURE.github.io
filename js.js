@@ -38,24 +38,13 @@
         const utcString = now.toUTCString();
         const UTC = now.getTime();
         const localString = now.toString();
-        console.log(`您已访问网站: ${counter} 秒; 本地时间: ${localString}; UTC时间: ${utcString}; 戳: ${UTC}`);
+        console.log(`您已访问网站: ${counter} 秒; 本地时间: ${localString}; UTC时间: ${utcString}; 戳: ${UTC}; Doman: arkfuture.cn ;);
         counter++;
-    }
-
-    function changeDomain() {
-        let domain = "example.com";
-        let ircLinkElement = document.getElementById('irc-link');
-        let ircLinkElementssl = document.getElementById('irc-link-ssl');
-        let strongElement = ircLinkElement.querySelector('strong');
-        let strongElementssl = ircLinkElementssl.querySelector('strong');
-        strongElement.href = 'irc://' + domain + ':6667';
-        strongElementssl.href = 'irc://' + domain + ':6667';
     }
 
     // 页面加载时执行
     window.onload = function() {
         loadCSS();
-        changeDomain();
         setInterval(updateTitle, 1500);
         setInterval(incrementCounter, 1000);
         setInterval(function() { loadCSS(); }, 60000); 
