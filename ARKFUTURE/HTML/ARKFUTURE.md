@@ -1,4 +1,8 @@
-# ARKFUTURE [公约 v2 25/01/10update UTF-8] 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+
+# ARKFUTURE [公约 v2.5 v1 UTF-8] 
 ## 简介：
 * ARKFUTURE 是在2015年由一群技术爱好者共同组建的一个集成型工作室(团队), 经过多年发展, 我们已从最初专注于游戏制作的爱好小组, 成长为融合多种技术的综合性技术团队
 * 我们聚在一起分享观点和创意, 共同进步, 共同研究, 共同面对挑战, 相互协作并分享经验
@@ -72,9 +76,10 @@
 * 本工作室常用聊天为 [工作室匿名IRC和Matrix.org及Telegram,频道均为#arkfuture_studio,管理运维组账号均为arkfuture] , 即时匿名通讯软件, 任何人都可以加入, 任何人都可以发言, 任何人都可以离开, 相较宽松. 这些聊天消息暂时不互通 请自行决定使用哪个软件
 * 我们拒绝骗子及恶意广告发布者加入我们, 请自行离开. 当收到成员举报, 管理运营人员应立即核实处理.
 
-# 权证金丝雀 | Warrant Canary
+
+# ARKFUTURE [权证金丝雀 | Warrant Canary v1 UTF-8] 
 ```
-第1号签名警告信: 截至2025年1月1日,无事件或传票
+第1号签名警告信: 截至签署日,无事件或传票
 
 尊敬的成员们,我们(ARKFUTURE),在此郑重声明,截至[2025年1月1日],我们尚未接收到任何来自政府机构,法律机构或其他第三方实体的法律命令或要求,以获取,披露或分享我们团队成员的个人信息,通信记录或任何形式的任何数据.
 
@@ -92,8 +97,25 @@ ARKFUTURE始终将成员的隐私和数据安全视为最高优先级.我们坚�
 
 感谢您对ARKFUTURE的信任和支持！
 
-签署人:ARKFUTURE管理运维团队-Wteani
-[2025/01/10]
+签署人 ARKFUTURE管理运维团队-Wteani
+验证:https://keys.openpgp.org/vks/v1/by-fingerprint/B74109C5686539CA68A781A9ED51A1876C121152 
+签署日期:[2025/01/18]
 ```
 # 祝您玩的愉快
 *自2025年1月1日起,每次更新公约和Warrant Canary警告信都将进行数字签名.*
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEt0EJxWhlOcpop4Gp7VGhh2wSEVIFAmeLpHEACgkQ7VGhh2wS
+EVIUxQv8CV8weWvf3Jp2Ourof/f1qKGlFuJNTvvrf6k6tsTFbUgRVfKiLaQ/4kFE
+q2IZN9AogOfvhUx9Lk4lpnXoiRQIi3K1ARJYBE0qsjThrsPVycJWvYdjQwU7tMcO
+M1rUH/0PFb5J63YDJhJIXH6HbgoNI9gCqvVqHcnWv4nnB332wOgY4K38wWPdzein
+1pKnbWJIKqn+BMnSxuzFCtm8viA0Q2Hz2Y9X76dKz5idgntL+9yhxbEi7sDleGvN
+pXUrpUaj7NcmZ+AlVQZJ9pTqdImw9Rf9CSX646QRHXllnjmS/CmXLLZssBL7mu8N
+4DBJoXtv+AvRqrDpGmPnG3CM77ts/QVZ7jBBIVrvUSpmNce/2VGlYhUxbXxn1KI6
+/MlkQoUDUCX31ocdmdP/Zo9iOyEGhM7OB0lfGJQk2nhoCajd4y74sojlLUqhjR2r
+Jc4MYUyfV+3YOcqtG7ZWxlcC5kzcSxuorlW+DuzY51KUKf4UAWP54mkzQGkdJ2rD
+8RHll0d1
+=CQ0d
+-----END PGP SIGNATURE-----
+
