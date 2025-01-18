@@ -99,7 +99,7 @@ ARKFUTURE始终将成员的隐私和数据安全视为最高优先级.我们坚�
 
 感谢您对ARKFUTURE的信任和支持！
 
-签署人 ARKFUTURE管理运维团队-Wteani
+签署人 ARKFUTURE管理运维团队-Wteani ARKFUTURE@FOXMAIL.COM
 验证:https://keys.openpgp.org/vks/v1/by-fingerprint/B74109C5686539CA68A781A9ED51A1876C121152 
 签署日:[2025/01/18]
 ```
