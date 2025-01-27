@@ -1,7 +1,3 @@
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
-
-
 # 公约
 *[v2.5 v1 UTF-8] 
 ## 简介：
@@ -77,47 +73,4 @@ Hash: SHA512
 * 本工作室常用聊天为 [工作室匿名IRC和Matrix.org及Telegram,频道均为#arkfuture_studio,管理运维组账号均为arkfuture] , 即时匿名通讯软件, 任何人都可以加入, 任何人都可以发言, 任何人都可以离开, 相较宽松. 这些聊天消息暂时不互通 请自行决定使用哪个软件
 * 我们拒绝骗子及恶意广告发布者加入我们, 请自行离开. 当收到成员举报, 管理运营人员应立即核实处理.
 
-
-# 权证金丝雀 | Warrant Canary
-* *[v1 v1 UTF-8] 
-```
-第1号签名警告信: 截至签署日,无事件或传票
-
-尊敬的成员们,我们(ARKFUTURE),在此郑重声明,截至[2025年1月1日],我们尚未接收到任何来自政府机构,法律机构或其他第三方实体的法律命令或要求,以获取,披露或分享我们团队成员的个人信息,通信记录或任何形式的任何数据.
-
-此页面旨在通知成员, ARKFUTURE 的服务器(包括公约中相关的团队或其他直接相关合作伙伴),及直接拥有的服务(社区门户, Git平台, 电子邮件服务, 在线协作平台服务, 云平台, CDN节点, 托管门户等)未被政府秘密传票传唤.
-
-ARKFUTURE始终将成员的隐私和数据安全视为最高优先级.我们坚信,保护每一位成员的隐私权益是我们不可推卸的责任.因此,我们承诺将持续遵守最严格的隐私保护政策,并确保所有成员的个人信息得到妥善保管和加密处理.
-
-我们鼓励所有团队成员定期查看此声明,以获取有关我们隐私保护实践的最新信息
-
-如果ARKFUTURE在规定的时间段内未更新新的警告信,或者此页面消失,用户应假定ARKFUTURE确实已收到秘密传票.
-
-此举旨在允许ARKFUTURE在不向他人透露政府已寻求或已获得秘密传票下的信息或记录的情况下,被动地向用户发出传票存在的警告.
-
-请放心,ARKFUTURE将继续致力于打造一个安全,透明,匿名,值得信赖的技术交流与工作环境,让每一位成员都能在这里安心提升自己,创新成长.
-
-感谢您对ARKFUTURE的信任和支持！
-
-签署人 ARKFUTURE管理运维团队-Wteani ARKFUTURE@FOXMAIL.COM
-验证:https://keys.openpgp.org/vks/v1/by-fingerprint/B74109C5686539CA68A781A9ED51A1876C121152 
-签署日:[2025/01/18]
-```
 # 祝您玩的愉快
-*自2025年1月1日起,每次更新公约和Warrant Canary警告信都将进行数字签名.*
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAEBCgAdFiEEt0EJxWhlOcpop4Gp7VGhh2wSEVIFAmeLpHEACgkQ7VGhh2wS
-EVIUxQv8CV8weWvf3Jp2Ourof/f1qKGlFuJNTvvrf6k6tsTFbUgRVfKiLaQ/4kFE
-q2IZN9AogOfvhUx9Lk4lpnXoiRQIi3K1ARJYBE0qsjThrsPVycJWvYdjQwU7tMcO
-M1rUH/0PFb5J63YDJhJIXH6HbgoNI9gCqvVqHcnWv4nnB332wOgY4K38wWPdzein
-1pKnbWJIKqn+BMnSxuzFCtm8viA0Q2Hz2Y9X76dKz5idgntL+9yhxbEi7sDleGvN
-pXUrpUaj7NcmZ+AlVQZJ9pTqdImw9Rf9CSX646QRHXllnjmS/CmXLLZssBL7mu8N
-4DBJoXtv+AvRqrDpGmPnG3CM77ts/QVZ7jBBIVrvUSpmNce/2VGlYhUxbXxn1KI6
-/MlkQoUDUCX31ocdmdP/Zo9iOyEGhM7OB0lfGJQk2nhoCajd4y74sojlLUqhjR2r
-Jc4MYUyfV+3YOcqtG7ZWxlcC5kzcSxuorlW+DuzY51KUKf4UAWP54mkzQGkdJ2rD
-8RHll0d1
-=CQ0d
------END PGP SIGNATURE-----
-
