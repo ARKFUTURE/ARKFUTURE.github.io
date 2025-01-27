@@ -28,7 +28,7 @@ ARKFUTURE始终将成员的隐私和数据安全视为最高优先级.我们坚�
 ```
 Wteani  (2025-01-27--2026-01-01) [new]
 GPG ID: 
-GPG KEY: ./
-GPG KEY MIRROR: https://keyserver.ubuntu.com/pks/lookup?op=vindex&search=0x9277a35f89ed2492d
+GPG KEY: Wteani.gpg
+GPG KEY MIRROR: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9277a35f89ed2492
 
 ```
