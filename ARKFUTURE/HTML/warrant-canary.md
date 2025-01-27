@@ -1,4 +1,5 @@
-# 权证金丝雀 | Warrant Canary
+# 权证金丝雀 | Warrant Canary 
+## January 28, 2025
 * * [UTF-8] 
 * * 自2025年1月1日起, 每次更新Warrant Canary警告信都将进行数字签名.*
 ```
@@ -18,7 +19,7 @@ ARKFUTURE始终将成员的隐私和数据安全视为最高优先级.我们坚�
 
 请放心, ARKFUTURE将继续致力于打造一个安全, 透明, 匿名, 值得信赖的技术交流与工作环境, 让每一位成员都能在这里安心提升自己, 创新成长.
 
-此消息由ARKFUTURE-administrator密钥环的GPG密钥和ARKFUTURE的团队首要负责人签名
+此消息由ARKFUTURE-administrator密钥环中的ARKFUTURE的团队首要负责人签名
 ```
 
 
@@ -27,6 +28,7 @@ ARKFUTURE始终将成员的隐私和数据安全视为最高优先级.我们坚�
 ```
 Wteani  (2025-01-27--2026-01-01) [new]
 GPG ID: 
-GPG KEY: https://keyserver.ubuntu.com/pks/lookup?op=vindex&search=0x9277a35f89ed2492d
+GPG KEY: ./
+GPG KEY MIRROR: https://keyserver.ubuntu.com/pks/lookup?op=vindex&search=0x9277a35f89ed2492d
 
 ```
