@@ -1,3 +1,6 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
 # 权证金丝雀 | Warrant Canary 
 ## January 28, 2025
 * * [UTF-8] 
@@ -30,3 +33,18 @@ GPG ID: 16fc 242d f0ee eef6 fe61 5455 9277 a35f 89ed 2492
 GPG KEY: http://arkfuture.github.io/ARKFUTURE/HTML/Wteani.gpg
 GPG KEY MIRROR: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9277a35f89ed2492
 ```
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEFvwkLfDu7vb+YVRVknejX4ntJJIFAmeYPBUACgkQknejX4nt
+JJL7KQv/RwODJO05fhbUapGjy6YmdaOlbACo0xjgFxqalATCn/lUyxUO1U0VHmdG
+j6MuLCmS7QTUX86pFMLAIlU4Njb50l7L6yJa+qAvjHc5bIlADYNqtwF0/P4fXoeg
+xlKe20qbObguNUAeXflKVuvSOwuQkzu2EHvOwYkFDOdiOZq3kAbvxBaa35XVT9aB
+GcNng379cjEPV3Iy6Cy8cGauyXiv8/s5zOzv/j3n/TciLooXFA3HsoF7tLqKX4C3
+gaGBPE+GyZ+qe8lOuCGudBEWmXdrS6a7BnUfWYqOOiJInACsAC+pxT9Rhw9UsAp0
+iB4gWZtw2+hvALkUP0on6uyc9K8nOMPz6gDwJ/uEO/5o3FRoAkKCA1v8c+ce/As3
+tZGicQThM1uUz8/fjUVAOBnQBJ8pd99zta71U67LczeuJom6rmpMAroukQ324ekA
+UKts95YZgZNwsf65ueKDot/81ILJEdMHPFLe3TrIE/YHFfqeV+qNcMQ9rhGCfS9y
+YULC4xnm
+=trma
+-----END PGP SIGNATURE-----
+
