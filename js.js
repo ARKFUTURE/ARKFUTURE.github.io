@@ -38,7 +38,7 @@
         const utcString = now.toUTCString();
         const UTC = now.getTime();
         const localString = now.toString();
-        console.log(`计数: ${counter}; 本地时: ${localString}; UTC时: ${utcString}; 戳: ${UTC};`);
+        console.log(`计: ${counter}; 本地时: ${localString}; UTC时: ${utcString}; 戳: ${UTC};`);
         counter++;
     }
 
