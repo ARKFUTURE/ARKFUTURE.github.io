@@ -35,7 +35,7 @@
     let counter = 0;
     function incrementCounter() {
         const now = new Date();
-        const T1 = window.performance.now();
+        const T1 = performance.now();
         const T2 = Date.now();
         const utcString = now.toUTCString();
         const UTC = now.getTime();
