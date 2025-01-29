@@ -41,7 +41,7 @@
         const UTC = now.getTime();
         const localString = now.toString();
         console.log(`计数: ${counter}; 本地时: ${localString}; UTC时: ${utcString}; 戳: ${UTC};`);
-        console.log(`$(T1) $(T2)`);
+        console.log(`${T1} vs ${T2}`);
         counter++;
     }
 
