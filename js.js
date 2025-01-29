@@ -35,10 +35,13 @@
     let counter = 0;
     function incrementCounter() {
         const now = new Date();
+        const T1 = window.performance.now();
+        const T2 = Date.now();
         const utcString = now.toUTCString();
         const UTC = now.getTime();
         const localString = now.toString();
         console.log(`计数: ${counter}; 本地时: ${localString}; UTC时: ${utcString}; 戳: ${UTC};`);
+        console.log(`$(T1) $(T2)`);
         counter++;
     }
 
