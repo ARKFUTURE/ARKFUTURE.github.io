@@ -38,13 +38,23 @@
         const utcString = now.toUTCString();
         const UTC = now.getTime();
         const localString = now.toString();
-        console.log(`计: ${counter}; 本地时: ${localString}; UTC时: ${utcString}; 戳: ${UTC};`);
+        console.log(`计: ${counter}; 时: ${localString}; UTC: ${utcString}; 戳: ${UTC};`);
         counter++;
+    }
+
+    function cooKieadSession() {
+        const now = new Date();
+        const UTC = now.getTime();
+        const localString = now.toString();
+        document.cookie = `utcTIME=${UTC}; TIME="${localString}"; path=/`;
+        sessionStorage.setItem('utcTIME', UTC);
+        sessionStorage.setItem('TIME', localString);
     }
 
     // 页面加载时执行
     window.onload = function() {
         loadCSS();
+        cooKieadSession();
         setInterval(updateTitle, 1500);
         setInterval(incrementCounter, 1000);
         setInterval(function() { loadCSS(); }, 60000); 
