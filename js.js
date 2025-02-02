@@ -51,7 +51,6 @@
 
     // 页面加载时执行
     window.onload = function() {
-        document.getElementById('tiMe').textContent = document.cookie.split(';');
         loadCSS();
         setInterval(incrementCounter, 1000);
         setInterval(updateTitle, 1500);
