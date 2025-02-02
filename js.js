@@ -46,7 +46,7 @@
         const now = new Date();
         const UTC = now.getTime();
         const localString = now.toString();
-        document.cookie = `utcTIME=${UTC}; TIME="${localString}"; path=/`;
+        document.cookie = `utcTIME=${UTC}; TIME=${localString}; path=/; SameSite=Strict`;
         sessionStorage.setItem('utcTIME', UTC);
         sessionStorage.setItem('TIME', localString);
     }
