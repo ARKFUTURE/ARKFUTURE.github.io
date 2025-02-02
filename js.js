@@ -36,14 +36,15 @@
     function incrementCounter() {
         const now = new Date();
         const utcString = now.toUTCString();
-        const timestamp = now.getTime();
+        const timestamp = String(now.getTime());
         const localString = now.toString();
         console.log(`计: ${counter}; 时: ${localString}; UTC: ${utcString}; 戳: ${timestamp};`);
-        document.cookie = `utcTIME=${utcString}; Path=/; SameSite=Strict`;
-        document.cookie = `locTIME=${localString}; Path=/; SameSite=Strict`;
-        document.cookie = `timestamp=${timestamp}; Path=/; SameSite=Strict`;
-        sessionStorage.setItem('utcTIME', timestamp);
-        sessionStorage.setItem('TIME', localString);
+        document.cookie = `utcTIME=${utcString};`;
+        document.cookie = `locTIME=${localString};`;
+        document.cookie = `timestamp=${timestamp};`;
+        sessionStorage.setItem('utcTIME', utcString);
+        sessionStorage.setItem('locTIME', localString);
+        sessionStorage.setItem('timestamp', timestamp);
         counter++;
     }
 
