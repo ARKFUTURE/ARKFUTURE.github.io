@@ -50,9 +50,8 @@
 
     // 页面加载时执行
     window.onload = function() {
-        loadCSS();
-        cooKieadSession();
-        setInterval(updateTitle, 1500);
         setInterval(incrementCounter, 1000);
+        loadCSS();
+        setInterval(updateTitle, 1500);
         setInterval(function() { loadCSS(); }, 60000); 
     };
