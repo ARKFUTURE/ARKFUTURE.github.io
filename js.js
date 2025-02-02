@@ -36,23 +36,15 @@
     function incrementCounter() {
         const now = new Date();
         const utcString = now.toUTCString();
-        const UTC = now.getTime();
+        const timestamp = now.getTime();
         const localString = now.toString();
-        console.log(`计: ${counter}; 时: ${localString}; UTC: ${utcString}; 戳: ${UTC};`);
-        counter++;
-    }
-
-    function cooKieadSession() {
-        const now = new Date();
-        const UTC = now.getTime();
-        const localString = now.toString();
-        // 设置cookie
-        document.cookie = `utcTIME=${UTC}`;
-        document.cookie = `locTIME="${localString}"`;
-        document.cookie = `SameSite=Strict`;
-        // 设置sessionStorage
-        sessionStorage.setItem('utcTIME', UTC);
+        console.log(`计: ${counter}; 时: ${localString}; UTC: ${utcString}; 戳: ${timestamp};`);
+        document.cookie = `utcTIME=${utcString}; Path=/; SameSite=Strict`;
+        document.cookie = `locTIME=${localString}; Path=/; SameSite=Strict`;
+        document.cookie = `timestamp=${timestamp}; Path=/; SameSite=Strict`;
+        sessionStorage.setItem('utcTIME', timestamp);
         sessionStorage.setItem('TIME', localString);
+        counter++;
     }
 
     // 页面加载时执行
