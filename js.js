@@ -48,7 +48,7 @@
         const localString = now.toString();
         // 设置cookie
         document.cookie = `utcTIME=${UTC}`;
-        document.cookie = `locTIME=${localString}`;
+        document.cookie = `locTIME="${localString}"`;
         document.cookie = `SameSite=Strict`;
         // 设置sessionStorage
         sessionStorage.setItem('utcTIME', UTC);
