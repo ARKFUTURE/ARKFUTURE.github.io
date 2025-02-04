@@ -32,6 +32,7 @@ Wteani  (2025-01-27--2026-01-01) [NEW/ONLY]
 GPG ID: 16fc 242d f0ee eef6 fe61 5455 9277 a35f 89ed 2492
 GPG KEY: http://arkfuture.github.io/ARKFUTURE/HTML/Wteani.gpg
 GPG KEY MIRROR: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9277a35f89ed2492
+gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 9277a35f89ed2492
 ```
 -----BEGIN PGP SIGNATURE-----
 
