@@ -24,7 +24,7 @@
     }
 
     // 设置标题的变化
-    const titles = ["⫷ARKFUTURE⫸", "⫷方舟未来⫸", "技术无止,勇于创新", "以史为镜,洞察未来"];
+    const titles = ["ARKFUTURE", "方舟未来", "技术无止,勇于创新", "以史为镜,洞察未来"];
     let currentIndex = 0;
 
     function updateTitle() {
@@ -39,12 +39,12 @@
         const timestamp = String(now.getTime());
         const localString = now.toString();
         console.log(`计: ${counter}; 时: ${localString}; UTC: ${utcString}; 戳: ${timestamp};`);
-        document.cookie = `utcTIME=${utcString};`;
-        document.cookie = `locTIME=${localString};`;
-        document.cookie = `timestamp=${timestamp};`;
-        sessionStorage.setItem('utcTIME', utcString);
-        sessionStorage.setItem('locTIME', localString);
-        sessionStorage.setItem('timestamp', timestamp);
+        // document.cookie = `utcTIME=${utcString};`;
+        // document.cookie = `locTIME=${localString};`;
+        // document.cookie = `timestamp=${timestamp};`;
+        // sessionStorage.setItem('utcTIME', utcString);
+        // sessionStorage.setItem('locTIME', localString);
+        // sessionStorage.setItem('timestamp', timestamp);
         counter++;
     }
 
