@@ -6,7 +6,7 @@ sleep 3
 echo "开始执行编译脚本"
 apt-get update
 apt-get install -y build-essential wget libssl-dev libpq-dev pkg-config libargon2-dev libldap2-dev libpcre2-dev libre2-dev gnutls-bin libgnutls28-dev
-wget https://github.com/inspircd/inspircd/archive/refs/tags/v4.5.0.tar.gz
+wget https://github.com/inspircd/inspircd/archive/refs/tags/v4.6.0.tar.gz
 tar -xzf v4.5.0.tar.gz 
 rm -rf v4.5.0.tar.gz
 mv inspircd-4.5.0 inspircd
