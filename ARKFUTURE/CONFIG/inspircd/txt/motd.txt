@@ -12,31 +12,24 @@
 \c07 1.使用 "\c04代理,TOR,I2P\c07" 连接,以增强您的匿名性
 \c07 2.使用 "\c04OTR(Off-the-Record Messaging)\c07" 技术(部分程序支持,推荐irssi)
 \c07 3.管理员不会阅读,抓取,收集您的任何消息(聊天消息,私人消息及文件)
-\c07 4.管理员不会拿着服务器的任何内容跟任何执法者合作, 请阅读[权证金丝雀]
+\c07 4.管理员不会拿着服务器的任何内容跟任何执法者合作, 请阅读[Warrant Canary]
 \c07 5.新用户进入服务器默认 "\c04 +ix模式,以保障聊天环境的和谐与安全 \c07"
 
 ----------SECOND
-\b 频道规则及相关命令
+\b 频道规则及相关命令和管理运维人员
 \c06 !! \c04您可以创建自己的频道，没有任何限制\c06 !!
 \c06 输入 \c04/RULES\c06 查看此irc规则
 \c06 输入 \c04/HELP -l \c06  以获取更多IRC帮助信息
 \c06 命令大全 引用网址:https://www.geekshed.net/commands/
+\c06 管理员 Nick:\c04 arkfuture
+\c06 BOT Nick:\c04 AFEBOT
+--机器人 AFEBOT 将协助您处理日常事务,识别 @ 开头的命令
 
 ----------THIRD
-\b 联系管理员/运营人员
-\c03 [\c04*Admin/管理员*\c03](Nick:\c04 arkfuture)
--- 我们的管理一直在线，为您解答疑问
-\c03 [\c04*BOT/机器人*\c03](Nick:\c04 AFEBOT)
---机器人 AFEBOT 将协助您处理日常事务，识别 @ 开头的命令。我们采用 limnoria 作为机器人框架
-
-----------非公开频道 (需要申请)
+\c03 请联系管理员申请加入
 \c03 [\c04 工作室频道 \c03] #arkfuture_studio
-\c03 [\c04 安全情报中心 \c03] #arkfuture_arksec
+\c03 [\c04 开源情报中心 \c03] #arkfuture_arksec
 \c03 [\c04 !管理运维组! \c03] #arkfuture
-
-----------非公开频道简介
-\c03 [\c04 #arkfuture_studio \c03] 是内部技术交流群
-\c03 [\c04 #arkfuture_arksec \c03] 是方舟安全实验室的内部群,包括开源安全情报交流,资源共享
 
 ----------
 请仔细阅读上面的MOTD以保证您了解和使用我们的IRC
