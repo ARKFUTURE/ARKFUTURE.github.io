@@ -6,9 +6,9 @@ sleep 3
 echo "开始执行安装脚本"
 apt update && apt upgrade && apt install -y wget build-essential
 wget https://github.com/inspircd/inspircd/releases/download/v4.6.0/inspircd_4.6.0.deb12u1_amd64.deb
-chmod 777 inspircd_4.5.0.deb12u1_amd64.deb
-apt install ./inspircd_4.5.0.deb12u1_amd64.deb -y
-rm -rf ./inspircd_4.5.0.deb12u1_amd64.deb
+chmod 777 inspircd_4.6.0.deb12u1_amd64.deb
+apt install ./inspircd_4.6.0.deb12u1_amd64.deb -y
+rm -rf ./inspircd_4.6.0.deb12u1_amd64.deb
 sleep 3
 echo "安装完成,开始下载初始配置到/etc/inspircd/"
 cd ~
