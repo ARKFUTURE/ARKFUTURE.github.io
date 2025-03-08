@@ -27,9 +27,10 @@ wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt
 cd /etc/inspircd/ssl
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/ssl/ssl.conf
 cd /etc/inspircd/
-chmod 777 /etc/inspircd/ -R
+chmod 644 /etc/inspircd/ -R
 sleep 3
-echo "脚本运行完成 请修改为您自己的配置文件"
+echo "脚本运行完成 请修改为您自己的配置文件 当前ARKFUTURE配置为"
+head -n 1 ./inspircd.conf
 else
     echo "您现在不是root用户权限,请提权后再次执行脚本"
 fi
