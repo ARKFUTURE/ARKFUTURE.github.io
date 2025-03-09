@@ -5,19 +5,23 @@ echo "现在是root用户权限"
 sleep 3
 echo "开始执行编译脚本"
 apt-get update
-apt-get install -y build-essential wget libargon2-dev libmaxminddb-dev libldap2-dev libmysqlclient-dev libpq-dev libsqlite3-dev libpcre2-dev libre2-dev libgnutls28-dev libssl-dev pkg-config
-wget https://github.com/inspircd/inspircd/archive/refs/tags/v4.6.0.tar.gz
+apt-get install -y build-essential wget libargon2-dev libmaxminddb-dev libldap2-dev libpq-dev libsqlite3-dev libpcre2-dev libre2-dev libgnutls28-dev libssl-dev rapidjson-dev pkg-config
+wget https://ghfast.top/https://github.com/inspircd/inspircd/archive/refs/tags/v4.6.0.tar.gz
 tar -xzf v4.6.0.tar.gz 
 rm -rf v4.6.0.tar.gz
 mv inspircd-4.6.0 inspircd
 cd inspircd
-./configure --enable-extras geo_maxmind,ldap,log_json,log_syslog,mysql,pgsql,regex_pcre2,regex_re2,sqlite3,ssl_gnutls,ssl_openssl,sslrehashsignal
+#./configure --enable-extras --disable-extras
 ./configure --system
+sleep 3
+echo "启用了以下插件:"
+./configure --list
 sleep 3
 make install -j5
 sleep 3
 cd /lib/systemd/system
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/inspircd.service
+wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/inspircd.service、
+chmod 644 ./inspircd.service
 echo "编译安装完成,开始下载初始配置到/etc/inspircd/"
 cd ~
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/usessl/config.sh
