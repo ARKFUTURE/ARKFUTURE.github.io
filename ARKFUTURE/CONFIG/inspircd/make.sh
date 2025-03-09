@@ -19,6 +19,8 @@ echo "启用了以下插件:"
 sleep 3
 make install -j5
 sleep 3
+cd ..
+rm -rf ./inspircd/
 cd /lib/systemd/system
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/inspircd.service
 chmod 644 ./inspircd.service
@@ -30,7 +32,6 @@ chmod 777 ./config.sh
 echo "若网络不好请手动重新执行./config.sh脚本 他会替换掉配置文件"
 echo "脚本运行完成 请修进入/etc/inspircd改为您自己的配置文件"
 cd ~
-rm -rf ./inspircd
 else
     echo "您现在不是root用户权限,请提权后再次执行脚本"
 fi
