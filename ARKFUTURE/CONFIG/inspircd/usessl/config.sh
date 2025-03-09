@@ -11,7 +11,7 @@ rm -rf *
 mkdir conf
 mkdir txt
 mkdir ssl
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/inspircd.conf
+wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/usessl/inspircd.conf
 cd /etc/inspircd/conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
@@ -25,7 +25,7 @@ wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt
 cd /etc/inspircd/ssl
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/ssl/ssl.conf
+wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/usessl/ssl.conf
 cd /etc/inspircd/
 chmod 644 /etc/inspircd/ -R
 sleep 3
