@@ -21,9 +21,6 @@ make install -j5
 sleep 3
 cd ..
 rm -rf ./inspircd/
-cd /lib/systemd/system
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/inspircd.service
-chmod 644 ./inspircd.service
 echo "编译安装完成,开始下载初始配置到/etc/inspircd/"
 cd ~
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/usessl/config.sh
