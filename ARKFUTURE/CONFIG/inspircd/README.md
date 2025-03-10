@@ -5,6 +5,7 @@
 * 我们在测试配置时 会添加 <die reason="服务器正在维护，请稍后再启动。"> 标签 测试完成后会及时删除()
 * * 当 InspIRCd 启动时，如果检测到配置文件中存在 <die> 标签，服务器会立即停止启动，并向日志或控制台输出配置中指定的消息。
 * 请使用 关闭 pkill -f inspircd 来关闭程序(编译安装)
+* 遇到systemctl 启动不成功时 请检查 日志目录(/var/log/inspircd) 是否为空(只有空的才能新建log文件), 否则使用systemctl时报错
 
 # ARKFUTURE inspircd 基础配置
 * 完整的 /etc/inspirc/ 目录应该为: 
