@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "inspircd 编译安装脚本 需要root权限 此脚本仅限Debian及Debian打包"
+echo "inspircd 编译安装脚本 需要root权限 此脚本仅限Debian及Debian打包 测试用"
 if [ "$(id -u)" -eq 0 ]; then
 echo "现在是root用户权限"
 sleep 3
