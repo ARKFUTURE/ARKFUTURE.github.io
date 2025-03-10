@@ -17,6 +17,10 @@
 我们团队直接使用 root用户 来执行 启动inspircd的命令 [root@hostname:~# inrpircd]
 并使用 [pkill -f inspircd 来关闭程序]
 
+3.有可能没有inspircd.service文件 (个人解决方法) 复制一个并重载 
+https://github.com/inspircd/inspircd/blob/insp4/make/template/inspircd.service
+cp inspircd.service /etc/systemd/system/
+systemctl daemon-reload
 
 ``` 
 
