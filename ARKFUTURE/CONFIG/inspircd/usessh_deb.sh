@@ -21,7 +21,6 @@ sleep 3
 echo "编译并打包为Debian12的deb包"
 make -j9
 checkinstall -D --default --install=yes --pkgname="inspircd_fullmodules" --pkgversion="4.6.0" --maintainer="arkfuture" --deldoc=yes --deldesc=yes 
-apt install ./inspircd*.deb
 echo "安装完成,开始下载初始配置到/etc/inspircd/"
 cd ~
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/usessl/config.sh
