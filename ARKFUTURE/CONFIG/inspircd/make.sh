@@ -19,7 +19,6 @@ echo "启用了以下插件:"
 ./configure --list
 sleep 3
 make install -j5
-# checkinstall -D --default --pkgname="inspircd" --pkgversion="4.6.0"
 sleep 3
 cd ..
 echo "编译安装完成,开始下载初始配置到/etc/inspircd/"
