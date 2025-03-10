@@ -1,11 +1,24 @@
-# 安装
+# 安装及问题
 * 编译安装：[编译安装](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/make.sh)
 * deb包安装: [deb包安装](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install.sh)
 * 更新配置文件: [更新配置文件](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh)
 * 我们在测试配置时 会添加 <die reason="服务器正在维护，请稍后再启动。"> 标签 测试完成后会及时删除()
 * * 当 InspIRCd 启动时，如果检测到配置文件中存在 <die> 标签，服务器会立即停止启动，并向日志或控制台输出配置中指定的消息。
-* 请使用 关闭 pkill -f inspircd 来关闭程序(编译安装)
-* 遇到systemctl 启动不成功时 请检查 日志目录(/var/log/inspircd) 是否为空(只有空的才能新建log文件), 否则使用systemctl时报错
+*
+*
+* 在我的实践过程中 会遇到报错 :
+```
+(编译安装后)使用systemctl时出错: 
+1.Could not read "/etc/inspircd/inspircd.conf" for include: Permission denied 
+原因是 inspircd-systemctl 默认使用irc用户执行inspircd程序 所加载的/etc/inspircd权限不够 (请自行为您的 /etc/inspircd/ 目录下文件授予 777 权限 [chmod 777 /etc/inspircd/ -R)]
+2.同时 还有 /var/log/inspircd 目录不能写的 报错 [.log 授予 777 权限]
+
+
+我们团队直接使用 root用户 来执行 启动inspircd的命令 [root@hostname:~# inrpircd]
+并使用 [pkill -f inspircd 来关闭程序]
+
+
+``` 
 
 # ARKFUTURE inspircd 基础配置
 * 完整的 /etc/inspirc/ 目录应该为: 
