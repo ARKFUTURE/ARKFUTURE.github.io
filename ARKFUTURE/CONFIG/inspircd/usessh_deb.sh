@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "inspircd 编译安装脚本 需要root权限 当前:Debian 根据不同系统请自行修改脚本"
+echo "inspircd 编译安装脚本 需要root权限 此脚本仅限Debian及Debian打包"
 if [ "$(id -u)" -eq 0 ]; then
 echo "现在是root用户权限"
 sleep 3
@@ -18,18 +18,12 @@ sleep 3
 echo "启用了以下插件:"
 ./configure --list
 sleep 3
-make install -j5
-# checkinstall -D --default --pkgname="inspircd" --pkgversion="4.6.0"
-sleep 3
-cd ..
-echo "编译安装完成,开始下载初始配置到/etc/inspircd/"
-cd ~
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/usessl/config.sh
-chmod 777 ./config.sh
-./config.sh
-echo "若网络不好请手动重新执行./config.sh脚本 他会替换掉配置文件"
-echo "脚本运行完成 请修进入/etc/inspircd改为您自己的配置文件"
-cd ~
+echo "编译并打包为Debian12的deb包"
+make -j9
+checkinstall -D --default --pkgname="inspircd" --pkgversion="4.6.0"
+echo "安装"
+apt install ./inspircd*.deb
+echo "安装完成"
 else
     echo "您现在不是root用户权限,请提权后再次执行脚本"
 fi
