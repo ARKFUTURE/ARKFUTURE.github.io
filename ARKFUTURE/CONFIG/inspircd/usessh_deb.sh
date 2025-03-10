@@ -20,8 +20,7 @@ echo "启用了以下插件:"
 sleep 3
 echo "编译并打包为Debian12的deb包"
 make -j9
-checkinstall -D --default --pkgname="inspircd" --pkgversion="4.6.0"
-echo "安装"
+checkinstall -D --default --install=yes --pkgname="inspircd_fullmodules" --pkgversion="4.6.0" --pakdir="./" --deldesc=yes 
 apt install ./inspircd*.deb
 echo "安装完成,开始下载初始配置到/etc/inspircd/"
 cd ~
