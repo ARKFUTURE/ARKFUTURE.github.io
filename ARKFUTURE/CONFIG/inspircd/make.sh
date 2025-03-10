@@ -20,7 +20,6 @@ echo "启用了以下插件:"
 sleep 3
 make install -j5
 sleep 3
-cd ..
 echo "编译安装完成,开始下载初始配置到/etc/inspircd/"
 cd ~
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/usessl/config.sh

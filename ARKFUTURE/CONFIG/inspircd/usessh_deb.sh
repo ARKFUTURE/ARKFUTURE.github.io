@@ -23,7 +23,14 @@ make -j9
 checkinstall -D --default --pkgname="inspircd" --pkgversion="4.6.0"
 echo "安装"
 apt install ./inspircd*.deb
-echo "安装完成"
+echo "安装完成,开始下载初始配置到/etc/inspircd/"
+cd ~
+wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/usessl/config.sh
+chmod 777 ./config.sh
+./config.sh
+echo "若网络不好请手动重新执行./config.sh脚本 他会替换掉配置文件"
+echo "脚本运行完成 请修进入/etc/inspircd改为您自己的配置文件"
+cd ~
 else
     echo "您现在不是root用户权限,请提权后再次执行脚本"
 fi
