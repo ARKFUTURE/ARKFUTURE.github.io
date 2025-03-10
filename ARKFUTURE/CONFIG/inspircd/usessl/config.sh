@@ -8,6 +8,18 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 echo "现在是root用户权限"
 sleep 3
+if [ -d "/var/log/inspircd" ]; then
+    echo "log目录存在。"
+else
+    mkdir -p /var/log/inspircd
+    chmod 755 /var/log/inspircd
+fi
+if [ -d "/var/run/inspircd" ]; then
+    echo "pid目录存在。"
+else
+    mkdir -p /var/run/inspircd
+    chmod 755 /var/run/inspircd
+fi
 echo "开始下载配置文件到/etc/inspircd"
 cd /etc/inspircd
 rm -rf *
