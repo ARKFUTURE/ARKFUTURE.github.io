@@ -8,6 +8,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 echo "现在是root用户权限"
 sleep 3
+mkdir /var/log/inspircd/ && chmod 750 /var/log/inspircd/
 echo "开始下载配置文件到/etc/inspircd"
 cd /etc/inspircd
 rm -rf *
