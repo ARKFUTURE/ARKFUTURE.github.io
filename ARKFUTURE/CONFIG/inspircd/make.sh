@@ -13,6 +13,7 @@ mv inspircd-4.6.0 inspircd
 cd inspircd
 #./configure --enable-extras --disable-extras
 ./configure --system
+./configure --update
 sleep 3
 echo "启用了以下插件:"
 ./configure --list
