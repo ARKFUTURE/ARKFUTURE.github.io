@@ -2,7 +2,10 @@
 echo "更新配置文件"
 echo "! 此操作会覆盖掉您的配置文件 !"
 echo "此脚本仅适用测试最新的ARKFUTURE usessl配置 以及 正式的ARKFUTURE的默认配置"
-if [ "$(id -u)" -eq 0 ]; then
+if [ "$(id -u)" -ne 0 ]; then
+    echo "错误：请使用 sudo 或 root 权限执行本脚本"
+    exit 1
+fi
 echo "现在是root用户权限"
 sleep 3
 echo "开始下载配置文件到/etc/inspircd"
@@ -32,6 +35,3 @@ chmod 644 /etc/inspircd/ -R
 sleep 3
 echo "脚本运行完成 请修改为您自己的配置文件 当前ARKFUTURE配置为"
 head -n 1 ./inspircd.conf
-else
-    echo "您现在不是root用户权限,请提权后再次执行脚本"
-fi
