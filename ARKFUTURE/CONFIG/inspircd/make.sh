@@ -21,7 +21,6 @@ sleep 3
 make install -j5
 sleep 3
 cd ..
-rm -rf ./inspircd/
 systemctl daemon-reload
 echo "编译安装完成,开始下载初始配置到/etc/inspircd/"
 cd ~
