@@ -33,4 +33,5 @@ cd /etc/inspircd/
 chmod 644 /etc/inspircd/ -R
 sleep 3
 echo "脚本运行完成 请修改为您自己的配置文件 当前ARKFUTURE配置为"
+echo "!编译的INSPIRCD 没有systemctl文件 需要自行添加 也可以使用[pkill -f inspircd]来关闭程序!"
 head -n 1 ./inspircd.conf
