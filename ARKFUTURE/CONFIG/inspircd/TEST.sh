@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "测试用!!!!!!"
-echo "inspircd 编译安装脚本 需要root权限 此脚本仅限Debian及Debian打包 测试用"
+echo "打包脚本 研究中"
 if [ "$(id -u)" -ne 0 ]; then
     echo "错误：请使用 sudo 或 root 权限执行本脚本"
     exit 1
