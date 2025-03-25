@@ -45,5 +45,5 @@ systemctl daemon-reload
 * 包括 ircd 及 客户端 和 bot 的相关软件的所有配置
 
 # 重要！自己编译安装包
-* 直接使用 build.sh 编译全部插件的软件包
-* https://github.com/inspircd/package-builder
+* 直接使用 build.sh 编译全部插件的软件包(ARKFUTURE修改)
+* https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/tag/20250310
