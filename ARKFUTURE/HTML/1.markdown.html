@@ -1,0 +1,146 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+ 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>InspIRCd安装与配置说明</title> 
+    <style> 
+        body { 
+            font-family: Arial, sans-serif; 
+            line-height: 1.6; 
+            margin: 20px; 
+        } 
+ 
+        h1, 
+        h2, 
+        h3 { 
+            color: #333; 
+        } 
+ 
+        h1 { 
+            font-size: 28px; 
+        } 
+ 
+        h2 { 
+            font-size: 24px; 
+        } 
+ 
+        h3 { 
+            font-size: 20px; 
+        } 
+ 
+        p { 
+            margin-bottom: 15px; 
+        } 
+ 
+        ul, 
+        ol { 
+            margin-bottom: 15px; 
+        } 
+ 
+        pre { 
+            background-color: #f4f4f4; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            overflow-x: auto; 
+        } 
+ 
+        a { 
+            color: #007BFF; 
+            text-decoration: none; 
+        } 
+ 
+        a:hover { 
+            text-decoration: underline; 
+        } 
+    </style> 
+</head> 
+ 
+<body> 
+    <h1>安装</h1> 
+    <ul> 
+        <li>官方deb包安装: <a 
+                href="https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install.sh">https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install.sh</a>  
+        </li> 
+        <li>全插件deb包安装: <a 
+                href="https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/installssl.sh">https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/installssl.sh</a>  
+        </li> 
+        <li>编译安装：<a 
+                href="https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/make.sh">https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/make.sh</a>  
+        </li> 
+        <li>更新配置文件: <a 
+                href="https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh">https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh</a>  
+        </li> 
+    </ul> 
+    <p>我们在测试配置时 会添加 <code>&lt;die reason="服务器正在维护，请稍后再启动。"&gt;</code> 标签到服务器配置中，测试完成后会及时删除, 这时请您稍后再更新。当 InspIRCd 启动时，如果检测到配置文件中存在 <code>&lt;die&gt;</code> 标签，服务器会立即停止启动，并向日志或控制台输出配置中指定的消息。</p> 
+ 
+    <h2>问题及相关帮助</h2> 
+    <h3>1 systemctl 问题</h3> 
+    <pre> 
+(编译安装后)使用systemctl时出错: 
+ 
+1.因为 INSPIRCD 工作组就是这样设计的 需要自行添加 
+1.1.复制一个并重载 
+https://github.com/inspircd/inspircd/blob/insp4/make/template/inspircd.service  
+cp inspircd.service  /etc/systemd/system/ 
+systemctl daemon-reload 
+ 
+2.对于无systemctl文件: 
+我们团队直接使用 root用户 来执行 启动inspircd [root@hostname:~# inrpircd] 
+并使用 [root@hostname:~# pkill -f inspircd] 来关闭程序 
+    </pre> 
+    <h3>2 各种名词及解释</h3> 
+    <pre> 
+NetAdmin：服务器管理 
+GlobalOp：服务器操作员 
+Helper：帮助员 
+管理员配置 都存放在 /etc/inspircd/conf/opers.conf  
+    </pre> 
+    <h3>3 配置相关</h3> 
+    <pre> 
+我们所有的模块(插件)配置(包括第三方) 都存放在 /etc/inspircd/conf/modulesconf.conf  
+    </pre> 
+    <h3>4 如果您启用了SSL相关</h3> 
+    <pre> 
+配置 /etc/inspircd/conf/modulesconf.conf  中 关于SSL 的配置项目 
+并且在 /etc/inspircd/ssl/ 目录中 放入相关CA证书文件 
+ 
+详细配置 
+https://docs.inspircd.org/4/modules/ssl_gnutls  
+https://docs.inspircd.org/4/modules/ssl_openssl  
+ 
+我们的配置中 使用了 &SSLPath; 这样的定义符号 它会替换 /etc/inspircd/ssl/ 
+如: &SSLPath;ca.crt  代替 /etc/inspircd/ssl/ca.crt  
+    </pre> 
+ 
+    <h2>目录和文件说明</h2> 
+    <pre> 
+* 完整的 /etc/inspirc/ 目录应该为: 
+* 如果不是如下样式,请执行 ./config.sh  来重新下载所有配置文件 
+* 如果还不懂 请提问给我:2qwn2rrds@mozmail.com  
+ 
+/etc/inspircd 
+    --inspircd.conf  
+    --ssl/ 
+    --conf/ 
+    --txt/ 
+    </pre> 
+    <pre> 
+    --inspircd.conf  #是inspircd的配置文件 
+    --ssl/ #ssl模块及安全证书相关的配置目录(如果要使用ssl请参照https://docs.inspircd.org/4/modules/ssl_openssl  修改) 
+    --conf/ #一般模块的配置目录(请参照 https://docs.inspircd.org/4/modules/  修改) 
+    --txt/ #MOTD文档所在的目录 (请按需修改) 
+    </pre> 
+ 
+    <h2>other目录的说明</h2> 
+    <p>此目录是其他关于irc的配置，包括 ircd 及 客户端 和 bot 的相关软件的所有配置。</p> 
+ 
+    <h2>重要！自己编译安装包 或者使用 直接编译安装</h2> 
+    <p>直接使用 build.sh  编译全部插件的软件包(ARKFUTURE修改)，<a 
+            href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/tag/20250310">https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/tag/20250310</a>  
+    </p> 
+</body> 
+ 
+</html> 
