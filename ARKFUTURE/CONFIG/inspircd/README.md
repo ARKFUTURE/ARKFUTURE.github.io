@@ -1,6 +1,6 @@
 # 安装
 * 官方deb包安装: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install.sh)
-* 全插件deb包安装: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/installssl.sh)
+* 全插件deb包安装: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/installssl.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/installssl.sh)
 * 编译安装：[https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/make.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/make.sh)
 * 更新配置文件: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh)
 * 
