@@ -8,10 +8,10 @@ echo "现在是root用户权限"
 echo "开始执行安装脚本"
 echo "请注意此软件包是官方软件包"
 apt update && apt upgrade && apt install -y wget
-wget https://github.com/inspircd/inspircd/releases/download/v4.6.0/inspircd_4.6.0.deb12u1_amd64.deb
-chmod 777 ./inspircd_4.6.0.deb12u1_amd64.deb
-apt install ./inspircd_4.6.0.deb12u1_amd64.deb -y
-rm -rf ./inspircd_4.6.0.deb12u1_amd64.deb
+wget -O inspircd.deb https://github.com/inspircd/inspircd/releases/download/v4.6.0/inspircd_4.6.0.deb12u1_amd64.deb
+chmod 777 ./inspircd.deb
+apt install ./inspircd.deb -y
+rm -rf ./inspircd.deb
 echo "安装完成,开始下载初始配置到/etc/inspircd/"
 cd ~
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh
