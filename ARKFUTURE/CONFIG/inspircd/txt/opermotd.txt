@@ -14,6 +14,7 @@
 \c06 因为我们暂时未设置 IRC Server 所以您需要参考 
 \c06 https://www.geekshed.net/commands/ircop/ 使用命令
 
+内部频道需要管理员使用 [/SAJOIN <用户名> <#频道名>] 先进入 然后再邀请别人进入
 
 ----------
 \b 团队相关
