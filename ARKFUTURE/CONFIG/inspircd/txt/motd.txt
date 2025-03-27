@@ -31,6 +31,7 @@
 
 ----------常用管理员命令
 \c06 输入 \c04 /OPER 用户名 密码 \c06 进入OP模式
+\c06 输入 \c04 /MKPASSWD hmac-sha512 密码 \c06 制作密码
 \c06 阅读 \c04 opermotd \c04
 
 
