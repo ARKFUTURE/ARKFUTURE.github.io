@@ -3,6 +3,8 @@
 * 全插件deb包安装: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/installssl.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/installssl.sh)
 * 编译安装：[https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/make.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/make.sh)
 * 更新配置文件: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh)
+*
+* ARKFUTURE 服务器安装+arkfuture配置(此项目使用了数据库服务,使用了arkfuture专属配置文件,并且使用了ssl): [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/afeconf.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/afeconf.sh)
 * 
 * 我们在测试配置时 会添加` <die reason="服务器正在维护，请稍后再启动。">` 标签到服务器配置中 
 * 测试完成后会及时删除, 这时请您稍后再更新
