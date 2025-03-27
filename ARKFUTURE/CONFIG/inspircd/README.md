@@ -74,6 +74,7 @@ https://docs.inspircd.org/4/modules/ssl_openssl
 * 此目录是其他关于irc的配置
 * 包括 ircd 及 客户端 和 bot 的相关软件的所有配置
 
-# 重要！自己编译安装包 或者使用 直接编译安装
+# 重要！
+* 自己编译安装包 或者使用 直接编译安装
 * 直接使用 build.sh 编译全部插件的软件包(ARKFUTURE修改)
 * https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/tag/20250310
