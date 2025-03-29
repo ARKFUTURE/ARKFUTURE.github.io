@@ -8,7 +8,7 @@ echo "现在是root用户权限"
 echo "开始执行安装脚本"
 echo "请注意此软件包是官方软件包"
 apt update && apt upgrade -y && apt install -y wget
-wget -O inspircd.deb https://github.com/inspircd/inspircd/releases/download/v4.6.0/inspircd_4.6.0.deb12u1_amd64.deb
+wget -O inspircd.deb https://github.com/inspircd/inspircd/releases/download/v4.7.0/inspircd_4.7.0.deb12u1_amd64.deb
 chmod 777 ./inspircd.deb
 apt install ./inspircd.deb -y
 rm -rf ./inspircd.deb
