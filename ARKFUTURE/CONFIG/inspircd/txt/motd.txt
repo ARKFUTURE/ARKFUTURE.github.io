@@ -20,13 +20,12 @@
 \c06 输入 \c04 /RULES \c06 以获取irc规则
 \c06 输入 \c04 /HELPOP \c06 以获取IRC帮助信息
 \c06 输入 \c04 /ADMIN \c06 以获取IRC管理员信息
-\c06 请在 \c04 #arkfuture \c06 频道上联系管理员
-\c06 BOT Nick: \c04 AFEBOT \c06 识别 @ 开头的命令
 
 ----------常用 ARKFUTURE 频道
-\c03 以下为非公开频道,请联系管理员申请加入
-\c03 [\c04 OP内部频道\c03] #arkfuture_op 
+\c03 以下为ARKFUTURE公开频道
 \c03 [\c04 工作室频道\c03] #arkfuture_studio 
+\c03 以下为非公开频道,加入请和 NICK:arkfuture 申请
+\c03 [\c04 管理运维工作组,IRC-OPER工作组\c03] #arkfuture
 \c03 [\c04 网络空间及现实空间安全实验室,OSINT中心\c03] #arkfuture_sec
 
 ----------常用管理员命令
