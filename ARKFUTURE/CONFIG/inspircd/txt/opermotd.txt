@@ -14,6 +14,9 @@
 \c06 因为我们暂时未设置 IRC Server 所以您需要参考 
 \c06 https://www.geekshed.net/commands/ircop/ 使用命令
 
+\c06 输入 \c04 /OPER 用户名 密码 \c06 进入OP模式
+\c06 使用 \c04 /MKPASSWD pbkdf2-hmac-sha512 密码 \c06 来制作密码 复制密码时`is `后面的全部字符
+
 内部频道需要管理员使用 [/SAJOIN <用户名> <#频道名>] 先进入 然后再邀请别人进入
 
 ----------
