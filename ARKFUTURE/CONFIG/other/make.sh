@@ -14,6 +14,8 @@ tar -xzf v4.7.0.tar.gz
 rm -rf v4.7.0.tar.gz
 cd inspircd-4.7.0
 #./configure --enable-extras --disable-extras
+# ./modulemanager upgrade
+# ./modulemanager install solvemsg qrcode randomidxlines autokick profilelink
 ./configure --system
 ./configure --update
 sleep 3
