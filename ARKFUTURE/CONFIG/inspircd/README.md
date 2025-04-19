@@ -87,3 +87,16 @@ https://docs.inspircd.org/4/modules/ssl_openssl
 * 自己编译安装包 或者使用 直接编译安装
 * 直接使用 build.sh 编译全部插件的软件包(ARKFUTURE修改)
 * https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/tag/20250310
+
+# SSL证书
+* 使用证书生成服务后 通常的 在你的域名目录中生成了以下四个证书文件
+* cert.pem chain.pem fullchain.pem privkey.pem
+* 对应的关系为:  
+
+| Certbot 生成文件 | InspIRCd 配置参数 | 技术作用说明                      |
+| ---------------- | ----------------- | --------------------------------- |
+| `privkey.pem`    | keyfile           | 服务器私钥文件，用于 TLS 握手加密 |
+| `cert.pem`       | certfile          | 域名主体证书，包含公钥信息        |
+| `chain.pem`      | cafile            | 中间证书链                        |
+ 
+* **可能支持 fullchain.pem ;如果支持 请优先使用 fullchain.pem 请自行测试替换 chain.pem**
