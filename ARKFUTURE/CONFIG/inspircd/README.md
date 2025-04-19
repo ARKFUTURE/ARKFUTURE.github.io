@@ -1,9 +1,10 @@
-# 安装
+# 安装 (对于稳定的Debian12)
 * 官方deb包安装: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/install.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install.sh)
-* ARKFUTURE全插件deb包安装(主要更新): [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/installssl.sh)
+* ARKFUTURE全插件deb包安装: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/installssl.sh)
+* ARKFUTURE全插件编译安装(请自行修改编译脚本): [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/make.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/make.sh)
 * 更新配置文件: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh)
 *
-* ARKFUTURE 服务器安装+arkfuture配置(此项目使用了数据库服务,使用了arkfuture专属配置文件,并且使用了ssl)(主要更新): [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/afeconf.sh)
+* ARKFUTURE 全插件服务器安装+arkfuture配置(此项目使用了第三方模块:数据库,ssl,sql认证等)(主要更新): [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/afeconf.sh)
 
 # 端口
 
@@ -106,7 +107,7 @@ https://docs.inspircd.org/4/modules/ssl_openssl
 
 即删除 chain.pem 修改 cert.pem 为fullchain.pem
 
-使用gnutls模块举例(使用fullchain.pem) 系统gnutls必须大于 3.6.0 版本
+使用gnutls模块举例(使用fullchain.pem) 系统gnutls必须大于 3.7.0 版本
 <sslprofile name="Clients"
             provider="gnutls"
             cafile=""
@@ -120,6 +121,24 @@ https://docs.inspircd.org/4/modules/ssl_openssl
             priority="NORMAL"
             requestclientcert="yes"
             strictpriority="no">
+
+使用openssl模块举例(使用fullchain.pem) 系统openssl必须大于 3.0.15 版本
+<sslprofile name="Clients"
+            provider="openssl"
+            cafile=""
+            certfile="&dir.config;/conf/fullchain.pem"
+            crlfile=""
+            ciphers="DEFAULT"
+            compression="no"
+            dhfile=""
+            ecdhcurve="prime256v1"
+            hash="sha3-256"
+            keyfile="&dir.config;/conf/key.pem"
+            renegotiation="no"
+            requestclientcert="yes"
+            tlsv11="no"
+            tlsv12="yes"
+            tlsv13="yes">
 
 大多数服务器（如 Nginx、Apache）可以直接引用fullchain.pem作为 SSL 证书
 ``` 
