@@ -8,7 +8,7 @@ echo "现在是root用户权限"
 sleep 3
 echo "开始执行编译脚本"
 apt-get update
-apt-get install -y build-essential checkinstall wget libargon2-dev libpsl-dev libldap2-dev libpq-dev libsqlite3-dev libpcre2-dev libre2-dev libgnutls28-dev pkg-config libssl-dev libmaxminddb-dev 
+apt-get install -y build-essential checkinstall wget libargon2-dev libpsl-dev libldap2-dev libpq-dev libsqlite3-dev libpcre2-dev libre2-dev libgnutls28-dev pkg-config libssl-dev libmaxminddb-dev libwww-perl
 wget https://ghfast.top/https://github.com/inspircd/inspircd/archive/refs/tags/v4.7.0.tar.gz
 tar -xzf v4.7.0.tar.gz 
 rm -rf v4.7.0.tar.gz
