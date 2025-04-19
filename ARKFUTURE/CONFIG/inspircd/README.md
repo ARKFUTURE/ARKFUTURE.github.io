@@ -98,5 +98,28 @@ https://docs.inspircd.org/4/modules/ssl_openssl
 | `privkey.pem`    | keyfile           | 服务器私钥文件，用于 TLS 握手加密 |
 | `cert.pem`       | certfile          | 域名主体证书，包含公钥信息        |
 | `chain.pem`      | cafile            | 中间证书链                        |
+| `fullchain.pem`  | certfile          | 合并后的完整证书链                |
  
-* **可能支持 fullchain.pem ;如果支持 请优先使用 fullchain.pem 请自行测试替换 chain.pem**
+* 注意:
+``` 
+可能支持 fullchain.pem ;如果支持 请优先使用 fullchain.pem 请自行测试 
+
+即删除 chain.pem 修改 cert.pem 为fullchain.pem
+
+使用gnutls模块举例(使用fullchain.pem) 系统gnutls必须大于 3.6.0 版本
+<sslprofile name="Clients"
+            provider="gnutls"
+            cafile=""
+            certfile="&dir.config;/conf/fullchain.pem"
+            crlfile=""
+            dhfile=""
+            hash="sha3-256"
+            keyfile="&dir.config;/conf/key.pem"
+            mindhbits="1024"
+            outrecsize="2048"
+            priority="NORMAL"
+            requestclientcert="yes"
+            strictpriority="no">
+
+大多数服务器（如 Nginx、Apache）可以直接引用fullchain.pem作为 SSL 证书
+``` 
