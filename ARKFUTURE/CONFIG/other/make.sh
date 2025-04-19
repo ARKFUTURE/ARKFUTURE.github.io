@@ -12,7 +12,7 @@ apt-get install -y build-essential checkinstall wget libargon2-dev libpsl-dev li
 wget https://ghfast.top/https://github.com/inspircd/inspircd/archive/refs/tags/v4.7.0.tar.gz
 tar -xzf v4.7.0.tar.gz 
 rm -rf v4.7.0.tar.gz
-cd inspircd inspircd-4.7.0
+cd inspircd-4.7.0
 #./configure --enable-extras --disable-extras
 ./configure --system
 ./configure --update
