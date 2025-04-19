@@ -136,6 +136,7 @@ https://docs.inspircd.org/4/modules/ssl_openssl
             keyfile="&dir.config;/conf/key.pem"
             renegotiation="no"
             requestclientcert="yes"
+            crlmode="chain"
             tlsv11="no"
             tlsv12="yes"
             tlsv13="yes">
