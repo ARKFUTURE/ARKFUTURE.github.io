@@ -9,12 +9,10 @@ echo "现在是root用户权限"
 sleep 3
 echo "安装必要应用"
 apt-get update
-apt-get install -y build-essential checkinstall wget libargon2-dev libpsl-dev libldap2-dev libpq-dev libsqlite3-dev libpcre2-dev libre2-dev libgnutls28-dev pkg-config libssl-dev libmaxminddb-dev libwww-perl
+apt-get install -y build-essential checkinstall wget git libargon2-dev libpsl-dev libldap2-dev libpq-dev libsqlite3-dev libpcre2-dev libre2-dev libgnutls28-dev pkg-config libssl-dev libmaxminddb-dev libwww-perl
 echo "下载源码包"
-wget https://ghfast.top/https://github.com/inspircd/inspircd/archive/refs/tags/v4.7.0.tar.gz
-tar -xzf v4.7.0.tar.gz 
-rm -rf v4.7.0.tar.gz
-cd inspircd-4.7.0
+git clone https://github.com/inspircd/inspircd.git
+cd inspircd
 echo "配置编译选项"
 # ./configure --enable-extras --disable-extras
 # ./modulemanager upgrade
@@ -31,7 +29,7 @@ make install
 sleep 3
 echo "编译安装完成,开始下载初始配置到/etc/inspircd/"
 cd ~
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh
+wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/config.sh
 chmod 777 ./config.sh
 ./config.sh
 echo "若网络不好请手动重新执行./config.sh脚本 他会替换掉配置文件"

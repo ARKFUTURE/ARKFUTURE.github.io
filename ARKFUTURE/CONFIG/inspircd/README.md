@@ -15,7 +15,7 @@
 | 7000      | 服务器, 明文传输 |
 | 7001      | 服务器, TLS传输  |
 
-# 问题及相关帮助
+# 说明/问题及相关帮助
 * 1 systemctl 问题
 ```
 (编译安装后)使用systemctl时出错: 
@@ -143,3 +143,43 @@ https://docs.inspircd.org/4/modules/ssl_openssl
 
 大多数服务器（如 Nginx、Apache）可以直接引用fullchain.pem作为 SSL 证书
 ``` 
+
+# ARKFUTURE 正式配置文件 说明
+* 使用了sql数据库 sqlite3
+```
+新建OP表
+CREATE TABLE IF NOT EXISTS "oper" (
+  "active" bool NOT NULL DEFAULT true,
+  "name" text NOT NULL,
+  "password" text NOT NULL,
+  "host" text NOT NULL,
+  "type" text NOT NULL,
+  "hash" text,
+  "vhost" text,
+  "commands" text,
+  "chanmodes" text,
+  "usermodes" text,
+  "snomasks" text
+);
+
+新建user表
+CREATE TABLE IF NOT EXISTS user (
+    "name" text NOT NULL,
+    "password" text
+);
+
+```
+
+# 版权及源代码许可/所有人
+```
+项目主站: https://inspircd.org/
+项目源代码: https://github.com/inspircd/
+
+项目源代码属于原作者及源代码维护作者
+
+ARKFUTURE 并未修改任何 INSPIRCD 源代码
+ARKFUTURE 属于全模块deb包维护者
+此站点并非是 INSPIRCD 的分支项目 我们仅仅是因为我们自己有需要而打包
+
+全部模块deb包维护者 :ARKFUTURE studio(group) 简称 ARKFUTURE
+```
