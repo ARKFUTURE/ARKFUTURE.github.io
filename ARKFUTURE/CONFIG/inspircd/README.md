@@ -1,10 +1,10 @@
 # 安装 (对于稳定的Debian12)
-* 官方deb包安装: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/install.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install.sh)
-* ARKFUTURE全插件deb包安装: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/installssl.sh)
-* ARKFUTURE全插件编译安装(请自行修改编译脚本): [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/make.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/make.sh)
-* 更新配置文件: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh)
+* 官方deb包安装: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/install.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/install.sh)
+* ARKFUTURE全插件deb包安装: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh)
+* ARKFUTURE全插件编译安装(请自行修改编译脚本): [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/make.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/make.sh)
+* 更新配置文件: [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/config.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/config.sh)
 *
-* ARKFUTURE 全插件服务器安装+arkfuture配置(此项目使用了第三方模块:数据库,ssl,sql认证等)(主要更新): [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/afeconf.sh)
+* ARKFUTURE 全插件服务器安装+arkfuture配置(此项目使用了第三方模块:数据库,ssl,sql认证等)(主要更新): [https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh](https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh)
 
 # 端口
 
