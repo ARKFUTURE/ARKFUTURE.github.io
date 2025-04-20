@@ -18,14 +18,7 @@ echo "安装完成,开始下载初始配置到/etc/inspircd/"
 echo "您安装了 INSPIRCD 全模块版本 此配置需要您自行配置额外的预编译模块"
 sleep 2
 cd ~
-read -p "是否下载 noroot 配置? (y/n 默认 n): " choice 
-if [ "$choice" = "y" ]; then 
-    echo "开始下载 noroot 配置..." 
-    wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/norootconf/config.sh
-else 
-    echo "开始下载 root 配置..." 
-    wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/config.sh
-fi 
+wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/config.sh
 sleep 2
 ./config.sh
 echo "脚本运行完成 请修进入/etc/inspircd改为您自己的配置文件"

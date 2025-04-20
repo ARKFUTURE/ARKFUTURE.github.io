@@ -62,6 +62,13 @@ https://docs.inspircd.org/4/modules/ssl_openssl
 
 当 InspIRCd 启动时，如果检测到配置文件中存在 `<die>` 标签，服务器会立即停止启动，并向日志或控制台输出配置中指定的消息。
 ``` 
+* 6 关于无root 的配置 
+```
+因为某些原因 在配置时遇到了 
+Unable to initialize m_randquote.so: Unable to read quotes from quotes: No such file or directory
+
+所以正在排查 暂时无果 不能用
+```
 
 
 # 目录和文件说明
