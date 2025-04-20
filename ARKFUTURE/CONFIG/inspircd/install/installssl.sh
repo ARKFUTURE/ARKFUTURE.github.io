@@ -15,6 +15,16 @@ chmod 777 ./inspircd.deb
 apt install ./inspircd.deb -y
 rm -rf ./inspircd.deb
 echo "安装完成,开始下载初始配置到/etc/inspircd/"
+sleep 2
+read -p "是否下载 noroot 配置? (y/n 默认 n): " choice 
+if [ "$choice" = "y" ]; then 
+    echo "开始下载 noroot 配置..." 
+    wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/norootconf/config.sh
+else 
+    echo "开始下载 root 配置..." 
+    wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/config.sh
+fi 
+sleep 2
 cd ~
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/config.sh
 chmod 777 ./config.sh
