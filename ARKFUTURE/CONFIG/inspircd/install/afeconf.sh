@@ -4,8 +4,6 @@ if [ "$(id -u)" -ne 0 ]; then
     echo "错误：请使用 sudo 或 root 权限执行本脚本"
     exit 1
 fi
-echo "dns 更新"
-#wget -O- https://raw.hellogithub.com/hosts >> /etc/hosts
 echo "现在是root用户权限"
 echo "开始执行安装脚本"
 echo "此软件包是编译了第三方插件的软件包,包括了不兼容许可的插件,拥有SSL支持,且使用了ssl相关的插件"
