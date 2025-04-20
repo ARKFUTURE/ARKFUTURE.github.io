@@ -1,19 +1,19 @@
 #!/bin/bash
 echo "更新配置文件"
 echo "! 此操作会覆盖掉您的配置文件 !"
-echo "此脚本仅适用最新的ARKFUTURE nossl配置 以及 更新ARKFUTURE的默认配置"
+echo "此脚本仅适用noroot模式的配置 以及 更新ARKFUTURE的默认配置"
 if [ "$(id -u)" -ne 0 ]; then
     echo "错误：请使用 sudo 或 root 权限执行本脚本"
     exit 1
 fi
 echo "现在是root用户权限"
 sleep 3
-echo "开始下载配置文件到/etc/inspircd"
-cd /etc/inspircd
-rm -rf *
+echo "开始下载配置文件到 ./inspircd/ (当前目录下)"
+mkdir -p ./inspircd
+cd ./inspircd
 mkdir conf
 mkdir txt
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
+wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/norootconf/inspircd.conf
 cd /etc/inspircd/conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
