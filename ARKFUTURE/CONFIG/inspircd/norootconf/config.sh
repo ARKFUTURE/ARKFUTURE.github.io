@@ -14,22 +14,23 @@ cd ./inspircd
 mkdir conf
 mkdir txt
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/norootconf/inspircd.conf
-cd ./inspircd/conf
+cd ./conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/permchannels.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/xline.db
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modulesconf.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
-cd ./inspircd/txt
+cd ../
+cd ./txt
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/motd.txt
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt
-cd ./inspircd/
-mkdir ./conf/ssl
-cd ./inspircd/
+cd ../
+mkdir -p ./conf/ssl
+cd ../
 chmod 644 ./inspircd/ -R
 sleep 3
 echo "脚本运行完成 请修改为您自己的配置文件 当前ARKFUTURE配置为"
-head -n 1 ./inspircd.conf
+head -n 1 ./inspircd/inspircd.conf

@@ -14,6 +14,7 @@ apt install ./inspircd.deb -y
 rm -rf ./inspircd.deb
 echo "安装完成,开始下载初始配置到/etc/inspircd/"
 sleep 2
+cd ~
 read -p "是否下载 noroot 配置? (y/n 默认 n): " choice 
 if [ "$choice" = "y" ]; then 
     echo "开始下载 noroot 配置..." 
@@ -23,8 +24,6 @@ else
     wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/config.sh
 fi 
 sleep 2
-cd ~
-chmod 777 ./config.sh
 ./config.sh
 echo "脚本运行完成 请修进入/etc/inspircd改为您自己的配置文件"
 sleep 3
