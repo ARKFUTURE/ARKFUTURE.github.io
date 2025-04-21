@@ -17,20 +17,18 @@
 \c07输入 \c04 /HELPOP \c12 获取IRC帮助信息 
 \c07输入 \c04 /ADMIN  \c12 获取IRC管理员信息 
 
-\c{white,pink}----------常用 ARKFUTURE 频道\c
-\b 以下为公开频道
-\c10[\c06工作室频道\c10] \c02#arkfuture_studio
-\b 以下为非公开频道
+\c{white,pink}----------ARKFUTURE 非公开频道\c
 \c10[\c06管理运维工作组,IRC-OPER工作组\c10] \c02#arkfuture
 \c10[\c06网络空间及现实空间安全实验室,OSINT中心\c10] \c02#arkfuture_sec
-\c10[\c06内部资源共享,付费资源共享c10] \c02#arkfuture_res
+\c10[\c06资源共享c10] \c02#arkfuture_res
 
 \c{white,pink}----------管理运维\c
 \c14输入[\c04/MSG arkfuture 消息\c14] \c12 联系管理员 
 \c07普通成员联系管理员可以: 申请管理员 申请加入非公开频道
-\c07普通成员可以审阅我们的IRC配置文件 给我们提一些在IRC中提高匿名的建议 我们会给予一些奖励
 
 *******************************************************************************
 请仔细阅读上面的MOTD以保证您了解和使用我们的IRC
-您也可审查我们的IRC配置并加入到配置匿名的IRC服务当中
+{普通成员可以审阅我们的IRC配置文件 
+给我们提一些在此IRC服务器中关于 匿名和安全 的建议或者意见 
+我们会给予一些奖励}
 命令大全 引用网址:https://www.geekshed.net/commands/
