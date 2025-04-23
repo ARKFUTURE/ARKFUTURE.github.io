@@ -1,7 +1,7 @@
 #motd -- UTF-8
 
 \c07\bWelcome to \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E 
-\c10\b此服务为 \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E \c12N\c13E\c14T \c10节点的重要组成部分\c 
+\b此服务为 \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E \c12N\c13E\c14T 节点的重要组成部分\c 
 
 \c{white,pink}----------说明\c
 \b 我们注重匿名性,IRC 不记名,添加好友请谨慎鉴别,我们的匿名方法及匿名建议:
