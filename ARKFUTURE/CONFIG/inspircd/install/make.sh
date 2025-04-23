@@ -9,7 +9,10 @@ echo "现在是root用户权限"
 sleep 3
 echo "安装必要应用"
 apt-get update
-33
+apt-get install -y build-essential checkinstall wget git libargon2-dev libpsl-dev libldap2-dev libpq-dev libsqlite3-dev libpcre2-dev libre2-dev libgnutls28-dev pkg-config libssl-dev libmaxminddb-dev libwww-perl
+echo "下载源码包"
+git clone https://github.com/inspircd/inspircd.git
+cd inspircd
 echo "配置编译选项"
 # ./configure --enable-extras --disable-extras
 # ./modulemanager upgrade
