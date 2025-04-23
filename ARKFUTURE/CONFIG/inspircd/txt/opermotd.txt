@@ -46,7 +46,7 @@ SAMODE
 命令格式: /SAMODE 频道 模式 
 作用: 直接修改频道模式（绕过频道管理员权限）
 
-使用 /MKPASSWD pbkdf2-hmac-sha512 密码 来制作密码 复制密码时`is `后面的全部字符
+使用 /MKPASSWD bcrypt 密码 来制作密码 复制密码时`is `后面的全部字符
 
 
 
