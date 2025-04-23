@@ -70,6 +70,10 @@ Unable to initialize m_randquote.so: Unable to read quotes from quotes: No such 
 
 所以正在排查 暂时无果 不能用
 ```
+* 7 对于部分插件 目录的配置
+```
+对于启用了某些插件 所使用的文件 ircd报错找不到文件 官方建议使用 **绝对路径**
+``` 
 
 
 # 目录和文件说明
@@ -90,6 +94,18 @@ Unable to initialize m_randquote.so: Unable to read quotes from quotes: No such 
     --ssl/ #ssl模块及安全证书相关的配置目录(如果要使用ssl请参照https://docs.inspircd.org/4/modules/ssl_openssl 修改)
     --conf/ #一般模块的配置目录(请参照 https://docs.inspircd.org/4/modules/ 修改)
     --txt/ #MOTD文档所在的目录 (请按需修改)
+``` 
+* 对于官方-Debian编译 所使用的目录
+```
+  Binary:  /usr/bin
+  Config:  /etc/inspircd
+  Data:    /var/lib/inspircd
+  Example: /usr/share/doc/inspircd/examples
+  Log:     /var/log/inspircd
+  Manual:  /usr/share/man/man1
+  Module:  /usr/lib/inspircd
+  Runtime: /run/inspircd
+  Script:  /usr/share/inspircd
 ``` 
 
 # 重要！
