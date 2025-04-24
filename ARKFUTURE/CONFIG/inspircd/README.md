@@ -72,12 +72,13 @@ Unable to initialize m_randquote.so: Unable to read quotes from quotes: No such 
 ```
 * 7 对于部分插件 目录的配置
 ```
-对于启用了某些插件 所使用的文件 ircd报错找不到文件 官方建议使用 **绝对路径**
-测试过 使用 
+对于启用了某些插件 所引用的文件 ircd会报错找不到文件 **官方建议使用 绝对路径**
+个人测试过 使用 
 
 &dir.config;
 &dir.config;/conf/
 &dir.config;/txt/
+
 可以解决 /etc/inspircd 目录引入的问题 其他目录没试过
 ``` 
 
