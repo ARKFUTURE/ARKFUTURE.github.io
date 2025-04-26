@@ -104,6 +104,7 @@ Unable to initialize m_randquote.so: Unable to read quotes from quotes: No such 
 ``` 
 * 对于官方-Debian编译 所使用的目录
 ```
+Paths:
   Binary:  /usr/bin
   Config:  /etc/inspircd
   Data:    /var/lib/inspircd
@@ -113,7 +114,9 @@ Unable to initialize m_randquote.so: Unable to read quotes from quotes: No such 
   Module:  /usr/lib/inspircd
   Runtime: /run/inspircd
   Script:  /usr/share/inspircd
+
 ``` 
+
 
 # 重要！
 * 自己编译安装包 或者使用 直接编译安装
