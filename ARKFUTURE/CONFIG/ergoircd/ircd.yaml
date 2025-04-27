@@ -1,1091 +1,732 @@
-# This is the default config file for Ergo.
-# It contains recommended defaults for all settings, including some behaviors
-# that differ from conventional ircd+services setups. See traditional.yaml
-# for a config with more "mainstream" behavior.
-#
-# If you are setting up a new Ergo server, you should copy this file
-# to a new one named 'ircd.yaml', then look through the file to see which
-# settings you want to customize. If you don't understand a setting, or
-# aren't sure what behavior you want, most of the defaults are fine
-# to start with (you can change them later, even on a running server).
-# However, there are a few that you should probably change up front:
-# 1. network.name (a human-readable name that identifies your network,
-#    no spaces or special characters) and server.name (consider using the
-#    domain name of your server)
-# 2. if you have valid TLS certificates (for example, from letsencrypt.org),
-#    you should enable them in server.listeners in place of the default
-#    self-signed certificates
-# 3. the operator password in the 'opers' section
-# 4. by default, message history is enabled, using in-memory history storage
-#    and with messages expiring after 7 days. depending on your needs, you may
-#    want to disable history entirely, remove the expiration time, switch to
-#    persistent history stored in MySQL, or do something else entirely. See
-#    the 'history' section of the config.
+# Ergo/Ergoircd conf ---UTF-8 ---Security configuration ---test
+# 这只是一个基础的配置文件 它可能需要根据您的需求进行调整
+# !!!!此文件已经经过实际测试,可以使用最新版本正常运行!!!!
+# 这是Ergo的基本配置 由ARKFUTURE修改.
 
-# network configuration
+#-#-#-#-#-#-#-#-#-#-#-#-网络及服务器配置-#-#-#-#-#-#-#-#-#-#-#-#-#
 network:
-    # name of the network
-    name: ErgoTest
+    # 网络名称 
+    name: ARKFUTURE 
 
-# server configuration
 server:
-    # server name
-    name: ergo.test
-
-    # addresses to listen on
+    #服务器名称
+    name: arkfuture.test  
     listeners:
-        # The standard plaintext port for IRC is 6667. Allowing plaintext over the
-        # public Internet poses serious security and privacy issues. Accordingly,
-        # we recommend using plaintext only on local (loopback) interfaces:
-        "127.0.0.1:6667": # (loopback ipv4, localhost-only)
-        "[::1]:6667":     # (loopback ipv6, localhost-only)
-        # If you need to serve plaintext on public interfaces, comment out the above
-        # two lines and uncomment the line below (which listens on all interfaces):
-        # ":6667":
-        # Alternately, if you have a TLS certificate issued by a recognized CA,
-        # you can configure port 6667 as an STS-only listener that only serves
-        # "redirects" to the TLS port, but doesn't allow chat. See the manual
-        # for details.
-
-        # The standard SSL/TLS port for IRC is 6697. This will listen on all interfaces:
-        ":6697":
-            # this is a standard TLS configuration with a single certificate;
-            # see the manual for instructions on how to configure SNI
-            tls:
-                cert: fullchain.pem
-                key: privkey.pem
-            # 'proxy' should typically be false. It's for cloud load balancers that
-            # always send a PROXY protocol header ahead of the connection. See the
-            # manual ("Reverse proxies") for more details.
-            proxy: false
-            # set the minimum TLS version:
-            min-tls-version: 1.2
-
-        # Example of a Unix domain socket for proxying:
-        # "/tmp/ergo_sock":
-
-        # Example of a Tor listener: any connection that comes in on this listener will
-        # be considered a Tor connection. It is strongly recommended that this listener
-        # *not* be on a public interface --- it should be on 127.0.0.0/8 or unix domain:
-        # "/hidden_service_sockets/ergo_tor_sock":
-        #     tor: true
-
-        # Example of a WebSocket listener:
-        # ":8097":
-        #     websocket: true
+        ":6667":
+        ":6668":
+        # ":6697":
         #     tls:
-        #         cert: fullchain.pem
-        #         key: privkey.pem
+        #         cert: fullchain.pem  
+        #         key: privkey.pem  
+        #     # 'proxy'通常应为false。用于总是发送PROXY协议头的云负载均衡器, 
+        #     # 详见手册("反向代理")
+        #     proxy: false 
+        #     # 设置最低TLS版本:
+        #     min-tls-version: 1.2 
+ 
+        # Unix域套接字示例:
+        # "/tmp/ergo_sock":
+ 
+        # Tor监听器示例:此监听器的连接将被视为Tor连接, 
+        # 强烈建议不要将此监听器置于公共接口:
+        # "/hidden_service_sockets/ergo_tor_sock":
+        #     tor: true 
+ 
+        # WebSocket监听器示例:
+        # ":8097":
+        #     websocket: true 
+        #     tls:
+        #         cert: fullchain.pem  
+        #         key: privkey.pem  
+ 
+    unix-bind-mode: 0777 
 
-    # sets the permissions for Unix listen sockets. on a typical Linux system,
-    # the default is 0775 or 0755, which prevents other users/groups from connecting
-    # to the socket. With 0777, it behaves like a normal TCP socket
-    # where anyone can connect.
-    unix-bind-mode: 0777
-
-    # configure the behavior of Tor listeners (ignored if you didn't enable any):
+    # tor监听配置
     tor-listeners:
-        # if this is true, connections from Tor must authenticate with SASL
-        require-sasl: false
+        require-sasl: false 
+        vhost: "" 
+        max-connections: 64 
+        throttle-duration: 10m 
+        max-connections-per-duration: 64 
 
-        # what hostname should be displayed for Tor connections?
-        vhost: "tor-network.onion"
-
-        # allow at most this many connections at once (0 for no limit):
-        max-connections: 64
-
-        # connection throttling (limit how many connection attempts are allowed at once):
-        throttle-duration: 10m
-        # set to 0 to disable throttling:
-        max-connections-per-duration: 64
-
-    # strict transport security, to get clients to automagically use TLS
+    # sts配置
     sts:
-        # whether to advertise STS
-        #
-        # to stop advertising STS, leave this enabled and set 'duration' below to "0". this will
-        # advertise to connecting users that the STS policy they have saved is no longer valid
-        enabled: false
-
-        # how long clients should be forced to use TLS for.
-        # setting this to a too-long time will mean bad things if you later remove your TLS.
-        # the default duration below is 1 month, 2 days and 5 minutes.
-        duration: 1mo2d5m
-
-        # tls port - you should be listening on this port above
-        port: 6697
-
-        # should clients include this STS policy when they ship their inbuilt preload lists?
-        preload: false
-
+        enabled: true 
+        duration: 30d 
+        port: 6697 
+        preload: true 
+ 
     websockets:
-        # Restrict the origin of WebSocket connections by matching the "Origin" HTTP
-        # header. This setting causes ergo to reject websocket connections unless
-        # they originate from a page on one of the whitelisted websites in this list.
-        # This prevents malicious websites from making their visitors connect to your
-        # ergo instance without their knowledge. An empty list means there are no
-        # restrictions.
         allowed-origins:
-            # - "https://ergo.chat"
-            # - "https://*.ergo.chat"
 
-    # casemapping controls what kinds of strings are permitted as identifiers (nicknames,
-    # channel names, account names, etc.), and how they are normalized for case.
-    # the recommended default is 'ascii' (traditional ASCII-only identifiers).
-    # the other options are 'precis', which allows UTF8 identifiers that are "sane"
-    # (according to UFC 8265), with additional mitigations for homoglyph attacks,
-    # 'permissive', which allows identifiers containing unusual characters like
-    # emoji, at the cost of increased vulnerability to homoglyph attacks and potential
-    # client compatibility problems, and the legacy mappings 'rfc1459' and
-    # 'rfc1459-strict'. we recommend leaving this value at its default;
-    # however, note that changing it once the network is already up and running is
-    # problematic.
     casemapping: "ascii"
+ 
+    enforce-utf8: true 
+ 
+    lookup-hostnames: true 
 
-    # enforce-utf8 controls whether the server will preemptively discard non-UTF8
-    # messages (since they cannot be relayed to websocket clients), or will allow
-    # them and relay them to non-websocket clients (as in traditional IRC).
-    enforce-utf8: true
-
-    # whether to look up user hostnames with reverse DNS. there are 3 possibilities:
-    # 1. lookup-hostnames enabled, IP cloaking disabled; users will see each other's hostnames
-    # 2. lookup-hostnames disabled, IP cloaking disabled; users will see each other's numeric IPs
-    # 3. [the default] IP cloaking enabled; users will see cloaked hostnames
-    lookup-hostnames: false
-    # whether to confirm hostname lookups using "forward-confirmed reverse DNS", i.e., for
-    # any hostname returned from reverse DNS, resolve it back to an IP address and reject it
-    # unless it matches the connecting IP
-    forward-confirm-hostnames: true
-
-    # use ident protocol to get usernames
+    forward-confirm-hostnames: true 
+ 
     check-ident: false
-
-    # ignore the supplied user/ident string from the USER command, always setting user/ident
-    # to the following literal value; this can potentially reduce confusion and simplify bans.
-    # the value must begin with a '~' character. comment out / omit to disable:
-    coerce-ident: '~u'
-
-    # 'password' allows you to require a global, shared password (the IRC `PASS` command)
-    # to connect to the server. for operator passwords, see the `opers` section of the
-    # config. for a more secure way to create a private server, see the `require-sasl`
-    # section. you must hash the password with `ergo genpasswd`, then enter the hash here:
+ 
+    coerce-ident: ''
+ 
     #password: "$2a$04$0123456789abcdef0123456789abcdef0123456789abcdef01234"
-
-    # motd filename
-    # if you change the motd, you should move it to ircd.motd
-    motd: ergo.motd
-
-    # motd formatting codes
-    # if this is true, the motd is escaped using formatting codes like $c, $b, and $i
-    motd-formatting: true
-
-    # relaying using the RELAYMSG command
+ 
+    motd: ergo.motd  
+ 
+    motd-formatting: true 
+ 
     relaymsg:
-        # is relaymsg enabled at all?
-        enabled: true
-
-        # which character(s) are reserved for relayed nicks?
+        enabled: true 
         separators: "/"
-
-        # can channel operators use RELAYMSG in their channels?
-        # our implementation of RELAYMSG makes it safe for chanops to use without the
-        # possibility of real users being silently spoofed
-        available-to-chanops: true
-
-    # IPs/CIDRs the PROXY command can be used from
-    # This should be restricted to localhost (127.0.0.1/8, ::1/128, and unix sockets).
-    # Unless you have a good reason. you should also add these addresses to the
-    # connection limits and throttling exemption lists.
+        available-to-chanops: true 
+ 
     proxy-allowed-from:
-        - localhost
-        # - "192.168.1.1"
-        # - "192.168.10.1/24"
+        - localhost 
 
-    # controls the use of the WEBIRC command (by IRC<->web interfaces, bouncers and similar)
     webirc:
-        # one webirc block -- should correspond to one set of gateways
-        -
-            # SHA-256 fingerprint of the TLS certificate the gateway must use to connect
-            # (comment this out to use passwords only)
+        -   
+            # 网关必须使用的 TLS 证书的 SHA-256 指纹 若仅使用密码验证 可注释此字段
             certfp: "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"
-
-            # password the gateway uses to connect, made with `ergo genpasswd`
             password: "$2a$04$abcdef0123456789abcdef0123456789abcdef0123456789abcde"
-
-            # IPs/CIDRs that can use this webirc command
-            # you should also add these addresses to the connection limits and throttling exemption lists
             hosts:
-                - localhost
-                # - "192.168.1.1"
-                # - "192.168.10.1/24"
+                - localhost 
 
-            # whether to accept the hostname parameter on the WEBIRC line as the IRC hostname
-            # (the default/recommended Ergo configuration will use cloaks instead)
-            accept-hostname: false
-
-    # maximum length of clients' sendQ in bytes
-    # this should be big enough to hold bursts of channel/direct messages
-    max-sendq: 96k
-
-    # compatibility with legacy clients
+            accept-hostname: false 
+ 
+    max-sendq: 96k 
+ 
     compatibility:
-        # many clients require that the final parameter of certain messages be an
-        # RFC1459 trailing parameter, i.e., prefixed with :, whether or not this is
-        # actually required. this forces Ergo to send those parameters
-        # as trailings. this is recommended unless you're testing clients for conformance;
-        # defaults to true when unset for that reason.
-        force-trailing: true
-
-        # some clients (ZNC 1.6.x and lower, Pidgin 2.12 and lower) do not
-        # respond correctly to SASL messages with the server name as a prefix:
-        # https://github.com/znc/znc/issues/1212
-        # this works around that bug, allowing them to use SASL.
-        send-unprefixed-sasl: true
-
-        # traditionally, IRC servers will truncate and send messages that are
-        # too long to be relayed intact. this behavior can be disabled by setting
-        # allow-truncation to false, in which case Ergo will reject the message
-        # and return an error to the client. (note that this option defaults to true
-        # when unset.)
-        allow-truncation: false
-
-    # IP-based DoS protection
+        force-trailing: true 
+        send-unprefixed-sasl: true 
+        allow-truncation: false 
+ 
+    # IP限制 
     ip-limits:
-        # whether to limit the total number of concurrent connections per IP/CIDR
-        count: true
-        # maximum concurrent connections per IP/CIDR
-        max-concurrent-connections: 16
-
-        # whether to restrict the rate of new connections per IP/CIDR
-        throttle: true
-        # how long to keep track of connections for
-        window: 10m
-        # maximum number of new connections per IP/CIDR within the given duration
-        max-connections-per-window: 32
-
-        # how wide the CIDR should be for IPv4 (a /32 is a fully specified IPv4 address)
-        cidr-len-ipv4: 32
-        # how wide the CIDR should be for IPv6 (a /64 is the typical prefix assigned
-        # by an ISP to an individual customer for their LAN)
-        cidr-len-ipv6: 64
-
-        # IPs/networks which are exempted from connection limits
+        # 是否限制每个IP/CIDR的并发连接总数 
+        count: true 
+        # 每个IP/CIDR的最大并发连接数 
+        max-concurrent-connections: 16 
+        # 是否限制每个IP/CIDR的新连接速率 
+        throttle: true 
+        # 统计连接的时间窗口长度
+        window: 10m 
+        # 在时间窗口内允许的最大新连接数
+        max-connections-per-window: 32 
+         # IPv4的CIDR前缀长度
+        cidr-len-ipv4: 32 
+        # IPv6的CIDR前缀长度
+        cidr-len-ipv6: 64 
+        # 豁免连接限制的IP/网络列表 
         exempted:
             - "localhost"
-            # - "192.168.1.1"
-            # - "2001:0db8::/32"
-
-        # custom connection limits for certain IPs/networks.
+        # 特定IP/网络的自定义限制
         custom-limits:
             #"irccloud":
             #    nets:
-            #        - "192.184.9.108"  # highgate.irccloud.com
-            #        - "192.184.9.110"  # ealing.irccloud.com
-            #        - "192.184.9.112"  # charlton.irccloud.com
-            #        - "192.184.10.118" # brockwell.irccloud.com
-            #        - "192.184.10.9"   # tooting.irccloud.com
-            #        - "192.184.8.73"   # hathersage.irccloud.com
-            #        - "192.184.8.103"  # stonehaven.irccloud.com
-            #        - "5.254.36.57"    # tinside.irccloud.com
-            #        - "5.254.36.56/29" # additional ipv4 net
-            #        - "2001:67c:2f08::/48"
-            #        - "2a03:5180:f::/64"
-            #    max-concurrent-connections: 2048
-            #    max-connections-per-window: 2048
-
-    # pluggable IP ban mechanism, via subprocess invocation
-    # this can be used to check new connections against a DNSBL, for example
-    # see the manual for details on how to write an IP ban checking script
+            #        - "192.184.9.108" 
+            #    max-concurrent-connections: 2048 
+            #    max-connections-per-window: 2048 
+ 
+    # IP封禁检查脚本 
     ip-check-script:
-        enabled: false
+        # 是否启用子进程IP检查机制(如DNSBL查询)
+        enabled: false 
+        # 执行脚本路径 
         command: "/usr/local/bin/check-ip-ban"
-        # constant list of args to pass to the command; the actual query
-        # and result are transmitted over stdin/stdout:
+        # 固定参数列表(查询通过标准输入/输出交互)
         args: []
-        # timeout for process execution, after which we send a SIGTERM:
-        timeout: 9s
-        # how long after the SIGTERM before we follow up with a SIGKILL:
-        kill-timeout: 1s
-        # how many scripts are allowed to run at once? 0 for no limit:
-        max-concurrency: 64
-        # if true, only check anonymous connections (not logged into an account)
-        # at the very end of the handshake:
-        exempt-sasl: false
-
-    # IP cloaking hides users' IP addresses from other users and from channel admins
-    # (but not from server admins), while still allowing channel admins to ban
-    # offending IP addresses or networks. In place of hostnames derived from reverse
-    # DNS, users see fake domain names like pwbs2ui4377257x8.irc. These names are
-    # generated deterministically from the underlying IP address, but if the underlying
-    # IP is not already known, it is infeasible to recover it from the cloaked name.
-    # If you disable this, you should probably enable lookup-hostnames in its place.
+        # 进程执行超时时间(超时后发送SIGTERM)
+        timeout: 9秒 
+        # SIGTERM后发送SIGKILL的间隔 
+        kill-timeout: 1秒 
+        # 最大并发脚本数(0表示无限制)
+        max-concurrency: 64 
+        # 是否豁免已认证SASL的连接检查 
+        exempt-sasl: false 
+ 
+    # IP伪装配置 
     ip-cloaking:
-        # whether to enable IP cloaking
-        enabled: true
-
-        # whether to use these cloak settings (specifically, `netname` and `num-bits`)
-        # to produce unique hostnames for always-on clients. you can enable this even if
-        # you disabled IP cloaking for normal clients above. if this is disabled,
-        # always-on clients will all have an identical hostname (the server name).
-        enabled-for-always-on: true
-
-        # fake TLD at the end of the hostname, e.g., pwbs2ui4377257x8.irc
-        # you may want to use your network name here
+        # 是否隐藏用户真实IP
+        enabled: true 
+        # 是否为"始终在线"客户端生成唯一伪域名 
+        enabled-for-always-on: true 
+        # 伪域名后缀
         netname: "irc"
-
-        # the cloaked hostname is derived only from the CIDR (most significant bits
-        # of the IP address), up to a configurable number of bits. this is the
-        # granularity at which bans will take effect for IPv4. Note that changing
-        # this value will invalidate any stored bans.
-        cidr-len-ipv4: 32
-
-        # analogous granularity for IPv6
-        cidr-len-ipv6: 64
-
-        # number of bits of hash output to include in the cloaked hostname.
-        # more bits means less likelihood of distinct IPs colliding,
-        # at the cost of a longer cloaked hostname. if this value is set to 0,
-        # all users will receive simply `netname` as their cloaked hostname.
-        num-bits: 64
-
-    # secure-nets identifies IPs and CIDRs which are secure at layer 3,
-    # for example, because they are on a trusted internal LAN or a VPN.
-    # plaintext connections from these IPs and CIDRs will be considered
-    # secure (clients will receive the +Z mode and be allowed to resume
-    # or reattach to secure connections). note that loopback IPs are always
-    # considered secure:
+        # IPv4地址的CIDR掩码长度
+        cidr-len-ipv4: 32 
+        # IPv6地址的CIDR掩码长度 
+        cidr-len-ipv6: 64 
+        # 哈希输出位数
+        num-bits: 64 
+ 
+    # 安全网络配置 
     secure-nets:
         # - "10.0.0.0/8"
-
-    # Ergo will write files to disk under certain circumstances, e.g.,
-    # CPU profiling or data export. by default, these files will be written
-    # to the working directory. set this to customize:
+ 
+    # 输出路径 
     #output-path: "/home/ergo/out"
+ 
+    # 覆盖服务主机名 
+    #override-services-hostname: "example.network" 
+ 
+    # 最大IRC行长度 
+    #max-line-len: 512 
+ 
+    # 隐藏LUSER统计 
+    suppress-lusers: false 
 
-    # the hostname used by "services", e.g., NickServ, defaults to "localhost",
-    # e.g., `NickServ!NickServ@localhost`. uncomment this to override:
-    #override-services-hostname: "example.network"
-
-    # in a "closed-loop" system where you control the server and all the clients,
-    # you may want to increase the maximum (non-tag) length of an IRC line from
-    # the default value of 512. DO NOT change this on a public server:
-    #max-line-len: 512
-
-    # send all 0's as the LUSERS (user counts) output to non-operators; potentially useful
-    # if you don't want to publicize how popular the server is
-    suppress-lusers: false
-
-# account options
+# 账户选项 
 accounts:
-    # is account authentication enabled, i.e., can users log into existing accounts?
-    authentication-enabled: true
-
-    # account registration
+    # 是否启用账户认证
+    authentication-enabled: true 
+ 
+    # 账户注册 
     registration:
-        # can users register new accounts for themselves? if this is false, operators with
-        # the `accreg` capability can still create accounts with `/NICKSERV SAREGISTER`
-        enabled: true
-
-        # can users use the REGISTER command to register before fully connecting?
-        allow-before-connect: true
-
-        # global throttle on new account creation
+        # 用户是否可以自行注册新账户
+        enabled: true 
+        # 用户是否能在完全连接前使用 REGISTER 命令注册
+        allow-before-connect: true 
+ 
+        # 全局新建账户限流 
         throttling:
-            enabled: true
-            # window
-            duration: 10m
-            # number of attempts allowed within the window
-            max-attempts: 30
-
-        # this is the bcrypt cost we'll use for account passwords
-        # (note that 4 is the lowest value allowed by the bcrypt library)
-        bcrypt-cost: 4
-
-        # length of time a user has to verify their account before it can be re-registered
-        verify-timeout: "32h"
-
-        # options for email verification of account registrations
+            enabled: true 
+            # 时间窗口 
+            duration: 10m 
+            # 窗口期内允许的最大尝试次数 
+            max-attempts: 30 
+ 
+        # 账户密码使用的 bcrypt 计算成本 
+        # (注意 bcrypt 库允许的最低值为 4)
+        bcrypt-cost: 12 
+ 
+        # 用户需在此时间内验证账户, 否则可被重新注册 
+        verify-timeout: "12h"
+ 
+        # 账户注册的邮件验证选项 
         email-verification:
-            enabled: false
-            sender: "admin@my.network"
-            require-tls: true
-            helo-domain: "my.network" # defaults to server name if unset
-            # set to `tcp4` to force sending over IPv4, `tcp6` to force IPv6:
+            # 是否启用邮件验证功能 
+            enabled: false 
+            # 发件人邮箱地址(需符合RFC规范)
+            sender: "admin@my.network" 
+            # 是否强制要求TLS加密连接 
+            require-tls: true 
+            # HELO/EHLO域名标识(默认使用服务器名称)
+            helo-domain: "my.network" 
+            # 设置为`tcp4`以强制通过IPv4发送, 设置为`tcp6`以强制IPv66:
             # protocol: "tcp4"
-            # set to force a specific source/local IPv4 or IPv6 address:
+            # 设置为强制特定源/本地IPv4或IPv6地址:
             # local-address: "1.2.3.4"
-            # options to enable DKIM signing of outgoing emails (recommended, but
-            # requires creating a DNS entry for the public key):
+            
+            # 用于启用传出电子邮件的DKIM签名的选项 推荐, 但需要为公钥创建DNS条目
             # dkim:
             #     domain: "my.network"
             #     selector: "20200229"
             #     key-file: "dkim.pem"
-            # to use an MTA/smarthost instead of sending email directly:
+            
+            ### 使用MTA/smarthost, 而不是直接发送电子邮件
             # mta:
             #     server: localhost
             #     port: 25
             #     username: "admin"
             #     password: "hunter2"
-            #     implicit-tls: false # TLS from the first byte, typically on port 465
-            # addresses that are not accepted for registration:
+            #     implicit-tls: false # 使用tls验证 通常在端口465上
+            
+            ### 邮箱地址黑名单策略 ### 
             address-blacklist:
-            #    - "*@mailinator.com"
-            address-blacklist-syntax: "glob" # change to "regex" for regular expressions
-            # file of newline-delimited address blacklist entries (no enclosing quotes)
-            # in the above syntax (i.e. either globs or regexes). supersedes
-            # address-blacklist if set:
-            # address-blacklist-file: "/path/to/address-blacklist-file"
-            timeout: 60s
-            # email-based password reset:
+            #    - "*@mailinator.com"   # 使用通配符禁止临时邮箱 
+
+            # 黑名单语法类型(glob通配符或regex正则)
+            address-blacklist-syntax: "glob"
+
+            # 黑名单文件路径(优先级高于内联配置)
+            # address-blacklist-file: "/path/to/file"
+            
+            # 邮件发送操作超时时间 
+            timeout: 60秒 
+            
+            ### 密码重置功能 ### 
             password-reset:
-                enabled: false
-                # time before we allow resending the email
-                cooldown: 1h
-                # time for which a password reset code is valid
-                timeout: 1d
-
-    # throttle account login attempts (to prevent either password guessing, or DoS
-    # attacks on the server aimed at forcing repeated expensive bcrypt computations)
+                # 是否启用邮件密码重置 
+                enabled: false 
+                # 重复发送邮件的最小间隔 
+                cooldown: 1小时 
+                # 重置链接有效期 
+                timeout: 1天 
+ 
+    # 限制账户登录尝试(防止密码猜测或针对服务器的 DoS 攻击)
     login-throttling:
-        enabled: true
-
-        # window
-        duration:  1m
-
-        # number of attempts allowed within the window
-        max-attempts: 3
-
-    # some clients (notably Pidgin and Hexchat) offer only a single password field,
-    # which makes it impossible to specify a separate server password (for the PASS
-    # command) and SASL password. if this option is set to true, a client that
-    # successfully authenticates with SASL will not be required to send
-    # PASS as well, so it can be configured to authenticate with SASL only.
-    skip-server-password: false
-
-    # enable login to accounts via the PASS command, e.g., PASS account:password
-    # this is useful for compatibility with old clients that don't support SASL
-    login-via-pass-command: true
-
-    # advertise the SCRAM-SHA-256 authentication method. set to false in case of
-    # compatibility issues with certain clients:
-    advertise-scram: true
-
-    # require-sasl controls whether clients are required to have accounts
-    # (and sign into them using SASL) to connect to the server
+        enabled: true 
+        # 时间窗口 
+        duration:  1m 
+        # 窗口期内允许的最大尝试次数 
+        max-attempts: 3 
+ 
+    # 部分客户端(如 Pidgin 和 Hexchat)仅提供单一密码字段, 无法区分服务器密码(PASS 命令)和 SASL 密码 
+    # 若设为 true, 成功通过 SASL 认证的客户端无需额外发送 PASS 命令 
+    skip-server-password: false 
+ 
+    # 允许通过 PASS 命令登录账户(例如 PASS account:password), 兼容不支持 SASL 的旧客户端 
+    login-via-pass-command: true 
+ 
+    # 广告 SCRAM-SHA-256 认证方法。与某些客户端存在兼容性问题时可设为 false:
+    advertise-scram: true 
+ 
+    # 是否要求客户端必须通过 SASL 登录账户才能连接服务器 
     require-sasl:
-        # if this is enabled, all clients must authenticate with SASL while connecting.
-        # WARNING: for a private server, you MUST set accounts.registration.enabled
-        # to false as well, in order to prevent non-administrators from registering
-        # accounts.
-        enabled: false
-
-        # IPs/CIDRs which are exempted from the account requirement
+        # 若启用, 所有客户端必须在连接时通过 SASL 认证 
+        # 警告:私有服务器必须同时将 accounts.registration.enabled  设为 false, 以防止非管理员注册账户 
+        enabled: false 
+        # 豁免账户要求的 IP/CIDR 
         exempted:
             - "localhost"
-            # - '10.10.0.0/16'
-
-    # nick-reservation controls how, and whether, nicknames are linked to accounts
+ 
+    # 昵称保留策略(昵称如何与账户关联)
     nick-reservation:
-        # is there any enforcement of reserved nicknames?
-        enabled: true
-
-        # how many nicknames, in addition to the account name, can be reserved?
-        # (note that additional nicks are unusable under force-nick-equals-account
-        # or if the client is always-on)
-        additional-nick-limit: 0
-
-        # method describes how nickname reservation is handled
-        #   strict:   users must already be logged in to their account (via
-        #             SASL, PASS account:password, or /NickServ IDENTIFY)
-        #             in order to use their reserved nickname(s)
-        #   optional: no enforcement by default, but allow users to opt in to
-        #             the enforcement level of their choice
-        method: strict
-
-        # allow users to set their own nickname enforcement status, e.g.,
-        # to opt out of strict enforcement
-        allow-custom-enforcement: false
-
-        # format for guest nicknames:
-        # 1. these nicknames cannot be registered or reserved
-        # 2. if a client is automatically renamed by the server,
-        #    this is the template that will be used (e.g., Guest-nccj6rgmt97cg)
-        # 3. if enforce-guest-format (see below) is enabled, clients without
-        #    a registered account will have this template applied to their
-        #    nicknames (e.g., 'katie' will become 'Guest-katie')
+        # 是否启用昵称保留?
+        enabled: true 
+        # 除账户名外可保留的额外昵称数量 
+        # (注意:若启用 force-nick-equals-account 或客户端为 always-on, 额外昵称将不可用)
+        additional-nick-limit: 0 
+        # 昵称保留方式:
+        #   strict:   用户必须已通过 SASL/PASS 或 /NickServ IDENTIFY 登录账户才能使用保留昵称 
+        #   optional: 默认无限制, 但允许用户自定义强制等级 
+        method: strict 
+        # 是否允许用户自定义昵称强制状态(例如退出严格模式)
+        allow-custom-enforcement: false 
+        # 访客昵称格式:
+        # 1. 此类昵称不可注册或保留 
+        # 2. 客户端被自动重命名时将使用此模板(如 Guest-nccj6rgmt97cg)
+        # 3. 若启用 enforce-guest-format, 未注册账户的客户端昵称将强制匹配此模板(如 'katie' 变为 'Guest-katie')
         guest-nickname-format: "Guest-*"
-
-        # when enabled, forces users not logged into an account to use
-        # a nickname matching the guest template. a caveat: this may prevent
-        # users from choosing nicknames in scripts different from the guest
-        # nickname format.
-        force-guest-format: false
-
-        # when enabled, forces users logged into an account to use the
-        # account name as their nickname. when combined with strict nickname
-        # enforcement, this lets users treat nicknames and account names
-        # as equivalent for the purpose of ban/invite/exception lists.
-        force-nick-equals-account: true
-
-        # parallel setting to force-nick-equals-account: if true, this forbids
-        # anonymous users (i.e., users not logged into an account) to change their
-        # nickname after the initial connection is complete
-        forbid-anonymous-nick-changes: false
-
-    # multiclient controls whether Ergo allows multiple connections to
-    # attach to the same client/nickname identity; this is part of the
-    # functionality traditionally provided by a bouncer like ZNC
+        # 启用时强制未登录账户的用户使用访客模板昵称(可能影响脚本用户选择非访客格式昵称)
+        force-guest-format: false 
+        # 启用时强制登录账户的用户使用账户名作为昵称(结合严格模式可实现昵称与账户名在封禁列表中等效)
+        force-nick-equals-account: true 
+        # 类似 force-nick-equals-account:若为 true, 禁止匿名用户(未登录账户)在初始连接后修改昵称 
+        forbid-anonymous-nick-changes: false 
+ 
+    # 多客户端控制(类似 ZNC 的 Bouncer 功能)
     multiclient:
-        # when disabled, each connection must use a separate nickname (as is the
-        # typical behavior of IRC servers). when enabled, a new connection that
-        # has authenticated with SASL can associate itself with an existing
-        # client
-        enabled: true
-
-        # if this is disabled, clients have to opt in to bouncer functionality
-        # using nickserv or the cap system. if it's enabled, they can opt out
-        # via nickserv
-        allowed-by-default: true
-
-        # whether to allow clients that remain on the server even
-        # when they have no active connections. The possible values are:
-        # "disabled", "opt-in", "opt-out", or "mandatory".
+        # 禁用时每个连接必须使用独立昵称(传统 IRC 行为)
+        enabled: true 
+        # 禁用时客户端需通过 nickserv 或 cap 系统选择启用 Bouncer 功能 
+        allowed-by-default: true 
+        # 允许无活跃连接时仍保留客户端。可选值:"disabled", "opt-in", "opt-out", "mandatory"
         always-on: "opt-in"
-
-        # whether to mark always-on clients away when they have no active connections:
+        # 无活跃连接时标记 always-on 客户端为离开状态:
         auto-away: "opt-in"
-
-        # QUIT always-on clients from the server if they go this long without connecting
-        # (use 0 or omit for no expiration):
-        #always-on-expiration: 90d
-
-    # vhosts controls the assignment of vhosts (strings displayed in place of the user's
-    # hostname/IP) by the HostServ service
+        # 若 always-on 客户端超过此时间未连接则从服务器退出(0 或省略表示永不过期):
+        always-on-expiration: 90d 
+ 
+    # 通过 HostServ 服务分配虚拟主机(替代用户主机名/IP 的字符串)
     vhosts:
-        # are vhosts enabled at all?
-        enabled: true
-
-        # maximum length of a vhost
-        max-length: 64
-
-        # regexp for testing the validity of a vhost
-        # (make sure any changes you make here are RFC-compliant)
+        # 是否启用虚拟主机?
+        enabled: true 
+        # 虚拟主机最大长度 
+        max-length: 64 
+        # 虚拟主机有效性正则表达式(确保符合 RFC 标准)
         valid-regexp: '^[0-9A-Za-z.\-_/]+$'
-
-    # modes that are set by default when a user connects
-    # if unset, no user modes will be set by default
-    # +i is invisible (a user's channels are hidden from whois replies)
-    # see  /QUOTE HELP umodes  for more user modes
-    default-user-modes: +i
-
-    # pluggable authentication mechanism, via subprocess invocation
-    # see the manual for details on how to write an authentication plugin script
+ 
+    # 用户连接时默认设置的模式 
+    # 未设置时无默认用户模式 
+    # +i 为隐身模式(隐藏用户的频道于 WHOIS 回复中)
+    default-user-modes: +i 
+ 
+    # 通过子进程调用的可插拔认证机制(详见手册编写认证插件脚本)
     auth-script:
-        enabled: false
+        enabled: false 
         command: "/usr/local/bin/authenticate-irc-user"
-        # constant list of args to pass to the command; the actual authentication
-        # data is transmitted over stdin/stdout:
+        # 传递给命令的固定参数列表(实际认证数据通过 stdin/stdout 传输):
         args: []
-        # should we automatically create users if the plugin returns success?
-        autocreate: true
-        # timeout for process execution, after which we send a SIGTERM:
-        timeout: 9s
-        # how long after the SIGTERM before we follow up with a SIGKILL:
-        kill-timeout: 1s
-        # how many scripts are allowed to run at once? 0 for no limit:
-        max-concurrency: 64
-
-    # support for login via OAuth2 bearer tokens
+        # 插件返回成功时是否自动创建用户?
+        autocreate: true 
+        # 进程执行超时时间(超时后发送 SIGTERM):
+        timeout: 9s 
+        # SIGTERM 后发送 SIGKILL 的等待时间:
+        kill-timeout: 1s 
+        # 允许同时运行的脚本数量(0 表示无限制):
+        max-concurrency: 64 
+ 
+    # 通过 OAuth2 Bearer Token 登录支持 
     oauth2:
-        enabled: false
-        # should we automatically create users on presentation of a valid token?
-        autocreate: true
-        # enable this to use auth-script for validation:
-        auth-script: false
-        introspection-url: "https://example.com/api/oidc/introspection"
-        introspection-timeout: 10s
-        # omit for auth method `none`; required for auth method `client_secret_basic`:
+        enabled: false 
+        # 是否在收到有效令牌时自动创建用户?
+        autocreate: true 
+        # 启用此选项以使用 auth-script 验证令牌:
+        auth-script: false 
+        introspection-url: "https://example.com/api/oidc/introspection" 
+        introspection-timeout: 10s 
+        # 省略表示使用 `none` 认证方法；`client_secret_basic` 方法需填写:
         client-id: "ergo"
         client-secret: "4TA0I7mJ3fUUcW05KJiODg"
-
-    # support for login via JWT bearer tokens
+ 
+    # 通过 JWT Bearer Token 登录支持 
     jwt-auth:
-        enabled: false
-        # should we automatically create users on presentation of a valid token?
-        autocreate: true
-        # any of these token definitions can be accepted, allowing for key rotation
+        enabled: false 
+        # 是否在收到有效令牌时自动创建用户?
+        autocreate: true 
+        # 可接受任意令牌定义(支持密钥轮换)
         tokens:
             -
-                algorithm: "hmac" # either 'hmac', 'rsa', or 'eddsa' (ed25519)
-                # hmac takes a symmetric key, rsa and eddsa take PEM-encoded public keys;
-                # either way, the key can be specified either as a YAML string:
+                algorithm: "hmac" # 可选 'hmac', 'rsa' 或 'eddsa' (ed25519)
+                # hmac 使用对称密钥, rsa/eddsa 使用 PEM 编码公钥:
                 key: "nANiZ1De4v6WnltCHN2H7Q"
-                # or as a path to the file containing the key:
-                #key-file: "jwt_pubkey.pem"
-                # list of JWT claim names to search for the user's account name (make sure the format
-                # is what you expect, especially if using "sub"):
+                # 或指定密钥文件路径:
+                #key-file: "jwt_pubkey.pem" 
+                # 用于提取用户账户名的 JWT 声明字段列表(注意格式, 尤其是使用 "sub" 时):
                 account-claims: ["preferred_username"]
-                # if a claim is formatted as an email address, require it to have the following domain,
-                # and then strip off the domain and use the local-part as the account name:
-                #strip-domain: "example.com"
-
-# channel options
+                # 若声明为邮箱地址, 要求其域名并剥离域名后使用本地部分作为账户名:
+                #strip-domain: "example.com" 
+ 
+# 频道选项 
 channels:
-    # modes that are set when new channels are created
-    # +n is no-external-messages, +t is op-only-topic,
-    # +C is no CTCPs (besides ACTION)
-    # see  /QUOTE HELP cmodes  for more channel modes
-    default-modes: +ntC
-
-    # how many channels can a client be in at once?
-    max-channels-per-client: 100
-
-    # if this is true, new channels can only be created by operators with the
-    # `chanreg` operator capability
-    operator-only-creation: false
-
-    # channel registration - requires an account
+    # 新频道创建时的默认模式 
+    # +n 为禁止外部消息, +t 为仅 OP 可修改主题 
+    # +C 为禁止 CTCP(除 ACTION 外)
+    default-modes: +ntC 
+ 
+    # 单个客户端最多可加入的频道数 
+    max-channels-per-client: 100 
+ 
+    # 若为 true, 只有拥有 `chanreg` 权限的操作员可创建新频道 
+    operator-only-creation: false 
+ 
+    # 频道注册(需账户)
     registration:
-        # can users register new channels?
-        enabled: true
-
-        # restrict new channel registrations to operators only?
-        # (operators can then transfer channels to regular users using /CS TRANSFER)
-        operator-only: false
-
-        # how many channels can each account register?
-        max-channels-per-account: 15
-
-    # as a crude countermeasure against spambots, anonymous connections younger
-    # than this value will get an empty response to /LIST (a time period of 0 disables)
-    list-delay: 0s
-
-    # INVITE to an invite-only channel expires after this amount of time
-    # (0 or omit for no expiration):
-    invite-expiration: 24h
-
-    # channels that new clients will automatically join. this should be used with
-    # caution, since traditional IRC users will likely view it as an antifeature.
-    # it may be useful in small community networks that have a single "primary" channel:
+        # 用户是否可以注册新频道?
+        enabled: true 
+        # 是否仅限操作员注册新频道?(操作员可通过 /CS TRANSFER 转移频道给普通用户)
+        operator-only: false 
+        # 单个账户可注册的最大频道数 
+        max-channels-per-account: 15 
+ 
+    # 简易反垃圾机器人措施:匿名连接在此时间内通过 /LIST 仅返回空响应(0 表示禁用)
+    list-delay: 0s 
+ 
+    # 邀请进入邀请制频道的有效期(0 或省略表示永不过期):
+    invite-expiration: 24h 
+ 
+    # 新客户端自动加入的频道。需谨慎使用(传统 IRC 用户可能视为缺陷)
+    # 适用于有单一"主频道"的小型社区网络:
     #auto-join:
     #    - "#lounge"
-
-# operator classes:
-# an operator has a single "class" (defining a privilege level), which can include
-# multiple "capabilities" (defining privileged actions they can take). all
-# currently available operator capabilities are associated with either the
-# 'chat-moderator' class (less privileged) or the 'server-admin' class (full
-# privileges) below: you can mix and match to create new classes.
+ 
+# 操作员类别:
+# 操作员属于单一"类别"(权限等级), 可包含多个"能力"(特权操作)
+# 所有可用操作员能力均属于 'chat-moderator'(低权限)或 'server-admin'(全权限)类 
 oper-classes:
-    # chat moderator: can ban/unban users from the server, join channels,
-    # fix mode issues and sort out vhosts.
+    # 聊天监管员:可封禁/解封用户、加入频道、修复模式问题和虚拟主机 
     "chat-moderator":
-        # title shown in WHOIS
-        title: Chat Moderator
-
-        # capability names
+        # WHOIS 显示的职称 
+        title: Chat_moderator 
+        # 能力列表 
         capabilities:
-            - "kill"      # disconnect user sessions
-            - "ban"       # ban IPs, CIDRs, NUH masks, and suspend accounts (UBAN / DLINE / KLINE)
-            - "nofakelag" # exempted from "fakelag" restrictions on rate of message sending
-            - "relaymsg"  # use RELAYMSG in any channel (see the `relaymsg` config block)
-            - "vhosts"    # add and remove vhosts from users
-            - "sajoin"    # join arbitrary channels, including private channels
-            - "samode"    # modify arbitrary channel and user modes
-            - "snomasks"  # subscribe to arbitrary server notice masks
-            - "roleplay"  # use the (deprecated) roleplay commands in any channel
-
-    # server admin: has full control of the ircd, including nickname and
-    # channel registrations
+            - "kill"      # 断开用户会话 
+            - "ban"       # 封禁 IP/CIDR/NUH 掩码和暂停账户(UBAN/DLINE/KLINE)
+            - "nofakelag" # 豁免消息发送速率的 "fakelag" 限制 
+            - "relaymsg"  # 在任何频道使用 RELAYMSG(见 `relaymsg` 配置块)
+            - "vhosts"    # 管理用户虚拟主机 
+            - "sajoin"    # 加入任意频道(包括私密频道)
+            - "samode"    # 修改任意频道和用户模式 
+            - "snomasks"  # 订阅任意服务器通知掩码 
+            - "roleplay"  # 在任何频道使用(已弃用)角色扮演命令 
+ 
+    # 服务器管理员:完全控制 IRC 服务(包括昵称和频道注册)
     "server-admin":
-        # title shown in WHOIS
-        title: Server Admin
-
-        # oper class this extends from
+        # WHOIS 显示的职称 
+        title: Server_admin 
+        # 继承自的类别 
         extends: "chat-moderator"
-
-        # capability names
+        # 能力列表 
         capabilities:
-            - "rehash"       # rehash the server, i.e. reload the config at runtime
-            - "accreg"       # modify arbitrary account registrations
-            - "chanreg"      # modify arbitrary channel registrations
-            - "history"      # modify or delete history messages
-            - "defcon"       # use the DEFCON command (restrict server capabilities)
-            - "massmessage"  # message all users on the server
-
-# ircd operators
+            - "rehash"       # 重载服务器配置(运行时重新加载)
+            - "accreg"       # 管理任意账户注册 
+            - "chanreg"      # 管理任意频道注册 
+            - "history"      # 修改或删除历史消息 
+            - "defcon"       # 使用 DEFCON 命令(限制服务器功能)
+            - "massmessage"  # 向全服用户发送消息 
+ 
+# IRC 服务操作员 
 opers:
-    # default operator named 'admin'; log in with /OPER admin <password>
-    admin:
-        # which capabilities this oper has access to
+    # 默认操作员 'arkfuture':通过 /OPER admin <密码> 登录 
+    arkfuture:
+        # 所属权限类别 
         class: "server-admin"
-
-        # traditionally, operator status is visible to unprivileged users in
-        # WHO and WHOIS responses. this can be disabled with 'hidden'.
-        hidden: true
-
-        # custom whois line (if `hidden` is enabled, visible only to other operators)
-        whois-line: is the server administrator
-
-        # custom hostname (ignored if `hidden` is enabled)
-        #vhost: "staff"
-
-        # modes are modes to auto-set upon opering-up. uncomment this to automatically
-        # enable snomasks ("server notification masks" that alert you to server events;
-        # see `/quote help snomasks` while opered-up for more information):
-        #modes: +is acdjknoqtuxv
-
-        # operators can be authenticated either by password (with the /OPER command),
-        # or by certificate fingerprint, or both. if a password hash is set, then a
-        # password is required to oper up (e.g., /OPER dan mypassword). to generate
-        # the hash, use `ergo genpasswd`.
+        # 是否对普通用户隐藏操作员状态(通过 WHO/WHOIS)
+        hidden: true 
+        # 自定义 WHOIS 行(若隐藏则仅其他操作员可见)
+        whois-line: 服务器管理员 
+        # 自定义主机名(隐藏时无效)
+        vhost: "arkfuture"
+        # 操作员登录时自动设置的模式(启用服务器通知掩码)
+        modes: +is
+        # 认证方式:密码(通过 /OPER 命令)或证书指纹 
         password: "$2a$04$0123456789abcdef0123456789abcdef0123456789abcdef01234"
-
-        # if a SHA-256 certificate fingerprint is configured here, then it will be
-        # required to /OPER. if you comment out the password hash above, then you can
-        # /OPER without a password.
+        # 若配置 SHA-256 证书指纹, 则必须通过 /OPER 验证 
         #certfp: "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"
-        # if 'auto' is set (and no password hash is set), operator permissions will be
-        # granted automatically as soon as you connect with the right fingerprint.
-        #auto: true
+        # 若设为 'auto'(且无密码), 连接时使用正确指纹即自动授予操作员权限 
+        #auto: true 
+ 
+    # 新增管理员可以拷贝上面arkfuture管理员并粘贴修改
 
-    # example of a moderator named 'alice'
-    # (log in with /OPER alice <password>):
-    #alice:
-    #    class: "chat-moderator"
-    #    whois-line: "can help with moderation issues!"
-    #    password: "$2a$04$0123456789abcdef0123456789abcdef0123456789abcdef01234"
 
-# logging, takes inspiration from Insp
+# 日志记录, 灵感来自Insp 
 logging:
     -
-        # how to log these messages
+        # 如何记录这些消息 
         #
-        #   file    log to a file
-        #   stdout  log to stdout
-        #   stderr  log to stderr
-        #   (you can specify multiple methods, e.g., to log to both stderr and a file)
-        method: stderr
-
-        # filename to log to, if file method is selected
-        # filename: ircd.log
-
-        # type(s) of logs to keep here. you can use - to exclude those types
+        #   file    记录到文件 
+        #   stdout  记录到标准输出 
+        #   stderr  记录到标准错误 
+        #   - (可以指定多种方法, 例如同时记录到stderr和文件)
+        method: file
+ 
+        # 要记录到的文件名(如果选择file方法)
+        filename: ircd.log  
+ 
+        # 要保留的日志类型。可使用-号排除特定类型 
         #
-        # exclusions take precedent over inclusions, so if you exclude a type it will NEVER
-        # be logged, even if you explicitly include it
+        # 排除规则优先于包含规则, 因此排除的类型将永远不会被记录 
         #
-        # useful types include:
-        #   *               everything (usually used with excluding some types below)
-        #   server          server startup, rehash, and shutdown events
-        #   accounts        account registration and authentication
-        #   channels        channel creation and operations
-        #   opers           oper actions, authentication, etc
-        #   services        actions related to NickServ, ChanServ, etc.
-        #   internal        unexpected runtime behavior, including potential bugs
-        #   userinput       raw lines sent by users
-        #   useroutput      raw lines sent to users
+        # 常用类型包括:
+        #   *               所有内容(通常与排除某些类型配合使用)
+        #   server          服务器启动、重载和关闭事件 
+        #   accounts        账号注册和认证 
+        #   channels        频道创建和操作 
+        #   opers           IRC管理员操作和认证 
+        #   services        与NickServ、ChanServ等相关操作 
+        #   internal        意外的运行时行为(包括潜在错误)
+        #   userinput       用户发送的原始数据 
+        #   useroutput      发送给用户的原始数据 
         type: "* -userinput -useroutput"
-
-        # one of: debug info warn error
-        level: info
-    #-
-    #   # example of a file log that avoids logging IP addresses
-    #   method: file
-    #   filename: ircd.log
-    #   type: "* -userinput -useroutput -connect-ip"
-    #   level: debug
-
-# debug options
+ 
+        # 级别选择:debug info warn error 
+        level: info 
+ 
+# 调试选项 
 debug:
-    # when enabled, Ergo will attempt to recover from certain kinds of
-    # client-triggered runtime errors that would normally crash the server.
-    # this makes the server more resilient to DoS, but could result in incorrect
-    # behavior. deployments that would prefer to "start from scratch", e.g., by
-    # letting the process crash and auto-restarting it with systemd, can set
-    # this to false.
-    recover-from-errors: true
-
-    # optionally expose a pprof http endpoint: https://golang.org/pkg/net/http/pprof/
-    # it is strongly recommended that you don't expose this on a public interface;
-    # if you need to access it remotely, you can use an SSH tunnel.
-    # set to `null`, "", leave blank, or omit to disable
+    # 启用时, Ergo将尝试从某些客户端触发的运行时错误中恢复(通常会崩溃服务器)
+    # 这增强了抗DoS能力, 但可能导致异常行为。建议使用systemd自动重启的场景设为false 
+    recover-from-errors: true 
+ 
+    # 是否启用pprof性能分析端点:https://golang.org/pkg/net/http/pprof/ 
+    # 强烈建议不要在公网暴露, 可通过SSH隧道远程访问 
+    # 设为null、空字符串或留空表示禁用 
     # pprof-listener: "localhost:6060"
-
-# lock file preventing multiple instances of Ergo from accidentally being
-# started at once. comment out or set to the empty string ("") to disable.
-# this path is relative to the working directory; if your datastore.path
-# is absolute, you should use an absolute path here as well.
-lock-file: "ircd.lock"
-
-# datastore configuration
+ 
+# 防止Ergo多实例运行的锁文件(设置为空字符串""禁用)
+# 路径相对于工作目录, 建议与datastore.path 保持相同类型(绝对/相对路径)
+lock-file: "ircd.lock" 
+ 
+# 数据存储配置 
 datastore:
-    # path to the database file (used to store account and channel registrations):
-    path: ircd.db
-
-    # if the database schema requires an upgrade, `autoupgrade` will attempt to
-    # perform it automatically on startup. the database will be backed
-    # up, and if the upgrade fails, the original database will be restored.
-    autoupgrade: true
-
-    # connection information for MySQL (currently only used for persistent history):
+    # 数据库文件路径(存储账号和频道注册信息):
+    path: ircd.db  
+ 
+    # 自动升级数据库架构(失败时自动回滚备份)
+    autoupgrade: true 
+ 
+    # MySQL连接配置(当前仅用于历史记录持久化):
     mysql:
-        enabled: false
+        enabled: false 
         host: "localhost"
-        port: 3306
-        # if socket-path is set, it will be used instead of host:port
-        #socket-path: "/var/run/mysqld/mysqld.sock"
+        port: 3306 
+        # 优先使用socket连接(若设置则覆盖host:port)
+        #socket-path: "/var/run/mysqld/mysqld.sock" 
         user: "ergo"
         password: "hunter2"
         history-database: "ergo_history"
-        timeout: 3s
-        max-conns: 4
-        # this may be necessary to prevent middleware from closing your connections:
-        #conn-max-lifetime: 180s
-
-# languages config
+        timeout: 3s 
+        max-conns: 4 
+        # 防止中间件关闭连接(建议值):
+        #conn-max-lifetime: 180s 
+ 
+# 多语言配置 
 languages:
-    # whether to load languages
-    enabled: true
-
-    # default language to use for new clients
-    # 'en' is the default English language in the code
-    default: en
-
-    # which directory contains our language files
-    path: languages
-
-# limits - these need to be the same across the network
+    # 是否加载多语言支持 
+    enabled: true 
+ 
+    # 新客户端默认语言('en'表示代码内置的英文)
+    default: en 
+ 
+    # 语言文件存储目录 
+    path: languages 
+ 
+# 全网络必须统一的限制参数 
 limits:
-    # nicklen is the max nick length allowed
-    nicklen: 32
-
-    # identlen is the max ident length allowed
-    identlen: 20
-
-    # realnamelen is the maximum realname length allowed
-    realnamelen: 150
-
-    # channellen is the max channel length allowed
-    channellen: 64
-
-    # awaylen is the maximum length of an away message
-    awaylen: 390
-
-    # kicklen is the maximum length of a kick message
-    kicklen: 390
-
-    # topiclen is the maximum length of a channel topic
-    topiclen: 390
-
-    # maximum number of monitor entries a client can have
-    monitor-entries: 100
-
-    # whowas entries to store
-    whowas-entries: 100
-
-    # maximum length of channel lists (beI modes)
-    chan-list-modes: 100
-
-    # maximum number of messages to accept during registration (prevents
-    # DoS / resource exhaustion attacks):
-    registration-messages: 1024
-
-    # message length limits for the new multiline cap
+    # 最大昵称长度 
+    nicklen: 32 
+ 
+    # 最大用户标识长度 
+    identlen: 20 
+ 
+    # 最大真实姓名长度 
+    realnamelen: 150 
+ 
+    # 最大频道名称长度 
+    channellen: 64 
+ 
+    # 最大离开消息长度 
+    awaylen: 390 
+ 
+    # 最大踢人消息长度 
+    kicklen: 390 
+ 
+    # 最大频道主题长度 
+    topiclen: 390 
+ 
+    # 单个客户端最大监控条目数 
+    monitor-entries: 100 
+ 
+    # 历史WhoWas记录数量 
+    whowas-entries: 100 
+ 
+    # 频道列表模式(beI)最大条目数 
+    chan-list-modes: 100 
+ 
+    # 注册期间最大接收消息数(防DoS攻击)
+    registration-messages: 1024 
+ 
+    # 多行消息限制 
     multiline:
-        max-bytes: 4096 # 0 means disabled
-        max-lines: 100  # 0 means no limit
-
-# fakelag: prevents clients from spamming commands too rapidly
+        max-bytes: 4096 # 0表示禁用 
+        max-lines: 100  # 0表示无限制 
+ 
+# 防刷屏机制 
 fakelag:
-    # whether to enforce fakelag
-    enabled: true
-
-    # time unit for counting command rates
-    window: 1s
-
-    # clients can send this many commands without fakelag being imposed
-    burst-limit: 5
-
-    # once clients have exceeded their burst allowance, they can send only
-    # this many commands per `window`:
-    messages-per-window: 2
-
-    # client status resets to the default state if they go this long without
-    # sending any commands:
-    cooldown: 2s
-
-    # exempt a certain number of command invocations per session from fakelag;
-    # this is to speed up "resynchronization" of client state during reattach
+    # 是否启用防刷屏 
+    enabled: true 
+ 
+    # 命令速率统计时间窗口 
+    window: 1s 
+ 
+    # 突发命令允许数量 
+    burst-limit: 5 
+ 
+    # 超限后每窗口允许消息数 
+    messages-per-window: 2 
+ 
+    # 无命令发送后的冷却重置时间 
+    cooldown: 2s 
+ 
+    # 特定命令的初始豁免次数 
     command-budgets:
-        "CHATHISTORY": 16
-        "MARKREAD":    16
-        "MONITOR":     1
-        "WHO":         4
-        "WEBPUSH":     1
-
-# the roleplay commands are semi-standardized extensions to IRC that allow
-# sending and receiving messages from pseudo-nicknames. this can be used either
-# for actual roleplaying, or for bridging IRC with other protocols.
+        "CHATHISTORY": 16 
+        "MARKREAD":    16 
+        "MONITOR":     1 
+        "WHO":         4 
+        "WEBPUSH":     1 
+ 
+# 角色扮演命令扩展(需频道和客户端单独启用+E模式)
 roleplay:
-    # are roleplay commands enabled at all? (channels and clients still have to
-    # opt in individually with the +E mode)
-    enabled: false
-
-    # require the "roleplay" oper capability to send roleplay messages?
-    require-oper: false
-
-    # require channel operator permissions to send roleplay messages?
-    require-chanops: false
-
-    # add the real nickname, in parentheses, to the end of every roleplay message?
-    add-suffix: true
-
-# external services can integrate with the ircd using JSON Web Tokens (https://jwt.io).
-# in effect, the server can sign a token attesting that the client is present on
-# the server, is a member of a particular channel, etc.
+    # 是否全局启用角色扮演命令 
+    enabled: true 
+ 
+    # 需要管理员权限才能发送角色消息 
+    require-oper: false 
+ 
+    # 需要频道管理员权限才能发送角色消息 
+    require-chanops: false 
+ 
+    # 在角色消息后附加真实昵称(括号内)
+    add-suffix: true 
+ 
+# 基于JWT的外部服务集成 
 extjwt:
-    # # default service config (for `EXTJWT #channel`).
-    # # expiration time for the token:
-    # expiration: 45s
-    # # you can configure tokens to be signed either with HMAC and a symmetric secret:
+    # # 默认服务配置(`EXTJWT #channel`)
+    # # JWT令牌有效期 
+    # expiration: 45s 
+    # # HMAC对称密钥签名方式:
     # secret: "65PHvk0K1_sM-raTsCEhatVkER_QD8a0zVV8gG2EWcI"
-    # # or with an RSA private key:
-    # #rsa-private-key-file: "extjwt.pem"
-
-    # # named services (for `EXTJWT #channel service_name`):
+    # # 或RSA私钥签名方式:
+    # #rsa-private-key-file: "extjwt.pem" 
+ 
+    # # 命名服务配置(`EXTJWT #channel service_name`)
     # services:
     #     "jitsi":
-    #         expiration: 30s
+    #         expiration: 30s 
     #         secret: "qmamLKDuOzIzlO8XqsGGewei_At11lewh6jtKfSTbkg"
-
-# history message storage: this is used by CHATHISTORY, HISTORY, znc.in/playback,
-# various autoreplay features, and the resume extension
+ 
+# 历史消息存储(用于CHATHISTORY/HISTORY/自动回放等功能)
 history:
-    # should we store messages for later playback?
-    # by default, messages are stored in RAM only; they do not persist
-    # across server restarts. however, you may want to understand how message
-    # history interacts with the GDPR and/or any data privacy laws that apply
-    # in your country and the countries of your users.
-    enabled: true
-
-    # how many channel-specific events (messages, joins, parts) should be tracked per channel?
-    channel-length: 2048
-
-    # how many direct messages and notices should be tracked per user?
-    client-length: 256
-
-    # how long should we try to preserve messages?
-    # if `autoresize-window` is 0, the in-memory message buffers are preallocated to
-    # their maximum length. if it is nonzero, the buffers are initially small and
-    # are dynamically expanded up to the maximum length. if the buffer is full
-    # and the oldest message is older than `autoresize-window`, then it will overwrite
-    # the oldest message rather than resize; otherwise, it will expand if possible.
-    autoresize-window: 3d
-
-    # number of messages to automatically play back on channel join (0 to disable):
-    autoreplay-on-join: 0
-
-    # maximum number of CHATHISTORY messages that can be
-    # requested at once (0 disables support for CHATHISTORY)
-    chathistory-maxmessages: 1000
-
-    # maximum number of messages that can be replayed at once during znc emulation
-    # (znc.in/playback, or automatic replay on initial reattach to a persistent client):
-    znc-maxmessages: 2048
-
-    # options to delete old messages, or prevent them from being retrieved
+    # 是否启用消息存储(默认内存存储, 重启后丢失)
+    enabled: true 
+ 
+    # 单个频道存储事件数(消息/加入/离开等)
+    channel-length: 2048 
+ 
+    # 单个用户存储私信/通知数 
+    client-length: 256 
+ 
+    # 动态调整存储窗口(0表示预分配最大长度)
+    autoresize-window: 3d 
+ 
+    # 加入频道时自动回放消息数(0禁用)
+    autoreplay-on-join: 0 
+ 
+    # 单次CHATHISTORY最大请求消息数(0禁用)
+    chathistory-maxmessages: 1000 
+ 
+    # ZNC兼容模式单次回放最大消息数 
+    znc-maxmessages: 2048 
+ 
+    # 历史消息访问限制 
     restrictions:
-        # if this is set, messages older than this cannot be retrieved by anyone
-        # (and will eventually be deleted from persistent storage, if that's enabled)
-        expire-time: 1w
-
-        # this restricts access to channel history (it can be overridden by channel
-        # owners). options are: 'none' (no restrictions), 'registration-time'
-        # (logged-in users cannot retrieve messages older than their account
-        # registration date, and anonymous users cannot retrieve messages older than
-        # their sign-on time, modulo the grace-period described below), and
-        # 'join-time' (users cannot retrieve messages older than the time they
-        # joined the channel, so only always-on clients can view history).
+        # 消息过期时间(过期后不可检索)
+        expire-time: 1w 
+ 
+        # 历史查询限制策略:'none'/'registration-time'/'join-time'
         query-cutoff: 'none'
-
-        # if query-cutoff is set to 'registration-time', this allows retrieval
-        # of messages that are up to 'grace-period' older than the above cutoff.
-        # if you use 'registration-time', this is recommended to allow logged-out
-        # users to query history after disconnections.
-        grace-period: 1h
-
-    # options to store history messages in a persistent database (currently only MySQL).
-    # in order to enable any of this functionality, you must configure a MySQL server
-    # in the `datastore.mysql` section. enabling persistence overrides the history
-    # size limits above (`channel-length`, `client-length`, etc.); persistent
-    # history has no limits other than those imposed by expire-time.
+ 
+        # 注册时间策略下的宽限期 
+        grace-period: 1h 
+ 
+    # MySQL持久化历史存储 
     persistent:
-        enabled: false
-
-        # store unregistered channel messages in the persistent database?
-        unregistered-channels: false
-
-        # for a registered channel, the channel owner can potentially customize
-        # the history storage setting. as the server operator, your options are
-        # 'disabled' (no persistent storage, regardless of per-channel setting),
-        # 'opt-in', 'opt-out', and 'mandatory' (force persistent storage, ignoring
-        # per-channel setting):
+        enabled: false 
+        # 是否存储未注册频道消息 
+        unregistered-channels: false 
+        # 注册频道存储策略:disabled/opt-in/opt-out/mandatory 
         registered-channels: "opt-out"
-
-        # direct messages are only stored in the database for logged-in clients;
-        # you can control how they are stored here (same options as above).
-        # if you enable this, strict nickname reservation is strongly recommended
-        # as well.
+        # 私信存储策略 
         direct-messages: "opt-out"
-
-    # options to control how messages are stored and deleted:
+ 
+    # 消息保留策略 
     retention:
-        # allow users to delete their own messages from history,
-        # and channel operators to delete messages in their channel?
-        allow-individual-delete: false
-
-        # if persistent history is enabled, create additional index tables,
-        # allowing deletion of JSON export of an account's messages. this
-        # may be needed for compliance with data privacy regulations.
-        enable-account-indexing: false
-
-    # options to control storage of TAGMSG
+        # 允许用户/频道管理员删除消息 
+        allow-individual-delete: false 
+        # 为GDPR合规启用账号消息索引 
+        enable-account-indexing: false 
+ 
+    # TAGMSG存储规则 
     tagmsg-storage:
-        # by default, should TAGMSG be stored?
-        default: false
-
-        # if `default` is false, store TAGMSG containing any of these tags:
+        # 默认是否存储TAGMSG 
+        default: false 
+        # 例外存储的标签列表 
         whitelist:
             - "+draft/react"
             - "+react"
-
-        # if `default` is true, don't store TAGMSG containing any of these tags:
+        # 例外排除的标签列表(当default=true时)
         #blacklist:
         #    - "+draft/typing"
         #    - "typing"
-
-# whether to allow customization of the config at runtime using environment variables,
-# e.g., ERGO__SERVER__MAX_SENDQ=128k. see the manual for more details.
-allow-environment-overrides: true
-
-# experimental support for mobile push notifications
-# see the manual for potential security, privacy, and performance implications.
-# DO NOT enable if you are running a Tor or I2P hidden service (i.e. one
-# with no public IP listeners, only Tor/I2P listeners).
+ 
+# 是否允许通过环境变量覆盖配置(格式:ERGO__SECTION__KEY=value)
+allow-environment-overrides: true 
+ 
+# 移动推送通知实验功能(Tor/I2P隐藏服务请勿启用)
 webpush:
-    # are push notifications enabled at all?
-    enabled: false
-    # request timeout for POST'ing the http notification
-    timeout: 10s
-    # delay sending the notification for this amount of time, then suppress it
-    # if the client sent MARKREAD to indicate that it was read on another device
-    delay: 0s
-    # subscriber field for the VAPID JWT authorization:
-    #subscriber: "https://your-website.com/"
-    # maximum number of push subscriptions per user
-    max-subscriptions: 4
-    # expiration time for a push subscription; it must be renewed within this time
-    # by the client reconnecting to IRC. we also detect whether the client is no longer
-    # successfully receiving push messages.
-    expiration: 14d
+    # 全局推送开关 
+    enabled: false 
+    # HTTP通知请求超时 
+    timeout: 10s 
+    # 延迟发送等待MARKREAD标记的时间 
+    delay: 0s 
+    # VAPID JWT的订阅者标识 
+    #subscriber: "https://your-website.com/" 
+    # 单个用户最大订阅数 
+    max-subscriptions: 4 
+    # 推送订阅有效期(需定期续订)
+    expiration: 14d 
