@@ -251,9 +251,9 @@ accounts:
                 # 是否启用邮件密码重置 
                 enabled: false 
                 # 重复发送邮件的最小间隔 
-                cooldown: 1小时 
+                cooldown: 1h 
                 # 重置链接有效期 
-                timeout: 1天 
+                timeout: 1d 
  
     # 限制账户登录尝试(防止密码猜测或针对服务器的 DoS 攻击)
     login-throttling:
