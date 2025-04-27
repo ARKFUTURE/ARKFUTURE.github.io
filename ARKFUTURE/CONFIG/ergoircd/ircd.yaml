@@ -545,7 +545,7 @@ datastore:
 # 多语言配置
 languages:
     # 是否加载多语言支持
-    enabled: true3
+    enabled: true
 
     # 新客户端默认语言('en'表示代码内置的英文)
     default: en
