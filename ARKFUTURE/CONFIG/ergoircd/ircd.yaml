@@ -312,7 +312,7 @@ accounts:
     # 多客户端控制(类似 ZNC 的 Bouncer 功能)
     multiclient:
         # 禁用时每个连接必须使用独立昵称(传统 IRC 行为)
-        enabled: false
+        enabled: true
         # 禁用时客户端需通过 nickserv 或 cap 系统选择启用 Bouncer 功能
         allowed-by-default: true
         # 允许无活跃连接时仍保留客户端。可选值:"disabled", "opt-in", "opt-out", "mandatory"
@@ -320,7 +320,7 @@ accounts:
         # 无活跃连接时标记 always-on 客户端为离开状态:
         auto-away: "opt-in"
         # 若 always-on 客户端超过此时间未连接则从服务器退出(0 或省略表示永不过期):
-        always-on-expiration: 90d
+        always-on-expiration: 30d
 
     # 通过 HostServ 服务分配虚拟主机(替代用户主机名/IP 的字符串)
     vhosts:
