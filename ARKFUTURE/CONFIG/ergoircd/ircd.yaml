@@ -85,7 +85,7 @@ server:
  
     # 允许使用 PROXY 命令的 IP 地址/CIDR 范围来源
     proxy-allowed-from:
-        - localhost 
+        # - localhost 
 
     webirc:
         -   
@@ -93,7 +93,7 @@ server:
             certfp: "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"
             password: "$2a$04$abcdef0123456789abcdef0123456789abcdef0123456789abcde"
             hosts:
-                - localhost 
+                # - localhost 
 
             accept-hostname: false 
  
@@ -122,7 +122,7 @@ server:
         cidr-len-ipv6: 64 
         # 豁免连接限制的IP/网络列表 
         exempted:
-            - "localhost"
+            # - "localhost"
         # 特定IP/网络的自定义限制
         custom-limits:
             #"irccloud":
@@ -279,10 +279,10 @@ accounts:
     require-sasl:
         # 若启用, 所有客户端必须在连接时通过 SASL 认证 
         # 警告:私有服务器必须同时将 accounts.registration.enabled  设为 false, 以防止非管理员注册账户 
-        enabled: false 
+        enabled: true 
         # 豁免账户要求的 IP/CIDR 
         exempted:
-            - "localhost"
+            # - "localhost"
  
     # 昵称保留策略(昵称如何与账户关联)
     nick-reservation:
@@ -333,8 +333,7 @@ accounts:
  
     # 用户连接时默认设置的模式 
     # 未设置时无默认用户模式 
-    # +i 为隐身模式(隐藏用户的频道于 WHOIS 回复中)
-    default-user-modes: +i 
+    default-user-modes:  
  
     # 通过子进程调用的可插拔认证机制(详见手册编写认证插件脚本)
     auth-script:
