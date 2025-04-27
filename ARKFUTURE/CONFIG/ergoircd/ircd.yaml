@@ -95,7 +95,6 @@ server:
             password: "$2a$04$abcdef0123456789abcdef0123456789abcdef0123456789abcde"
             hosts:
                 # - localhost
-
             accept-hostname: false
 
     max-sendq: 96k
