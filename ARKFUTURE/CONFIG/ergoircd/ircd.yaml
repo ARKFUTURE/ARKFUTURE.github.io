@@ -113,7 +113,7 @@ server:
         # 统计连接的时间窗口长度
         window: 10m 
         # 在时间窗口内允许的最大新连接数
-        max-connections-per-window: 32 
+        max-connections-per-window: 20 
          # IPv4的CIDR前缀长度
         cidr-len-ipv4: 32 
         # IPv6的CIDR前缀长度
@@ -153,7 +153,7 @@ server:
         # 是否为"始终在线"客户端生成唯一伪域名 
         enabled-for-always-on: true 
         # 伪域名后缀
-        netname: "irc"
+        netname: "/AFENet"
         # IPv4地址的CIDR掩码长度
         cidr-len-ipv4: 32 
         # IPv6地址的CIDR掩码长度 
@@ -549,7 +549,7 @@ languages:
     enabled: true 
  
     # 新客户端默认语言('en'表示代码内置的英文)
-    default: zh-CN 
+    default: en 
  
     # 语言文件存储目录 
     path: languages 
