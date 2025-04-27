@@ -43,7 +43,7 @@ server:
 
     # tor监听配置
     tor-listeners:
-        require-sasl: false 
+        require-sasl: true 
         vhost: "" 
         max-connections: 64 
         throttle-duration: 10m 
@@ -195,7 +195,7 @@ accounts:
             # 时间窗口 
             duration: 10m 
             # 窗口期内允许的最大尝试次数 
-            max-attempts: 30 
+            max-attempts: 10 
  
         # 账户密码使用的 bcrypt 计算成本 
         # (注意 bcrypt 库允许的最低值为 4)
