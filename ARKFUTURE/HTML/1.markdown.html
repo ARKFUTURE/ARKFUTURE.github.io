@@ -981,24 +981,53 @@ body {padding: 2em;}
   </head>
   <body>
   <div class="markdown-body">
-    <h1>安装</h1>
+    <ul>
+<li>您可以查看我们的配置文件, 可以为我们的配置文件提出<strong>安全相关的建议和意见</strong>, 我们会为了IRC的<strong>匿名性/安全性积极采纳</strong></li>
+</ul>
+<h1>安装 (对于稳定的Debian12)</h1>
+<h1># INSPIRCD配置:</h1>
 <ul>
 <li>官方deb包安装: <a href="https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/install.sh">https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/install.sh</a></li>
-<li>全插件deb包安装: <a href="https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh">https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh</a></li>
-<li>编译安装：<a href="https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/make.sh">https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/make.sh</a></li>
-<li>更新配置文件: <a href="https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh">https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/config.sh</a></li>
-<li></li>
-<li>ARKFUTURE 服务器安装+arkfuture配置(此项目使用了数据库服务,使用了arkfuture专属配置文件,并且使用了ssl): <a href="https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh">https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh</a></li>
-<li></li>
-<li>我们在测试配置时 会添加<code> &lt;die reason="服务器正在维护，请稍后再启动。"&gt;</code> 标签到服务器配置中</li>
-<li>测试完成后会及时删除, 这时请您稍后再更新</li>
-<li>
+<li>ARKFUTURE全插件deb包安装: <a href="https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh">https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh</a></li>
+<li>ARKFUTURE全插件编译安装(请自行修改编译脚本): <a href="https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/make.sh">https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/make.sh</a></li>
+<li>ARKFUTURE 全插件服务器安装+arkfuture配置(此项目使用了第三方模块:数据库,ssl,sql认证等)(主要更新): <a href="https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh">https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh</a></li>
+</ul>
+<h1># ERGOIRCD配置:</h1>
 <ul>
-<li>当 InspIRCd 启动时，如果检测到配置文件中存在 <code>&lt;die&gt;</code> 标签，服务器会立即停止启动，并向日志或控制台输出配置中指定的消息。</li>
+<li><a href="https://arkfuture.github.io/ARKFUTURE/CONFIG/ergoircd/ircd.yaml">https://arkfuture.github.io/ARKFUTURE/CONFIG/ergoircd/ircd.yaml</a></li>
 </ul>
-</li>
-</ul>
-<h1>问题及相关帮助</h1>
+<h1>端口</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>端口</th><th>配置</th></tr></thead><tbody><tr><td>6667-6669</td><td>客户端, 明文传输</td></tr><tr><td>6697</td><td>客户端, TLS传输</td></tr><tr><td>7000</td><td>服务器, TLS传输</td></tr><tr><td>6680</td><td>websocket,TLS传输</td></tr><tr><td>8081</td><td>httpd,TLS传输</td></tr></tbody></table>
+<h1>说明/问题及相关帮助</h1>
 <ul>
 <li>1 systemctl 问题</li>
 </ul>
@@ -1011,21 +1040,27 @@ body {padding: 2em;}
 </span><span class="code-line line-number" line="7">systemctl daemon-reload
 </span><span class="code-line line-number" line="8">
 </span><span class="code-line line-number" line="9">2.对于无systemctl文件:
-</span><span class="code-line line-number" line="10">我们团队直接使用 root用户 来执行 启动inspircd [root@hostname:~# inrpircd]
-</span><span class="code-line line-number" line="11">并使用 [root@hostname:~# pkill -f inspircd] 来关闭程序
+</span><span class="code-line line-number" line="10">
+</span><span class="code-line line-number" line="11">使用 root用户 来启动
+</span><span class="code-line line-number" line="12">[root@hostname:~# inrpircd]
+</span><span class="code-line line-number" line="13">关闭程序
+</span><span class="code-line line-number" line="14">[root@hostname:~# pkill -f inspircd]
+</span><span class="code-line line-number" line="15">
+</span><span class="code-line line-number" line="16">需要 无root启动 则
+</span><span class="code-line line-number" line="17">[root@hostname:~# sudo -u irc inspircd]
+</span><span class="code-line line-number" line="18">关闭程序
+</span><span class="code-line line-number" line="19">[root@hostname:~# pkill -f inspircd]
 </span></code></pre>
 <ul>
-<li>2 各种名词及解释</li>
+<li>2 管理员</li>
 </ul>
-<pre><code class="code-highlight"><span class="code-line line-number" line="1">NetAdmin：服务器管理
-</span><span class="code-line line-number" line="2">GlobalOp：服务器操作员
-</span><span class="code-line line-number" line="3">Helper：帮助员
-</span><span class="code-line line-number" line="4">管理员配置 都存放在 /etc/inspircd/conf/opers.conf
+<pre><code class="code-highlight"><span class="code-line line-number" line="1">管理员配置 都存放在 /etc/inspircd/conf/opers.conf
+</span><span class="code-line line-number" line="2">ARKFUTURE管理员配置 都存放与数据库中 并使用了相关的sql插件
 </span></code></pre>
 <ul>
 <li>3 配置相关</li>
 </ul>
-<pre><code class="code-highlight"><span class="code-line line-number" line="1">我们所有的模块(插件)配置(包括第三方) 都存放在 /etc/inspircd/conf/modulesconf.conf
+<pre><code class="code-highlight"><span class="code-line line-number" line="1">我们所有的模块(插件)配置(包括第额外的需要编译的插件) 都存放在 /etc/inspircd/conf/modulesconf.conf
 </span></code></pre>
 <ul>
 <li>4 如果您启用了SSL相关</li>
@@ -1033,12 +1068,44 @@ body {padding: 2em;}
 <pre><code class="code-highlight"><span class="code-line line-number" line="1">配置 /etc/inspircd/conf/modulesconf.conf 中 关于SSL 的配置项目
 </span><span class="code-line line-number" line="2">并且在 /etc/inspircd/ssl/ 目录中 放入相关CA证书文件
 </span><span class="code-line line-number" line="3">
-</span><span class="code-line line-number" line="4">详细配置
-</span><span class="code-line line-number" line="5">https://docs.inspircd.org/4/modules/ssl_gnutls
-</span><span class="code-line line-number" line="6">https://docs.inspircd.org/4/modules/ssl_openssl
+</span><span class="code-line line-number" line="4">!INSPIRCD 工作组 推荐使用 gnutls(默认开启tls1.3)!
+</span><span class="code-line line-number" line="5">
+</span><span class="code-line line-number" line="6">详细配置
+</span><span class="code-line line-number" line="7">https://docs.inspircd.org/4/modules/ssl_gnutls
+</span><span class="code-line line-number" line="8">https://docs.inspircd.org/4/modules/ssl_openssl
+</span><span class="code-line line-number" line="9">
+</span><span class="code-line line-number" line="10">我们的配置中 使用了 &amp;SSLPath; 这样的定义符号 它会替换 /etc/inspircd/ssl/
+</span><span class="code-line line-number" line="11">如: &amp;SSLPath;ca.crt 代替 /etc/inspircd/ssl/ca.crt
+</span></code></pre>
+<ul>
+<li>5 关于<die></die></li>
+</ul>
+<pre><code class="code-highlight"><span class="code-line line-number" line="1">我们在测试配置时 会添加` &lt;die reason="服务器正在维护，请稍后再启动。"&gt;` 标签到服务器配置中 
+</span><span class="code-line line-number" line="2">测试完成后会及时删除, 这时请您稍后再更新
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4">当 InspIRCd 启动时，如果检测到配置文件中存在 `&lt;die&gt;` 标签，服务器会立即停止启动，并向日志或控制台输出配置中指定的消息。
+</span></code></pre>
+<ul>
+<li>6 对于 脚本 /usr/share/inspircd/deploy-ssl.sh 证书拷贝脚本(用于证书复制到配置文件) 中</li>
+</ul>
+<pre><code class="code-highlight"><span class="code-line line-number" line="1">我们的专属于ssl的目录为:
+</span><span class="code-line line-number" line="2">INSPIRCD_CONFIG_DIR="/etc/inspircd/conf/ssl"
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4">如果您为了安全可以执行命令: 
+</span><span class="code-line line-number" line="5">find /etc/inspircd/conf/ssl/ -name "key.pem" -exec chmod 600 {} \;
+</span><span class="code-line line-number" line="6">find /etc/inspircd/conf/ssl/ -name "cert.pem" -exec chmod 644 {} \;
+</span></code></pre>
+<ul>
+<li>7 对于部分插件 目录的配置</li>
+</ul>
+<pre><code class="code-highlight"><span class="code-line line-number" line="1">对于启用了某些插件 所引用的文件 ircd会报错找不到文件 **官方建议使用 绝对路径**
+</span><span class="code-line line-number" line="2">个人测试过 使用 
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4">&amp;dir.config;
+</span><span class="code-line line-number" line="5">&amp;dir.config;/conf/
+</span><span class="code-line line-number" line="6">&amp;dir.config;/txt/
 </span><span class="code-line line-number" line="7">
-</span><span class="code-line line-number" line="8">我们的配置中 使用了 &amp;SSLPath; 这样的定义符号 它会替换 /etc/inspircd/ssl/
-</span><span class="code-line line-number" line="9">如: &amp;SSLPath;ca.crt 代替 /etc/inspircd/ssl/ca.crt
+</span><span class="code-line line-number" line="8">可以解决 /etc/inspircd 目录引入的问题 其他目录没试过
 </span></code></pre>
 <h1>目录和文件说明</h1>
 <pre><code class="code-highlight"><span class="code-line line-number" line="1">* 完整的 /etc/inspirc/ 目录应该为: 
@@ -1056,17 +1123,155 @@ body {padding: 2em;}
 </span><span class="code-line line-number" line="3">    --conf/ #一般模块的配置目录(请参照 https://docs.inspircd.org/4/modules/ 修改)
 </span><span class="code-line line-number" line="4">    --txt/ #MOTD文档所在的目录 (请按需修改)
 </span></code></pre>
-<h1>other目录的说明</h1>
 <ul>
-<li>此目录是其他关于irc的配置</li>
-<li>包括 ircd 及 客户端 和 bot 的相关软件的所有配置</li>
+<li>对于官方-Debian编译 所使用的目录</li>
 </ul>
+<pre><code class="code-highlight"><span class="code-line line-number" line="1">Paths:
+</span><span class="code-line line-number" line="2">  Binary:  /usr/bin
+</span><span class="code-line line-number" line="3">  Config:  /etc/inspircd
+</span><span class="code-line line-number" line="4">  Data:    /var/lib/inspircd
+</span><span class="code-line line-number" line="5">  Example: /usr/share/doc/inspircd/examples
+</span><span class="code-line line-number" line="6">  Log:     /var/log/inspircd
+</span><span class="code-line line-number" line="7">  Manual:  /usr/share/man/man1
+</span><span class="code-line line-number" line="8">  Module:  /usr/lib/inspircd
+</span><span class="code-line line-number" line="9">  Runtime: /run/inspircd
+</span><span class="code-line line-number" line="10">  Script:  /usr/share/inspircd
+</span><span class="code-line line-number" line="11">
+</span></code></pre>
 <h1>重要！</h1>
 <ul>
 <li>自己编译安装包 或者使用 直接编译安装</li>
 <li>直接使用 build.sh 编译全部插件的软件包(ARKFUTURE修改)</li>
 <li><a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/tag/20250310">https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/tag/20250310</a></li>
 </ul>
+<h1>SSL证书</h1>
+<ul>
+<li>使用证书生成服务后 通常的 在你的域名目录中生成了以下四个证书文件</li>
+<li>cert.pem chain.pem fullchain.pem privkey.pem</li>
+<li>对应的关系为:</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Certbot 生成文件</th><th>InspIRCd 配置参数</th><th>技术作用说明</th></tr></thead><tbody><tr><td><code>privkey.pem</code></td><td>keyfile</td><td>服务器私钥文件，用于 TLS 握手加密</td></tr><tr><td><code>cert.pem</code></td><td>certfile</td><td>域名主体证书，包含公钥信息</td></tr><tr><td><code>chain.pem</code></td><td>cafile</td><td>中间证书链</td></tr><tr><td><code>fullchain.pem</code></td><td>certfile</td><td>合并后的完整证书链</td></tr></tbody></table>
+<ul>
+<li>使用有效的 TLS 证书</li>
+<li>
+<ul>
+<li>在投入生产环境时,另一个主要障碍(但非常值得努力解决)是为您的域名获取有效的TLS证书(如果尚未完成):</li>
+</ul>
+</li>
+</ul>
+<pre><code class="code-highlight"><span class="code-line line-number" line="1">Chinese:
+</span><span class="code-line line-number" line="2">
+</span><span class="code-line line-number" line="3">获取TLS证书的最简单方式是使用Certbot从Let's Encrypt申请. 具体操作取决于您是否已在80端口运行Web服务器:
+</span><span class="code-line line-number" line="4">
+</span><span class="code-line line-number" line="5">    如果已运行,请遵循Certbot官网的指南；
+</span><span class="code-line line-number" line="6">    如果未运行,可使用命令 certbot certonly --standalone --preferred-challenges http -d example.com (将example.com 替换为您的域名). 
+</span><span class="code-line line-number" line="7">
+</span><span class="code-line line-number" line="8">证书存储路径:成功申请后,证书将保存在/etc/letsencrypt/live/example.com 目录下(替换为您的域名). 
+</span><span class="code-line line-number" line="9">
+</span><span class="code-line line-number" line="10">您需要将fullchain.pem 作为证书文件,privkey.pem 作为私钥文件. 但需注意:
+</span><span class="code-line line-number" line="11">
+</span><span class="code-line line-number" line="12">    这些文件默认属于root用户,且私钥对irc角色用户不可读,因此无法直接使用. 
+</span><span class="code-line line-number" line="13">    可通过编写Certbot的续订部署钩子(renewal deploy hook)解决权限问题. 例如,将以下脚本安装为/etc/letsencrypt/renewal-hooks/deploy/install-ergo-certificates(在证书续订成功后更新文件),并替换其中的example.com 为您的域名,再通过chmod 0755赋予执行权限:
+</span><span class="code-line line-number" line="14">
+</span><span class="code-line line-number" line="15">----
+</span><span class="code-line line-number" line="16">
+</span><span class="code-line line-number" line="17">English:
+</span><span class="code-line line-number" line="18">The simplest way to get valid TLS certificates is from Let's Encrypt with Certbot. 
+</span><span class="code-line line-number" line="19">
+</span><span class="code-line line-number" line="20">The correct procedure will depend on whether you are already running a web server on port 80. 
+</span><span class="code-line line-number" line="21">
+</span><span class="code-line line-number" line="22">If you are, follow the guides on the Certbot website; if you aren't, you can use certbot certonly --standalone --preferred-challenges http -d example.com (replace example.com with your domain).
+</span><span class="code-line line-number" line="23">
+</span><span class="code-line line-number" line="24">The At this point, you should have certificates available at /etc/letsencrypt/live/example.com (replacing example.com with your domain).
+</span><span class="code-line line-number" line="25">
+</span><span class="code-line line-number" line="26">You should serve fullchain.pem as the certificate and privkey.pem as its private key. 
+</span><span class="code-line line-number" line="27">
+</span><span class="code-line line-number" line="28">However, these files are owned by root and the private key is not readable by the ergo role user, so you won't be able to use them directly in their current locations.
+</span><span class="code-line line-number" line="29">
+</span><span class="code-line line-number" line="30">You can write a renewal deploy hook for certbot to make copies of these certificates accessible to the ergo role user. 
+</span><span class="code-line line-number" line="31">
+</span><span class="code-line line-number" line="32">For example, install the following script as /etc/letsencrypt/renewal-hooks/deploy/install-ergo-certificates (which will update the certificate and key after a successful renewal), again replacing example.com with your domain name, and chmod it 0755:
+</span></code></pre>
+<pre><code class="code-highlight"><span class="code-line line-number" line="1">#!/bin/bash
+</span><span class="code-line line-number" line="2">
+</span><span class="code-line line-number" line="3">set -eu
+</span><span class="code-line line-number" line="4">
+</span><span class="code-line line-number" line="5">umask 077
+</span><span class="code-line line-number" line="6">cp /etc/letsencrypt/live/example.com/fullchain.pem /home/ergo/
+</span><span class="code-line line-number" line="7">cp /etc/letsencrypt/live/example.com/privkey.pem /home/ergo/
+</span><span class="code-line line-number" line="8">chown ergo:ergo /home/ergo/*.pem
+</span><span class="code-line line-number" line="9"># rehash ergo, which will reload the certificates:
+</span><span class="code-line line-number" line="10">systemctl reload ergo.service
+</span></code></pre>
+<h1>ARKFUTURE 正式配置文件 说明</h1>
+<ul>
+<li>使用了sql数据库 sqlite3</li>
+</ul>
+<pre><code class="code-highlight"><span class="code-line line-number" line="1">新建OP表
+</span><span class="code-line line-number" line="2">CREATE TABLE IF NOT EXISTS "oper" (
+</span><span class="code-line line-number" line="3">  "active" bool NOT NULL DEFAULT true,
+</span><span class="code-line line-number" line="4">  "name" text NOT NULL,
+</span><span class="code-line line-number" line="5">  "password" text NOT NULL,
+</span><span class="code-line line-number" line="6">  "host" text NOT NULL,
+</span><span class="code-line line-number" line="7">  "type" text NOT NULL,
+</span><span class="code-line line-number" line="8">  "hash" text,
+</span><span class="code-line line-number" line="9">  "account" text,
+</span><span class="code-line line-number" line="10">  "vhost" text,
+</span><span class="code-line line-number" line="11">  "commands" text,
+</span><span class="code-line line-number" line="12">  "chanmodes" text,
+</span><span class="code-line line-number" line="13">  "usermodes" text,
+</span><span class="code-line line-number" line="14">  "snomasks" text
+</span><span class="code-line line-number" line="15">);
+</span><span class="code-line line-number" line="16">
+</span><span class="code-line line-number" line="17">新建user表
+</span><span class="code-line line-number" line="18">CREATE TABLE IF NOT EXISTS user (
+</span><span class="code-line line-number" line="19">    "name" text NOT NULL,
+</span><span class="code-line line-number" line="20">    "password" text
+</span><span class="code-line line-number" line="21">);
+</span><span class="code-line line-number" line="22">
+</span></code></pre>
+<h1>版权及源代码许可/所有人</h1>
+<pre><code class="code-highlight"><span class="code-line line-number" line="1">项目主站: https://inspircd.org/
+</span><span class="code-line line-number" line="2">项目源代码: https://github.com/inspircd/
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4">项目源代码属于原作者及源代码维护作者
+</span><span class="code-line line-number" line="5">
+</span><span class="code-line line-number" line="6">ARKFUTURE 并未修改任何 INSPIRCD 源代码
+</span><span class="code-line line-number" line="7">ARKFUTURE 属于全模块deb包维护者
+</span><span class="code-line line-number" line="8">此站点并非是 INSPIRCD 的分支项目 我们仅仅是因为我们自己有需要而打包
+</span><span class="code-line line-number" line="9">
+</span><span class="code-line line-number" line="10">全部模块deb包维护者 :ARKFUTURE studio(group) 简称 ARKFUTURE
+</span></code></pre>
   </div>
   </body>
 </html>

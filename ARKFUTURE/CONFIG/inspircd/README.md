@@ -1,10 +1,12 @@
+* 您可以查看我们的配置文件, 可以为我们的配置文件提出**安全相关的建议和意见**, 我们会为了IRC的**匿名性/安全性积极采纳**
 # 安装 (对于稳定的Debian12)
+# # INSPIRCD配置: 
 * 官方deb包安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/install.sh
 * ARKFUTURE全插件deb包安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh
 * ARKFUTURE全插件编译安装(请自行修改编译脚本): https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/make.sh
-* 更新配置文件: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/config.sh
-*
 * ARKFUTURE 全插件服务器安装+arkfuture配置(此项目使用了第三方模块:数据库,ssl,sql认证等)(主要更新): https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh
+# # ERGOIRCD配置: 
+* https://arkfuture.github.io/ARKFUTURE/CONFIG/ergoircd/ircd.yaml
 
 # 端口
 
@@ -69,12 +71,14 @@ https://docs.inspircd.org/4/modules/ssl_openssl
 
 当 InspIRCd 启动时，如果检测到配置文件中存在 `<die>` 标签，服务器会立即停止启动，并向日志或控制台输出配置中指定的消息。
 ``` 
-* 6 关于无root 的配置 
+* 6 对于 脚本 /usr/share/inspircd/deploy-ssl.sh 证书拷贝脚本(用于证书复制到配置文件) 中
 ```
-因为某些原因 在配置时遇到了 
-Unable to initialize m_randquote.so: Unable to read quotes from quotes: No such file or directory
+我们的专属于ssl的目录为:
+INSPIRCD_CONFIG_DIR="/etc/inspircd/conf/ssl"
 
-所以正在排查 暂时无果 不能用
+如果您为了安全可以执行命令: 
+find /etc/inspircd/conf/ssl/ -name "key.pem" -exec chmod 600 {} \;
+find /etc/inspircd/conf/ssl/ -name "cert.pem" -exec chmod 644 {} \;
 ```
 * 7 对于部分插件 目录的配置
 ```
