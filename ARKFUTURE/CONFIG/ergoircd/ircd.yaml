@@ -154,7 +154,7 @@ server:
         # 是否为"始终在线"客户端生成唯一伪域名 
         enabled-for-always-on: true 
         # 伪域名后缀
-        netname: "/AFENet"
+        netname: "AFENet"
         # IPv4地址的CIDR掩码长度
         cidr-len-ipv4: 32 
         # IPv6地址的CIDR掩码长度 
