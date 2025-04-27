@@ -15,15 +15,20 @@ server:
         ":6667":
         ":6668":
         ":6669":
-        # ":6697":
-        #     tls:
-        #         cert: fullchain.pem
-        #         key: privkey.pem
-        #     # 'proxy'通常应为false。用于总是发送PROXY协议头的云负载均衡器,
-        #     # 详见手册("反向代理")
-        #     proxy: false
-        #     # 设置最低TLS版本:
-        #     min-tls-version: 1.2
+        ":6697":
+            tls:
+                cert: fullchain.pem
+                key: key.pem
+            # 'proxy'通常应为false。用于总是发送PROXY协议头的云负载均衡器,
+            # 详见手册("反向代理")
+            proxy: false
+            min-tls-version: 1.2
+        ":8097":
+            websocket: true
+            tls:
+                cert: fullchain.pem
+                key: key.pem
+                min-tls-version: 1.2
 
         # Unix域套接字示例:
         # "/tmp/ergo_sock":
@@ -33,19 +38,12 @@ server:
         # "/hidden_service_sockets/ergo_tor_sock":
         #     tor: true
 
-        # WebSocket监听器示例:
-        # ":8097":
-        #     websocket: true
-        #     tls:
-        #         cert: fullchain.pem
-        #         key: privkey.pem
-
     unix-bind-mode: 0777
 
     # tor监听配置
     tor-listeners:
         require-sasl: true
-        vhost: ""
+        vhost: "tOr"
         max-connections: 64
         throttle-duration: 10m
         max-connections-per-duration: 64
