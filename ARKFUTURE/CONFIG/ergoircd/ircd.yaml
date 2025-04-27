@@ -73,7 +73,7 @@ server:
 
     #password: "$2a$04$0123456789abcdef0123456789abcdef0123456789abcdef01234"
 
-    motd: motd.txt
+    motd: motd.motd
 
     motd-formatting: true
 
