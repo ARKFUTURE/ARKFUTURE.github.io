@@ -384,12 +384,10 @@ accounts:
 # 频道选项 
 channels:
     # 新频道创建时的默认模式 
-    # +n 为禁止外部消息, +t 为仅 OP 可修改主题 
-    # +C 为禁止 CTCP(除 ACTION 外)
-    default-modes: +ntC 
+    default-modes:  
  
     # 单个客户端最多可加入的频道数 
-    max-channels-per-client: 100 
+    max-channels-per-client:  
  
     # 若为 true, 只有拥有 `chanreg` 权限的操作员可创建新频道 
     operator-only-creation: false 
@@ -404,7 +402,7 @@ channels:
         max-channels-per-account: 15 
  
     # 简易反垃圾机器人措施:匿名连接在此时间内通过 /LIST 仅返回空响应(0 表示禁用)
-    list-delay: 0s 
+    list-delay: 60s 
  
     # 邀请进入邀请制频道的有效期(0 或省略表示永不过期):
     invite-expiration: 24h 
