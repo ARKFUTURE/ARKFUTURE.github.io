@@ -5,369 +5,369 @@
 
 #-#-#-#-#-#-#-#-#-#-#-#-网络及服务器配置-#-#-#-#-#-#-#-#-#-#-#-#-#
 network:
-    # 网络名称 
-    name: ARKFUTURE 
+    # 网络名称
+    name: ARKFUTURE
 
 server:
     #服务器名称
-    name: arkfuture.test  
+    name: arkfuture.test
     listeners:
         ":6667":
         ":6668":
         # ":6697":
         #     tls:
-        #         cert: fullchain.pem  
-        #         key: privkey.pem  
-        #     # 'proxy'通常应为false。用于总是发送PROXY协议头的云负载均衡器, 
+        #         cert: fullchain.pem
+        #         key: privkey.pem
+        #     # 'proxy'通常应为false。用于总是发送PROXY协议头的云负载均衡器,
         #     # 详见手册("反向代理")
-        #     proxy: false 
+        #     proxy: false
         #     # 设置最低TLS版本:
-        #     min-tls-version: 1.2 
- 
+        #     min-tls-version: 1.2
+
         # Unix域套接字示例:
         # "/tmp/ergo_sock":
- 
-        # Tor监听器示例:此监听器的连接将被视为Tor连接, 
+
+        # Tor监听器示例:此监听器的连接将被视为Tor连接,
         # 强烈建议不要将此监听器置于公共接口:
         # "/hidden_service_sockets/ergo_tor_sock":
-        #     tor: true 
- 
+        #     tor: true
+
         # WebSocket监听器示例:
         # ":8097":
-        #     websocket: true 
+        #     websocket: true
         #     tls:
-        #         cert: fullchain.pem  
-        #         key: privkey.pem  
- 
-    unix-bind-mode: 0777 
+        #         cert: fullchain.pem
+        #         key: privkey.pem
+
+    unix-bind-mode: 0777
 
     # tor监听配置
     tor-listeners:
-        require-sasl: true 
-        vhost: "" 
-        max-connections: 64 
-        throttle-duration: 10m 
-        max-connections-per-duration: 64 
+        require-sasl: true
+        vhost: ""
+        max-connections: 64
+        throttle-duration: 10m
+        max-connections-per-duration: 64
 
     # sts配置
     sts:
-        enabled: true 
-        duration: 30d 
-        port: 6697 
-        preload: true 
- 
+        enabled: true
+        duration: 30d
+        port: 6697
+        preload: true
+
     websockets:
         allowed-origins:
 
     casemapping: "ascii"
- 
-    enforce-utf8: true 
- 
-    lookup-hostnames: true 
 
-    forward-confirm-hostnames: true 
- 
+    enforce-utf8: true
+
+    lookup-hostnames: true
+
+    forward-confirm-hostnames: true
+
     check-ident: false
- 
+
     coerce-ident: ''
- 
+
     #password: "$2a$04$0123456789abcdef0123456789abcdef0123456789abcdef01234"
- 
-    motd: motd.txt  
- 
-    motd-formatting: true 
-    
+
+    motd: motd.txt
+
+    motd-formatting: true
+
     #使用RELAYMSG命令进行中继
     relaymsg:
-        enabled: true 
+        enabled: true
         separators: "/"
-        available-to-chanops: true 
- 
+        available-to-chanops: true
+
     # 允许使用 PROXY 命令的 IP 地址/CIDR 范围来源
     proxy-allowed-from:
-        # - localhost 
+        # - localhost
 
     webirc:
-        -   
+        -
             # 网关必须使用的 TLS 证书的 SHA-256 指纹 若仅使用密码验证 可注释此字段
             certfp: "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"
             password: "$2a$04$abcdef0123456789abcdef0123456789abcdef0123456789abcde"
             hosts:
-                # - localhost 
+                # - localhost
 
-            accept-hostname: false 
- 
-    max-sendq: 96k 
- 
+            accept-hostname: false
+
+    max-sendq: 96k
+
     compatibility:
-        force-trailing: true 
-        send-unprefixed-sasl: true 
-        allow-truncation: false 
- 
-    # IP限制 
+        force-trailing: true
+        send-unprefixed-sasl: true
+        allow-truncation: false
+
+    # IP限制
     ip-limits:
-        # 是否限制每个IP/CIDR的并发连接总数 
-        count: true 
-        # 每个IP/CIDR的最大并发连接数 
-        max-concurrent-connections: 16 
-        # 是否限制每个IP/CIDR的新连接速率 
-        throttle: true 
+        # 是否限制每个IP/CIDR的并发连接总数
+        count: true
+        # 每个IP/CIDR的最大并发连接数
+        max-concurrent-connections: 16
+        # 是否限制每个IP/CIDR的新连接速率
+        throttle: true
         # 统计连接的时间窗口长度
-        window: 10m 
+        window: 10m
         # 在时间窗口内允许的最大新连接数
-        max-connections-per-window: 20 
+        max-connections-per-window: 20
          # IPv4的CIDR前缀长度
-        cidr-len-ipv4: 32 
+        cidr-len-ipv4: 32
         # IPv6的CIDR前缀长度
-        cidr-len-ipv6: 64 
-        # 豁免连接限制的IP/网络列表 
+        cidr-len-ipv6: 64
+        # 豁免连接限制的IP/网络列表
         exempted:
             # - "localhost"
         # 特定IP/网络的自定义限制
         custom-limits:
             #"irccloud":
             #    nets:
-            #        - "192.184.9.108" 
-            #    max-concurrent-connections: 2048 
-            #    max-connections-per-window: 2048 
- 
-    # IP封禁检查脚本 
+            #        - "192.184.9.108"
+            #    max-concurrent-connections: 2048
+            #    max-connections-per-window: 2048
+
+    # IP封禁检查脚本
     ip-check-script:
         # 是否启用子进程IP检查机制(如DNSBL查询)
-        enabled: false 
-        # 执行脚本路径 
+        enabled: false
+        # 执行脚本路径
         command: "/usr/local/bin/check-ip-ban"
         # 固定参数列表(查询通过标准输入/输出交互)
         args: []
         # 进程执行超时时间(超时后发送SIGTERM)
-        timeout: 9s 
-        # SIGTERM后发送SIGKILL的间隔 
-        kill-timeout: 1s 
+        timeout: 9s
+        # SIGTERM后发送SIGKILL的间隔
+        kill-timeout: 1s
         # 最大并发脚本数(0表示无限制)
-        max-concurrency: 64 
-        # 是否豁免已认证SASL的连接检查 
-        exempt-sasl: false 
- 
-    # IP伪装配置 
+        max-concurrency: 64
+        # 是否豁免已认证SASL的连接检查
+        exempt-sasl: false
+
+    # IP伪装配置
     ip-cloaking:
         # 是否隐藏用户真实IP
-        enabled: true 
-        # 是否为"始终在线"客户端生成唯一伪域名 
-        enabled-for-always-on: true 
+        enabled: true
+        # 是否为"始终在线"客户端生成唯一伪域名
+        enabled-for-always-on: true
         # 伪域名后缀
         netname: "AFENet"
         # IPv4地址的CIDR掩码长度
-        cidr-len-ipv4: 32 
-        # IPv6地址的CIDR掩码长度 
-        cidr-len-ipv6: 64 
+        cidr-len-ipv4: 32
+        # IPv6地址的CIDR掩码长度
+        cidr-len-ipv6: 64
         # 哈希输出位数
-        num-bits: 64 
- 
-    # 安全网络配置 
+        num-bits: 64
+
+    # 安全网络配置
     secure-nets:
         # - "10.0.0.0/8"
- 
-    # 输出路径 
-    #output-path: "/home/ergo/out"
- 
-    # 覆盖服务主机名 
-    #override-services-hostname: "example.network" 
- 
-    # 最大IRC行长度 
-    #max-line-len: 512 
- 
-    # 隐藏LUSER统计 
-    suppress-lusers: false 
 
-# 账户选项 
+    # 输出路径
+    #output-path: "/home/ergo/out"
+
+    # 覆盖服务主机名
+    #override-services-hostname: "example.network"
+
+    # 最大IRC行长度
+    #max-line-len: 512
+
+    # 隐藏LUSER统计
+    suppress-lusers: false
+
+# 账户选项
 accounts:
     # 是否启用账户认证
-    authentication-enabled: true 
- 
-    # 账户注册 
+    authentication-enabled: true
+
+    # 账户注册
     registration:
         # 用户是否可以自行注册新账户
-        enabled: true 
+        enabled: true
         # 用户是否能在完全连接前使用 REGISTER 命令注册
-        allow-before-connect: true 
- 
-        # 全局新建账户限流 
+        allow-before-connect: true
+
+        # 全局新建账户限流
         throttling:
-            enabled: true 
-            # 时间窗口 
-            duration: 10m 
-            # 窗口期内允许的最大尝试次数 
-            max-attempts: 10 
- 
-        # 账户密码使用的 bcrypt 计算成本 
+            enabled: true
+            # 时间窗口
+            duration: 10m
+            # 窗口期内允许的最大尝试次数
+            max-attempts: 10
+
+        # 账户密码使用的 bcrypt 计算成本
         # (注意 bcrypt 库允许的最低值为 4)
-        bcrypt-cost: 12 
- 
-        # 用户需在此时间内验证账户, 否则可被重新注册 
+        bcrypt-cost: 12
+
+        # 用户需在此时间内验证账户, 否则可被重新注册
         verify-timeout: "12h"
- 
-        # 账户注册的邮件验证选项 
+
+        # 账户注册的邮件验证选项
         email-verification:
-            # 是否启用邮件验证功能 
-            enabled: false 
+            # 是否启用邮件验证功能
+            enabled: false
             # 发件人邮箱地址(需符合RFC规范)
-            sender: "admin@my.network" 
-            # 是否强制要求TLS加密连接 
-            require-tls: true 
+            sender: "admin@my.network"
+            # 是否强制要求TLS加密连接
+            require-tls: true
             # HELO/EHLO域名标识(默认使用服务器名称)
-            helo-domain: "my.network" 
+            helo-domain: "my.network"
             # 设置为`tcp4`以强制通过IPv4发送, 设置为`tcp6`以强制IPv66:
             # protocol: "tcp4"
             # 设置为强制特定源/本地IPv4或IPv6地址:
             # local-address: "1.2.3.4"
-            
-            # 用于启用传出电子邮件的DKIM签名的选项 推荐, 但需要为公钥创建DNS条目
+
+            # options to enable DKIM signing of outgoing emails (recommended, but requires creating a DNS entry for the public key):
             # dkim:
             #     domain: "my.network"
             #     selector: "20200229"
             #     key-file: "dkim.pem"
             
-            ### 使用MTA/smarthost, 而不是直接发送电子邮件
+            # to use an MTA/smarthost instead of sending email directly:
             # mta:
             #     server: localhost
             #     port: 25
             #     username: "admin"
             #     password: "hunter2"
-            #     implicit-tls: false # 使用tls验证 通常在端口465上
-            
-            ### 邮箱地址黑名单策略 ### 
+            #     implicit-tls: false # TLS from the first byte, typically on port 465
+
+            ### 邮箱地址黑名单策略 ###
             address-blacklist:
-            #    - "*@mailinator.com"   # 使用通配符禁止临时邮箱 
+            #    - "*@mailinator.com"   # 使用通配符禁止临时邮箱
 
             # 黑名单语法类型(glob通配符或regex正则)
             address-blacklist-syntax: "glob"
 
             # 黑名单文件路径(优先级高于内联配置)
             # address-blacklist-file: "/path/to/file"
-            
-            # 邮件发送操作超时时间 
-            timeout: 60s 
-            
-            ### 密码重置功能 ### 
+
+            # 邮件发送操作超时时间
+            timeout: 60s
+
+            ### 密码重置功能 ###
             password-reset:
-                # 是否启用邮件密码重置 
-                enabled: false 
-                # 重复发送邮件的最小间隔 
-                cooldown: 1h 
-                # 重置链接有效期 
-                timeout: 1d 
- 
+                # 是否启用邮件密码重置
+                enabled: false
+                # 重复发送邮件的最小间隔
+                cooldown: 1h
+                # 重置链接有效期
+                timeout: 1d
+
     # 限制账户登录尝试(防止密码猜测或针对服务器的 DoS 攻击)
     login-throttling:
-        enabled: true 
-        # 时间窗口 
-        duration:  1m 
-        # 窗口期内允许的最大尝试次数 
-        max-attempts: 3 
- 
-    # 部分客户端(如 Pidgin 和 Hexchat)仅提供单一密码字段, 无法区分服务器密码(PASS 命令)和 SASL 密码 
-    # 若设为 true, 成功通过 SASL 认证的客户端无需额外发送 PASS 命令 
-    skip-server-password: false 
- 
-    # 允许通过 PASS 命令登录账户(例如 PASS account:password), 兼容不支持 SASL 的旧客户端 
-    login-via-pass-command: true 
- 
+        enabled: true
+        # 时间窗口
+        duration:  1m
+        # 窗口期内允许的最大尝试次数
+        max-attempts: 3
+
+    # 部分客户端(如 Pidgin 和 Hexchat)仅提供单一密码字段, 无法区分服务器密码(PASS 命令)和 SASL 密码
+    # 若设为 true, 成功通过 SASL 认证的客户端无需额外发送 PASS 命令
+    skip-server-password: false
+
+    # 允许通过 PASS 命令登录账户(例如 PASS account:password), 兼容不支持 SASL 的旧客户端
+    login-via-pass-command: true
+
     # 广告 SCRAM-SHA-256 认证方法。与某些客户端存在兼容性问题时可设为 false:
-    advertise-scram: true 
- 
-    # 是否要求客户端必须通过 SASL 登录账户才能连接服务器 
+    advertise-scram: true
+
+    # 是否要求客户端必须通过 SASL 登录账户才能连接服务器
     require-sasl:
-        # 若启用, 所有客户端必须在连接时通过 SASL 认证 
-        # 警告:私有服务器必须同时将 accounts.registration.enabled  设为 false, 以防止非管理员注册账户 
-        enabled: false 
-        # 豁免账户要求的 IP/CIDR 
+        # 若启用, 所有客户端必须在连接时通过 SASL 认证
+        # 警告:私有服务器必须同时将 accounts.registration.enabled  设为 false, 以防止非管理员注册账户
+        enabled: false
+        # 豁免账户要求的 IP/CIDR
         exempted:
             # - "localhost"
- 
+
     # 昵称保留策略(昵称如何与账户关联)
     nick-reservation:
         # 是否启用昵称保留?
-        enabled: true 
-        # 除账户名外可保留的额外昵称数量 
+        enabled: true
+        # 除账户名外可保留的额外昵称数量
         # (注意:若启用 force-nick-equals-account 或客户端为 always-on, 额外昵称将不可用)
-        additional-nick-limit: 0 
+        additional-nick-limit: 0
         # 昵称保留方式:
-        #   strict:   用户必须已通过 SASL/PASS 或 /NickServ IDENTIFY 登录账户才能使用保留昵称 
-        #   optional: 默认无限制, 但允许用户自定义强制等级 
-        method: strict 
+        #   strict:   用户必须已通过 SASL/PASS 或 /NickServ IDENTIFY 登录账户才能使用保留昵称
+        #   optional: 默认无限制, 但允许用户自定义强制等级
+        method: strict
         # 是否允许用户自定义昵称强制状态(例如退出严格模式)
-        allow-custom-enforcement: false 
+        allow-custom-enforcement: false
         # 访客昵称格式:
-        # 1. 此类昵称不可注册或保留 
+        # 1. 此类昵称不可注册或保留
         # 2. 客户端被自动重命名时将使用此模板(如 Guest-nccj6rgmt97cg)
         # 3. 若启用 enforce-guest-format, 未注册账户的客户端昵称将强制匹配此模板(如 'katie' 变为 'Guest-katie')
         guest-nickname-format: "Guest-*"
         # 启用时强制未登录账户的用户使用访客模板昵称(可能影响脚本用户选择非访客格式昵称)
-        force-guest-format: false 
+        force-guest-format: false
         # 启用时强制登录账户的用户使用账户名作为昵称(结合严格模式可实现昵称与账户名在封禁列表中等效)
-        force-nick-equals-account: true 
-        # 类似 force-nick-equals-account:若为 true, 禁止匿名用户(未登录账户)在初始连接后修改昵称 
-        forbid-anonymous-nick-changes: false 
- 
+        force-nick-equals-account: true
+        # 类似 force-nick-equals-account:若为 true, 禁止匿名用户(未登录账户)在初始连接后修改昵称
+        forbid-anonymous-nick-changes: false
+
     # 多客户端控制(类似 ZNC 的 Bouncer 功能)
     multiclient:
         # 禁用时每个连接必须使用独立昵称(传统 IRC 行为)
-        enabled: true 
-        # 禁用时客户端需通过 nickserv 或 cap 系统选择启用 Bouncer 功能 
-        allowed-by-default: true 
+        enabled: false
+        # 禁用时客户端需通过 nickserv 或 cap 系统选择启用 Bouncer 功能
+        allowed-by-default: true
         # 允许无活跃连接时仍保留客户端。可选值:"disabled", "opt-in", "opt-out", "mandatory"
         always-on: "opt-in"
         # 无活跃连接时标记 always-on 客户端为离开状态:
         auto-away: "opt-in"
         # 若 always-on 客户端超过此时间未连接则从服务器退出(0 或省略表示永不过期):
-        always-on-expiration: 90d 
- 
+        always-on-expiration: 90d
+
     # 通过 HostServ 服务分配虚拟主机(替代用户主机名/IP 的字符串)
     vhosts:
         # 是否启用虚拟主机?
-        enabled: true 
-        # 虚拟主机最大长度 
-        max-length: 64 
+        enabled: true
+        # 虚拟主机最大长度
+        max-length: 64
         # 虚拟主机有效性正则表达式(确保符合 RFC 标准)
         valid-regexp: '^[0-9A-Za-z.\-_/]+$'
- 
-    # 用户连接时默认设置的模式 
-    # 未设置时无默认用户模式 
-    default-user-modes:  
- 
+
+    # 用户连接时默认设置的模式
+    # 未设置时无默认用户模式
+    default-user-modes:
+
     # 通过子进程调用的可插拔认证机制(详见手册编写认证插件脚本)
     auth-script:
-        enabled: false 
+        enabled: false
         command: "/usr/local/bin/authenticate-irc-user"
         # 传递给命令的固定参数列表(实际认证数据通过 stdin/stdout 传输):
         args: []
         # 插件返回成功时是否自动创建用户?
-        autocreate: true 
+        autocreate: true
         # 进程执行超时时间(超时后发送 SIGTERM):
-        timeout: 9s 
+        timeout: 9s
         # SIGTERM 后发送 SIGKILL 的等待时间:
-        kill-timeout: 1s 
+        kill-timeout: 1s
         # 允许同时运行的脚本数量(0 表示无限制):
-        max-concurrency: 64 
- 
-    # 通过 OAuth2 Bearer Token 登录支持 
+        max-concurrency: 64
+
+    # 通过 OAuth2 Bearer Token 登录支持
     oauth2:
-        enabled: false 
+        enabled: false
         # 是否在收到有效令牌时自动创建用户?
-        autocreate: true 
+        autocreate: true
         # 启用此选项以使用 auth-script 验证令牌:
-        auth-script: false 
-        introspection-url: "https://example.com/api/oidc/introspection" 
-        introspection-timeout: 10s 
+        auth-script: false
+        introspection-url: "https://example.com/api/oidc/introspection"
+        introspection-timeout: 10s
         # 省略表示使用 `none` 认证方法；`client_secret_basic` 方法需填写:
         client-id: "ergo"
         client-secret: "4TA0I7mJ3fUUcW05KJiODg"
- 
-    # 通过 JWT Bearer Token 登录支持 
+
+    # 通过 JWT Bearer Token 登录支持
     jwt-auth:
-        enabled: false 
+        enabled: false
         # 是否在收到有效令牌时自动创建用户?
-        autocreate: true 
+        autocreate: true
         # 可接受任意令牌定义(支持密钥轮换)
         tokens:
             -
@@ -375,335 +375,335 @@ accounts:
                 # hmac 使用对称密钥, rsa/eddsa 使用 PEM 编码公钥:
                 key: "nANiZ1De4v6WnltCHN2H7Q"
                 # 或指定密钥文件路径:
-                #key-file: "jwt_pubkey.pem" 
+                #key-file: "jwt_pubkey.pem"
                 # 用于提取用户账户名的 JWT 声明字段列表(注意格式, 尤其是使用 "sub" 时):
                 account-claims: ["preferred_username"]
                 # 若声明为邮箱地址, 要求其域名并剥离域名后使用本地部分作为账户名:
-                #strip-domain: "example.com" 
- 
-# 频道选项 
+                #strip-domain: "example.com"
+
+# 频道选项
 channels:
-    # 新频道创建时的默认模式 
-    default-modes:  
- 
-    # 单个客户端最多可加入的频道数 
-    max-channels-per-client:  
- 
-    # 若为 true, 只有拥有 `chanreg` 权限的操作员可创建新频道 
-    operator-only-creation: false 
- 
+    # 新频道创建时的默认模式
+    default-modes:
+
+    # 单个客户端最多可加入的频道数
+    max-channels-per-client:
+
+    # 若为 true, 只有拥有 `chanreg` 权限的操作员可创建新频道
+    operator-only-creation: false
+
     # 频道注册(需账户)
     registration:
         # 用户是否可以注册新频道?
-        enabled: true 
+        enabled: true
         # 是否仅限操作员注册新频道?(操作员可通过 /CS TRANSFER 转移频道给普通用户)
-        operator-only: false 
-        # 单个账户可注册的最大频道数 
-        max-channels-per-account: 15 
- 
+        operator-only: false
+        # 单个账户可注册的最大频道数
+        max-channels-per-account: 15
+
     # 简易反垃圾机器人措施:匿名连接在此时间内通过 /LIST 仅返回空响应(0 表示禁用)
-    list-delay: 60s 
- 
+    list-delay: 60s
+
     # 邀请进入邀请制频道的有效期(0 或省略表示永不过期):
-    invite-expiration: 24h 
- 
+    invite-expiration: 24h
+
     # 新客户端自动加入的频道。需谨慎使用(传统 IRC 用户可能视为缺陷)
     # 适用于有单一"主频道"的小型社区网络:
     #auto-join:
     #    - "#lounge"
- 
+
 # 操作员类别:
 # 操作员属于单一"类别"(权限等级), 可包含多个"能力"(特权操作)
-# 所有可用操作员能力均属于 'chat-moderator'(低权限)或 'server-admin'(全权限)类 
+# 所有可用操作员能力均属于 'chat-moderator'(低权限)或 'server-admin'(全权限)类
 oper-classes:
-    # 聊天监管员:可封禁/解封用户、加入频道、修复模式问题和虚拟主机 
+    # 聊天监管员:可封禁/解封用户、加入频道、修复模式问题和虚拟主机
     "chat-moderator":
-        # WHOIS 显示的职称 
-        title: Chat_moderator 
-        # 能力列表 
+        # WHOIS 显示的职称
+        title: Chat_moderator
+        # 能力列表
         capabilities:
-            - "kill"      # 断开用户会话 
+            - "kill"      # 断开用户会话
             - "ban"       # 封禁 IP/CIDR/NUH 掩码和暂停账户(UBAN/DLINE/KLINE)
-            - "nofakelag" # 豁免消息发送速率的 "fakelag" 限制 
+            - "nofakelag" # 豁免消息发送速率的 "fakelag" 限制
             - "relaymsg"  # 在任何频道使用 RELAYMSG(见 `relaymsg` 配置块)
-            - "vhosts"    # 管理用户虚拟主机 
+            - "vhosts"    # 管理用户虚拟主机
             - "sajoin"    # 加入任意频道(包括私密频道)
-            - "samode"    # 修改任意频道和用户模式 
-            - "snomasks"  # 订阅任意服务器通知掩码 
-            - "roleplay"  # 在任何频道使用(已弃用)角色扮演命令 
- 
+            - "samode"    # 修改任意频道和用户模式
+            - "snomasks"  # 订阅任意服务器通知掩码
+            - "roleplay"  # 在任何频道使用(已弃用)角色扮演命令
+
     # 服务器管理员:完全控制 IRC 服务(包括昵称和频道注册)
     "server-admin":
-        # WHOIS 显示的职称 
-        title: Server_admin 
-        # 继承自的类别 
+        # WHOIS 显示的职称
+        title: Server_admin
+        # 继承自的类别
         extends: "chat-moderator"
-        # 能力列表 
+        # 能力列表
         capabilities:
             - "rehash"       # 重载服务器配置(运行时重新加载)
-            - "accreg"       # 管理任意账户注册 
-            - "chanreg"      # 管理任意频道注册 
-            - "history"      # 修改或删除历史消息 
+            - "accreg"       # 管理任意账户注册
+            - "chanreg"      # 管理任意频道注册
+            - "history"      # 修改或删除历史消息
             - "defcon"       # 使用 DEFCON 命令(限制服务器功能)
-            - "massmessage"  # 向全服用户发送消息 
- 
-# IRC 服务操作员 
+            - "massmessage"  # 向全服用户发送消息
+
+# IRC 服务操作员
 opers:
-    # 默认操作员 'arkfuture':通过 /OPER admin <密码> 登录 
+    # 默认操作员 'arkfuture':通过 /OPER admin <密码> 登录
     arkfuture:
-        # 所属权限类别 
+        # 所属权限类别
         class: "server-admin"
         # 是否对普通用户隐藏操作员状态(通过 WHO/WHOIS)
-        hidden: true 
+        hidden: true
         # 自定义 WHOIS 行(若隐藏则仅其他操作员可见)
-        whois-line: 服务器管理员 
+        whois-line: 服务器管理员
         # 自定义主机名(隐藏时无效)
         vhost: "arkfuture"
         # 操作员登录时自动设置的模式(启用服务器通知掩码)
         modes: +is
-        # 认证方式:密码(通过 /OPER 命令)或证书指纹 
+        # 认证方式:密码(通过 /OPER 命令)或证书指纹
         password: "$2a$12$hLhV4qchwBSsfshDkOC95e1QZ22DySloJPfgDmGZBtKDuHlwdFmhO"
-        # 若配置 SHA-256 证书指纹, 则必须通过 /OPER 验证 
+        # 若配置 SHA-256 证书指纹, 则必须通过 /OPER 验证
         #certfp: "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"
-        # 若设为 'auto'(且无密码), 连接时使用正确指纹即自动授予操作员权限 
-        #auto: true 
- 
+        # 若设为 'auto'(且无密码), 连接时使用正确指纹即自动授予操作员权限
+        #auto: true
+
     # 新增管理员可以拷贝上面arkfuture管理员并粘贴修改
 
 
-# 日志记录, 灵感来自Insp 
+# 日志记录, 灵感来自Insp
 logging:
     -
-        # 如何记录这些消息 
+        # 如何记录这些消息
         #
-        #   file    记录到文件 
-        #   stdout  记录到标准输出 
-        #   stderr  记录到标准错误 
+        #   file    记录到文件
+        #   stdout  记录到标准输出
+        #   stderr  记录到标准错误
         #   - (可以指定多种方法, 例如同时记录到stderr和文件)
         method: file
- 
+
         # 要记录到的文件名(如果选择file方法)
-        filename: ircd.log  
- 
-        # 要保留的日志类型。可使用-号排除特定类型 
+        filename: ircd.log
+
+        # 要保留的日志类型。可使用-号排除特定类型
         #
-        # 排除规则优先于包含规则, 因此排除的类型将永远不会被记录 
+        # 排除规则优先于包含规则, 因此排除的类型将永远不会被记录
         #
         # 常用类型包括:
         #   *               所有内容(通常与排除某些类型配合使用)
-        #   server          服务器启动、重载和关闭事件 
-        #   accounts        账号注册和认证 
-        #   channels        频道创建和操作 
-        #   opers           IRC管理员操作和认证 
-        #   services        与NickServ、ChanServ等相关操作 
+        #   server          服务器启动、重载和关闭事件
+        #   accounts        账号注册和认证
+        #   channels        频道创建和操作
+        #   opers           IRC管理员操作和认证
+        #   services        与NickServ、ChanServ等相关操作
         #   internal        意外的运行时行为(包括潜在错误)
-        #   userinput       用户发送的原始数据 
-        #   useroutput      发送给用户的原始数据 
+        #   userinput       用户发送的原始数据
+        #   useroutput      发送给用户的原始数据
         type: "* -userinput -useroutput"
- 
-        # 级别选择:debug info warn error 
-        level: info 
- 
-# 调试选项 
+
+        # 级别选择:debug info warn error
+        level: info
+
+# 调试选项
 debug:
     # 启用时, Ergo将尝试从某些客户端触发的运行时错误中恢复(通常会崩溃服务器)
-    # 这增强了抗DoS能力, 但可能导致异常行为。建议使用systemd自动重启的场景设为false 
-    recover-from-errors: true 
- 
-    # 是否启用pprof性能分析端点:https://golang.org/pkg/net/http/pprof/ 
-    # 强烈建议不要在公网暴露, 可通过SSH隧道远程访问 
-    # 设为null、空字符串或留空表示禁用 
+    # 这增强了抗DoS能力, 但可能导致异常行为。建议使用systemd自动重启的场景设为false
+    recover-from-errors: true
+
+    # 是否启用pprof性能分析端点:https://golang.org/pkg/net/http/pprof/
+    # 强烈建议不要在公网暴露, 可通过SSH隧道远程访问
+    # 设为null、空字符串或留空表示禁用
     # pprof-listener: "localhost:6060"
- 
+
 # 防止Ergo多实例运行的锁文件(设置为空字符串""禁用)
 # 路径相对于工作目录, 建议与datastore.path 保持相同类型(绝对/相对路径)
-lock-file: "ircd.lock" 
- 
-# 数据存储配置 
+lock-file: "ircd.lock"
+
+# 数据存储配置
 datastore:
     # 数据库文件路径(存储账号和频道注册信息):
-    path: ircd.db  
- 
+    path: ircd.db
+
     # 自动升级数据库架构(失败时自动回滚备份)
-    autoupgrade: true 
- 
+    autoupgrade: true
+
     # MySQL连接配置(当前仅用于历史记录持久化):
     mysql:
-        enabled: false 
+        enabled: false
         host: "localhost"
-        port: 3306 
+        port: 3306
         # 优先使用socket连接(若设置则覆盖host:port)
-        #socket-path: "/var/run/mysqld/mysqld.sock" 
+        #socket-path: "/var/run/mysqld/mysqld.sock"
         user: "ergo"
         password: "hunter2"
         history-database: "ergo_history"
-        timeout: 3s 
-        max-conns: 4 
+        timeout: 3s
+        max-conns: 4
         # 防止中间件关闭连接(建议值):
-        #conn-max-lifetime: 180s 
- 
-# 多语言配置 
+        #conn-max-lifetime: 180s
+
+# 多语言配置
 languages:
-    # 是否加载多语言支持 
-    enabled: true 
- 
+    # 是否加载多语言支持
+    enabled: true3
+
     # 新客户端默认语言('en'表示代码内置的英文)
-    default: en 
- 
-    # 语言文件存储目录 
-    path: languages 
- 
-# 全网络必须统一的限制参数 
+    default: en
+
+    # 语言文件存储目录
+    path: languages
+
+# 全网络必须统一的限制参数
 limits:
-    # 最大昵称长度 
-    nicklen: 32 
- 
-    # 最大用户标识长度 
-    identlen: 20 
- 
-    # 最大真实姓名长度 
-    realnamelen: 150 
- 
-    # 最大频道名称长度 
-    channellen: 64 
- 
-    # 最大离开消息长度 
-    awaylen: 390 
- 
-    # 最大踢人消息长度 
-    kicklen: 390 
- 
-    # 最大频道主题长度 
-    topiclen: 390 
- 
-    # 单个客户端最大监控条目数 
-    monitor-entries: 100 
- 
-    # 历史WhoWas记录数量 
-    whowas-entries: 100 
- 
-    # 频道列表模式(beI)最大条目数 
-    chan-list-modes: 100 
- 
+    # 最大昵称长度
+    nicklen: 32
+
+    # 最大用户标识长度
+    identlen: 20
+
+    # 最大真实姓名长度
+    realnamelen: 150
+
+    # 最大频道名称长度
+    channellen: 64
+
+    # 最大离开消息长度
+    awaylen: 390
+
+    # 最大踢人消息长度
+    kicklen: 390
+
+    # 最大频道主题长度
+    topiclen: 390
+
+    # 单个客户端最大监控条目数
+    monitor-entries: 100
+
+    # 历史WhoWas记录数量
+    whowas-entries: 100
+
+    # 频道列表模式(beI)最大条目数
+    chan-list-modes: 100
+
     # 注册期间最大接收消息数(防DoS攻击)
-    registration-messages: 1024 
- 
-    # 多行消息限制 
+    registration-messages: 1024
+
+    # 多行消息限制
     multiline:
-        max-bytes: 4096 # 0表示禁用 
-        max-lines: 100  # 0表示无限制 
- 
-# 防刷屏机制 
+        max-bytes: 4096 # 0表示禁用
+        max-lines: 100  # 0表示无限制
+
+# 防刷屏机制
 fakelag:
-    # 是否启用防刷屏 
-    enabled: true 
- 
-    # 命令速率统计时间窗口 
-    window: 1s 
- 
-    # 突发命令允许数量 
-    burst-limit: 5 
- 
-    # 超限后每窗口允许消息数 
-    messages-per-window: 2 
- 
-    # 无命令发送后的冷却重置时间 
-    cooldown: 2s 
- 
-    # 特定命令的初始豁免次数 
+    # 是否启用防刷屏
+    enabled: true
+
+    # 命令速率统计时间窗口
+    window: 1s
+
+    # 突发命令允许数量
+    burst-limit: 5
+
+    # 超限后每窗口允许消息数
+    messages-per-window: 2
+
+    # 无命令发送后的冷却重置时间
+    cooldown: 2s
+
+    # 特定命令的初始豁免次数
     command-budgets:
-        "CHATHISTORY": 16 
-        "MARKREAD":    16 
-        "MONITOR":     1 
-        "WHO":         4 
-        "WEBPUSH":     1 
- 
+        "CHATHISTORY": 16
+        "MARKREAD":    16
+        "MONITOR":     1
+        "WHO":         4
+        "WEBPUSH":     1
+
 # 角色扮演命令扩展(需频道和客户端单独启用+E模式)
 roleplay:
-    # 是否全局启用角色扮演命令 
-    enabled: true 
- 
-    # 需要管理员权限才能发送角色消息 
-    require-oper: false 
- 
-    # 需要频道管理员权限才能发送角色消息 
-    require-chanops: false 
- 
+    # 是否全局启用角色扮演命令
+    enabled: true
+
+    # 需要管理员权限才能发送角色消息
+    require-oper: false
+
+    # 需要频道管理员权限才能发送角色消息
+    require-chanops: false
+
     # 在角色消息后附加真实昵称(括号内)
-    add-suffix: true 
- 
-# 基于JWT的外部服务集成 
+    add-suffix: true
+
+# 基于JWT的外部服务集成
 extjwt:
     # # 默认服务配置(`EXTJWT #channel`)
-    # # JWT令牌有效期 
-    # expiration: 45s 
+    # # JWT令牌有效期
+    # expiration: 45s
     # # HMAC对称密钥签名方式:
     # secret: "65PHvk0K1_sM-raTsCEhatVkER_QD8a0zVV8gG2EWcI"
     # # 或RSA私钥签名方式:
-    # #rsa-private-key-file: "extjwt.pem" 
- 
+    # #rsa-private-key-file: "extjwt.pem"
+
     # # 命名服务配置(`EXTJWT #channel service_name`)
     # services:
     #     "jitsi":
-    #         expiration: 30s 
+    #         expiration: 30s
     #         secret: "qmamLKDuOzIzlO8XqsGGewei_At11lewh6jtKfSTbkg"
- 
+
 # 历史消息存储(用于CHATHISTORY/HISTORY/自动回放等功能)
 history:
     # 是否启用消息存储(默认内存存储, 重启后丢失)
-    enabled: true 
- 
+    enabled: true
+
     # 单个频道存储事件数(消息/加入/离开等)
-    channel-length: 2048 
- 
-    # 单个用户存储私信/通知数 
-    client-length: 256 
- 
+    channel-length: 2048
+
+    # 单个用户存储私信/通知数
+    client-length: 256
+
     # 动态调整存储窗口(0表示预分配最大长度)
-    autoresize-window: 3d 
- 
+    autoresize-window: 3d
+
     # 加入频道时自动回放消息数(0禁用)
-    autoreplay-on-join: 0 
- 
+    autoreplay-on-join: 0
+
     # 单次CHATHISTORY最大请求消息数(0禁用)
-    chathistory-maxmessages: 1000 
- 
-    # ZNC兼容模式单次回放最大消息数 
-    znc-maxmessages: 2048 
- 
-    # 历史消息访问限制 
+    chathistory-maxmessages: 1000
+
+    # ZNC兼容模式单次回放最大消息数
+    znc-maxmessages: 2048
+
+    # 历史消息访问限制
     restrictions:
         # 消息过期时间(过期后不可检索)
-        expire-time: 1w 
- 
+        expire-time: 1w
+
         # 历史查询限制策略:'none'/'registration-time'/'join-time'
         query-cutoff: 'none'
- 
-        # 注册时间策略下的宽限期 
-        grace-period: 1h 
- 
-    # MySQL持久化历史存储 
+
+        # 注册时间策略下的宽限期
+        grace-period: 1h
+
+    # MySQL持久化历史存储
     persistent:
-        enabled: false 
-        # 是否存储未注册频道消息 
-        unregistered-channels: false 
-        # 注册频道存储策略:disabled/opt-in/opt-out/mandatory 
+        enabled: false
+        # 是否存储未注册频道消息
+        unregistered-channels: false
+        # 注册频道存储策略:disabled/opt-in/opt-out/mandatory
         registered-channels: "opt-out"
-        # 私信存储策略 
+        # 私信存储策略
         direct-messages: "opt-out"
- 
-    # 消息保留策略 
+
+    # 消息保留策略
     retention:
-        # 允许用户/频道管理员删除消息 
-        allow-individual-delete: false 
-        # 为GDPR合规启用账号消息索引 
-        enable-account-indexing: false 
- 
-    # TAGMSG存储规则 
+        # 允许用户/频道管理员删除消息
+        allow-individual-delete: false
+        # 为GDPR合规启用账号消息索引
+        enable-account-indexing: false
+
+    # TAGMSG存储规则
     tagmsg-storage:
-        # 默认是否存储TAGMSG 
-        default: false 
-        # 例外存储的标签列表 
+        # 默认是否存储TAGMSG
+        default: false
+        # 例外存储的标签列表
         whitelist:
             - "+draft/react"
             - "+react"
@@ -711,21 +711,21 @@ history:
         #blacklist:
         #    - "+draft/typing"
         #    - "typing"
- 
+
 # 是否允许通过环境变量覆盖配置(格式:ERGO__SECTION__KEY=value)
-allow-environment-overrides: true 
- 
+allow-environment-overrides: true
+
 # 移动推送通知实验功能(Tor/I2P隐藏服务请勿启用)
 webpush:
-    # 全局推送开关 
-    enabled: false 
-    # HTTP通知请求超时 
-    timeout: 10s 
-    # 延迟发送等待MARKREAD标记的时间 
-    delay: 0s 
-    # VAPID JWT的订阅者标识 
-    #subscriber: "https://your-website.com/" 
-    # 单个用户最大订阅数 
-    max-subscriptions: 4 
+    # 全局推送开关
+    enabled: false
+    # HTTP通知请求超时
+    timeout: 10s
+    # 延迟发送等待MARKREAD标记的时间
+    delay: 0s
+    # VAPID JWT的订阅者标识
+    #subscriber: "https://your-website.com/"
+    # 单个用户最大订阅数
+    max-subscriptions: 4
     # 推送订阅有效期(需定期续订)
-    expiration: 14d 
+    expiration: 14d
