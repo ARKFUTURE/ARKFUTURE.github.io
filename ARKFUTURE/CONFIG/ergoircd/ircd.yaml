@@ -251,11 +251,11 @@ accounts:
             ### 密码重置功能 ###
             password-reset:
                 # 是否启用邮件密码重置
-                enabled: false
+                enabled: true
                 # 重复发送邮件的最小间隔
-                cooldown: 1h
+                cooldown: 30m
                 # 重置链接有效期
-                timeout: 1d
+                timeout: 1h
 
     # 限制账户登录尝试(防止密码猜测或针对服务器的 DoS 攻击)
     login-throttling:
