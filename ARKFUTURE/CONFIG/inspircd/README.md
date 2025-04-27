@@ -189,6 +189,7 @@ CREATE TABLE IF NOT EXISTS "oper" (
   "host" text NOT NULL,
   "type" text NOT NULL,
   "hash" text,
+  "account" text,
   "vhost" text,
   "commands" text,
   "chanmodes" text,
