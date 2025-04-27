@@ -73,7 +73,7 @@ server:
  
     #password: "$2a$04$0123456789abcdef0123456789abcdef0123456789abcdef01234"
  
-    motd: ergo.motd  
+    motd: motd.txt  
  
     motd-formatting: true 
  
@@ -82,6 +82,7 @@ server:
         separators: "/"
         available-to-chanops: true 
  
+    # 允许使用 PROXY 命令的 IP 地址/CIDR 范围来源
     proxy-allowed-from:
         - localhost 
 
