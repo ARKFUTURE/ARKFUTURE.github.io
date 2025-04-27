@@ -182,19 +182,6 @@ You can write a renewal deploy hook for certbot to make copies of these certific
 For example, install the following script as /etc/letsencrypt/renewal-hooks/deploy/install-ergo-certificates (which will update the certificate and key after a successful renewal), again replacing example.com with your domain name, and chmod it 0755:
 ``` 
 
-```
-#!/bin/bash
-
-set -eu
-
-umask 077
-cp /etc/letsencrypt/live/example.com/fullchain.pem /home/ergo/
-cp /etc/letsencrypt/live/example.com/privkey.pem /home/ergo/
-chown ergo:ergo /home/ergo/*.pem
-# rehash ergo, which will reload the certificates:
-systemctl reload ergo.service
-```
-
 # ARKFUTURE 正式配置文件 说明
 * 使用了sql数据库 sqlite3
 ```

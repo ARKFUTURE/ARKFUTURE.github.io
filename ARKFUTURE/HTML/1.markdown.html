@@ -1222,17 +1222,6 @@ body {padding: 2em;}
 </span><span class="code-line line-number" line="31">
 </span><span class="code-line line-number" line="32">For example, install the following script as /etc/letsencrypt/renewal-hooks/deploy/install-ergo-certificates (which will update the certificate and key after a successful renewal), again replacing example.com with your domain name, and chmod it 0755:
 </span></code></pre>
-<pre><code class="code-highlight"><span class="code-line line-number" line="1">#!/bin/bash
-</span><span class="code-line line-number" line="2">
-</span><span class="code-line line-number" line="3">set -eu
-</span><span class="code-line line-number" line="4">
-</span><span class="code-line line-number" line="5">umask 077
-</span><span class="code-line line-number" line="6">cp /etc/letsencrypt/live/example.com/fullchain.pem /home/ergo/
-</span><span class="code-line line-number" line="7">cp /etc/letsencrypt/live/example.com/privkey.pem /home/ergo/
-</span><span class="code-line line-number" line="8">chown ergo:ergo /home/ergo/*.pem
-</span><span class="code-line line-number" line="9"># rehash ergo, which will reload the certificates:
-</span><span class="code-line line-number" line="10">systemctl reload ergo.service
-</span></code></pre>
 <h1>ARKFUTURE 正式配置文件 说明</h1>
 <ul>
 <li>使用了sql数据库 sqlite3</li>
