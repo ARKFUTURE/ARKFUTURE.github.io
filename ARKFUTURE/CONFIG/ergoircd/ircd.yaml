@@ -76,7 +76,8 @@ server:
     motd: motd.txt  
  
     motd-formatting: true 
- 
+    
+    #使用RELAYMSG命令进行中继
     relaymsg:
         enabled: true 
         separators: "/"
