@@ -135,48 +135,55 @@ Paths:
 | `chain.pem`      | cafile            | 中间证书链                        |
 | `fullchain.pem`  | certfile          | 合并后的完整证书链                |
  
-* 注意:
+* 使用有效的 TLS 证书
+* * 在投入生产环境时,另一个主要障碍(但非常值得努力解决)是为您的域名获取有效的TLS证书(如果尚未完成):
 ``` 
-可能支持 fullchain.pem ;如果支持 请优先使用 fullchain.pem 请自行测试 
+Chinese:
 
-即删除 chain.pem 修改 cert.pem 为fullchain.pem
+获取TLS证书的最简单方式是使用Certbot从Let's Encrypt申请. 具体操作取决于您是否已在80端口运行Web服务器:
 
-使用gnutls模块举例(使用fullchain.pem) 系统gnutls必须大于 3.7.0 版本
-<sslprofile name="Clients"
-            provider="gnutls"
-            cafile=""
-            certfile="&dir.config;/conf/fullchain.pem"
-            crlfile=""
-            dhfile=""
-            hash="sha3-256"
-            keyfile="&dir.config;/conf/key.pem"
-            mindhbits="1024"
-            outrecsize="2048"
-            priority="NORMAL"
-            requestclientcert="yes"
-            strictpriority="no">
+    如果已运行,请遵循Certbot官网的指南；
+    如果未运行,可使用命令 certbot certonly --standalone --preferred-challenges http -d example.com (将example.com 替换为您的域名). 
 
-使用openssl模块举例(使用fullchain.pem) 系统openssl必须大于 3.0.15 版本
-<sslprofile name="Clients"
-            provider="openssl"
-            cafile=""
-            certfile="&dir.config;/conf/fullchain.pem"
-            crlfile=""
-            ciphers="DEFAULT"
-            compression="no"
-            dhfile=""
-            ecdhcurve="prime256v1"
-            hash="sha3-256"
-            keyfile="&dir.config;/conf/key.pem"
-            renegotiation="no"
-            requestclientcert="yes"
-            crlmode="chain"
-            tlsv11="no"
-            tlsv12="yes"
-            tlsv13="yes">
+证书存储路径:成功申请后,证书将保存在/etc/letsencrypt/live/example.com 目录下(替换为您的域名). 
 
-大多数服务器（如 Nginx、Apache）可以直接引用fullchain.pem作为 SSL 证书
+您需要将fullchain.pem 作为证书文件,privkey.pem 作为私钥文件. 但需注意:
+
+    这些文件默认属于root用户,且私钥对irc角色用户不可读,因此无法直接使用. 
+    可通过编写Certbot的续订部署钩子(renewal deploy hook)解决权限问题. 例如,将以下脚本安装为/etc/letsencrypt/renewal-hooks/deploy/install-ergo-certificates(在证书续订成功后更新文件),并替换其中的example.com 为您的域名,再通过chmod 0755赋予执行权限:
+
+----
+
+English:
+The simplest way to get valid TLS certificates is from Let's Encrypt with Certbot. 
+
+The correct procedure will depend on whether you are already running a web server on port 80. 
+
+If you are, follow the guides on the Certbot website; if you aren't, you can use certbot certonly --standalone --preferred-challenges http -d example.com (replace example.com with your domain).
+
+The At this point, you should have certificates available at /etc/letsencrypt/live/example.com (replacing example.com with your domain).
+
+You should serve fullchain.pem as the certificate and privkey.pem as its private key. 
+
+However, these files are owned by root and the private key is not readable by the ergo role user, so you won't be able to use them directly in their current locations.
+
+You can write a renewal deploy hook for certbot to make copies of these certificates accessible to the ergo role user. 
+
+For example, install the following script as /etc/letsencrypt/renewal-hooks/deploy/install-ergo-certificates (which will update the certificate and key after a successful renewal), again replacing example.com with your domain name, and chmod it 0755:
 ``` 
+
+```
+#!/bin/bash
+
+set -eu
+
+umask 077
+cp /etc/letsencrypt/live/example.com/fullchain.pem /home/ergo/
+cp /etc/letsencrypt/live/example.com/privkey.pem /home/ergo/
+chown ergo:ergo /home/ergo/*.pem
+# rehash ergo, which will reload the certificates:
+systemctl reload ergo.service
+```
 
 # ARKFUTURE 正式配置文件 说明
 * 使用了sql数据库 sqlite3
