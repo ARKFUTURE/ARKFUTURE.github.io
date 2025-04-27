@@ -28,8 +28,14 @@ cp inspircd.service /etc/systemd/system/
 systemctl daemon-reload
 
 2.对于无systemctl文件:
+
 使用 root用户 来启动
 [root@hostname:~# inrpircd]
+关闭程序
+[root@hostname:~# pkill -f inspircd]
+
+需要 无root启动 则
+[root@hostname:~# sudo -u irc inspircd]
 关闭程序
 [root@hostname:~# pkill -f inspircd]
 ``` 

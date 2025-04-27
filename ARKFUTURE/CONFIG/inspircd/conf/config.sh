@@ -30,7 +30,6 @@ cd /etc/inspircd/
 mkdir ./conf/ssl
 cd /etc/inspircd/
 chown -R irc:irc /etc/inspircd/
-#chmod -R 644 /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
 find /etc/inspircd -type f -exec chmod 644 {} \;
 sleep 3
