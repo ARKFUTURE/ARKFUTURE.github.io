@@ -138,9 +138,9 @@ server:
         # 固定参数列表(查询通过标准输入/输出交互)
         args: []
         # 进程执行超时时间(超时后发送SIGTERM)
-        timeout: 9秒 
+        timeout: 9s 
         # SIGTERM后发送SIGKILL的间隔 
-        kill-timeout: 1秒 
+        kill-timeout: 1s 
         # 最大并发脚本数(0表示无限制)
         max-concurrency: 64 
         # 是否豁免已认证SASL的连接检查 
@@ -244,7 +244,7 @@ accounts:
             # address-blacklist-file: "/path/to/file"
             
             # 邮件发送操作超时时间 
-            timeout: 60秒 
+            timeout: 60s 
             
             ### 密码重置功能 ### 
             password-reset:
