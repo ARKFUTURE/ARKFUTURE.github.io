@@ -279,7 +279,7 @@ accounts:
     require-sasl:
         # 若启用, 所有客户端必须在连接时通过 SASL 认证 
         # 警告:私有服务器必须同时将 accounts.registration.enabled  设为 false, 以防止非管理员注册账户 
-        enabled: true 
+        enabled: false 
         # 豁免账户要求的 IP/CIDR 
         exempted:
             # - "localhost"
