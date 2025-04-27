@@ -14,6 +14,7 @@ server:
     listeners:
         ":6667":
         ":6668":
+        ":6669":
         # ":6697":
         #     tls:
         #         cert: fullchain.pem
