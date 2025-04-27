@@ -463,7 +463,7 @@ opers:
         # 操作员登录时自动设置的模式(启用服务器通知掩码)
         modes: +is
         # 认证方式:密码(通过 /OPER 命令)或证书指纹 
-        password: "$2a$12$hLhV4qchwBSsfshDkOC95e1QZ22DySloJPfgDmGZBtKDuHlwdFmhO*NetAdminbcrypt"
+        password: "$2a$12$hLhV4qchwBSsfshDkOC95e1QZ22DySloJPfgDmGZBtKDuHlwdFmhO"
         # 若配置 SHA-256 证书指纹, 则必须通过 /OPER 验证 
         #certfp: "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"
         # 若设为 'auto'(且无密码), 连接时使用正确指纹即自动授予操作员权限 
@@ -549,7 +549,7 @@ languages:
     enabled: true 
  
     # 新客户端默认语言('en'表示代码内置的英文)
-    default: en 
+    default: zh-CN 
  
     # 语言文件存储目录 
     path: languages 
