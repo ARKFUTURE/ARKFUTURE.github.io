@@ -52,17 +52,15 @@ ARKFUTURE管理员配置 都存放与数据库中 并使用了相关的sql插件
 ``` 
 * 4 如果您启用了SSL相关
 ```
+! 请参考第6项
 配置 /etc/inspircd/conf/modulesconf.conf 中 关于SSL 的配置项目
-并且在 /etc/inspircd/ssl/ 目录中 放入相关CA证书文件
+并且在 /etc/inspircd/ssl/ 目录中 放入相关CA证书文件 
 
 !INSPIRCD 工作组 推荐使用 gnutls(默认开启tls1.3)!
 
 详细配置
 https://docs.inspircd.org/4/modules/ssl_gnutls
 https://docs.inspircd.org/4/modules/ssl_openssl
-
-我们的配置中 使用了 &SSLPath; 这样的定义符号 它会替换 /etc/inspircd/ssl/
-如: &SSLPath;ca.crt 代替 /etc/inspircd/ssl/ca.crt
 ``` 
 * 5 关于<die>
 ```
@@ -71,7 +69,7 @@ https://docs.inspircd.org/4/modules/ssl_openssl
 
 当 InspIRCd 启动时，如果检测到配置文件中存在 `<die>` 标签，服务器会立即停止启动，并向日志或控制台输出配置中指定的消息。
 ``` 
-* 6 对于 脚本 /usr/share/inspircd/deploy-ssl.sh 证书拷贝脚本(用于证书复制到配置文件) 中
+* 6 对于 脚本 /usr/share/inspircd/deploy-ssl.sh 证书拷贝脚本(用于证书复制到配置文件)
 ```
 我们的专属于ssl的目录为:
 INSPIRCD_CONFIG_DIR="/etc/inspircd/conf/ssl"
