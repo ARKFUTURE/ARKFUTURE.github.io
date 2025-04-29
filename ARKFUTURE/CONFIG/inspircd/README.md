@@ -92,6 +92,36 @@ find /etc/inspircd/conf/ssl/ -name "cert.pem" -exec chmod 644 {} \;
 
 应该可以解决 /etc/inspircd 目录引入的问题 
 ``` 
+* 8 对于使用官方的 INSPIRCD4+ 版本的deb安装包
+```
+如果您需要在无ssl环境的 inspircd4+ 上启用ssl
+您可以使用官方的 haproxy 模组 
+
+-1- 删除原有的<bing>
+
+<bind port="6667,6668,6669"
+      type="clients">
+
+并修改 <bing> 为 :
+
+<bind address="127.0.0.1"
+      port="29989"
+      hook="haproxy"
+      type="clients">
+
+-2- 
+apt 安装 haproxy
+并下载我们提供的示例 haproxy.cfg https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/haproxy.cfg
+
+然后 首先测试 haproxy 的配置文件是否正确 
+使用命令: haproxy -c -f ./haproxy.cfg
+这里需要修改你的证书路径
+
+生成测试证书:
+openssl req -x509 -newkey rsa:4096 -nodes -keyout cert.key  -out cert.crt  -days 365 -subj "/C=US/ST=California/L=San Francisco/O=MyOrg/OU=IT/CN=localhost/emailAddress=admin@example.com"  && cat cert.key  cert.crt  > ./cert.pem  
+
+
+```
 
 
 # 目录和文件说明
