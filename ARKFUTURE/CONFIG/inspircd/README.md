@@ -115,7 +115,7 @@ apt 安装 haproxy
 
 然后 首先测试 haproxy 的配置文件是否正确 
 使用命令: haproxy -c -f ./haproxy.cfg
-这里需要修改你的证书路径
+!这里需要修改你的证书路径!
 
 生成测试证书:
 openssl req -x509 -newkey rsa:4096 -nodes -keyout cert.key  -out cert.crt  -days 365 -subj "/C=US/ST=California/L=San Francisco/O=MyOrg/OU=IT/CN=localhost/emailAddress=admin@example.com"  && cat cert.key  cert.crt  > ./cert.pem  
