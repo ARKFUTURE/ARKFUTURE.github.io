@@ -81,13 +81,15 @@ find /etc/inspircd/conf/ssl/ -name "cert.pem" -exec chmod 644 {} \;
 * 7 对于部分插件 目录的配置
 ```
 对于启用了某些插件 所引用的文件 ircd会报错找不到文件 **官方建议使用 绝对路径**
-个人测试过 使用 
+
+我们建议 使用了编译的第三方模块的 建议使用如下目录配置 来避免严重的文件读取失败报错 请参照我们的afeconf配置
 
 &dir.config;
 &dir.config;/conf/
+&dir.config;/conf/ssl/
 &dir.config;/txt/
 
-可以解决 /etc/inspircd 目录引入的问题 其他目录没试过
+应该可以解决 /etc/inspircd 目录引入的问题 
 ``` 
 
 
