@@ -1,5 +1,5 @@
 * 您可以查看我们的配置文件, 可以为我们的配置文件提出**安全相关的建议和意见**, 我们会为了IRC的**匿名性/安全性积极采纳**
-# 安装 (对于稳定的Debian12)
+# 安装 (此页面所有内容都基于 稳定的Debian 官方页面的最新版本)
 # # INSPIRCD配置: 
 * 官方deb包安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/install.sh
 * ARKFUTURE全插件deb包安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh
@@ -44,11 +44,12 @@ systemctl daemon-reload
 * 2 管理员
 ```
 管理员配置 都存放在 /etc/inspircd/conf/opers.conf
-ARKFUTURE管理员配置 都存放与数据库中 并使用了相关的sql插件
+
+afeconf 管理员配置 都存放与数据库中 并启用了相关的sql插件
 ```
 * 3 配置相关
 ```
-我们所有的模块(插件)配置(包括第额外的需要编译的插件) 都存放在 /etc/inspircd/conf/modulesconf.conf
+我们所有的模块(插件)配置(包括第三方额外的需要编译的插件) 都存放在 /etc/inspircd/conf/modulesconf.conf
 ``` 
 * 4 如果您启用了SSL相关
 ```
