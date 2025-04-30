@@ -145,7 +145,7 @@ apt 安装 haproxy
 !这里需要修改你的证书路径!
 
 生成测试证书:
-openssl req -x509 -newkey rsa:2048 -nodes -days 365 -subj "/C=HK/ST=Hong Kong/L=Kowloon/O=ARKFUTURE/OU=IT/CN=arkfuture.test" -keyout key.pem -out cert.pem 
+! 经测试 实验性质的证书 不起作用 故不添加 测试生成命令
 ```
 
 
