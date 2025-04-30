@@ -102,14 +102,41 @@ find /etc/inspircd/conf/ssl/ -name "cert.pem" -exec chmod 644 {} \;
 <bind port="6667,6668,6669"
       type="clients">
 
-并修改 <bing> 为 :
+并修改 <bing> 为 : # 这里的思路为: 明文接口和ssl/tls接口分开发送数据 以便达到使用 connect 分类
 
+<bind address="127.0.0.1"
+      port="29988"
+      hook="haproxy"
+      type="clients">
 <bind address="127.0.0.1"
       port="29989"
       hook="haproxy"
       type="clients">
 
--2- 
+-2- 修改 <connect> :为
+<connect name="Basic"
+         parent="Main"
+         allow="*"
+         usecloak="yes"
+         useconnectban="yes"
+         port="29988">
+
+<connect name="Secure"
+         parent="Main"
+         allow="*"
+         usecloak="yes"
+         useconnectban="yes"
+         port="29989"
+         requiressl="yes"
+         usests="yes">
+
+-3- 现在 你可以启用 sts 模块并添加
+<sts host="*"
+     duration="30d"
+     port="29989"
+     preload="yes">
+
+-4- 
 apt 安装 haproxy
 并下载我们提供的示例 haproxy.cfg https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/haproxy.cfg
 
@@ -118,9 +145,7 @@ apt 安装 haproxy
 !这里需要修改你的证书路径!
 
 生成测试证书:
-openssl req -x509 -newkey rsa:4096 -nodes -keyout cert.key  -out cert.crt  -days 365 -subj "/C=US/ST=California/L=San Francisco/O=MyOrg/OU=IT/CN=localhost/emailAddress=admin@example.com"  && cat cert.key  cert.crt  > ./cert.pem  
-
-
+openssl req -x509 -newkey rsa:4096 -nodes -days 365 -subj "/C=HK/ST=Hong Kong/L=Kowloon/O=ARKFUTURE/OU=IT/CN=arkfuture.test" -keyout key.pem -out cert.pem && cat key.pem cert.pem  > ./fullcert.pem
 ```
 
 
