@@ -6,23 +6,6 @@
         return { day, month };
     }
 
-    // 根据日期加载不同的CSS
-    function loadCSS() {
-        const date = getCurrentDate();
-        const cssFiles = {
-            '12-25': 'theme/christmas.css',   // 圣诞节
-            '1-1': 'theme/newyear.css'       // 新年
-        };
-        const dateKey = `${date.month}-${date.day}`;
-        const cssFile = cssFiles[dateKey] || 'theme/default.css';
-
-        // 创建link标签加载CSS
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = cssFile;
-        document.head.appendChild(link);
-    }
-
     // 设置标题的变化
     const titles = ["ARKFUTURE", "技术无止,勇于创新", "以史为镜,洞察未来"];
     let currentIndex = 0;
@@ -53,5 +36,4 @@
         loadCSS();
         setInterval(incrementCounter, 1000);
         setInterval(updateTitle, 1500);
-        setInterval(function() { loadCSS(); }, 60000); 
     };
