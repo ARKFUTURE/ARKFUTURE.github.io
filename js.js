@@ -31,6 +31,14 @@
         counter++;
     }
 
+    // 动态加载CSS文件
+    function loadCSS() {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'theme.css';
+        document.head.appendChild(link);
+    }
+
     // 页面加载时执行
     window.onload = function() {
         loadCSS();
