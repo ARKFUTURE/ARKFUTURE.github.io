@@ -1,53 +1,83 @@
-/* 赛博朋克主题样式表 */
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700&display=swap');
+/* 高级赛博朋克科技风格 */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Rajdhani:wght@500;600&display=swap');
 
 :root {
-  --neon-blue: #4db8ff;
-  --neon-pink: #ff66cc;
-  --neon-purple: #b366ff;
-  --neon-cyan: #66ffcc;
-  --dark-bg: #1a1a2e;
-  --text-glow: 0 0 2px currentColor;
+  --neon-blue: #00F0FF;
+  --neon-purple: #B026FF;
+  --neon-green: #00FF88;
+  --neon-orange: #FF9E00;
+  --dark-bg: #080817;
+  --grid-line: rgba(0, 240, 255, 0.1);
 }
 
 body {
   font-family: 'Rajdhani', sans-serif;
-  background-color: var(--dark-bg);
-  color: var(--neon-cyan);
+  background: 
+    radial-gradient(ellipse at 20% 30%, rgba(0, 240, 255, 0.05) 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 70%, rgba(176, 38, 255, 0.05) 0%, transparent 40%),
+    linear-gradient(to bottom, #080817, #0a0a1f),
+    repeating-linear-gradient(0deg, var(--grid-line) 0px, var(--grid-line) 1px, transparent 1px, transparent 40px),
+    repeating-linear-gradient(90deg, var(--grid-line) 0px, var(--grid-line) 1px, transparent 1px, transparent 40px);
+  background-attachment: fixed;
+  color: #E0E0FF;
   line-height: 1.6;
+  font-size: 1rem;
   margin: 0;
   padding: 20px;
-}
-
-h1.LM {
-  font-size: 3rem;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: var(--text-glow);
-  margin: 1rem 0;
-}
-
-h1.tit, h2 {
-  color: var(--neon-blue);
-  text-shadow: var(--text-glow);
-  border-left: 3px solid var(--neon-pink);
-  padding-left: 10px;
-}
-
-a {
-  color: var(--neon-purple);
-  text-decoration: none;
-  transition: all 0.3s ease;
   position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.02) 0%, transparent 50%),
+    repeating-linear-gradient(0deg, transparent 0px, transparent 39px, rgba(0, 240, 255, 0.03) 39px, rgba(0, 240, 255, 0.03) 40px);
+  pointer-events: none;
+  z-index: -1;
+  animation: pulse 12s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+h1, h2, h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 500;
+  margin: 1.2rem 0;
+  letter-spacing: 1px;
+}
+
+h1 {
+  font-size: 2.2rem;
+  color: var(--neon-blue);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+}
+
+h2 {
+  font-size: 1.8rem;
+  color: var(--neon-purple);
+  text-shadow: 0 0 6px rgba(176, 38, 255, 0.3);
+}
+
+/* 统一链接样式 - 数据流效果 */
+a {
+  color: var(--neon-green);
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+  transition: all 0.3s ease;
 }
 
 a:hover {
-  color: var(--neon-pink);
-  text-shadow: 0 0 8px var(--neon-pink);
+  color: var(--neon-orange);
 }
 
 a::after {
@@ -57,80 +87,53 @@ a::after {
   height: 2px;
   bottom: -2px;
   left: 0;
-  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-purple));
   transform: scaleX(0);
-  transition: transform 0.3s ease;
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 a:hover::after {
   transform: scaleX(1);
+  transform-origin: left;
 }
 
-ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-ul li {
-  margin-bottom: 8px;
+/* 内容区块 */
+.content-block {
+  background: rgba(8, 8, 23, 0.7);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-left: 3px solid var(--neon-blue);
   position: relative;
-  padding-left: 20px;
+  overflow: hidden;
 }
 
-ul li::before {
-  content: "➤";
-  color: var(--neon-blue);
+.content-block::before {
+  content: '';
   position: absolute;
+  top: 0;
   left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--neon-blue), transparent);
+  animation: scan 3s linear infinite;
 }
 
-p {
-  margin: 1rem 0;
-  text-shadow: 0 0 2px rgba(0, 240, 255, 0.3);
-}
-
-pre {
-  background-color: rgba(13, 2, 33, 0.7);
-  border-left: 3px solid var(--neon-pink);
-  padding: 15px;
-  overflow-x: auto;
-  color: var(--neon-cyan);
-  text-shadow: var(--text-glow);
-}
-
-hr {
-  border: none;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
-  margin: 2rem 0;
-}
-
-footer {
-  margin-top: 3rem;
-  text-align: center;
-  font-size: 0.9rem;
-  color: rgba(0, 240, 255, 0.7);
-}
-
-/* 特殊元素样式 */
-#irc-link strong {
-  color: var(--neon-blue);
-  text-shadow: var(--text-glow);
-}
-
-p[style*="color: coral"] {
-  color: #ff7f50 !important;
-  text-shadow: 0 0 8px rgba(255, 127, 80, 0.7);
-}
-
-iframe {
-  background-color: rgba(0, 240, 255, 0.05);
-  border-radius: 4px;
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  h1.LM {
+  body {
+    padding: 15px;
+    font-size: 0.95rem;
+  }
+  h1 {
     font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.6rem;
   }
 }
