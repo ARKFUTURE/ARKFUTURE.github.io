@@ -7,6 +7,8 @@
 * ARKFUTURE 全插件服务器安装+arkfuture配置(此项目使用了第三方模块:数据库,ssl,sql认证等)(主要更新): https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh
 # # ERGOIRCD配置: 
 * https://arkfuture.github.io/ARKFUTURE/CONFIG/ergoircd/ircd.yaml
+# # IRCBOT 配置 : 使用Limnoria
+* https://arkfuture.github.io/ARKFUTURE/CONFIG/other/AFEBOT.conf
 
 # 端口
 
