@@ -15,6 +15,7 @@ chmod 777 ./inspircd.deb
 apt install ./inspircd.deb -y
 rm -rf ./inspircd.deb
 echo "安装完成,开始下载初始配置到/etc/inspircd/"
+sleep 2
 cd ~
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/afeconf/config.sh
 chmod 777 ./config.sh

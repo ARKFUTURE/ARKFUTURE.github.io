@@ -16,7 +16,7 @@ echo "安装完成,开始下载初始配置到/etc/inspircd/"
 sleep 2
 cd ~
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/config.sh
-sleep 2
+chmod 777 ./config.sh
 ./config.sh
 echo "脚本运行完成 请修进入/etc/inspircd改为您自己的配置文件"
 sleep 3
