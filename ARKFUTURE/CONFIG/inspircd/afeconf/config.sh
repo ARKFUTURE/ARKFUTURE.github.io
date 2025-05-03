@@ -29,6 +29,7 @@ wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt"
 wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt"
 cd /etc/inspircd/
 mkdir ./conf/ssl
+cd /etc/inspircd/conf/ssl
 wget -O cert.pem "https://arkfuture.github.io/ARKFUTURE/CONFIG/other/cert.pem.txt"
 wget -O key.pem "https://arkfuture.github.io/ARKFUTURE/CONFIG/other/key.pem.txt"
 cd /etc/inspircd/
