@@ -146,8 +146,8 @@ apt 安装 haproxy
 使用命令: haproxy -c -f ./haproxy.cfg
 !这里需要修改你的证书路径!
 
-生成测试证书:
-! 经测试 实验性质的证书 不起作用 故不添加 测试生成命令
+生成测试证书: 域名 arkfuture.test *.arkfuture.test (这些域名值用于测试, 实际是无效的)
+openssl req -x509 -newkey rsa:4096 -sha3-256 -days 365 -nodes -subj "/C=HK/ST=HongKong/L=Kowloon/O=ARKFUTURE/OU=IT Security/CN=arkfuture.test" -addext "subjectAltName = DNS:arkfuture.test" -addext "extendedKeyUsage = serverAuth, clientAuth" -keyout key.pem  -out cert.pem 
 ```
 
 
