@@ -37,12 +37,12 @@ chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
 find /etc/inspircd -type f -exec chmod 644 {} \;
 sleep 3
-echo "脚本运行完成 请修改为您自己的配置文件 当前ARKFUTURE配置为"
+echo "脚本运行完成 请修改为您自己的配置 当前ARKFUTURE配置为"
 head -n 1 ./inspircd.conf
 sleep 4
 echo "---注意---"
 echo "1"
-echo "请修改<server:name>,<badip>,<badhost:host>,exception:host>,<sts:host>的值[重要] 和其他您需要修改的配置内容内容"
+echo "请修改<server:name>,<badip>,<badhost:host>,<exception:host>,<sts:host>的值[重要] 和其他您需要修改的配置内容内容"
 echo "以便能达到在生产环境中正确运行 否则有可能会出现重大问题"
 echo "2"
 echo "我们添加了一个虚假的cert.pem/key.pem 在 conf/ssl/ 中 仅用于测试 测试完毕 请及时删除!"
