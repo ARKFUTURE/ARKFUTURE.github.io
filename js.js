@@ -39,9 +39,17 @@
         document.head.appendChild(link);
     }
 
+    function UA() {
+        if ( /curl|wget|libcurl/i.test(navigator.userAgent)) { 
+            window.location.replace("/ARKFUTURE/MD/index.md");  
+        }
+}
+
+
     // 页面加载时执行
     window.onload = function() {
         loadCSS();
+        UA();
         setInterval(incrementCounter, 1000);
         setInterval(updateTitle, 1500);
     };
