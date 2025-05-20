@@ -150,7 +150,6 @@ outputs:
         # one taken into consideration.
         header: X-Forwarded-For
 
-      #类型  #协议配置相关
       types:
         - alert:
             # payload: yes             # enable dumping payload in Base64
@@ -1204,8 +1203,8 @@ defrag:
 # last time seen flows.
 # The memcap can be specified in kb, mb, gb.  Just a number indicates it's
 # in bytes.
-# The memcap-policy can be "drop-flow", "pass-flow", "bypass", "drop-packet",
-# "pass-packet", "reject" or "ignore" (which is the default).
+# The memcap-policy can be "drop-flow", "pass-flow", "bypass", "drop-packet", "pass-packet", "reject" or "ignore" (which is the default).
+# 
 
 flow:
   memcap: 128mb
@@ -1936,9 +1935,3 @@ threshold-file: /etc/suricata/threshold.config
 #include: include1.yaml
 #include: include2.yaml
 
-##
-## 实时重载
-##
-
-detect-engine:
-  - rule-reload: true
