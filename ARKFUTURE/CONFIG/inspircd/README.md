@@ -94,60 +94,10 @@ find /etc/inspircd/conf/ssl/ -name "cert.pem" -exec chmod 644 {} \;
 
 应该可以解决 /etc/inspircd 目录引入的问题 
 ``` 
-* 8 对于使用官方的 INSPIRCD4+ 版本的deb安装包
+* 8 对于使用官方的 INSPIRCD 版本的deb安装包
 ```
-如果您需要在无ssl环境的 inspircd4+ 上启用ssl
-您可以使用官方的 haproxy 模组 
-
--1- 删除原有的<bing>
-
-<bind port="6667,6668,6669"
-      type="clients">
-
-并修改 <bing> 为 : # 这里的思路为: 明文接口和ssl/tls接口分开发送数据 以便达到使用 connect 分类
-
-<bind address="127.0.0.1"
-      port="29988"
-      hook="haproxy"
-      type="clients">
-<bind address="127.0.0.1"
-      port="29989"
-      hook="haproxy"
-      type="clients">
-
--2- 修改 <connect> :为
-<connect name="Basic"
-         parent="Main"
-         allow="*"
-         usecloak="yes"
-         useconnectban="yes"
-         port="29988">
-
-<connect name="Secure"
-         parent="Main"
-         allow="*"
-         usecloak="yes"
-         useconnectban="yes"
-         port="29989"
-         requiressl="yes"
-         usests="yes">
-
--3- 现在 你可以启用 sts 模块并添加
-<sts host="*"
-     duration="30d"
-     port="29989"
-     preload="yes">
-
--4- 
-apt 安装 haproxy
-并下载我们提供的示例 haproxy.cfg https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/haproxy.cfg
-
-然后 首先测试 haproxy 的配置文件是否正确 
-使用命令: haproxy -c -f ./haproxy.cfg
-!这里需要修改你的证书路径!
-
-生成测试证书: 域名 arkfuture.test *.arkfuture.test (这些域名值用于测试, 实际是无效的)
-openssl req -x509 -newkey rsa:4096 -sha3-256 -days 365 -nodes -subj "/C=HK/ST=HongKong/L=Kowloon/O=ARKFUTURE/OU=IT Security/CN=arkfuture.test" -addext "subjectAltName = DNS:arkfuture.test,DNS:*.arkfuture.test" -addext "extendedKeyUsage = serverAuth, clientAuth" -keyout key.pem  -out cert.pem 
+如果您需要在无ssl环境的 inspircd 上启用ssl
+您可以使用官方的 haproxy 模组 代理使用ssl
 ```
 
 
