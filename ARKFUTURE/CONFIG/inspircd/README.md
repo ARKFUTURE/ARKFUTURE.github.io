@@ -4,7 +4,7 @@
 * 官方deb包安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/install.sh
 * ARKFUTURE全插件deb包安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh
 * ARKFUTURE全插件编译安装(请自行修改编译脚本): https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/make.sh
-* ARKFUTURE 全插件服务器安装+arkfuture配置(此项目使用了第三方模块:数据库,ssl,sql认证等)(主要更新): https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh
+* ARKFUTURE 全插件服务器安装+arkfuture配置(包含一个无用的ca证书 为随机生成的测试证书 需要自行替换): https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh(主要更新): https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh
 # # ERGOIRCD配置: 
 * https://arkfuture.github.io/ARKFUTURE/CONFIG/ergoircd/ircd.yaml
 # # IRCBOT 配置 : 使用Limnoria
