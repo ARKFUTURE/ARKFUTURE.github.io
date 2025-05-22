@@ -80,11 +80,9 @@
     <br>
 
 <p>软件包搜索</p>
-    <form method="GET" action="https://packages.debian.org/search" target="_blank">
-        <input type="text" name="keywords" size="30" autocomplete="off" placeholder="Debian软件包查找 关键字"><br>
-        <input type="text" name="searchon" size="30" autocomplete="off" value="names" placeholder="查找类别:默认包名匹配"><br>
-        <input type="text" name="suite" size="30" autocomplete="off" value="bookworm" placeholder="系统代号:默认bookworm"><br>
-        <input type="text" name="section" size="30" autocomplete="off" value="all" placeholder="查找类别:默认所有">
+    <form method="GET" action="https://repology.org/projects/" target="_blank">
+        <input type="text" name="search" size="30" autocomplete="off" placeholder="Linux发行版软件包搜索"><br>
+        <input type="text" name="inrepo" size="30" autocomplete="off" placeholder="查找系统,参数 如:debian_13"><br>
         <input type="submit" value="搜索"><i><--点击</i>
     </form>
     <br>
