@@ -24,7 +24,6 @@ config listener 'Default'
 
 config user 'arkfuture'
         option password '修改为你的密码'
-        option admin    'true'
         option nick     '修改为你的昵称'
         option altnick  '修改为你的昵称'
         option ident    '修改为你的昵称'
