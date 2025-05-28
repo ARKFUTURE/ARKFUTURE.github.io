@@ -1,12 +1,16 @@
 * 您可以查看我们的配置文件, 可以为我们的配置文件提出**安全相关的建议和意见**, 我们会为了IRC的**匿名性/安全性积极采纳**
 # 安装 (此页面所有内容都基于 稳定的Debian 官方页面的最新版本)
-# # INSPIRCD配置: 
+# # INSPircd配置: 
 * 官方deb包安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/install.sh
 * ARKFUTURE全插件deb包安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh
-* ARKFUTURE全插件编译安装(请自行修改编译脚本): https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/make.sh
-* ARKFUTURE 全插件服务器安装+arkfuture配置(包含一个无作用的随机生成的测试ca证书 生产环境时需要自行替换): https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh(主要更新): https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh
-# # ERGOIRCD配置: 
-* https://arkfuture.github.io/ARKFUTURE/CONFIG/ergoircd/ircd.yaml
+* ARKFUTURE全插件编译脚本(根据官方打包项目修改 仅支持Debian): https://github.com/KissKissCat/inspircd-package-builder
+* ARKFUTURE全插件deb包安装+arkfuture配置(包含一个无作用的随机生成的测试ca证书 生产环境时需要自行替换): https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh
+# # ERGOircd配置: 
+* https://arkfuture.github.io/ARKFUTURE/CONFIG/other/ircd.yaml
+# # NGircd配置: 
+* https://arkfuture.github.io/ARKFUTURE/CONFIG/other/ngircd.conf
+* ngircd 的最小配置文件的实现 使用时需 修改 ngircd2.conf 为 ngircd.conf
+* https://arkfuture.github.io/ARKFUTURE/CONFIG/other/ngircd2.conf
 # # IRCBOT 配置 : 使用Limnoria
 * https://arkfuture.github.io/ARKFUTURE/CONFIG/other/AFEBOT.conf
 
@@ -47,7 +51,7 @@ systemctl daemon-reload
 ```
 管理员配置 都存放在 /etc/inspircd/conf/opers.conf
 
-afeconf 管理员配置 都存放与数据库中 并启用了相关的sql插件
+但是afeconf 管理员配置 都存放与数据库中 并启用了相关的sql插件
 ```
 * 3 配置相关
 ```
@@ -148,10 +152,10 @@ Paths:
 
 | Certbot 生成文件 | InspIRCd 配置参数 | 技术作用说明                      |
 | ---------------- | ----------------- | --------------------------------- |
-| `privkey.pem`    | keyfile           | 服务器私钥文件，用于 TLS 握手加密 |
-| `cert.pem`       | certfile          | 域名主体证书，包含公钥信息        |
-| `chain.pem`      | cafile            | 中间证书链                        |
-| `fullchain.pem`  | certfile          | 合并后的完整证书链                |
+| `privkey.pem`    | `keyfile`          | 服务器私钥文件，用于 TLS 握手加密 |
+| `cert.pem`       | `certfile`          | 域名主体证书，包含公钥信息        |
+| `chain.pem`      | `cafile`            | 中间证书链                        |
+| `fullchain.pem`  | `certfile`          | 合并后的完整证书链                |
  
 * 使用有效的 TLS 证书
 * * 在投入生产环境时,另一个主要障碍(但非常值得努力解决)是为您的域名获取有效的TLS证书(如果尚未完成):
