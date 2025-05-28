@@ -1,0 +1,76 @@
+# NTP外部服务器
+config server
+        option hostname 'ntp.ntsc.ac.cn'
+        option maxpoll '12'
+        option iburst 'yes'
+
+config server
+        option hostname 'cn.ntp.org.cn'
+        option maxpoll '12'
+        option iburst 'yes'
+
+config server
+        option hostname 'hk.ntp.org.cn'
+        option maxpoll '12'
+        option iburst 'yes'
+
+config server
+        option hostname 'tw.ntp.org.cn'
+        option maxpoll '12'
+        option iburst 'yes'
+
+config server
+        option hostname 'edu.ntp.org.cn'
+        option maxpoll '12'
+        option iburst 'yes'
+
+config server
+        option hostname 'stdtime.gov.hk'
+        option maxpoll '12'
+        option iburst 'yes'
+
+config server
+        option hostname 'time.smg.gov.mo'
+        option maxpoll '12'
+        option iburst 'yes'
+
+# NTP外部池
+config pool
+	option hostname 'pool.ntp.org'
+	option maxpoll '12'
+	option iburst 'yes'
+
+config pool
+	option hostname '0.pool.ntp.org'
+	option maxpoll '12'
+	option iburst 'yes'
+
+config pool
+	option hostname '1.pool.ntp.org'
+	option maxpoll '12'
+	option iburst 'yes'
+
+config pool
+	option hostname '2.pool.ntp.org'
+	option maxpoll '12'
+	option iburst 'yes'
+
+# NTP本地服务器
+config lock_all
+
+config rtcsync
+
+config dhcp_ntp_server
+	option iburst 'yes'
+	option disabled 'no'
+
+config allow
+	option interface 'lan'
+
+config makestep
+	option threshold '0.1'
+	option limit '3'
+
+config nts
+	option rtccheck 'yes'
+	option systemcerts 'yes'
