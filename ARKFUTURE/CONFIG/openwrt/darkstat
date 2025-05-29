@@ -6,8 +6,8 @@ config darkstat
 	option no_dns           false
 	option no_macs          false
 	option no_lastseen      false
-	option httpaddr         '0.0.0.0'
-	option httpport         '667'
+	option httpaddr         ''
+	option httpport         '8082'
 #	option network_filter   'not (src net 192.168.1 and dst net 192.168.1)'
 #	option network_netmask  '192.168.1.0/255.255.255.0'
 #	option local_only       false
