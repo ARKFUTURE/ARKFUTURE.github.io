@@ -10,7 +10,7 @@ config darkstat
 	option httpport         '667'
 #	option network_filter   'not (src net 192.168.1 and dst net 192.168.1)'
 #	option network_netmask  '192.168.1.0/255.255.255.0'
-	option local_only       false
+#	option local_only       false
 #	option hosts_max        '1000'
 #	option hosts_keep       '500'
 #	option ports_max        '60'
