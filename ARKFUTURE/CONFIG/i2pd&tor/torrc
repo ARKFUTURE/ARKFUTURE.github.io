@@ -1,0 +1,12 @@
+SOCKSPort 9050
+Log notice syslog
+RunAsDaemon 1
+DataDirectory /var/lib/tor
+ORPort auto
+Exitpolicy reject *:*
+BridgeRelay 1
+ServerTransportPlugin obfs4 exec /usr/bin/obfs4prox
+ServerTransportListenAddr obfs4 [::]:40158
+ExtORPort auto
+##如果您想运行私人桥接器 例如因为您将手动将您的桥接器 地址分发给您的朋友 请取消注释此行：
+PublishServerDescriptor bridge
