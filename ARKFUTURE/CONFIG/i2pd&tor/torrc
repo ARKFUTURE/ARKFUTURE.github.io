@@ -3,41 +3,36 @@
 # 此项目中的 address 项根据个人需求修改; 数据文件路径中 应该包含 certificates文件夹 否则补种失败
 # !!!!此文件已经经过实际测试,可以使用最新版本正常运行!!!!
 
-##### 代理
-SOCKSPort 0.0.0.0:9050
-# 下面是前置代理 取消注释此即可开启
-#HTTPSProxy 127.0.0.1:8787
-#Socks5Proxy 127.0.0.1:1080 
-# UseBridges的数字改为0 关闭自带网桥连接 开启前置代理
-UseBridges 1
 
-##### 配置
+##### 节点的名称和管理员联系方式
+Nickname AFE
+ContactInfo name@domain
+
+##### 代理设置
+# 设置Tor代理
+SOCKSPort 0.0.0.0:9050
+# 设置是否使用内置网桥连接 1为启用 0则使用前置代理
+UseBridges 1
+# 设置前置代理 tor 仅支持https和socks5
+#HTTPSProxy 127.0.0.1:8787
+#Socks5Proxy 127.0.0.1:1080
+
+##### 基础设置
 Log notice syslog
 RunAsDaemon 1
 DataDirectory /var/lib/tor
 ORPort auto
-BridgeRelay 1
+ExitRelay 0
+IPv6Exit 0
 AvoidDiskWrites 1
 ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed
-ExtORPort auto
-# 如果您想运行私人桥接器 例如因为您将手动将您的桥接器 地址分发给您的朋友 请取消注释此行：
-#PublishServerDescriptor bridge
-# tor默认的重建链路的时间是30s 可以适当延长时间保证速度
-NewCircuitPeriod 900
 
-# 下面是排除邪恶国家节点 取消注释此即可开启
-#ExcludeExitNodes {cn},{hk},{mo},{sg},{th},{pk},{by},{ru},{ir},{vn},{ph},{my},{cu}
-#ExcludeNodes {cn},{hk},{mo},{sg},{th},{pk},{by},{ru},{ir},{vn},{ph},{my},{cu}
-# 下面是强制排除邪恶国家节点 即使Tor找不到可用的线路 也不会去尝试这些国家的节点 取消注释此开启
-#StrictNodes 1
+##### 国家节点设置(出口节点 邪恶节点等)
+# StrictNodess 指定是否强制使用指定地区的节点 1为强制 0为可忽略
+StrictNodes 0
+# 指定出口端点 多个位置指纹使用逗号隔开 如{tw},{hk},{sg}
+#ExitNodes {tw}
 
-# 面是指定国家出口节点 比如德国 法国 荷兰 取消注释此开启
-#ExitNodes {de},{fr},{nl}
-# 下面是指定出口IP 和上面指定出口国家不可同时开启 二选一 取消注释此开启
-#ExitNodes 185.248.160.65,54.37.16.241,46.182.106.190
-# StrictExitNodes的意思是需要按照ExitNodes指定节点作为出口取消注释此开启
-#StrictExitNodes 1
-
-# 网桥 一行一个 前面必须有Bridge
+##### 网桥 一行一个 前面必须有Bridge
 Bridge obfs4 XXX
 Bridge obfs4 XXX
