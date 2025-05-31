@@ -1,5 +1,5 @@
 # torrc conf ---UTF-8 ---Security configuration
-# 这只是一个基础的配置文件 它可能需要根据您的需求进行调整
+# 这只是一个基础的Tor客户端配置文件 它可能需要根据您的需求进行调整
 # 此项目中的 address 项根据个人需求修改; 数据文件路径中 应该包含 certificates文件夹 否则补种失败
 # !!!!此文件已经经过实际测试,可以使用最新版本正常运行!!!!
 
@@ -9,30 +9,23 @@ Nickname AFE
 ContactInfo name@domain
 
 ##### 代理设置
-# 设置Tor代理
+# Tor代理设置
 SOCKSPort 127.0.0.1:9050
-# 下面是前置代理 去掉前面#号即可开启
+# 自带网桥设置 设置后为1后 Tor 将获取"Bridge"配置行中列出的每个桥接器的描述符 并自动连接到它们
+UseBridges 1
+# 前置代理设置
 #HTTPSProxy 127.0.0.1:8787
 #Socks5Proxy 127.0.0.1:1080
-# 下面数字改为0 关闭自带网桥连接
-UseBridges 1
 
 ##### 基础设置
 Log notice syslog
 RunAsDaemon 1
 AvoidDiskWrites 1
+DisableNetwork 1
+CookieAuthentication 1
+DormantCanceledByStartup 1
 ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed
 ConnectionPadding auto
-
-##### 是否作为中继
-BridgeRelay 0
-#ORPort auto
-# 避免公开节点信息 
-#PublishServerDescriptor 0
-
-##### 是否作为出口中继
-ExitRelay 0
-#ExtORPort auto
 
 ##### 国家节点设置(出口节点 邪恶节点等)
 # StrictNodess 指定是否强制使用指定地区的节点 1为强制 0为可忽略
