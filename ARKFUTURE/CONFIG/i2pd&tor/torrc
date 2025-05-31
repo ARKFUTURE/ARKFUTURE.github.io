@@ -10,7 +10,7 @@ ContactInfo name@domain
 
 ##### 代理设置
 # 设置Tor代理
-SOCKSPort 0.0.0.0:9050
+SOCKSPort 127.0.0.1:9050
 # 下面是前置代理 去掉前面#号即可开启
 #HTTPSProxy 127.0.0.1:8787
 #Socks5Proxy 127.0.0.1:1080
@@ -26,7 +26,12 @@ ORPort auto
 ExtORPort auto
 
 ##### 是否作为中继
-#BridgeRelay 1
+BridgeRelay 0
+# 避免公开节点信息 
+#PublishServerDescriptor 0
+
+##### 是否作为出口中继
+ExitRelay 0
 
 ##### 国家节点设置(出口节点 邪恶节点等)
 # StrictNodess 指定是否强制使用指定地区的节点 1为强制 0为可忽略
