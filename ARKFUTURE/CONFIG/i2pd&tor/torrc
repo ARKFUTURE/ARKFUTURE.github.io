@@ -22,9 +22,10 @@ Log notice syslog
 RunAsDaemon 1
 AvoidDiskWrites 1
 ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed
+ConnectionPadding 1
 #ORPort auto
 #ExtORPort auto
-ConnectionPadding 1
+
 
 ##### 是否作为中继
 BridgeRelay 0
