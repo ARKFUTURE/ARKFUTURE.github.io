@@ -15,15 +15,16 @@ SOCKSPort 127.0.0.1:9050
 #HTTPSProxy 127.0.0.1:8787
 #Socks5Proxy 127.0.0.1:1080
 # 下面数字改为0 关闭自带网桥连接
-#UseBridges 1
+UseBridges 1
 
 ##### 基础设置
 Log notice syslog
 RunAsDaemon 1
 AvoidDiskWrites 1
 ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed
-ORPort auto
-ExtORPort auto
+#ORPort auto
+#ExtORPort auto
+ConnectionPadding 1
 
 ##### 是否作为中继
 BridgeRelay 0
