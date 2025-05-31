@@ -32,6 +32,6 @@ ConnectionPadding auto
 # 指定出口端点 多个位置指纹使用逗号隔开 如{tw},{hk},{sg}
 #ExitNodes {tw}
 
-##### 网桥 一行一个 前面必须有Bridge
+##### 网桥 一行一个 格式已给出
 Bridge obfs4 XXX
 Bridge obfs4 XXX
