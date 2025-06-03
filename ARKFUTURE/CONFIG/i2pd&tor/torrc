@@ -26,6 +26,13 @@ DormantCanceledByStartup 1
 ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed
 ConnectionPadding auto
 
+##### 是否作为中继或出口中继
+#BridgeRelay 0
+#ORPort auto
+#PublishServerDescriptor 0
+#ExitRelay 0
+#ExtORPort auto
+
 ##### 国家节点设置(出口节点 邪恶节点等)
 # StrictNodess 指定是否强制使用指定地区的节点 1为强制 0为可忽略
 #StrictNodes 0
