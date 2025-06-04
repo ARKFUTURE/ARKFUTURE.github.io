@@ -94,7 +94,7 @@ Telegram 管理运维人员在线
 * 确保你愿意为社区的发展做出贡献
 
 2 成为成员节点的个人条件(非必要)
-* I2P Tor 匿名网络
+* I2P Tor GnuNet匿名网络
 * BitTorrent IPFS(新) 匿名文件共享网络
 * IRC XMPP Matrix Telegram 匿名聊天平台
 * Git搭建的个人知识库 或自己的任意的开源知识库
