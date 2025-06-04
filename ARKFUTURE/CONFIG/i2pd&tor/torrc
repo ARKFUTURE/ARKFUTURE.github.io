@@ -2,6 +2,7 @@
 # 这只是一个基础的Tor客户端配置文件 它可能需要根据您的需求进行调整
 # 此项目中的 address 项根据个人需求修改; 数据文件路径中 应该包含 certificates文件夹 否则补种失败
 # !!!!此文件已经经过实际测试,可以使用最新版本正常运行!!!!
+# https://2019.www.torproject.org/docs/tor-manual.html.en
 # DisableNetwork 1
 
 ##### 节点的名称和管理员联系方式
