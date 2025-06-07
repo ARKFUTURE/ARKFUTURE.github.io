@@ -11,7 +11,6 @@
             <outline text="exploitdb" type="rss" htmlUrl="https://exploit-db.com/" xmlUrl="https://exploit-db.com/rss.xml"/>
             <outline text="Sploitus" type="rss" htmlUrl="https://sploitus.com/" xmlUrl="https://sploitus.com/rss"/>
             <outline text="tenable" type="rss" htmlUrl="https://tenable.com/" xmlUrl="https://tenable.com/security/research/feed"/>
-            <outline text="0daytoday" type="rss" htmlUrl="https://0day.today/" xmlUrl="http://0day.today/rss"/>
             <outline text="seclists" type="rss" htmlUrl="https://seclists.org/" xmlUrl="http://seclists.org/rss/fulldisclosure.rss"/>
             <outline text="zerodayinitiative" type="rss" htmlUrl="https://zerodayinitiative.com/" xmlUrl="https://zerodayinitiative.com/rss/published/"/>
             <outline text="secaffairs(news)" type="rss" htmlUrl="https://securityaffairs.com" xmlUrl="https://securityaffairs.com/feed"/>
