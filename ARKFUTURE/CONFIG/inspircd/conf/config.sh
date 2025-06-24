@@ -21,6 +21,7 @@ wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/permchannels.con
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/xline.db
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modulesconf.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
+wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
 cd /etc/inspircd/txt
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/motd.txt
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
