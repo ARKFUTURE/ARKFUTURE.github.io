@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS user (
 项目源代码属于原作者及源代码维护作者
 
 ARKFUTURE 并未修改任何 INSPIRCD 源代码
-ARKFUTURE 属于全模块deb包维护者
+ARKFUTURE 属于全模块deb包维护者(非官方人员)
 此站点并非是 INSPIRCD 的分支项目 我们仅仅是因为我们自己有需要而打包
 
 全部模块deb包维护者 :ARKFUTURE studio(group) 简称 ARKFUTURE
