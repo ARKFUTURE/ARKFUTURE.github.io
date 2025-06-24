@@ -19,7 +19,7 @@ echo "您安装了 INSPIRCD 全模块版本 此配置需要您自行配置额外
 sleep 2
 cd ~
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/config.sh
-sleep 2
+chmod 777 ./config.sh
 ./config.sh
 echo "脚本运行完成 请修进入/etc/inspircd改为您自己的配置文件"
 sleep 3
