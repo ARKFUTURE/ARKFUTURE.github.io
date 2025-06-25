@@ -16,17 +16,8 @@ mkdir conf
 mkdir txt
 wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/afeconf/inspircd.conf"
 cd /etc/inspircd/conf
-wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf"
 wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/permchannels.conf"
 wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/xline.db"
-wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/afeconf/modulesconf.conf"
-wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf"
-wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/afeconf/auth.sq3"
-cd /etc/inspircd/txt
-wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/motd.txt"
-wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt"
-wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt"
-wget "https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt"
 cd /etc/inspircd/
 mkdir ./conf/ssl
 cd /etc/inspircd/conf/ssl

@@ -19,7 +19,7 @@ wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/permchannels.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/xline.db
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modulesconf.conf
+wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
 wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
 cd /etc/inspircd/txt
