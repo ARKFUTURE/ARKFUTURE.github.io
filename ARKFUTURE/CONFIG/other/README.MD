@@ -8,6 +8,7 @@ AFEBOT.conf  ->  Limnoria (IRC机器人)
 chrony.conf  ->  chrony (时间同步)
 haproxy.cfg  ->  haproxy (负载均衡及代理)
 inspircd-package-builder.zip  ->  inspircd (deb包打包工具)
+links.conf  ->  inspircd links 配置
 ircd.yaml  ->  ERGOircd (IRC服务器)
 irssi.conf  ->  irssi (IRC客户端)
 ngircd.conf and ngircd2.conf  ->  NGircd (IRC服务器)

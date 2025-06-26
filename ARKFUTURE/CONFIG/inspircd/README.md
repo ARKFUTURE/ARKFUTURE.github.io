@@ -2,8 +2,8 @@
 # 安装 (此页面所有内容都基于 稳定的Debian 官方页面的最新版本)
 # # INSPircd配置: 
 * 官方deb包安装+基本配置: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/install.sh
-* ARKFUTURE全插件deb包+基本配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh
-* ARKFUTURE全插件deb包安装+arkfuture配置(包含一个无作用的随机生成的测试ca证书 生产环境时需要自行替换): https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh
+* 本站全插件deb包+基本配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh
+* 本站全插件deb包+arkfuture配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh
 # # ERGOircd配置: 
 * https://arkfuture.github.io/ARKFUTURE/CONFIG/other/ircd.yaml
 # # NGircd配置: 
