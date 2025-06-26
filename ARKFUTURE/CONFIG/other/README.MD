@@ -4,13 +4,10 @@
 
 # 配置文件及对应软件说明
 ```
-AFEBOT.conf  ->  Limnoria (IRC机器人)
-chrony.conf  ->  chrony (时间同步)
+AFEBOT.conf  ->  Limnoria (IRC机器人) !
+chrony.conf  ->  chrony (时间同步) !
 haproxy.cfg  ->  haproxy (负载均衡及代理)
-inspircd-package-builder.zip  ->  inspircd (deb包打包工具)
+inspircd-package-builder.zip  ->  inspircd (deb包打包工具) !
 links.conf  ->  inspircd links 配置
-ircd.yaml  ->  ERGOircd (IRC服务器)
-irssi.conf  ->  irssi (IRC客户端)
-ngircd.conf and ngircd2.conf  ->  NGircd (IRC服务器)
 cert.pem.txt(cert.pem) and key.pem.txt(key.pem)  ->  测试的证书 (仅作为测试 没有实际用途)
 ```

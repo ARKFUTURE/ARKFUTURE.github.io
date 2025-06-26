@@ -4,14 +4,16 @@
 * 官方deb包安装+基本配置: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/install.sh
 * 本站全插件deb包+基本配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh
 * 本站全插件deb包+arkfuture配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh
+* 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/ARKFUTURE/CONFIG/inspircd
+* # HYBRIDircd配置:
+* https://arkfuture.github.io/ARKFUTURE/CONFIG/hybridircd/ircd.conf
+* 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/ARKFUTURE/CONFIG/hybridircd
 # # ERGOircd配置: 
-* https://arkfuture.github.io/ARKFUTURE/CONFIG/other/ircd.yaml
+* https://arkfuture.github.io/ARKFUTURE/CONFIG/ergoircd/ircd.yaml
+* 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/ARKFUTURE/CONFIG/ergoircd
 # # NGircd配置: 
-* https://arkfuture.github.io/ARKFUTURE/CONFIG/other/ngircd.conf
-* ngircd 的最小配置文件的实现 使用时需 修改 ngircd2.conf 为 ngircd.conf
-* https://arkfuture.github.io/ARKFUTURE/CONFIG/other/ngircd2.conf
-# # IRCBOT 配置 : 使用Limnoria
-* https://arkfuture.github.io/ARKFUTURE/CONFIG/other/AFEBOT.conf
+* https://arkfuture.github.io/ARKFUTURE/CONFIG/ngircd/ngircd.conf
+* 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/ARKFUTURE/CONFIG/ngircd
 
 # 端口
 
