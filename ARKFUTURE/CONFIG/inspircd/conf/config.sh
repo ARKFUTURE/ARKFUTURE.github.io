@@ -13,20 +13,20 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
 cd /etc/inspircd/conf
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/permchannels.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/xline.db
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/permchannels.conf
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/xline.db
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
 cd /etc/inspircd/txt
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/motd.txt
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/motd.txt
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt
 cd /etc/inspircd/
 mkdir ./conf/ssl
 cd /etc/inspircd/
