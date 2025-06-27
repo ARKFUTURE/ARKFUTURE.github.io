@@ -1,7 +1,9 @@
-# Ergo/Ergoircd conf ---UTF-8 ---Security configuration ---test
-# 这只是一个基础的配置文件 它可能需要根据您的需求进行调整
+# Ergo/Ergoircd conf ---UTF-8 ---Security configuration ---v2.16_BasicConfigure
+# 这只是一个基础的设置(模板)文件 它可能需要根据您的需求进行调整
 # !!!!此文件已经经过实际测试,可以使用最新版本正常运行!!!!
-# 这是Ergo的基本配置 由ARKFUTURE修改.
+
+# 您可以在以下文档中查询详细设置来完善此设置,我们的设置基于官方文档
+# https://github.com/ergochat/ergo/blob/master/default.yaml
 
 #-#-#-#-#-#-#-#-#-#-#-#-网络及服务器配置-#-#-#-#-#-#-#-#-#-#-#-#-#
 network:
@@ -10,7 +12,7 @@ network:
 
 server:
     #服务器名称
-    name: arkfuture.test
+    name: irc.arkfuture.test
     listeners:
         ":6667":
         ":6668":

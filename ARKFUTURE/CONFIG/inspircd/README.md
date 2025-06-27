@@ -5,7 +5,7 @@
 * 本站全插件deb包+基本配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/installssl.sh
 * 本站全插件deb包+arkfuture配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/afeconf.sh
 * 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/ARKFUTURE/CONFIG/inspircd
-* # HYBRIDircd配置:
+# # HYBRIDircd配置:
 * https://arkfuture.github.io/ARKFUTURE/CONFIG/hybridircd/ircd.conf
 * 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/ARKFUTURE/CONFIG/hybridircd
 # # ERGOircd配置: 
