@@ -575,7 +575,7 @@ limits:
     kicklen: 300
 
     # 最大频道主题长度
-    topiclen: 330
+    topiclen: 300
 
     # 单个客户端最大监控条目数
     monitor-entries: 100
