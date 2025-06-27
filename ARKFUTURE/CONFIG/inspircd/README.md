@@ -104,7 +104,32 @@ https://docs.inspircd.org/4/modules/ssl_openssl
 
 应该可以解决 /etc/inspircd 目录引入的问题 
 ``` 
+* 7 irc互联
+```
+为了增强irc互联的标准性 我们将会定义我们自己的 limits(最大长度限制) 值:
+cidr 32 IPv4长度
+cidr 128 IPv6长度
+line 512 最大irc行长度
 
+away 200 最大离开消息长度
+chan 60 最大频道名称长度
+host 64 最大主机名长度
+key 30 最大通频道密钥长度
+kick 300 最大踢人消息长度
+modes 20 单个MODE消息中可修改的非标签模式的最大数量
+nick 30 最大昵称长度
+quit 300 最大退出消息长度
+real 130 最大真实姓名长度
+topic 330 最大频道主题长度
+user 10 最大用户名长度
+ident 20 最大用户标识长度
+
+whowas-entries 100 单个客户端最大监控条目数
+whowas-entries 100 历史WhoWas记录数量
+chan-list-modes 100 频道列表模式(beI)最大条目数
+registration-messages 1024 注册期间最大接收消息数
+multiline (max-bytes 4096, max-lines 100) 多行消息限制
+``` 
 
 # 目录和文件说明
 ```

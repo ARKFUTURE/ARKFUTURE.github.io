@@ -120,7 +120,7 @@ server:
          # IPv4的CIDR前缀长度
         cidr-len-ipv4: 32
         # IPv6的CIDR前缀长度
-        cidr-len-ipv6: 64
+        cidr-len-ipv6: 128
         # 豁免连接限制的IP/网络列表
         exempted:
             # - "localhost"
@@ -160,7 +160,7 @@ server:
         # IPv4地址的CIDR掩码长度
         cidr-len-ipv4: 32
         # IPv6地址的CIDR掩码长度
-        cidr-len-ipv6: 64
+        cidr-len-ipv6: 128
         # 哈希输出位数
         num-bits: 64
 
@@ -557,25 +557,25 @@ languages:
 # 全网络必须统一的限制参数
 limits:
     # 最大昵称长度
-    nicklen: 32
+    nicklen: 30
 
     # 最大用户标识长度
     identlen: 20
 
     # 最大真实姓名长度
-    realnamelen: 150
+    realnamelen: 130
 
     # 最大频道名称长度
-    channellen: 64
+    channellen: 60
 
     # 最大离开消息长度
-    awaylen: 390
+    awaylen: 200
 
     # 最大踢人消息长度
-    kicklen: 390
+    kicklen: 300
 
     # 最大频道主题长度
-    topiclen: 390
+    topiclen: 330
 
     # 单个客户端最大监控条目数
     monitor-entries: 100
