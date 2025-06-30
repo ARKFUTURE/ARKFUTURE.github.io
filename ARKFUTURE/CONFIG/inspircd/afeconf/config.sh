@@ -15,14 +15,12 @@ rm -rf *
 mkdir conf
 mkdir txt
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/afeconf/inspircd.conf
+echo "下载测试ssl证书,此证书仅用于测试(占位用,并无其他作用),需要自行删除,并且使用官方脚本拷贝您的生产环境证书"
+curl -L -o cert.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/cert.pem.txt
+curl -L -o key.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/key.pem.txt
 cd /etc/inspircd/conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/permchannels.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/xline.db
-cd /etc/inspircd/
-mkdir ./conf/ssl
-cd /etc/inspircd/conf/ssl
-curl -L -o cert.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/cert.pem.txt
-curl -L -o key.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/key.pem.txt
 cd /etc/inspircd/
 chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
