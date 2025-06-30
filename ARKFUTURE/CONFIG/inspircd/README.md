@@ -62,11 +62,10 @@ systemctl daemon-reload
 ```
 0 参考下面的 #SSL证书生成
 
-1 配置 /etc/inspircd/conf/modules.conf 中 关于SSL 的配置项目 (我们将/conf/ssl定义为证书存放目录, 您也可以配置自己的ssl证书存放目录而不使用我们规定的)
+1 配置 /etc/inspircd/conf/modules.conf 中 关于SSL 的配置项目 (我们更改了之前的配置配置文件,以符合deploy-ssl.sh中的目录文件配置)
 
 2修改证书续订拷贝脚本 /usr/share/inspircd/deploy-ssl.sh
 在脚本中 需要修改为:
-INSPIRCD_CONFIG_DIR="/etc/inspircd/conf/ssl" (我们将/conf/ssl定义为证书存放目录, 也可以替换为您的ssl目录)
 CERT_DIR="/etc/letsencrypt/live/example.com" (将example.com替换为您的域名, 也可以使用二级域名)
 
 3 在第一次使用SSL时 对于证书文件 您可以主动执行脚本 `/usr/share/inspircd/deploy-ssl.sh` 来帮您正确拷贝证书文件
@@ -99,7 +98,6 @@ https://docs.inspircd.org/4/modules/ssl_openssl
 
 &dir.config;
 &dir.config;/conf/
-&dir.config;/conf/ssl/
 &dir.config;/txt/
 
 应该可以解决 /etc/inspircd 目录引入的问题 
