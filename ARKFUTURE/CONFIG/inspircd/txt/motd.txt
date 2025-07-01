@@ -25,9 +25,12 @@
 - \c14* 输入[\c04/oper 密码\c14] \c12 登录管理账户
 -
 \c{white,pink}----------官方网络频道
-- #arkfuture_studio - 工作室频道
-- #Help - ARKFUTURE 和 IRC 相关问题的帮助频道
 - #lobby - 公共聊天频道 
+- #Help - ARKFUTURE 和 IRC 相关问题的帮助频道
+- #arkfuture_studio - ARKFUTURE工作室频道(Studio)
+- #arkfuture_asc - ARK融合安全中心(Cyber Security/National Security) 非公开频道
+- #arkfuture_afi - ARK融合情报中心(Fusion Intelligence) 非公开频道
+-
 -
 \c{white,pink}----------警告
 - 不对通过此网络的任何文本或材料的内容
