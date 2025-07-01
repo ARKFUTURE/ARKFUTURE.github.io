@@ -24,7 +24,7 @@
 - \c14* 输入[\c04/MSG arkfuture 消息\c14] \c12 联系管理员 
 - \c14* 输入[\c04/oper 密码\c14] \c12 登录管理账户
 -
-\c{white,pink}----------官方网络频道
+\c{white,pink}----------官方网络频道\c
 - #lobby - 公共聊天频道 
 - #Help - ARKFUTURE 和 IRC 相关问题的帮助频道
 - #arkfuture_studio - ARKFUTURE工作室频道(Studio)
