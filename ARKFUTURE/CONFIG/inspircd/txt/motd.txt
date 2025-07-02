@@ -8,7 +8,7 @@
 - \b 我们注重匿名性,IRC 不记名,添加好友请谨慎鉴别,我们的匿名方法及匿名建议:
 - \c02* 使用 "\c04 代理,TOR,I2P \c02" 连接,以增强您的匿名性
 - \c02* 使用 "\c04 OTR(Off-the-Record Messaging) \c02" 技术
-- \c02* 进入服务器 会自动添加 \c04"+ix模式" \c02
+- \c02* 进入服务器 会自动添加 \c04"+iw模式" \c02
 - \c02* 网络管理部门不会\c04阅读,抓取,收集\c02您的任何消息(聊天消息,私人消息及文件)
 - \c02* 网络管理部门不会干预 非官方频道 中发生的频道事务 除非它违反了公约中的管理内容
 - \c02* 网络管理部门不会获取服务器的任何内容跟\c04执法者\c02合作, 请阅读[\c04Warrant Canary\c02]
@@ -25,11 +25,12 @@
 - \c14* 输入[\c04/oper 密码\c14] \c12 登录管理账户
 -
 \c{white,pink}----------官方网络频道\c
-- #lobby - 公共聊天频道 
 - #Help - ARKFUTURE 和 IRC 相关问题的帮助频道
+- #lobby - 公共聊天频道 
 - #arkfuture_studio - ARKFUTURE工作室频道(Studio)
-- #arkfuture_asc - ARK融合安全中心(Cyber Security/National Security) 非公开频道
-- #arkfuture_afi - ARK融合情报中心(Fusion Intelligence) 非公开频道
+- #arkfuture_asc - ARK融合安全中心(Cyber Security/National Security/Strategic Research) 非公开频道
+- #arkfuture_afi - ARK融合情报中心(Fusion Intelligence/Big Data Analysis) 非公开频道
+- #arkfuture_aer - ARK融合应急中心(Emergency Response/Crisis Management Center) 非公开频道
 -
 -
 \c{white,pink}----------警告
