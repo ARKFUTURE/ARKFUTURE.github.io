@@ -32,7 +32,7 @@ mkdir ./conf/ssl
 cd /etc/inspircd/
 chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
-find /etc/inspircd -type f -exec chmod 644 {} \;
+find /etc/inspircd -type f -exec chmod 600 {} \;
 sleep 3
 echo "脚本运行完成 请修改为您自己的配置 当前ARKFUTURE配置为"
 head -n 1 ./inspircd.conf
