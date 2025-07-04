@@ -14,7 +14,6 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
-echo "下载测试ssl证书,此证书仅用于测试(占位用,并无其他作用),需要自行删除,并且使用官方脚本拷贝您的生产环境证书"
 curl -L -o cert.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/cert.pem.txt
 curl -L -o key.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/key.pem.txt
 cd /etc/inspircd/
@@ -30,7 +29,7 @@ echo "1"
 echo "请修改<define:value>为您的 [域名] 如:irc.example.test 和其它您需要修改的[自己的配置内容]"
 echo "以便能达到在生产环境中正确运行 否则有可能会出现重大问题"
 echo "2"
-echo "我们添加了一个虚假的cert.pem/key.pem 在 etc/inspircd 中 ![仅用于测试 测试完毕 请及时删除]!"
+echo "我们添加了一个虚假的cert.pem/key.pem 在 etc/inspircd 中 ![此证书仅用于测试(占位用,并无其他作用),需要自行删除,并且使用官方脚本拷贝您的生产环境证书]!"
 echo "按照 https://ARKFUTURE.github.io/ARKFUTURE/CONFIG/inspircd/README.md 的说明 使用官方脚本 正确导您自己的入证书"
 echo "3"
 echo "此脚本只能运行一次! 如果运行第二次 会覆盖您的配置文件! 请谨慎操作"
