@@ -25,18 +25,19 @@
 - \c14* 输入[\c04/oper 密码\c14] \c12 登录管理账户
 -
 \c{white,pink}----------官方网络频道\c
-- #Help - ARKFUTURE 和 IRC 相关问题的帮助频道
+- #help - ARKFUTURE 和 IRC 相关问题的帮助频道
 - #lobby - 公共聊天频道 
 - #arkfuture_studio - ARKFUTURE工作室频道(Studio)
+- #arkfuture_help - 帮助频道
+- #arkfuture_log - 管理员 snomasks 消息频道 非公开频道
 - #arkfuture_asc - ARK融合安全中心(Cyber Security/National Security/Strategic Research) 非公开频道
 - #arkfuture_afi - ARK融合情报中心(Fusion Intelligence/Big Data Analysis) 非公开频道
 - #arkfuture_aer - ARK融合应急中心(Emergency Response/Crisis Management Center) 非公开频道
 -
 -
-\c{white,pink}----------警告
-- 不对通过此网络的任何文本或材料的内容
-- 或在使用这些服务时运行任何命令的结果承担任何责任
-- 并明确声明对此类内容或结果不承担任何责任
+\c{white,pink}----------其他说明
+- 如果有用户需要跟您使用dcc传输文件 
+- 您可以使用:[/DCCALLOW +用户名 2h] 这个命令来添加对方到白名单
 
 **************************访问权限是特权而不是权利***************************
 请仔细阅读上面的MOTD以保证您了解和使用我们的IRC
