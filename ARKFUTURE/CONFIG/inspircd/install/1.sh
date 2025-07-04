@@ -13,12 +13,7 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-if [[ -e "/etc/inspircd/inspircd.conf"  ]]; then
-    echo "您的/etc/inspircd/inspircd.conf存在, 不进行覆盖, 除非您主动删除它"
-else 
-    echo "您的/etc/inspircd/inspircd.conf不存在, 进行下载"
-    curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
-fi 
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
 cd /etc/inspircd/conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
