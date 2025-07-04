@@ -17,6 +17,7 @@ mkdir txt
 if [[ -f "/etc/inspircd/inspircd.conf"  ]]; then
     echo "您的/etc/inspircd/inspircd.conf存在, 不进行覆盖, 除非您主动删除它"
 else 
+    echo "您的/etc/inspircd/inspircd.conf不存在, 进行下载"
     curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
 fi 
 echo "下载测试ssl证书,此证书仅用于测试(占位用,并无其他作用),需要自行删除,并且使用官方脚本拷贝您的生产环境证书"
