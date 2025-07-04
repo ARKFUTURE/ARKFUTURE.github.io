@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "更新配置文件"
-echo "! 此操作会覆盖掉您除了inspircd.conf和modules.conf的其余配置文件 !"
+echo "! 此操作会覆盖掉配置文件 !"
 echo "此脚本仅适用最新的ARKFUTURE nossl配置 以及 更新ARKFUTURE的默认配置"
 if [ "$(id -u)" -ne 0 ]; then
     echo "错误：请使用 sudo 或 root 权限执行本脚本"
@@ -20,12 +20,7 @@ else
     curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
 fi 
 cd /etc/inspircd/conf
-if [[ -e "/etc/inspircd/modules.conf"  ]]; then
-    echo "您的/etc/inspircd/modules.conf存在, 不进行覆盖, 除非您主动删除它"
-else 
-    echo "您的/etc/inspircd/modules.conf不存在, 进行下载"
-    curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
-fi 
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/permchannels.conf

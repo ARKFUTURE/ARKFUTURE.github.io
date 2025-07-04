@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "更新配置文件"
-echo "! 此操作会覆盖掉您除了inspircd.conf和modules.conf的其余配置文件 !"
+echo "! 此操作会覆盖配置文件 !"
 echo "ARKFUTURE 服务器正式的配置文件, 是ARKFUTURE公共配置的分支配置"
 sleep 3
 if [ "$(id -u)" -ne 0 ]; then
@@ -14,12 +14,7 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-if [[ -e "/etc/inspircd/inspircd.conf"  ]]; then
-    echo "您的/etc/inspircd/inspircd.conf存在, 不进行覆盖, 除非您主动删除它"
-else 
-    echo "您的/etc/inspircd/inspircd.conf不存在, 进行下载"
-    curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
-fi 
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
 echo "下载测试ssl证书,此证书仅用于测试(占位用,并无其他作用),需要自行删除,并且使用官方脚本拷贝您的生产环境证书"
 curl -L -o cert.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/cert.pem.txt
 curl -L -o key.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/key.pem.txt
