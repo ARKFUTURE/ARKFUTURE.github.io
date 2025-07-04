@@ -27,8 +27,6 @@ curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.tx
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt
 cd /etc/inspircd/
-mkdir ./conf/ssl
-cd /etc/inspircd/
 chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
 find /etc/inspircd -type f -exec chmod 600 {} \;
