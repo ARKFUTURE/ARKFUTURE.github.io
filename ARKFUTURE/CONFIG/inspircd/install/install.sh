@@ -1,11 +1,11 @@
 #!/bin/bash
-echo "inspircd 安装脚本 需要root权限 Debian"
+echo "inspircd 安装脚本 需要root权限 Debian12"
 if [ "$(id -u)" -ne 0 ]; then
     echo "错误：请使用 sudo 或 root 权限执行本脚本"
     exit 1
 fi
 echo "现在是root用户权限"
-echo "开始执行安装脚本 "
+echo "开始执行安装脚本"
 sleep 2
 echo "请选择要下载的版本:"
 read -p "请输入数字(1-2);1为官方版本,2为第本站全模块版本: " version 
