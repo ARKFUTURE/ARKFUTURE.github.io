@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "更新配置文件"
-echo "! 此操作会覆盖掉您的配置文件 !"
+echo "! 此操作会覆盖掉您除了inspircd.conf和modules.conf的其余配置文件 !"
 echo "此脚本仅适用最新的ARKFUTURE nossl配置 以及 更新ARKFUTURE的默认配置"
 if [ "$(id -u)" -ne 0 ]; then
     echo "错误：请使用 sudo 或 root 权限执行本脚本"
@@ -13,13 +13,21 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
+if [[ -f "/etc/inspircd/inspircd.conf"  ]]; then
+    echo "您的/etc/inspircd/inspircd.conf存在, 不进行覆盖, 除非您主动删除它"
+else 
+    curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
+fi 
 cd /etc/inspircd/conf
+if [[ -f "/etc/inspircd/modules.conf"  ]]; then
+    echo "您的/etc/inspircd/modules.conf存在, 不进行覆盖, 除非您主动删除它"
+else 
+    curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
+fi 
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/permchannels.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/xline.db
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
 cd /etc/inspircd/txt
@@ -34,5 +42,5 @@ chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
 find /etc/inspircd -type f -exec chmod 600 {} \;
 sleep 3
-echo "脚本运行完成 请修改为您自己的配置 当前ARKFUTURE配置为"
+echo "脚本运行完成 请修改为您自己的配置 当前配置为"
 head -n 1 ./inspircd.conf
