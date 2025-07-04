@@ -18,7 +18,6 @@ cd /etc/inspircd/conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
-#curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/xline.db
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
 cd /etc/inspircd/txt
