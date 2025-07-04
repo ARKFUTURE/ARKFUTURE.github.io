@@ -14,7 +14,7 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-if [[ -f "/etc/inspircd/inspircd.conf"  ]]; then
+if [[ -e "/etc/inspircd/inspircd.conf"  ]]; then
     echo "您的/etc/inspircd/inspircd.conf存在, 不进行覆盖, 除非您主动删除它"
 else 
     echo "您的/etc/inspircd/inspircd.conf不存在, 进行下载"
