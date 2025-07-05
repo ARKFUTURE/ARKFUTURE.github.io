@@ -13,7 +13,7 @@ echo "开始下载配置文件到/etc/inspircd"
 cd /etc/inspircd
 rm -rf *
 mkdir conf
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/afeconf/inspircd.conf
 curl -L -o cert.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/cert.pem.txt
 curl -L -o key.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/key.pem.txt
 cd /etc/inspircd/
