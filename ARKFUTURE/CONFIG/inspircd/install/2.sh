@@ -19,7 +19,7 @@ curl -L -o key.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/key.pem.tx
 cd /etc/inspircd/
 chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
-find /etc/inspircd -type f -exec chmod 600 {} \;
+find /etc/inspircd -type f -exec chmod 644 {} \;
 sleep 3
 echo "脚本运行完成 请修改为您自己的配置 当前配置为"
 head -n 1 ./inspircd.conf
