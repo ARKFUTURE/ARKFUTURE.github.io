@@ -30,14 +30,14 @@ TEST: \c11,04 A\c --- \c{green} A\c --- \c{red,cyan} A\c --- \hea74dc A\h --- \h
 - \c14* 输入[\c10/oper 管理员名 密码\c14] 登录管理账户
 -
 \c{white,pink}----------官方网络频道\c
-- \c{green,pink}#help\c - ARKFUTURE 和 IRC 相关问题的帮助频道
-- \c{green,pink}#lobby\c - 公共聊天频道 
-- \c{green,pink}#arkfuture_studio\c - ARKFUTURE工作室频道(Studio)
-- \c{green,pink}#arkfuture_help\c - 帮助频道
-- \c{green,pink}#arkfuture_log\c - 管理员 snomasks 消息频道 非公开频道
-- \c{green,pink}#arkfuture_asc\c - ARK融合安全中心(Cyber Security/National Security/Strategic Research) 非公开频道
-- \c{green,pink}#arkfuture_afi\c - ARK融合情报中心(Fusion Intelligence/Big Data Analysis) 非公开频道
-- \c{green,pink}#arkfuture_aer\c - ARK融合应急中心(Emergency Response/Crisis Management Center) 非公开频道
+- \c{blue,orange}#help\c - ARKFUTURE 和 IRC 相关问题的帮助频道
+- \c{blue,orange}#lobby\c - 公共聊天频道 
+- \c{blue,orange}#arkfuture_studio\c - ARKFUTURE工作室频道(Studio)
+- \c{blue,orange}#arkfuture_help\c - 帮助频道
+- \c{blue,orange}#arkfuture_log\c - 管理员 snomasks 消息频道 非公开频道
+- \c{blue,orange}#arkfuture_asc\c - ARK融合安全中心(Cyber Security/National Security/Strategic Research) 非公开频道
+- \c{blue,orange}#arkfuture_afi\c - ARK融合情报中心(Fusion Intelligence/Big Data Analysis) 非公开频道
+- \c{blue,orange}#arkfuture_aer\c - ARK融合应急中心(Emergency Response/Crisis Management Center) 非公开频道
 -
 -
 \c{white,pink}----------其他说明
