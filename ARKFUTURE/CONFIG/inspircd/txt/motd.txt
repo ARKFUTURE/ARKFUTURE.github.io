@@ -1,6 +1,7 @@
 #motd -- UTF-8 
 TEST: \c00 0 \c01 1 \c02 2 \c03 3 \c04 4 \c05 5 \c06 6 \c07 7 \c08 8 \c09 9 \c10 10 \c11 11 \c1 12 \c13 13 \c14 14 \c15 15 \c99 99
-TEST: \b A \i A \r A \u A \m A \s A \c11,04 A\c \c{red,cyan} A\c \hea74dc,2ec27e A\h
+TEST: \b A \i A \r A \u A \m A \s A 
+TEST: \c11,04 A\c --- \c{red,cyan} A\c --- \hea74dc,2ec27e A\h
 - 
 \c{white,pink}----------欢迎\c
 - \c07\bWelcome to \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E 
@@ -19,14 +20,14 @@ TEST: \b A \i A \r A \u A \m A \s A \c11,04 A\c \c{red,cyan} A\c \hea74dc,2ec27e
 - 
 \c{white,pink}----------频道规则·相关命令\c
 - \b !您可以创建自己的频道并推广!
-- \c07* 输入 \c04 /RULES  \c07获取IRC规则 
-- \c07* 输入 \c04 /HELPOP \c07获取IRC帮助信息 
-- \c07* 输入 \c04 /ADMIN  \c07获取IRC管理员信息 
+- \c07* 输入 \c02 /RULES  \c07获取IRC规则 
+- \c07* 输入 \c02 /HELPOP \c07获取IRC帮助信息 
+- \c07* 输入 \c02 /ADMIN  \c07获取IRC管理员信息 
 - \c07* 联系管理员申请进入非公开频道  
 -
 \c{white,pink}----------管理运维\c
-- \c14* 输入[\c04/MSG arkfuture 消息\c14] \c12 联系管理员 
-- \c14* 输入[\c04/oper 密码\c14] \c12 登录管理账户
+- \c14* 输入[\c10/MSG arkfuture 消息\c14] 联系管理员 
+- \c14* 输入[\c10/oper 管理员名 密码\c14] 登录管理账户
 -
 \c{white,pink}----------官方网络频道\c
 - #help - ARKFUTURE 和 IRC 相关问题的帮助频道
