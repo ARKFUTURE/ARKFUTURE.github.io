@@ -1,4 +1,4 @@
-# 权证金丝雀 | Warrant Canary 
+# 权证金丝雀(金丝雀安全说明) | Warrant Canary 
 ## 01/01/2025
 * * [UTF-8] 
 * * 自签署日起, 每次更新Warrant Canary警告信都将进行数字签名.
