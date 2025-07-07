@@ -1,7 +1,7 @@
 #motd -- UTF-8 
 TEST: \c00 0 \c01 1 \c02 2 \c03 3 \c04 4 \c05 5 \c06 6 \c07 7 \c08 8 \c09 9 \c10 10 \c11 11 \c1 12 \c13 13 \c14 14 \c15 15 \c99 99
 TEST: \b A \i A \r A \u A \m A \s A 
-TEST: \c11,04 A\c --- \c{red,cyan} A\c --- \hea74dc,2ec27e A\h
+TEST: \c11,04 A\c --- \c{green} A\c --- \c{red,cyan} A\c --- \hea74dc A\h --- \h613583,2ec27e A\h
 - 
 \c{white,pink}----------欢迎\c
 - \c07\bWelcome to \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E 
@@ -30,14 +30,14 @@ TEST: \c11,04 A\c --- \c{red,cyan} A\c --- \hea74dc,2ec27e A\h
 - \c14* 输入[\c10/oper 管理员名 密码\c14] 登录管理账户
 -
 \c{white,pink}----------官方网络频道\c
-- #help - ARKFUTURE 和 IRC 相关问题的帮助频道
-- #lobby - 公共聊天频道 
-- #arkfuture_studio - ARKFUTURE工作室频道(Studio)
-- #arkfuture_help - 帮助频道
-- #arkfuture_log - 管理员 snomasks 消息频道 非公开频道
-- #arkfuture_asc - ARK融合安全中心(Cyber Security/National Security/Strategic Research) 非公开频道
-- #arkfuture_afi - ARK融合情报中心(Fusion Intelligence/Big Data Analysis) 非公开频道
-- #arkfuture_aer - ARK融合应急中心(Emergency Response/Crisis Management Center) 非公开频道
+- \c{green,pink}#help\c - ARKFUTURE 和 IRC 相关问题的帮助频道
+- \c{green,pink}#lobby\c - 公共聊天频道 
+- \c{green,pink}#arkfuture_studio\c - ARKFUTURE工作室频道(Studio)
+- \c{green,pink}#arkfuture_help\c - 帮助频道
+- \c{green,pink}#arkfuture_log\c - 管理员 snomasks 消息频道 非公开频道
+- \c{green,pink}#arkfuture_asc\c - ARK融合安全中心(Cyber Security/National Security/Strategic Research) 非公开频道
+- \c{green,pink}#arkfuture_afi\c - ARK融合情报中心(Fusion Intelligence/Big Data Analysis) 非公开频道
+- \c{green,pink}#arkfuture_aer\c - ARK融合应急中心(Emergency Response/Crisis Management Center) 非公开频道
 -
 -
 \c{white,pink}----------其他说明
