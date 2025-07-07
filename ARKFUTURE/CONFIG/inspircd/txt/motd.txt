@@ -34,10 +34,10 @@ TEST: \c11,04 A\c --- \c{green} A\c --- \c{red,cyan} A\c --- \hea74dc A\h --- \h
 - \c{orange,blue}#lobby\c - 公共聊天频道 
 - \c{orange,blue}#arkfuture_studio\c - ARKFUTURE工作室频道(Studio)
 - \c{orange,blue}#arkfuture_help\c - 帮助频道
-- \c{orange,blue}#arkfuture_log\c - 管理员 snomasks 消息频道 非公开频道
-- \c{orange,blue}#arkfuture_asc\c - ARK融合安全中心(Cyber Security/National Security/Strategic Research) 非公开频道
-- \c{orange,blue}#arkfuture_afi\c - ARK融合情报中心(Fusion Intelligence/Big Data Analysis) 非公开频道
-- \c{orange,blue}#arkfuture_aer\c - ARK融合应急中心(Emergency Response/Crisis Management Center) 非公开频道
+- \c{orange,red}#arkfuture_log\c - 管理员 snomasks 消息频道 非公开频道
+- \c{orange,red}#arkfuture_asc\c - ARK融合安全中心(Cyber Security/National Security/Strategic Research) 非公开频道
+- \c{orange,red}#arkfuture_afi\c - ARK融合情报中心(Fusion Intelligence/Big Data Analysis) 非公开频道
+- \c{orange,red}#arkfuture_aer\c - ARK融合应急中心(Emergency Response/Crisis Management Center) 非公开频道
 -
 -
 \c{white,pink}----------其他说明
