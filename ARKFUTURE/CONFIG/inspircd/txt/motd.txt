@@ -22,7 +22,7 @@
 - \c14* 输入[\c10/MSG arkfuture 消息\c14] 联系管理员 
 - \c14* 输入[\c10/oper 管理员名 密码\c14] 登录管理账户
 -
-\c{white,pink}----------官方网络频道\c
+\c{white,pink}----------官方频道\c
 - \c{green,white}#lobby\c - 公共聊天频道 
 - \c{green,white}#help\c - 帮助频道
 -
