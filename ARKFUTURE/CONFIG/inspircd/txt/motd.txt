@@ -19,7 +19,6 @@
 - \c07* 输入 \c02 /RULES  \c07获取IRC规则 
 - \c07* 输入 \c02 /HELPOP \c07获取IRC帮助信息 
 - \c07* 输入 \c02 /ADMIN  \c07获取IRC管理员信息 
-- \c07* 联系管理员申请进入非公开频道  
 -
 \c{white,pink}----------管理运维\c
 - \c14* 输入[\c10/MSG arkfuture 消息\c14] 联系管理员 
