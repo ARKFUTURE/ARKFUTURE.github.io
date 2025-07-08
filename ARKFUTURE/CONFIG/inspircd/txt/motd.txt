@@ -14,24 +14,22 @@
 - 
 \c{white,pink}----------频道规则·相关命令\c
 - \b !您可以创建自己的频道并推广!
-- \c07* 输入 \c02 /RULES  \c07获取IRC规则 
-- \c07* 输入 \c02 /HELPOP \c07获取IRC帮助信息 
-- \c07* 输入 \c02 /ADMIN  \c07获取IRC管理员信息 
+- \c07* 输入 \c04/RULES  \c07获取IRC规则 
+- \c07* 输入 \c04/HELPOP \c07获取IRC帮助信息 
+- \c07* 输入 \c04/ADMIN  \c07获取IRC管理员信息 
 -
 \c{white,pink}----------管理运维\c
-- \c14* 输入[\c10/MSG arkfuture 消息\c14] 联系管理员 
-- \c14* 输入[\c10/oper 管理员名 密码\c14] 登录管理账户
+- \c14* 输入 \c04/MSG arkfuture 消息 \c14联系管理员 
+- \c14* 输入 \c04/oper 管理员名 密码 \c14登录管理账户
 -
 \c{white,pink}----------官方频道\c
 - \c{green,white}#lobby\c - 公共聊天频道 
 - \c{green,white}#help\c - 帮助频道
 -
 \c{white,pink}----------其他说明
-- \c03如果有用户需要跟您使用\c04dcc\c03传输文件 
-- \c03您可以使用:[\c04/DCCALLOW +用户名 2h\c03]这个命令来添加对方到白名单
-
-
-\c{red}**************************访问权限是特权而不是权利***************************
-\c{red}请仔细阅读上面的MOTD以保证您了解和使用我们的IRC
-\c{red}也请审阅我们的配置文件,给我们提一些安全匿名的建议,采纳您的建议时我们会给予一些奖励
-\c{red}命令大全 引用网址:https://www.geekshed.net/commands/
+- \c03!访问权限是特权而不是权利!
+- \c03请仔细阅读上面的MOTD以保证您了解和使用我们的IRC
+- \c03也请审阅我们的配置文件,给我们提一些安全匿名的建议,采纳您的建议时我们会给予一些奖励
+- \c03命令大全 引用网址:https://www.geekshed.net/commands/
+-
+- \c03如果您使用了XDCC bot, 则命令为: \c04/MSG bot名 xdcc send #文件号
