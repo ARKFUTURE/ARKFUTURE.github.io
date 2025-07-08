@@ -35,4 +35,8 @@ SAMODE
 命令格式: /SAMODE 频道 模式 
 作用: 直接修改频道模式（绕过频道管理员权限）
 
-使用 /MKPASSWD bcrypt 密码 来制作密码 复制密码时`is `后面的全部字符
+MKPASSWD
+命令格式: /MKPASSWD bcrypt 密码
+作用: 生成 bcrypt 加密的密码; is 后面的为加密的密码
+示例: bcrypt hashed password for XXX is $2a$15$pCgfvShuvTuwjn.7oaPmk.f/evEswCRD50P.ou9lIcP3GVrLSLnju
+
