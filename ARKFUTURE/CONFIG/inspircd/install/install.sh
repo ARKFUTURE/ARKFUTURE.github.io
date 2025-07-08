@@ -4,6 +4,7 @@ if [ "$(id -u)" -ne 0 ]; then
     echo "错误：请使用 sudo 或 root 权限执行本脚本"
     exit 1
 fi
+echo "当前目录为: $(pwd)"
 echo "现在是root用户权限"
 echo "开始执行安装脚本"
 sleep 2
