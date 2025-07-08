@@ -29,11 +29,6 @@
 - \c{green,white}#lobby\c - 公共聊天频道 
 - \c{green,white}#help\c - 帮助频道
 - \c{green,white}#arkfuture_studio\c - ARKFUTURE工作室频道(Studio)
-- \c{red,white}#arkfuture_log\c - 管理员 snomasks 消息频道 非公开频道
-- \c{red,white}#arkfuture_asc\c - ARK融合安全中心(Cyber Security/National Security/Strategic Research) 非公开频道
-- \c{red,white}#arkfuture_afi\c - ARK融合情报中心(Fusion Intelligence/Big Data Analysis) 非公开频道
-- \c{red,white}#arkfuture_aer\c - ARK融合应急中心(Emergency Response/Crisis Management Center) 非公开频道
--
 -
 \c{white,pink}----------其他说明
 - 如果有用户需要跟您使用dcc传输文件 
