@@ -19,7 +19,7 @@ echo "安装完成,开始下载配置文脚本"
 sleep 1
 curl -L -o config.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/2.sh
 chmod 777 ./config.sh
-echo "请稍后手动执行 ./config.sh 命令来下载配置文件"
+echo "请稍后手动修改然后执行 ./config.sh 命令来下载配置文件"
 sleep 1
 echo "结束"
 cd ~
