@@ -10,7 +10,7 @@ echo "此软件包是编译了第三方插件的软件包,包括了不兼容许�
 echo "请注意此软件包不是官方软件包,且拥有许可不兼容的第三方插件,请自行选择是否安装"
 sleep 3
 apt update && apt install -y wget
-curl -L --user ##修改为用户名##:##修改为密码## -o inspircd.deb https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/download/20250310/inspircd_4.7.0.deb12_amd64.deb
+curl -L -o inspircd.deb https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/download/20250310/inspircd_4.7.0.deb12_amd64.deb
 chmod 777 ./inspircd.deb
 apt install ./inspircd.deb -y
 rm -rf ./inspircd.deb
