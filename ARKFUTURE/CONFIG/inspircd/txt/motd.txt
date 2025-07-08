@@ -2,8 +2,6 @@
 \c{white,pink}----------欢迎\c
 - \c07\bWelcome to \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E 
 - \b此服务为 \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E \c12N\c13E\c14T\c \b的重要组成部分\c
-- 我们的公约:https://arkfuture.github.io/ARKFUTURE/MD/arkfuture.md
-- 金丝雀安全说明:https://arkfuture.github.io/ARKFUTURE/MD/warrant-canary.md
 - 
 \c{white,pink}----------说明\c
 - \b 我们注重匿名性, IRC不记名, 添加好友请谨慎鉴别, 我们的匿名方法及匿名建议:
@@ -27,12 +25,6 @@
 \c{white,pink}----------官方网络频道\c
 - \c{green,white}#lobby\c - 公共聊天频道 
 - \c{green,white}#help\c - 帮助频道
-- \c{green,white}#arkfuture_studio\c - ARKFUTURE工作室频道(Studio)
-- \c{red,white}#arkfuture_ao\c - 管理员频道(Admin/OPer) [非公开频道]
-- \c{red,white}#arkfuture_log\c - 管理员 snomasks 消息频道 [非公开频道]
-- \c{red,white}#arkfuture_asc\c - ARK融合安全中心(Cyber Security/National Security/Strategic Research) [非公开频道]
-- \c{red,white}#arkfuture_afi\c - ARK融合情报中心(Fusion Intelligence/Big Data Analysis) [非公开频道]
-- \c{red,white}#arkfuture_aer\c - ARK融合应急中心(Emergency Response/Crisis Management Center) [非公开频道]
 -
 \c{white,pink}----------其他说明
 - \c03如果有用户需要跟您使用\c04dcc\c03传输文件 
