@@ -1,9 +1,10 @@
 #!/bin/bash
 echo "inspircd 安装脚本 需要root权限 Debian"
 if [ "$(id -u)" -ne 0 ]; then
-    echo "错误：请使用 sudo 或 root 权限执行本脚本"
+    echo "错误: 请使用 sudo 或 root 权限执行本脚本"
     exit 1
 fi
+echo "当前目录: $(pwd)"
 echo "现在是root用户权限"
 echo "开始执行安装脚本"
 echo "此软件包是编译了第三方插件的软件包,包括了不兼容许可的插件,拥有SSL支持,且使用了ssl相关的插件"
@@ -14,12 +15,11 @@ curl -L -o inspircd.deb https://github.com/ARKFUTURE/ARKFUTURE.github.io/release
 chmod 777 ./inspircd.deb
 apt install ./inspircd.deb -y
 rm -rf ./inspircd.deb
-echo "安装完成,开始下载初始配置到/etc/inspircd/"
-sleep 2
-cd ~
+echo "安装完成,开始下载配置文脚本"
+sleep 1
 curl -L -o config.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/2.sh
 chmod 777 ./config.sh
-sleep 1
 echo "请稍后手动执行 ./config.sh 命令来下载配置文件"
-echo "完成"
+sleep 1
+echo "结束"
 cd ~
