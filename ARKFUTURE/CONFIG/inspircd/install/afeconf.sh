@@ -19,8 +19,7 @@ sleep 2
 cd ~
 curl -L -o config.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/2.sh
 chmod 777 ./config.sh
-./config.sh
-echo "脚本运行完成 请进入/etc/inspircd改为您自己的配置文件"
-sleep 3
-echo "若网络不好请手动重新执行./config.sh脚本 ! 此操作会覆盖掉配置文件 !"
+sleep 1
+echo "请稍后手动执行 ./config.sh 命令来下载配置文件"
+echo "完成"
 cd ~
