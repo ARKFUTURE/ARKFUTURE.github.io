@@ -121,6 +121,8 @@ topic 300 最大频道主题长度
 user 10 最大用户名长度
 ident 20 最大用户标识长度
 
+modelistsize = 100 频道上可设置的列表模式(如b,e,I)的最大数量
+
 whowas-entries 100 单个客户端最大监控条目数
 whowas-entries 100 历史WhoWas记录数量
 chan-list-modes 100 频道列表模式(beI)最大条目数
