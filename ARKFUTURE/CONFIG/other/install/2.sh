@@ -14,20 +14,21 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-curl -L -O --user ##修改为用户名##:##修改为密码##  http://frp.freefrp.net:10240/SERVER/inspircd.conf
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/inspircd.conf
 curl -L -o cert.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/cert.pem.txt
 curl -L -o key.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/key.pem.txt
 cd /etc/inspircd/conf
-curl -L -O --user ##修改为用户名##:##修改为密码##  http://frp.freefrp.net:10240/SERVER/modules.conf
-curl -L -O --user ##修改为用户名##:##修改为密码##  http://frp.freefrp.net:10240/SERVER/helpop.conf
-curl -L -O --user ##修改为用户名##:##修改为密码##  http://frp.freefrp.net:10240/SERVER/opers.conf
-curl -L -O --user ##修改为用户名##:##修改为密码##  http://frp.freefrp.net:10240/SERVER/ascii.conf
-curl -L -O --user ##修改为用户名##:##修改为密码##  http://frp.freefrp.net:10240/SERVER/generic.conf
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/modules.conf
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/helpop.conf
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/opers.conf
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/ascii.conf
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/generic.conf
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/opers.conf
 cd /etc/inspircd/txt
-curl -L -O --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/motd.txt
-curl -L -O --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/opermotd.txt
-curl -L -O --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/quotes.txt
-curl -L -O --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/rules.txt
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/motd.txt
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/opermotd.txt
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/quotes.txt
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/rules.txt
 cd /etc/inspircd/
 chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
