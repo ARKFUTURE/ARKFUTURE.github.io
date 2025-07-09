@@ -1,8 +1,8 @@
 * 您可以查看我们的配置文件, 可以为我们的配置文件提出**安全相关的建议和意见**, 我们会为了IRC的**匿名性/安全性积极采纳**
 # 安装 (此页面所有内容都基于 稳定的Debian 官方页面的最新版本)
 # # INSPircd配置: 
-* 官方deb包+本站全插件deb包+基本配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/install.sh
-* 本站全插件deb包+arkfuture配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/afeconf.sh
+* 官方deb包+本站全插件deb包+基本配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/install/install.sh
+* 本站全插件deb包+arkfuture配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/other/install/afeconf.sh
 * 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/ARKFUTURE/CONFIG/inspircd
 # # HYBRIDircd配置:
 * https://arkfuture.github.io/ARKFUTURE/CONFIG/hybridircd/ircd.conf
