@@ -37,7 +37,7 @@ rm -rf ./inspircd.deb
 echo "安装完成,开始下载ARKFUTURE初始模板配置到 /etc/inspircd/"
 sleep 2
 cd ~
-curl -L -o config.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/install/1.sh
+curl -L -o config.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/1.sh
 chmod 777 ./config.sh
 ./config.sh
 echo "脚本运行完成 请进入/etc/inspircd/ 根据官网教程改为您自己的配置文件"

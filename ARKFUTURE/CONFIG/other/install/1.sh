@@ -13,7 +13,7 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/inspircd.conf
+curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/inspircd.conf
 cd /etc/inspircd/conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
