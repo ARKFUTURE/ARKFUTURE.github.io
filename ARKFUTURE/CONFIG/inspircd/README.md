@@ -10,7 +10,7 @@
 # # ERGOircd配置: 
 * https://arkfuture.github.io/ARKFUTURE/CONFIG/ergoircd/ircd.yaml
 * 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/ARKFUTURE/CONFIG/ergoircd
-# # NGircd配置(此服务配置可能会在未来停止使用并删除): 
+# # NGircd配置(此服务配置可能会在未来停止使用并删除,请您注意): 
 * https://arkfuture.github.io/ARKFUTURE/CONFIG/ngircd/ngircd.conf
 * 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/ARKFUTURE/CONFIG/ngircd
 
@@ -25,7 +25,7 @@
 | 8081      | httpd,TLS传输     |
 
 # 说明/问题及相关帮助
-* 1 systemctl 问题
+* 1 systemctl 问题 [Debian尽量用systemdctl管理]
 ```
 (编译安装后)使用systemctl时出错: 
 
