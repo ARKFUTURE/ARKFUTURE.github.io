@@ -9,5 +9,4 @@ chrony.conf  ->  chrony (时间同步) !
 haproxy.cfg  ->  haproxy (负载均衡及代理)
 inspircd-package-builder.zip  ->  inspircd (deb包打包工具) !
 links.conf  ->  inspircd links 配置
-cert.pem.txt(cert.pem) and key.pem.txt(key.pem)  ->  测试的证书 (仅作为测试 没有实际用途)
 ```
