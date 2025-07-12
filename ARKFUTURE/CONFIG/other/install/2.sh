@@ -15,8 +15,7 @@ rm -rf *
 mkdir conf
 mkdir txt
 curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/inspircd.conf
-curl -L -o cert.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/cert.pem.txt
-curl -L -o key.pem https://arkfuture.github.io/ARKFUTURE/CONFIG/other/key.pem.txt
+openssl req -x509 -newkey rsa:4096 -nodes -keyout key.pem -out cert.pem -days 365 -subj "/CN=irc.arkfuture.test" -addext "basicConstraints=critical,CA:FALSE"
 cd /etc/inspircd/conf
 curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/modules.conf
 curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/helpop.conf
