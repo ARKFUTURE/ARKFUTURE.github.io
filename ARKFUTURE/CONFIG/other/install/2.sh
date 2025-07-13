@@ -2,13 +2,13 @@
 echo "更新配置文件"
 echo "! 此操作会覆盖配置文件 !"
 echo "ARKFUTURE 服务器正式的配置文件, 是ARKFUTURE公共配置的分支配置"
-sleep 3
+sleep 2
 if [ "$(id -u)" -ne 0 ]; then
     echo "错误：请使用 sudo 或 root 权限执行本脚本"
     exit 1
 fi
 echo "现在是root用户权限"
-sleep 3
+sleep 2
 echo "开始下载配置文件到/etc/inspircd"
 cd /etc/inspircd
 rm -rf *
@@ -35,7 +35,7 @@ cd /etc/inspircd/
 chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
 find /etc/inspircd -type f -exec chmod 640 {} \;
-sleep 3
+sleep 2
 echo "开始下载配置文件到/etc/anope"
 cd /etc/anope
 rm -rf *
@@ -58,7 +58,7 @@ sleep 2
 echo "脚本运行完成 请修改为您自己的配置 当前配置为"
 head -n 1 /etc/inspircd/inspircd.conf
 head -n 1 /etc/anope/services.conf
-sleep 3
+sleep 2
 echo "---注意---"
 echo "1"
 echo "请修改<define:value>为您的 [域名] 如:irc.example.test 和其它您需要修改的[自己的配置内容]"
