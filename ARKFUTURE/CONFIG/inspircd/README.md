@@ -215,6 +215,24 @@ However, these files are owned by root and the private key is not readable by th
 You can write a renewal deploy hook for certbot to make copies of these certificates accessible to the ergo role user. 
 ``` 
 
+```
+配置示例:
+<sslprofile name="Clients"
+            provider="gnutls"
+            cafile="" #PEM格式CA文件的路径
+            certfile="cert.pem" #PEM格式证书文件的路径
+            crlfile="" #PEM格式CRL文件的路径
+            dhfile="" #PEM格式DH参数文件的路径 在GnuTLS 3.6.0以上版本上无效
+            hash="sha3-256" #用于TLS(SSL)客户端指纹的空格分隔哈希算法列表,前缀spki-可对WebIRC网关客户端使用SPKI指纹而非证书指纹.
+            keyfile="key.pem" #PEM格式私钥文件的路径
+            mindhbits="1024" #Diffie-Hellman密钥交换中使用的DH参数文件最小位数
+            outrecsize="2048" #传出GnuTLS记录的最大大小
+            priority="NORMAL" #GnuTLS优先级字符串
+            requestclientcert="yes" #是否向客户端请求TLS(SSL)证书
+            strictpriority="no"> #是否要求GnuTLS优先级字符串中的所有令牌均有效
+```
+
+
 # ARKFUTURE 正式配置文件 说明
 * 使用了sql数据库 sqlite3
 ```
