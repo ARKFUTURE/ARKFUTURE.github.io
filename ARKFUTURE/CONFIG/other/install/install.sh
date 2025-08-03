@@ -22,7 +22,7 @@ elif [ "$version" == "2" ]; then
     echo "正在下载INSPIRCD-ARKFUTURE全模块软件包"
     apt update && apt install -y wget
     echo "此软件包是已经编译了第三方插件的软件包,包括了不兼容许可的插件,拥有SSL支持,且使用了ssl相关的插件"
-    curl -L -o inspircd.deb https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/download/20250310/inspircd_4.7.0.deb12_amd64.deb
+    curl -L -o inspircd.deb https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/download/20250310/inspircd_latestversion_deb12u1_amd64.deb
     echo "校验,请对比官网所给出的sha256sum"
     sha256sum inspircd.deb
     sha512sum inspircd.deb
