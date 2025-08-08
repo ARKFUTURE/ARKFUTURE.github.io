@@ -5,8 +5,8 @@
 ----------
 -\b ARKFUTURE-IRC
 -\c12 欢迎加入 ARKFUTURE 管理员组
--\c06 因为我们暂时未设置 IRC Service 所以您需要参考 
 -\c06 https://www.geekshed.net/commands/ircop/ 使用命令
+-
 -
 -部分命令:
 -
