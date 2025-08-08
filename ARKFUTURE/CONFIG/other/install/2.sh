@@ -23,7 +23,7 @@ curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://fr
 curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/ascii.conf
 curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/generic.conf
 curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/links.conf
-touch permchannels.conf
+curl -L -O --anyauth https://github.com/P3TERX/GeoLite.mmdb/releases/download/2025.08.07/GeoLite2-Country.mmdb
 touch filters.conf
 touch xline.db
 cd /etc/inspircd/txt
