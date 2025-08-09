@@ -27,8 +27,8 @@ curl -L -O --anyauth https://gh-proxy.com/https://github.com/P3TERX/GeoLite.mmdb
 touch filters.conf
 touch xline.db
 cd /etc/inspircd/txt
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/motd.txt
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/opermotd.txt
+curl -L -O --anyauth https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/motd.txt
+curl -L -O --anyauth https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
 curl -L -O --anyauth https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt
 curl -L -O --anyauth https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt
 cd /etc/inspircd/

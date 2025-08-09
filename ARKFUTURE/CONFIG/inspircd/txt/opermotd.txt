@@ -6,6 +6,11 @@
 -\b ARKFUTURE-IRC
 -\c12 欢迎加入 ARKFUTURE 管理员组
 -\c06 https://www.geekshed.net/commands/ircop/ 使用命令
+- 
+-您好Server管理员, 使用Service管理员账户您需要注册一个账户来先固定Nickname:
+-注册命令:  /NickServ REGISTER 您的密码 您的邮箱
+-登录命令:  /NickServ IDENTIFY 您的用户名 您的密码
+-说明: 注册(仅需要注册一次,不强制要求邮箱)>登录(即为Service管理员用户)
 -
 -
 -部分命令:
