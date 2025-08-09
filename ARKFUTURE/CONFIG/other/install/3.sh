@@ -24,28 +24,8 @@ chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
 find /etc/inspircd -type f -exec chmod 640 {} \;
 sleep 2
-echo "开始下载配置文件到/etc/anope"
-cd /etc/anope
-rm -rf *
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/anope/services.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/anope/services.motd
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/anope/modules.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/anope/nickserv.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/anope/chanserv.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/anope/operserv.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/anope/botserv.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/anope/global.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/anope/memoserv.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/anope/hostserv.conf
-cd /etc/anope
-chown root:root /etc/anope
-chmod 755 /etc/anope
-find /etc/anope -type f -exec chown root:irc {} \;
-find /etc/anope -type f -exec chmod 640 {} \;
-sleep 2
 echo "脚本运行完成 请修改为您自己的配置 当前配置为"
 head -n 1 /etc/inspircd/inspircd.conf
-head -n 1 /etc/anope/services.conf
 sleep 2
 echo "---注意---"
 echo "1"

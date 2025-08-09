@@ -17,9 +17,22 @@ apt install ./inspircd.deb -y
 rm -rf ./inspircd.deb
 echo "安装完成,开始下载配置文脚本"
 sleep 1
-curl -L -o config.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/2.sh
+echo "请选择要下载的导入脚本:"
+read -p "请输入数字(1-2);1为离线导入脚本,2为在线导入脚本: " version 
+if [ "$version" == "1" ]; then
+    echo "离线导入脚本 config.sh"
+    curl -L -o config.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/2.sh
+elif [ "$version" == "2" ]; then
+    echo "在线导入脚本 config.sh"
+    curl -L -o config.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/3.sh
+else 
+    echo "Error: 请输入正确的数字"
+    exit 1 
+fi 
+echo "anope配置文件导入脚本 anope.sh"
+curl -L -o anope.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/4.sh
 chmod 777 ./config.sh
-echo "请稍后手动修改然后执行 ./config.sh 命令来下载配置文件"
+echo "请稍后手动修改然后执行 ./config.sh 及 anope.sh 命令来覆盖式导入配置文件"
 sleep 1
 echo "结束"
 cd ~
