@@ -20,10 +20,10 @@ sleep 1
 echo "请选择要下载的导入脚本:"
 read -p "请输入数字(1-2);1为离线导入脚本,2为在线导入脚本: " version 
 if [ "$version" == "1" ]; then
-    echo "离线导入脚本 config.sh"
+    echo "离线导入脚本 需修改 ./config.sh"
     curl -L -o config.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/2.sh
 elif [ "$version" == "2" ]; then
-    echo "在线导入脚本 config.sh"
+    echo "在线导入脚本 需修改 /etc/inspircd/inspircd.conf"
     curl -L -o config.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/3.sh
 else 
     echo "Error: 请输入正确的数字"
