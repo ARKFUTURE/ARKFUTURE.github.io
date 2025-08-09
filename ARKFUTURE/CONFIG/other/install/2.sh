@@ -18,19 +18,19 @@ curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://fr
 openssl req -x509 -newkey rsa:4096 -nodes -keyout key.pem -out cert.pem -days 365 -subj "/CN=irc.arkfuture.test" -addext "basicConstraints=critical,CA:FALSE"
 cd /etc/inspircd/conf
 curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/modules.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/helpop.conf
 curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/opers.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/ascii.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/generic.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/links.conf
-curl -L -O --anyauth https://github.com/P3TERX/GeoLite.mmdb/releases/download/2025.08.07/GeoLite2-Country.mmdb
+curl -L -O --anyauth https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/links.conf
+curl -L -O --anyauth https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
+curl -L -O --anyauth https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
+curl -L -O --anyauth https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
+curl -L -O --anyauth https://gh-proxy.com/https://github.com/P3TERX/GeoLite.mmdb/releases/download/2025.08.07/GeoLite2-Country.mmdb
 touch filters.conf
 touch xline.db
 cd /etc/inspircd/txt
 curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/motd.txt
 curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/opermotd.txt
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/quotes.txt
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/rules.txt
+curl -L -O --anyauth https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt
+curl -L -O --anyauth https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt
 cd /etc/inspircd/
 chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
