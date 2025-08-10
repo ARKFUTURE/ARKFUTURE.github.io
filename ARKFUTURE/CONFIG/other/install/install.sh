@@ -13,7 +13,7 @@ read -p "请输入数字(1-2);1为官方版本,2为第本站全模块版本: " v
 if [ "$version" == "1" ]; then
     echo "正在下载INSPIRCD官方软件包"
     apt update && apt install -y wget
-    curl -L -o inspircd.deb https://github.com/inspircd/inspircd/releases/download/v4.7.0/inspircd_4.7.0.deb12u2_amd64.deb
+    curl -L -o inspircd.deb https://github.com/inspircd/inspircd/releases/download/v4.8.0/inspircd_4.8.0.deb13u1_amd64.deb
     echo "校验,请对比官网所给出的sha256sum"
     sha256sum inspircd.deb
     sha512sum inspircd.deb
@@ -22,7 +22,7 @@ elif [ "$version" == "2" ]; then
     echo "正在下载INSPIRCD-ARKFUTURE全模块软件包"
     apt update && apt install -y wget
     echo "此软件包是已经编译了第三方插件的软件包,包括了不兼容许可的插件,拥有SSL支持,且使用了ssl相关的插件"
-    curl -L -o inspircd.deb https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/download/20250310/inspircd_latestversion_deb12u1_amd64.deb
+    curl -L -o inspircd.deb https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/download/20250310/inspircd_latestversion_amd64.deb
     echo "校验,请对比官网所给出的sha256sum"
     sha256sum inspircd.deb
     sha512sum inspircd.deb
