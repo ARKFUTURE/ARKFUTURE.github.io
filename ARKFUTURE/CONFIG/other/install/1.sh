@@ -35,3 +35,4 @@ find /etc/inspircd -type f -exec chmod 640 {} \;
 sleep 2
 echo "脚本运行完成 请修改为您自己的配置 当前配置为"
 head -n 1 ./inspircd.conf
+echo "inspircd配置文件下载完成"
