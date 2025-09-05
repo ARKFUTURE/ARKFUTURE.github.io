@@ -23,6 +23,7 @@ echo "anope配置文件覆盖导入脚本 anope.sh"
 curl -L -o anope.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/3.sh
 chmod 777 ./inspircd.sh && chmod 777 ./anope.sh
 echo "请稍后手动修改然后执行 ./config.sh 及 ./anope.sh 命令来覆盖式导入配置文件"
+echo "anope-irc Service 是可选的,如果您不需要请自行删除"
 sleep 1
 echo "---注意---"
 echo "1"
