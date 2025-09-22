@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+    <head>
+        <title>ARKFUTURErss</title>
+        <dateCreated>2024/05/1</dateCreated>
+        <dateModified>2024/10/1</dateModified>
+        <ownerName>ARKFUTURE</ownerName>
+    </head>
+    <body>
+        <outline text="CyberSec POC/EXP/News">
+            <outline text="exploitdb" type="rss" htmlUrl="https://exploit-db.com/" xmlUrl="https://exploit-db.com/rss.xml"/>
+            <outline text="Sploitus" type="rss" htmlUrl="https://sploitus.com/" xmlUrl="https://sploitus.com/rss"/>
+            <outline text="tenable" type="rss" htmlUrl="https://tenable.com/" xmlUrl="https://tenable.com/security/research/feed"/>
+            <outline text="seclists" type="rss" htmlUrl="https://seclists.org/" xmlUrl="http://seclists.org/rss/fulldisclosure.rss"/>
+            <outline text="zerodayinitiative" type="rss" htmlUrl="https://zerodayinitiative.com/" xmlUrl="https://zerodayinitiative.com/rss/published/"/>
+            <outline text="secaffairs(news)" type="rss" htmlUrl="https://securityaffairs.com" xmlUrl="https://securityaffairs.com/feed"/>
+            <outline text="darkreading(news)" type="rss" htmlUrl="https://darkreading.com/" xmlUrl="https://darkreading.com/rss.xml"/>
+            <outline text="hackthebox(news)" type="rss" htmlUrl="https://hackthebox.com/" xmlUrl="https://hackthebox.com/rss/blog/all"/>
+            <outline text="hackernews(news)" type="rss" htmlUrl="https://news.ycombinator.com/" xmlUrl="https://news.ycombinator.com/rss"/>
+        </outline>
+    </body>
+</opml>
