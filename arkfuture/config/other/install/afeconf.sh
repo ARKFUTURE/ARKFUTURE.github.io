@@ -10,7 +10,7 @@ echo "开始执行安装脚本"
 echo "此软件包是编译了第三方插件的软件包,包括了不兼容许可的插件,拥有SSL支持,且使用了ssl相关的插件"
 echo "请注意此软件包不是官方软件包,且拥有许可不兼容的第三方插件,请自行选择是否安装; 同时也安装了Anope IRC Service"
 sleep 3
-apt update && apt install -y wget curl anope openssl gnutls-bin
+apt update && apt install -y wget curl openssl gnutls-bin
 curl -L -o inspircd.deb https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/download/20250310/inspircd_latestversion_amd64.deb
 chmod 777 ./inspircd.deb
 apt install ./inspircd.deb -y
@@ -22,8 +22,8 @@ curl -L -o inspircd.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/other/instal
 #echo "anope配置文件覆盖导入脚本 anope.sh"
 #curl -L -o anope.sh https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/3.sh
 chmod 777 ./inspircd.sh && chmod 777 ./anope.sh
+echo "我们提供了一个anope的配置文件下载脚本 默认是禁用的您需要修改本文件来下载脚本文件 anope需要自行安装"
 echo "请稍后手动修改然后执行 ./config.sh 及 ./anope.sh 命令来覆盖式导入配置文件"
-echo "anope-irc Service 是可选的,如果您不需要请自行删除"
 sleep 1
 echo "---注意---"
 echo "1"
