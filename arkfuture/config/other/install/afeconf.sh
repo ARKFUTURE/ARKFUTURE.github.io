@@ -21,18 +21,16 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/inspircd.conf
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://XXX/inspircd.conf
 openssl req -x509 -newkey rsa:4096 -sha256 -days 10 -nodes -keyout key.pem -out cert.pem -subj "/CN=irc.arkfuture.test" -addext "extendedKeyUsage = serverAuth"
 cd /etc/inspircd/conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/modules.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://frp.freefrp.net:10240/SERVER/opers.conf
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://XXX/modules.conf
+curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://XXX/opers.conf
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/conf/links.conf
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/conf/helpop.conf
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/conf/ascii.conf
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/conf/generic.conf
 curl -L -O --anyauth https://gh-proxy.com/https://github.com/P3TERX/GeoLite.mmdb/releases/download/2025.08.07/GeoLite2-Country.mmdb
-touch filters.conf
-touch xline.db
 cd /etc/inspircd/txt
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/txt/motd.txt
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/txt/opermotd.txt
