@@ -1,14 +1,13 @@
 * 您可以查看我们的配置文件, 可以为我们的配置文件提出**安全相关的建议和意见**, 我们会为了IRC的**匿名性/安全性积极采纳**
 # 安装 (此页面所有内容都基于 稳定的Debian 官方页面的最新版本)
 # # INSPircd配置
-* 官方deb包+本站全插件deb包+基本配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/install.sh
-* 本站全插件deb包+arkfuture配置安装: https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/afeconf.sh
+* 官方deb包/本站全插件deb包+基本配置: https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/install.sh
 * 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/ARKFUTURE/CONFIG/inspircd
 # # HYBRIDircd配置
-* https://arkfuture.github.io/ARKFUTURE/CONFIG/hybridircd/ircd.conf
+* 基本配置: https://arkfuture.github.io/ARKFUTURE/CONFIG/hybridircd/ircd.conf
 * 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/ARKFUTURE/CONFIG/hybridircd
 # # ERGOircd配置
-* https://arkfuture.github.io/ARKFUTURE/CONFIG/ergoircd/ircd.yaml
+* 基本配置: https://arkfuture.github.io/ARKFUTURE/CONFIG/ergoircd/ircd.yaml
 * 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/ARKFUTURE/CONFIG/ergoircd
 
 # 端口
@@ -274,4 +273,5 @@ ARKFUTURE 启用了所有的需要在编译时启用的插件
 全部模块deb包维护者 :ARKFUTURE studio(group) 简称 ARKFUTURE
 ```
 
-```
+
+* [arkfuture配置安装](https://arkfuture.github.io/ARKFUTURE/CONFIG/other/install/afeconf.sh)

@@ -8,6 +8,7 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 echo "现在是root用户权限"
+apt install -y anope
 sleep 2
 echo "开始下载配置文件到/etc/anope"
 cd /etc/anope
