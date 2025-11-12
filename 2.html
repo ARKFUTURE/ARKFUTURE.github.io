@@ -18,6 +18,7 @@
 	--clr-blue: #2563EB;
 	--clr-accent: #4F46E5;
 	--clr-border: #9CA3AF;
+	--clr-warning: #F59E0B;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -35,6 +36,7 @@
 		--clr-blue: #93C5FD;
 		--clr-accent: #818CF8;
 		--clr-border: #4B5563;
+		--clr-warning: #FCD34D;
 	}
 }
 
@@ -62,7 +64,7 @@ html, body {
 	width: 100%;
 }
 
-/* 紧凑的设置栏 - 单行设计 */
+/* 设置栏 */
 .settings-bar {
 	flex: 0 0 50px;
 	background-color: var(--clr-background2);
@@ -89,7 +91,7 @@ html, body {
 	white-space: nowrap;
 }
 
-.settings-group input {
+.settings-group input[type="text"] {
 	padding: 6px 10px;
 	background-color: var(--clr-background3);
 	color: var(--clr-font);
@@ -98,6 +100,12 @@ html, body {
 	font-size: 13px;
 	min-width: 120px;
 	transition: all 0.2s;
+}
+
+.settings-group input[type="checkbox"] {
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
 }
 
 .settings-group input:focus {
@@ -154,7 +162,35 @@ html, body {
 	color: white;
 }
 
-/* 聊天主区域 - 占据剩余所有空间 */
+/* 警告提示 */
+.ssl-warning {
+	display: none;
+	position: absolute;
+	top: 55px;
+	left: 15px;
+	right: 15px;
+	background: linear-gradient(135deg, var(--clr-warning), #F59E0B);
+	color: #000;
+	padding: 10px 15px;
+	border-radius: 8px;
+	font-size: 13px;
+	z-index: 200;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	max-width: 600px;
+}
+
+.ssl-warning.visible {
+	display: block;
+}
+
+.ssl-warning a {
+	color: #000;
+	font-weight: 600;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+/* 聊天区域 */
 .chat-container {
 	flex: 1 1 auto;
 	display: flex;
@@ -163,7 +199,6 @@ html, body {
 	position: relative;
 }
 
-/* 频道标签栏 */
 .channels {
 	flex: 0 0 45px;
 	background-color: var(--clr-background2);
@@ -216,7 +251,6 @@ html, body {
 	background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* 日志窗口 - 可折叠，绝对定位 */
 .log-container {
 	position: absolute;
 	top: 0;
@@ -279,7 +313,6 @@ html, body {
 	word-wrap: break-word;
 }
 
-/* 频道内容区域 */
 .channelcontents {
 	flex: 1 1 auto;
 	display: flex;
@@ -327,7 +360,6 @@ html, body {
 	line-height: 1.5;
 }
 
-/* 用户列表 */
 ul {
 	flex: 0 0 200px;
 	overflow-y: auto;
@@ -367,7 +399,6 @@ ul {
 	color: var(--clr-green);
 }
 
-/* 输入框 - 固定底部 */
 #input {
 	position: absolute;
 	bottom: 10px;
@@ -389,7 +420,6 @@ ul {
 	box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
-/* 滚动条 */
 ::-webkit-scrollbar {
 	width: 8px;
 	height: 8px;
@@ -404,7 +434,6 @@ ul {
 	border-radius: 4px;
 }
 
-/* 响应式设计 - 自适应屏幕 */
 @media (max-width: 768px) {
 	.settings-bar {
 		flex-wrap: wrap;
@@ -461,7 +490,7 @@ ul {
 	<h1 id="caption">IRC Client</h1>
 </div>
 
-<!-- 紧凑设置栏 -->
+<!-- 设置栏 -->
 <div class="settings-bar">
 	<div class="settings-group">
 		<label>WebSocket:</label>
@@ -475,11 +504,24 @@ ul {
 		<label>频道:</label>
 		<input type="text" id="channelInput" value="#abjects" placeholder="#channel">
 	</div>
+	<div class="settings-group">
+		<label title="浏览器无法真正忽略SSL证书，此选项会显示解决方案">
+			<input type="checkbox" id="allowInvalidSSL"> 允许无效SSL
+		</label>
+	</div>
 	<button class="connect-btn" id="connectBtn" onclick="toggleConnection()">连接</button>
 	<button class="log-toggle-btn" onclick="toggleLog()">查看日志</button>
 </div>
 
-<!-- 可折叠日志窗口 -->
+<!-- SSL警告提示 -->
+<div class="ssl-warning" id="sslWarning">
+	<strong>⚠️ 浏览器无法忽略SSL证书错误！</strong> 请使用以下方案：<br>
+	1. 改用 <code>ws://</code> 非加密连接（如果服务器支持）<br>
+	2. 在浏览器中访问 <a id="sslLink" target="_blank">服务器URL</a> 并手动信任证书<br>
+	3. 使用本地代理工具（如 stunnel）转发连接
+</div>
+
+<!-- 日志窗口 -->
 <div class="log-container" id="logContainer">
 	<div class="log-header">
 		<span>WebSocket日志</span>
@@ -514,6 +556,7 @@ var PrefixChars;
 
 var websocket = null;
 var isConnected = false;
+var allowInvalidSSL = false;
 
 function onLoad()
 {
@@ -552,6 +595,19 @@ function writeToLog(message) {
 	}
 }
 
+// SSL警告控制
+function showSSLWarning(url) {
+	if (!allowInvalidSSL) return;
+	
+	const warning = document.getElementById('sslWarning');
+	const link = document.getElementById('sslLink');
+	link.href = url.replace('wss://', 'https://').replace('ws://', 'http://');
+	link.textContent = link.href;
+	
+	warning.classList.add('visible');
+	setTimeout(() => warning.classList.remove('visible'), 15000);
+}
+
 // 连接控制
 function toggleConnection() {
 	if (isConnected) {
@@ -572,11 +628,13 @@ function doConnect() {
 	const wsUrlInput = document.getElementById('wsUrl');
 	const nickInput = document.getElementById('nickInput');
 	const channelInput = document.getElementById('channelInput');
+	const sslCheckbox = document.getElementById('allowInvalidSSL');
 	const connectBtn = document.getElementById('connectBtn');
 	
 	wsUrl = wsUrlInput.value.trim();
 	nickname = nickInput.value.trim();
 	channelName = channelInput.value.trim();
+	allowInvalidSSL = sslCheckbox.checked;
 	
 	if (!wsUrl) {
 		alert("请输入WebSocket地址");
@@ -590,9 +648,16 @@ function doConnect() {
 		channelName = '#' + channelName;
 	}
 	
+	// 检查SSL证书问题
+	if (allowInvalidSSL && wsUrl.startsWith('wss://')) {
+		showSSLWarning(wsUrl);
+		writeToLog("[SSL] 提醒用户处理证书问题");
+	}
+	
 	wsUrlInput.disabled = true;
 	nickInput.disabled = true;
 	channelInput.disabled = true;
+	sslCheckbox.disabled = true;
 	connectBtn.textContent = '连接中...';
 	connectBtn.disabled = true;
 	
@@ -611,11 +676,13 @@ function onDisconnect() {
 	const wsUrlInput = document.getElementById('wsUrl');
 	const nickInput = document.getElementById('nickInput');
 	const channelInput = document.getElementById('channelInput');
+	const sslCheckbox = document.getElementById('allowInvalidSSL');
 	const connectBtn = document.getElementById('connectBtn');
 	
 	wsUrlInput.disabled = false;
 	nickInput.disabled = false;
 	channelInput.disabled = false;
+	sslCheckbox.disabled = false;
 	connectBtn.textContent = '连接';
 	connectBtn.disabled = false;
 	connectBtn.classList.remove('disconnect');
@@ -914,12 +981,18 @@ function send()
 //WEBSOCKET STUFF
 function WebSocket_Connect(wsUri)
 {
-	websocket = new WebSocket(wsUri);
-	websocket.binaryType = 'blob'
-	websocket.onclose = function(evt) { onClose(evt) };
-	websocket.onerror = function(evt) { onError(evt) };
-	websocket.onopen = function(evt) { onOpen(evt) };
-	websocket.onmessage = function(evt) { onMessage(evt) };
+	try {
+		websocket = new WebSocket(wsUri);
+		websocket.binaryType = 'blob'
+		websocket.onclose = function(evt) { onClose(evt) };
+		websocket.onerror = function(evt) { onError(evt) };
+		websocket.onopen = function(evt) { onOpen(evt) };
+		websocket.onmessage = function(evt) { onMessage(evt) };
+	} catch (e) {
+		writeToLog(`[ERROR] WebSocket创建失败: ${e.message}`);
+		onDisconnect();
+		alert(`连接失败: ${e.message}\n\n如果是SSL证书错误，请勾选"允许无效SSL"查看解决方案`);
+	}
 }
 
 function onClose(evt)
@@ -928,12 +1001,22 @@ function onClose(evt)
 	writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel);
 	writeToLog(`[CLOSE] ${evt.code} - ${evt.reason || '连接关闭'}`);
 	onDisconnect();
+	
+	// 检查是否是证书错误
+	if (evt.code === 1006 && allowInvalidSSL) {
+		showSSLWarning(wsUrl);
+	}
 }
 
 function onError(evt)
 {
 	writeToScreen("var(--clr-red)", "ERROR: " + evt.data, statusChannel);
 	writeToLog(`[ERROR] ${evt.data || 'WebSocket错误'}`);
+	
+	// 检查是否是证书错误
+	if (allowInvalidSSL && wsUrl.startsWith('wss://')) {
+		showSSLWarning(wsUrl);
+	}
 }
 
 function onOpen(evt)
