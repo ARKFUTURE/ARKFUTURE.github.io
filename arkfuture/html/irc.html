@@ -527,6 +527,25 @@ ul {
 		display: none; /* 移动端隐藏状态指示器 */
 	}
 }
+
+.ssl-help-btn {
+    padding: 6px 12px;
+    background: linear-gradient(135deg, var(--clr-warning), #F59E0B);
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.ssl-help-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
 </style>
 </head>
 <body>
@@ -555,8 +574,8 @@ ul {
 		</label>
 	</div>
 	<div class="settings-group">
-		<label title="浏览器无法真正忽略SSL证书, 此选项会显示解决方案">
-			<input type="checkbox" id="allowInvalidSSL"> 允许无效SSL
+		<label title="SSL帮助">
+			<button class="ssl-help-btn" onclick="showSSLWarning()" title="点击查看SSL证书问题的解决方案">SSL帮助</button>
 		</label>
 	</div>
 	
@@ -612,7 +631,6 @@ var PrefixChars;
 
 var websocket = null;
 var isConnected = false;
-var allowInvalidSSL = false;
 var autoReconnect = false;
 var reconnectAttempts = 0;
 var maxReconnectAttempts = 5;
@@ -686,19 +704,24 @@ function writeToLog(message) {
 
 // SSL警告
 function showSSLWarning(url) {
-	if (!allowInvalidSSL || !url) return;
-	
-	const warning = document.getElementById('sslWarning');
-	const link = document.getElementById('sslLink');
-	if (!warning || !link) return;
-	
-	link.href = url.replace('wss://', 'https://').replace('ws://', 'http://');
-	link.textContent = link.href;
-	
-	warning.classList.add('visible');
-	setTimeout(() => {
-		if (warning) warning.classList.remove('visible');
-	}, 15000);
+    const warning = document.getElementById('sslWarning');
+    const link = document.getElementById('sslLink');
+    if (!warning || !link) return;
+    
+    // 如果提供了URL则使用，否则使用当前输入框的值
+    let displayUrl = url || document.getElementById('wsUrl')?.value.trim();
+    if (displayUrl) {
+        link.href = displayUrl.replace('wss://', 'https://').replace('ws://', 'http://');
+        link.textContent = link.href;
+    } else {
+        link.href = '#';
+        link.textContent = '请先在WebSocket地址栏输入服务器地址';
+    }
+    
+    warning.classList.add('visible');
+    setTimeout(() => {
+        if (warning) warning.classList.remove('visible');
+    }, 15000);
 }
 
 // 连接控制
@@ -736,7 +759,6 @@ function doConnect() {
 	const wsUrlInput = document.getElementById('wsUrl');
 	const nickInput = document.getElementById('nickInput');
 	const channelInput = document.getElementById('channelInput');
-	const sslCheckbox = document.getElementById('allowInvalidSSL');
 	const reconnectCheckbox = document.getElementById('autoReconnect');
 	const connectBtn = document.getElementById('connectBtn');
 	
@@ -748,7 +770,6 @@ function doConnect() {
 	wsUrl = wsUrlInput.value.trim();
 	nickname = nickInput.value.trim();
 	channelName = channelInput.value.trim();
-	allowInvalidSSL = sslCheckbox ? sslCheckbox.checked : false;
 	autoReconnect = reconnectCheckbox ? reconnectCheckbox.checked : false;
 	
 	// 验证输入
@@ -777,7 +798,6 @@ function doConnect() {
 	wsUrlInput.disabled = true;
 	nickInput.disabled = true;
 	channelInput.disabled = true;
-	if (sslCheckbox) sslCheckbox.disabled = true;
 	if (reconnectCheckbox) reconnectCheckbox.disabled = true;
 	connectBtn.textContent = '连接中...';
 	connectBtn.disabled = true;
@@ -1277,8 +1297,8 @@ function onError(evt)
 	writeToLog(`[ERROR] ${errorType}: ${evt.data || '未知错误'}`);
 	
 	// SSL错误处理
-	if (allowInvalidSSL && wsUrl && wsUrl.startsWith('wss://')) {
-		showSSLWarning(wsUrl);
+    if (wsUrl && wsUrl.startsWith('wss://')) {
+        showSSLWarning(wsUrl);
 	}
 }
 
