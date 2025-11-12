@@ -4,7 +4,6 @@
 <meta charset="UTF-8"> 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-/* 现代化配色方案 */
 :root {
 	--clr-background: #F5F7FA;
 	--clr-background2: #E4E7F4;
@@ -39,104 +38,91 @@
 	}
 }
 
-/* 全局字体和布局优化 */
+* {
+	box-sizing: border-box;
+}
+
 html, body {
-	text-align: center; 
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 	margin: 0;
 	padding: 0;
 	height: 100%;
 	width: 100%;
-	box-sizing: border-box;
-	overflow-x: hidden;
 	background-color: var(--clr-background); 
 	color: var(--clr-font);
 	font-size: 14px;
 	line-height: 1.5;
+	overflow: hidden;
 }
 
-/* 标题样式优化 */
-h1 {
-	background: linear-gradient(90deg, var(--clr-accent), var(--clr-purple));
-	-webkit-background-clip: text; 
-	-webkit-text-fill-color: transparent;
-	font-weight: 700;
-	letter-spacing: -0.5px;
-	margin: 0;
-	padding: 20px;
-}
-
-/* 主容器优化 */
 .main {
-	margin: 0;
-	height: 100%;
-	width: 100%;
 	display: flex;
 	flex-direction: column;
-	box-sizing: border-box;
+	height: 100vh;
+	width: 100%;
 }
 
-/* 设置面板 - 卡片式设计 */
-.settings-panel {
-	flex: 0 1 auto;
-	padding: 20px;
+/* 紧凑的设置栏 - 单行设计 */
+.settings-bar {
+	flex: 0 0 50px;
 	background-color: var(--clr-background2);
+	border-bottom: 1px solid var(--clr-border);
 	display: flex;
-	flex-direction: column;
-	gap: 15px;
-	border-bottom: 2px solid var(--clr-border);
-}
-
-.settings-row {
-	display: flex;
-	gap: 15px;
 	align-items: center;
-	max-width: 800px;
-	width: 100%;
-	margin: 0 auto;
+	padding: 0 15px;
+	gap: 15px;
+	overflow-x: auto;
+	min-height: 50px;
 }
 
-.settings-row label {
-	flex: 0 0 100px;
-	text-align: right;
+.settings-group {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex: 0 0 auto;
+}
+
+.settings-group label {
+	font-size: 12px;
 	font-weight: 600;
 	color: var(--clr-font);
+	white-space: nowrap;
 }
 
-.settings-row input {
-	flex: 1 1 auto;
-	padding: 10px 15px;
+.settings-group input {
+	padding: 6px 10px;
 	background-color: var(--clr-background3);
 	color: var(--clr-font);
 	border: 1px solid var(--clr-border);
-	border-radius: 8px;
-	font-size: 14px;
-	transition: all 0.3s ease;
+	border-radius: 6px;
+	font-size: 13px;
+	min-width: 120px;
+	transition: all 0.2s;
 }
 
-.settings-row input:focus {
+.settings-group input:focus {
 	outline: none;
 	border-color: var(--clr-accent);
-	box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+	box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
 }
 
 .connect-btn {
-	flex: 0 0 auto;
-	padding: 10px 30px;
+	padding: 6px 18px;
 	background: linear-gradient(135deg, var(--clr-accent), var(--clr-purple));
 	color: white;
 	border: none;
-	border-radius: 8px;
+	border-radius: 6px;
 	cursor: pointer;
 	font-weight: 600;
-	font-size: 14px;
-	transition: all 0.3s ease;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	font-size: 13px;
+	white-space: nowrap;
+	transition: all 0.2s;
+	flex: 0 0 auto;
 }
 
 .connect-btn:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .connect-btn:disabled {
@@ -150,35 +136,120 @@ h1 {
 	background: linear-gradient(135deg, var(--clr-red), #EF4444);
 }
 
-/* 日志窗口 - 更集成化设计 */
-.log-container {
-	flex: 0 0 auto;
-	height: 120px;
+.log-toggle-btn {
+	padding: 6px 12px;
+	background-color: var(--clr-background4);
+	color: var(--clr-font);
 	border: 1px solid var(--clr-border);
-	margin: 10px;
-	border-radius: 8px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 12px;
+	font-weight: 500;
+	white-space: nowrap;
+	transition: all 0.2s;
+}
+
+.log-toggle-btn:hover {
+	background-color: var(--clr-accent);
+	color: white;
+}
+
+/* 聊天主区域 - 占据剩余所有空间 */
+.chat-container {
+	flex: 1 1 auto;
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	position: relative;
+}
+
+/* 频道标签栏 */
+.channels {
+	flex: 0 0 45px;
+	background-color: var(--clr-background2);
+	border-bottom: 1px solid var(--clr-border);
+	display: flex;
+	align-items: center;
+	padding: 0 10px;
+	gap: 8px;
+	overflow-x: auto;
+}
+
+.channel {
+	padding: 8px 16px;
 	background-color: var(--clr-background3);
+	border: 1px solid var(--clr-border);
+	border-radius: 20px;
+	cursor: pointer;
+	font-weight: 500;
+	font-size: 13px;
+	transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	white-space: nowrap;
+}
+
+.channel:hover {
+	background-color: var(--clr-background4);
+}
+
+.channel.active {
+	background: linear-gradient(135deg, var(--clr-accent), var(--clr-purple));
+	color: white;
+	border-color: var(--clr-accent);
+}
+
+.channel button.x {
+	background: none;
+	border: none;
+	color: inherit;
+	cursor: pointer;
+	padding: 2px 6px;
+	font-weight: bold;
+	border-radius: 50%;
+	font-size: 14px;
+	transition: all 0.2s;
+}
+
+.channel button.x:hover {
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 日志窗口 - 可折叠，绝对定位 */
+.log-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 200px;
+	background-color: var(--clr-background3);
+	border-bottom: 2px solid var(--clr-accent);
+	display: none;
+	flex-direction: column;
+	z-index: 100;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.log-container.visible {
+	display: flex;
 }
 
 .log-header {
-	flex: 0 0 auto;
-	padding: 8px 15px;
+	flex: 0 0 35px;
+	padding: 0 15px;
 	background-color: var(--clr-background2);
-	font-weight: 600;
-	text-align: left;
 	border-bottom: 1px solid var(--clr-border);
-	color: var(--clr-font);
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	font-weight: 600;
+	font-size: 13px;
 }
 
 .log-controls {
 	display: flex;
-	gap: 10px;
+	gap: 8px;
 }
 
 .log-controls button {
@@ -200,117 +271,32 @@ h1 {
 	flex: 1 1 auto;
 	overflow-y: auto;
 	padding: 10px;
-	font-size: 12px;
-	text-align: left;
-	white-space: pre-wrap;
-	word-wrap: break-word;
-	font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+	font-size: 11px;
+	font-family: 'Consolas', 'Monaco', monospace;
 	background-color: var(--clr-background3);
 	color: var(--clr-font);
-}
-
-/* 频道标签样式 - 药丸式设计 */
-.channels {
-	padding: 0;
-	flex: 0 1 auto;
-	display: flex;
-	flex-direction: row;
-	justify-content: start;
-	align-items: center;
-	background-color: var(--clr-background2);
-	border-bottom: 1px solid var(--clr-border);
-	min-height: 50px;
-}
-
-.channel {
-	padding: 10px 20px;
-	margin: 5px;
-	background-color: var(--clr-background3);
-	border: 1px solid var(--clr-border);
-	border-radius: 20px;
-	cursor: pointer;
-	font-weight: 500;
-	transition: all 0.2s ease;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.channel:hover {
-	background-color: var(--clr-background4);
-	transform: translateY(-1px);
-}
-
-.channel.active {
-	background: linear-gradient(135deg, var(--clr-accent), var(--clr-purple));
-	color: white;
-	border-color: var(--clr-accent);
-	box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
-}
-
-.channel button.x {
-	background: none;
-	border: none;
-	color: inherit;
-	cursor: pointer;
-	padding: 2px 6px;
-	font-weight: bold;
-	border-radius: 50%;
-	transition: all 0.2s;
-}
-
-.channel button.x:hover {
-	background-color: rgba(255, 255, 255, 0.2);
+	white-space: pre-wrap;
+	word-wrap: break-word;
 }
 
 /* 频道内容区域 */
 .channelcontents {
-	box-sizing: border-box;
 	flex: 1 1 auto;
-	flex-grow: 1;
-	width: 100%;
+	display: flex;
 	overflow: hidden;
-	padding: 0 10px;
+	padding: 10px;
 }
 
-/* 输入框优化 */
-#input {
-	border: 1px solid var(--clr-border);
-	flex: 0 1 auto;
-	width: calc(100% - 20px);
-	justify-content: end;
-	padding: 12px 15px;
-	margin: 0 10px 10px;
-	border-radius: 8px;
-	background-color: var(--clr-background3);
-	color: var(--clr-font);
-	font-size: 14px;
-	transition: all 0.3s ease;
-}
-
-#input:focus {
-	outline: none;
-	border-color: var(--clr-accent);
-	box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-}
-
-/* 频道内容布局优化 */
 .channelcontent {
-	height: 100%;
 	display: flex;
 	flex-direction: row;
+	width: 100%;
+	height: 100%;
 	gap: 10px;
-	padding: 10px 0;
 }
 
 .channelcontent nav {
-	box-sizing: border-box;
 	flex: 1 1 auto;
-	flex-grow: 1;
-	float: left;
-	height: 100%;
-	width: 100%;
 	display: flex;
 	flex-direction: column;
 	background-color: var(--clr-background3);
@@ -320,61 +306,45 @@ h1 {
 }
 
 .channelcontent nav h3 {
-	box-sizing: border-box;
-	width: 100%;
-	border-bottom: 1px solid var(--clr-border);
-	float: left;
-	text-align: left;
-	padding: 12px 15px;
+	flex: 0 0 auto;
+	padding: 10px 15px;
 	margin: 0;
-	flex: 0 1 auto;
 	background-color: var(--clr-background2);
+	border-bottom: 1px solid var(--clr-border);
 	font-weight: 600;
-	color: var(--clr-font);
+	font-size: 14px;
 }
 
 .channelcontent nav nav {
-	width: 100%;
-	float: left;
-	overflow-y: auto;
-	border: none;
 	flex: 1 1 auto;
-	flex-grow: 1;
+	overflow-y: auto;
 	padding: 15px;
 }
 
-/* 消息样式优化 */
 .channelcontent nav p {
-	overflow-wrap: break-word;
-	text-align: left;
-	padding: 4px 0;
 	margin: 0;
-	line-height: 1.6;
+	padding: 3px 0;
+	line-height: 1.5;
 }
 
-/* 用户列表优化 */
+/* 用户列表 */
 ul {
-	box-sizing: border-box;
-	justify-content: right;
-	overflow-y: auto;
 	flex: 0 0 200px;
-	height: 100%;
+	overflow-y: auto;
 	padding: 10px;
 	margin: 0;
 	border-left: 1px solid var(--clr-border);
-	list-style-type: none;
+	list-style: none;
 	background-color: var(--clr-background3);
 	border-radius: 0 8px 8px 0;
 }
 
 .channelcontents li {
-	padding: 6px 10px;
-	margin: 2px 0;
-	border-radius: 6px;
+	padding: 5px 10px;
+	margin: 1px 0;
 	display: flex;
-	align-items: center;
 	gap: 8px;
-	transition: background-color 0.2s;
+	border-radius: 4px;
 }
 
 .channelcontents li:hover {
@@ -383,27 +353,43 @@ ul {
 
 .channelcontents li p {
 	margin: 0;
-	padding: 0;
 }
 
 .channelcontents li p:first-child {
-	border: 0;
-	float: left;
 	width: 20px;
 	color: var(--clr-purple);
-	text-align: center;
 	font-weight: bold;
+	text-align: center;
 }
 
 .channelcontents li p:nth-child(2) {
-	border: 0;
-	float: right;
 	flex: 1;
 	color: var(--clr-green);
-	text-align: left;
 }
 
-/* 滚动条美化 */
+/* 输入框 - 固定底部 */
+#input {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	right: 10px;
+	padding: 12px 15px;
+	background-color: var(--clr-background3);
+	color: var(--clr-font);
+	border: 1px solid var(--clr-border);
+	border-radius: 8px;
+	font-size: 14px;
+	transition: all 0.2s;
+	z-index: 10;
+}
+
+#input:focus {
+	outline: none;
+	border-color: var(--clr-accent);
+	box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* 滚动条 */
 ::-webkit-scrollbar {
 	width: 8px;
 	height: 8px;
@@ -418,20 +404,26 @@ ul {
 	border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-	background: var(--clr-purple);
-}
-
-/* 响应式设计 */
+/* 响应式设计 - 自适应屏幕 */
 @media (max-width: 768px) {
-	.settings-row {
-		flex-direction: column;
-		align-items: stretch;
+	.settings-bar {
+		flex-wrap: wrap;
+		padding: 8px;
+		gap: 10px;
+		min-height: auto;
 	}
 	
-	.settings-row label {
-		text-align: left;
-		flex: 1 1 auto;
+	.settings-group {
+		flex: 1 1 45%;
+	}
+	
+	.settings-group input {
+		min-width: 100px;
+		width: 100%;
+	}
+	
+	.log-container {
+		height: 40vh;
 	}
 	
 	.channelcontent {
@@ -439,54 +431,72 @@ ul {
 	}
 	
 	ul {
-		flex: 0 0 150px;
+		flex: 0 0 120px;
 		border-left: none;
 		border-top: 1px solid var(--clr-border);
+	}
+	
+	#input {
+		left: 5px;
+		right: 5px;
+		bottom: 5px;
+	}
+}
+
+@media (max-width: 480px) {
+	.settings-group {
+		flex: 1 1 100%;
+	}
+	
+	.channel {
+		font-size: 12px;
+		padding: 6px 12px;
 	}
 }
 </style>
 </head>
 <body>
 <div class="main">
-<div class="header" style = "background-image: linear-gradient(var(--clr-background2), var(--clr-background),var(--clr-background),var(--clr-background2));">
-	<h1 id="caption">Abjects IRC Network</h1>
+<div class="header" style="background: linear-gradient(90deg, var(--clr-background2), var(--clr-background));">
+	<h1 id="caption">IRC Client</h1>
 </div>
 
-<!-- 设置面板 -->
-<div class="settings-panel">
-	<div class="settings-row">
-		<label for="wsUrl">WebSocket地址:</label>
+<!-- 紧凑设置栏 -->
+<div class="settings-bar">
+	<div class="settings-group">
+		<label>WebSocket:</label>
 		<input type="text" id="wsUrl" value="" placeholder="wss://irc.example.com:port/">
 	</div>
-	<div class="settings-row">
-		<label for="nickInput">昵称:</label>
-		<input type="text" id="nickInput" value="" placeholder="输入你的昵称">
+	<div class="settings-group">
+		<label>昵称:</label>
+		<input type="text" id="nickInput" value="" placeholder="输入昵称">
 	</div>
-	<div class="settings-row">
-		<label for="channelInput">频道:</label>
+	<div class="settings-group">
+		<label>频道:</label>
 		<input type="text" id="channelInput" value="#abjects" placeholder="#channel">
 	</div>
-	<div class="settings-row">
-		<button class="connect-btn" id="connectBtn" onclick="toggleConnection()">连接</button>
-	</div>
+	<button class="connect-btn" id="connectBtn" onclick="toggleConnection()">连接</button>
+	<button class="log-toggle-btn" onclick="toggleLog()">查看日志</button>
 </div>
 
-<!-- 日志输出窗口 -->
-<div class="log-container" style="display: none;">
+<!-- 可折叠日志窗口 -->
+<div class="log-container" id="logContainer">
 	<div class="log-header">
 		<span>WebSocket日志</span>
 		<div class="log-controls">
 			<button onclick="clearLog()">清空</button>
-			<button onclick="toggleLog()">折叠</button>
+			<button onclick="toggleLog()">关闭</button>
 		</div>
 	</div>
 	<div id="logOutput"></div>
 </div>
 
-<div class="channels" style="display: none;"></div>
-<nav class="channelcontents" style="display: none;"></nav>
+<div class="chat-container">
+	<div class="channels" style="display: none;"></div>
+	<nav class="channelcontents" style="display: none;"></nav>
+	<input type="text" name="input" id="input" style="display: none;" onKeyPress="onKeyPress(event)" onKeyDown="onKeyDown(event)" placeholder="输入消息..."/>
+</div>
 
-<input type="text" name="input" id="input" size="30" value="" onKeyPress="onKeyPress(event)" onKeyDown="onKeyDown(event)" placeholder="输入消息..."/>
 </div>
 </body>
 <script>
@@ -505,15 +515,6 @@ var PrefixChars;
 var websocket = null;
 var isConnected = false;
 
-function getSettingsElements() {
-	return {
-		wsUrlInput: document.getElementById('wsUrl'),
-		nickInput: document.getElementById('nickInput'),
-		channelInput: document.getElementById('channelInput'),
-		connectBtn: document.getElementById('connectBtn')
-	};
-}
-
 function onLoad()
 {
 	channels = document.getElementsByClassName("channels")[0];
@@ -522,18 +523,36 @@ function onLoad()
 	
 	let url = new URL(document.location);
 	if (url.hash) {
-		let channelInput = document.getElementById('channelInput');
-		channelInput.value = url.hash;
+		document.getElementById('channelInput').value = url.hash;
 	}
 	
 	if (window.frameElement) {
-		let caption = document.getElementById("caption");
-		caption.style.display = "none";
+		document.getElementById("caption").style.display = "none";
 	}
 }
 
 window.addEventListener("load", onLoad, false);
 
+// 日志控制
+function toggleLog() {
+	const logContainer = document.getElementById('logContainer');
+	logContainer.classList.toggle('visible');
+}
+
+function clearLog() {
+	document.getElementById('logOutput').textContent = '';
+}
+
+function writeToLog(message) {
+	const logOutput = document.getElementById('logOutput');
+	if (logOutput) {
+		const timestamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+		logOutput.textContent += `[${timestamp}] ${message}\n`;
+		logOutput.scrollTop = logOutput.scrollHeight;
+	}
+}
+
+// 连接控制
 function toggleConnection() {
 	if (isConnected) {
 		if (websocket) {
@@ -545,40 +564,37 @@ function toggleConnection() {
 }
 
 function validateNickname(nick) {
-	if (!nick || nick.trim() === "") {
-		return false;
-	}
+	if (!nick || nick.trim() === "") return false;
 	return /^[a-zA-Z_\\`\[\]{}^|][a-zA-Z0-9_\\`\[\]{}^|-]*$/.test(nick);
 }
 
 function doConnect() {
-	const settings = getSettingsElements();
+	const wsUrlInput = document.getElementById('wsUrl');
+	const nickInput = document.getElementById('nickInput');
+	const channelInput = document.getElementById('channelInput');
+	const connectBtn = document.getElementById('connectBtn');
 	
-	wsUrl = settings.wsUrlInput.value.trim();
-	nickname = settings.nickInput.value.trim();
-	channelName = settings.channelInput.value.trim();
+	wsUrl = wsUrlInput.value.trim();
+	nickname = nickInput.value.trim();
+	channelName = channelInput.value.trim();
 	
 	if (!wsUrl) {
 		alert("请输入WebSocket地址");
 		return;
 	}
-	
 	if (!validateNickname(nickname)) {
-		alert("昵称格式无效！\n昵称必须以字母或特定符号开头，不能包含空格");
+		alert("昵称格式无效！必须以字母或特定符号开头，不能包含空格");
 		return;
 	}
-	
 	if (!channelName.startsWith('#')) {
 		channelName = '#' + channelName;
 	}
 	
-	settings.wsUrlInput.disabled = true;
-	settings.nickInput.disabled = true;
-	settings.channelInput.disabled = true;
-	settings.connectBtn.textContent = '连接中...';
-	settings.connectBtn.disabled = true;
-	
-	document.querySelector('.log-container').style.display = 'flex';
+	wsUrlInput.disabled = true;
+	nickInput.disabled = true;
+	channelInput.disabled = true;
+	connectBtn.textContent = '连接中...';
+	connectBtn.disabled = true;
 	
 	channels.innerHTML = '';
 	channelContents.innerHTML = '';
@@ -592,37 +608,23 @@ function doConnect() {
 
 function onDisconnect() {
 	isConnected = false;
-	const settings = getSettingsElements();
+	const wsUrlInput = document.getElementById('wsUrl');
+	const nickInput = document.getElementById('nickInput');
+	const channelInput = document.getElementById('channelInput');
+	const connectBtn = document.getElementById('connectBtn');
 	
-	settings.wsUrlInput.disabled = false;
-	settings.nickInput.disabled = false;
-	settings.channelInput.disabled = false;
-	settings.connectBtn.textContent = '连接';
-	settings.connectBtn.disabled = false;
-	settings.connectBtn.classList.remove('disconnect');
+	wsUrlInput.disabled = false;
+	nickInput.disabled = false;
+	channelInput.disabled = false;
+	connectBtn.textContent = '连接';
+	connectBtn.disabled = false;
+	connectBtn.classList.remove('disconnect');
 	
 	writeToLog(`[系统] 已断开连接`);
 	
 	document.querySelector('.channels').style.display = 'none';
 	document.querySelector('.channelcontents').style.display = 'none';
 	document.getElementById('input').style.display = 'none';
-}
-
-// 新增日志控制函数
-function clearLog() {
-	document.getElementById('logOutput').textContent = '';
-}
-
-function toggleLog() {
-	const logOutput = document.getElementById('logOutput');
-	const btn = event.target;
-	if (logOutput.style.display === 'none') {
-		logOutput.style.display = 'block';
-		btn.textContent = '折叠';
-	} else {
-		logOutput.style.display = 'none';
-		btn.textContent = '展开';
-	}
 }
 
 ////////////////////////////////////////////////////////////////
@@ -691,6 +693,7 @@ function sortUserList(user_a, user_b)
 {
 	if (user_a[0][0] === user_b[0][0])
 		return user_a[1].localeCompare(user_b[1], undefined, { sensitivity: 'accent' });
+	if (!PrefixChars || !PrefixChars[1]) return 0;
 	return PrefixChars[1].indexOf(user_a[0][0]) - PrefixChars[1].indexOf(user_b[0][0]);
 }
 
@@ -706,7 +709,6 @@ function Tab_Create(name, topic, createlist)
 		this.button.className = "channel active";
 		let x = document.createElement("button");
 			x.innerHTML = "×";
-			x.nonce = escapedName;
 			x.onclick = Tab_Close;
 			x.value = escapedName;
 			x.className = "x";
@@ -716,10 +718,7 @@ function Tab_Create(name, topic, createlist)
 		this.channel.className = "channelcontent";
 		this.channelnav = document.createElement("nav");
 			this.topic = document.createElement("h3");
-			if (topic)
-				this.topic.innerHTML = HTML_escape(topic);
-			else
-				this.topic.innerHTML = HTML_escape("no channeltopic available");
+			this.topic.innerHTML = HTML_escape(topic || "no channeltopic available");
 		this.channelnav.appendChild(this.topic)
 		this.content = document.createElement("nav");
 		this.channelnav.appendChild(this.content);
@@ -727,11 +726,11 @@ function Tab_Create(name, topic, createlist)
 		if (createlist) 
 		{
 			this.userlist = document.createElement("ul");
-			this.users = new Array();
+			this.users = [];
 			this.names_end = true;
 			this.channel.appendChild(this.userlist);
 		}
-	channelContents.insertBefore(this.channel, channelContents.children[0]);
+	channelContents.appendChild(this.channel);
 	channelMap.set(name, this);
 	activeChannel = this;
 }
@@ -884,15 +883,6 @@ function writeToScreen(color, message, channel)
 	}
 }
 
-function writeToLog(message) {
-	const logOutput = document.getElementById('logOutput');
-	if (logOutput) {
-		const timestamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-		logOutput.textContent += `[${timestamp}] ${message}\n`;
-		logOutput.scrollTop = logOutput.scrollHeight;
-	}
-}
-
 function send()
 {
 	let text = document.getElementById("input").value.trim();
@@ -956,10 +946,10 @@ function onOpen(evt)
 	document.querySelector('.channelcontents').style.display = 'flex';
 	document.getElementById('input').style.display = 'block';
 	
-	const settings = getSettingsElements();
-	settings.connectBtn.textContent = '断开';
-	settings.connectBtn.disabled = false;
-	settings.connectBtn.classList.add('disconnect');
+	const connectBtn = document.getElementById('connectBtn');
+	connectBtn.textContent = '断开';
+	connectBtn.disabled = false;
+	connectBtn.classList.add('disconnect');
 	
 	doSend("user websocket * * :Abjects WebSocket User");
 	doSend("nick " + nickname);
@@ -1027,10 +1017,7 @@ Commands.set("332", function (nick, data) {
 	{
 		text += " " + data[i];
 	}
-	if (text)
-		channel.topic.innerHTML = HTML_escape(text);
-	else
-		channel.topic.innerHTML = HTML_escape("no channeltopic available");
+	channel.topic.innerHTML = HTML_escape(text || "no channeltopic available");
 	writeToLog(`[IRC] 频道主题: ${data[3]} - ${text}`);
 });
 Commands.set("353", function (nick, data) {
@@ -1039,7 +1026,7 @@ Commands.set("353", function (nick, data) {
 		return;
 	if (channel.names_end == true)
 	{
-		channel.users = new Array();
+		channel.users = [];
 		channel.names_end = false;
 	}
 	data[5] = data[5].substring(1);
@@ -1181,10 +1168,7 @@ Commands.set("TOPIC", function (nick, data) {
 	{
 		text += " " + data[i];
 	}
-	if (text)
-		channel.topic.innerHTML = HTML_escape(text);
-	else
-		channel.topic.innerHTML = HTML_escape("no channeltopic available");
+	channel.topic.innerHTML = HTML_escape(text || "no channeltopic available");
 	writeToScreen("var(--clr-green)", "* "+nick + ' TOPIC set to : '+ text , channel);
 	writeToLog(`[IRC] 主题变更: ${data[2]} - ${text}`);
 });
