@@ -18,8 +18,8 @@
 | 6697      | 客户端, TLS传输   |
 | 7000      | 服务器, 明文传输   |
 | 7001      | 服务器, TLS传输   |
-| 8067      | websocket,明文传输|
-| 8097      | websocket,TLS传输 |
+| 6680      | websocket,明文传输|
+| 6681      | websocket,TLS传输 |
 
 # 说明/问题及相关帮助
 * 1 systemctl 问题 [Debian尽量用systemdctl管理]
