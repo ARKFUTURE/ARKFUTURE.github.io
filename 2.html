@@ -1,0 +1,813 @@
+<!-- 
+TODO: tab key to autocomplete nicks
+TODO: doubleclick nick to open private chat window
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <link rel="stylesheet" href="abjects.css"> -->
+<style>
+:root {
+	--clr-background: #C4C1D6;
+	--clr-background2: #D9D5EB;
+	--clr-background3: #FFFFFF;
+	--clr-background4: #A4A1B6;
+	--clr-font: #000000;
+	--clr-brown: brown;
+	--clr-green: DarkGreen;
+	--clr-gold: DarkGoldenRod;
+	--clr-red: DarkRed;
+	--clr-purple: purple;
+	--clr-blue: blue;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--clr-background: #151227;
+		--clr-background2: #262238;
+		--clr-background3: #000000;
+		--clr-background4: #615E73;
+		--clr-font: #FFFFFF;
+		--clr-brown: SandyBrown;
+		--clr-green: LimeGreen;
+		--clr-gold: Gold;
+		--clr-red: #FF2222;
+		--clr-purple: Plum;
+		--clr-blue: DeepSkyBlue;
+	}
+}
+
+html, body {
+	text-align: center; 
+	font-family: monospace, monospace;
+	margin:0;
+	padding:0;
+	height:100%;
+	width: 100%;
+	box-sizing: border-box;
+	overflow-x:hidden;
+	background-color: var(--clr-background); 
+	color: var(--clr-font);
+}
+h1 {
+background: -webkit-linear-gradient(var(--clr-background2), var(--clr-font),var(--clr-background2)); 
+-webkit-background-clip: text; 
+-webkit-text-fill-color: transparent;
+}
+.main {
+	margin:0;
+	height:100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.header {
+	flex: 0 1 auto;
+}
+.header h1 {
+	margin: 0px;
+	padding: 10px;
+	border: 0;
+}
+.channels {
+	padding: 5px;
+	flex: 0 1 auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: start;
+	border: 1px solid;
+}
+.channelcontents {
+	box-sizing: border-box;
+	flex: 1 1 auto;
+	flex-grow: 1;
+	width: 100%;
+	overflow: hidden;
+}
+input {
+	border: 1px solid;
+	flex: 0 1 auto;
+	width: 100%;
+	justify-content: end;
+	padding: 5px;
+}
+.channelcontent {
+	height:100%;
+	display: flex;
+	flex-direction: row;
+}
+.channelcontent nav {
+	box-sizing: border-box;
+	flex: 1 1 auto;
+	flex-grow: 1;
+	float:left;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.channelcontent nav h3 {
+	box-sizing: border-box;
+	width: 100%;
+	border: 1px solid;
+	float:left;
+	text-align: left;
+	padding: 5px;
+	margin: 0;
+	flex: 0 1 auto;
+}
+.channelcontent nav nav {
+	width: 100%;
+	float:left;
+	overflow: auto;
+	border: 1px solid;
+	flex: 1 1 auto;
+	flex-grow: 1;
+	padding: 5px;
+}
+.channelcontent nav p {
+	overflow-wrap: break-word;
+	text-align: left;
+	padding: 0px;
+	margin: 0px;
+}
+ul {
+	box-sizing: border-box;
+	justify-content: right;
+	overflow: auto;
+	flex: 0 1 auto;
+	height: 100%;
+	padding: 5px;
+	margin: 0px;
+	border: 1px solid;
+	list-style-type: none;
+}
+.channelcontents li {
+	padding-right:15px;
+}
+.channelcontents li p:first-child {
+	border: 0;
+	float:left;
+	width: 10%;
+	color: var(--clr-purple);
+	padding:0;
+	margin:0;
+	text-align: right;
+}
+.channelcontents li p:nth-child(2) {
+	border: 0;
+	float:right;
+	width: 90%;
+	color: var(--clr-green);
+	padding:0;
+	margin:0;
+	text-align: left;
+}
+</style>
+</head>
+<body>
+<div class="main">
+<div class="header" style = "background-image: linear-gradient(var(--clr-background2), var(--clr-background),var(--clr-background),var(--clr-background2));">
+	<h1 id="caption" style="font-size:3em;">IRC Network</h1>
+</div>
+
+<div class="channels"></div>
+<nav class="channelcontents"></nav>
+
+<input type="text" name="input" id="input" size="30" value="" onKeyPress="onKeyPress(event)" onKeyDown="onKeyDown(event)"/>
+</div>
+</body>
+<script>
+////////////////////////////////////////////////////////////////
+//STARTUP + INIT
+var nickname = "";
+var channelName = "#abjects";
+var channels, channelContents;
+var channelMap= new Map();
+var activeChannel = null;
+var statusChannel = null;
+var input;
+var PrefixChars;
+let url = new URL(document.location);
+if (url.hash)
+	channelName = url.hash;
+
+if (window.frameElement) {
+	let bla = document.getElementById("header");
+	caption.style.display = "none";
+}
+
+function onLoad()
+{
+	channels = document.getElementsByClassName("channels")[0];
+	channelContents = document.getElementsByClassName("channelcontents")[0];
+	input = document.getElementById("input");
+	statusChannel = new Tab_Create("Status", "Status Window", false);
+	setTimeout(PageDone, 100);
+}
+
+function PageDone()
+{
+	nickname = GetNickName("");
+	WebSocket_Connect("wss://172.24.83.171:8097/");
+}
+
+function GetNickName(err)
+{
+	nick = "";
+	while ((nick == "") || (nick == null))
+	{
+		nick = prompt(err + "Please enter your nickname", "AbjectsGuest" + Math.floor((Math.random() * 10000) + 1).toString());
+	}
+	return nick;
+}
+
+window.addEventListener("load", onLoad, false);
+////////////////////////////////////////////////////////////////
+//UI 
+function onKeyPress(e) {
+	if(e && e.keyCode == 13) {
+		send();
+	}
+}
+
+function onKeyDown(e) {
+	if(e.keyCode == 9)
+	{
+		if(e.preventDefault) 
+		{
+			e.preventDefault();
+		}
+		console.log("TODO: TAB KEY");
+		return false;
+	}
+}
+
+function Tab_onClick(evt) {
+	let chanName = evt.currentTarget.value;
+	Tab_Show(chanName);
+}
+
+function Tabs_Hide()
+{
+	let i, tabcontent, tablinks;
+	tabcontent = document.getElementsByClassName("channelcontent");
+	for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none";
+	}
+	tablinks = document.getElementsByClassName("channel");
+	for (i = 0; i < tablinks.length; i++) {
+		tablinks[i].className = tablinks[i].className.replace(" active", "");
+	}
+}
+
+function Tab_Show(name) {
+	let channel = channelMap.get(name);
+	Tabs_Hide();
+	channel.channel.style.display = "flex";
+	channel.button.className += " active";
+	activeChannel = channel;
+}
+
+function HTML_escape(text)
+{
+	if (!text)
+		return "";
+	let map = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#039;'
+	};
+	return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
+function sortUserList(user_a, user_b)
+{
+	if (user_a[0][0] === user_b[0][0])
+		return user_a[1].localeCompare(user_b[1], undefined, { sensitivity: 'accent' });
+	return PrefixChars[1].indexOf(user_a[0][0]) - PrefixChars[1].indexOf(user_b[0][0]);
+}
+
+function Tab_Create(name, topic, createlist)
+{
+	Tabs_Hide();
+	this.name = name;
+	let escapedName = HTML_escape(name);
+	this.button = document.createElement("button");
+		this.button.innerHTML = escapedName;
+		this.button.value = escapedName;
+		this.button.onclick = Tab_onClick;
+		this.button.className = "channel active";
+		let x = document.createElement("button");
+			x.innerHTML = "x";
+			x.nonce = escapedName;
+			x.onclick = Tab_Close;
+			x.value = escapedName;
+			x.classname = "x";
+		this.button.appendChild(x);
+	channels.appendChild(this.button);
+	this.channel = document.createElement("nav");
+		this.channel.className = "channelcontent";
+		this.channelnav = document.createElement("nav");
+			this.topic = document.createElement("h3");
+			if (topic)
+				this.topic.innerHTML = HTML_escape(topic);
+			else
+				this.topic.innerHTML = HTML_escape("no channeltopic available");
+		this.channelnav.appendChild(this.topic)
+		this.content = document.createElement("nav");
+		this.channelnav.appendChild(this.content);
+		this.channel.appendChild(this.channelnav);
+		if (createlist) 
+		{
+			this.userlist = document.createElement("ul");
+			this.users = new Array();
+			this.names_end = true;
+			this.channel.appendChild(this.userlist);
+		}
+	channelContents.insertBefore(this.channel, channelContents.children[0]);
+	channelMap.set(name, this);
+	activeChannel = this;
+}
+
+function Tab_Close(evt)
+{
+	doSend("part " + evt.currentTarget.value);
+}
+
+function Channel_Destroy(name) {
+	let channel = channelMap.get(name);
+	if (!channel)
+		return;
+	channel.button.remove();
+	channel.channel.remove();
+	if (activeChannel == channel)
+	{
+		activeChannel = statusChannel;
+	}
+	channelMap.delete(name);
+	Tab_Show(activeChannel.name);
+}
+
+function Channel_InsertUser(nick, channel, prefix)
+{
+	let user = document.createElement("li");
+	let tmp = document.createElement("p");
+	if (prefix)
+		tmp.innerHTML = prefix[0];
+	user.appendChild(tmp);
+	tmp = document.createElement("p");
+	tmp.innerHTML = HTML_escape(nick);
+	user.appendChild(tmp);
+	let i = 0;
+	for (i;i<channel.users.length;i++)
+	{
+		if (PrefixChars[1].indexOf(channel.users[i][0][0]) > PrefixChars[1].indexOf(prefix[0]))
+			break;
+		if (PrefixChars[1].indexOf(channel.users[i][0][0]) < PrefixChars[1].indexOf(prefix[0]))
+			continue;
+		if (channel.users[i][1].localeCompare(nick, undefined, { sensitivity: 'accent' }) < 0)
+			continue;
+		break;
+	}
+	channel.users.splice(i, 0, [prefix , nick]);
+	channel.userlist.insertBefore(user, channel.userlist.childNodes[i]);
+}
+
+function Channel_AppendUser(nick, channel, dontnotify, prefix)
+{
+	let user = document.createElement("li");
+	let tmp = document.createElement("p");
+	if (prefix)
+		tmp.innerHTML = prefix[0];
+	user.appendChild(tmp);
+	tmp = document.createElement("p");
+	tmp.innerHTML = HTML_escape(nick);
+	user.appendChild(tmp);
+	channel.userlist.appendChild(user);
+}
+
+function Channel_RemoveUser(nick, channel)
+{
+	if (!channel.userlist)
+		return;
+	for (let i = 0; i< channel.userlist.children.length; i++)
+	{
+		let anick = decodeURI(channel.userlist.children[i].children[1].innerHTML);
+		if (anick == nick)
+		{
+			channel.userlist.children[i].remove();
+			channel.users.splice(i, 1);
+			return true;
+		}
+	}
+}
+
+function Channel_RenameUser(nick, newnick, channel)
+{
+	if (!channel.userlist)
+		return;
+	for (let i = 0; i< channel.users.length; i++)
+	{
+		if (channel.users[i][1] == nick)
+		{
+			let prefix = channel.users[i][0];
+			Channel_RemoveUser(nick, channel);
+			Channel_InsertUser(newnick, channel, prefix);
+			return true;
+		}
+	}
+}
+
+function Channel_UpdateUserPrefix(nick, channel, add, prefix)
+{
+	for (let i=0;i<channel.users.length;i++)
+	{
+		if (channel.users[i][1] == nick)
+		{
+			let pos = PrefixChars[0].indexOf(prefix);
+			if (pos < 0)
+				return;
+			let prefixes = "";
+			if (add == "true")
+			{
+				let ii;
+				for (ii=0; ii< channel.users[i][0].length;ii++)
+				{
+					if (PrefixChars[1].indexOf(channel.users[i][0][ii]) >= pos)
+						break;
+					prefixes += channel.users[i][0][ii]
+				}
+				prefixes += PrefixChars[1][pos]
+				for (ii; ii< channel.users[i][0].length;ii++)
+				{
+					prefixes += channel.users[i][0][ii]
+				}
+			}
+			else
+			{
+				let tmp = channel.users[i][0].indexOf(PrefixChars[1][pos]);
+				prefixes = channel.users[i][0].substring(0, tmp) + channel.users[i][0].substring(tmp + 1);
+			}
+			if (prefixes == "")
+				prefixes = " ";
+			channel.users[i][0] = prefixes;
+			Channel_RenameUser(nick, nick, channel);
+			break;
+		}
+	}
+}
+
+function writeToScreen(color, message, channel)
+{
+	let pre = document.createElement("p");
+	pre.style.color = color;
+	pre.innerHTML = HTML_escape(message);
+	let output = channel.content;
+	output.appendChild(pre);
+	while (output.children.length > 200)
+	{
+		output.removeChild(output.children[1]);
+	}
+	output.scrollTop = output.scrollHeight;
+}
+
+function send()
+{
+	let text = document.getElementById("input").value;
+	let msg;
+	if (text[0] == "/")
+	{
+		if (text.indexOf("/me ") == 0)
+		{
+			msg = "privmsg " + activeChannel.name + " :\x01ACTION " + text.substring(4) +"\x01\n";
+			writeToScreen("var(--clr-red)", "* " + nickname + " " + text.substring(4), activeChannel);
+		} else {
+			writeToScreen("var(--clr-font)", text, statusChannel);
+			msg = text.substring(1) +"\n";
+			writeToScreen("var(--clr-font)", text, statusChannel);
+		}
+	}
+	else
+	{
+		msg = "privmsg " + activeChannel.name + " :" + text +"\n";
+		writeToScreen("var(--clr-font)", "<" + nickname + "> " + text, activeChannel);
+	}
+	doSend(msg);
+	input.value = "";
+}
+////////////////////////////////////////////////////////////////
+//WEBSOCKET STUFF
+function WebSocket_Connect(wsUri)
+{
+	websocket = new WebSocket(wsUri);
+	websocket.binaryType = 'blob'
+	websocket.onclose = function(evt) { onClose(evt) };
+	websocket.onerror = function(evt) { onError(evt) };
+	websocket.onopen = function(evt) { onOpen(evt) };
+	websocket.onmessage = function(evt) { onMessage(evt) };
+}
+
+function onClose(evt)
+{
+	writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel);
+	alert("You have been disconnected.");
+	window.location.reload();
+}
+
+function onError(evt)
+{
+	writeToScreen("var(--clr-red)", "ERROR: " + evt.data, statusChannel);
+}
+
+function onOpen(evt)
+{
+	writeToScreen("var(--clr-font)", "CONNECTED", statusChannel);
+	doSend("user websocket * * :Abjects WebSocket User");
+	doSend("nick " + nickname);
+}
+
+function onMessage(evt)
+{
+	rawData = evt.data;
+	if (rawData instanceof Blob)
+	{
+		let fileReader = new FileReader();
+		fileReader.addEventListener("loadend",handleBinaryInput);
+		fileReader.readAsText(rawData);
+	}
+	else
+	{
+		process(rawData);
+	}
+}
+
+function handleBinaryInput(event)
+{
+	let fileReader = event.target;
+	let raw = fileReader.result;
+	process(raw);
+}
+
+function doSend(message)
+{
+	websocket.send(message);
+}
+
+////////////////////////////////////////////////////////////////
+//IRC PROTOCOL
+var Commands = new Map();
+Commands.set("001", function (nick, data) {
+	doSend("CAP REQ :multi-prefix");
+	doSend("join " + channelName);
+});
+Commands.set("005", function (nick, data) {
+	for (let i=2;i<data.length;i++)
+	{
+		if (data[i].indexOf("PREFIX=") == 0)
+		{
+			PrefixChars = (data[i].substring(8) +" ").split(")");
+			writeToScreen("var(--clr-brown)", "*** PREFIX CHARS: " + PrefixChars[0] + " " + PrefixChars[1], statusChannel);
+		}
+	}
+});
+Commands.set("332", function (nick, data) {
+	channel = channelMap.get(data[3]);
+	if (!channel)
+		return;
+	text = data[4].substring(1);
+	for (let i=5;i<data.length;i++)
+	{
+		text += " " + data[i];
+	}
+	if (text)
+		channel.topic.innerHTML = HTML_escape(text);
+	else
+		channel.topic.innerHTML = HTML_escape("no channeltopic available");
+});
+Commands.set("353", function (nick, data) {
+	channel = channelMap.get(data[4]);
+	if (!channel)
+		return;
+	if (channel.names_end == true)
+	{
+		channel.users = new Array();
+		channel.names_end = false;
+	}
+	data[5] = data[5].substring(1);
+	for (let i=5;i<data.length;i++)
+	{
+		prefix="";
+		ii = 0;
+		while (PrefixChars[1].indexOf(data[i][ii]) >= 0)
+		{
+			prefix += data[i][ii];
+			ii++;
+		}
+		if (prefix == "")
+			prefix = " ";
+		channel.users.push([prefix, data[i].substring(ii)])
+	}
+});
+Commands.set("366", function (nick, data) {
+	channel = channelMap.get(data[3]);
+	if (!channel)
+		return;
+	channel.users.sort(sortUserList);
+	channel.userlist.innerHTML = "";
+	for (let i=0;i<channel.users.length;i++)
+		Channel_AppendUser(channel.users[i][1], channel, true, channel.users[i][0]);
+	channel.names_end = true;
+});
+Commands.set("432", function (nick, data) {
+	nickname = GetNickName("ERROR: Nickname is unavailable: Illegal characters\r\n");
+	doSend("nick " + nickname);	
+});
+Commands.set("433", function (nick, data) {
+	nickname = GetNickName("ERROR: Nickname is already in use.\r\n");
+	doSend("nick " + nickname);	
+});
+Commands.set("JOIN", function (nick, data) {
+	if (data[0].indexOf(":"+nickname+"!") != 0)
+	{
+		if (data[2][0] == ":")
+			data[2] = data[2].substring(1);
+		channel = channelMap.get(data[2]);
+		if (!channel)
+			return;
+		Channel_InsertUser(nick, channel, " ");
+	}
+	else
+	{
+		channel = new Tab_Create(data[2].substring(1),"",true);
+		nick = nickname;
+	}
+	writeToScreen("var(--clr-green)", "* " + nick + " JOINED", channel);
+});
+Commands.set("KICK", function (nick, data) {
+	channel = channelMap.get(data[2]);
+	if (!channel)
+		return;
+	text=data[4].substring(1);
+	for (let i=5;i<data.length;i++)
+	{
+		text += " " + data[i];
+	}
+	if (data[3] != nickname)
+	{
+		if (Channel_RemoveUser(data[3], channel))
+			writeToScreen("var(--clr-green)", "* " + data[3]+ " KICKED by " + nick + " beause of " +text, channel);
+		return;
+	}
+	Channel_Destroy(data[2]);
+	writeToScreen("var(--clr-green)", "*** YOU GOT KICKED OUT OF "+ data[2] + " by " + nick + " beause of " +text, statusChannel);
+});
+Commands.set("MODE", function (nick, data) {
+	channel = channelMap.get(data[2]);
+	if (!channel)
+		return;
+	text = data[3];
+	for (let i=4;i<data.length;i++)
+	{
+		text += " " + data[i];
+	}
+	writeToScreen("var(--clr-green)", "* " + nick + " MODE "  + text, channel);
+	ii = 4;
+	status = "false";
+	for (let i=0;i<data[3].length;i++)
+	{
+		if (data[3][i] == "+")
+			status = "true";
+		else if (data[3][i] == "-")
+			status = "false";
+		else 
+		{
+			Channel_UpdateUserPrefix(data[ii], channel, status, data[3][i]);
+			ii++;
+		}
+	}
+});
+Commands.set("NICK", function (nick, data) {
+	newnick = data[2].substring(1);
+	if (nick == nickname)
+		nickname = newnick;
+	channelMap.forEach(function(channel, name) {
+		if (Channel_RenameUser(nick, newnick, channel))
+		{
+			if (newnick == nickname)
+				writeToScreen("var(--clr-green)", "* YOU are know known as " + newnick, channel);
+			else
+				writeToScreen("var(--clr-green)", "* " +nick+ " is know known as " + newnick, channel);
+		}
+	});
+});
+Commands.set("PART", function (nick, data) {
+	if (data[0].indexOf(":"+nickname+"!") != 0)
+	{
+		channel = channelMap.get(data[2]);
+		if (!channel)
+			return;
+		if (Channel_RemoveUser(nick, channel))
+			writeToScreen("var(--clr-green)", "* " + nick + " LEFT", channel);
+		return;
+	}
+	Channel_Destroy(data[2]);
+});
+Commands.set("TOPIC", function (nick, data) {
+	channel = channelMap.get(data[2]);
+	if (!channel)
+		return;
+	text = data[3].substring(1);
+	for (let i=4;i<data.length;i++)
+	{
+		text += " " + data[i];
+	}
+	if (text)
+		channel.topic.innerHTML = HTML_escape(text);
+	else
+		channel.topic.innerHTML = HTML_escape("no channeltopic available");
+	writeToScreen("var(--clr-green)", "* "+nick + ' TOPIC set to : '+ text , channel);
+});
+Commands.set("QUIT", function (nick, data) {
+	channelMap.forEach(function(channel, name) {
+		if (Channel_RemoveUser(nick, channel))
+		{
+			writeToScreen("var(--clr-blue)", "* "+nick+" QUIT", channel);
+		}
+	})
+});
+Commands.set("PRIVMSG", function (nick, data) {
+	channel = channelMap.get(data[2]);
+	if (!channel)
+		channel = statusChannel;
+	text=data[3].substring(1);
+	for (let i=4;i<data.length;i++)
+	{
+		text += " " + data[i];
+	}
+	nick = data[0].substring(1).split("!",1)[0];
+	if (text[0] == "\x01")
+	{
+		if (text.indexOf("\x01ACTION ") == 0)
+			writeToScreen("var(--clr-red)", "* " + nick +" " + text.substring(8), channel);
+		else
+			writeToScreen("var(--clr-red)", "* " + nick +" " + text, channel);
+	}
+	else
+		writeToScreen("var(--clr-font)", "<" + nick +"> " + text, channel);
+});
+Commands.set("NOTICE", function (nick, data) {
+	channel = channelMap.get(data[2]);
+	if (!channel)
+		channel = statusChannel;
+	text=data[3].substring(1);
+	for (let i=4;i<data.length;i++)
+	{
+		text += " " + data[i];
+	}
+	nick = data[0].substring(1).split("!",1)[0];
+	writeToScreen("var(--clr-red)", "-" + nick +"- " + text, channel);
+});
+
+function process(rawData)
+{
+	let data = rawData.split(" ");
+	let nick = data[0].substring(1).split("!")[0];
+	let fn = Commands.get(data[1].toUpperCase());
+	if (fn)
+	{
+		fn(nick, data);
+		return;
+	}
+	if (!isNaN(parseInt(data[1])))
+	{
+		text = data[1];
+		for (let i=3;i<data.length;i++)
+		{
+			text += " " + data[i];
+		}
+		writeToScreen("var(--clr-gold)", text, statusChannel);
+		return;
+	}
+	if (data[0] == "PING")
+	{
+		pongResponse = rawData.replace("PING", "PONG");
+		writeToScreen("var(--clr-brown)", pongResponse, statusChannel);
+		websocket.send(pongResponse);
+		return;
+	}
+	if (data[0] == "ERROR")
+	{
+		writeToScreen("var(--clr-font)", rawData, statusChannel);
+		return;
+	}
+	//DEBUG OUTPUT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	writeToScreen("var(--clr-green)", "DEBUG" + rawData, statusChannel);
+	//DEBUG OUTPUT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+}
+</script>
+</html>
