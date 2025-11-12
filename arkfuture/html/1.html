@@ -1,2318 +1,1105 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="zh-CN">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<title>自适应IRC客户端</title>
-	<style>
-		/* CSS变量 - 改进的色彩系统 */
-		:root {
-			--clr-background: #F8FAFC;
-			--clr-background2: #E2E8F0;
-			--clr-background3: #FFFFFF;
-			--clr-background4: #CBD5E1;
-			--clr-font: #0F172A;
-			--clr-brown: #92400E;
-			--clr-green: #047857;
-			--clr-gold: #D97706;
-			--clr-red: #DC2626;
-			--clr-purple: #7C3AED;
-			--clr-blue: #2563EB;
-			--clr-accent: #4F46E5;
-			--clr-border: #94A3B8;
-			--clr-warning: #F59E0B;
-			--clr-success: #10B981;
-			--clr-highlight: #FEF3C7;
-			--clr-unread: #EF4444;
-			--shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-			--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-			--shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-			--radius: 8px;
-			--transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-		}
-
-		/* 暗色主题 - 使用prefers-color-scheme和手动切换 */
-		@media (prefers-color-scheme: dark) {
-			:root {
-				--clr-background: #0F172A;
-				--clr-background2: #1E293B;
-				--clr-background3: #1E293B;
-				--clr-background4: #334155;
-				--clr-font: #F1F5F9;
-				--clr-brown: #FDE68A;
-				--clr-green: #6EE7B7;
-				--clr-gold: #FBBF24;
-				--clr-red: #FCA5A5;
-				--clr-purple: #C4B5FD;
-				--clr-blue: #93C5FD;
-				--clr-accent: #818CF8;
-				--clr-border: #475569;
-				--clr-warning: #FCD34D;
-				--clr-success: #6EE7B7;
-				--clr-highlight: #78350F;
-				--clr-unread: #F87171;
-			}
-		}
-
-		[data-theme="dark"] {
-			--clr-background: #0F172A !important;
-			--clr-background2: #1E293B !important;
-			--clr-background3: #1E293B !important;
-			--clr-background4: #334155 !important;
-			--clr-font: #F1F5F9 !important;
-			--clr-brown: #FDE68A !important;
-			--clr-green: #6EE7B7 !important;
-			--clr-gold: #FBBF24 !important;
-			--clr-red: #FCA5A5 !important;
-			--clr-purple: #C4B5FD !important;
-			--clr-blue: #93C5FD !important;
-			--clr-accent: #818CF8 !important;
-			--clr-border: #475569 !important;
-			--clr-warning: #FCD34D !important;
-			--clr-success: #6EE7B7 !important;
-			--clr-highlight: #78350F !important;
-			--clr-unread: #F87171 !important;
-		}
-
-		/* 全局重置与优化 */
-		* {
-			box-sizing: border-box;
-			tap-highlight-color: transparent;
-			-webkit-tap-highlight-color: transparent;
-		}
-
-		html,
-		body {
-			font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-			margin: 0;
-			padding: 0;
-			height: 100%;
-			width: 100%;
-			background-color: var(--clr-background);
-			color: var(--clr-font);
-			font-size: 14px;
-			line-height: 1.6;
-			overflow: hidden;
-			-webkit-font-smoothing: antialiased;
-			-moz-osx-font-smoothing: grayscale;
-			touch-action: manipulation;
-		}
-
-		/* 主容器 - 使用Grid布局实现完美自适应 */
-		.main {
-			display: grid;
-			grid-template-rows: auto 1fr;
-			height: 100vh;
-			width: 100%;
-			position: relative;
-		}
-
-		/* 头部 - 响应式Flex布局 */
-		.header {
-			background: linear-gradient(90deg, var(--clr-background2), var(--clr-background));
-			padding: 12px 20px;
-			border-bottom: 1px solid var(--clr-border);
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			gap: 16px;
-			flex-wrap: wrap;
-		}
-
-		.header h1 {
-			margin: 0;
-			font-size: clamp(16px, 4vw, 20px);
-			font-weight: 700;
-			color: var(--clr-accent);
-			white-space: nowrap;
-		}
-
-		.header-controls {
-			display: flex;
-			gap: 8px;
-			align-items: center;
-			flex-wrap: wrap;
-		}
-
-		/* 设置栏 - 自适应Grid布局 */
-		.settings-bar {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-			gap: 8px;
-			background-color: var(--clr-background2);
-			border-bottom: 1px solid var(--clr-border);
-			padding: 12px 16px;
-			overflow-x: auto;
-			max-height: 120px;
-			overflow-y: auto;
-		}
-
-		.settings-group {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			min-width: 0;
-		}
-
-		.settings-group label {
-			font-size: clamp(11px, 2vw, 13px);
-			font-weight: 600;
-			color: var(--clr-font);
-			white-space: nowrap;
-			flex-shrink: 0;
-		}
-
-		.settings-group input[type="text"] {
-			flex: 1;
-			padding: 6px 10px;
-			background-color: var(--clr-background3);
-			color: var(--clr-font);
-			border: 1px solid var(--clr-border);
-			border-radius: var(--radius);
-			font-size: 13px;
-			transition: var(--transition);
-			min-width: 60px;
-		}
-
-		.settings-group input:focus {
-			outline: none;
-			border-color: var(--clr-accent);
-			box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
-		}
-
-		.settings-group input[type="checkbox"] {
-			width: 16px;
-			height: 16px;
-			cursor: pointer;
-			flex-shrink: 0;
-		}
-
-		/* 响应式按钮组 */
-		.btn-group {
-			display: flex;
-			gap: 6px;
-			flex-wrap: wrap;
-		}
-
-		.btn {
-			padding: 6px 12px;
-			background: linear-gradient(135deg, var(--clr-accent), var(--clr-purple));
-			color: white;
-			border: none;
-			border-radius: var(--radius);
-			cursor: pointer;
-			font-weight: 600;
-			font-size: 13px;
-			white-space: nowrap;
-			transition: var(--transition);
-			user-select: none;
-			-webkit-user-select: none;
-		}
-
-		.btn:hover {
-			transform: translateY(-1px);
-			box-shadow: var(--shadow-md);
-		}
-
-		.btn:disabled {
-			background: var(--clr-background4);
-			cursor: not-allowed;
-			transform: none;
-			box-shadow: none;
-		}
-
-		.btn.disconnect {
-			background: linear-gradient(135deg, var(--clr-red), #EF4444);
-		}
-
-		.btn-secondary {
-			background: var(--clr-background4);
-			color: var(--clr-font);
-			border: 1px solid var(--clr-border);
-		}
-
-		.btn-secondary:hover {
-			background: var(--clr-accent);
-			color: white;
-		}
-
-		.btn-warning {
-			background: linear-gradient(135deg, var(--clr-warning), #F59E0B);
-			color: #000;
-		}
-
-		.btn-warning:hover {
-			box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-		}
-
-		/* 连接状态指示器 */
-		.connection-status {
-			display: inline-flex;
-			align-items: center;
-			gap: 6px;
-			padding: 4px 10px;
-			background-color: var(--clr-background3);
-			border: 1px solid var(--clr-border);
-			border-radius: var(--radius);
-			font-size: clamp(10px, 1.5vw, 11px);
-			font-weight: 500;
-			transition: var(--transition);
-			margin-left: auto;
-			white-space: nowrap;
-		}
-
-		.connection-status.connected {
-			border-color: var(--clr-success);
-			background-color: rgba(16, 185, 129, 0.1);
-		}
-
-		.connection-status.disconnected {
-			border-color: var(--clr-red);
-			background-color: rgba(220, 38, 38, 0.1);
-		}
-
-		.connection-status .indicator {
-			width: 8px;
-			height: 8px;
-			border-radius: 50%;
-			background-color: var(--clr-border);
-			transition: background-color 0.3s;
-		}
-
-		.connection-status.connected .indicator {
-			background-color: var(--clr-success);
-			animation: pulse 2s infinite;
-		}
-
-		.connection-status.disconnected .indicator {
-			background-color: var(--clr-red);
-		}
-
-		@keyframes pulse {
-			0% {
-				opacity: 1;
-			}
-
-			50% {
-				opacity: 0.5;
-			}
-
-			100% {
-				opacity: 1;
-			}
-		}
-
-		/* SSL警告 - 响应式定位 */
-		.ssl-warning {
-			display: none;
-			position: fixed;
-			bottom: 20px;
-			right: 20px;
-			max-width: min(380px, 90vw);
-			background: linear-gradient(135deg, var(--clr-warning), #F59E0B);
-			color: #000;
-			padding: 12px 16px;
-			border-radius: var(--radius);
-			font-size: clamp(12px, 2vw, 13px);
-			z-index: 200;
-			box-shadow: var(--shadow-lg);
-			backdrop-filter: blur(4px);
-		}
-
-		.ssl-warning.visible {
-			display: block;
-		}
-
-		.ssl-warning a {
-			color: #000;
-			font-weight: 600;
-			text-decoration: underline;
-			cursor: pointer;
-			word-break: break-all;
-		}
-
-		/* 聊天容器 - 使用Grid实现完美分割 */
-		.chat-container {
-			display: grid;
-			grid-template-rows: auto 1fr auto;
-			overflow: hidden;
-			position: relative;
-		}
-
-		/* 频道标签栏 - 可滚动 */
-		.channels {
-			display: flex;
-			align-items: center;
-			padding: 8px 12px;
-			gap: 6px;
-			background-color: var(--clr-background2);
-			border-bottom: 1px solid var(--clr-border);
-			overflow-x: auto;
-			overflow-y: hidden;
-			scrollbar-width: thin;
-			-webkit-overflow-scrolling: touch;
-		}
-
-		.channels::-webkit-scrollbar {
-			height: 4px;
-		}
-
-		.channels::-webkit-scrollbar-thumb {
-			background: var(--clr-accent);
-			border-radius: 2px;
-		}
-
-		.channel {
-			position: relative;
-			padding: 6px 12px;
-			background-color: var(--clr-background3);
-			border: 1px solid var(--clr-border);
-			border-radius: 20px;
-			cursor: pointer;
-			font-weight: 500;
-			font-size: clamp(12px, 2vw, 13px);
-			transition: var(--transition);
-			display: flex;
-			align-items: center;
-			gap: 6px;
-			white-space: nowrap;
-			flex-shrink: 0;
-			user-select: none;
-		}
-
-		.channel:hover {
-			background-color: var(--clr-background4);
-			transform: translateY(-1px);
-		}
-
-		.channel.active {
-			background: linear-gradient(135deg, var(--clr-accent), var(--clr-purple));
-			color: white;
-			border-color: var(--clr-accent);
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		}
-
-		/* 未读消息计数 - 绝对定位避免遮挡 */
-		.unread-count {
-			background: var(--clr-unread);
-			color: white;
-			border-radius: 50%;
-			min-width: 18px;
-			height: 18px;
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 10px;
-			font-weight: bold;
-			position: absolute;
-			top: -6px;
-			right: -6px;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-			animation: bounce 0.3s ease;
-		}
-
-		@keyframes bounce {
-
-			0%,
-			100% {
-				transform: scale(1);
-			}
-
-			50% {
-				transform: scale(1.2);
-			}
-		}
-
-		.channel button.x {
-			background: none;
-			border: none;
-			color: inherit;
-			cursor: pointer;
-			padding: 2px 6px;
-			font-weight: bold;
-			border-radius: 50%;
-			font-size: 14px;
-			transition: var(--transition);
-			margin-left: 2px;
-		}
-
-		.channel button.x:hover {
-			background-color: rgba(255, 255, 255, 0.2);
-			transform: scale(1.1);
-		}
-
-		/* 日志容器 */
-		.log-container {
-			position: absolute;
-			inset: 0;
-			background-color: var(--clr-background3);
-			border-bottom: 2px solid var(--clr-accent);
-			display: none;
-			flex-direction: column;
-			z-index: 100;
-			box-shadow: var(--shadow-lg);
-		}
-
-		.log-container.visible {
-			display: flex;
-		}
-
-		.log-header {
-			flex: 0 0 35px;
-			padding: 0 15px;
-			background-color: var(--clr-background2);
-			border-bottom: 1px solid var(--clr-border);
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			font-weight: 600;
-			font-size: clamp(12px, 2vw, 13px);
-		}
-
-		.log-controls {
-			display: flex;
-			gap: 8px;
-		}
-
-		.log-controls button {
-			padding: 4px 10px;
-			background-color: var(--clr-background4);
-			border: none;
-			border-radius: 4px;
-			cursor: pointer;
-			font-size: 11px;
-			transition: var(--transition);
-		}
-
-		.log-controls button:hover {
-			background-color: var(--clr-accent);
-			color: white;
-		}
-
-		#logOutput {
-			flex: 1 1 auto;
-			overflow-y: auto;
-			padding: 10px;
-			font-size: 11px;
-			font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-			background-color: var(--clr-background3);
-			color: var(--clr-font);
-			white-space: pre-wrap;
-			word-wrap: break-word;
-			line-height: 1.5;
-		}
-
-		/* 频道内容区域 - 使用CSS Grid */
-		.channelcontents {
-			display: flex;
-			overflow: hidden;
-			padding: 12px;
-			gap: 12px;
-		}
-
-		.channelcontent {
-			display: grid;
-			grid-template-columns: 1fr auto;
-			width: 100%;
-			height: 100%;
-			gap: 12px;
-		}
-
-		.channelcontent nav {
-			display: flex;
-			flex-direction: column;
-			background-color: var(--clr-background3);
-			border-radius: var(--radius);
-			overflow: hidden;
-			border: 1px solid var(--clr-border);
-			box-shadow: var(--shadow-sm);
-		}
-
-		.channelcontent nav h3 {
-			flex: 0 0 auto;
-			padding: 10px 15px;
-			margin: 0;
-			background-color: var(--clr-background2);
-			border-bottom: 1px solid var(--clr-border);
-			font-weight: 600;
-			font-size: clamp(13px, 2vw, 14px);
-			position: sticky;
-			top: 0;
-			z-index: 1;
-		}
-
-		.channelcontent nav nav {
-			flex: 1 1 auto;
-			overflow-y: auto;
-			padding: 15px;
-			scrollbar-width: thin;
-		}
-
-		.channelcontent nav nav::-webkit-scrollbar {
-			width: 6px;
-		}
-
-		.channelcontent nav nav::-webkit-scrollbar-thumb {
-			background: var(--clr-accent);
-			border-radius: 3px;
-		}
-
-		.channelcontent nav p {
-			margin: 0;
-			padding: 3px 0;
-			word-wrap: break-word;
-			overflow-wrap: anywhere;
-		}
-
-		/* 提及高亮 */
-		.mention-highlight {
-			background: var(--clr-highlight);
-			font-weight: 600;
-			padding: 1px 4px;
-			border-radius: 4px;
-			color: var(--clr-font);
-		}
-
-		/* 用户列表 - 可折叠 */
-		ul {
-			flex: 0 0 200px;
-			overflow-y: auto;
-			overflow-x: hidden;
-			padding: 10px;
-			margin: 0;
-			border-left: 1px solid var(--clr-border);
-			list-style: none;
-			background-color: var(--clr-background3);
-			border-radius: 0 var(--radius) var(--radius) 0;
-			scrollbar-width: thin;
-		}
-
-		ul.collapsed {
-			flex: 0 0 0;
-			padding: 0;
-			border: none;
-			overflow: hidden;
-		}
-
-		.channelcontents li {
-			padding: 6px 10px;
-			margin: 1px 0;
-			display: flex;
-			gap: 8px;
-			border-radius: 4px;
-			cursor: pointer;
-			transition: var(--transition);
-			align-items: center;
-		}
-
-		.channelcontents li:hover {
-			background-color: var(--clr-background2);
-		}
-
-		.channelcontents li p {
-			margin: 0;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-
-		.channelcontents li p:first-child {
-			width: 20px;
-			color: var(--clr-purple);
-			font-weight: bold;
-			text-align: center;
-			flex-shrink: 0;
-		}
-
-		.channelcontents li p:nth-child(2) {
-			flex: 1;
-			color: var(--clr-green);
-		}
-
-		/* 用户上下文菜单 */
-		.user-context-menu {
-			position: absolute;
-			background: var(--clr-background3);
-			border: 1px solid var(--clr-border);
-			border-radius: var(--radius);
-			padding: 4px;
-			display: none;
-			z-index: 100;
-			box-shadow: var(--shadow-lg);
-			min-width: 150px;
-			backdrop-filter: blur(4px);
-		}
-
-		.user-context-menu.visible {
-			display: block;
-		}
-
-		.context-menu-item {
-			padding: 8px 12px;
-			cursor: pointer;
-			border-radius: 4px;
-			font-size: 13px;
-			transition: var(--transition);
-		}
-
-		.context-menu-item:hover {
-			background: var(--clr-accent);
-			color: white;
-		}
-
-		/* 输入框容器 */
-		.input-container {
-			position: relative;
-			padding: 12px;
-			background-color: var(--clr-background2);
-			border-top: 1px solid var(--clr-border);
-		}
-
-		#input {
-			width: 100%;
-			padding: 12px 15px;
-			background-color: var(--clr-background3);
-			color: var(--clr-font);
-			border: 1px solid var(--clr-border);
-			border-radius: var(--radius);
-			font-size: 14px;
-			transition: var(--transition);
-			outline: none;
-		}
-
-		#input:focus {
-			border-color: var(--clr-accent);
-			box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-		}
-
-		/* 自动补全建议 */
-		.autocomplete-suggestions {
-			position: absolute;
-			background: var(--clr-background3);
-			border: 1px solid var(--clr-border);
-			border-radius: var(--radius);
-			max-height: 200px;
-			overflow-y: auto;
-			display: none;
-			z-index: 50;
-			box-shadow: var(--shadow-lg);
-			width: calc(100% - 24px);
-			bottom: 60px;
-		}
-
-		.autocomplete-suggestions.visible {
-			display: block;
-		}
-
-		.autocomplete-item {
-			padding: 8px 12px;
-			cursor: pointer;
-			font-size: 13px;
-			transition: var(--transition);
-		}
-
-		.autocomplete-item:hover,
-		.autocomplete-item.active {
-			background: var(--clr-accent);
-			color: white;
-		}
-
-		/* 链接预览 */
-		.link-preview {
-			position: absolute;
-			background: var(--clr-background3);
-			border: 1px solid var(--clr-border);
-			border-radius: var(--radius);
-			padding: 8px;
-			display: none;
-			z-index: 101;
-			box-shadow: var(--shadow-lg);
-			max-width: min(300px, 90vw);
-			font-size: 12px;
-			color: var(--clr-font);
-			word-break: break-all;
-			backdrop-filter: blur(4px);
-		}
-
-		.link-preview.visible {
-			display: block;
-		}
-
-		/* 搜索容器 - 响应式 */
-		.search-container {
-			position: relative;
-			grid-column: span 1;
-		}
-
-		.search-container input {
-			width: 100%;
-		}
-
-		.search-results {
-			position: absolute;
-			top: 100%;
-			right: 0;
-			background: var(--clr-background3);
-			border: 1px solid var(--clr-border);
-			border-radius: var(--radius);
-			padding: 8px;
-			margin-top: 4px;
-			min-width: min(250px, 90vw);
-			display: none;
-			z-index: 1000;
-			box-shadow: var(--shadow-lg);
-			max-height: 300px;
-			overflow-y: auto;
-			backdrop-filter: blur(4px);
-		}
-
-		.search-results.visible {
-			display: block;
-		}
-
-		.search-result-item {
-			padding: 6px;
-			cursor: pointer;
-			border-radius: 4px;
-			margin: 2px 0;
-			font-size: 12px;
-			transition: var(--transition);
-		}
-
-		.search-result-item:hover {
-			background: var(--clr-background4);
-		}
-
-		/* 折叠按钮 */
-		.toggle-users-btn {
-			position: absolute;
-			top: 10px;
-			right: 10px;
-			padding: 4px 8px;
-			background: var(--clr-accent);
-			color: white;
-			border: none;
-			border-radius: 4px;
-			cursor: pointer;
-			font-size: 12px;
-			z-index: 2;
-		}
-
-		/* 响应式断点 - 移动优先 */
-
-		/* 极小屏幕 (320px - 480px) */
-		@media (max-width: 480px) {
-			:root {
-				--radius: 6px;
-			}
-
-			.header {
-				padding: 10px 12px;
-				gap: 8px;
-			}
-
-			.header h1 {
-				font-size: 16px;
-			}
-
-			.settings-bar {
-				grid-template-columns: 1fr;
-				padding: 8px 12px;
-				gap: 6px;
-				max-height: 150px;
-			}
-
-			.settings-group {
-				flex-direction: column;
-				align-items: flex-start;
-				gap: 4px;
-			}
-
-			.settings-group input[type="text"] {
-				width: 100%;
-			}
-
-			.btn-group {
-				flex-direction: column;
-				width: 100%;
-			}
-
-			.btn {
-				width: 100%;
-			}
-
-			.connection-status {
-				margin-left: 0;
-				justify-content: center;
-				width: 100%;
-			}
-
-			.channels {
-				padding: 6px 8px;
-			}
-
-			.channel {
-				padding: 6px 10px;
-				font-size: 12px;
-			}
-
-			.channelcontent {
-				grid-template-columns: 1fr;
-			}
-
-			ul {
-				display: none;
-			}
-
-			.channelcontents {
-				padding: 8px;
-			}
-
-			.channelcontent nav nav {
-				padding: 10px;
-			}
-
-			#input {
-				font-size: 16px;
-				/* 防止iOS缩放 */
-			}
-
-			.input-container {
-				padding: 8px;
-			}
-		}
-
-		/* 小屏幕 (481px - 768px) */
-		@media (min-width: 481px) and (max-width: 768px) {
-			.settings-bar {
-				grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-			}
-
-			.channelcontent {
-				grid-template-columns: 1fr auto;
-			}
-
-			ul {
-				flex: 0 0 160px;
-			}
-
-			.channels {
-				padding: 8px 10px;
-			}
-		}
-
-		/* 中等屏幕 (769px - 1024px) */
-		@media (min-width: 769px) and (max-width: 1024px) {
-			.settings-bar {
-				grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-			}
-
-			ul {
-				flex: 0 0 180px;
-			}
-		}
-
-		/* 大屏幕 (>1024px) */
-		@media (min-width: 1025px) {
-			.settings-bar {
-				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-			}
-
-			ul {
-				flex: 0 0 220px;
-			}
-		}
-
-		/* 高DPI屏幕优化 */
-		@media (-webkit-min-device-pixel-ratio: 2),
-		(min-resolution: 192dpi) {
-			body {
-				font-weight: 400;
-			}
-
-			.channel button.x {
-				padding: 4px 8px;
-			}
-		}
-
-		/* 横屏模式优化 */
-		@media (orientation: landscape) and (max-height: 500px) {
-			.header {
-				padding: 8px 12px;
-			}
-
-			.settings-bar {
-				padding: 6px 12px;
-				max-height: 80px;
-			}
-		}
-
-		/* 触摸优化 */
-		@media (hover: none) {
-
-			.channel:hover,
-			.context-menu-item:hover {
-				background: none;
-			}
-
-			.channel:active {
-				background: var(--clr-background4);
-			}
-
-			.context-menu-item:active {
-				background: var(--clr-accent);
-				color: white;
-			}
-		}
-
-		/* 打印样式 */
-		@media print {
-
-			.settings-bar,
-			.ssl-warning,
-			.user-context-menu,
-			.autocomplete-suggestions,
-			.search-container {
-				display: none !important;
-			}
-
-			.main {
-				grid-template-rows: 1fr;
-			}
-
-			body {
-				background: white !important;
-				color: black !important;
-			}
-		}
-
-		/* 动画优化 */
-		@media (prefers-reduced-motion: reduce) {
-			* {
-				transition: none !important;
-				animation: none !important;
-			}
-		}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赛博朋克IRC终端</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;500&display=swap');
+        
+        :root {
+            /* 赛博朋克配色 - 霓虹荧光色系 */
+            --clr-bg-primary: #0a0a0a;
+            --clr-bg-secondary: #0f0f0f;
+            --clr-bg-tertiary: #1a1a1a;
+            --clr-bg-quaternary: #252525;
+            --clr-text-primary: #00ff9d;
+            --clr-text-secondary: #ff00ff;
+            --clr-text-tertiary: #00ffff;
+            --clr-text-quaternary: #ffff00;
+            --clr-accent-cyan: #00ffff;
+            --clr-accent-magenta: #ff00ff;
+            --clr-accent-yellow: #ffff00;
+            --clr-accent-green: #00ff00;
+            --clr-accent-red: #ff0040;
+            --clr-accent-blue: #0080ff;
+            --clr-accent-purple: #c000ff;
+            --clr-border: #333333;
+            --clr-glow-cyan: #00ffff80;
+            --clr-glow-magenta: #ff00ff80;
+            --clr-glow-yellow: #ffff0080;
+            
+            /* 动画参数 */
+            --anim-glow-speed: 2s;
+            --anim-glitch-speed: 0.3s;
+            --anim-flicker-speed: 0.1s;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --clr-bg-primary: #0a0a0a;
+                --clr-bg-secondary: #0f0f0f;
+                --clr-bg-tertiary: #1a1a1a;
+                --clr-text-primary: #00ff9d;
+                --clr-text-secondary: #ff00ff;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect x="0" y="0" width="2" height="16" fill="%2300ffff"/><rect x="0" y="0" width="16" height="2" fill="%2300ffff"/></svg>'), auto;
+        }
+
+        @keyframes bg-scroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100vh; }
+        }
+
+        @keyframes glow-cyan {
+            0%, 100% { text-shadow: 0 0 4px var(--clr-accent-cyan), 0 0 8px var(--clr-accent-cyan), 0 0 16px var(--clr-accent-cyan); }
+            50% { text-shadow: 0 0 8px var(--clr-accent-cyan), 0 0 16px var(--clr-accent-cyan), 0 0 32px var(--clr-accent-cyan); }
+        }
+
+        @keyframes glow-magenta {
+            0%, 100% { box-shadow: 0 0 8px var(--clr-accent-magenta), inset 0 0 4px var(--clr-accent-magenta); }
+            50% { box-shadow: 0 0 16px var(--clr-accent-magenta), inset 0 0 8px var(--clr-accent-magenta); }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.95; }
+            5% { opacity: 0.85; }
+            10% { opacity: 0.95; }
+            15% { opacity: 0.9; }
+            20% { opacity: 0.95; }
+            100% { opacity: 0.95; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        body {
+            font-family: 'Roboto Mono', monospace;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100%;
+            background: linear-gradient(0deg, 
+                var(--clr-bg-primary) 0%, 
+                rgba(0, 255, 255, 0.05) 50%, 
+                var(--clr-bg-primary) 100%);
+            background-size: 100% 200vh;
+            animation: bg-scroll 20s linear infinite;
+            color: var(--clr-text-primary);
+            font-size: 14px;
+            line-height: 1.5;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 扫描线效果 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 255, 0.03) 2px,
+                rgba(0, 255, 255, 0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+            animation: flicker 0.15s infinite;
+        }
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 故障艺术标题 */
+        .header {
+            flex: 0 0 auto;
+            background: linear-gradient(90deg, 
+                var(--clr-bg-secondary) 0%, 
+                var(--clr-bg-tertiary) 50%, 
+                var(--clr-bg-secondary) 100%);
+            border-bottom: 2px solid var(--clr-accent-cyan);
+            padding: 15px 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px var(--clr-glow-cyan);
+        }
+
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(0, 255, 255, 0.2), 
+                transparent);
+            animation: glitch 3s infinite;
+        }
+
+        #caption {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 32px;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--clr-text-primary);
+            text-shadow: 
+                0 0 8px var(--clr-accent-cyan),
+                0 0 16px var(--clr-accent-cyan),
+                0 0 24px var(--clr-accent-cyan);
+            animation: glow-cyan 2s ease-in-out infinite alternate;
+        }
+
+        #caption::after {
+            content: " [ONLINE]";
+            font-size: 12px;
+            color: var(--clr-accent-yellow);
+            vertical-align: super;
+        }
+
+        /* 控制面板 - 赛博格风格 */
+        .settings-bar {
+            flex: 0 0 60px;
+            background: var(--clr-bg-secondary);
+            border-bottom: 1px solid var(--clr-border);
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            gap: 15px;
+            overflow-x: auto;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            animation: flicker 0.1s infinite;
+        }
+
+        .settings-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 0 0 auto;
+            position: relative;
+        }
+
+        .settings-group::before {
+            content: "";
+            position: absolute;
+            left: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 16px;
+            background: var(--clr-accent-magenta);
+            box-shadow: 0 0 4px var(--clr-accent-magenta);
+        }
+
+        .settings-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--clr-text-tertiary);
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .settings-group input[type="text"] {
+            padding: 8px 12px;
+            background: var(--clr-bg-tertiary);
+            color: var(--clr-text-primary);
+            border: 1px solid var(--clr-border);
+            border-radius: 4px;
+            font-size: 13px;
+            min-width: 140px;
+            font-family: 'Roboto Mono', monospace;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 8px rgba(0, 255, 255, 0.1);
+        }
+
+        .settings-group input[type="text"]:focus {
+            outline: none;
+            border-color: var(--clr-accent-cyan);
+            box-shadow: 
+                0 0 0 2px rgba(0, 255, 255, 0.2),
+                inset 0 0 8px rgba(0, 255, 255, 0.2);
+            animation: glitch 0.3s;
+        }
+
+        .settings-group input[type="text"]::placeholder {
+            color: rgba(0, 255, 255, 0.3);
+        }
+
+        .settings-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            position: relative;
+            appearance: none;
+            background: var(--clr-bg-tertiary);
+            border: 1px solid var(--clr-border);
+            border-radius: 3px;
+            transition: all 0.2s;
+        }
+
+        .settings-group input[type="checkbox"]:checked {
+            background: var(--clr-accent-cyan);
+            border-color: var(--clr-accent-cyan);
+            box-shadow: 0 0 8px var(--clr-accent-cyan);
+        }
+
+        .settings-group input[type="checkbox"]:checked::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 5px;
+            width: 6px;
+            height: 12px;
+            border: solid var(--clr-bg-primary);
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* 全息投影按钮 */
+        .connect-btn, .ssl-help-btn, .log-toggle-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .connect-btn {
+            background: linear-gradient(135deg, 
+                var(--clr-accent-magenta) 0%, 
+                var(--clr-accent-purple) 50%, 
+                var(--clr-accent-magenta) 100%);
+            background-size: 200% 200%;
+            color: var(--clr-bg-primary);
+            box-shadow: 0 0 16px var(--clr-glow-magenta);
+            animation: pulse 2s infinite;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 24px var(--clr-glow-magenta);
+            background-position: 100% 100%;
+        }
+
+        .connect-btn:disabled {
+            background: var(--clr-bg-tertiary);
+            color: var(--clr-text-quaternary);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            animation: none;
+        }
+
+        .connect-btn.disconnect {
+            background: linear-gradient(135deg, 
+                var(--clr-accent-red) 0%, 
+                var(--clr-accent-yellow) 100%);
+            box-shadow: 0 0 16px rgba(255, 0, 64, 0.5);
+        }
+
+        .ssl-help-btn {
+            background: linear-gradient(135deg, 
+                var(--clr-accent-yellow) 0%, 
+                var(--clr-accent-red) 100%);
+            color: var(--clr-bg-primary);
+            box-shadow: 0 0 12px var(--clr-glow-yellow);
+        }
+
+        .ssl-help-btn:hover {
+            box-shadow: 0 0 20px var(--clr-glow-yellow);
+            transform: translateY(-2px);
+        }
+
+        .log-toggle-btn {
+            background: var(--clr-bg-tertiary);
+            color: var(--clr-text-tertiary);
+            border: 1px solid var(--clr-border);
+            position: relative;
+        }
+
+        .log-toggle-btn:hover {
+            background: var(--clr-accent-cyan);
+            color: var(--clr-bg-primary);
+            box-shadow: 0 0 12px var(--clr-glow-cyan);
+            transform: translateY(-1px);
+        }
+
+        /* 连接状态 - 数字仪表盘 */
+        .connection-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px;
+            background: var(--clr-bg-tertiary);
+            border: 2px solid var(--clr-border);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: auto;
+            flex: 0 0 auto;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: inset 0 0 8px rgba(0, 255, 255, 0.1);
+        }
+
+        .connection-status.connected {
+            border-color: var(--clr-accent-green);
+            color: var(--clr-accent-green);
+            box-shadow: 
+                inset 0 0 8px rgba(0, 255, 0, 0.2),
+                0 0 12px rgba(0, 255, 0, 0.3);
+            animation: glow-cyan var(--anim-glow-speed) ease-in-out infinite alternate;
+        }
+
+        .connection-status.disconnected {
+            border-color: var(--clr-accent-red);
+            color: var(--clr-accent-red);
+            box-shadow: 
+                inset 0 0 8px rgba(255, 0, 64, 0.2),
+                0 0 12px rgba(255, 0, 64, 0.3);
+        }
+
+        .connection-status .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--clr-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .connection-status.connected .indicator {
+            background: var(--clr-accent-green);
+            box-shadow: 0 0 8px var(--clr-accent-green);
+            animation: pulse 1s infinite;
+        }
+
+        .connection-status.disconnected .indicator {
+            background: var(--clr-accent-red);
+            box-shadow: 0 0 8px var(--clr-accent-red);
+        }
+
+        /* SSL警告 - 紧急弹窗 */
+        .ssl-warning {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            max-width: 420px;
+            background: linear-gradient(135deg, 
+                var(--clr-accent-yellow) 0%, 
+                var(--clr-accent-red) 100%);
+            color: var(--clr-bg-primary);
+            padding: 16px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 0 32px var(--clr-glow-yellow);
+            border: 2px solid var(--clr-accent-yellow);
+            font-weight: 600;
+            animation: glitch 0.5s infinite;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .ssl-warning.visible {
+            display: block;
+            animation: 
+                glitch 0.5s infinite,
+                pulse 1s infinite;
+        }
+
+        .ssl-warning strong {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .ssl-warning a {
+            color: var(--clr-bg-primary);
+            font-weight: 900;
+            text-decoration: underline;
+            cursor: pointer;
+            display: inline-block;
+            padding: 2px 4px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 2px;
+        }
+
+        /* 日志容器 - 终端界面 */
+        .log-container {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.95);
+            border: 2px solid var(--clr-accent-magenta);
+            display: none;
+            flex-direction: column;
+            z-index: 100;
+            box-shadow: 0 0 40px var(--clr-glow-magenta);
+            backdrop-filter: blur(10px);
+        }
+
+        .log-container.visible {
+            display: flex;
+            animation: glitch 0.3s;
+        }
+
+        .log-header {
+            flex: 0 0 40px;
+            padding: 0 20px;
+            background: var(--clr-bg-secondary);
+            border-bottom: 2px solid var(--clr-accent-magenta);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--clr-text-magenta);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', monospace;
+            text-shadow: 0 0 8px var(--clr-accent-magenta);
+        }
+
+        .log-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .log-controls button {
+            padding: 6px 14px;
+            background: var(--clr-bg-tertiary);
+            color: var(--clr-text-tertiary);
+            border: 1px solid var(--clr-border);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .log-controls button:hover {
+            background: var(--clr-accent-magenta);
+            color: var(--clr-bg-primary);
+            box-shadow: 0 0 12px var(--clr-glow-magenta);
+        }
+
+        #logOutput {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            padding: 20px;
+            font-size: 12px;
+            font-family: 'Roboto Mono', monospace;
+            background: var(--clr-bg-primary);
+            color: var(--clr-text-primary);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.6;
+            text-shadow: 0 0 4px currentColor;
+        }
+
+        /* 聊天容器 */
+        .chat-container {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            background: radial-gradient(ellipse at center, 
+                var(--clr-bg-primary) 0%, 
+                rgba(0, 255, 255, 0.02) 100%);
+        }
+
+        /* 频道标签 - 数据流 */
+        .channels {
+            flex: 0 0 50px;
+            background: var(--clr-bg-secondary);
+            border-bottom: 2px solid var(--clr-accent-cyan);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 10px;
+            overflow-x: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .channel {
+            padding: 10px 20px;
+            background: var(--clr-bg-tertiary);
+            border: 1px solid var(--clr-border);
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--clr-text-tertiary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .channel::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .channel:hover::before {
+            left: 100%;
+        }
+
+        .channel:hover {
+            background: var(--clr-bg-quaternary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 255, 0.2);
+            border-color: var(--clr-accent-cyan);
+        }
+
+        .channel.active {
+            background: linear-gradient(135deg, 
+                var(--clr-accent-cyan) 0%, 
+                var(--clr-accent-blue) 100%);
+            color: var(--clr-bg-primary);
+            border-color: var(--clr-accent-cyan);
+            box-shadow: 0 0 16px var(--clr-glow-cyan);
+            font-weight: 700;
+            text-shadow: 0 0 4px var(--clr-bg-primary);
+        }
+
+        .channel button.x {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-weight: bold;
+            border-radius: 50%;
+            font-size: 16px;
+            transition: all 0.2s;
+            margin-left: 8px;
+        }
+
+        .channel button.x:hover {
+            background: rgba(255, 0, 64, 0.3);
+            color: var(--clr-accent-red);
+            box-shadow: 0 0 8px var(--clr-accent-red);
+        }
+
+        /* 频道内容 - 矩阵布局 */
+        .channelcontents {
+            flex: 1 1 auto;
+            display: flex;
+            overflow: hidden;
+            padding: 12px;
+            gap: 12px;
+        }
+
+        .channelcontent {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 100%;
+            gap: 12px;
+        }
+
+        .channelcontent nav {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            background: var(--clr-bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--clr-border);
+            box-shadow: 
+                0 8px 24px rgba(0, 0, 0, 0.5),
+                inset 0 0 16px rgba(0, 255, 255, 0.05);
+        }
+
+        .channelcontent nav h3 {
+            flex: 0 0 auto;
+            padding: 12px 18px;
+            margin: 0;
+            background: var(--clr-bg-tertiary);
+            border-bottom: 2px solid var(--clr-accent-cyan);
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--clr-text-cyan);
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px var(--clr-accent-cyan);
+        }
+
+        .channelcontent nav nav {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .channelcontent nav p {
+            margin: 0;
+            padding: 4px 0;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .channelcontent nav p::before {
+            content: ">";
+            color: var(--clr-accent-magenta);
+            margin-right: 10px;
+            opacity: 0.5;
+        }
+
+        /* 用户列表 - 赛博格数据面板 */
+        ul {
+            flex: 0 0 220px;
+            overflow-y: auto;
+            padding: 15px;
+            margin: 0;
+            border-left: 2px solid var(--clr-accent-cyan);
+            list-style: none;
+            background: var(--clr-bg-secondary);
+            border-radius: 0 8px 8px 0;
+            box-shadow: inset 4px 0 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .channelcontents li {
+            padding: 8px 12px;
+            margin: 3px 0;
+            display: flex;
+            gap: 10px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            background: rgba(0, 0, 0, 0.2);
+            align-items: center;
+        }
+
+        .channelcontents li:hover {
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateX(4px);
+            box-shadow: -4px 0 8px var(--clr-glow-cyan);
+        }
+
+        .channelcontents li p {
+            margin: 0;
+            font-size: 13px;
+        }
+
+        .channelcontents li p:first-child {
+            width: 24px;
+            color: var(--clr-accent-purple);
+            font-weight: bold;
+            text-align: center;
+            font-size: 16px;
+            text-shadow: 0 0 4px var(--clr-accent-purple);
+        }
+
+        .channelcontents li p:nth-child(2) {
+            flex: 1;
+            color: var(--clr-accent-green);
+            font-weight: 500;
+        }
+
+        /* 输入框 - 终端命令行 */
+        #input {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            padding: 15px 20px;
+            background: var(--clr-bg-secondary);
+            color: var(--clr-text-primary);
+            border: 2px solid var(--clr-accent-cyan);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Roboto Mono', monospace;
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 
+                inset 0 0 16px rgba(0, 255, 255, 0.1),
+                0 4px 16px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 0 4px currentColor;
+        }
+
+        #input:focus {
+            outline: none;
+            border-color: var(--clr-accent-magenta);
+            box-shadow: 
+                inset 0 0 20px rgba(255, 0, 255, 0.2),
+                0 0 24px var(--clr-glow-magenta);
+            animation: glitch 0.2s;
+        }
+
+        #input::placeholder {
+            color: rgba(0, 255, 255, 0.3);
+            font-style: italic;
+        }
+
+        /* 滚动条 - 赛博风格 */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--clr-bg-primary);
+            border-radius: 0;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, 
+                var(--clr-accent-cyan) 0%, 
+                var(--clr-accent-magenta) 100%);
+            border-radius: 0;
+            border: 2px solid var(--clr-bg-primary);
+            transition: all 0.2s;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, 
+                var(--clr-accent-magenta) 0%, 
+                var(--clr-accent-cyan) 100%);
+            box-shadow: 0 0 8px var(--clr-glow-magenta);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .settings-bar {
+                flex-wrap: wrap;
+                padding: 10px;
+                gap: 10px;
+                min-height: auto;
+                flex: 0 0 auto;
+            }
+
+            .settings-group {
+                flex: 1 1 45%;
+            }
+
+            .settings-group input {
+                min-width: 120px;
+                width: 100%;
+            }
+
+            #caption {
+                font-size: 24px;
+                letter-spacing: 2px;
+            }
+
+            .channelcontent {
+                flex-direction: column;
+            }
+
+            ul {
+                flex: 0 0 140px;
+                border-left: none;
+                border-top: 2px solid var(--clr-accent-cyan);
+                border-radius: 0 0 8px 8px;
+            }
+
+            #input {
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+            }
+
+            .log-container {
+                height: 50vh;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .settings-group {
+                flex: 1 1 100%;
+            }
+
+            .channel {
+                font-size: 11px;
+                padding: 8px 14px;
+            }
+
+            .connection-status {
+                display: none;
+            }
+
+            #caption {
+                font-size: 20px;
+            }
+        }
+
+        /* 消息样式 */
+        .message-system {
+            color: var(--clr-accent-yellow) !important;
+            font-weight: 700;
+            text-shadow: 0 0 4px var(--clr-accent-yellow);
+        }
+
+        .message-error {
+            color: var(--clr-accent-red) !important;
+            font-weight: 700;
+            text-shadow: 0 0 4px var(--clr-accent-red);
+        }
+
+        .message-success {
+            color: var(--clr-accent-green) !important;
+            font-weight: 700;
+            text-shadow: 0 0 4px var(--clr-accent-green);
+        }
+
+        .message-action {
+            color: var(--clr-accent-purple) !important;
+            font-style: italic;
+        }
+
+        .message-nick {
+            color: var(--clr-accent-cyan) !important;
+            font-weight: 600;
+        }
+
+        .message-text {
+            color: var(--clr-text-primary);
+        }
+
+        /* 链接样式 */
+        a {
+            color: var(--clr-accent-cyan);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--clr-accent-cyan);
+            transition: all 0.2s;
+        }
+
+        a:hover {
+            color: var(--clr-accent-magenta);
+            border-bottom-style: solid;
+            text-shadow: 0 0 8px var(--clr-accent-magenta);
+        }
+
+        /* 代码雨背景 - 矩阵风格 */
+        .code-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.1;
+        }
+
+        .code-rain canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 
 <body>
-	<div class="main">
-		<div class="header">
-			<h1 id="caption">自适应IRC客户端</h1>
-			<div class="header-controls">
-				<button class="btn btn-warning" onclick="toggleTheme()" title="切换明暗主题">🌓 主题</button>
-				<div class="connection-status disconnected" id="connectionStatus">
-					<span class="indicator"></span>
-					<span id="statusText">未连接</span>
-				</div>
-			</div>
-		</div>
-
-		<div class="settings-bar">
-			<div class="settings-group">
-				<label>WebSocket:</label>
-				<input type="text" id="wsUrl" value="" placeholder="wss://irc.example.com:port/">
-			</div>
-			<div class="settings-group">
-				<label>昵称:</label>
-				<input type="text" id="nickInput" value="" placeholder="输入昵称">
-			</div>
-			<div class="settings-group">
-				<label>频道:</label>
-				<input type="text" id="channelInput" value="" placeholder="#channel">
-			</div>
-			<div class="search-container">
-				<input type="text" id="searchInput" placeholder="🔍 搜索消息..." onkeyup="onSearchKeyUp(event)">
-				<div class="search-results" id="searchResults"></div>
-			</div>
-			<div class="settings-group">
-				<label title="启用后会在断开时自动重连">
-					<input type="checkbox" id="autoReconnect"> 自动重连
-				</label>
-			</div>
-			<div class="settings-group">
-				<label title="桌面通知">
-					<input type="checkbox" id="enableNotifications"> 桌面通知
-				</label>
-			</div>
-			<div class="btn-group">
-				<button class="btn btn-warning" onclick="showSSLWarning()" title="SSL证书问题帮助">🔒 SSL帮助</button>
-				<button class="btn" id="connectBtn" onclick="toggleConnection()">连接</button>
-				<button class="btn btn-secondary" onclick="toggleLog()">📋 日志</button>
-			</div>
-		</div>
-
-		<div class="ssl-warning" id="sslWarning">
-			<strong>⚠️ 浏览器无法忽略SSL证书错误!</strong><br>
-			1. 改用 <code>ws://</code> 非加密连接<br>
-			2. 访问 <a id="sslLink" target="_blank">服务器URL</a> 并手动信任证书
-		</div>
-
-		<div class="log-container" id="logContainer">
-			<div class="log-header">
-				<span>WebSocket日志</span>
-				<div class="log-controls">
-					<button onclick="clearLog()">清空</button>
-					<button onclick="toggleLog()">关闭</button>
-				</div>
-			</div>
-			<div id="logOutput"></div>
-		</div>
-
-		<div class="chat-container">
-			<div class="channels" style="display: none;"></div>
-			<nav class="channelcontents" style="display: none;">
-				<div class="channelcontent">
-					<nav>
-						<h3></h3>
-						<nav></nav>
-					</nav>
-					<ul></ul>
-				</div>
-			</nav>
-			<div class="input-container" style="display: none;">
-				<input type="text" id="input" onKeyPress="onKeyPress(event)" onKeyDown="onKeyDown(event)"
-					   onInput="onInputChanged(event)" placeholder="输入消息 (Tab补全, ↑↓历史)" autocomplete="off" />
-				<div class="autocomplete-suggestions" id="autocompleteSuggestions"></div>
-			</div>
-		</div>
-
-		<div class="user-context-menu" id="userContextMenu"></div>
-		<div class="link-preview" id="linkPreview"></div>
-	</div>
-
-	<script>
-		// 核心变量与配置
-		var nickname = "", channelName = "", wsUrl = "";
-		var channels, channelContents, input;
-		var channelMap = new Map();
-		var activeChannel = null, statusChannel = null;
-		var PrefixChars, websocket = null, isConnected = false;
-		var autoReconnect = false, reconnectAttempts = 0;
-		var maxReconnectAttempts = 5, reconnectDelay = 3000;
-		var ignoredUsers = new Set();
-		var commandHistory = [], commandIndex = -1;
-		var touchStartX = 0, touchStartY = 0;
-
-		// 初始化
-		function onLoad() {
-			channels = document.querySelector('.channels');
-			channelContents = document.querySelector('.channelcontents');
-			input = document.getElementById('input');
-
-			let url = new URL(document.location);
-			if (url.hash) document.getElementById('channelInput').value = url.hash;
-
-			if (window.frameElement) document.getElementById("caption").style.display = "none";
-
-			updateConnectionStatus(false);
-			setupEventListeners();
-			requestNotificationPermission();
-			applySavedTheme();
-		}
-		window.addEventListener("load", onLoad);
-
-		// 事件监听器设置
-		function setupEventListeners() {
-			// 点击外部关闭菜单
-			document.addEventListener('click', function (e) {
-				const contextMenu = document.getElementById('userContextMenu');
-				const searchResults = document.getElementById('searchResults');
-				if (contextMenu && !contextMenu.contains(e.target)) {
-					contextMenu.classList.remove('visible');
-				}
-				if (searchResults && !searchResults.contains(e.target) && e.target !== document.getElementById('searchInput')) {
-					searchResults.classList.remove('visible');
-				}
-			});
-
-			// 触摸手势支持
-			let startX = 0, startY = 0;
-			document.addEventListener('touchstart', function (e) {
-				startX = e.touches[0].clientX;
-				startY = e.touches[0].clientY;
-			}, { passive: true });
-
-			document.addEventListener('touchend', function (e) {
-				if (!startX || !startY) return;
-				const endX = e.changedTouches[0].clientX;
-				const endY = e.changedTouches[0].clientY;
-				const diffX = startX - endX;
-				const diffY = startY - endY;
-
-				// 水平滑动切换频道
-				if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-					const tabs = Array.from(document.getElementsByClassName('channel'));
-					const activeIndex = tabs.findIndex(t => t.classList.contains('active'));
-					if (diffX > 0 && activeIndex < tabs.length - 1) {
-						tabs[activeIndex + 1].click(); // 滑动到下一个
-					} else if (diffX < 0 && activeIndex > 0) {
-						tabs[activeIndex - 1].click(); // 滑动到上一个
-					}
-				}
-				startX = startY = 0;
-			});
-
-			// 窗口大小改变时重新计算布局
-			window.addEventListener('resize', function () {
-				setTimeout(() => {
-					if (activeChannel && activeChannel.content) {
-						activeChannel.content.scrollTop = activeChannel.content.scrollHeight;
-					}
-				}, 100);
-			});
-		}
-
-		// 主题管理
-		function applySavedTheme() {
-			const savedTheme = localStorage.getItem('irc-theme');
-			if (savedTheme === 'dark') {
-				document.documentElement.setAttribute('data-theme', 'dark');
-			}
-		}
-
-		function toggleTheme() {
-			const currentTheme = document.documentElement.getAttribute('data-theme');
-			if (currentTheme === 'dark') {
-				document.documentElement.removeAttribute('data-theme');
-				localStorage.setItem('irc-theme', 'light');
-			} else {
-				document.documentElement.setAttribute('data-theme', 'dark');
-				localStorage.setItem('irc-theme', 'dark');
-			}
-		}
-
-		// 通知权限
-		function requestNotificationPermission() {
-			if ('Notification' in window && Notification.permission === 'default') {
-				Notification.requestPermission().then(permission => {
-					if (permission === 'granted') {
-						document.getElementById('enableNotifications').checked = true;
-					}
-				});
-			}
-		}
-
-		// 连接状态更新
-		function updateConnectionStatus(connected) {
-			const statusEl = document.getElementById('connectionStatus');
-			const statusText = document.getElementById('statusText');
-			if (!statusEl || !statusText) return;
-
-			if (connected) {
-				statusEl.classList.remove('disconnected');
-				statusEl.classList.add('connected');
-				statusText.textContent = `已连接 (${nickname})`;
-			} else {
-				statusEl.classList.remove('connected');
-				statusEl.classList.add('disconnected');
-				statusText.textContent = '未连接';
-			}
-		}
-
-		// 日志功能
-		function toggleLog() {
-			const logContainer = document.getElementById('logContainer');
-			if (logContainer) {
-				logContainer.classList.toggle('visible');
-				if (logContainer.classList.contains('visible')) {
-					document.body.style.overflow = 'hidden';
-				} else {
-					document.body.style.overflow = '';
-				}
-			}
-		}
-
-		function clearLog() {
-			const logOutput = document.getElementById('logOutput');
-			if (logOutput) logOutput.textContent = '';
-		}
-
-		function writeToLog(message) {
-			const logOutput = document.getElementById('logOutput');
-			if (logOutput) {
-				const timestamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-				logOutput.textContent += `[${timestamp}] ${message}\n`;
-				logOutput.scrollTop = logOutput.scrollHeight;
-			}
-		}
-
-		function showSSLWarning(url) {
-			const warning = document.getElementById('sslWarning');
-			const link = document.getElementById('sslLink');
-			if (!warning || !link) return;
-
-			let displayUrl = url || document.getElementById('wsUrl')?.value.trim();
-			if (displayUrl) {
-				link.href = displayUrl.replace('wss://', 'https://').replace('ws://', 'http://');
-				link.textContent = link.href;
-			} else {
-				link.href = '#';
-				link.textContent = '请先输入服务器地址';
-			}
-			warning.classList.add('visible');
-			setTimeout(() => warning.classList.remove('visible'), 5000);
-		}
-
-		// 连接管理
-		function toggleConnection() {
-			if (isConnected) {
-				autoReconnect = false;
-				document.getElementById('autoReconnect').checked = false;
-				if (websocket) {
-					try { websocket.close(1000, "User disconnected"); } catch (e) { }
-				}
-				onDisconnect();
-			} else {
-				doConnect();
-			}
-		}
-
-		function validateNickname(nick) {
-			return nick && /^[a-zA-Z_\\`\[\]{}^|][a-zA-Z0-9_\\`\[\]{}^|-]*$/.test(nick);
-		}
-
-		function validateWsUrl(url) {
-			return url && /^wss?:\/\/.+/.test(url);
-		}
-
-		function doConnect() {
-			const wsUrlInput = document.getElementById('wsUrl');
-			const nickInput = document.getElementById('nickInput');
-			const channelInput = document.getElementById('channelInput');
-			const reconnectCheckbox = document.getElementById('autoReconnect');
-			const connectBtn = document.getElementById('connectBtn');
-
-			if (!wsUrlInput || !nickInput || !channelInput || !connectBtn) {
-				alert("界面元素加载错误, 请刷新页面重试");
-				return;
-			}
-
-			wsUrl = wsUrlInput.value.trim();
-			nickname = nickInput.value.trim();
-			channelName = channelInput.value.trim();
-			autoReconnect = reconnectCheckbox?.checked || false;
-
-			if (!validateWsUrl(wsUrl)) {
-				alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
-				return;
-			}
-			if (!validateNickname(nickname)) {
-				alert("昵称格式无效!必须以字母或特定符号开头, 不能包含空格和特殊字符");
-				return;
-			}
-			if (channelName && !channelName.startsWith('#')) {
-				channelName = '#' + channelName;
-			}
-
-			reconnectAttempts = 0;
-			wsUrlInput.disabled = true;
-			nickInput.disabled = true;
-			channelInput.disabled = true;
-			if (reconnectCheckbox) reconnectCheckbox.disabled = true;
-			connectBtn.textContent = '连接中...';
-			connectBtn.disabled = true;
-
-			channels.innerHTML = '';
-			channelContents.innerHTML = '';
-			channelMap.clear();
-			statusChannel = new Tab_Create("Status", "Status Window", false);
-			statusChannel.unreadCount = 0;
-
-			writeToLog(`[系统] 正在连接: ${wsUrl}`);
-			WebSocket_Connect(wsUrl);
-		}
-
-		function onDisconnect() {
-			isConnected = false;
-			const elements = {
-				wsUrl: document.getElementById('wsUrl'),
-				nickInput: document.getElementById('nickInput'),
-				channelInput: document.getElementById('channelInput'),
-				reconnectCheckbox: document.getElementById('autoReconnect'),
-				connectBtn: document.getElementById('connectBtn'),
-				channels: document.querySelector('.channels'),
-				channelContents: document.querySelector('.channelcontents'),
-				input: document.getElementById('input')
-			};
-
-			Object.entries(elements).forEach(([key, el]) => {
-				if (!el) return;
-				switch (key) {
-					case 'connectBtn':
-						el.textContent = '连接';
-						el.disabled = false;
-						el.classList.remove('disconnect');
-						break;
-					case 'channels':
-					case 'channelContents':
-						el.style.display = 'none';
-						break;
-					case 'input':
-						el.style.display = 'none';
-						el.value = '';
-						break;
-					default:
-						el.disabled = false;
-				}
-			});
-
-			updateConnectionStatus(false);
-			writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel, "");
-			writeToLog(`[系统] 已断开连接`);
-
-			if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
-				reconnectAttempts++;
-				const delay = reconnectDelay * reconnectAttempts;
-				writeToLog(`[重连] ${Math.floor(delay / 1000)}秒后尝试第 ${reconnectAttempts}/${maxReconnectAttempts} 次重连...`);
-				setTimeout(() => {
-					if (!isConnected && autoReconnect) {
-						writeToLog(`[重连] 正在尝试重新连接...`);
-						doConnect();
-					}
-				}, delay);
-			} else if (autoReconnect && reconnectAttempts >= maxReconnectAttempts) {
-				writeToLog(`[重连] 达到最大重连次数, 停止尝试`);
-				autoReconnect = false;
-				document.getElementById('autoReconnect').checked = false;
-				alert('自动重连失败, 请检查网络或服务器设置');
-			}
-		}
-
-		// 键盘处理
-		function onKeyPress(e) {
-			if (e?.keyCode === 13) send();
-		}
-
-		function onKeyDown(e) {
-			// Tab自动补全
-			if (e.keyCode === 9) {
-				e.preventDefault();
-				handleAutocomplete();
-				return false;
-			}
-			// 命令历史
-			if (e.keyCode === 38 || e.keyCode === 40) {
-				e.preventDefault();
-				if (commandHistory.length > 0) {
-					commandIndex = e.keyCode === 38
-						? Math.min(commandIndex + 1, commandHistory.length - 1)
-						: Math.max(commandIndex - 1, -1);
-					input.value = commandIndex === -1 ? '' : commandHistory[commandIndex];
-				}
-			}
-		}
-
-		function onInputChanged(e) {
-			// 清理自动补全
-			const suggestions = document.getElementById('autocompleteSuggestions');
-			if (suggestions) {
-				suggestions.classList.remove('visible');
-				suggestions.innerHTML = '';
-			}
-		}
-
-		function handleAutocomplete() {
-			const text = input.value;
-			const cursorPos = input.selectionStart;
-			const textBeforeCursor = text.substring(0, cursorPos);
-			const words = textBeforeCursor.split(' ');
-			const lastWord = words[words.length - 1];
-
-			if (!lastWord) return;
-
-			let suggestions = [];
-
-			// 昵称补全
-			if (lastWord.startsWith('@') || !text.startsWith('/')) {
-				const searchPrefix = lastWord.startsWith('@') ? lastWord.substring(1) : lastWord;
-				if (activeChannel?.users) {
-					suggestions = activeChannel.users
-						.map(user => user[1])
-						.filter(nick => nick.toLowerCase().startsWith(searchPrefix.toLowerCase()))
-						.map(nick => lastWord.startsWith('@') ? `@${nick}` : nick);
-				}
-			}
-
-			// 命令补全
-			if (text.startsWith('/')) {
-				const commands = ['/me', '/query', '/ignore', '/whois', '/away', '/list', '/clear'];
-				suggestions = commands.filter(cmd => cmd.startsWith(lastWord));
-			}
-
-			if (suggestions.length > 0) {
-				const suggestion = suggestions[0];
-				const replacement = suggestion + (text.startsWith('/') ? '' : ' ');
-				words[words.length - 1] = replacement;
-				input.value = words.join(' ') + text.substring(cursorPos);
-				input.selectionStart = input.selectionEnd = words.join(' ').length + 1;
-			}
-		}
-
-		// 标签页管理
-		function Tab_onClick(evt) {
-			if (!evt?.currentTarget) return;
-			const chanName = evt.currentTarget.value;
-			Tab_Show(chanName);
-			evt.currentTarget.classList.remove('unread');
-			const countEl = evt.currentTarget.querySelector('.unread-count');
-			if (countEl) countEl.remove();
-		}
-
-		function Tabs_Hide() {
-			document.querySelectorAll('.channelcontent').forEach(el => el.style.display = 'none');
-			document.querySelectorAll('.channel').forEach(el => el.classList.remove('active'));
-		}
-
-		function Tab_Show(name) {
-			if (!name) return;
-			const channel = channelMap.get(name);
-			if (!channel) return;
-
-			Tabs_Hide();
-			if (channel.channel) {
-				channel.channel.style.display = 'flex';
-				channel.button.classList.add('active');
-				activeChannel = channel;
-				channel.unreadCount = 0;
-			}
-		}
-
-		function HTML_escape(text) {
-			if (!text) return "";
-			const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-			return text.replace(/[&<>"']/g, m => map[m]);
-		}
-
-		function sortUserList(a, b) {
-			if (!a?.[0] || !b?.[0]) return 0;
-			if (a[0][0] === b[0][0])
-				return a[1].localeCompare(b[1], undefined, { sensitivity: 'accent' });
-			if (!PrefixChars?.[1]) return 0;
-			return PrefixChars[1].indexOf(a[0][0]) - PrefixChars[1].indexOf(b[0][0]);
-		}
-
-		function Tab_Create(name, topic, createlist) {
-			if (!name || !channels || !channelContents) {
-				console.error("Tab_Create: 缺少必要元素");
-				return;
-			}
-
-			Tabs_Hide();
-			this.name = name;
-			this.unreadCount = 0;
-
-			const escapedName = HTML_escape(name);
-			this.button = document.createElement("button");
-			this.button.innerHTML = escapedName;
-			this.button.value = escapedName;
-			this.button.onclick = Tab_onClick;
-			this.button.className = "channel active";
-
-			const x = document.createElement("button");
-			x.innerHTML = "×";
-			x.onclick = Tab_Close;
-			x.value = escapedName;
-			x.className = "x";
-			this.button.appendChild(x);
-			channels.appendChild(this.button);
-
-			this.channel = document.createElement("nav");
-			this.channel.className = "channelcontent";
-
-			const navContainer = document.createElement("nav");
-			this.topic = document.createElement("h3");
-			this.topic.innerHTML = HTML_escape(topic || "no channeltopic available");
-			navContainer.appendChild(this.topic);
-
-			this.content = document.createElement("nav");
-			navContainer.appendChild(this.content);
-			this.channel.appendChild(navContainer);
-
-			if (createlist) {
-				this.userlist = document.createElement("ul");
-				this.users = [];
-				this.names_end = true;
-				this.channel.appendChild(this.userlist);
-
-				// 添加折叠按钮
-				const toggleBtn = document.createElement('button');
-				toggleBtn.className = 'toggle-users-btn';
-				toggleBtn.textContent = '👥';
-				toggleBtn.title = '折叠/展开用户列表';
-				toggleBtn.onclick = function () {
-					this.userlist.classList.toggle('collapsed');
-					toggleBtn.textContent = this.userlist.classList.contains('collapsed') ? '👥' : '✕';
-				}.bind(this);
-				navContainer.style.position = 'relative';
-				navContainer.appendChild(toggleBtn);
-			}
-
-			channelContents.appendChild(this.channel);
-			channelMap.set(name, this);
-			activeChannel = this;
-		}
-
-		function Tab_Close(evt) {
-			if (!evt?.currentTarget) return;
-			const chanName = evt.currentTarget.value;
-			doSend("part " + chanName);
-			evt.stopPropagation();
-		}
-
-		function Channel_Destroy(name) {
-			if (!name) return;
-			const channel = channelMap.get(name);
-			if (!channel) return;
-
-			channel.button.remove();
-			channel.channel.remove();
-			if (activeChannel === channel) activeChannel = statusChannel;
-			channelMap.delete(name);
-
-			if (activeChannel) Tab_Show(activeChannel.name);
-		}
-
-		// 用户管理
-		function Channel_InsertUser(nick, channel, prefix) {
-			if (!nick || !channel?.userlist) return;
-
-			const user = document.createElement("li");
-			const prefixEl = document.createElement("p");
-			if (prefix && prefix !== " ") prefixEl.innerHTML = prefix[0];
-			user.appendChild(prefixEl);
-
-			const nickEl = document.createElement("p");
-			nickEl.innerHTML = HTML_escape(nick);
-			user.appendChild(nickEl);
-
-			user.addEventListener('contextmenu', e => {
-				e.preventDefault();
-				showUserContextMenu(e, nick);
-			});
-
-			let i = 0;
-			for (; i < channel.users.length; i++) {
-				if (channel.users[i]?.[1]?.localeCompare(nick, undefined, { sensitivity: 'accent' }) >= 0) break;
-			}
-			channel.users.splice(i, 0, [prefix || " ", nick]);
-			channel.userlist.insertBefore(user, channel.userlist.childNodes[i]);
-		}
-
-		function Channel_AppendUser(nick, channel, dontnotify, prefix) {
-			if (!nick || !channel?.userlist) return;
-
-			const user = document.createElement("li");
-			const prefixEl = document.createElement("p");
-			if (prefix && prefix !== " ") prefixEl.innerHTML = prefix[0];
-			user.appendChild(prefixEl);
-
-			const nickEl = document.createElement("p");
-			nickEl.innerHTML = HTML_escape(nick);
-			user.appendChild(nickEl);
-
-			user.addEventListener('contextmenu', e => {
-				e.preventDefault();
-				showUserContextMenu(e, nick);
-			});
-
-			channel.userlist.appendChild(user);
-		}
-
-		function Channel_RemoveUser(nick, channel) {
-			if (!nick || !channel?.userlist) return false;
-
-			for (let i = 0; i < channel.userlist.children.length; i++) {
-				const userItem = channel.userlist.children[i];
-				if (userItem?.children[1]?.textContent === nick) {
-					userItem.remove();
-					if (channel.users?.[i]) channel.users.splice(i, 1);
-					return true;
-				}
-			}
-			return false;
-		}
-
-		function Channel_RenameUser(nick, newnick, channel) {
-			if (!nick || !newnick || !channel) return false;
-			if (!channel.userlist) return false;
-
-			for (let i = 0; i < channel.users.length; i++) {
-				if (channel.users[i]?.[1] === nick) {
-					const prefix = channel.users[i][0];
-					Channel_RemoveUser(nick, channel);
-					Channel_InsertUser(newnick, channel, prefix);
-					return true;
-				}
-			}
-			return false;
-		}
-
-		function Channel_UpdateUserPrefix(nick, channel, add, prefix) {
-			if (!nick || !channel?.users || !PrefixChars) return;
-
-			for (let i = 0; i < channel.users.length; i++) {
-				if (channel.users[i]?.[1] === nick) {
-					const pos = PrefixChars[0].indexOf(prefix);
-					if (pos < 0) return;
-
-					let prefixes = "";
-					if (add === "true" || add === true) {
-						let ii = 0;
-						for (; ii < channel.users[i][0].length; ii++) {
-							if (PrefixChars[1].indexOf(channel.users[i][0][ii]) >= pos) break;
-							prefixes += channel.users[i][0][ii];
-						}
-						prefixes += PrefixChars[1][pos];
-						for (; ii < channel.users[i][0].length; ii++) {
-							prefixes += channel.users[i][0][ii];
-						}
-					} else {
-						const tmp = channel.users[i][0].indexOf(PrefixChars[1][pos]);
-						if (tmp >= 0) {
-							prefixes = channel.users[i][0].substring(0, tmp) + channel.users[i][0].substring(tmp + 1);
-						}
-					}
-
-					if (prefixes === "") prefixes = " ";
-					channel.users[i][0] = prefixes;
-					Channel_RenameUser(nick, nick, channel);
-					break;
-				}
-			}
-		}
-
-		// 消息显示
-		function writeToScreen(color, message, channel, username) {
-			if (!channel?.content) return;
-
-			const pre = document.createElement("p");
-			pre.style.color = color;
-
-			const now = new Date();
-			const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
-			let displayMessage = username ? `[${timeStr}] ${username} → ${linkify(message)}` : `[${timeStr}] ${linkify(message)}`;
-
-			// 提及高亮
-			if (nickname && message.includes(`@${nickname}`)) {
-				displayMessage = displayMessage.replace(
-					new RegExp(`@${nickname}`, 'g'),
-					`<span class="mention-highlight">@${nickname}</span>`
-				);
-				// 桌面通知
-				if (document.getElementById('enableNotifications')?.checked &&
-					Notification.permission === 'granted') {
-					new Notification(`${username} @你`, {
-						body: message,
-						tag: channel.name,
-						renotify: true
-					});
-				}
-			}
-
-			pre.innerHTML = displayMessage;
-			channel.content.appendChild(pre);
-
-			// 限制消息数量
-			while (channel.content.children.length > 300) {
-				channel.content.removeChild(channel.content.firstChild);
-			}
-
-			channel.content.scrollTop = channel.content.scrollHeight;
-
-			// 未读计数
-			if (activeChannel !== channel) {
-				channel.unreadCount = (channel.unreadCount || 0) + 1;
-				updateUnreadCount(channel);
-			}
-		}
-
-		function updateUnreadCount(channel) {
-			const button = channel.button;
-			button.classList.add('unread');
-			let countEl = button.querySelector('.unread-count');
-			if (!countEl) {
-				countEl = document.createElement('span');
-				countEl.className = 'unread-count';
-				button.appendChild(countEl);
-			}
-			countEl.textContent = channel.unreadCount > 99 ? '99+' : channel.unreadCount;
-		}
-
-		function linkify(text) {
-			const urlRegex = /(https?:\/\/[^\s<>{}|\\^~[\]`]+)/g;
-			return text.replace(urlRegex, function (url) {
-				return `<a href="${url}" target="_blank" rel="noopener noreferrer" 
-					onmouseover="showLinkPreview(event, '${url}')"
-					onmouseout="hideLinkPreview()"
-					style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${url}</a>`;
-			});
-		}
-
-		function showLinkPreview(event, url) {
-			const preview = document.getElementById('linkPreview');
-			if (!preview) return;
-			preview.textContent = `🔗 ${url}`;
-			preview.classList.add('visible');
-			preview.style.left = Math.min(event.pageX + 10, window.innerWidth - 310) + 'px';
-			preview.style.top = event.pageY + 10 + 'px';
-		}
-
-		function hideLinkPreview() {
-			document.getElementById('linkPreview')?.classList.remove('visible');
-		}
-
-		function showUserContextMenu(event, nick) {
-			const menu = document.getElementById('userContextMenu');
-			if (!menu) return;
-
-			menu.innerHTML = `
-				<div class="context-menu-item" onclick="doSend('query ${nick}')">💬 私聊 ${nick}</div>
-				<div class="context-menu-item" onclick="doSend('whois ${nick}')">👤 查看信息</div>
-				<div class="context-menu-item" onclick="ignoreUser('${nick}')">🚫 忽略 ${nick}</div>
-			`;
-			menu.classList.add('visible');
-			menu.style.left = Math.min(event.pageX, window.innerWidth - 160) + 'px';
-			menu.style.top = Math.min(event.pageY, window.innerHeight - 120) + 'px';
-		}
-
-		function ignoreUser(nick) {
-			ignoredUsers.add(nick.toLowerCase());
-			writeToScreen("var(--clr-gold)", `已忽略用户: ${nick}`, statusChannel, "");
-			writeToLog(`[IGNORE] 已忽略: ${nick}`);
-			document.getElementById('userContextMenu')?.classList.remove('visible');
-		}
-
-		// 搜索功能
-		function onSearchKeyUp(event) {
-			const searchInput = document.getElementById('searchInput');
-			const searchResults = document.getElementById('searchResults');
-			if (!searchInput || !searchResults) return;
-
-			const query = searchInput.value.toLowerCase().trim();
-			if (query.length === 0) {
-				searchResults.classList.remove('visible');
-				return;
-			}
-
-			if (event.key === 'Enter') {
-				const results = [];
-				channelMap.forEach((channel, name) => {
-					if (!channel.content) return;
-					Array.from(channel.content.children).forEach(msg => {
-						if (msg.textContent.toLowerCase().includes(query)) {
-							results.push({ channel: name, message: msg.textContent, element: msg });
-						}
-					});
-				});
-
-				searchResults.innerHTML = '';
-				if (results.length === 0) {
-					searchResults.innerHTML = '<div class="search-result-item">无匹配结果</div>';
-				} else {
-					results.slice(0, 10).forEach(result => {
-						const item = document.createElement('div');
-						item.className = 'search-result-item';
-						item.innerHTML = `<strong>${result.channel}:</strong> ${result.message.substring(0, 60)}${result.message.length > 60 ? '...' : ''}`;
-						item.onclick = () => {
-							Tab_Show(result.channel);
-							result.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-							result.element.style.background = 'var(--clr-highlight)';
-							setTimeout(() => result.element.style.background = '', 1500);
-							searchResults.classList.remove('visible');
-							searchInput.value = '';
-						};
-						searchResults.appendChild(item);
-					});
-				}
-				searchResults.classList.add('visible');
-			}
-		}
-
-		// 消息发送
-		function send() {
-			const text = input?.value.trim();
-			if (!text || !activeChannel) return;
-
-			// 保存命令历史
-			if (text.startsWith('/')) {
-				commandHistory.unshift(text);
-				commandHistory = commandHistory.slice(0, 50);
-			}
-			commandIndex = -1;
-
-			let msg;
-			if (text[0] === "/") {
-				const parts = text.split(' ');
-				const command = parts[0].toLowerCase();
-
-				switch (command) {
-					case '/me':
-						msg = `privmsg ${activeChannel.name} :\x01ACTION ${text.substring(4)}\n`;
-						writeToScreen("var(--clr-red)", `${nickname} ${text.substring(4)}`, activeChannel, "*");
-						break;
-					case '/query':
-						const target = parts[1];
-						if (target && validateNickname(target)) {
-							new Tab_Create(target, `Private chat with ${target}`, false);
-							writeToLog(`[QUERY] 打开私聊: ${target}`);
-						} else {
-							writeToScreen("var(--clr-red)", "无效的昵称", statusChannel, "");
-						}
-						input.value = '';
-						return;
-					case '/ignore':
-						ignoreUser(parts[1]);
-						input.value = '';
-						return;
-					case '/clear':
-						if (activeChannel.content) activeChannel.content.innerHTML = '';
-						input.value = '';
-						return;
-					default:
-						writeToScreen("var(--clr-font)", text, statusChannel, "");
-						msg = text.substring(1) + "\n";
-				}
-			} else {
-				msg = `privmsg ${activeChannel.name} :${text}\n`;
-				writeToScreen("var(--clr-font)", text, activeChannel, nickname);
-			}
-
-			doSend(msg);
-			if (input) input.value = "";
-		}
-
-		// WebSocket连接
-		function WebSocket_Connect(wsUri) {
-			if (!wsUri) {
-				writeToLog("[ERROR] WebSocket地址为空");
-				return;
-			}
-
-			try {
-				if (websocket) {
-					try {
-						websocket.onclose = null;
-						websocket.onerror = null;
-						websocket.onopen = null;
-						websocket.onmessage = null;
-						if (websocket.readyState !== WebSocket.CLOSED) {
-							websocket.close(1000, "Reconnecting");
-						}
-					} catch (e) { }
-					websocket = null;
-				}
-
-				writeToLog(`[WebSocket] 正在创建连接: ${wsUri}`);
-				websocket = new WebSocket(wsUri);
-				websocket.binaryType = 'blob';
-
-				const connectTimeout = setTimeout(() => {
-					if (websocket && websocket.readyState === WebSocket.CONNECTING) {
-						writeToLog(`[ERROR] 连接超时 (30秒)`);
-						try { websocket.close(1006, "Connection timeout"); } catch (e) { }
-					}
-				}, 30000);
-
-				websocket.onclose = evt => {
-					clearTimeout(connectTimeout);
-					onClose(evt);
-				};
-				websocket.onerror = evt => onError(evt);
-				websocket.onopen = evt => {
-					clearTimeout(connectTimeout);
-					onOpen(evt);
-				};
-				websocket.onmessage = evt => onMessage(evt);
-			} catch (e) {
-				writeToLog(`[ERROR] WebSocket创建失败: ${e.message}`);
-				onDisconnect();
-				if (wsUrl?.startsWith('wss://')) {
-					showSSLWarning(wsUrl);
-				}
-				alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
-			}
-		}
-
-		function onClose(evt) {
-			isConnected = false;
-			let reason = evt.reason || '连接关闭';
-			let code = evt.code;
-			let logMsg = `[CLOSE] Code: ${code}`;
-
-			const codeMap = {
-				1000: ' (正常关闭)',
-				1006: ' (异常断开 - 可能SSL证书错误)',
-				1005: ' (无状态码)',
-				1011: ' (服务器异常)'
-			};
-			logMsg += codeMap[code] || (code >= 4000 && code <= 4999 ? ' (应用层错误)' : '');
-			logMsg += ` - ${reason}`;
-
-			writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel, "");
-			writeToLog(logMsg);
-
-			if (websocket) {
-				try {
-					websocket.onclose = null;
-					websocket.onerror = null;
-					websocket.onopen = null;
-					websocket.onmessage = null;
-				} catch (e) { }
-				websocket = null;
-			}
-			onDisconnect();
-		}
-
-		function onError(evt) {
-			let errorType = 'WebSocket错误';
-			if (evt?.target) {
-				errorType = evt.target.readyState === WebSocket.CONNECTING ? '连接失败' : '消息错误';
-			}
-
-			writeToScreen("var(--clr-red)", `ERROR: ${errorType}`, statusChannel, "");
-			writeToLog(`[ERROR] ${errorType}: ${evt.data || '未知错误'}`);
-
-			if (wsUrl?.startsWith('wss://')) {
-				showSSLWarning(wsUrl);
-			}
-		}
-
-		function onOpen(evt) {
-			isConnected = true;
-			reconnectAttempts = 0;
-
-			writeToScreen("var(--clr-font)", "CONNECTED", statusChannel, "");
-			writeToLog(`[OPEN] WebSocket连接成功: ${wsUrl}`);
-			updateConnectionStatus(true);
-
-			document.querySelector('.channels').style.display = 'flex';
-			document.querySelector('.channelcontents').style.display = 'flex';
-			document.querySelector('.input-container').style.display = 'block';
-
-			const connectBtn = document.getElementById('connectBtn');
-			if (connectBtn) {
-				connectBtn.textContent = '断开';
-				connectBtn.disabled = false;
-				connectBtn.classList.add('disconnect');
-			}
-
-			doSend("user websocket * * :WebSocket User");
-			doSend("nick " + nickname);
-		}
-
-		function onMessage(evt) {
-			if (!evt) return;
-
-			rawData = evt.data;
-			writeToLog(`← RECV: ${typeof rawData === 'string' ? rawData : '[二进制数据]'}`);
-
-			if (rawData instanceof Blob) {
-				const fileReader = new FileReader();
-				fileReader.addEventListener("loadend", e => {
-					const raw = e.target.result;
-					writeToLog(`← RECV (Blob→Text): ${raw}`);
-					process(raw);
-				});
-				fileReader.readAsText(rawData);
-			} else {
-				process(rawData);
-			}
-		}
-
-		function doSend(message) {
-			if (!message) return;
-
-			if (websocket?.readyState === WebSocket.OPEN) {
-				try {
-					websocket.send(message);
-					writeToLog(`→ SEND: ${message.trim()}`);
-				} catch (e) {
-					writeToLog(`[ERROR] 发送消息失败: ${e.message}`);
-					writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel, "");
-				}
-			} else {
-				writeToLog(`[ERROR] WebSocket未连接, 无法发送: ${message.trim()}`);
-				if (!isConnected) {
-					writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
-				}
-			}
-		}
-
-		// IRC命令处理
-		const Commands = new Map([
-			["001", function (nick, data) {
-				doSend("CAP REQ :multi-prefix");
-				if (channelName) {
-					doSend("join " + channelName);
-					writeToLog(`[IRC] 接收001, 准备加入频道: ${channelName}`);
-				} else {
-					writeToLog(`[IRC] 接收001, 未设置自动加入频道`);
-				}
-			}],
-			["005", function (nick, data) {
-				if (!data || !PrefixChars) return;
-				for (let i = 2; i < data.length; i++) {
-					if (data[i].indexOf("PREFIX=") === 0) {
-						const tmp = data[i].substring(8) + " ";
-						if (tmp) {
-							PrefixChars = tmp.split(")");
-							writeToScreen("var(--clr-brown)", "PREFIX CHARS: " + PrefixChars[0] + " " + PrefixChars[1], statusChannel, "");
-							writeToLog(`[IRC] 支持的PREFIX: ${PrefixChars[0]} ${PrefixChars[1]}`);
-						}
-					}
-				}
-			}],
-			["332", function (nick, data) {
-				if (!data || data.length < 5) return;
-				const channel = channelMap.get(data[3]);
-				if (!channel?.topic) return;
-
-				let text = data[4].substring(1);
-				for (let i = 5; i < data.length; i++) text += " " + data[i];
-
-				channel.topic.innerHTML = HTML_escape(text || "no channeltopic available");
-				writeToLog(`[IRC] 频道主题: ${data[3]} - ${text}`);
-			}],
-			["353", function (nick, data) {
-				if (!data || data.length < 6) return;
-				const channel = channelMap.get(data[4]);
-				if (!channel) return;
-
-				if (channel.names_end === true) {
-					channel.users = [];
-					channel.names_end = false;
-				}
-
-				data[5] = data[5].substring(1);
-				for (let i = 5; i < data.length; i++) {
-					let prefix = "", ii = 0;
-					while (PrefixChars?.[1] && PrefixChars[1].indexOf(data[i][ii]) >= 0) {
-						prefix += data[i][ii];
-						ii++;
-					}
-					if (prefix === "") prefix = " ";
-					channel.users.push([prefix, data[i].substring(ii)]);
-				}
-				writeToLog(`[IRC] 接收用户列表: ${channel.users.length} 用户`);
-			}],
-			["366", function (nick, data) {
-				if (!data || data.length < 4) return;
-				const channel = channelMap.get(data[3]);
-				if (!channel) return;
-
-				channel.users.sort(sortUserList);
-				channel.userlist.innerHTML = "";
-				channel.users.forEach(user => Channel_AppendUser(user[1], channel, true, user[0]));
-				channel.names_end = true;
-				writeToLog(`[IRC] 用户列表加载完成`);
-			}],
-			["432", function (nick, data) {
-				nickname = prompt("ERROR: Nickname is unavailable: Illegal characters\r\nPlease enter your nickname", "");
-				doSend("nick " + nickname);
-				writeToLog(`[IRC] 昵称错误, 重新输入: ${nickname}`);
-			}],
-			["433", function (nick, data) {
-				nickname = prompt("ERROR: Nickname is already in use.\r\nPlease enter your nickname", "");
-				doSend("nick " + nickname);
-				writeToLog(`[IRC] 昵称冲突, 新昵称: ${nickname}`);
-			}],
-			["JOIN", function (nick, data) {
-				if (!data || data.length < 3) return;
-				if (ignoredUsers.has(nick.toLowerCase())) return;
-
-				if (data[0].indexOf(":" + nickname + "!") !== 0) {
-					if (data[2][0] === ":") data[2] = data[2].substring(1);
-					const channel = channelMap.get(data[2]);
-					if (!channel) return;
-					Channel_InsertUser(nick, channel, " ");
-				} else {
-					const channel = new Tab_Create(data[2].substring(1), "", true);
-					nick = nickname;
-				}
-				writeToScreen("var(--clr-green)", `${nick} 加入频道`, channel, "*");
-				writeToLog(`[IRC] 用户加入: ${nick} -> ${data[2]}`);
-			}],
-			["KICK", function (nick, data) {
-				if (!data || data.length < 5) return;
-				const channel = channelMap.get(data[2]);
-				if (!channel) return;
-
-				let text = data[4].substring(1);
-				for (let i = 5; i < data.length; i++) text += " " + data[i];
-
-				if (data[3] !== nickname) {
-					if (Channel_RemoveUser(data[3], channel)) {
-						writeToScreen("var(--clr-green)", `${data[3]} 被 ${nick} 踢出 (原因: ${text})`, channel, "*");
-					}
-					return;
-				}
-				Channel_Destroy(data[2]);
-				writeToScreen("var(--clr-font)", `你被 ${nick} 踢出 ${data[2]} (原因: ${text})`, statusChannel, "");
-				writeToLog(`[IRC] 被踢出: ${data[2]} by ${nick} - ${text}`);
-			}],
-			["MODE", function (nick, data) {
-				if (!data || data.length < 4) return;
-				const channel = channelMap.get(data[2]);
-				if (!channel) return;
-
-				let text = data[3];
-				for (let i = 4; i < data.length; i++) text += " " + data[i];
-
-				writeToScreen("var(--clr-green)", `${nick} 设置模式: ${text}`, channel, "*");
-				if (!PrefixChars || data[3].length < 1) return;
-
-				let ii = 4, status = "false";
-				for (let i = 0; i < data[3].length; i++) {
-					if (data[3][i] === "+") status = "true";
-					else if (data[3][i] === "-") status = "false";
-					else if (ii < data.length) {
-						Channel_UpdateUserPrefix(data[ii], channel, status, data[3][i]);
-						ii++;
-					}
-				}
-				writeToLog(`[IRC] 模式变更: ${text}`);
-			}],
-			["NICK", function (nick, data) {
-				if (!data || data.length < 3) return;
-				const newnick = data[2].substring(1);
-				if (nick === nickname) nickname = newnick;
-
-				channelMap.forEach((channel, name) => {
-					if (Channel_RenameUser(nick, newnick, channel)) {
-						const message = newnick === nickname ? `你现在的新昵称是 ${newnick}` : `${nick} 更名为 ${newnick}`;
-						writeToScreen("var(--clr-green)", message, channel, "*");
-					}
-				});
-				writeToLog(`[IRC] 昵称变更: ${nick} -> ${newnick}`);
-			}],
-			["PART", function (nick, data) {
-				if (!data || data.length < 3) return;
-				if (ignoredUsers.has(nick.toLowerCase())) return;
-
-				if (data[0].indexOf(":" + nickname + "!") !== 0) {
-					const channel = channelMap.get(data[2]);
-					if (!channel) return;
-					if (Channel_RemoveUser(nick, channel)) {
-						writeToScreen("var(--clr-green)", `${nick} 离开频道`, channel, "*");
-					}
-					return;
-				}
-				Channel_Destroy(data[2]);
-				writeToLog(`[IRC] 离开频道: ${data[2]}`);
-			}],
-			["TOPIC", function (nick, data) {
-				if (!data || data.length < 4) return;
-				const channel = channelMap.get(data[2]);
-				if (!channel?.topic) return;
-
-				let text = data[3].substring(1);
-				for (let i = 4; i < data.length; i++) text += " " + data[i];
-
-				channel.topic.innerHTML = HTML_escape(text || "no channeltopic available");
-				writeToScreen("var(--clr-green)", `${nick} 设置主题为: ${text}`, channel, "*");
-				writeToLog(`[IRC] 主题变更: ${data[2]} - ${text}`);
-			}],
-			["QUIT", function (nick, data) {
-				if (ignoredUsers.has(nick.toLowerCase())) return;
-
-				channelMap.forEach((channel, name) => {
-					if (Channel_RemoveUser(nick, channel)) {
-						writeToScreen("var(--clr-blue)", `${nick} 退出IRC`, channel, "*");
-					}
-				});
-				writeToLog(`[IRC] 用户退出: ${nick}`);
-			}],
-			["PRIVMSG", function (nick, data) {
-				if (!data || data.length < 4) return;
-				if (ignoredUsers.has(nick.toLowerCase())) {
-					writeToLog(`[IGNORED] 忽略 ${nick} 的消息`);
-					return;
-				}
-
-				let channel = channelMap.get(data[2]);
-				let isPrivate = false;
-
-				if (!channel && data[2] === nickname) {
-					channel = channelMap.get(nick);
-					if (!channel) channel = new Tab_Create(nick, `Private chat with ${nick}`, false);
-					isPrivate = true;
-				} else if (!channel) {
-					channel = statusChannel;
-				}
-
-				let text = data[3].substring(1);
-				for (let i = 4; i < data.length; i++) text += " " + data[i];
-
-				nick = data[0].substring(1).split("!")[0];
-				if (text[0] === "\x01") {
-					if (text.indexOf("\x01ACTION ") === 0) {
-						writeToScreen("var(--clr-red)", `${isPrivate ? '' : '* '}${nick} ${text.substring(8)}`, channel, isPrivate ? nick : "*");
-					} else {
-						writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*");
-					}
-				} else {
-					writeToScreen("var(--clr-font)", text, channel, nick);
-				}
-			}],
-			["NOTICE", function (nick, data) {
-				if (!data || data.length < 4) return;
-				const channel = channelMap.get(data[2]) || statusChannel;
-
-				let text = data[3].substring(1);
-				for (let i = 4; i < data.length; i++) text += " " + data[i];
-
-				nick = data[0].substring(1).split("!")[0];
-				writeToScreen("var(--clr-red)", `通知 ${nick}: ${text}`, channel, "-");
-				writeToLog(`[NOTICE] ${nick}: ${text}`);
-			}]
-		]);
-
-		function process(rawData) {
-			if (!rawData) return;
-
-			const data = rawData.split(" ");
-			if (!data || data.length < 2) {
-				writeToLog(`[DEBUG] 无效数据: ${rawData}`);
-				return;
-			}
-
-			const nick = data[0].substring(1).split("!")[0];
-			const command = data[1].toUpperCase();
-			const fn = Commands.get(command);
-
-			if (fn) {
-				fn(nick, data);
-				return;
-			}
-
-			if (!isNaN(parseInt(data[1]))) {
-				let text = data[1];
-				for (let i = 3; i < data.length; i++) text += " " + data[i];
-				writeToScreen("var(--clr-gold)", text, statusChannel, "");
-				writeToLog(`[SERVER] ${data[1]}: ${text}`);
-				return;
-			}
-
-			if (data[0] === "PING") {
-				const pongResponse = rawData.replace("PING", "PONG");
-				writeToScreen("var(--clr-brown)", pongResponse, statusChannel, "");
-				doSend(pongResponse);
-				writeToLog(`[PING/PONG] ${pongResponse}`);
-				return;
-			}
-
-			if (data[0] === "ERROR") {
-				writeToScreen("var(--clr-font)", rawData, statusChannel, "");
-				writeToLog(`[ERROR] ${rawData}`);
-				return;
-			}
-
-			writeToLog(`[DEBUG] ${rawData}`);
-		}
-	</script>
+    <!-- 代码雨背景 -->
+    <div class="code-rain">
+        <canvas id="matrix"></canvas>
+    </div>
+
+    <div class="main">
+        <div class="header">
+            <h1 id="caption">IRC终端 v2.0.7</h1>
+        </div>
+        <div class="settings-bar">
+            <div class="settings-group">
+                <label>节点:</label>
+                <input type="text" id="wsUrl" value="" placeholder="wss://irc.network.com:6697/">
+            </div>
+            <div class="settings-group">
+                <label>操作员:</label>
+                <input type="text" id="nickInput" value="" placeholder="输入代号">
+            </div>
+            <div class="settings-group">
+                <label>频道:</label>
+                <input type="text" id="channelInput" value="" placeholder="#public">
+            </div>
+            <div class="settings-group">
+                <label title="启用后会在断开时自动重连">
+                    <input type="checkbox" id="autoReconnect"> 自动修复
+                </label>
+            </div>
+            <div class="settings-group">
+                <label title="SSL证书故障排除">
+                    <button class="ssl-help-btn" onclick="showSSLWarning()" title="点击查看SSL证书问题的解决方案">证书故障</button>
+                </label>
+            </div>
+            <button class="connect-btn" id="connectBtn" onclick="toggleConnection()">初始化</button>
+            <button class="log-toggle-btn" onclick="toggleLog()">系统日志</button>
+            <div class="connection-status disconnected" id="connectionStatus">
+                <span class="indicator"></span>
+                <span id="statusText">离线</span>
+            </div>
+        </div>
+        <div class="ssl-warning" id="sslWarning">
+            <strong>⚠️ 安全证书验证失败!</strong><br>
+            1. 改用 <code>ws://</code> 非加密协议 (不推荐)<br>
+            2. 在浏览器中访问 <a id="sslLink" target="_blank">节点地址</a> 并手动信任证书<br>
+            3. 检查系统时间和时区设置
+        </div>
+        <div class="log-container" id="logContainer">
+            <div class="log-header">
+                <span>系统日志 - 实时监控</span>
+                <div class="log-controls">
+                    <button onclick="clearLog()">清除</button>
+                    <button onclick="toggleLog()">关闭</button>
+                </div>
+            </div>
+            <div id="logOutput"></div>
+        </div>
+        <div class="chat-container">
+            <div class="channels" style="display: none;"></div>
+            <nav class="channelcontents" style="display: none;"></nav>
+            <input type="text" name="input" id="input" style="display: none;" onKeyPress="onKeyPress(event)" onKeyDown="onKeyDown(event)" placeholder="> 输入指令或消息...">
+        </div>
+    </div>
+
+    <script>
+        // 代码雨动画
+        class MatrixRain {
+            constructor() {
+                this.canvas = document.getElementById('matrix');
+                this.ctx = this.canvas.getContext('2d');
+                this.chars = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                this.fontSize = 14;
+                this.columns = 0;
+                this.drops = [];
+                this.init();
+                this.animate();
+            }
+
+            init() {
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+                this.columns = Math.floor(this.canvas.width / this.fontSize);
+                this.drops = new Array(this.columns).fill(1);
+            }
+
+            animate() {
+                this.ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.ctx.fillStyle = '#00ffff';
+                this.ctx.font = this.fontSize + 'px Roboto Mono';
+                
+                for (let i = 0; i < this.drops.length; i++) {
+                    const text = this.chars.charAt(Math.floor(Math.random() * this.chars.length));
+                    this.ctx.fillText(text, i * this.fontSize, this.drops[i] * this.fontSize);
+                    
+                    if (this.drops[i] * this.fontSize > this.canvas.height && Math.random() > 0.975) {
+                        this.drops[i] = 0;
+                    }
+                    this.drops[i]++;
+                }
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // 启动代码雨
+        const matrix = new MatrixRain();
+
+        // 增强的视觉反馈
+        function addGlitchEffect(element) {
+            element.style.animation = 'none';
+            setTimeout(() => {
+                element.style.animation = `glitch ${Math.random() * 0.5 + 0.2}s`;
+            }, 10);
+        }
+
+        // 覆盖原始函数以添加视觉效果
+        const originalWriteToScreen = writeToScreen;
+        writeToScreen = function(color, message, channel, username) {
+            originalWriteToScreen(color, message, channel, username);
+            if (channel && channel.content) {
+                addGlitchEffect(channel.content.lastElementChild);
+            }
+        };
+
+        // 连接状态变化时的视觉反馈
+        const originalUpdateConnectionStatus = updateConnectionStatus;
+        updateConnectionStatus = function(connected) {
+            originalUpdateConnectionStatus(connected);
+            const statusEl = document.getElementById('connectionStatus');
+            const caption = document.getElementById('caption');
+            if (connected) {
+                caption.textContent = "IRC终端 v2.0.7 [在线]";
+                addGlitchEffect(statusEl);
+            } else {
+                caption.textContent = "IRC终端 v2.0.7 [离线]";
+            }
+        };
+
+        // 在页面加载完成后添加初始化效果
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.body.style.opacity = '0';
+                document.body.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    document.body.style.opacity = '1';
+                }, 100);
+            }, 0);
+        });
+    </script>
 </body>
-
 </html>
