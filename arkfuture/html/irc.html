@@ -558,7 +558,7 @@ ul {
 		</label>
 	</div>
 	<div class="settings-group">
-		<label title="浏览器无法真正忽略SSL证书，此选项会显示解决方案">
+		<label title="浏览器无法真正忽略SSL证书, 此选项会显示解决方案">
 			<input type="checkbox" id="allowInvalidSSL"> 允许无效SSL
 		</label>
 	</div>
@@ -575,8 +575,8 @@ ul {
 
 <!-- SSL警告提示 -->
 <div class="ssl-warning" id="sslWarning">
-	<strong>⚠️ 浏览器无法忽略SSL证书错误！</strong> 请使用以下方案：<br>
-	1. 改用 <code>ws://</code> 非加密连接（如果浏览器支持）<br>
+	<strong>⚠️ 浏览器无法忽略SSL证书错误!</strong> 请使用以下方案：<br>
+	1. 改用 <code>ws://</code> 非加密连接(如果浏览器支持)<br>
 	2. 在浏览器中访问 <a id="sslLink" target="_blank">服务器URL</a> 并手动信任证书<br>
 </div>
 
@@ -744,7 +744,7 @@ function doConnect() {
 	const connectBtn = document.getElementById('connectBtn');
 	
 	if (!wsUrlInput || !nickInput || !channelInput || !connectBtn) {
-		alert("界面元素加载错误，请刷新页面重试");
+		alert("界面元素加载错误, 请刷新页面重试");
 		return;
 	}
 	
@@ -756,14 +756,14 @@ function doConnect() {
 	
 	// 验证输入
 	if (!validateWsUrl(wsUrl)) {
-		alert("WebSocket地址格式错误！必须以 ws:// 或 wss:// 开头");
+		alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
 		return;
 	}
 	if (!validateNickname(nickname)) {
-		alert("昵称格式无效！必须以字母或特定符号开头，不能包含空格和特殊字符");
+		alert("昵称格式无效!必须以字母或特定符号开头, 不能包含空格和特殊字符");
 		return;
 	}
-	if (!channelName.startsWith('#')) {
+	if (channelName && !channelName.startsWith('#')) {
 		channelName = '#' + channelName;
 	}
 	
@@ -844,10 +844,10 @@ function onDisconnect() {
 			}
 		}, delay);
 	} else if (autoReconnect && reconnectAttempts >= maxReconnectAttempts) {
-		writeToLog(`[重连] 达到最大重连次数，停止尝试`);
+		writeToLog(`[重连] 达到最大重连次数, 停止尝试`);
 		autoReconnect = false;
 		if (reconnectCheckbox) reconnectCheckbox.checked = false;
-		alert('自动重连失败，请检查网络或服务器设置');
+		alert('自动重连失败, 请检查网络或服务器设置');
 	}
 }
 
@@ -1212,7 +1212,7 @@ function WebSocket_Connect(wsUri)
 	} catch (e) {
 		writeToLog(`[ERROR] WebSocket创建失败: ${e.message}`);
 		onDisconnect();
-		alert(`连接失败: ${e.message}\n\n如果是SSL证书错误，请勾选"允许无效SSL"查看解决方案`);
+		alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请勾选"允许无效SSL"查看解决方案`);
 	}
 }
 
@@ -1354,9 +1354,9 @@ function doSend(message)
 			writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel);
 		}
 	} else {
-		writeToLog(`[ERROR] WebSocket未连接，无法发送: ${message.trim()}`);
+		writeToLog(`[ERROR] WebSocket未连接, 无法发送: ${message.trim()}`);
 		if (!isConnected) {
-			writeToScreen("var(--clr-red)", "未连接，消息未发送", statusChannel);
+			writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel);
 		}
 	}
 }
@@ -1365,9 +1365,14 @@ function doSend(message)
 //IRC PROTOCOL
 var Commands = new Map();
 Commands.set("001", function (nick, data) {
-	doSend("CAP REQ :multi-prefix");
-	doSend("join " + channelName);
-	writeToLog(`[IRC] 接收001，准备加入频道: ${channelName}`);
+    doSend("CAP REQ :multi-prefix");
+    // 只在频道名不为空时才自动加入
+    if (channelName) {
+        doSend("join " + channelName);
+        writeToLog(`[IRC] 接收001, 准备加入频道: ${channelName}`);
+    } else {
+        writeToLog(`[IRC] 接收001, 未设置自动加入频道`);
+    }
 });
 Commands.set("005", function (nick, data) {
 	if (!data || !PrefixChars) return;
@@ -1439,12 +1444,12 @@ Commands.set("366", function (nick, data) {
 Commands.set("432", function (nick, data) {
 	nickname = prompt("ERROR: Nickname is unavailable: Illegal characters\r\nPlease enter your nickname", "");
 	doSend("nick " + nickname);	
-	writeToLog(`[IRC] 昵称错误，重新输入: ${nickname}`);
+	writeToLog(`[IRC] 昵称错误, 重新输入: ${nickname}`);
 });
 Commands.set("433", function (nick, data) {
 	nickname = prompt("ERROR: Nickname is already in use.\r\nPlease enter your nickname", "");
 	doSend("nick " + nickname);	
-	writeToLog(`[IRC] 昵称冲突，新昵称: ${nickname}`);
+	writeToLog(`[IRC] 昵称冲突, 新昵称: ${nickname}`);
 });
 Commands.set("JOIN", function (nick, data) {
 	if (!data || data.length < 3) return;
