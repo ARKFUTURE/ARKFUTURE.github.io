@@ -1,0 +1,2035 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>增强型 IRC 客户端</title>
+	<style>
+		:root {
+			--clr-background: #F5F7FA;
+			--clr-background2: #E4E7F4;
+			--clr-background3: #FFFFFF;
+			--clr-background4: #D1D5DB;
+			--clr-font: #1F2937;
+			--clr-brown: #92400E;
+			--clr-green: #065F46;
+			--clr-gold: #D97706;
+			--clr-red: #DC2626;
+			--clr-purple: #7C3AED;
+			--clr-blue: #2563EB;
+			--clr-accent: #4F46E5;
+			--clr-border: #9CA3AF;
+			--clr-warning: #F59E0B;
+			--clr-success: #10B981;
+			--clr-highlight: #FEF3C7;
+			--clr-unread: #EF4444;
+		}
+
+		@media (prefers-color-scheme: dark) {
+			:root {
+				--clr-background: #111827;
+				--clr-background2: #1F2937;
+				--clr-background3: #1F2937;
+				--clr-background4: #4B5563;
+				--clr-font: #F9FAFB;
+				--clr-brown: #FDE68A;
+				--clr-green: #6EE7B7;
+				--clr-gold: #FBBF24;
+				--clr-red: #FCA5A5;
+				--clr-purple: #C4B5FD;
+				--clr-blue: #93C5FD;
+				--clr-accent: #818CF8;
+				--clr-border: #4B5563;
+				--clr-warning: #FCD34D;
+				--clr-success: #6EE7B7;
+				--clr-highlight: #78350F;
+				--clr-unread: #F87171;
+			}
+		}
+
+		[data-theme="dark"] {
+			--clr-background: #111827 !important;
+			--clr-background2: #1F2937 !important;
+			--clr-background3: #1F2937 !important;
+			--clr-background4: #4B5563 !important;
+			--clr-font: #F9FAFB !important;
+			--clr-brown: #FDE68A !important;
+			--clr-green: #6EE7B7 !important;
+			--clr-gold: #FBBF24 !important;
+			--clr-red: #FCA5A5 !important;
+			--clr-purple: #C4B5FD !important;
+			--clr-blue: #93C5FD !important;
+			--clr-accent: #818CF8 !important;
+			--clr-border: #4B5563 !important;
+			--clr-warning: #FCD34D !important;
+			--clr-success: #6EE7B7 !important;
+			--clr-highlight: #78350F !important;
+			--clr-unread: #F87171 !important;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			width: 100%;
+			background-color: var(--clr-background);
+			color: var(--clr-font);
+			font-size: 14px;
+			line-height: 1.6;
+			overflow: hidden;
+		}
+
+		.main {
+			display: flex;
+			flex-direction: column;
+			height: 100vh;
+			width: 100%;
+		}
+
+		.header {
+			background: linear-gradient(90deg, var(--clr-background2), var(--clr-background));
+			padding: 12px 20px;
+			border-bottom: 1px solid var(--clr-border);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.header h1 {
+			margin: 0;
+			font-size: 18px;
+			font-weight: 700;
+			color: var(--clr-accent);
+		}
+
+		.settings-bar {
+			flex: 0 0 50px;
+			background-color: var(--clr-background2);
+			border-bottom: 1px solid var(--clr-border);
+			display: flex;
+			align-items: center;
+			padding: 0 15px;
+			gap: 10px;
+			overflow-x: auto;
+			min-height: 50px;
+			flex-wrap: nowrap;
+		}
+
+		.settings-group {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			flex: 0 0 auto;
+		}
+
+		.settings-group label {
+			font-size: 12px;
+			font-weight: 600;
+			color: var(--clr-font);
+			white-space: nowrap;
+		}
+
+		.settings-group input[type="text"] {
+			padding: 6px 10px;
+			background-color: var(--clr-background3);
+			color: var(--clr-font);
+			border: 1px solid var(--clr-border);
+			border-radius: 6px;
+			font-size: 13px;
+			min-width: 90px;
+			transition: all 0.2s;
+		}
+
+		.settings-group input:focus {
+			outline: none;
+			border-color: var(--clr-accent);
+			box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+		}
+
+		.settings-group input[type="checkbox"] {
+			width: 16px;
+			height: 16px;
+			cursor: pointer;
+		}
+
+		.settings-group button {
+			padding: 6px 10px;
+			background-color: var(--clr-background4);
+			color: var(--clr-font);
+			border: 1px solid var(--clr-border);
+			border-radius: 6px;
+			cursor: pointer;
+			font-size: 12px;
+			font-weight: 500;
+			transition: all 0.2s;
+			white-space: nowrap;
+		}
+
+		.settings-group button:hover {
+			background-color: var(--clr-accent);
+			color: white;
+		}
+
+		.connect-btn {
+			padding: 6px 18px;
+			background: linear-gradient(135deg, var(--clr-accent), var(--clr-purple));
+			color: white;
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+			font-weight: 600;
+			font-size: 13px;
+			white-space: nowrap;
+			transition: all 0.2s;
+			flex: 0 0 auto;
+		}
+
+		.connect-btn:hover {
+			transform: translateY(-1px);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+		}
+
+		.connect-btn:disabled {
+			background: var(--clr-background4);
+			cursor: not-allowed;
+			transform: none;
+			box-shadow: none;
+		}
+
+		.connect-btn.disconnect {
+			background: linear-gradient(135deg, var(--clr-red), #EF4444);
+		}
+
+		.log-toggle-btn {
+			padding: 6px 12px;
+			background-color: var(--clr-background4);
+			color: var(--clr-font);
+			border: 1px solid var(--clr-border);
+			border-radius: 6px;
+			cursor: pointer;
+			font-size: 12px;
+			font-weight: 500;
+			white-space: nowrap;
+			transition: all 0.2s;
+		}
+
+		.log-toggle-btn:hover {
+			background-color: var(--clr-accent);
+			color: white;
+		}
+
+		.connection-status {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding: 4px 10px;
+			background-color: var(--clr-background3);
+			border: 1px solid var(--clr-border);
+			border-radius: 6px;
+			font-size: 11px;
+			font-weight: 500;
+			margin-left: auto;
+			flex: 0 0 auto;
+			transition: all 0.3s;
+		}
+
+		.connection-status.connected {
+			border-color: var(--clr-success);
+			background-color: rgba(16, 185, 129, 0.1);
+		}
+
+		.connection-status.disconnected {
+			border-color: var(--clr-red);
+			background-color: rgba(220, 38, 38, 0.1);
+		}
+
+		.connection-status .indicator {
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background-color: var(--clr-border);
+			transition: background-color 0.3s;
+		}
+
+		.connection-status.connected .indicator {
+			background-color: var(--clr-success);
+		}
+
+		.connection-status.disconnected .indicator {
+			background-color: var(--clr-red);
+		}
+
+		.ssl-warning {
+			display: none;
+			position: absolute;
+			bottom: 20px;
+			right: 20px;
+			max-width: 380px;
+			background: linear-gradient(135deg, var(--clr-warning), #F59E0B);
+			color: #000;
+			padding: 12px 16px;
+			border-radius: 8px;
+			font-size: 13px;
+			z-index: 200;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		}
+
+		.ssl-warning.visible {
+			display: block;
+		}
+
+		.ssl-warning a {
+			color: #000;
+			font-weight: 600;
+			text-decoration: underline;
+			cursor: pointer;
+		}
+
+		/* 搜索框样式 */
+		.search-container {
+			position: relative;
+			flex: 0 0 auto;
+		}
+
+		.search-container input {
+			min-width: 80px;
+		}
+
+		.search-results {
+			position: absolute;
+			top: 100%;
+			right: 0;
+			background: var(--clr-background3);
+			border: 1px solid var(--clr-border);
+			border-radius: 6px;
+			padding: 8px;
+			margin-top: 4px;
+			min-width: 200px;
+			display: none;
+			z-index: 1000;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		}
+
+		.search-results.visible {
+			display: block;
+		}
+
+		.search-result-item {
+			padding: 4px;
+			cursor: pointer;
+			border-radius: 3px;
+			margin: 2px 0;
+			font-size: 12px;
+		}
+
+		.search-result-item:hover {
+			background: var(--clr-background4);
+		}
+
+		.chat-container {
+			flex: 1 1 auto;
+			display: flex;
+			flex-direction: column;
+			overflow: hidden;
+			position: relative;
+		}
+
+		.channels {
+			flex: 0 0 45px;
+			background-color: var(--clr-background2);
+			border-bottom: 1px solid var(--clr-border);
+			display: flex;
+			align-items: center;
+			padding: 0 10px;
+			gap: 8px;
+			overflow-x: auto;
+		}
+
+		.channel {
+			padding: 8px 16px;
+			background-color: var(--clr-background3);
+			border: 1px solid var(--clr-border);
+			border-radius: 20px;
+			cursor: pointer;
+			font-weight: 500;
+			font-size: 13px;
+			transition: all 0.2s;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			white-space: nowrap;
+			position: relative;
+		}
+
+		.channel:hover {
+			background-color: var(--clr-background4);
+		}
+
+		.channel.active {
+			background: linear-gradient(135deg, var(--clr-accent), var(--clr-purple));
+			color: white;
+			border-color: var(--clr-accent);
+		}
+
+		/* 未读消息计数 */
+		.unread-count {
+			background: var(--clr-unread);
+			color: white;
+			border-radius: 50%;
+			width: 18px;
+			height: 18px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 10px;
+			font-weight: bold;
+			position: absolute;
+			top: -6px;
+			right: -6px;
+		}
+
+		.channel button.x {
+			background: none;
+			border: none;
+			color: inherit;
+			cursor: pointer;
+			padding: 2px 6px;
+			font-weight: bold;
+			border-radius: 50%;
+			font-size: 14px;
+			transition: all 0.2s;
+		}
+
+		.channel button.x:hover {
+			background-color: rgba(255, 255, 255, 0.2);
+		}
+
+		.log-container {
+			position: absolute;
+			inset: 0;
+			background-color: var(--clr-background3);
+			border-bottom: 2px solid var(--clr-accent);
+			display: none;
+			flex-direction: column;
+			z-index: 100;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		}
+
+		.log-container.visible {
+			display: flex;
+		}
+
+		.log-header {
+			flex: 0 0 35px;
+			padding: 0 15px;
+			background-color: var(--clr-background2);
+			border-bottom: 1px solid var(--clr-border);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			font-weight: 600;
+			font-size: 13px;
+		}
+
+		.log-controls {
+			display: flex;
+			gap: 8px;
+		}
+
+		.log-controls button {
+			padding: 4px 10px;
+			background-color: var(--clr-background4);
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 11px;
+			transition: all 0.2s;
+		}
+
+		.log-controls button:hover {
+			background-color: var(--clr-accent);
+			color: white;
+		}
+
+		#logOutput {
+			flex: 1 1 auto;
+			overflow-y: auto;
+			padding: 10px;
+			font-size: 11px;
+			font-family: 'Consolas', 'Monaco', monospace;
+			background-color: var(--clr-background3);
+			color: var(--clr-font);
+			white-space: pre-wrap;
+			word-wrap: break-word;
+		}
+
+		.channelcontents {
+			flex: 1 1 auto;
+			display: flex;
+			overflow: hidden;
+			padding: 10px;
+		}
+
+		.channelcontent {
+			display: flex;
+			flex-direction: row;
+			width: 100%;
+			height: 100%;
+			gap: 10px;
+		}
+
+		.channelcontent nav {
+			flex: 1 1 auto;
+			display: flex;
+			flex-direction: column;
+			background-color: var(--clr-background3);
+			border-radius: 8px;
+			overflow: hidden;
+			border: 1px solid var(--clr-border);
+			position: relative;
+		}
+
+		.channelcontent nav h3 {
+			flex: 0 0 auto;
+			padding: 10px 15px;
+			margin: 0;
+			background-color: var(--clr-background2);
+			border-bottom: 1px solid var(--clr-border);
+			font-weight: 600;
+			font-size: 14px;
+		}
+
+		.channelcontent nav nav {
+			flex: 1 1 auto;
+			overflow-y: auto;
+			padding: 15px;
+		}
+
+		.channelcontent nav p {
+			margin: 0;
+			padding: 4px 0;
+			line-height: 1.5;
+		}
+
+		/* 提及高亮样式 */
+		.mention-highlight {
+			background: var(--clr-highlight);
+			font-weight: 600;
+			padding: 0 2px;
+			border-radius: 3px;
+		}
+
+		ul {
+			flex: 0 0 200px;
+			overflow-y: auto;
+			padding: 10px;
+			margin: 0;
+			border-left: 1px solid var(--clr-border);
+			list-style: none;
+			background-color: var(--clr-background3);
+			border-radius: 0 8px 8px 0;
+		}
+
+		.channelcontents li {
+			padding: 5px 10px;
+			margin: 1px 0;
+			display: flex;
+			gap: 8px;
+			border-radius: 4px;
+			cursor: pointer;
+			position: relative;
+		}
+
+		.channelcontents li:hover {
+			background-color: var(--clr-background4);
+		}
+
+		.channelcontents li p {
+			margin: 0;
+		}
+
+		.channelcontents li p:first-child {
+			width: 20px;
+			color: var(--clr-purple);
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.channelcontents li p:nth-child(2) {
+			flex: 1;
+			color: var(--clr-green);
+		}
+
+		/* 用户右键菜单 */
+		.user-context-menu {
+			position: absolute;
+			background: var(--clr-background3);
+			border: 1px solid var(--clr-border);
+			border-radius: 6px;
+			padding: 4px;
+			display: none;
+			z-index: 100;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			min-width: 150px;
+		}
+
+		.user-context-menu.visible {
+			display: block;
+		}
+
+		.context-menu-item {
+			padding: 6px 12px;
+			cursor: pointer;
+			border-radius: 4px;
+			font-size: 13px;
+			transition: all 0.2s;
+		}
+
+		.context-menu-item:hover {
+			background: var(--clr-accent);
+			color: white;
+		}
+
+		/* 链接预览 */
+		.link-preview {
+			position: absolute;
+			background: var(--clr-background3);
+			border: 1px solid var(--clr-border);
+			border-radius: 6px;
+			padding: 8px;
+			display: none;
+			z-index: 101;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			max-width: 300px;
+			font-size: 12px;
+			color: var(--clr-font);
+		}
+
+		.link-preview.visible {
+			display: block;
+		}
+
+		#input {
+			position: absolute;
+			bottom: 10px;
+			left: 10px;
+			right: 10px;
+			padding: 12px 15px;
+			background-color: var(--clr-background3);
+			color: var(--clr-font);
+			border: 1px solid var(--clr-border);
+			border-radius: 8px;
+			font-size: 14px;
+			transition: all 0.2s;
+			z-index: 10;
+		}
+
+		#input:focus {
+			outline: none;
+			border-color: var(--clr-accent);
+			box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+		}
+
+		/* 自动补全提示 */
+		.autocomplete-suggestions {
+			position: absolute;
+			background: var(--clr-background3);
+			border: 1px solid var(--clr-border);
+			border-radius: 6px;
+			max-height: 200px;
+			overflow-y: auto;
+			display: none;
+			z-index: 50;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			width: calc(100% - 20px);
+		}
+
+		.autocomplete-suggestions.visible {
+			display: block;
+		}
+
+		.autocomplete-item {
+			padding: 8px 12px;
+			cursor: pointer;
+			font-size: 13px;
+			transition: all 0.2s;
+		}
+
+		.autocomplete-item:hover,
+		.autocomplete-item.active {
+			background: var(--clr-accent);
+			color: white;
+		}
+
+		::-webkit-scrollbar {
+			width: 8px;
+			height: 8px;
+		}
+
+		::-webkit-scrollbar-track {
+			background: var(--clr-background);
+		}
+
+		::-webkit-scrollbar-thumb {
+			background: var(--clr-accent);
+			border-radius: 4px;
+		}
+
+		@media (max-width: 768px) {
+			.settings-bar {
+				flex-wrap: wrap;
+				padding: 8px;
+				gap: 8px;
+				min-height: auto;
+			}
+
+			.settings-group {
+				flex: 1 1 45%;
+			}
+
+			.settings-group input {
+				min-width: 80px;
+				width: 100%;
+			}
+
+			.log-container {
+				height: 40vh;
+			}
+
+			.channelcontent {
+				flex-direction: column;
+			}
+
+			ul {
+				flex: 0 0 120px;
+				border-left: none;
+				border-top: 1px solid var(--clr-border);
+			}
+
+			#input {
+				left: 5px;
+				right: 5px;
+				bottom: 5px;
+			}
+		}
+
+		@media (max-width: 480px) {
+			.settings-group {
+				flex: 1 1 100%;
+			}
+
+			.channel {
+				font-size: 12px;
+				padding: 6px 12px;
+			}
+
+			.connection-status {
+				display: none;
+			}
+		}
+
+		.ssl-help-btn {
+			padding: 6px 12px;
+			background: linear-gradient(135deg, var(--clr-warning), #F59E0B);
+			color: #000;
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+			font-weight: 600;
+			font-size: 13px;
+			white-space: nowrap;
+			transition: all 0.2s;
+		}
+
+		.ssl-help-btn:hover {
+			transform: translateY(-1px);
+			box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+		}
+	</style>
+</head>
+
+<body>
+	<div class="main">
+		<div class="header">
+			<h1 id="caption">增强型 IRC 客户端</h1>
+			<div class="settings-group" style="margin: 0;">
+				<button class="ssl-help-btn" onclick="toggleTheme()" title="切换明暗主题">主题切换</button>
+			</div>
+		</div>
+		<div class="settings-bar">
+			<div class="settings-group">
+				<label>WebSocket:</label>
+				<input type="text" id="wsUrl" value="" placeholder="wss://irc.example.com:port/">
+			</div>
+			<div class="settings-group">
+				<label>昵称:</label>
+				<input type="text" id="nickInput" value="" placeholder="输入昵称">
+			</div>
+			<div class="settings-group">
+				<label>频道:</label>
+				<input type="text" id="channelInput" value="" placeholder="#channel">
+			</div>
+			<div class="search-container">
+				<input type="text" id="searchInput" placeholder="搜索消息" onkeyup="onSearchKeyUp(event)">
+				<div class="search-results" id="searchResults"></div>
+			</div>
+			<div class="settings-group">
+				<label title="启用后会在断开时自动重连">
+					<input type="checkbox" id="autoReconnect"> 自动重连
+				</label>
+			</div>
+			<div class="settings-group">
+				<label title="桌面通知">
+					<input type="checkbox" id="enableNotifications"> 桌面通知
+				</label>
+			</div>
+			<div class="settings-group">
+				<label title="SSL帮助">
+					<button class="ssl-help-btn" onclick="showSSLWarning()" title="点击查看SSL证书问题的解决方案">SSL帮助</button>
+				</label>
+			</div>
+			<button class="connect-btn" id="connectBtn" onclick="toggleConnection()">连接</button>
+			<button class="log-toggle-btn" onclick="toggleLog()">查看日志</button>
+			<div class="connection-status disconnected" id="connectionStatus">
+				<span class="indicator"></span>
+				<span id="statusText">未连接</span>
+			</div>
+		</div>
+		<div class="ssl-warning" id="sslWarning">
+			<strong>⚠️ 浏览器无法忽略SSL证书错误!</strong> 请使用以下方案：<br>
+			1. 改用 <code>ws://</code> 非加密连接(如果浏览器支持)<br>
+			2. 在浏览器中访问 <a id="sslLink" target="_blank">服务器URL</a> 并手动信任证书<br>
+		</div>
+		<div class="log-container" id="logContainer">
+			<div class="log-header">
+				<span>WebSocket日志</span>
+				<div class="log-controls">
+					<button onclick="clearLog()">清空</button>
+					<button onclick="toggleLog()">关闭</button>
+				</div>
+			</div>
+			<div id="logOutput"></div>
+		</div>
+		<div class="chat-container">
+			<div class="channels" style="display: none;"></div>
+			<nav class="channelcontents" style="display: none;"></nav>
+			<input type="text" name="input" id="input" style="display: none;" onKeyPress="onKeyPress(event)"
+				onKeyDown="onKeyDown(event)" onInput="onInputChanged(event)" placeholder="输入消息..."
+				autocomplete="off" />
+			<div class="autocomplete-suggestions" id="autocompleteSuggestions"></div>
+			<div class="user-context-menu" id="userContextMenu"></div>
+			<div class="link-preview" id="linkPreview"></div>
+		</div>
+	</div>
+</body>
+<script>
+	var nickname = "";
+	var channelName = "";
+	var wsUrl = "";
+	var channels, channelContents;
+	var channelMap = new Map();
+	var activeChannel = null;
+	var statusChannel = null;
+	var input;
+	var PrefixChars;
+	var websocket = null;
+	var isConnected = false;
+	var autoReconnect = false;
+	var reconnectAttempts = 0;
+	var maxReconnectAttempts = 5;
+	var reconnectDelay = 3000;
+	var ignoredUsers = new Set();
+	var notificationPermission = 'default';
+	var commandHistory = [];
+	var commandIndex = -1;
+
+	function onLoad() {
+		channels = document.getElementsByClassName("channels")[0];
+		channelContents = document.getElementsByClassName("channelcontents")[0];
+		input = document.getElementById("input");
+		let url = new URL(document.location);
+		if (url.hash) {
+			document.getElementById('channelInput').value = url.hash;
+		}
+		if (window.frameElement) {
+			document.getElementById("caption").style.display = "none";
+		}
+		updateConnectionStatus(false);
+		setupEventListeners();
+		requestNotificationPermission();
+		applySavedTheme();
+	}
+	window.addEventListener("load", onLoad, false);
+
+	function setupEventListeners() {
+		// 点击外部关闭菜单
+		document.addEventListener('click', function (e) {
+			const contextMenu = document.getElementById('userContextMenu');
+			const searchResults = document.getElementById('searchResults');
+			if (contextMenu && !contextMenu.contains(e.target)) {
+				contextMenu.classList.remove('visible');
+			}
+			if (searchResults && !searchResults.contains(e.target)) {
+				searchResults.classList.remove('visible');
+			}
+		});
+
+		// 检查存储的主题
+		const savedTheme = localStorage.getItem('irc-theme');
+		if (savedTheme === 'dark') {
+			document.documentElement.setAttribute('data-theme', 'dark');
+		}
+	}
+
+	function applySavedTheme() {
+		const savedTheme = localStorage.getItem('irc-theme');
+		if (savedTheme === 'dark') {
+			document.documentElement.setAttribute('data-theme', 'dark');
+		}
+	}
+
+	function toggleTheme() {
+		const currentTheme = document.documentElement.getAttribute('data-theme');
+		if (currentTheme === 'dark') {
+			document.documentElement.removeAttribute('data-theme');
+			localStorage.setItem('irc-theme', 'light');
+		} else {
+			document.documentElement.setAttribute('data-theme', 'dark');
+			localStorage.setItem('irc-theme', 'dark');
+		}
+	}
+
+	function requestNotificationPermission() {
+		if ('Notification' in window && Notification.permission === 'default') {
+			Notification.requestPermission().then(permission => {
+				notificationPermission = permission;
+				if (permission === 'granted') {
+					document.getElementById('enableNotifications').checked = true;
+				}
+			});
+		}
+	}
+
+	function updateConnectionStatus(connected) {
+		const statusEl = document.getElementById('connectionStatus');
+		const statusText = document.getElementById('statusText');
+		if (!statusEl || !statusText) {
+			console.error("连接状态元素未找到");
+			return;
+		}
+		if (connected) {
+			statusEl.classList.remove('disconnected');
+			statusEl.classList.add('connected');
+			statusText.textContent = `已连接 (${nickname})`;
+		} else {
+			statusEl.classList.remove('connected');
+			statusEl.classList.add('disconnected');
+			statusText.textContent = '未连接';
+		}
+	}
+
+	function toggleLog() {
+		const logContainer = document.getElementById('logContainer');
+		if (logContainer) {
+			logContainer.classList.toggle('visible');
+		}
+	}
+
+	function clearLog() {
+		const logOutput = document.getElementById('logOutput');
+		if (logOutput) {
+			logOutput.textContent = '';
+		}
+	}
+
+	function writeToLog(message) {
+		const logOutput = document.getElementById('logOutput');
+		if (logOutput) {
+			const timestamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+			logOutput.textContent += `[${timestamp}] ${message}\n`;
+			logOutput.scrollTop = logOutput.scrollHeight;
+		}
+	}
+
+	function showSSLWarning(url) {
+		const warning = document.getElementById('sslWarning');
+		const link = document.getElementById('sslLink');
+		if (!warning || !link) return;
+		let displayUrl = url || document.getElementById('wsUrl')?.value.trim();
+		if (displayUrl) {
+			link.href = displayUrl.replace('wss://', 'https://').replace('ws://', 'http://');
+			link.textContent = link.href;
+		} else {
+			link.href = '#';
+			link.textContent = '请先在WebSocket地址栏输入服务器地址';
+		}
+		warning.classList.add('visible');
+		setTimeout(() => {
+			if (warning) warning.classList.remove('visible');
+		}, 5000);
+	}
+
+	function toggleConnection() {
+		if (isConnected) {
+			autoReconnect = false;
+			const reconnectCheckbox = document.getElementById('autoReconnect');
+			if (reconnectCheckbox) reconnectCheckbox.checked = false;
+			if (websocket) {
+				try {
+					websocket.close(1000, "User disconnected");
+				} catch (e) {
+					writeToLog(`[ERROR] 关闭WebSocket时出错: ${e.message}`);
+				}
+			}
+			onDisconnect();
+		} else {
+			doConnect();
+		}
+	}
+
+	function validateNickname(nick) {
+		if (!nick || nick.trim() === "") return false;
+		return /^[a-zA-Z_\\`\[\]{}^|][a-zA-Z0-9_\\`\[\]{}^|-]*$/.test(nick);
+	}
+
+	function validateWsUrl(url) {
+		if (!url) return false;
+		return /^wss?:\/\/.+/.test(url);
+	}
+
+	function doConnect() {
+		const wsUrlInput = document.getElementById('wsUrl');
+		const nickInput = document.getElementById('nickInput');
+		const channelInput = document.getElementById('channelInput');
+		const reconnectCheckbox = document.getElementById('autoReconnect');
+		const connectBtn = document.getElementById('connectBtn');
+		if (!wsUrlInput || !nickInput || !channelInput || !connectBtn) {
+			alert("界面元素加载错误, 请刷新页面重试");
+			return;
+		}
+		wsUrl = wsUrlInput.value.trim();
+		nickname = nickInput.value.trim();
+		channelName = channelInput.value.trim();
+		autoReconnect = reconnectCheckbox ? reconnectCheckbox.checked : false;
+		if (!validateWsUrl(wsUrl)) {
+			alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
+			return;
+		}
+		if (!validateNickname(nickname)) {
+			alert("昵称格式无效!必须以字母或特定符号开头, 不能包含空格和特殊字符");
+			return;
+		}
+		if (channelName && !channelName.startsWith('#')) {
+			channelName = '#' + channelName;
+		}
+		reconnectAttempts = 0;
+		wsUrlInput.disabled = true;
+		nickInput.disabled = true;
+		channelInput.disabled = true;
+		if (reconnectCheckbox) reconnectCheckbox.disabled = true;
+		connectBtn.textContent = '连接中...';
+		connectBtn.disabled = true;
+		channels.innerHTML = '';
+		channelContents.innerHTML = '';
+		channelMap.clear();
+		statusChannel = new Tab_Create("Status", "Status Window", false);
+		statusChannel.unreadCount = 0;
+		writeToLog(`[系统] 正在连接: ${wsUrl}`);
+		WebSocket_Connect(wsUrl);
+	}
+
+	function onDisconnect() {
+		isConnected = false;
+		const wsUrlInput = document.getElementById('wsUrl');
+		const nickInput = document.getElementById('nickInput');
+		const channelInput = document.getElementById('channelInput');
+		const reconnectCheckbox = document.getElementById('autoReconnect');
+		const connectBtn = document.getElementById('connectBtn');
+		if (wsUrlInput) wsUrlInput.disabled = false;
+		if (nickInput) nickInput.disabled = false;
+		if (channelInput) channelInput.disabled = false;
+		if (reconnectCheckbox) reconnectCheckbox.disabled = false;
+		if (connectBtn) {
+			connectBtn.textContent = '连接';
+			connectBtn.disabled = false;
+			connectBtn.classList.remove('disconnect');
+		}
+		updateConnectionStatus(false);
+		const channelsEl = document.querySelector('.channels');
+		const channelContentsEl = document.querySelector('.channelcontents');
+		const inputEl = document.getElementById('input');
+		if (channelsEl) channelsEl.style.display = 'none';
+		if (channelContentsEl) channelContentsEl.style.display = 'none';
+		if (inputEl) {
+			inputEl.style.display = 'none';
+			inputEl.value = '';
+		}
+		writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel, "");
+		writeToLog(`[系统] 已断开连接`);
+		if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
+			reconnectAttempts++;
+			const delay = reconnectDelay * reconnectAttempts;
+			writeToLog(`[重连] ${Math.floor(delay / 1000)}秒后尝试第 ${reconnectAttempts}/${maxReconnectAttempts} 次重连...`);
+			setTimeout(() => {
+				if (!isConnected && autoReconnect) {
+					writeToLog(`[重连] 正在尝试重新连接...`);
+					doConnect();
+				}
+			}, delay);
+		} else if (autoReconnect && reconnectAttempts >= maxReconnectAttempts) {
+			writeToLog(`[重连] 达到最大重连次数, 停止尝试`);
+			autoReconnect = false;
+			if (reconnectCheckbox) reconnectCheckbox.checked = false;
+			alert('自动重连失败, 请检查网络或服务器设置');
+		}
+	}
+
+	function onKeyPress(e) {
+		if (e && e.keyCode == 13) {
+			send();
+		}
+	}
+
+	function onKeyDown(e) {
+		// Tab补全
+		if (e.keyCode == 9) {
+			if (e.preventDefault) {
+				e.preventDefault();
+			}
+			handleAutocomplete();
+			return false;
+		}
+		// 命令历史上下键
+		if (e.keyCode == 38) { // 上
+			if (commandHistory.length > 0) {
+				commandIndex = Math.min(commandIndex + 1, commandHistory.length - 1);
+				input.value = commandHistory[commandIndex];
+			}
+			e.preventDefault();
+		} else if (e.keyCode == 40) { // 下
+			if (commandHistory.length > 0) {
+				commandIndex = Math.max(commandIndex - 1, -1);
+				input.value = commandIndex === -1 ? '' : commandHistory[commandIndex];
+			}
+			e.preventDefault();
+		}
+	}
+
+	function onInputChanged(e) {
+		// 清理自动补全建议
+		const suggestions = document.getElementById('autocompleteSuggestions');
+		if (suggestions) {
+			suggestions.classList.remove('visible');
+			suggestions.innerHTML = '';
+		}
+	}
+
+	function handleAutocomplete() {
+		const text = input.value;
+		const cursorPos = input.selectionStart;
+		const textBeforeCursor = text.substring(0, cursorPos);
+		
+		// 获取最后一个词
+		const words = textBeforeCursor.split(' ');
+		const lastWord = words[words.length - 1];
+		
+		if (!lastWord) return;
+		
+		let suggestions = [];
+		
+		// 昵称补全
+		if (lastWord.startsWith('@') || !text.startsWith('/')) {
+			const searchPrefix = lastWord.startsWith('@') ? lastWord.substring(1) : lastWord;
+			if (activeChannel && activeChannel.users) {
+				suggestions = activeChannel.users
+					.map(user => user[1])
+					.filter(nick => nick.toLowerCase().startsWith(searchPrefix.toLowerCase()))
+					.map(nick => lastWord.startsWith('@') ? `@${nick}` : nick);
+			}
+		}
+		
+		// 命令补全
+		if (text.startsWith('/')) {
+			const commands = ['/me', '/query', '/ignore', '/whois', '/away', '/list', '/clear'];
+			suggestions = commands.filter(cmd => cmd.startsWith(lastWord));
+		}
+		
+		if (suggestions.length > 0) {
+			const suggestion = suggestions[0];
+			const replacement = suggestion + (text.startsWith('/') ? '' : ' ');
+			words[words.length - 1] = replacement;
+			input.value = words.join(' ') + text.substring(cursorPos);
+			input.selectionStart = input.selectionEnd = words.join(' ').length + 1;
+		}
+	}
+
+	function Tab_onClick(evt) {
+		if (!evt || !evt.currentTarget) return;
+		let chanName = evt.currentTarget.value;
+		Tab_Show(chanName);
+		// 清除未读计数
+		evt.currentTarget.classList.remove('unread');
+		const countEl = evt.currentTarget.querySelector('.unread-count');
+		if (countEl) countEl.remove();
+	}
+
+	function Tabs_Hide() {
+		let i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("channelcontent");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+		tablinks = document.getElementsByClassName("channel");
+		for (i = 0; i < tablinks.length; i++) {
+			tablinks[i].className = tablinks[i].className.replace(" active", "");
+		}
+	}
+
+	function Tab_Show(name) {
+		if (!name) return;
+		let channel = channelMap.get(name);
+		if (!channel) return;
+		Tabs_Hide();
+		if (channel && channel.channel) {
+			channel.channel.style.display = "flex";
+			channel.button.classList.add('active');
+			activeChannel = channel;
+			// 标记为已读
+			channel.unreadCount = 0;
+			channel.button.classList.remove('unread');
+			const countEl = channel.button.querySelector('.unread-count');
+			if (countEl) countEl.remove();
+		}
+	}
+
+	function HTML_escape(text) {
+		if (!text) return "";
+		let map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+		return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+	}
+
+	function sortUserList(user_a, user_b) {
+		if (!user_a || !user_b || !user_a[0] || !user_b[0]) return 0;
+		if (user_a[0][0] === user_b[0][0])
+			return user_a[1].localeCompare(user_b[1], undefined, { sensitivity: 'accent' });
+		if (!PrefixChars || !PrefixChars[1]) return 0;
+		let aIndex = PrefixChars[1].indexOf(user_a[0][0]);
+		let bIndex = PrefixChars[1].indexOf(user_b[0][0]);
+		return aIndex - bIndex;
+	}
+
+	function Tab_Create(name, topic, createlist) {
+		if (!name || !channels || !channelContents) {
+			console.error("Tab_Create: 缺少必要元素");
+			return;
+		}
+		Tabs_Hide();
+		this.name = name;
+		this.unreadCount = 0;
+		let escapedName = HTML_escape(name);
+		this.button = document.createElement("button");
+		this.button.innerHTML = escapedName;
+		this.button.value = escapedName;
+		this.button.onclick = Tab_onClick;
+		this.button.className = "channel active";
+		let x = document.createElement("button");
+		x.innerHTML = "×";
+		x.onclick = Tab_Close;
+		x.value = escapedName;
+		x.className = "x";
+		this.button.appendChild(x);
+		channels.appendChild(this.button);
+		this.channel = document.createElement("nav");
+		this.channel.className = "channelcontent";
+		this.channelnav = document.createElement("nav");
+		this.topic = document.createElement("h3");
+		this.topic.innerHTML = HTML_escape(topic || "no channeltopic available");
+		this.channelnav.appendChild(this.topic);
+		this.content = document.createElement("nav");
+		this.channelnav.appendChild(this.content);
+		this.channel.appendChild(this.channelnav);
+		if (createlist) {
+			this.userlist = document.createElement("ul");
+			this.users = [];
+			this.names_end = true;
+			this.channel.appendChild(this.userlist);
+		}
+		channelContents.appendChild(this.channel);
+		channelMap.set(name, this);
+		activeChannel = this;
+	}
+
+	function Tab_Close(evt) {
+		if (!evt || !evt.currentTarget) return;
+		const chanName = evt.currentTarget.value;
+		doSend("part " + chanName);
+		evt.stopPropagation();
+	}
+
+	function Channel_Destroy(name) {
+		if (!name) return;
+		let channel = channelMap.get(name);
+		if (!channel) return;
+		channel.button.remove();
+		channel.channel.remove();
+		if (activeChannel == channel) {
+			activeChannel = statusChannel;
+		}
+		channelMap.delete(name);
+		if (activeChannel) {
+			Tab_Show(activeChannel.name);
+		}
+	}
+
+	function Channel_InsertUser(nick, channel, prefix) {
+		if (!nick || !channel || !channel.userlist) return;
+		let user = document.createElement("li");
+		let tmp = document.createElement("p");
+		if (prefix && prefix !== " ") tmp.innerHTML = prefix[0];
+		user.appendChild(tmp);
+		tmp = document.createElement("p");
+		tmp.innerHTML = HTML_escape(nick);
+		user.appendChild(tmp);
+		user.addEventListener('contextmenu', function (e) {
+			e.preventDefault();
+			showUserContextMenu(e, nick);
+		});
+		let i = 0;
+		for (i; i < channel.users.length; i++) {
+			if (channel.users[i] && channel.users[i][1]) {
+				if (channel.users[i][1].localeCompare(nick, undefined, { sensitivity: 'accent' }) < 0) continue;
+			}
+			break;
+		}
+		channel.users.splice(i, 0, [prefix || " ", nick]);
+		channel.userlist.insertBefore(user, channel.userlist.childNodes[i]);
+	}
+
+	function Channel_AppendUser(nick, channel, dontnotify, prefix) {
+		if (!nick || !channel || !channel.userlist) return;
+		let user = document.createElement("li");
+		let tmp = document.createElement("p");
+		if (prefix && prefix !== " ") tmp.innerHTML = prefix[0];
+		user.appendChild(tmp);
+		tmp = document.createElement("p");
+		tmp.innerHTML = HTML_escape(nick);
+		user.appendChild(tmp);
+		user.addEventListener('contextmenu', function (e) {
+			e.preventDefault();
+			showUserContextMenu(e, nick);
+		});
+		channel.userlist.appendChild(user);
+	}
+
+	function Channel_RemoveUser(nick, channel) {
+		if (!nick || !channel || !channel.userlist) return;
+		for (let i = 0; i < channel.userlist.children.length; i++) {
+			let userItem = channel.userlist.children[i];
+			if (!userItem || !userItem.children[1]) continue;
+			let anick = userItem.children[1].textContent;
+			if (anick == nick) {
+				userItem.remove();
+				if (channel.users && channel.users[i]) {
+					channel.users.splice(i, 1);
+				}
+				return true;
+			}
+		}
+	}
+
+	function Channel_RenameUser(nick, newnick, channel) {
+		if (!nick || !newnick || !channel) return;
+		if (!channel.userlist) return;
+		for (let i = 0; i < channel.users.length; i++) {
+			if (channel.users[i] && channel.users[i][1] == nick) {
+				let prefix = channel.users[i][0];
+				Channel_RemoveUser(nick, channel);
+				Channel_InsertUser(newnick, channel, prefix);
+				return true;
+			}
+		}
+	}
+
+	function Channel_UpdateUserPrefix(nick, channel, add, prefix) {
+		if (!nick || !channel || !channel.users || !PrefixChars) return;
+		for (let i = 0; i < channel.users.length; i++) {
+			if (channel.users[i] && channel.users[i][1] == nick) {
+				let pos = PrefixChars[0].indexOf(prefix);
+				if (pos < 0) return;
+				let prefixes = "";
+				if (add == "true" || add === true) {
+					let ii;
+					for (ii = 0; ii < channel.users[i][0].length; ii++) {
+						if (PrefixChars[1].indexOf(channel.users[i][0][ii]) >= pos) break;
+						prefixes += channel.users[i][0][ii];
+					}
+					prefixes += PrefixChars[1][pos];
+					for (; ii < channel.users[i][0].length; ii++) {
+						prefixes += channel.users[i][0][ii];
+					}
+				} else {
+					let tmp = channel.users[i][0].indexOf(PrefixChars[1][pos]);
+					if (tmp >= 0) {
+						prefixes = channel.users[i][0].substring(0, tmp) + channel.users[i][0].substring(tmp + 1);
+					}
+				}
+				if (prefixes == "") prefixes = " ";
+				channel.users[i][0] = prefixes;
+				Channel_RenameUser(nick, nick, channel);
+				break;
+			}
+		}
+	}
+
+	function writeToScreen(color, message, channel, username) {
+		if (!channel || !channel.content) return;
+		let pre = document.createElement("p");
+		pre.style.color = color;
+		const now = new Date();
+		const utcTime = now.toISOString().substr(11, 8);
+		let displayMessage;
+		if (username && username !== "") {
+			displayMessage = `[${utcTime}] ${username} -> ${linkify(message || "")}`;
+		} else {
+			displayMessage = `[${utcTime}] ${linkify(message || "")}`;
+		}
+		// 提及高亮
+		if (nickname && message.includes(`@${nickname}`)) {
+			pre.innerHTML = displayMessage.replace(
+				new RegExp(`@${nickname}`, 'g'),
+				`<span class="mention-highlight">@${nickname}</span>`
+			);
+			// 发送通知
+			if (document.getElementById('enableNotifications').checked &&
+				'Notification' in window &&
+				Notification.permission === 'granted') {
+				new Notification(`${username} @你`, {
+					body: message,
+					icon: null,
+					tag: channel.name
+				});
+			}
+		} else {
+			pre.innerHTML = displayMessage;
+		}
+		let output = channel.content;
+		if (output) {
+			output.appendChild(pre);
+			while (output.children.length > 300) {
+				output.removeChild(output.children[0]);
+			}
+			output.scrollTop = output.scrollHeight;
+		}
+		// 增加未读计数
+		if (activeChannel !== channel) {
+			channel.unreadCount = (channel.unreadCount || 0) + 1;
+			updateUnreadCount(channel);
+		}
+	}
+
+	function updateUnreadCount(channel) {
+		const button = channel.button;
+		button.classList.add('unread');
+		let countEl = button.querySelector('.unread-count');
+		if (!countEl) {
+			countEl = document.createElement('span');
+			countEl.className = 'unread-count';
+			button.appendChild(countEl);
+		}
+		countEl.textContent = channel.unreadCount;
+	}
+
+	function linkify(text) {
+		const urlRegex = /(https?:\/\/[^\s]+)/g;
+		return text.replace(urlRegex, function (url) {
+			return `<a href="${url}" target="_blank" rel="noopener noreferrer" 
+				onmouseover="showLinkPreview(event, '${url}')"
+				onmouseout="hideLinkPreview()"
+				style="color: var(--clr-accent); text-decoration: underline;">${url}</a>`;
+		});
+	}
+
+	function showLinkPreview(event, url) {
+		const preview = document.getElementById('linkPreview');
+		if (!preview) return;
+		preview.textContent = `链接: ${url}`;
+		preview.classList.add('visible');
+		preview.style.left = event.pageX + 10 + 'px';
+		preview.style.top = event.pageY + 10 + 'px';
+	}
+
+	function hideLinkPreview() {
+		const preview = document.getElementById('linkPreview');
+		if (preview) {
+			preview.classList.remove('visible');
+		}
+	}
+
+	function showUserContextMenu(event, nick) {
+		const menu = document.getElementById('userContextMenu');
+		if (!menu) return;
+		menu.innerHTML = `
+			<div class="context-menu-item" onclick="doSend('query ${nick}')">私聊 ${nick}</div>
+			<div class="context-menu-item" onclick="doSend('whois ${nick}')">查看信息</div>
+			<div class="context-menu-item" onclick="ignoreUser('${nick}')">忽略 ${nick}</div>
+		`;
+		menu.classList.add('visible');
+		menu.style.left = event.pageX + 'px';
+		menu.style.top = event.pageY + 'px';
+	}
+
+	function ignoreUser(nick) {
+		ignoredUsers.add(nick.toLowerCase());
+		writeToScreen("var(--clr-gold)", `已忽略用户: ${nick}`, statusChannel, "");
+		writeToLog(`[IGNORE] 已忽略: ${nick}`);
+		const menu = document.getElementById('userContextMenu');
+		if (menu) menu.classList.remove('visible');
+	}
+
+	function onSearchKeyUp(event) {
+		const searchInput = document.getElementById('searchInput');
+		const searchResults = document.getElementById('searchResults');
+		if (!searchInput || !searchResults) return;
+		
+		const query = searchInput.value.toLowerCase().trim();
+		if (query.length === 0) {
+			searchResults.classList.remove('visible');
+			return;
+		}
+		
+		if (event.key === 'Enter') {
+			const results = [];
+			channelMap.forEach((channel, name) => {
+				if (!channel.content) return;
+				const messages = Array.from(channel.content.children);
+				const matches = messages.filter(msg => 
+					msg.textContent.toLowerCase().includes(query)
+				).slice(-5); // 最近5条
+				
+				matches.forEach(msg => {
+					results.push({
+						channel: name,
+						message: msg.textContent,
+						element: msg
+					});
+				});
+			});
+			
+			searchResults.innerHTML = '';
+			if (results.length === 0) {
+				searchResults.innerHTML = '<div class="search-result-item">无匹配结果</div>';
+			} else {
+				results.forEach(result => {
+					const item = document.createElement('div');
+					item.className = 'search-result-item';
+					item.innerHTML = `<strong>${result.channel}:</strong> ${result.message.substring(0, 50)}...`;
+					item.onclick = () => {
+						Tab_Show(result.channel);
+						result.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+						result.element.style.background = 'var(--clr-highlight)';
+						setTimeout(() => {
+							result.element.style.background = '';
+						}, 2000);
+						searchResults.classList.remove('visible');
+						searchInput.value = '';
+					};
+					searchResults.appendChild(item);
+				});
+			}
+			searchResults.classList.add('visible');
+		}
+	}
+
+	function send() {
+		let text = input ? input.value.trim() : "";
+		if (!text || !activeChannel) return;
+		
+		// 保存命令历史
+		if (text.startsWith('/')) {
+			commandHistory.unshift(text);
+			commandHistory = commandHistory.slice(0, 50); // 保留最近50条
+		}
+		commandIndex = -1;
+		
+		let msg;
+		if (text[0] == "/") {
+			if (text.indexOf("/me ") == 0) {
+				msg = "privmsg " + activeChannel.name + " :\x01ACTION " + text.substring(4) + "\n";
+				writeToScreen("var(--clr-red)", `${nickname} ${text.substring(4)}`, activeChannel, "*");
+			} else if (text.indexOf("/query ") == 0) {
+				const target = text.substring(7).trim().split(' ')[0];
+				if (target && validateNickname(target)) {
+					new Tab_Create(target, `Private chat with ${target}`, false);
+					writeToLog(`[QUERY] 打开私聊: ${target}`);
+				}
+				input.value = '';
+				return;
+			} else if (text.indexOf("/ignore ") == 0) {
+				const target = text.substring(8).trim();
+				ignoreUser(target);
+				input.value = '';
+				return;
+			} else if (text.indexOf("/clear") == 0) {
+				if (activeChannel && activeChannel.content) {
+					activeChannel.content.innerHTML = '';
+				}
+				input.value = '';
+				return;
+			} else {
+				writeToScreen("var(--clr-font)", text, statusChannel, "");
+				msg = text.substring(1) + "\n";
+			}
+		} else {
+			msg = "privmsg " + activeChannel.name + " :" + text + "\n";
+			writeToScreen("var(--clr-font)", text, activeChannel, nickname);
+		}
+		doSend(msg);
+		if (input) input.value = "";
+	}
+
+	function WebSocket_Connect(wsUri) {
+		if (!wsUri) {
+			writeToLog("[ERROR] WebSocket地址为空");
+			return;
+		}
+		try {
+			if (websocket) {
+				try {
+					websocket.onclose = null;
+					websocket.onerror = null;
+					websocket.onopen = null;
+					websocket.onmessage = null;
+					if (websocket.readyState !== WebSocket.CLOSED) {
+						websocket.close(1000, "Reconnecting");
+					}
+				} catch (e) {
+					writeToLog(`[WARN] 清理旧连接时出错: ${e.message}`);
+				}
+				websocket = null;
+			}
+			writeToLog(`[WebSocket] 正在创建连接: ${wsUri}`);
+			websocket = new WebSocket(wsUri);
+			websocket.binaryType = 'blob';
+			const connectTimeout = setTimeout(() => {
+				if (websocket && websocket.readyState === WebSocket.CONNECTING) {
+					writeToLog(`[ERROR] 连接超时 (30秒)`);
+					try {
+						websocket.close(1006, "Connection timeout");
+					} catch (e) {
+						writeToLog(`[ERROR] 超时关闭连接失败: ${e.message}`);
+					}
+				}
+			}, 30000);
+			websocket.onclose = function (evt) {
+				clearTimeout(connectTimeout);
+				onClose(evt);
+			};
+			websocket.onerror = function (evt) {
+				onError(evt);
+			};
+			websocket.onopen = function (evt) {
+				clearTimeout(connectTimeout);
+				onOpen(evt);
+			};
+			websocket.onmessage = function (evt) {
+				onMessage(evt);
+			};
+		} catch (e) {
+			writeToLog(`[ERROR] WebSocket创建失败: ${e.message}`);
+			onDisconnect();
+			if (wsUrl && wsUrl.startsWith('wss://')) {
+				showSSLWarning(wsUrl);
+			}
+			alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
+		}
+	}
+
+	function onClose(evt) {
+		isConnected = false;
+		let reason = evt.reason || '连接关闭';
+		let code = evt.code;
+		let logMsg = `[CLOSE] Code: ${code}`;
+		switch (code) {
+			case 1000: logMsg += ' (正常关闭)'; break;
+			case 1006: logMsg += ' (异常断开 - 可能SSL证书错误)'; break;
+			case 1005: logMsg += ' (无状态码)'; break;
+			case 1011: logMsg += ' (服务器异常)'; break;
+			default: if (code >= 4000 && code <= 4999) { logMsg += ' (应用层错误)'; }
+		}
+		logMsg += ` - ${reason}`;
+		writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel, "");
+		writeToLog(logMsg);
+		if (websocket) {
+			try {
+				websocket.onclose = null;
+				websocket.onerror = null;
+				websocket.onopen = null;
+				websocket.onmessage = null;
+			} catch (e) {
+				writeToLog(`[WARN] 清理事件监听器失败: ${e.message}`);
+			}
+			websocket = null;
+		}
+		onDisconnect();
+	}
+
+	function onError(evt) {
+		let errorType = 'WebSocket错误';
+		if (evt && evt.target) {
+			if (evt.target.readyState === WebSocket.CONNECTING) {
+				errorType = '连接失败';
+			} else if (evt.target.readyState === WebSocket.OPEN) {
+				errorType = '消息错误';
+			}
+		}
+		writeToScreen("var(--clr-red)", `ERROR: ${errorType}`, statusChannel, "");
+		writeToLog(`[ERROR] ${errorType}: ${evt.data || '未知错误'}`);
+		if (wsUrl && wsUrl.startsWith('wss://')) {
+			showSSLWarning(wsUrl);
+		}
+	}
+
+	function onOpen(evt) {
+		isConnected = true;
+		reconnectAttempts = 0;
+		writeToScreen("var(--clr-font)", "CONNECTED", statusChannel, "");
+		writeToLog(`[OPEN] WebSocket连接成功: ${wsUrl}`);
+		updateConnectionStatus(true);
+		const channelsEl = document.querySelector('.channels');
+		const channelContentsEl = document.querySelector('.channelcontents');
+		const inputEl = document.getElementById('input');
+		if (channelsEl) channelsEl.style.display = 'flex';
+		if (channelContentsEl) channelContentsEl.style.display = 'flex';
+		if (inputEl) inputEl.style.display = 'block';
+		const connectBtn = document.getElementById('connectBtn');
+		if (connectBtn) {
+			connectBtn.textContent = '断开';
+			connectBtn.disabled = false;
+			connectBtn.classList.add('disconnect');
+		}
+		doSend("user websocket * * :WebSocket User");
+		doSend("nick " + nickname);
+	}
+
+	function onMessage(evt) {
+		if (!evt) return;
+		rawData = evt.data;
+		writeToLog(`← RECV: ${typeof rawData === 'string' ? rawData : '[二进制数据]'}`);
+		if (rawData instanceof Blob) {
+			let fileReader = new FileReader();
+			fileReader.addEventListener("loadend", handleBinaryInput);
+			fileReader.readAsText(rawData);
+		} else {
+			process(rawData);
+		}
+	}
+
+	function handleBinaryInput(event) {
+		if (!event || !event.target) return;
+		let fileReader = event.target;
+		let raw = fileReader.result;
+		writeToLog(`← RECV (Blob→Text): ${raw}`);
+		process(raw);
+	}
+
+	function doSend(message) {
+		if (!message) return;
+		if (websocket && websocket.readyState === WebSocket.OPEN) {
+			try {
+				websocket.send(message);
+				writeToLog(`→ SEND: ${message.trim()}`);
+			} catch (e) {
+				writeToLog(`[ERROR] 发送消息失败: ${e.message}`);
+				writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel, "");
+			}
+		} else {
+			writeToLog(`[ERROR] WebSocket未连接, 无法发送: ${message.trim()}`);
+			if (!isConnected) {
+				writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
+			}
+		}
+	}
+
+	var Commands = new Map();
+	Commands.set("001", function (nick, data) {
+		doSend("CAP REQ :multi-prefix");
+		if (channelName) {
+			doSend("join " + channelName);
+			writeToLog(`[IRC] 接收001, 准备加入频道: ${channelName}`);
+		} else {
+			writeToLog(`[IRC] 接收001, 未设置自动加入频道`);
+		}
+	});
+	Commands.set("005", function (nick, data) {
+		if (!data || !PrefixChars) return;
+		for (let i = 2; i < data.length; i++) {
+			if (data[i].indexOf("PREFIX=") == 0) {
+				let tmp = data[i].substring(8) + " ";
+				if (tmp) {
+					PrefixChars = tmp.split(")");
+					writeToScreen("var(--clr-brown)", "PREFIX CHARS: " + PrefixChars[0] + " " + PrefixChars[1], statusChannel, "");
+					writeToLog(`[IRC] 支持的PREFIX: ${PrefixChars[0]} ${PrefixChars[1]}`);
+				}
+			}
+		}
+	});
+	Commands.set("332", function (nick, data) {
+		if (!data || data.length < 5) return;
+		let channel = channelMap.get(data[3]);
+		if (!channel || !channel.topic) return;
+		text = data[4].substring(1);
+		for (let i = 5; i < data.length; i++) {
+			text += " " + data[i];
+		}
+		channel.topic.innerHTML = HTML_escape(text || "no channeltopic available");
+		writeToLog(`[IRC] 频道主题: ${data[3]} - ${text}`);
+	});
+	Commands.set("353", function (nick, data) {
+		if (!data || data.length < 6) return;
+		let channel = channelMap.get(data[4]);
+		if (!channel) return;
+		if (channel.names_end == true) {
+			channel.users = [];
+			channel.names_end = false;
+		}
+		data[5] = data[5].substring(1);
+		for (let i = 5; i < data.length; i++) {
+			prefix = "";
+			ii = 0;
+			while (PrefixChars && PrefixChars[1] && PrefixChars[1].indexOf(data[i][ii]) >= 0) {
+				prefix += data[i][ii];
+				ii++;
+			}
+			if (prefix == "") prefix = " ";
+			channel.users.push([prefix, data[i].substring(ii)]);
+		}
+		writeToLog(`[IRC] 接收用户列表: ${channel.users.length} 用户`);
+	});
+	Commands.set("366", function (nick, data) {
+		if (!data || data.length < 4) return;
+		let channel = channelMap.get(data[3]);
+		if (!channel) return;
+		channel.users.sort(sortUserList);
+		channel.userlist.innerHTML = "";
+		for (let i = 0; i < channel.users.length; i++) {
+			Channel_AppendUser(channel.users[i][1], channel, true, channel.users[i][0]);
+		}
+		channel.names_end = true;
+		writeToLog(`[IRC] 用户列表加载完成`);
+	});
+	Commands.set("432", function (nick, data) {
+		nickname = prompt("ERROR: Nickname is unavailable: Illegal characters\r\nPlease enter your nickname", "");
+		doSend("nick " + nickname);
+		writeToLog(`[IRC] 昵称错误, 重新输入: ${nickname}`);
+	});
+	Commands.set("433", function (nick, data) {
+		nickname = prompt("ERROR: Nickname is already in use.\r\nPlease enter your nickname", "");
+		doSend("nick " + nickname);
+		writeToLog(`[IRC] 昵称冲突, 新昵称: ${nickname}`);
+	});
+	Commands.set("JOIN", function (nick, data) {
+		if (!data || data.length < 3) return;
+		if (ignoredUsers.has(nick.toLowerCase())) return; // 忽略用户
+		
+		if (data[0].indexOf(":" + nickname + "!") != 0) {
+			if (data[2][0] == ":") data[2] = data[2].substring(1);
+			let channel = channelMap.get(data[2]);
+			if (!channel) return;
+			Channel_InsertUser(nick, channel, " ");
+		} else {
+			let channel = new Tab_Create(data[2].substring(1), "", true);
+			nick = nickname;
+		}
+		writeToScreen("var(--clr-green)", `${nick} 加入频道`, channel, "*");
+		writeToLog(`[IRC] 用户加入: ${nick} -> ${data[2]}`);
+	});
+	Commands.set("KICK", function (nick, data) {
+		if (!data || data.length < 5) return;
+		let channel = channelMap.get(data[2]);
+		if (!channel) return;
+		text = data[4].substring(1);
+		for (let i = 5; i < data.length; i++) {
+			text += " " + data[i];
+		}
+		if (data[3] != nickname) {
+			if (Channel_RemoveUser(data[3], channel)) {
+				writeToScreen("var(--clr-green)", `${data[3]} 被 ${nick} 踢出 (原因: ${text})`, channel, "*");
+			}
+			return;
+		}
+		Channel_Destroy(data[2]);
+		writeToScreen("var(--clr-font)", `你被 ${nick} 踢出 ${data[2]} (原因: ${text})`, statusChannel, "");
+		writeToLog(`[IRC] 被踢出: ${data[2]} by ${nick} - ${text}`);
+	});
+	Commands.set("MODE", function (nick, data) {
+		if (!data || data.length < 4) return;
+		let channel = channelMap.get(data[2]);
+		if (!channel) return;
+		text = data[3];
+		for (let i = 4; i < data.length; i++) {
+			text += " " + data[i];
+		}
+		writeToScreen("var(--clr-green)", `${nick} 设置模式: ${text}`, channel, "*");
+		if (!PrefixChars || data[3].length < 1) return;
+		ii = 4;
+		status = "false";
+		for (let i = 0; i < data[3].length; i++) {
+			if (data[3][i] == "+") status = "true";
+			else if (data[3][i] == "-") status = "false";
+			else {
+				if (ii < data.length) {
+					Channel_UpdateUserPrefix(data[ii], channel, status, data[3][i]);
+					ii++;
+				}
+			}
+		}
+		writeToLog(`[IRC] 模式变更: ${text}`);
+	});
+	Commands.set("NICK", function (nick, data) {
+		if (!data || data.length < 3) return;
+		let newnick = data[2].substring(1);
+		if (nick == nickname) nickname = newnick;
+		channelMap.forEach(function (channel, name) {
+			if (Channel_RenameUser(nick, newnick, channel)) {
+				if (newnick == nickname) {
+					writeToScreen("var(--clr-green)", `你现在的新昵称是 ${newnick}`, channel, "*");
+				} else {
+					writeToScreen("var(--clr-green)", `${nick} 更名为 ${newnick}`, channel, "*");
+				}
+			}
+		});
+		writeToLog(`[IRC] 昵称变更: ${nick} -> ${newnick}`);
+	});
+	Commands.set("PART", function (nick, data) {
+		if (!data || data.length < 3) return;
+		if (ignoredUsers.has(nick.toLowerCase())) return; // 忽略用户
+		
+		if (data[0].indexOf(":" + nickname + "!") != 0) {
+			let channel = channelMap.get(data[2]);
+			if (!channel) return;
+			if (Channel_RemoveUser(nick, channel)) {
+				writeToScreen("var(--clr-green)", `${nick} 离开频道`, channel, "*");
+			}
+			return;
+		}
+		Channel_Destroy(data[2]);
+		writeToLog(`[IRC] 离开频道: ${data[2]}`);
+	});
+	Commands.set("TOPIC", function (nick, data) {
+		if (!data || data.length < 4) return;
+		let channel = channelMap.get(data[2]);
+		if (!channel || !channel.topic) return;
+		text = data[3].substring(1);
+		for (let i = 4; i < data.length; i++) {
+			text += " " + data[i];
+		}
+		channel.topic.innerHTML = HTML_escape(text || "no channeltopic available");
+		writeToScreen("var(--clr-green)", `${nick} 设置主题为: ${text}`, channel, "*");
+		writeToLog(`[IRC] 主题变更: ${data[2]} - ${text}`);
+	});
+	Commands.set("QUIT", function (nick, data) {
+		if (ignoredUsers.has(nick.toLowerCase())) return; // 忽略用户
+		
+		channelMap.forEach(function (channel, name) {
+			if (Channel_RemoveUser(nick, channel)) {
+				writeToScreen("var(--clr-blue)", `${nick} 退出IRC`, channel, "*");
+			}
+		});
+		writeToLog(`[IRC] 用户退出: ${nick}`);
+	});
+	Commands.set("PRIVMSG", function (nick, data) {
+		if (!data || data.length < 4) return;
+		if (ignoredUsers.has(nick.toLowerCase())) {
+			writeToLog(`[IGNORED] 忽略 ${nick} 的消息`);
+			return; // 忽略用户
+		}
+		
+		let channel = channelMap.get(data[2]);
+		let isPrivate = false;
+		if (!channel && data[2] === nickname) {
+			// 私聊消息
+			channel = channelMap.get(nick);
+			if (!channel) {
+				channel = new Tab_Create(nick, `Private chat with ${nick}`, false);
+			}
+			isPrivate = true;
+		} else if (!channel) {
+			channel = statusChannel;
+		}
+		
+		text = data[3].substring(1);
+		for (let i = 4; i < data.length; i++) {
+			text += " " + data[i];
+		}
+		nick = data[0].substring(1).split("!")[0];
+		if (text[0] == "\x01") {
+			if (text.indexOf("\x01ACTION ") == 0) {
+				writeToScreen("var(--clr-red)", `${isPrivate ? '' : '* '}${nick} ${text.substring(8)}`, channel, isPrivate ? nick : "*");
+			} else {
+				writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*");
+			}
+		} else {
+			writeToScreen("var(--clr-font)", text, channel, nick);
+		}
+	});
+	Commands.set("NOTICE", function (nick, data) {
+		if (!data || data.length < 4) return;
+		let channel = channelMap.get(data[2]);
+		if (!channel) channel = statusChannel;
+		text = data[3].substring(1);
+		for (let i = 4; i < data.length; i++) {
+			text += " " + data[i];
+		}
+		nick = data[0].substring(1).split("!")[0];
+		writeToScreen("var(--clr-red)", `通知 ${nick}: ${text}`, channel, "-");
+		writeToLog(`[NOTICE] ${nick}: ${text}`);
+	});
+
+	function process(rawData) {
+		if (!rawData) return;
+		let data = rawData.split(" ");
+		if (!data || data.length < 2) {
+			writeToLog(`[DEBUG] 无效数据: ${rawData}`);
+			return;
+		}
+		let nick = data[0].substring(1).split("!")[0];
+		let command = data[1].toUpperCase();
+		let fn = Commands.get(command);
+		if (fn) {
+			fn(nick, data);
+			return;
+		}
+		if (!isNaN(parseInt(data[1]))) {
+			text = data[1];
+			for (let i = 3; i < data.length; i++) {
+				text += " " + data[i];
+			}
+			writeToScreen("var(--clr-gold)", text, statusChannel, "");
+			writeToLog(`[SERVER] ${data[1]}: ${text}`);
+			return;
+		}
+		if (data[0] == "PING") {
+			pongResponse = rawData.replace("PING", "PONG");
+			writeToScreen("var(--clr-brown)", pongResponse, statusChannel, "");
+			doSend(pongResponse);
+			writeToLog(`[PING/PONG] ${pongResponse}`);
+			return;
+		}
+		if (data[0] == "ERROR") {
+			writeToScreen("var(--clr-font)", rawData, statusChannel, "");
+			writeToLog(`[ERROR] ${rawData}`);
+			return;
+		}
+		console.log("DEBUG:", rawData);
+		writeToLog(`[DEBUG] ${rawData}`);
+	}
+</script>
+
+</html>
