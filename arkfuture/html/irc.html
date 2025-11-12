@@ -550,7 +550,7 @@ ul {
 	</div>
 	<div class="settings-group">
 		<label>频道:</label>
-		<input type="text" id="channelInput" value="#abjects" placeholder="#channel">
+		<input type="text" id="channelInput" value="" placeholder="#channel">
 	</div>
 	<div class="settings-group">
 		<label title="启用后会在断开时自动重连">
@@ -1312,7 +1312,7 @@ function onOpen(evt)
 	}
 	
 	// 发送IRC认证
-	doSend("user websocket * * :Abjects WebSocket User");
+	doSend("user websocket * * :WebSocket User");
 	doSend("nick " + nickname);
 }
 
@@ -1438,12 +1438,12 @@ Commands.set("366", function (nick, data) {
 	writeToLog(`[IRC] 用户列表加载完成`);
 });
 Commands.set("432", function (nick, data) {
-	nickname = prompt("ERROR: Nickname is unavailable: Illegal characters\r\nPlease enter your nickname", "AbjectsGuest" + Math.floor((Math.random() * 10000) + 1).toString());
+	nickname = prompt("ERROR: Nickname is unavailable: Illegal characters\r\nPlease enter your nickname", "");
 	doSend("nick " + nickname);	
 	writeToLog(`[IRC] 昵称错误，重新输入: ${nickname}`);
 });
 Commands.set("433", function (nick, data) {
-	nickname = prompt("ERROR: Nickname is already in use.\r\nPlease enter your nickname", "AbjectsGuest" + Math.floor((Math.random() * 10000) + 1).toString());
+	nickname = prompt("ERROR: Nickname is already in use.\r\nPlease enter your nickname", "");
 	doSend("nick " + nickname);	
 	writeToLog(`[IRC] 昵称冲突，新昵称: ${nickname}`);
 });
