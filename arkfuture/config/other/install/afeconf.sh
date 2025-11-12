@@ -21,11 +21,11 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://XXX/inspircd.conf
+curl -L -O --anyauth http://XXX/inspircd.conf
 openssl req -x509 -newkey rsa:4096 -sha256 -days 10 -nodes -keyout key.pem -out cert.pem -subj "/CN=irc.arkfuture.test" -addext "extendedKeyUsage = serverAuth"
 cd /etc/inspircd/conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://XXX/modules.conf
-curl -L -O --anyauth --user ##修改为用户名##:##修改为密码## http://XXX/opers.conf
+curl -L -O --anyauth http://XXX/modules.conf
+curl -L -O --anyauth http://XXX/opers.conf
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/conf/links.conf
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/conf/helpop.conf
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/conf/ascii.conf
