@@ -45,3 +45,4 @@ head -n 1 /etc/inspircd/inspircd.conf
 sleep 2
 ###### 说明
 echo "inspircd配置文件下载完成"
+rm -rf ./afeconf.sh
