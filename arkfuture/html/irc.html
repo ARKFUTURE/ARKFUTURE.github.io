@@ -792,12 +792,6 @@
 		// 重置重连计数器
 		reconnectAttempts = 0;
 
-		// SSL警告
-		if (allowInvalidSSL && wsUrl.startsWith('wss://')) {
-			showSSLWarning(wsUrl);
-			writeToLog("[SSL] 提醒用户处理证书问题");
-		}
-
 		// 禁用输入
 		wsUrlInput.disabled = true;
 		nickInput.disabled = true;
@@ -1104,21 +1098,22 @@
 	}
 
 	function writeToScreen(color, message, channel) {
-		if (!channel || !channel.content) return;
-		let pre = document.createElement("p");
-		pre.style.color = color;
-		pre.innerHTML = linkify(message || "");
-		const now = new Date();
-		const utcTime = now.toISOString().substr(11, 8);
-		pre.textContent = `[${utcTime}] ${message || ""}`;
-		let output = channel.content;
-		if (output) {
-			output.appendChild(pre);
-			while (output.children.length > 200) {
-				output.removeChild(output.children[0]);
-			}
-			output.scrollTop = output.scrollHeight;
-		}
+    if (!channel || !channel.content) return;
+    let pre = document.createElement("p");
+    pre.style.color = color;
+    const now = new Date();
+    const utcTime = now.toISOString().substr(11, 8);
+    const messageWithLink = linkify(message || "");
+    pre.innerHTML = `[${utcTime}] ${messageWithLink}`;
+    
+    let output = channel.content;
+    if (output) {
+        output.appendChild(pre);
+        while (output.children.length > 200) {
+            output.removeChild(output.children[0]);
+        }
+        output.scrollTop = output.scrollHeight;
+    }
 	}
 
 	function linkify(text) {
@@ -1210,7 +1205,11 @@
 
 		} catch (e) {
 			writeToLog(`[ERROR] WebSocket创建失败: ${e.message}`);
-			onDisconnect();
+			onDisconnect();	
+			// 判断是否是SSL错误并显示帮助
+			if (wsUrl && wsUrl.startsWith('wss://')) {
+				showSSLWarning(wsUrl);
+			}
 			alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
 		}
 	}
