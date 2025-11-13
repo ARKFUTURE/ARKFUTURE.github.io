@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head>
+<html lang="zh-CN">
+<head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>IRC Web Client</title>
@@ -117,10 +118,10 @@
 			overflow: hidden;
 		}
 
-		/* 主容器 */
+		/* 主容器 - 使用flexbox确保兼容性 */
 		.main {
-			display: grid;
-			grid-template-rows: auto auto 1fr;
+			display: flex;
+			flex-direction: column;
 			height: 100vh;
 			width: 100%;
 		}
@@ -131,6 +132,7 @@
 			padding: var(--space-md) var(--space-lg);
 			border-bottom: 1px solid var(--border-color);
 			box-shadow: var(--shadow-sm);
+			flex: 0 0 auto;
 		}
 
 		.header h1 {
@@ -148,6 +150,7 @@
 			gap: var(--space-md);
 			overflow-x: auto;
 			border-bottom: 1px solid var(--border-color);
+			flex: 0 0 auto;
 			min-height: 60px;
 		}
 
@@ -413,12 +416,11 @@
 			font-style: italic;
 		}
 
-		/* 聊天容器 - 修改为三栏布局 */
+		/* 聊天容器 - 修复为三栏flex布局 */
 		.chat-container {
 			flex: 1 1 auto;
-			display: grid;
-			grid-template-columns: 220px 1fr 200px;
-			grid-template-rows: auto 1fr auto;
+			display: flex;
+			flex-direction: row;
 			overflow: hidden;
 			position: relative;
 			min-height: 0;
@@ -426,8 +428,7 @@
 
 		/* 频道列表 - 左侧边栏 */
 		.channels {
-			grid-column: 1;
-			grid-row: 1 / -1;
+			flex: 0 0 220px;
 			background-color: var(--bg-secondary);
 			border-right: 1px solid var(--border-color);
 			display: flex;
@@ -483,10 +484,9 @@
 			transform: scale(1.1);
 		}
 
-		/* 频道内容区域 */
+		/* 频道内容区域 - 中间主区域 */
 		.channelcontents-wrapper {
-			grid-column: 2;
-			grid-row: 1 / -1;
+			flex: 1 1 auto;
 			display: none;
 			flex-direction: column;
 			min-height: 0;
@@ -525,9 +525,6 @@
 			flex-direction: column;
 			background-color: var(--bg-tertiary);
 			overflow: hidden;
-			border: 1px solid var(--border-color);
-			border-radius: var(--border-radius);
-			margin: var(--space-sm);
 		}
 
 		.channelcontent nav h3 {
@@ -551,8 +548,7 @@
 
 		/* 用户列表 - 右侧边栏 */
 		.userlist-container {
-			grid-column: 3;
-			grid-row: 1 / -1;
+			flex: 0 0 200px;
 			background-color: var(--bg-secondary);
 			border-left: 1px solid var(--border-color);
 			display: none;
@@ -571,6 +567,7 @@
 			border-bottom: 1px solid var(--border-color);
 			flex: 0 0 auto;
 			background-color: var(--bg-secondary);
+			color: var(--text-primary);
 		}
 
 		ul {
@@ -620,8 +617,16 @@
 			font-size: var(--font-size-sm);
 		}
 
+		/* 输入框 - 固定在底部 */
+		.input-container {
+			flex: 0 0 auto;
+			padding: var(--space-sm) var(--space-lg);
+			background-color: var(--bg-secondary);
+			border-top: 1px solid var(--border-color);
+		}
+
 		#input {
-			grid-column: 1 / -1;
+			width: 100%;
 			padding: var(--space-md);
 			background-color: var(--bg-tertiary);
 			color: var(--text-primary);
@@ -629,10 +634,6 @@
 			border-radius: var(--border-radius);
 			font-size: var(--font-size-base);
 			transition: var(--transition-fast);
-			margin: var(--space-sm);
-			width: auto;
-			position: static;
-			display: block;
 		}
 
 		#input:focus {
@@ -655,8 +656,11 @@
 			color: var(--text-tertiary);
 			text-align: center;
 			padding: var(--space-lg);
-			grid-column: 1 / -1;
-			grid-row: 1 / -1;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
 		}
 
 		.empty-state h3 {
@@ -690,36 +694,19 @@
 			background: var(--accent-hover);
 		}
 
-		/* 响应式设计 */
+		/* 响应式设计 - 修复移动端布局 */
 		@media (max-width: 1024px) {
-			.chat-container {
-				grid-template-columns: 180px 1fr;
-			}
-			
 			.userlist-container {
 				display: none !important;
-			}
-			
-			.channelcontent.active nav {
-				margin: var(--space-xs);
 			}
 		}
 
 		@media (max-width: 768px) {
-			.main {
-				grid-template-rows: auto 1fr;
-			}
-			
 			.settings-bar {
-				order: 2;
 				flex-wrap: wrap;
 				padding: var(--space-sm);
 				gap: var(--space-sm);
 				min-height: auto;
-				position: sticky;
-				bottom: 0;
-				z-index: 50;
-				box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
 			}
 			
 			.settings-group {
@@ -738,37 +725,8 @@
 				margin-top: var(--space-xs);
 			}
 			
-			.chat-container {
-				grid-template-columns: 1fr;
-				grid-template-rows: 1fr auto;
-			}
-			
 			.channels {
-				grid-column: 1;
-				grid-row: 2;
-				flex-direction: row;
-				overflow-x: auto;
-				overflow-y: hidden;
-				border-right: none;
-				border-top: 1px solid var(--border-color);
-				padding: var(--space-xs);
-				height: 60px;
-			}
-			
-			.channel {
-				min-width: 120px;
-				justify-content: center;
-			}
-			
-			.channelcontents-wrapper {
-				grid-column: 1;
-				grid-row: 1;
-			}
-			
-			.ssl-warning {
-				max-width: calc(100vw - var(--space-lg) * 2);
-				left: var(--space-lg);
-				right: var(--space-lg);
+				flex: 0 0 180px;
 			}
 			
 			.log-container {
@@ -777,16 +735,43 @@
 		}
 
 		@media (max-width: 480px) {
+			.channels {
+				flex: 0 0 100%;
+				flex-direction: row;
+				overflow-x: auto;
+				overflow-y: hidden;
+				border-right: none;
+				border-top: 1px solid var(--border-color);
+				padding: var(--space-xs);
+				height: 60px;
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				z-index: 10;
+			}
+			
+			.channel {
+				min-width: 120px;
+				justify-content: center;
+			}
+			
+			.chat-container {
+				padding-bottom: 60px; /* 为频道栏留出空间 */
+			}
+			
 			.settings-group {
 				flex: 1 1 100%;
 			}
 			
-			.header {
-				padding: var(--space-sm) var(--space-md);
+			.connection-status span:last-child {
+				display: none;
 			}
 			
-			.header h1 {
-				font-size: var(--font-size-lg);
+			.ssl-warning {
+				max-width: calc(100vw - var(--space-lg) * 2);
+				left: var(--space-lg);
+				right: var(--space-lg);
 			}
 		}
 	</style>
@@ -846,18 +831,24 @@
 
 		<div class="chat-container">
 			<div class="channels" id="channelsContainer"></div>
+			
 			<div class="channelcontents-wrapper hidden" id="contentsWrapper">
 				<div class="channelcontents" id="channelContents"></div>
 			</div>
+
 			<div class="userlist-container" id="userlistContainer">
 				<div class="userlist-header">在线用户</div>
 				<ul id="globalUserList"></ul>
 			</div>
+
 			<div class="empty-state" id="emptyState">
 				<h3>欢迎使用 IRC 客户端</h3>
 				<p>请先填写服务器信息并点击连接</p>
 			</div>
-			<input type="text" name="input" id="input" placeholder="输入消息..." style="display: none;" onkeydown="onKeyPress(event)">
+		</div>
+
+		<div class="input-container" style="display: none;" id="inputContainer">
+			<input type="text" name="input" id="input" placeholder="输入消息..." onkeydown="onKeyPress(event)">
 		</div>
 	</div>
 
@@ -898,6 +889,7 @@
 				contentsWrapper: document.getElementById("contentsWrapper"),
 				emptyState: document.getElementById("emptyState"),
 				input: document.getElementById("input"),
+				inputContainer: document.getElementById("inputContainer"),
 				wsUrlInput: document.getElementById('wsUrl'),
 				nickInput: document.getElementById('nickInput'),
 				channelInput: document.getElementById('channelInput'),
@@ -909,7 +901,8 @@
 				logOutput: document.getElementById('logOutput'),
 				sslWarning: document.getElementById('sslWarning'),
 				sslLink: document.getElementById('sslLink'),
-				caption: document.getElementById("caption")
+				caption: document.getElementById("caption"),
+				userlistContainer: document.getElementById('userlistContainer')
 			};
 
 			// 从URL获取频道
@@ -1057,7 +1050,7 @@
 			DOM.contentsWrapper.classList.remove('hidden');
 			DOM.contentsWrapper.classList.add('visible');
 			if (DOM.emptyState) DOM.emptyState.style.display = 'none';
-			if (DOM.input) DOM.input.style.display = 'block';
+			if (DOM.inputContainer) DOM.inputContainer.style.display = 'block';
 
 			AppState.statusChannel = new ChannelTab("Status", "Status Window", false);
 			writeToLog(`[系统] 正在连接: ${AppState.wsUrl}`);
@@ -1085,9 +1078,10 @@
 			DOM.contentsWrapper.classList.remove('visible');
 			DOM.contentsWrapper.classList.add('hidden');
 			if (DOM.emptyState) DOM.emptyState.style.display = 'flex';
-			if (DOM.input) DOM.input.style.display = 'none';
+			if (DOM.inputContainer) DOM.inputContainer.style.display = 'none';
+			if (DOM.userlistContainer) DOM.userlistContainer.classList.remove('visible');
 
-			writeToScreen("var(--clr-font)", "DISCONNECTED", AppState.statusChannel, "");
+			displayMessage("var(--text-primary)", "DISCONNECTED", AppState.statusChannel, "");
 			writeToLog(`[系统] 已断开连接`);
 
 			attemptReconnect();
@@ -1117,24 +1111,43 @@
 		}
 
 		function showMessage(text, type = 'info') {
-			// 简单的消息提示实现
 			const message = document.createElement('div');
 			message.textContent = text;
+			const bgColor = type === 'error' ? 'var(--error)' : type === 'warning' ? 'var(--warning)' : 'var(--info)';
+			const textColor = type === 'warning' ? '#000' : 'white';
 			message.style.cssText = `
 				position: fixed;
 				top: 20px;
 				left: 50%;
 				transform: translateX(-50%);
 				padding: 12px 24px;
-				background: ${type === 'error' ? 'var(--error)' : type === 'warning' ? 'var(--warning)' : 'var(--info)'};
-				color: ${type === 'warning' ? '#000' : 'white'};
+				background: ${bgColor};
+				color: ${textColor};
 				border-radius: var(--border-radius);
 				box-shadow: var(--shadow-lg);
 				z-index: 2000;
 				animation: slideDown 0.3s ease;
+				max-width: 80%;
+				word-wrap: break-word;
 			`;
+			
+			// 添加动画样式
+			if (!document.getElementById('messageAnimations')) {
+				const style = document.createElement('style');
+				style.id = 'messageAnimations';
+				style.textContent = `
+					@keyframes slideDown {
+						from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+						to { transform: translateX(-50%) translateY(0); opacity: 1; }
+					}
+				`;
+				document.head.appendChild(style);
+			}
+			
 			document.body.appendChild(message);
-			setTimeout(() => message.remove(), CONFIG.MESSAGE_TIMEOUT);
+			setTimeout(() => {
+				message.remove();
+			}, CONFIG.MESSAGE_TIMEOUT);
 		}
 
 		// 键盘事件
@@ -1306,7 +1319,7 @@
 		}
 
 		function removeUserFromChannel(nick, channel) {
-			if (!nick || !channel?.userlist) return;
+			if (!nick || !channel?.userlist) return false;
 			for (let i = 0; i < channel.userlist.children.length; i++) {
 				const userItem = channel.userlist.children[i];
 				if (!userItem?.children[1]) continue;
@@ -1645,7 +1658,9 @@
 				writeToLog(`[IRC] 用户列表加载完成`);
 				
 				// 显示用户列表面板
-				document.getElementById('userlistContainer')?.classList.add('visible');
+				if (DOM.userlistContainer) {
+					DOM.userlistContainer.classList.add('visible');
+				}
 			}],
 			["432", (nick, data) => {
 				const newNick = prompt("错误: 昵称包含非法字符\n请输入新的昵称", "");
