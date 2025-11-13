@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>IRC Web Client</title>
+	<title>IRC Web Client - 现代版</title>
 	<style>
+		/* 基础变量 */
 		:root {
 			--clr-background: #F5F7FA;
 			--clr-background2: #E4E7F4;
@@ -19,17 +19,28 @@
 			--clr-purple: #7C3AED;
 			--clr-blue: #2563EB;
 			--clr-accent: #4F46E5;
+			--clr-accent2: #818CF8;
 			--clr-border: #9CA3AF;
 			--clr-warning: #F59E0B;
 			--clr-success: #10B981;
-			--clr-highlight: #FEF3C7; /* 高亮背景色 */
+			--clr-info: #0891B2;
+			--clr-user-online: #10B981;
+			--clr-user-away: #F59E0B;
 			--spacing-sm: 8px;
 			--spacing-md: 12px;
 			--spacing-lg: 16px;
-			--border-radius: 8px;
-			--transition: all 0.2s ease;
+			--spacing-xl: 20px;
+			--border-radius: 12px;
+			--border-radius-sm: 8px;
+			--transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+			--shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+			--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+			--shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+			--opacity-50: 0.5;
+			--glass-blur: blur(12px);
 		}
 
+		/* 深色主题 */
 		@media (prefers-color-scheme: dark) {
 			:root {
 				--clr-background: #111827;
@@ -44,67 +55,35 @@
 				--clr-purple: #C4B5FD;
 				--clr-blue: #93C5FD;
 				--clr-accent: #818CF8;
+				--clr-accent2: #A5B4FC;
 				--clr-border: #4B5563;
 				--clr-warning: #FCD34D;
 				--clr-success: #6EE7B7;
-				--clr-highlight: #4A3C08; /* 暗色模式高亮 */
+				--clr-info: #67E8F9;
+				--clr-user-online: #6EE7B7;
+				--clr-user-away: #FCD34D;
+				--shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+				--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+				--shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 			}
-		}
-
-		/* 手动主题覆盖 */
-		html[data-theme="light"] {
-			--clr-background: #F5F7FA;
-			--clr-background2: #E4E7F4;
-			--clr-background3: #FFFFFF;
-			--clr-background4: #D1D5DB;
-			--clr-font: #1F2937;
-			--clr-brown: #92400E;
-			--clr-green: #065F46;
-			--clr-gold: #D97706;
-			--clr-red: #DC2626;
-			--clr-purple: #7C3AED;
-			--clr-blue: #2563EB;
-			--clr-accent: #4F46E5;
-			--clr-border: #9CA3AF;
-			--clr-warning: #F59E0B;
-			--clr-success: #10B981;
-			--clr-highlight: #FEF3C7;
-		}
-
-		html[data-theme="dark"] {
-			--clr-background: #111827;
-			--clr-background2: #1F2937;
-			--clr-background3: #1F2937;
-			--clr-background4: #4B5563;
-			--clr-font: #F9FAFB;
-			--clr-brown: #FDE68A;
-			--clr-green: #6EE7B7;
-			--clr-gold: #FBBF24;
-			--clr-red: #FCA5A5;
-			--clr-purple: #C4B5FD;
-			--clr-blue: #93C5FD;
-			--clr-accent: #818CF8;
-			--clr-border: #4B5563;
-			--clr-warning: #FCD34D;
-			--clr-success: #6EE7B7;
-			--clr-highlight: #4A3C08;
 		}
 
 		* {
 			box-sizing: border-box;
 		}
 
-		html,
-		body {
-			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+		html, body {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 			margin: 0;
 			padding: 0;
 			height: 100%;
-			background-color: var(--clr-background);
+			background: linear-gradient(135deg, var(--clr-background), var(--clr-background2));
 			color: var(--clr-font);
 			font-size: 14px;
-			line-height: 1.5;
+			line-height: 1.6;
 			overflow: hidden;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
 		}
 
 		.main {
@@ -115,39 +94,35 @@
 		}
 
 		.header {
-			background: linear-gradient(90deg, var(--clr-background2), var(--clr-background));
+			background: linear-gradient(90deg, var(--clr-accent), var(--clr-purple));
 			padding: var(--spacing-md) var(--spacing-lg);
 			flex: 0 0 auto;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
+			backdrop-filter: var(--glass-blur);
+			-webkit-backdrop-filter: var(--glass-blur);
+			box-shadow: var(--shadow-md);
+			z-index: 10;
+			position: relative;
 		}
 
 		.header h1 {
 			margin: 0;
-			font-size: 18px;
+			font-size: 20px;
 			font-weight: 700;
-		}
-
-		/* 主题切换按钮 */
-		.theme-toggle-btn {
-			background: var(--clr-accent);
 			color: white;
-			border: none;
-			padding: 6px 12px;
-			border-radius: var(--border-radius);
-			cursor: pointer;
-			font-size: 13px;
-			transition: var(--transition);
+			letter-spacing: -0.5px;
+			display: flex;
+			align-items: center;
+			gap: var(--spacing-sm);
 		}
 
-		.theme-toggle-btn:hover {
-			background: var(--clr-purple);
+		.header h1::before {
+			content: "#";
+			color: rgba(255, 255, 255, 0.7);
 		}
 
 		.settings-bar {
 			flex: 0 0 auto;
-			background-color: var(--clr-background2);
+			background: var(--clr-background3);
 			border-bottom: 1px solid var(--clr-border);
 			display: flex;
 			align-items: center;
@@ -155,14 +130,18 @@
 			gap: var(--spacing-sm);
 			overflow-x: auto;
 			flex-wrap: nowrap;
-			min-height: 50px;
+			min-height: 56px;
+			backdrop-filter: var(--glass-blur);
+			-webkit-backdrop-filter: var(--glass-blur);
+			box-shadow: var(--shadow-sm);
 		}
 
 		.settings-group {
 			display: flex;
 			align-items: center;
-			gap: 6px;
+			gap: 8px;
 			flex: 0 0 auto;
+			position: relative;
 		}
 
 		.settings-group label {
@@ -170,36 +149,45 @@
 			font-weight: 600;
 			color: var(--clr-font);
 			white-space: nowrap;
+			opacity: 0.8;
 		}
 
 		.settings-group input[type="text"] {
-			padding: 6px 10px;
-			background-color: var(--clr-background3);
+			padding: 8px 12px;
+			background: var(--clr-background);
 			color: var(--clr-font);
 			border: 1px solid var(--clr-border);
-			border-radius: var(--border-radius);
+			border-radius: var(--border-radius-sm);
 			font-size: 13px;
-			min-width: 120px;
+			min-width: 140px;
 			transition: var(--transition);
+			box-shadow: var(--shadow-sm);
+		}
+
+		.settings-group input[type="text"]:focus {
+			outline: none;
+			border-color: var(--clr-accent);
+			box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+			transform: translateY(-1px);
 		}
 
 		.settings-group input[type="checkbox"] {
-			width: 16px;
-			height: 16px;
+			width: 18px;
+			height: 18px;
 			cursor: pointer;
 			margin: 0;
+			accent-color: var(--clr-accent);
+			transition: var(--transition);
 		}
 
-		.settings-group input:focus {
-			outline: none;
-			border-color: var(--clr-accent);
-			box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+		.settings-group input[type="checkbox"]:hover {
+			transform: scale(1.1);
 		}
 
 		.btn {
-			padding: 6px 12px;
+			padding: 8px 14px;
 			border: none;
-			border-radius: var(--border-radius);
+			border-radius: var(--border-radius-sm);
 			cursor: pointer;
 			font-weight: 600;
 			font-size: 13px;
@@ -208,6 +196,37 @@
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
+			gap: 6px;
+			box-shadow: var(--shadow-sm);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.btn:hover {
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-md);
+		}
+
+		.btn:active {
+			transform: translateY(0);
+		}
+
+		.btn::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 0;
+			height: 0;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.3);
+			transform: translate(-50%, -50%);
+			transition: width 0.6s, height 0.6s;
+		}
+
+		.btn:active::after {
+			width: 300px;
+			height: 300px;
 		}
 
 		.connect-btn {
@@ -215,16 +234,12 @@
 			color: white;
 		}
 
-		.connect-btn:hover:not(:disabled) {
-			transform: translateY(-1px);
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-		}
-
 		.connect-btn:disabled {
 			background: var(--clr-background4);
 			cursor: not-allowed;
 			transform: none;
 			box-shadow: none;
+			opacity: 0.6;
 		}
 
 		.connect-btn.disconnect {
@@ -232,66 +247,96 @@
 		}
 
 		.log-toggle-btn {
-			background-color: var(--clr-background4);
+			background: var(--clr-background4);
 			color: var(--clr-font);
 			border: 1px solid var(--clr-border);
 		}
 
 		.log-toggle-btn:hover {
-			background-color: var(--clr-accent);
+			background: var(--clr-accent);
 			color: white;
+			border-color: var(--clr-accent);
 		}
 
 		.ssl-help-btn {
 			background: linear-gradient(135deg, var(--clr-warning), #F59E0B);
 			color: #000;
-			padding: 6px 10px;
+			padding: 8px 12px;
 		}
 
 		.ssl-help-btn:hover {
-			transform: translateY(-1px);
-			box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+			background: linear-gradient(135deg, #F59E0B, #D97706);
+		}
+
+		.theme-toggle-btn {
+			background: var(--clr-background4);
+			color: var(--clr-font);
+			border: 1px solid var(--clr-border);
+			padding: 8px;
+			border-radius: 50%;
+			width: 36px;
+			height: 36px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.theme-toggle-btn:hover {
+			background: var(--clr-accent);
+			color: white;
+			transform: rotate(180deg);
 		}
 
 		.connection-status {
 			display: inline-flex;
 			align-items: center;
-			gap: 6px;
-			padding: 4px 10px;
-			background-color: var(--clr-background3);
+			gap: 8px;
+			padding: 6px 12px;
+			background: var(--clr-background3);
 			border: 1px solid var(--clr-border);
-			border-radius: var(--border-radius);
-			font-size: 11px;
+			border-radius: 20px;
+			font-size: 12px;
 			font-weight: 500;
 			margin-left: auto;
 			flex: 0 0 auto;
 			transition: var(--transition);
+			box-shadow: var(--shadow-sm);
 		}
 
 		.connection-status.connected {
 			border-color: var(--clr-success);
-			background-color: rgba(16, 185, 129, 0.1);
+			background: rgba(16, 185, 129, 0.1);
+			box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
 		}
 
 		.connection-status.disconnected {
 			border-color: var(--clr-red);
-			background-color: rgba(220, 38, 38, 0.1);
+			background: rgba(220, 38, 38, 0.1);
+			box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
 		}
 
 		.connection-status .indicator {
 			width: 8px;
 			height: 8px;
 			border-radius: 50%;
-			background-color: var(--clr-border);
+			background: var(--clr-border);
 			transition: var(--transition);
+			position: relative;
 		}
 
 		.connection-status.connected .indicator {
-			background-color: var(--clr-success);
+			background: var(--clr-success);
+			animation: pulse 2s infinite;
 		}
 
 		.connection-status.disconnected .indicator {
-			background-color: var(--clr-red);
+			background: var(--clr-red);
+		}
+
+		@keyframes pulse {
+			0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+			70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+			100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 		}
 
 		.ssl-warning {
@@ -299,19 +344,27 @@
 			position: absolute;
 			bottom: 20px;
 			right: 20px;
-			max-width: 380px;
+			max-width: 420px;
 			background: linear-gradient(135deg, var(--clr-warning), #F59E0B);
 			color: #000;
 			padding: var(--spacing-md);
 			border-radius: var(--border-radius);
 			font-size: 13px;
 			z-index: 200;
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-			line-height: 1.4;
+			box-shadow: var(--shadow-lg);
+			line-height: 1.5;
+			backdrop-filter: var(--glass-blur);
+			-webkit-backdrop-filter: var(--glass-blur);
+			border: 1px solid rgba(0, 0, 0, 0.1);
+			transform: translateY(100px);
+			opacity: 0;
+			transition: var(--transition);
 		}
 
 		.ssl-warning.visible {
 			display: block;
+			transform: translateY(0);
+			opacity: 1;
 		}
 
 		.ssl-warning a {
@@ -319,14 +372,106 @@
 			font-weight: 600;
 			text-decoration: underline;
 			cursor: pointer;
+			transition: var(--transition);
+		}
+
+		.ssl-warning a:hover {
+			opacity: 0.8;
 		}
 
 		.ssl-warning code {
 			background: rgba(0, 0, 0, 0.1);
-			padding: 2px 4px;
-			border-radius: 3px;
-			font-family: monospace;
+			padding: 2px 6px;
+			border-radius: 4px;
+			font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+			font-weight: 600;
 		}
+
+		.ssl-warning .close {
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			cursor: pointer;
+			font-size: 18px;
+			line-height: 1;
+			opacity: 0.7;
+		}
+
+		.ssl-warning .close:hover {
+			opacity: 1;
+		}
+
+		.log-container {
+			position: absolute;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.85);
+			border-bottom: 2px solid var(--clr-accent);
+			display: none;
+			flex-direction: column;
+			z-index: 100;
+			box-shadow: var(--shadow-lg);
+			backdrop-filter: var(--glass-blur);
+			-webkit-backdrop-filter: var(--glass-blur);
+		}
+
+		.log-container.visible {
+			display: flex;
+		}
+
+		.log-header {
+			flex: 0 0 auto;
+			padding: var(--spacing-sm) var(--spacing-md);
+			background: rgba(31, 41, 55, 0.7);
+			border-bottom: 1px solid var(--clr-border);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			font-weight: 600;
+			font-size: 13px;
+			min-height: 40px;
+			color: var(--clr-font);
+		}
+
+		.log-controls {
+			display: flex;
+			gap: 8px;
+		}
+
+		.log-controls button {
+			padding: 6px 12px;
+			background: var(--clr-background4);
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+			font-size: 11px;
+			transition: var(--transition);
+			color: var(--clr-font);
+		}
+
+		.log-controls button:hover {
+			background: var(--clr-accent);
+			color: white;
+			transform: translateY(-1px);
+		}
+
+		#logOutput {
+			flex: 1 1 auto;
+			overflow-y: auto;
+			padding: var(--spacing-sm);
+			font-size: 11px;
+			font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+			background: rgba(17, 24, 39, 0.9);
+			color: #F9FAFB;
+			white-space: pre-wrap;
+			word-wrap: break-word;
+			line-height: 1.4;
+		}
+
+		#logOutput .log-error { color: #FCA5A5; }
+		#logOutput .log-warn { color: #FCD34D; }
+		#logOutput .log-info { color: #93C5FD; }
+		#logOutput .log-success { color: #6EE7B7; }
+		#logOutput .log-debug { color: #9CA3AF; }
 
 		.chat-container {
 			flex: 1 1 auto;
@@ -339,19 +484,24 @@
 
 		.channels {
 			flex: 0 0 auto;
-			background-color: var(--clr-background2);
+			background: var(--clr-background3);
 			border-bottom: 1px solid var(--clr-border);
 			display: flex;
 			align-items: center;
 			padding: var(--spacing-sm) 10px;
-			gap: 6px;
+			gap: 8px;
 			overflow-x: auto;
 			flex-wrap: nowrap;
+			box-shadow: var(--shadow-sm);
+		}
+
+		.channels::-webkit-scrollbar {
+			height: 4px;
 		}
 
 		.channel {
-			padding: 6px 12px;
-			background-color: var(--clr-background3);
+			padding: 8px 14px;
+			background: var(--clr-background2);
 			border: 1px solid var(--clr-border);
 			border-radius: 20px;
 			cursor: pointer;
@@ -360,43 +510,36 @@
 			transition: var(--transition);
 			display: inline-flex;
 			align-items: center;
-			gap: 6px;
+			gap: 8px;
 			white-space: nowrap;
-			position: relative;
+			min-width: fit-content;
 		}
 
 		.channel:hover {
-			background-color: var(--clr-background4);
+			background: var(--clr-background4);
+			transform: translateY(-1px);
 		}
 
 		.channel.active {
 			background: linear-gradient(135deg, var(--clr-accent), var(--clr-purple));
 			color: white;
+			border-color: transparent;
+			box-shadow: var(--shadow-md);
+		}
+
+		.channel.unread {
 			border-color: var(--clr-accent);
+			animation: pulse-border 2s infinite;
 		}
 
-		/* 未读消息徽章 */
-		.channel .unread-badge {
-			position: absolute;
-			top: -4px;
-			right: -4px;
-			background: var(--clr-red);
-			color: white;
-			border-radius: 10px;
-			padding: 2px 6px;
-			font-size: 10px;
-			font-weight: bold;
-			min-width: 16px;
-			text-align: center;
-			display: none;
-		}
-
-		.channel .unread-badge.visible {
-			display: block;
+		@keyframes pulse-border {
+			0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+			70% { box-shadow: 0 0 0 8px rgba(79, 70, 229, 0); }
+			100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
 		}
 
 		.channel button.x {
-			background: none;
+			background: rgba(0, 0, 0, 0.1);
 			border: none;
 			color: inherit;
 			cursor: pointer;
@@ -406,77 +549,31 @@
 			font-size: 14px;
 			transition: var(--transition);
 			line-height: 1;
+			width: 20px;
+			height: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 
 		.channel button.x:hover {
-			background-color: rgba(255, 255, 255, 0.2);
-		}
-
-		.log-container {
-			position: absolute;
-			inset: 0;
-			background-color: var(--clr-background3);
-			border-bottom: 2px solid var(--clr-accent);
-			display: none;
-			flex-direction: column;
-			z-index: 100;
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-		}
-
-		.log-container.visible {
-			display: flex;
-		}
-
-		.log-header {
-			flex: 0 0 auto;
-			padding: var(--spacing-sm) var(--spacing-md);
-			background-color: var(--clr-background2);
-			border-bottom: 1px solid var(--clr-border);
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			font-weight: 600;
-			font-size: 13px;
-			min-height: 35px;
-		}
-
-		.log-controls {
-			display: flex;
-			gap: 6px;
-		}
-
-		.log-controls button {
-			padding: 4px 10px;
-			background-color: var(--clr-background4);
-			border: none;
-			border-radius: 4px;
-			cursor: pointer;
-			font-size: 11px;
-			transition: var(--transition);
-		}
-
-		.log-controls button:hover {
-			background-color: var(--clr-accent);
+			background: rgba(220, 38, 38, 0.8);
 			color: white;
+			transform: scale(1.1);
 		}
 
-		#logOutput {
-			flex: 1 1 auto;
-			overflow-y: auto;
-			padding: var(--spacing-sm);
-			font-size: 11px;
-			font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-			background-color: var(--clr-background3);
-			color: var(--clr-font);
-			white-space: pre-wrap;
-			word-wrap: break-word;
-			line-height: 1.4;
-		}
-
-		#logOutput:empty::before {
-			content: '日志为空...';
-			color: var(--clr-border);
-			font-style: italic;
+		.unread-badge {
+			background: var(--clr-accent);
+			color: white;
+			border-radius: 10px;
+			padding: 2px 6px;
+			font-size: 10px;
+			font-weight: 700;
+			min-width: 18px;
+			text-align: center;
+			position: absolute;
+			top: -8px;
+			right: -8px;
 		}
 
 		.channelcontents-wrapper {
@@ -517,23 +614,27 @@
 			flex: 1 1 auto;
 			display: flex;
 			flex-direction: column;
-			background-color: var(--clr-background3);
+			background: var(--clr-background3);
 			border-radius: var(--border-radius);
 			overflow: hidden;
 			border: 1px solid var(--clr-border);
+			margin: var(--spacing-sm);
+			box-shadow: var(--shadow-sm);
 		}
 
 		.channelcontent nav h3 {
 			flex: 0 0 auto;
 			padding: var(--spacing-md);
 			margin: 0;
-			background-color: var(--clr-background2);
+			background: var(--clr-background2);
 			border-bottom: 1px solid var(--clr-border);
 			font-weight: 600;
 			font-size: 14px;
 			min-height: 40px;
 			display: flex;
 			align-items: center;
+			justify-content: space-between;
+			color: var(--clr-font);
 		}
 
 		.channelcontent nav nav {
@@ -541,108 +642,557 @@
 			overflow-y: auto;
 			padding: var(--spacing-md);
 			min-height: 0;
+			background: var(--clr-background);
 		}
 
-		.channelcontent nav p {
-			margin: 0;
-			padding: 3px 0;
-			line-height: 1.5;
+		/* 消息气泡样式 */
+		.message {
+			margin: var(--spacing-sm) 0;
+			padding: var(--spacing-sm) var(--spacing-md);
+			display: flex;
+			gap: 10px;
+			align-items: flex-start;
+			transition: var(--transition);
+			border-radius: var(--border-radius-sm);
 		}
 
-		/* 高亮消息样式 */
-		.channelcontent nav p.highlighted {
-			background-color: var(--clr-highlight);
-			padding: 3px 8px;
-			border-radius: 4px;
-			margin: 2px -8px;
-			font-weight: 600;
+		.message:hover {
+			background: rgba(0, 0, 0, 0.02);
 		}
 
-		/* 消息复制提示 */
-		.channelcontent nav p:hover {
-			cursor: pointer;
+		.dark .message:hover {
+			background: rgba(255, 255, 255, 0.02);
 		}
 
-		.channelcontent nav p::before {
-			content: '';
-			position: absolute;
-			right: 20px;
+		.message-avatar {
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, var(--clr-accent), var(--clr-purple));
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: 700;
+			font-size: 12px;
+			color: white;
+			flex-shrink: 0;
+			box-shadow: var(--shadow-sm);
+		}
+
+		.message-content {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+		}
+
+		.message-header {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.message-username {
+			font-weight: 700;
+			color: var(--clr-purple);
+			font-size: 13px;
+		}
+
+		.message-timestamp {
+			font-size: 10px;
 			color: var(--clr-border);
-			font-size: 11px;
-			opacity: 0;
-			transition: opacity 0.2s;
+			opacity: 0.7;
 		}
 
-		.channelcontent nav p:hover::before {
-			content: '点击复制';
-			opacity: 1;
+		.message-text {
+			margin: 0;
+			color: var(--clr-font);
+			word-wrap: break-word;
+			line-height: 1.5;
+			font-size: 14px;
+		}
+
+		.message-text a {
+			color: var(--clr-accent);
+			text-decoration: none;
+			border-bottom: 1px dashed var(--clr-accent);
+			transition: var(--transition);
+		}
+
+		.message-text a:hover {
+			color: var(--clr-purple);
+			border-bottom-style: solid;
+		}
+
+		.message-text code {
+			background: var(--clr-background2);
+			padding: 2px 4px;
+			border-radius: 4px;
+			font-family: 'Fira Code', monospace;
+			font-size: 12px;
+		}
+
+		.message-action {
+			background: rgba(0, 0, 0, 0.05);
+			padding: var(--spacing-sm);
+			border-radius: var(--border-radius-sm);
+			border-left: 3px solid var(--clr-accent);
+		}
+
+		.dark .message-action {
+			background: rgba(255, 255, 255, 0.05);
 		}
 
 		ul {
-			flex: 0 0 200px;
+			flex: 0 0 240px;
 			overflow-y: auto;
 			padding: var(--spacing-sm);
 			margin: 0;
 			border-left: 1px solid var(--clr-border);
 			list-style: none;
-			background-color: var(--clr-background3);
+			background: var(--clr-background3);
 			min-height: 0;
+			box-shadow: inset 2px 0 4px rgba(0, 0, 0, 0.05);
 		}
 
-		.channelcontents li {
-			padding: 6px 10px;
-			margin: 1px 0;
+		.user-list-item {
+			padding: 8px 12px;
+			margin: 2px 0;
 			display: flex;
+			align-items: center;
 			gap: 8px;
-			border-radius: 4px;
+			border-radius: var(--border-radius-sm);
 			transition: var(--transition);
+			cursor: pointer;
 		}
 
-		.channelcontents li:hover {
-			background-color: var(--clr-background2);
+		.user-list-item:hover {
+			background: var(--clr-background2);
+			transform: translateX(4px);
 		}
 
-		.channelcontents li p {
-			margin: 0;
+		.user-avatar-small {
+			width: 24px;
+			height: 24px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, var(--clr-accent2), var(--clr-purple));
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 10px;
+			font-weight: 700;
+			color: white;
 		}
 
-		.channelcontents li p:first-child {
-			width: 20px;
+		.user-prefix {
+			font-weight: 700;
 			color: var(--clr-purple);
-			font-weight: bold;
+			min-width: 12px;
 			text-align: center;
 		}
 
-		.channelcontents li p:nth-child(2) {
+		.user-nick {
 			flex: 1;
 			color: var(--clr-green);
+			font-weight: 500;
+			font-size: 13px;
+		}
+
+		.user-status {
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background: var(--clr-user-online);
+			box-shadow: 0 0 0 2px var(--clr-background3);
+		}
+
+		.user-away {
+			background: var(--clr-user-away);
+		}
+
+		.input-container {
+			flex: 0 0 auto;
+			padding: var(--spacing-md);
+			background: var(--clr-background3);
+			border-top: 1px solid var(--clr-border);
+			display: flex;
+			align-items: center;
+			gap: var(--spacing-sm);
+			position: relative;
 		}
 
 		#input {
-			flex: 0 0 auto;
-			padding: var(--spacing-md);
-			background-color: var(--clr-background3);
+			flex: 1;
+			padding: 12px var(--spacing-md);
+			background: var(--clr-background);
 			color: var(--clr-font);
 			border: 1px solid var(--clr-border);
 			border-radius: var(--border-radius);
 			font-size: 14px;
 			transition: var(--transition);
-			margin: var(--spacing-sm);
-			width: auto;
-			position: static;
-			display: block;
+			box-shadow: var(--shadow-sm);
 		}
 
 		#input:focus {
 			outline: none;
 			border-color: var(--clr-accent);
-			box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+			box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+			transform: translateY(-1px);
 		}
 
 		#input::placeholder {
 			color: var(--clr-border);
+			opacity: 0.7;
 		}
 
+		.input-actions {
+			display: flex;
+			gap: 8px;
+			align-items: center;
+		}
+
+		.input-action-btn {
+			width: 36px;
+			height: 36px;
+			border-radius: 50%;
+			background: var(--clr-background4);
+			border: 1px solid var(--clr-border);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			transition: var(--transition);
+			color: var(--clr-font);
+			font-size: 16px;
+		}
+
+		.input-action-btn:hover {
+			background: var(--clr-accent);
+			color: white;
+			transform: scale(1.1);
+		}
+
+		.command-suggestions {
+			position: absolute;
+			bottom: 100%;
+			left: var(--spacing-md);
+			right: var(--spacing-md);
+			background: var(--clr-background3);
+			border: 1px solid var(--clr-border);
+			border-radius: var(--border-radius-sm);
+			box-shadow: var(--shadow-lg);
+			max-height: 200px;
+			overflow-y: auto;
+			display: none;
+			z-index: 50;
+			backdrop-filter: var(--glass-blur);
+			-webkit-backdrop-filter: var(--glass-blur);
+		}
+
+		.command-suggestions.visible {
+			display: block;
+		}
+
+		.suggestion-item {
+			padding: 10px var(--spacing-md);
+			cursor: pointer;
+			font-size: 13px;
+			border-bottom: 1px solid var(--clr-background2);
+			transition: var(--transition);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.suggestion-item:last-child {
+			border-bottom: none;
+		}
+
+		.suggestion-item:hover {
+			background: var(--clr-accent);
+			color: white;
+			transform: translateX(4px);
+		}
+
+		.suggestion-item .desc {
+			font-size: 11px;
+			opacity: 0.7;
+		}
+
+		/* 通知样式 */
+		.notification {
+			position: absolute;
+			top: 80px;
+			right: 20px;
+			background: var(--clr-background3);
+			border-left: 4px solid var(--clr-accent);
+			padding: var(--spacing-md);
+			border-radius: var(--border-radius-sm);
+			box-shadow: var(--shadow-lg);
+			max-width: 320px;
+			z-index: 150;
+			transform: translateX(400px);
+			opacity: 0;
+			transition: var(--transition);
+			backdrop-filter: var(--glass-blur);
+			-webkit-backdrop-filter: var(--glass-blur);
+		}
+
+		.notification.visible {
+			transform: translateX(0);
+			opacity: 1;
+		}
+
+		.notification .title {
+			font-weight: 700;
+			font-size: 14px;
+			margin-bottom: 4px;
+			color: var(--clr-font);
+		}
+
+		.notification .message {
+			font-size: 13px;
+			color: var(--clr-font);
+			opacity: 0.8;
+		}
+
+		.notification .close {
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			cursor: pointer;
+			opacity: 0.6;
+			transition: var(--transition);
+		}
+
+		.notification .close:hover {
+			opacity: 1;
+			transform: scale(1.1);
+		}
+
+		/* 搜索框 */
+		.search-container {
+			position: absolute;
+			top: 80px;
+			right: 20px;
+			background: var(--clr-background3);
+			border: 1px solid var(--clr-border);
+			border-radius: var(--border-radius-sm);
+			box-shadow: var(--shadow-lg);
+			display: none;
+			z-index: 140;
+			backdrop-filter: var(--glass-blur);
+			-webkit-backdrop-filter: var(--glass-blur);
+			transform: translateY(-10px);
+			opacity: 0;
+			transition: var(--transition);
+			min-width: 280px;
+		}
+
+		.search-container.visible {
+			display: block;
+			transform: translateY(0);
+			opacity: 1;
+		}
+
+		.search-input {
+			padding: 10px var(--spacing-md);
+			border: none;
+			background: transparent;
+			color: var(--clr-font);
+			width: 100%;
+			border-radius: var(--border-radius-sm);
+			font-size: 13px;
+		}
+
+		.search-input:focus {
+			outline: none;
+		}
+
+		.search-results {
+			max-height: 200px;
+			overflow-y: auto;
+			border-top: 1px solid var(--clr-background2);
+		}
+
+		.search-result-item {
+			padding: 8px var(--spacing-md);
+			font-size: 12px;
+			cursor: pointer;
+			transition: var(--transition);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.search-result-item:hover {
+			background: var(--clr-accent);
+			color: white;
+		}
+
+		/* 快速命令面板 */
+		.quick-commands {
+			position: absolute;
+			bottom: 100px;
+			left: 50%;
+			transform: translateX(-50%) translateY(100px);
+			background: var(--clr-background3);
+			border: 1px solid var(--clr-border);
+			border-radius: var(--border-radius);
+			box-shadow: var(--shadow-lg);
+			padding: var(--spacing-md);
+			display: none;
+			z-index: 120;
+			backdrop-filter: var(--glass-blur);
+			-webkit-backdrop-filter: var(--glass-blur);
+			opacity: 0;
+			transition: var(--transition);
+		}
+
+		.quick-commands.visible {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+			transform: translateX(-50%) translateY(0);
+			opacity: 1;
+		}
+
+		.quick-command-btn {
+			padding: 8px 16px;
+			background: var(--clr-background2);
+			border: 1px solid var(--clr-border);
+			border-radius: var(--border-radius-sm);
+			cursor: pointer;
+			transition: var(--transition);
+			font-size: 13px;
+			color: var(--clr-font);
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.quick-command-btn:hover {
+			background: var(--clr-accent);
+			color: white;
+			transform: translateX(4px);
+		}
+
+		/* 滚动指示器 */
+		.scroll-indicator {
+			position: absolute;
+			bottom: 70px;
+			right: 20px;
+			background: var(--clr-accent);
+			color: white;
+			padding: 8px 16px;
+			border-radius: 20px;
+			font-size: 12px;
+			cursor: pointer;
+			opacity: 0;
+			transition: var(--transition);
+			pointer-events: none;
+			z-index: 5;
+			box-shadow: var(--shadow-md);
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.scroll-indicator.visible {
+			opacity: 1;
+			pointer-events: all;
+		}
+
+		.scroll-indicator:hover {
+			transform: translateY(-2px);
+			background: var(--clr-purple);
+		}
+
+		/* 空状态 */
+		.empty-state {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100%;
+			color: var(--clr-border);
+			text-align: center;
+			padding: var(--spacing-xl);
+		}
+
+		.empty-state h3 {
+			margin: 0 0 12px 0;
+			font-size: 24px;
+			font-weight: 700;
+			background: linear-gradient(135deg, var(--clr-accent), var(--clr-purple));
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+
+		.empty-state p {
+			margin: 0;
+			font-size: 14px;
+			opacity: 0.7;
+			max-width: 300px;
+		}
+
+		.empty-state .logo {
+			font-size: 64px;
+			margin-bottom: var(--spacing-md);
+			opacity: 0.3;
+			animation: float 3s ease-in-out infinite;
+		}
+
+		@keyframes float {
+			0% { transform: translateY(0px); }
+			50% { transform: translateY(-10px); }
+			100% { transform: translateY(0px); }
+		}
+
+		/* 加载动画 */
+		.loading {
+			display: inline-flex;
+			gap: 4px;
+			align-items: center;
+		}
+
+		.loading span {
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background: var(--clr-accent);
+			animation: loading-bounce 1.4s infinite ease-in-out both;
+		}
+
+		.loading span:nth-child(1) { animation-delay: -0.32s; }
+		.loading span:nth-child(2) { animation-delay: -0.16s; }
+
+		@keyframes loading-bounce {
+			0%, 80%, 100% { transform: scale(0); }
+			40% { transform: scale(1); }
+		}
+
+		/* 工具提示 */
+		.tooltip {
+			position: fixed;
+			background: rgba(0, 0, 0, 0.8);
+			color: white;
+			padding: 4px 8px;
+			border-radius: 4px;
+			font-size: 11px;
+			pointer-events: none;
+			opacity: 0;
+			transition: opacity 0.2s;
+			z-index: 1000;
+			white-space: nowrap;
+		}
+
+		.tooltip.visible {
+			opacity: 1;
+		}
+
+		/* 自定义滚动条 */
 		::-webkit-scrollbar {
 			width: 8px;
 			height: 8px;
@@ -655,6 +1205,7 @@
 		::-webkit-scrollbar-thumb {
 			background: var(--clr-accent);
 			border-radius: 4px;
+			border: 2px solid var(--clr-background);
 		}
 
 		::-webkit-scrollbar-thumb:hover {
@@ -665,7 +1216,7 @@
 		@media (max-width: 768px) {
 			.settings-bar {
 				flex-wrap: wrap;
-				padding: 8px;
+				padding: 10px;
 				gap: 8px;
 				min-height: auto;
 			}
@@ -684,11 +1235,11 @@
 				margin-left: 0;
 				flex: 1 1 100%;
 				justify-content: center;
-				margin-top: 4px;
+				margin-top: 6px;
 			}
 
 			.log-container {
-				height: 40vh;
+				height: 45vh;
 			}
 
 			.channelcontent {
@@ -696,7 +1247,7 @@
 			}
 
 			ul {
-				flex: 0 0 120px;
+				flex: 0 0 130px;
 				border-left: none;
 				border-top: 1px solid var(--clr-border);
 			}
@@ -704,6 +1255,29 @@
 			#input {
 				margin: 8px;
 				padding: 10px;
+			}
+
+			.notification {
+				max-width: 280px;
+				right: 10px;
+			}
+
+			.search-container {
+				right: 10px;
+				max-width: calc(100% - 20px);
+			}
+
+			ul {
+				flex: 0 0 130px;
+			}
+
+			.user-list-item {
+				padding: 6px 8px;
+			}
+
+			.user-avatar-small {
+				width: 20px;
+				height: 20px;
 			}
 		}
 
@@ -728,50 +1302,176 @@
 			.log-header {
 				padding: 8px;
 			}
+
+			.message {
+				padding: 6px 8px;
+			}
+
+			.message-avatar {
+				width: 28px;
+				height: 28px;
+			}
 		}
 
-		/* 滚动到底部的提示 */
-		.scroll-indicator {
+		/* 键盘快捷键提示 */
+		.keyboard-shortcuts {
 			position: absolute;
-			bottom: 70px;
-			right: 20px;
-			background: var(--clr-accent);
-			color: white;
-			padding: 6px 12px;
-			border-radius: 20px;
-			font-size: 12px;
-			cursor: pointer;
-			opacity: 0;
-			transition: opacity 0.3s;
-			pointer-events: none;
-			z-index: 5;
-		}
-
-		.scroll-indicator.visible {
-			opacity: 1;
-			pointer-events: all;
-		}
-
-		/* 空状态提示 */
-		.empty-state {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			height: 100%;
-			color: var(--clr-border);
-			text-align: center;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%) scale(0.9);
+			background: var(--clr-background3);
+			border: 1px solid var(--clr-border);
+			border-radius: var(--border-radius);
+			box-shadow: var(--shadow-lg);
 			padding: var(--spacing-lg);
+			z-index: 300;
+			display: none;
+			opacity: 0;
+			transition: var(--transition);
+			max-width: 90vw;
+			max-height: 80vh;
+			overflow-y: auto;
+			backdrop-filter: var(--glass-blur);
+			-webkit-backdrop-filter: var(--glass-blur);
 		}
 
-		.empty-state h3 {
-			margin: 0 0 8px 0;
-			font-size: 16px;
+		.keyboard-shortcuts.visible {
+			display: block;
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(1);
+		}
+
+		.keyboard-shortcuts h3 {
+			margin: 0 0 var(--spacing-md) 0;
+			font-size: 18px;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.shortcut-item {
+			display: flex;
+			justify-content: space-between;
+			padding: 8px 0;
+			border-bottom: 1px solid var(--clr-background2);
+		}
+
+		.shortcut-item:last-child {
+			border-bottom: none;
+		}
+
+		.shortcut-keys {
+			display: flex;
+			gap: 4px;
+		}
+
+		.shortcut-key {
+			padding: 2px 6px;
+			background: var(--clr-background2);
+			border: 1px solid var(--clr-border);
+			border-radius: 4px;
+			font-size: 11px;
+			font-family: monospace;
 			font-weight: 600;
 		}
 
-		.empty-state p {
+		/* 用户上下文菜单 */
+		.context-menu {
+			position: absolute;
+			background: var(--clr-background3);
+			border: 1px solid var(--clr-border);
+			border-radius: var(--border-radius-sm);
+			box-shadow: var(--shadow-lg);
+			padding: 6px 0;
+			z-index: 200;
+			display: none;
+			min-width: 160px;
+			backdrop-filter: var(--glass-blur);
+			-webkit-backdrop-filter: var(--glass-blur);
+		}
+
+		.context-menu.visible {
+			display: block;
+		}
+
+		.context-menu-item {
+			padding: 8px 16px;
+			cursor: pointer;
+			font-size: 13px;
+			transition: var(--transition);
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.context-menu-item:hover {
+			background: var(--clr-accent);
+			color: white;
+		}
+
+		.context-menu-separator {
+			height: 1px;
+			background: var(--clr-background2);
+			margin: 4px 0;
+		}
+
+		/* 代码块样式 */
+		.message-text pre {
+			background: var(--clr-background2);
+			border: 1px solid var(--clr-border);
+			border-radius: var(--border-radius-sm);
+			padding: var(--spacing-sm);
+			margin: var(--spacing-sm) 0;
+			overflow-x: auto;
+		}
+
+		.message-text code {
+			font-family: 'Fira Code', monospace;
+			font-size: 12px;
+		}
+
+		.message-text pre code {
+			background: none;
+			border: none;
+			padding: 0;
+		}
+
+		/* 文件上传区域 */
+		.file-drop-zone {
+			position: absolute;
+			inset: 0;
+			background: rgba(79, 70, 229, 0.1);
+			border: 2px dashed var(--clr-accent);
+			border-radius: var(--border-radius);
+			display: none;
+			align-items: center;
+			justify-content: center;
+			z-index: 50;
+			pointer-events: none;
+			transition: var(--transition);
+		}
+
+		.file-drop-zone.visible {
+			display: flex;
+			pointer-events: all;
+		}
+
+		.file-drop-zone-content {
+			background: var(--clr-background3);
+			padding: var(--spacing-lg);
+			border-radius: var(--border-radius);
+			box-shadow: var(--shadow-lg);
+			text-align: center;
+		}
+
+		.file-drop-zone-content h3 {
+			margin: 0 0 8px 0;
+			color: var(--clr-font);
+		}
+
+		.file-drop-zone-content p {
 			margin: 0;
+			color: var(--clr-border);
 			font-size: 13px;
 		}
 	</style>
@@ -780,8 +1480,7 @@
 <body>
 	<div class="main">
 		<div class="header">
-			<h1 id="caption">IRC Client</h1>
-			<button class="theme-toggle-btn" onclick="toggleTheme()" title="切换主题">🌓 主题</button>
+			<h1 id="caption">IRC Client Pro</h1>
 		</div>
 
 		<div class="settings-bar">
@@ -803,17 +1502,16 @@
 				</label>
 			</div>
 			<div class="settings-group">
-				<label title="高亮关键词(逗号分隔)">
-					<input type="text" id="highlightInput" value="" placeholder="高亮词(可选)">
+				<label title="消息通知">
+					<input type="checkbox" id="enableNotifications" checked> 消息通知
 				</label>
 			</div>
 			<div class="settings-group">
-				<label title="SSL帮助">
-					<button class="btn ssl-help-btn" onclick="showSSLWarning()" title="点击查看SSL证书问题的解决方案">SSL帮助</button>
-				</label>
+				<button class="btn ssl-help-btn" onclick="showSSLWarning()" title="点击查看SSL证书问题的解决方案">SSL帮助</button>
 			</div>
 			<button class="btn connect-btn" id="connectBtn" onclick="toggleConnection()">连接</button>
-			<button class="btn log-toggle-btn" onclick="toggleLog()">查看日志</button>
+			<button class="btn log-toggle-btn" onclick="toggleLog()">日志</button>
+			<button class="btn theme-toggle-btn" onclick="toggleTheme()" id="themeBtn" title="切换主题">🌓</button>
 			<div class="connection-status disconnected" id="connectionStatus">
 				<span class="indicator"></span>
 				<span id="statusText">未连接</span>
@@ -821,6 +1519,7 @@
 		</div>
 
 		<div class="ssl-warning" id="sslWarning">
+			<span class="close" onclick="document.getElementById('sslWarning').classList.remove('visible')">×</span>
 			<strong>⚠️ 浏览器无法忽略SSL证书错误!</strong> 请使用以下方案：<br>
 			1. 改用 <code>ws://</code> 非加密连接(如果浏览器支持)<br>
 			2. 在浏览器中访问 <a id="sslLink" target="_blank">服务器URL</a> 并手动信任证书<br>
@@ -843,1213 +1542,1279 @@
 				<div class="channelcontents" id="channelContents"></div>
 			</div>
 			<div class="empty-state" id="emptyState">
-				<h3>欢迎使用 IRC 客户端</h3>
-				<p>请先填写服务器信息并点击连接</p>
+				<div class="logo">💬</div>
+				<h3>欢迎使用 IRC 客户端 Pro</h3>
+				<p>填写服务器信息并点击连接开始聊天</p>
 			</div>
-			<input type="text" name="input" id="input" placeholder="输入消息..." style="display: none;"
-				   onkeydown="onKeyPress(event)" onkeydown="onKeyDown(event)" />
+			
+			<div class="file-drop-zone" id="fileDropZone">
+				<div class="file-drop-zone-content">
+					<h3>📁 拖拽文件到此处</h3>
+					<p>支持发送文件到当前频道</p>
+				</div>
+			</div>
+
+			<div class="notification" id="notification">
+				<span class="close" onclick="hideNotification()">×</span>
+				<div class="title" id="notificationTitle"></div>
+				<div class="message" id="notificationMessage"></div>
+			</div>
+
+			<div class="search-container" id="searchContainer">
+				<input type="text" class="search-input" id="searchInput" placeholder="搜索消息...">
+				<div class="search-results" id="searchResults"></div>
+			</div>
+
+			<div class="quick-commands" id="quickCommands">
+				<div class="quick-command-btn" onclick="executeQuickCommand('/me')">
+					🎭 <span>/me - 动作消息</span>
+				</div>
+				<div class="quick-command-btn" onclick="executeQuickCommand('/join')">
+					➕ <span>/join - 加入频道</span>
+				</div>
+				<div class="quick-command-btn" onclick="executeQuickCommand('/nick')">
+					👤 <span>/nick - 更改昵称</span>
+				</div>
+				<div class="quick-command-btn" onclick="executeQuickCommand('/msg')">
+					💬 <span>/msg - 私聊</span>
+				</div>
+				<div class="quick-command-btn" onclick="executeQuickCommand('/clear')">
+					🧹 <span>/clear - 清屏</span>
+				</div>
+				<div class="quick-command-btn" onclick="toggleQuickCommands()">
+					❌ <span>关闭</span>
+				</div>
+			</div>
+
+			<div class="keyboard-shortcuts" id="keyboardShortcuts">
+				<h3>⌨️ 键盘快捷键</h3>
+				<div class="shortcut-item">
+					<span>切换主题</span>
+					<div class="shortcut-keys"><span class="shortcut-key">Ctrl</span><span class="shortcut-key">T</span></div>
+				</div>
+				<div class="shortcut-item">
+					<span>搜索消息</span>
+					<div class="shortcut-keys"><span class="shortcut-key">Ctrl</span><span class="shortcut-key">F</span></div>
+				</div>
+				<div class="shortcut-item">
+					<span>打开日志</span>
+					<div class="shortcut-keys"><span class="shortcut-key">Ctrl</span><span class="shortcut-key">L</span></div>
+				</div>
+				<div class="shortcut-item">
+					<span>快速命令</span>
+					<div class="shortcut-keys"><span class="shortcut-key">/</span></div>
+				</div>
+				<div class="shortcut-item">
+					<span>关闭提示</span>
+					<div class="shortcut-keys"><span class="shortcut-key">ESC</span></div>
+				</div>
+				<div style="text-align: center; margin-top: var(--spacing-md);">
+					<button class="btn" onclick="toggleKeyboardShortcuts()">关闭</button>
+				</div>
+			</div>
+
+			<div class="context-menu" id="userContextMenu">
+				<div class="context-menu-item" onclick="openPrivateChat()">
+					💬 发起私聊
+				</div>
+				<div class="context-menu-item" onclick="whoisUser()">
+					ℹ️ 查看信息
+				</div>
+				<div class="context-menu-item" onclick="openUserNotes()">
+					📝 添加备注
+				</div>
+				<div class="context-menu-separator"></div>
+				<div class="context-menu-item" onclick="ignoreUser()">
+					🚫 忽略用户
+				</div>
+			</div>
+
+			<div class="scroll-indicator" id="scrollIndicator" onclick="scrollToBottom()">
+				⬇️ 新消息
+			</div>
+
+			<div class="input-container">
+				<input type="text" name="input" id="input" placeholder="输入消息或命令 (/)..." 
+					   onkeydown="onKeyDown(event)" oninput="onInputChange()">
+				<div class="input-actions">
+					<div class="input-action-btn" onclick="toggleQuickCommands()" title="快速命令">⚡</div>
+					<div class="input-action-btn" onclick="selectFile()" title="发送文件">📎</div>
+					<div class="input-action-btn" onclick="insertEmoji()" title="插入表情">😊</div>
+				</div>
+				<div class="command-suggestions" id="commandSuggestions"></div>
+			</div>
 		</div>
 	</div>
+
+	<div class="tooltip" id="globalTooltip"></div>
 </body>
 
 <script>
-	var nickname = "";
-	var channelName = "";
-	var wsUrl = "";
-	var channels, channelContents, contentsWrapper, emptyState, input;
-	var channelMap = new Map();
-	var activeChannel = null;
-	var statusChannel = null;
-	var PrefixChars;
-	var websocket = null;
-	var isConnected = false;
-	var autoReconnect = false;
-	var reconnectAttempts = 0;
-	var maxReconnectAttempts = 5;
-	var reconnectDelay = 3000;
+// 全局变量
+var nickname = "";
+var channelName = "";
+var wsUrl = "";
+var channels, channelContents, contentsWrapper, emptyState, input;
+var channelMap = new Map();
+var activeChannel = null;
+var statusChannel = null;
+var PrefixChars;
+var websocket = null;
+var isConnected = false;
+var autoReconnect = false;
+var reconnectAttempts = 0;
+var maxReconnectAttempts = 5;
+var reconnectDelay = 3000;
+var unreadCounts = new Map();
+var messageHistory = [];
+var currentHistoryIndex = -1;
+var userNotes = new Map();
+var ignoredUsers = new Set();
+var notificationSound = null;
+var messageSearchIndex = [];
+var currentTheme = 'auto'; // auto, light, dark
 
-	// ADDED FEATURE: 输入历史
-	var inputHistory = [];
-	var historyIndex = -1;
+// IRC命令列表
+var availableCommands = [
+	{ cmd: '/me', desc: '发送动作消息', usage: '/me 动作' },
+	{ cmd: '/join', desc: '加入频道', usage: '/join #频道' },
+	{ cmd: '/part', desc: '离开频道', usage: '/part #频道' },
+	{ cmd: '/nick', desc: '更改昵称', usage: '/nick 新昵称' },
+	{ cmd: '/msg', desc: '发送私聊', usage: '/msg 用户 消息' },
+	{ cmd: '/whois', desc: '查看用户信息', usage: '/whois 用户' },
+	{ cmd: '/ignore', desc: '忽略用户', usage: '/ignore 用户' },
+	{ cmd: '/unignore', desc: '取消忽略', usage: '/unignore 用户' },
+	{ cmd: '/clear', desc: '清空当前频道', usage: '/clear' },
+	{ cmd: '/help', desc: '显示帮助', usage: '/help' }
+];
 
-	// ADDED FEATURE: 高亮关键词
-	var highlightKeywords = [];
+// 初始化
+function onLoad() {
+	channels = document.getElementById("channelsContainer");
+	channelContents = document.getElementById("channelContents");
+	contentsWrapper = document.getElementById("contentsWrapper");
+	emptyState = document.getElementById("emptyState");
+	input = document.getElementById("input");
 
-	// ADDED FEATURE: 未读消息计数
-	var unreadCount = new Map();
-
-	// ADDED FEATURE: 表情符号映射
-	var emojiMap = {
-		':)': '😊',
-		':D': '😄',
-		':(': '😢',
-		':P': '😛',
-		':|': '😐',
-		';)': '😉',
-		'<3': '❤️',
-		':heart:': '❤️',
-		':thumbsup:': '👍',
-		':thumbsdown:': '👎',
-		':ok:': '👌',
-		':fire:': '🔥',
-		':star:': '⭐',
-		':sunny:': '☀️',
-		':moon:': '🌙',
-		':cloud:': '☁️',
-		':rain:': '🌧️',
-		':smile:': '😊',
-		':cry:': '😭',
-		':laugh:': '😂',
-		':wink:': '😉',
-		':thinking:': '🤔',
-		':love:': '😍',
-		':angry:': '😠',
-		':cool:': '😎',
-		':surprised:': '😲'
-	};
-
-	function onLoad() {
-		channels = document.getElementById("channelsContainer");
-		channelContents = document.getElementById("channelContents");
-		contentsWrapper = document.getElementById("contentsWrapper");
-		emptyState = document.getElementById("emptyState");
-		input = document.getElementById("input");
-
-		let url = new URL(document.location);
-		if (url.hash) {
-			document.getElementById('channelInput').value = url.hash;
-		}
-		if (window.frameElement) {
-			document.getElementById("caption").style.display = "none";
-		}
-		updateConnectionStatus(false);
-
-		// ADDED FEATURE: 加载保存的配置
-		loadSavedConfig();
-
-		// ADDED FEATURE: 请求通知权限
-		requestNotificationPermission();
-
-		// ADDED FEATURE: 输入框自动聚焦
-		if (input) {
-			input.addEventListener('blur', () => setTimeout(() => input.focus(), 100));
-		}
-
-		// ADDED FEATURE: 监听窗口焦点变化
-		window.addEventListener('focus', () => {
-			if (activeChannel) {
-				unreadCount.set(activeChannel.name, 0);
-				updateUnreadBadge(activeChannel.name);
-			}
-		});
+	let url = new URL(document.location);
+	if (url.hash) {
+		document.getElementById('channelInput').value = url.hash;
 	}
-	window.addEventListener("load", onLoad, false);
+	if (window.frameElement) {
+		document.getElementById("caption").style.display = "none";
+	}
+	updateConnectionStatus(false);
 
-	// ADDED FEATURE: 加载保存的配置
-	function loadSavedConfig() {
-		try {
-			const saved = localStorage.getItem('ircConfig');
-			if (saved) {
-				const config = JSON.parse(saved);
-				if (config.wsUrl) document.getElementById('wsUrl').value = config.wsUrl;
-				if (config.nickname) document.getElementById('nickInput').value = config.nickname;
-				if (config.channel) document.getElementById('channelInput').value = config.channel;
-				if (config.highlightKeywords) document.getElementById('highlightInput').value = config.highlightKeywords;
-				writeToLog(`[配置] 已加载保存的配置`);
-			}
-		} catch (e) {
-			writeToLog(`[配置] 加载配置失败: ${e.message}`);
-		}
+	// 加载设置
+	loadSettings();
+
+	// 初始化通知音效
+	initNotificationSound();
+
+	// 初始化拖拽
+	initDragAndDrop();
+
+	// 初始化工具提示
+	initTooltips();
+
+	// 自动聚焦输入框
+	if (input) {
+		input.addEventListener('blur', () => setTimeout(() => input.focus(), 100));
+		input.focus();
 	}
 
-	// ADDED FEATURE: 保存配置
-	function saveConfig() {
-		try {
-			const config = {
-				wsUrl: wsUrl,
-				nickname: nickname,
-				channel: channelName,
-				highlightKeywords: document.getElementById('highlightInput').value
-			};
-			localStorage.setItem('ircConfig', JSON.stringify(config));
-			writeToLog(`[配置] 配置已保存`);
-		} catch (e) {
-			writeToLog(`[配置] 保存配置失败: ${e.message}`);
+	// 监听系统主题变化
+	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeDisplay);
+
+	// 键盘快捷键
+	document.addEventListener('keydown', globalKeyHandler);
+
+	// 滚动事件
+	document.addEventListener('scroll', onGlobalScroll, true);
+
+	writeToLog(`[系统] 客户端初始化完成`);
+}
+window.addEventListener("load", onLoad, false);
+
+// 设置管理
+function loadSettings() {
+	try {
+		const saved = localStorage.getItem('ircSettings');
+		if (saved) {
+			const settings = JSON.parse(saved);
+			document.getElementById('wsUrl').value = settings.wsUrl || '';
+			document.getElementById('nickInput').value = settings.nick || '';
+			document.getElementById('channelInput').value = settings.channel || '';
+			document.getElementById('autoReconnect').checked = settings.autoReconnect || false;
+			document.getElementById('enableNotifications').checked = settings.enableNotifications !== false;
+			currentTheme = settings.theme || 'auto';
+			applyTheme(currentTheme);
 		}
-	}
-
-	// ADDED FEATURE: 请求通知权限
-	function requestNotificationPermission() {
-		if ('Notification' in window && Notification.permission === 'default') {
-			Notification.requestPermission().then(permission => {
-				writeToLog(`[通知] 通知权限: ${permission}`);
-			});
+		// 加载用户备注
+		const notes = localStorage.getItem('ircUserNotes');
+		if (notes) {
+			userNotes = new Map(JSON.parse(notes));
 		}
-	}
-
-	// ADDED FEATURE: 发送浏览器通知
-	function sendBrowserNotification(title, body, channelName) {
-		if (!isConnected || document.hasFocus()) return;
-		if ('Notification' in window && Notification.permission === 'granted') {
-			try {
-				new Notification(title, {
-					body: body,
-					icon: null,
-					tag: channelName,
-					silent: false
-				});
-			} catch (e) {
-				writeToLog(`[通知] 发送通知失败: ${e.message}`);
-			}
+		// 加载忽略列表
+		const ignored = localStorage.getItem('ircIgnoredUsers');
+		if (ignored) {
+			ignoredUsers = new Set(JSON.parse(ignored));
 		}
+	} catch (e) {
+		writeToLog(`[ERROR] 加载设置失败: ${e.message}`);
 	}
+}
 
-	function updateConnectionStatus(connected) {
-		const statusEl = document.getElementById('connectionStatus');
-		const statusText = document.getElementById('statusText');
-		if (!statusEl || !statusText) return;
-
-		if (connected) {
-			statusEl.classList.remove('disconnected');
-			statusEl.classList.add('connected');
-			statusText.textContent = `已连接 (${nickname})`;
-		} else {
-			statusEl.classList.remove('connected');
-			statusEl.classList.add('disconnected');
-			statusText.textContent = '未连接';
-		}
-	}
-
-	function toggleLog() {
-		const logContainer = document.getElementById('logContainer');
-		if (logContainer) {
-			logContainer.classList.toggle('visible');
-			if (!logContainer.classList.contains('visible')) {
-				logContainer.scrollTop = logContainer.scrollHeight;
-			}
-		}
-	}
-
-	function clearLog() {
-		const logOutput = document.getElementById('logOutput');
-		if (logOutput) {
-			logOutput.textContent = '';
-		}
-	}
-
-	function writeToLog(message) {
-		const logOutput = document.getElementById('logOutput');
-		if (logOutput) {
-			const timestamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-			logOutput.textContent += `[${timestamp}] ${message}\n`;
-			logOutput.scrollTop = logOutput.scrollHeight;
-		}
-	}
-
-	function showSSLWarning(url) {
-		const warning = document.getElementById('sslWarning');
-		const link = document.getElementById('sslLink');
-		if (!warning || !link) return;
-
-		let displayUrl = url || document.getElementById('wsUrl')?.value.trim();
-		if (displayUrl) {
-			link.href = displayUrl.replace('wss://', 'https://').replace('ws://', 'http://');
-			link.textContent = link.href;
-		} else {
-			link.href = '#';
-			link.textContent = '请先在WebSocket地址栏输入服务器地址';
-		}
-		warning.classList.add('visible');
-		setTimeout(() => {
-			if (warning) warning.classList.remove('visible');
-		}, 6000);
-	}
-
-	function toggleTheme() {
-		const currentTheme = document.documentElement.getAttribute('data-theme');
-		const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-		document.documentElement.setAttribute('data-theme', newTheme);
-		localStorage.setItem('theme', newTheme);
-		writeToLog(`[主题] 切换到${newTheme === 'dark' ? '暗色' : '亮色'}主题`);
-	}
-
-	// 初始化主题
-	if (localStorage.getItem('theme')) {
-		document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
-	}
-
-	function toggleConnection() {
-		if (isConnected) {
-			autoReconnect = false;
-			const reconnectCheckbox = document.getElementById('autoReconnect');
-			if (reconnectCheckbox) reconnectCheckbox.checked = false;
-			if (websocket) {
-				try {
-					websocket.close(1000, "User disconnected");
-				} catch (e) {
-					writeToLog(`[ERROR] 关闭WebSocket时出错: ${e.message}`);
-				}
-			}
-			onDisconnect();
-		} else {
-			doConnect();
-		}
-	}
-
-	function validateNickname(nick) {
-		if (!nick || nick.trim() === "") return false;
-		return /^[a-zA-Z_\\`\[\]{}^|][a-zA-Z0-9_\\`\[\]{}^|-]*$/.test(nick);
-	}
-
-	function validateWsUrl(url) {
-		if (!url) return false;
-		return /^wss?:\/\/.+/.test(url);
-	}
-
-	function doConnect() {
-		const wsUrlInput = document.getElementById('wsUrl');
-		const nickInput = document.getElementById('nickInput');
-		const channelInput = document.getElementById('channelInput');
-		const reconnectCheckbox = document.getElementById('autoReconnect');
-		const highlightInput = document.getElementById('highlightInput');
-		const connectBtn = document.getElementById('connectBtn');
-
-		if (!wsUrlInput || !nickInput || !channelInput || !connectBtn) {
-			alert("界面元素加载错误, 请刷新页面重试");
-			return;
-		}
-
-		wsUrl = wsUrlInput.value.trim();
-		nickname = nickInput.value.trim();
-		channelName = channelInput.value.trim();
-		autoReconnect = reconnectCheckbox ? reconnectCheckbox.checked : false;
-
-		// ADDED FEATURE: 解析高亮关键词
-		const highlightValue = highlightInput ? highlightInput.value.trim() : '';
-		highlightKeywords = highlightValue ? highlightValue.split(',').map(k => k.trim()).filter(k => k) : [];
-		highlightKeywords.push(nickname); // 总是高亮自己的昵称
-
-		if (!validateWsUrl(wsUrl)) {
-			alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
-			return;
-		}
-		if (!validateNickname(nickname)) {
-			alert("昵称格式无效!必须以字母或特定符号开头, 不能包含空格和特殊字符");
-			return;
-		}
-		if (channelName && !channelName.startsWith('#')) {
-			channelName = '#' + channelName;
-		}
-
-		reconnectAttempts = 0;
-		wsUrlInput.disabled = true;
-		nickInput.disabled = true;
-		channelInput.disabled = true;
-		if (reconnectCheckbox) reconnectCheckbox.disabled = true;
-		if (highlightInput) highlightInput.disabled = true;
-
-		connectBtn.textContent = '连接中...';
-		connectBtn.disabled = true;
-
-		// 清空界面
-		channels.innerHTML = '';
-		channelContents.innerHTML = '';
-		channelMap.clear();
-		unreadCount.clear(); // ADDED FEATURE: 清空未读计数
-
-		// 显示聊天区域
-		contentsWrapper.classList.remove('hidden');
-		contentsWrapper.classList.add('visible');
-		if (emptyState) emptyState.style.display = 'none';
-		if (input) input.style.display = 'block';
-
-		statusChannel = new Tab_Create("Status", "Status Window", false);
-		writeToLog(`[系统] 正在连接: ${wsUrl}`);
-		
-		// ADDED FEATURE: 保存配置
-		saveConfig();
-		
-		WebSocket_Connect(wsUrl);
-	}
-
-	function onDisconnect() {
-		isConnected = false;
-		const wsUrlInput = document.getElementById('wsUrl');
-		const nickInput = document.getElementById('nickInput');
-		const channelInput = document.getElementById('channelInput');
-		const reconnectCheckbox = document.getElementById('autoReconnect');
-		const highlightInput = document.getElementById('highlightInput');
-		const connectBtn = document.getElementById('connectBtn');
-
-		if (wsUrlInput) wsUrlInput.disabled = false;
-		if (nickInput) nickInput.disabled = false;
-		if (channelInput) channelInput.disabled = false;
-		if (reconnectCheckbox) reconnectCheckbox.disabled = false;
-		if (highlightInput) highlightInput.disabled = false;
-
-		if (connectBtn) {
-			connectBtn.textContent = '连接';
-			connectBtn.disabled = false;
-			connectBtn.classList.remove('disconnect');
-		}
-
-		updateConnectionStatus(false);
-
-		// 隐藏聊天区域
-		contentsWrapper.classList.remove('visible');
-		contentsWrapper.classList.add('hidden');
-		if (emptyState) emptyState.style.display = 'flex';
-		if (input) input.style.display = 'none';
-
-		writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel, "");
-		writeToLog(`[系统] 已断开连接`);
-
-		if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
-			reconnectAttempts++;
-			const delay = reconnectDelay * reconnectAttempts;
-			writeToLog(`[重连] ${Math.floor(delay / 1000)}秒后尝试第 ${reconnectAttempts}/${maxReconnectAttempts} 次重连...`);
-			setTimeout(() => {
-				if (!isConnected && autoReconnect) {
-					writeToLog(`[重连] 正在尝试重新连接...`);
-					doConnect();
-				}
-			}, delay);
-		} else if (autoReconnect && reconnectAttempts >= maxReconnectAttempts) {
-			writeToLog(`[重连] 达到最大重连次数, 停止尝试`);
-			autoReconnect = false;
-			if (reconnectCheckbox) reconnectCheckbox.checked = false;
-			alert('自动重连失败, 请检查网络或服务器设置');
-		}
-	}
-
-	function onKeyPress(e) {
-		if (!e || !input) return;
-		
-		// ADDED FEATURE: 上下箭头历史导航
-		if (e.key === 'ArrowUp') {
-			e.preventDefault();
-			if (historyIndex > 0) {
-				historyIndex--;
-				input.value = inputHistory[historyIndex];
-			}
-			return;
-		} else if (e.key === 'ArrowDown') {
-			e.preventDefault();
-			if (historyIndex < inputHistory.length - 1) {
-				historyIndex++;
-				input.value = inputHistory[historyIndex];
-			} else if (historyIndex === inputHistory.length - 1) {
-				historyIndex = inputHistory.length;
-				input.value = '';
-			}
-			return;
-		}
-
-		if (e.key === 'Enter') {
-			// ADDED FEATURE: 保存到历史
-			const message = input.value.trim();
-			if (message) {
-				if (inputHistory.length === 0 || inputHistory[inputHistory.length - 1] !== message) {
-					inputHistory.push(message);
-					if (inputHistory.length > 100) inputHistory.shift(); // 限制历史数量
-				}
-				historyIndex = inputHistory.length;
-			}
-			send();
-		}
-	}
-
-	function onKeyDown(e) {
-		if (e.key === 'Tab') {
-			e.preventDefault();
-			console.log("TODO: TAB KEY - Nickname completion");
-			return false;
-		}
-	}
-
-	function Tab_onClick(evt) {
-		if (!evt || !evt.currentTarget) return;
-		let chanName = evt.currentTarget.value;
-		Tab_Show(chanName);
-	}
-
-	function Tabs_Hide() {
-		let tabcontent = document.querySelectorAll(".channelcontent");
-		tabcontent.forEach(content => content.classList.remove('active'));
-
-		let tablinks = document.querySelectorAll(".channel");
-		tablinks.forEach(link => link.classList.remove("active"));
-	}
-
-	function Tab_Show(name) {
-		if (!name) return;
-		let channel = channelMap.get(name);
-		Tabs_Hide();
-		if (channel && channel.channel) {
-			channel.channel.classList.add('active');
-			channel.button.classList.add("active");
-			activeChannel = channel;
-			
-			// ADDED FEATURE: 清除未读计数
-			unreadCount.set(name, 0);
-			updateUnreadBadge(name);
-			
-			// 自动滚动到底部
-			setTimeout(() => {
-				if (channel.content) {
-					channel.content.scrollTop = channel.content.scrollHeight;
-				}
-			}, 10);
-		}
-	}
-
-	function HTML_escape(text) {
-		if (!text) return "";
-		let map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-		return text.replace(/[&<>"']/g, function (m) { return map[m]; });
-	}
-
-	function sortUserList(user_a, user_b) {
-		if (!user_a || !user_b || user_a.length < 2 || user_b.length < 2) return 0;
-		if (user_a[0][0] === user_b[0][0])
-			return user_a[1].localeCompare(user_b[1], undefined, { sensitivity: 'accent' });
-		if (!PrefixChars || !PrefixChars[1]) return 0;
-		let aIndex = PrefixChars[1].indexOf(user_a[0][0]);
-		let bIndex = PrefixChars[1].indexOf(user_b[0][0]);
-		return aIndex - bIndex;
-	}
-
-	function Tab_Create(name, topic, createlist) {
-		if (!name || !channels || !channelContents) {
-			console.error("Tab_Create: 缺少必要元素");
-			return;
-		}
-		Tabs_Hide();
-		this.name = name;
-		let escapedName = HTML_escape(name);
-
-		this.button = document.createElement("button");
-		this.button.innerHTML = escapedName;
-		this.button.value = escapedName;
-		this.button.onclick = Tab_onClick;
-		this.button.className = "channel";
-
-		// ADDED FEATURE: 未读消息徽章
-		this.unreadBadge = document.createElement("span");
-		this.unreadBadge.className = "unread-badge";
-		this.unreadBadge.textContent = '0';
-		this.button.appendChild(this.unreadBadge);
-
-		let x = document.createElement("button");
-		x.innerHTML = "×";
-		x.onclick = Tab_Close;
-		x.value = escapedName;
-		x.className = "x";
-		this.button.appendChild(x);
-
-		channels.appendChild(this.button);
-
-		this.channel = document.createElement("div");
-		this.channel.className = "channelcontent";
-
-		let navWrapper = document.createElement("nav");
-		this.topic = document.createElement("h3");
-		this.topic.innerHTML = HTML_escape(topic || "无主题");
-		navWrapper.appendChild(this.topic);
-
-		this.content = document.createElement("nav");
-		navWrapper.appendChild(this.content);
-
-		this.channel.appendChild(navWrapper);
-
-		if (createlist) {
-			this.userlist = document.createElement("ul");
-			this.users = [];
-			this.names_end = true;
-			this.channel.appendChild(this.userlist);
-		}
-
-		channelContents.appendChild(this.channel);
-		channelMap.set(name, this);
-		activeChannel = this;
-		
-		// ADDED FEATURE: 初始化未读计数
-		unreadCount.set(name, 0);
-		
-		Tab_Show(name);
-		return this;
-	}
-
-	function Tab_Close(evt) {
-		evt.stopPropagation();
-		if (!evt || !evt.currentTarget) return;
-		doSend("part " + evt.currentTarget.value);
-	}
-
-	function Channel_Destroy(name) {
-		if (!name) return;
-		let channel = channelMap.get(name);
-		if (!channel) return;
-		channel.button.remove();
-		channel.channel.remove();
-		if (activeChannel == channel) {
-			activeChannel = statusChannel;
-		}
-		channelMap.delete(name);
-		unreadCount.delete(name); // ADDED FEATURE: 删除未读计数
-		if (activeChannel) {
-			Tab_Show(activeChannel.name);
-		}
-	}
-
-	function Channel_InsertUser(nick, channel, prefix) {
-		if (!nick || !channel || !channel.userlist) return;
-		let user = document.createElement("li");
-		let tmp = document.createElement("p");
-		if (prefix && prefix !== " ") tmp.innerHTML = prefix[0];
-		user.appendChild(tmp);
-		tmp = document.createElement("p");
-		tmp.innerHTML = HTML_escape(nick);
-		user.appendChild(tmp);
-		let i = 0;
-		for (i; i < channel.users.length; i++) {
-			if (channel.users[i] && channel.users[i][1]) {
-				if (channel.users[i][1].localeCompare(nick, undefined, { sensitivity: 'accent' }) < 0) continue;
-			}
-			break;
-		}
-		channel.users.splice(i, 0, [prefix || " ", nick]);
-		channel.userlist.insertBefore(user, channel.userlist.childNodes[i]);
-	}
-
-	function Channel_AppendUser(nick, channel, dontnotify, prefix) {
-		if (!nick || !channel || !channel.userlist) return;
-		let user = document.createElement("li");
-		let tmp = document.createElement("p");
-		if (prefix && prefix !== " ") tmp.innerHTML = prefix[0];
-		user.appendChild(tmp);
-		tmp = document.createElement("p");
-		tmp.innerHTML = HTML_escape(nick);
-		user.appendChild(tmp);
-		channel.userlist.appendChild(user);
-	}
-
-	function Channel_RemoveUser(nick, channel) {
-		if (!nick || !channel || !channel.userlist) return;
-		for (let i = 0; i < channel.userlist.children.length; i++) {
-			let userItem = channel.userlist.children[i];
-			if (!userItem || !userItem.children[1]) continue;
-			let anick = userItem.children[1].textContent;
-			if (anick == nick) {
-				userItem.remove();
-				if (channel.users && channel.users[i]) {
-					channel.users.splice(i, 1);
-				}
-				return true;
-			}
-		}
-	}
-
-	function Channel_RenameUser(nick, newnick, channel) {
-		if (!nick || !newnick || !channel) return;
-		if (!channel.userlist) return;
-		for (let i = 0; i < channel.users.length; i++) {
-			if (channel.users[i] && channel.users[i][1] == nick) {
-				let prefix = channel.users[i][0];
-				Channel_RemoveUser(nick, channel);
-				Channel_InsertUser(newnick, channel, prefix);
-				return true;
-			}
-		}
-	}
-
-	function Channel_UpdateUserPrefix(nick, channel, add, prefix) {
-		if (!nick || !channel || !channel.users || !PrefixChars) return;
-		for (let i = 0; i < channel.users.length; i++) {
-			if (channel.users[i] && channel.users[i][1] == nick) {
-				let pos = PrefixChars[0].indexOf(prefix);
-				if (pos < 0) return;
-				let prefixes = "";
-				if (add == "true" || add === true) {
-					let ii;
-					for (ii = 0; ii < channel.users[i][0].length; ii++) {
-						if (PrefixChars[1].indexOf(channel.users[i][0][ii]) >= pos) break;
-						prefixes += channel.users[i][0][ii];
-					}
-					prefixes += PrefixChars[1][pos];
-					for (; ii < channel.users[i][0].length; ii++) {
-						prefixes += channel.users[i][0][ii];
-					}
-				} else {
-					let tmp = channel.users[i][0].indexOf(PrefixChars[1][pos]);
-					if (tmp >= 0) {
-						prefixes = channel.users[i][0].substring(0, tmp) + channel.users[i][0].substring(tmp + 1);
-					}
-				}
-				if (prefixes == "") prefixes = " ";
-				channel.users[i][0] = prefixes;
-				Channel_RenameUser(nick, nick, channel);
-				break;
-			}
-		}
-	}
-
-	// ADDED FEATURE: 更新未读徽章
-	function updateUnreadBadge(channelName) {
-		const channel = channelMap.get(channelName);
-		if (!channel || !channel.unreadBadge) return;
-		
-		const count = unreadCount.get(channelName) || 0;
-		if (count > 0) {
-			channel.unreadBadge.textContent = count > 99 ? '99+' : count;
-			channel.unreadBadge.classList.add('visible');
-		} else {
-			channel.unreadBadge.classList.remove('visible');
-		}
-	}
-
-	// MODIFIED: 添加高亮和复制功能
-	function writeToScreen(color, message, channel, username) {
-		if (!channel || !channel.content) return;
-		let pre = document.createElement("p");
-		pre.style.color = color;
-		
-		// ADDED FEATURE: 检查是否需要高亮
-		let shouldHighlight = false;
-		const msgText = message.toLowerCase();
-		for (let keyword of highlightKeywords) {
-			if (keyword && msgText.includes(keyword.toLowerCase())) {
-				shouldHighlight = true;
-				break;
-			}
-		}
-		if (shouldHighlight) {
-			pre.classList.add('highlighted');
-		}
-		
-		const now = new Date();
-		const utcTime = now.toISOString().substr(11, 8);
-		let displayMessage;
-		if (username && username !== "") {
-			displayMessage = `[${utcTime}] ${username}: ${linkify(message || "")}`;
-		} else {
-			displayMessage = `[${utcTime}] ${linkify(message || "")}`;
-		}
-		pre.innerHTML = displayMessage;
-		
-		// ADDED FEATURE: 点击复制消息
-		pre.title = '点击复制消息';
-		pre.onclick = function() {
-			copyToClipboard(message);
+function saveSettings() {
+	try {
+		const settings = {
+			wsUrl: document.getElementById('wsUrl').value,
+			nick: document.getElementById('nickInput').value,
+			channel: document.getElementById('channelInput').value,
+			autoReconnect: document.getElementById('autoReconnect').checked,
+			enableNotifications: document.getElementById('enableNotifications').checked,
+			theme: currentTheme
 		};
-		
-		let output = channel.content;
-		if (output) {
-			output.appendChild(pre);
-			while (output.children.length > 200) {
-				output.removeChild(output.children[0]);
-			}
-			
-			// ADDED FEATURE: 更新未读计数
-			if (channel !== activeChannel) {
-				const currentCount = unreadCount.get(channel.name) || 0;
-				unreadCount.set(channel.name, currentCount + 1);
-				updateUnreadBadge(channel.name);
-			}
-			
-			// 保持滚动在底部
-			requestAnimationFrame(() => {
-				output.scrollTop = output.scrollHeight;
+		localStorage.setItem('ircSettings', JSON.stringify(settings));
+	} catch (e) {
+		writeToLog(`[ERROR] 保存设置失败: ${e.message}`);
+	}
+}
+
+// 主题管理
+function toggleTheme() {
+	const themes = ['auto', 'light', 'dark'];
+	const currentIndex = themes.indexOf(currentTheme);
+	currentTheme = themes[(currentIndex + 1) % 3];
+	applyTheme(currentTheme);
+	saveSettings();
+}
+
+function applyTheme(theme) {
+	const html = document.documentElement;
+	if (theme === 'dark') {
+		html.classList.add('dark');
+	} else if (theme === 'light') {
+		html.classList.remove('dark');
+	} else {
+		// 跟随系统
+		updateThemeDisplay();
+	}
+}
+
+function updateThemeDisplay() {
+	const html = document.documentElement;
+	if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+		html.classList.add('dark');
+	} else {
+		html.classList.remove('dark');
+	}
+}
+
+// 通知系统
+function initNotificationSound() {
+	try {
+		const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+		notificationSound = () => {
+			const oscillator = audioContext.createOscillator();
+			const gainNode = audioContext.createGain();
+			oscillator.connect(gainNode);
+			gainNode.connect(audioContext.destination);
+			oscillator.frequency.value = 800;
+			oscillator.type = 'sine';
+			gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+			gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+			oscillator.start(audioContext.currentTime);
+			oscillator.stop(audioContext.currentTime + 0.3);
+		};
+	} catch (e) {
+		writeToLog(`[WARN] 无法初始化通知音效: ${e.message}`);
+	}
+}
+
+function showNotification(title, message, channel) {
+	const enableNotifications = document.getElementById('enableNotifications').checked;
+	if (!enableNotifications || !("Notification" in window)) return;
+
+	// 检查权限
+	if (Notification.permission === 'default') {
+		Notification.requestPermission();
+		return;
+	}
+	if (Notification.permission !== 'granted') return;
+
+	// 如果窗口不是激活状态，显示通知
+	if (document.hidden) {
+		try {
+			const notification = new Notification(`IRC - ${channel || '新消息'}`, {
+				body: message,
+				icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%234F46E5"/><text x="50" y="60" text-anchor="middle" fill="white" font-size="40" font-weight="bold">#</text></svg>',
+				tag: 'irc-message'
 			});
+			notification.onclick = () => {
+				window.focus();
+				channel && Tab_Show(channel);
+			};
+			setTimeout(notification.close.bind(notification), 5000);
+		} catch (e) {
+			writeToLog(`[ERROR] 显示通知失败: ${e.message}`);
 		}
 	}
 
-	function linkify(text) {
-		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
-		return text.replace(urlRegex, function (url) {
-			return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${url}</a>`;
-		});
-	}
+	// 播放提示音
+	if (notificationSound) notificationSound();
 
-	// ADDED FEATURE: 复制到剪贴板
-	function copyToClipboard(text) {
-		if (!text) return;
-		navigator.clipboard.writeText(text).then(() => {
-			writeToLog(`[复制] 已复制: ${text.substring(0, 30)}...`);
-		}).catch(err => {
-			writeToLog(`[复制] 复制失败: ${err}`);
-		});
-	}
+	// 显示内部通知
+	const notificationEl = document.getElementById('notification');
+	const titleEl = document.getElementById('notificationTitle');
+	const messageEl = document.getElementById('notificationMessage');
+	
+	titleEl.textContent = title;
+	messageEl.textContent = message;
+	notificationEl.classList.add('visible');
+	
+	setTimeout(() => {
+		hideNotification();
+	}, 5000);
+}
 
-	function send() {
-		let text = input ? input.value.trim() : "";
-		if (!text || !activeChannel) return;
+function hideNotification() {
+	document.getElementById('notification').classList.remove('visible');
+}
+
+// 工具提示
+function initTooltips() {
+	const tooltip = document.getElementById('globalTooltip');
+	document.addEventListener('mouseover', (e) => {
+		const target = e.target.closest('[data-tooltip]');
+		if (target) {
+			tooltip.textContent = target.dataset.tooltip;
+			tooltip.classList.add('visible');
+			const rect = target.getBoundingClientRect();
+			let x = rect.left + rect.width / 2;
+			let y = rect.top;
+			x = Math.min(Math.max(x, 20), window.innerWidth - 20);
+			y = Math.min(Math.max(y - 20, 20), window.innerHeight - 20);
+			tooltip.style.left = `${x}px`;
+			tooltip.style.top = `${y}px`;
+			tooltip.style.transform = 'translateX(-50%)';
+		}
+	});
+	
+	document.addEventListener('mouseout', (e) => {
+		if (e.target.closest('[data-tooltip]')) {
+			tooltip.classList.remove('visible');
+		}
+	});
+}
+
+// 拖拽上传
+function initDragAndDrop() {
+	const dropZone = document.getElementById('fileDropZone');
+	let dragTimer;
+
+	document.addEventListener('dragover', (e) => {
+		e.preventDefault();
+		clearTimeout(dragTimer);
+		dropZone.classList.add('visible');
+	});
+
+	document.addEventListener('dragleave', (e) => {
+		e.preventDefault();
+		clearTimeout(dragTimer);
+		dragTimer = setTimeout(() => {
+			dropZone.classList.remove('visible');
+		}, 100);
+	});
+
+	document.addEventListener('drop', (e) => {
+		e.preventDefault();
+		dropZone.classList.remove('visible');
+		clearTimeout(dragTimer);
 		
-		// ADDED FEATURE: 表情符号替换
-		for (let [key, emoji] of Object.entries(emojiMap)) {
-			text = text.replace(new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), emoji);
-		}
-		
-		let msg;
-		if (text[0] == "/") {
-			if (text.indexOf("/me ") == 0) {
-				msg = "privmsg " + activeChannel.name + " :\x01ACTION " + text.substring(4) + "\n";
-				writeToScreen("var(--clr-red)", `${nickname} ${text.substring(4)}`, activeChannel, "*");
-			} else {
-				writeToScreen("var(--clr-font)", text, statusChannel, "");
-				msg = text.substring(1) + "\n";
-			}
-		} else {
-			msg = "privmsg " + activeChannel.name + " :" + text + "\n";
-			writeToScreen("var(--clr-font)", text, activeChannel, nickname);
-		}
-		doSend(msg);
-		if (input) input.value = "";
-	}
-
-	function WebSocket_Connect(wsUri) {
-		if (!wsUri) {
-			writeToLog("[ERROR] WebSocket地址为空");
+		if (!activeChannel || activeChannel === statusChannel) {
+			showNotification('错误', '请先加入一个频道', '');
 			return;
 		}
-		try {
-			if (websocket) {
-				try {
-					websocket.onclose = null;
-					websocket.onerror = null;
-					websocket.onopen = null;
-					websocket.onmessage = null;
-					if (websocket.readyState !== WebSocket.CLOSED) {
-						websocket.close(1000, "Reconnecting");
-					}
-				} catch (e) {
-					writeToLog(`[WARN] 清理旧连接时出错: ${e.message}`);
-				}
-				websocket = null;
-			}
-			writeToLog(`[WebSocket] 正在创建连接: ${wsUri}`);
-			websocket = new WebSocket(wsUri);
-			websocket.binaryType = 'blob';
 
-			const connectTimeout = setTimeout(() => {
-				if (websocket && websocket.readyState === WebSocket.CONNECTING) {
-					writeToLog(`[ERROR] 连接超时 (30秒)`);
-					try {
-						websocket.close(1006, "Connection timeout");
-					} catch (e) {
-						writeToLog(`[ERROR] 超时关闭连接失败: ${e.message}`);
-					}
-				}
-			}, 30000);
-
-			websocket.onclose = function (evt) {
-				clearTimeout(connectTimeout);
-				onClose(evt);
-			};
-			websocket.onerror = function (evt) {
-				onError(evt);
-			};
-			websocket.onopen = function (evt) {
-				clearTimeout(connectTimeout);
-				onOpen(evt);
-			};
-			websocket.onmessage = function (evt) {
-				onMessage(evt);
-			};
-		} catch (e) {
-			writeToLog(`[ERROR] WebSocket创建失败: ${e.message}`);
-			onDisconnect();
-			if (wsUrl && wsUrl.startsWith('wss://')) {
-				showSSLWarning(wsUrl);
-			}
-			alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
+		const files = e.dataTransfer.files;
+		if (files.length > 0) {
+			handleFileUpload(files[0]);
 		}
+	});
+}
+
+function selectFile() {
+	const input = document.createElement('input');
+	input.type = 'file';
+	input.onchange = (e) => {
+		const file = e.target.files[0];
+		if (file) handleFileUpload(file);
+	};
+	input.click();
+}
+
+function handleFileUpload(file) {
+	if (file.size > 5 * 1024 * 1024) {
+		showNotification('文件过大', '目前只支持5MB以下的文件', '系统');
+		return;
 	}
 
-	function onClose(evt) {
-		isConnected = false;
-		let reason = evt.reason || '连接关闭';
-		let code = evt.code;
-		let logMsg = `[CLOSE] Code: ${code}`;
+	const reader = new FileReader();
+	reader.onload = (e) => {
+		const data = e.target.result;
+		const fileName = file.name;
+		const fileSize = (file.size / 1024).toFixed(1);
+		
+		// 生成文件分享链接（实际项目中需要上传到服务器）
+		const shareUrl = `https://file.io/${btoa(fileName)}`;
+		const message = `📁 分享文件: ${fileName} (${fileSize}KB) - ${shareUrl}`;
+		
+		doSend("privmsg " + activeChannel.name + " :" + message + "\n");
+		writeToScreen("var(--clr-blue)", message, activeChannel, nickname);
+		showNotification('文件发送', `已发送文件: ${fileName}`, activeChannel.name);
+	};
+	reader.readAsDataURL(file);
+}
 
-		switch (code) {
-			case 1000: logMsg += ' (正常关闭)'; break;
-			case 1006: logMsg += ' (异常断开 - 可能SSL证书错误)'; break;
-			case 1005: logMsg += ' (无状态码)'; break;
-			case 1011: logMsg += ' (服务器异常)'; break;
-			default: if (code >= 4000 && code <= 4999) { logMsg += ' (应用层错误)'; }
+// 全局快捷键
+function globalKeyHandler(e) {
+	if (e.ctrlKey) {
+		switch(e.key.toLowerCase()) {
+			case 'f':
+				e.preventDefault();
+				toggleMessageSearch();
+				break;
+			case 'l':
+				e.preventDefault();
+				toggleLog();
+				break;
+			case 't':
+				e.preventDefault();
+				toggleTheme();
+				break;
 		}
-		logMsg += ` - ${reason}`;
+	} else if (e.key === 'Escape') {
+		// 关闭所有弹窗
+		document.getElementById('searchContainer').classList.remove('visible');
+		document.getElementById('quickCommands').classList.remove('visible');
+		document.getElementById('keyboardShortcuts').classList.remove('visible');
+		document.getElementById('userContextMenu').classList.remove('visible');
+	}
+}
 
-		writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel, "");
-		writeToLog(logMsg);
+// 消息搜索
+function toggleMessageSearch() {
+	const container = document.getElementById('searchContainer');
+	container.classList.toggle('visible');
+	if (container.classList.contains('visible')) {
+		document.getElementById('searchInput').focus();
+	}
+}
 
+function onGlobalScroll(e) {
+	if (e.target.classList.contains('channelcontent') || e.target.parentElement?.classList.contains('channelcontent')) {
+		checkScrollPosition();
+	}
+}
+
+// 连接状态管理
+function updateConnectionStatus(connected) {
+	const statusEl = document.getElementById('connectionStatus');
+	const statusText = document.getElementById('statusText');
+	if (!statusEl || !statusText) return;
+
+	if (connected) {
+		statusEl.classList.remove('disconnected');
+		statusEl.classList.add('connected');
+		statusText.textContent = `已连接 (${nickname})`;
+	} else {
+		statusEl.classList.remove('connected');
+		statusEl.classList.add('disconnected');
+		statusText.textContent = '未连接';
+	}
+}
+
+// 日志管理
+function toggleLog() {
+	const logContainer = document.getElementById('logContainer');
+	if (logContainer) {
+		logContainer.classList.toggle('visible');
+		if (!logContainer.classList.contains('visible')) {
+			logContainer.scrollTop = logContainer.scrollHeight;
+		}
+	}
+}
+
+function clearLog() {
+	const logOutput = document.getElementById('logOutput');
+	if (logOutput) {
+		logOutput.textContent = '';
+	}
+}
+
+function writeToLog(message, level = 'INFO') {
+	const logOutput = document.getElementById('logOutput');
+	if (logOutput) {
+		const timestamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+		const levelClass = `log-${level.toLowerCase()}`;
+		logOutput.innerHTML += `<span class="${levelClass}">[${timestamp}] ${message}</span>\n`;
+		logOutput.scrollTop = logOutput.scrollHeight;
+	}
+}
+
+// SSL警告
+function showSSLWarning(url) {
+	const warning = document.getElementById('sslWarning');
+	const link = document.getElementById('sslLink');
+	if (!warning || !link) return;
+
+	let displayUrl = url || document.getElementById('wsUrl')?.value.trim();
+	if (displayUrl) {
+		link.href = displayUrl.replace('wss://', 'https://').replace('ws://', 'http://');
+		link.textContent = link.href;
+	} else {
+		link.href = '#';
+		link.textContent = '请先在WebSocket地址栏输入服务器地址';
+	}
+	warning.classList.add('visible');
+	setTimeout(() => {
+		if (warning) warning.classList.remove('visible');
+	}, 8000);
+}
+
+// 连接管理
+function toggleConnection() {
+	if (isConnected) {
+		autoReconnect = false;
+		const reconnectCheckbox = document.getElementById('autoReconnect');
+		if (reconnectCheckbox) reconnectCheckbox.checked = false;
 		if (websocket) {
 			try {
-				websocket.onclose = null;
-				websocket.onerror = null;
-				websocket.onopen = null;
-				websocket.onmessage = null;
+				websocket.close(1000, "User disconnected");
 			} catch (e) {
-				writeToLog(`[WARN] 清理事件监听器失败: ${e.message}`);
+				writeToLog(`[ERROR] 关闭WebSocket时出错: ${e.message}`, 'ERROR');
 			}
-			websocket = null;
 		}
 		onDisconnect();
+	} else {
+		doConnect();
+	}
+}
+
+function validateNickname(nick) {
+	if (!nick || nick.trim() === "") return false;
+	return /^[a-zA-Z_\\`\[\]{}^|][a-zA-Z0-9_\\`\[\]{}^|-]*$/.test(nick);
+}
+
+function validateWsUrl(url) {
+	if (!url) return false;
+	return /^wss?:\/\/.+/.test(url);
+}
+
+function doConnect() {
+	const wsUrlInput = document.getElementById('wsUrl');
+	const nickInput = document.getElementById('nickInput');
+	const channelInput = document.getElementById('channelInput');
+	const reconnectCheckbox = document.getElementById('autoReconnect');
+	const connectBtn = document.getElementById('connectBtn');
+
+	if (!wsUrlInput || !nickInput || !channelInput || !connectBtn) {
+		alert("界面元素加载错误, 请刷新页面重试");
+		return;
 	}
 
-	function onError(evt) {
-		let errorType = 'WebSocket错误';
-		if (evt && evt.target) {
-			if (evt.target.readyState === WebSocket.CONNECTING) {
-				errorType = '连接失败';
-			} else if (evt.target.readyState === WebSocket.OPEN) {
-				errorType = '消息错误';
+	wsUrl = wsUrlInput.value.trim();
+	nickname = nickInput.value.trim();
+	channelName = channelInput.value.trim();
+	autoReconnect = reconnectCheckbox ? reconnectCheckbox.checked : false;
+
+	if (!validateWsUrl(wsUrl)) {
+		alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
+		return;
+	}
+	if (!validateNickname(nickname)) {
+		alert("昵称格式无效!必须以字母或特定符号开头, 不能包含空格和特殊字符");
+		return;
+	}
+	if (channelName && !channelName.startsWith('#')) {
+		channelName = '#' + channelName;
+	}
+
+	reconnectAttempts = 0;
+	wsUrlInput.disabled = true;
+	nickInput.disabled = true;
+	channelInput.disabled = true;
+	if (reconnectCheckbox) reconnectCheckbox.disabled = true;
+
+	connectBtn.textContent = '连接中...';
+	connectBtn.disabled = true;
+
+	// 保存设置
+	saveSettings();
+
+	// 清空界面
+	channels.innerHTML = '';
+	channelContents.innerHTML = '';
+	channelMap.clear();
+	messageSearchIndex = [];
+
+	// 显示聊天区域
+	contentsWrapper.classList.remove('hidden');
+	contentsWrapper.classList.add('visible');
+	if (emptyState) emptyState.style.display = 'none';
+	if (input) input.style.display = 'block';
+
+	statusChannel = new Tab_Create("Status", "系统状态", false);
+	writeToLog(`[系统] 正在连接: ${wsUrl}`);
+	WebSocket_Connect(wsUrl);
+}
+
+function onDisconnect() {
+	isConnected = false;
+	const wsUrlInput = document.getElementById('wsUrl');
+	const nickInput = document.getElementById('nickInput');
+	const channelInput = document.getElementById('channelInput');
+	const reconnectCheckbox = document.getElementById('autoReconnect');
+	const connectBtn = document.getElementById('connectBtn');
+
+	if (wsUrlInput) wsUrlInput.disabled = false;
+	if (nickInput) nickInput.disabled = false;
+	if (channelInput) channelInput.disabled = false;
+	if (reconnectCheckbox) reconnectCheckbox.disabled = false;
+
+	if (connectBtn) {
+		connectBtn.textContent = '连接';
+		connectBtn.disabled = false;
+		connectBtn.classList.remove('disconnect');
+	}
+
+	updateConnectionStatus(false);
+
+	// 隐藏聊天区域
+	contentsWrapper.classList.remove('visible');
+	contentsWrapper.classList.add('hidden');
+	if (emptyState) emptyState.style.display = 'flex';
+	if (input) input.style.display = 'none';
+
+	writeToScreen("status", "DISCONNECTED", statusChannel, "");
+	writeToLog(`[系统] 已断开连接`);
+
+	if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
+		reconnectAttempts++;
+		const delay = reconnectDelay * reconnectAttempts;
+		writeToLog(`[重连] ${Math.floor(delay / 1000)}秒后尝试第 ${reconnectAttempts}/${maxReconnectAttempts} 次重连...`);
+		setTimeout(() => {
+			if (!isConnected && autoReconnect) {
+				writeToLog(`[重连] 正在尝试重新连接...`);
+				doConnect();
+			}
+		}, delay);
+	} else if (autoReconnect && reconnectAttempts >= maxReconnectAttempts) {
+		writeToLog(`[重连] 达到最大重连次数, 停止尝试`, 'WARN');
+		autoReconnect = false;
+		if (reconnectCheckbox) reconnectCheckbox.checked = false;
+		showNotification('重连失败', '自动重连失败, 请检查网络或服务器设置', '系统');
+	}
+}
+
+// 键盘事件
+function onKeyDown(e) {
+	if (e.key === 'Enter') {
+		const suggestions = document.getElementById('commandSuggestions');
+		if (suggestions.classList.contains('visible')) {
+			const selected = suggestions.querySelector('.suggestion-item.active');
+			if (selected) {
+				input.value = selected.dataset.command + ' ';
+				suggestions.classList.remove('visible');
+				input.focus();
+				return;
 			}
 		}
-		writeToScreen("var(--clr-red)", `ERROR: ${errorType}`, statusChannel, "");
-		writeToLog(`[ERROR] ${errorType}: ${evt.data || '未知错误'}`);
-		if (wsUrl && wsUrl.startsWith('wss://')) {
-			showSSLWarning(wsUrl);
-		}
+		send();
+	} else if (e.key === 'Tab') {
+		e.preventDefault();
+		handleTabComplete();
+	} else if (e.key === 'ArrowUp' && !input.value && messageHistory.length > 0) {
+		e.preventDefault();
+		currentHistoryIndex = Math.min(currentHistoryIndex + 1, messageHistory.length - 1);
+		input.value = messageHistory[messageHistory.length - 1 - currentHistoryIndex];
+	} else if (e.key === 'ArrowDown' && currentHistoryIndex >= 0) {
+		e.preventDefault();
+		currentHistoryIndex = Math.max(currentHistoryIndex - 1, -1);
+		input.value = currentHistoryIndex >= 0 ? messageHistory[messageHistory.length - 1 - currentHistoryIndex] : '';
+	} else {
+		currentHistoryIndex = -1;
 	}
 
-	function onOpen(evt) {
-		isConnected = true;
-		reconnectAttempts = 0;
-		writeToScreen("var(--clr-font)", "CONNECTED", statusChannel, "");
-		writeToLog(`[OPEN] WebSocket连接成功: ${wsUrl}`);
-		updateConnectionStatus(true);
-
-		const connectBtn = document.getElementById('connectBtn');
-		if (connectBtn) {
-			connectBtn.textContent = '断开';
-			connectBtn.disabled = false;
-			connectBtn.classList.add('disconnect');
-		}
-
-		doSend("user websocket * * :WebSocket User");
-		doSend("nick " + nickname);
+	// 隐藏命令建议
+	if (e.key !== '/' && !input.value.startsWith('/')) {
+		document.getElementById('commandSuggestions').classList.remove('visible');
 	}
+}
 
-	function onMessage(evt) {
-		if (!evt) return;
-		rawData = evt.data;
-		writeToLog(`← RECV: ${typeof rawData === 'string' ? rawData : '[二进制数据]'}`);
-		if (rawData instanceof Blob) {
-			let fileReader = new FileReader();
-			fileReader.addEventListener("loadend", handleBinaryInput);
-			fileReader.readAsText(rawData);
-		} else {
-			process(rawData);
-		}
+function onInputChange() {
+	const value = input.value;
+	if (value.startsWith('/')) {
+		showCommandSuggestions(value.substring(1));
+	} else {
+		document.getElementById('commandSuggestions').classList.remove('visible');
 	}
+}
 
-	function handleBinaryInput(event) {
-		if (!event || !event.target) return;
-		let fileReader = event.target;
-		let raw = fileReader.result;
-		writeToLog(`← RECV (Blob→Text): ${raw}`);
-		process(raw);
-	}
+function handleTabComplete() {
+	const text = input.value;
+	const cursorPos = input.selectionStart;
+	const beforeCursor = text.substring(0, cursorPos);
+	const parts = beforeCursor.split(' ');
+	const currentWord = parts[parts.length - 1];
 
-	function doSend(message) {
-		if (!message) return;
-		if (websocket && websocket.readyState === WebSocket.OPEN) {
-			try {
-				websocket.send(message);
-				writeToLog(`→ SEND: ${message.trim()}`);
-			} catch (e) {
-				writeToLog(`[ERROR] 发送消息失败: ${e.message}`);
-				writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel, "");
-			}
-		} else {
-			writeToLog(`[ERROR] WebSocket未连接, 无法发送: ${message.trim()}`);
-			if (!isConnected) {
-				writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
-			}
+	if (currentWord.length > 0 && activeChannel && activeChannel.users) {
+		// 昵称补全
+		const matches = activeChannel.users.filter(user => 
+			user[1].toLowerCase().startsWith(currentWord.toLowerCase())
+		);
+		if (matches.length === 1) {
+			const completion = matches[0][1];
+			parts[parts.length - 1] = completion;
+			input.value = parts.join(' ') + text.substring(cursorPos);
+			input.setSelectionRange(parts.join(' ').length, parts.join(' ').length);
+		} else if (matches.length > 1) {
+			showNotification('自动补全', `可能的匹配: ${matches.map(m => m[1]).join(', ')}`, '系统');
 		}
 	}
+}
 
-	var Commands = new Map();
-	Commands.set("001", function (nick, data) {
-		doSend("CAP REQ :multi-prefix");
-		if (channelName) {
-			doSend("join " + channelName);
-			writeToLog(`[IRC] 接收001, 准备加入频道: ${channelName}`);
-		} else {
-			writeToLog(`[IRC] 接收001, 未设置自动加入频道`);
-		}
+function showCommandSuggestions(query) {
+	const suggestions = document.getElementById('commandSuggestions');
+	const matches = availableCommands.filter(cmd => 
+		cmd.cmd.includes(query.toLowerCase())
+	);
+	
+	if (matches.length === 0) {
+		suggestions.classList.remove('visible');
+		return;
+	}
+
+	suggestions.innerHTML = matches.map((cmd, index) => `
+		<div class="suggestion-item ${index === 0 ? 'active' : ''}" 
+			 data-command="${cmd.cmd}"
+			 onmouseover="this.classList.add('active');"
+			 onmouseout="this.classList.remove('active');"
+			 onclick="selectCommand('${cmd.cmd}')">
+			<span><strong>${cmd.cmd}</strong> - ${cmd.desc}</span>
+			<span class="desc">${cmd.usage}</span>
+		</div>
+	`).join('');
+	
+	suggestions.classList.add('visible');
+}
+
+function selectCommand(command) {
+	input.value = command + ' ';
+	document.getElementById('commandSuggestions').classList.remove('visible');
+	input.focus();
+}
+
+// Tab管理
+function Tab_onClick(evt) {
+	if (!evt || !evt.currentTarget) return;
+	let chanName = evt.currentTarget.value;
+	Tab_Show(chanName);
+}
+
+function Tabs_Hide() {
+	let tabcontent = document.querySelectorAll(".channelcontent");
+	tabcontent.forEach(content => content.classList.remove('active'));
+
+	let tablinks = document.querySelectorAll(".channel");
+	tablinks.forEach(link => {
+		link.classList.remove("active");
+		// 清除未读标记
+		const badge = link.querySelector('.unread-badge');
+		if (badge) badge.remove();
 	});
-	Commands.set("005", function (nick, data) {
-		if (!data || !PrefixChars) return;
-		for (let i = 2; i < data.length; i++) {
-			if (data[i].indexOf("PREFIX=") == 0) {
-				let tmp = data[i].substring(8) + " ";
-				if (tmp) {
-					PrefixChars = tmp.split(")");
-					writeToScreen("var(--clr-brown)", "PREFIX CHARS: " + PrefixChars[0] + " " + PrefixChars[1], statusChannel, "");
-					writeToLog(`[IRC] 支持的PREFIX: ${PrefixChars[0]} ${PrefixChars[1]}`);
+}
+
+function Tab_Show(name) {
+	if (!name) return;
+	let channel = channelMap.get(name);
+	Tabs_Hide();
+	if (channel && channel.channel) {
+		channel.channel.classList.add('active');
+		channel.button.classList.add("active");
+		activeChannel = channel;
+		// 清除未读计数
+		unreadCounts.set(name, 0);
+		// 滚动到底部
+		setTimeout(() => {
+			if (channel.content) {
+				channel.content.scrollTop = channel.content.scrollHeight;
+			}
+		}, 10);
+	}
+}
+
+function Tab_Close(evt) {
+	evt.stopPropagation();
+	if (!evt || !evt.currentTarget) return;
+	const chanName = evt.currentTarget.value;
+	
+	// 确认对话框
+	if (chanName !== 'Status') {
+		const confirm = window.confirm(`确定要离开频道 ${chanName} 吗?`);
+		if (!confirm) return;
+	}
+	
+	doSend("part " + chanName);
+	Channel_Destroy(chanName);
+}
+
+function Tab_Create(name, topic, createlist) {
+	if (!name || !channels || !channelContents) {
+		console.error("Tab_Create: 缺少必要元素");
+		return null;
+	}
+	
+	// 防止重复创建
+	if (channelMap.has(name)) {
+		Tab_Show(name);
+		return channelMap.get(name);
+	}
+	
+	Tabs_Hide();
+	this.name = name;
+	let escapedName = HTML_escape(name);
+
+	this.button = document.createElement("button");
+	this.button.innerHTML = escapedName + '<span class="unread-badge" style="display: none;">0</span>';
+	this.button.value = escapedName;
+	this.button.onclick = Tab_onClick;
+	this.button.className = "channel";
+
+	let x = document.createElement("button");
+	x.innerHTML = "×";
+	x.onclick = Tab_Close;
+	x.value = escapedName;
+	x.className = "x";
+	this.button.appendChild(x);
+
+	channels.appendChild(this.button);
+
+	this.channel = document.createElement("div");
+	this.channel.className = "channelcontent";
+
+	let navWrapper = document.createElement("nav");
+	this.topic = document.createElement("h3");
+	this.topic.innerHTML = HTML_escape(topic || "无主题");
+	navWrapper.appendChild(this.topic);
+
+	this.content = document.createElement("nav");
+	this.content.addEventListener('scroll', checkScrollPosition);
+	navWrapper.appendChild(this.content);
+
+	this.channel.appendChild(navWrapper);
+
+	if (createlist) {
+		this.userlist = document.createElement("ul");
+		this.users = [];
+		this.names_end = true;
+		this.channel.appendChild(this.userlist);
+	}
+
+	channelContents.appendChild(this.channel);
+	channelMap.set(name, this);
+	activeChannel = this;
+	Tab_Show(name);
+	
+	// 初始化该频道的未读计数
+	unreadCounts.set(name, 0);
+	
+	return this;
+}
+
+function Channel_Destroy(name) {
+	if (!name) return;
+	let channel = channelMap.get(name);
+	if (!channel) return;
+	channel.button.remove();
+	channel.channel.remove();
+	if (activeChannel == channel) {
+		activeChannel = statusChannel;
+	}
+	channelMap.delete(name);
+	unreadCounts.delete(name);
+	if (activeChannel) {
+		Tab_Show(activeChannel.name);
+	}
+}
+
+function Channel_InsertUser(nick, channel, prefix) {
+	if (!nick || !channel || !channel.userlist) return;
+	
+	// 检查是否已存在
+	for (let i = 0; i < channel.users.length; i++) {
+		if (channel.users[i] && channel.users[i][1] === nick) {
+			return;
+		}
+	}
+	
+	let user = document.createElement("li");
+	user.className = 'user-list-item';
+	user.dataset.nick = nick;
+	user.oncontextmenu = (e) => showUserContextMenu(e, nick);
+	
+	let avatar = document.createElement("div");
+	avatar.className = 'user-avatar-small';
+	avatar.textContent = nick.charAt(0).toUpperCase();
+	
+	let prefixEl = document.createElement("span");
+	prefixEl.className = 'user-prefix';
+	if (prefix && prefix !== " ") prefixEl.textContent = prefix[0];
+	
+	avatar.appendChild(prefixEl);
+	user.appendChild(avatar);
+	
+	let nickEl = document.createElement("span");
+	nickEl.className = 'user-nick';
+	nickEl.textContent = nick;
+	user.appendChild(nickEl);
+	
+	let statusEl = document.createElement("span");
+	statusEl.className = 'user-status';
+	statusEl.title = '在线';
+	user.appendChild(statusEl);
+	
+	let i = 0;
+	for (i; i < channel.users.length; i++) {
+		if (channel.users[i] && channel.users[i][1]) {
+			if (channel.users[i][1].localeCompare(nick, undefined, { sensitivity: 'accent' }) < 0) continue;
+		}
+		break;
+	}
+	channel.users.splice(i, 0, [prefix || " ", nick]);
+	channel.userlist.insertBefore(user, channel.userlist.childNodes[i]);
+	
+	// 添加头像工具提示
+	user.dataset.tooltip = userNotes.get(nick) || '右键查看更多选项';
+}
+
+function Channel_AppendUser(nick, channel, dontnotify, prefix) {
+	if (!nick || !channel || !channel.userlist) return;
+	
+	// 检查是否已存在
+	if (channel.users.some(u => u[1] === nick)) return;
+	
+	let user = document.createElement("li");
+	user.className = 'user-list-item';
+	user.dataset.nick = nick;
+	user.oncontextmenu = (e) => showUserContextMenu(e, nick);
+	
+	let avatar = document.createElement("div");
+	avatar.className = 'user-avatar-small';
+	avatar.textContent = nick.charAt(0).toUpperCase();
+	
+	let prefixEl = document.createElement("span");
+	prefixEl.className = 'user-prefix';
+	if (prefix && prefix !== " ") prefixEl.textContent = prefix[0];
+	
+	avatar.appendChild(prefixEl);
+	user.appendChild(avatar);
+	
+	let nickEl = document.createElement("span");
+	nickEl.className = 'user-nick';
+	nickEl.textContent = nick;
+	user.appendChild(nickEl);
+	
+	let statusEl = document.createElement("span");
+	statusEl.className = 'user-status';
+	statusEl.title = '在线';
+	user.appendChild(statusEl);
+	
+	channel.userlist.appendChild(user);
+	channel.users.push([prefix || " ", nick]);
+	
+	// 添加头像工具提示
+	user.dataset.tooltip = userNotes.get(nick) || '右键查看更多选项';
+}
+
+function Channel_RemoveUser(nick, channel) {
+	if (!nick || !channel || !channel.userlist) return;
+	for (let i = 0; i < channel.userlist.children.length; i++) {
+		let userItem = channel.userlist.children[i];
+		if (!userItem || !userItem.dataset.nick) continue;
+		let anick = userItem.dataset.nick;
+		if (anick == nick) {
+			userItem.remove();
+			if (channel.users && channel.users[i]) {
+				channel.users.splice(i, 1);
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+function Channel_RenameUser(nick, newnick, channel) {
+	if (!nick || !newnick || !channel) return false;
+	if (!channel.userlist) return false;
+	for (let i = 0; i < channel.users.length; i++) {
+		if (channel.users[i] && channel.users[i][1] == nick) {
+			let prefix = channel.users[i][0];
+			Channel_RemoveUser(nick, channel);
+			Channel_InsertUser(newnick, channel, prefix);
+			return true;
+		}
+	}
+	return false;
+}
+
+function Channel_UpdateUserPrefix(nick, channel, add, prefix) {
+	if (!nick || !channel || !channel.users || !PrefixChars) return;
+	for (let i = 0; i < channel.users.length; i++) {
+		if (channel.users[i] && channel.users[i][1] == nick) {
+			let pos = PrefixChars[0].indexOf(prefix);
+			if (pos < 0) return;
+			let prefixes = "";
+			if (add == "true" || add === true) {
+				let ii;
+				for (ii = 0; ii < channel.users[i][0].length; ii++) {
+					if (PrefixChars[1].indexOf(channel.users[i][0][ii]) >= pos) break;
+					prefixes += channel.users[i][0][ii];
 				}
-			}
-		}
-	});
-	Commands.set("332", function (nick, data) {
-		if (!data || data.length < 5) return;
-		let channel = channelMap.get(data[3]);
-		if (!channel || !channel.topic) return;
-		let text = data[4].substring(1);
-		for (let i = 5; i < data.length; i++) {
-			text += " " + data[i];
-		}
-		channel.topic.innerHTML = HTML_escape(text || "无主题");
-		writeToLog(`[IRC] 频道主题: ${data[3]} - ${text}`);
-	});
-	Commands.set("353", function (nick, data) {
-		if (!data || data.length < 6) return;
-		let channel = channelMap.get(data[4]);
-		if (!channel) return;
-		if (channel.names_end == true) {
-			channel.users = [];
-			channel.names_end = false;
-		}
-		data[5] = data[5].substring(1);
-		for (let i = 5; i < data.length; i++) {
-			let prefix = "";
-			let ii = 0;
-			while (PrefixChars && PrefixChars[1] && PrefixChars[1].indexOf(data[i][ii]) >= 0) {
-				prefix += data[i][ii];
-				ii++;
-			}
-			if (prefix == "") prefix = " ";
-			channel.users.push([prefix, data[i].substring(ii)]);
-		}
-		writeToLog(`[IRC] 接收用户列表: ${channel.users.length} 用户`);
-	});
-	Commands.set("366", function (nick, data) {
-		if (!data || data.length < 4) return;
-		let channel = channelMap.get(data[3]);
-		if (!channel) return;
-		channel.users.sort(sortUserList);
-		channel.userlist.innerHTML = "";
-		for (let i = 0; i < channel.users.length; i++) {
-			Channel_AppendUser(channel.users[i][1], channel, true, channel.users[i][0]);
-		}
-		channel.names_end = true;
-		writeToLog(`[IRC] 用户列表加载完成`);
-	});
-	Commands.set("432", function (nick, data) {
-		nickname = prompt("错误: 昵称包含非法字符\n请输入新的昵称", "");
-		if (nickname) {
-			doSend("nick " + nickname);
-			writeToLog(`[IRC] 昵称错误, 重新输入: ${nickname}`);
-		}
-	});
-	Commands.set("433", function (nick, data) {
-		nickname = prompt("错误: 昵称已被占用\n请输入新的昵称", "");
-		if (nickname) {
-			doSend("nick " + nickname);
-			writeToLog(`[IRC] 昵称冲突, 新昵称: ${nickname}`);
-		}
-	});
-	Commands.set("JOIN", function (nick, data) {
-		if (!data || data.length < 3) return;
-		if (data[0].indexOf(":" + nickname + "!") != 0) {
-			if (data[2][0] == ":") data[2] = data[2].substring(1);
-			let channel = channelMap.get(data[2]);
-			if (!channel) return;
-			Channel_InsertUser(nick, channel, " ");
-			writeToScreen("var(--clr-green)", `${nick} 加入频道`, channel, "*");
-			// ADDED FEATURE: 发送通知
-			if (channel !== activeChannel) {
-				sendBrowserNotification(`${nick} 加入`, `${nick} 加入了 ${data[2]}`, data[2]);
-			}
-		} else {
-			let channel = new Tab_Create(data[2].substring(1), "", true);
-			nick = nickname;
-			writeToScreen("var(--clr-green)", `你已加入频道 ${data[2].substring(1)}`, channel, "*");
-		}
-		writeToLog(`[IRC] 用户加入: ${nick} → ${data[2]}`);
-	});
-	Commands.set("KICK", function (nick, data) {
-		if (!data || data.length < 5) return;
-		let channel = channelMap.get(data[2]);
-		if (!channel) return;
-		let text = data[4].substring(1);
-		for (let i = 5; i < data.length; i++) {
-			text += " " + data[i];
-		}
-		if (data[3] != nickname) {
-			if (Channel_RemoveUser(data[3], channel)) {
-				writeToScreen("var(--clr-red)", `${data[3]} 被 ${nick} 踢出 (原因: ${text})`, channel, "*");
-				sendBrowserNotification(`${data[3]} 被踢出`, `${data[3]} 被踢出 ${data[2]}`, data[2]);
-			}
-		} else {
-			Channel_Destroy(data[2]);
-			writeToScreen("var(--clr-red)", `你被 ${nick} 踢出 ${data[2]} (原因: ${text})`, statusChannel, "");
-			alert(`你被踢出 ${data[2]}\n原因: ${text}`);
-		}
-		writeToLog(`[IRC] 被踢出: ${data[2]} by ${nick} - ${text}`);
-	});
-	Commands.set("MODE", function (nick, data) {
-		if (!data || data.length < 4) return;
-		let channel = channelMap.get(data[2]);
-		if (!channel) return;
-		let text = data[3];
-		for (let i = 4; i < data.length; i++) {
-			text += " " + data[i];
-		}
-		writeToScreen("var(--clr-blue)", `${nick} 设置模式: ${text}`, channel, "*");
-		if (!PrefixChars || data[3].length < 1) return;
-		let ii = 4;
-		let status = "false";
-		for (let i = 0; i < data[3].length; i++) {
-			if (data[3][i] == "+") status = "true";
-			else if (data[3][i] == "-") status = "false";
-			else {
-				if (ii < data.length) {
-					Channel_UpdateUserPrefix(data[ii], channel, status, data[3][i]);
-					ii++;
+				prefixes += PrefixChars[1][pos];
+				for (; ii < channel.users[i][0].length; ii++) {
+					prefixes += channel.users[i][0][ii];
 				}
-			}
-		}
-		writeToLog(`[IRC] 模式变更: ${text}`);
-	});
-	Commands.set("NICK", function (nick, data) {
-		if (!data || data.length < 3) return;
-		let newnick = data[2].substring(1);
-		if (nick == nickname) nickname = newnick;
-		channelMap.forEach(function (channel, name) {
-			if (Channel_RenameUser(nick, newnick, channel)) {
-				if (newnick == nickname) {
-					writeToScreen("var(--clr-green)", `你现在的新昵称是 ${newnick}`, channel, "*");
-				} else {
-					writeToScreen("var(--clr-green)", `${nick} 更名为 ${newnick}`, channel, "*");
-				}
-			}
-		});
-		writeToLog(`[IRC] 昵称变更: ${nick} → ${newnick}`);
-	});
-	Commands.set("PART", function (nick, data) {
-		if (!data || data.length < 3) return;
-		if (data[0].indexOf(":" + nickname + "!") != 0) {
-			let channel = channelMap.get(data[2]);
-			if (!channel) return;
-			if (Channel_RemoveUser(nick, channel)) {
-				writeToScreen("var(--clr-green)", `${nick} 离开频道`, channel, "*");
-				sendBrowserNotification(`${nick} 离开`, `${nick} 离开了 ${data[2]}`, data[2]);
-			}
-		} else {
-			Channel_Destroy(data[2]);
-			writeToScreen("var(--clr-green)", `你已离开频道 ${data[2]}`, statusChannel, "");
-		}
-		writeToLog(`[IRC] 离开频道: ${data[2]}`);
-	});
-	Commands.set("TOPIC", function (nick, data) {
-		if (!data || data.length < 4) return;
-		let channel = channelMap.get(data[2]);
-		if (!channel || !channel.topic) return;
-		let text = data[3].substring(1);
-		for (let i = 4; i < data.length; i++) {
-			text += " " + data[i];
-		}
-		channel.topic.innerHTML = HTML_escape(text || "无主题");
-		writeToScreen("var(--clr-blue)", `${nick} 设置主题为: ${text}`, channel, "*");
-		writeToLog(`[IRC] 主题变更: ${data[2]} - ${text}`);
-	});
-	Commands.set("QUIT", function (nick, data) {
-		channelMap.forEach(function (channel, name) {
-			if (Channel_RemoveUser(nick, channel)) {
-				writeToScreen("var(--clr-purple)", `${nick} 退出IRC`, channel, "*");
-			}
-		});
-		writeToLog(`[IRC] 用户退出: ${nick}`);
-	});
-	Commands.set("PRIVMSG", function (nick, data) {
-		if (!data || data.length < 4) return;
-		let channel = channelMap.get(data[2]);
-		if (!channel) channel = statusChannel;
-		let text = data[3].substring(1);
-		for (let i = 4; i < data.length; i++) {
-			text += " " + data[i];
-		}
-		nick = data[0].substring(1).split("!")[0];
-		
-		// ADDED FEATURE: 记录原始消息用于通知
-		const originalText = text;
-		
-		if (text[0] == "\x01") {
-			if (text.indexOf("\x01ACTION ") == 0) {
-				writeToScreen("var(--clr-red)", `${nick} ${text.substring(8)}`, channel, "*");
 			} else {
-				writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*");
+				let tmp = channel.users[i][0].indexOf(PrefixChars[1][pos]);
+				if (tmp >= 0) {
+					prefixes = channel.users[i][0].substring(0, tmp) + channel.users[i][0].substring(tmp + 1);
+				}
 			}
-		} else {
-			writeToScreen("var(--clr-font)", text, channel, nick);
+			if (prefixes == "") prefixes = " ";
+			channel.users[i][0] = prefixes;
+			Channel_RenameUser(nick, nick, channel);
+			break;
 		}
-		
-		// ADDED FEATURE: 发送浏览器通知
-		if (channel !== activeChannel && nick !== nickname) {
-			const displayText = originalText.replace(/\x01ACTION/, '').replace(/\x01/g, '').trim();
-			sendBrowserNotification(`[${data[2]}] ${nick}`, displayText, data[2]);
-		}
-	});
-	Commands.set("NOTICE", function (nick, data) {
-		if (!data || data.length < 4) return;
-		let channel = channelMap.get(data[2]);
-		if (!channel) channel = statusChannel;
-		let text = data[3].substring(1);
-		for (let i = 4; i < data.length; i++) {
-			text += " " + data[i];
-		}
-		nick = data[0].substring(1).split("!")[0];
-		writeToScreen("var(--clr-gold)", `通知 ${nick}: ${text}`, channel, "-");
-		writeToLog(`[NOTICE] ${nick}: ${text}`);
-		
-		// ADDED FEATURE: 通知提示
-		if (nick !== nickname) {
-			sendBrowserNotification(`通知 from ${nick}`, text, '通知');
-		}
-	});
-
-	function process(rawData) {
-		if (!rawData) return;
-		let data = rawData.split(" ");
-		if (!data || data.length < 2) {
-			writeToLog(`[DEBUG] 无效数据: ${rawData}`);
-			return;
-		}
-		let nick = data[0].substring(1).split("!")[0];
-		let command = data[1].toUpperCase();
-		let fn = Commands.get(command);
-		if (fn) {
-			fn(nick, data);
-			return;
-		}
-		if (!isNaN(parseInt(data[1]))) {
-			let text = data[1];
-			for (let i = 3; i < data.length; i++) {
-				text += " " + data[i];
-			}
-			writeToScreen("var(--clr-gold)", text, statusChannel, "");
-			writeToLog(`[SERVER] ${data[1]}: ${text}`);
-			return;
-		}
-		if (data[0] == "PING") {
-			let pongResponse = rawData.replace("PING", "PONG");
-			writeToScreen("var(--clr-brown)", pongResponse, statusChannel, "");
-			doSend(pongResponse);
-			writeToLog(`[PING/PONG] ${pongResponse}`);
-			return;
-		}
-		if (data[0] == "ERROR") {
-			writeToScreen("var(--clr-font)", rawData, statusChannel, "");
-			writeToLog(`[ERROR] ${rawData}`);
-			return;
-		}
-		console.log("DEBUG:", rawData);
-		writeToLog(`[DEBUG] ${rawData}`);
 	}
-</script>
+}
 
-</html>
+// 消息显示
+function writeToScreen(type, message, channel, username) {
+	if (!channel || !channel.content) return;
+	
+	// 应用忽略规则
+	if (username && ignoredUsers.has(username)) return;
+	
+	const now = new Date();
+	const messageId = `${channel.name}-${now.getTime()}-${Math.random().toString(36).substr(2, 9)}`;
+	
+	const messageEl = document.createElement("div");
+	messageEl.className = 'message';
+	messageEl.dataset.timestamp = now.getTime();
+	messageEl.dataset.id = messageId;
+	
+	// 消息搜索索引
+	messageSearchIndex.push({
+		id: messageId,
+		content: `${username} ${message}`.toLowerCase(),
+		channel: channel.name,
+		timestamp: now.getTime()
+	});
+	
+	// 用户头像
+	let displayUsername = username;
+	if (username === "*" || username === "-") {
+		displayUsername = '系统';
+	} else if (username === nickname) {
+		displayUsername = nickname;
+	}
+	
+	const avatar = document.createElement("div");
+	avatar.className = 'message-avatar';
+	avatar.textContent = displayUsername.charAt(0).toUpperCase();
+	
+	const content = document.createElement("div");
+	content.className = 'message-content';
+	
+	const header = document.createElement("div");
+	header.className = 'message-header';
+	
+	const usernameEl = document.createElement("span");
+	usernameEl.className = 'message-username';
+	usernameEl.textContent = displayUsername;
+	
+	const timestampEl = document.createElement("span");
+	timestampEl.className = 'message-timestamp';
+	timestampEl.textContent = formatTime(now);
+	
+	header.appendChild(usernameEl);
+	header.appendChild(timestampEl);
+	
+	const textEl = document.createElement("p");
+	textEl.className = 'message-text';
+	
+	let displayMessage = '';
+	if (type === 'status') {
+		textEl.style.color = 'var(--clr-brown)';
+		displayMessage = message;
+	} else if (username === '*' || username === '-') {
+		textEl.className = 'message-text message-action';
+		textEl.style.color = 'var(--clr-gold)';
+		displayMessage = message;
+	} else if (message.includes('加入频道') || message.includes('离开频道') || message.includes('更名为')) {
+		textEl.style.color = 'var(--clr-green)';
+		displayMessage = message;
+	} else if (message.includes('踢出')) {
+		textEl.style.color = 'var(--clr-red)';
+		displayMessage = message;
+	} else {
+		textEl.style.color = 'var(--clr-font)';
+		displayMessage = username ? `${username}: ${linkify(message)}` : linkify(message);
+	}
+	
+	textEl.innerHTML = displayMessage;
+	
+	content.appendChild(header);
+	content.appendChild(textEl);
+	messageEl.appendChild(avatar);
+	messageEl.appendChild(content);
+	
+	let output = channel.content;
+	if (output) {
+		output.appendChild(messageEl);
+		
+		// 限制消息数量
+		while (output.children.length > 300) {
+			const removed = output.children[0];
+			if (removed.dataset.id) {
+				messageSearchIndex = messageSearchIndex.filter(m => m.id !== removed.dataset.id);
+			}
+			output.removeChild(removed);
+		}
+		
+		// 自动滚动
+		const isScrolledToBottom = output.scrollHeight - output.clientHeight <= output.scrollTop + 100;
+		if (isScrolledToBottom) {
+			requestAnimationFrame(() => {
+				output.scrollTop = output.scrollHeight;
+				messageEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+			});
+		} else if (username && username !== nickname) {
+			// 显示滚动提示
+			showScrollIndicator();
+			// 更新未读计数
+			if (!channel.channel.classList.contains('active')) {
+				const unread = (unreadCounts.get(channel.name) || 0) + 1;
+				unreadCounts.set(channel.name, unread);
+				updateUnreadBadge(channel.name, unread);
+			}
+		}
+	}
+}
+
+function linkify(text) {
+	// URL链接
+	const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
+	text = text.replace(urlRegex, function (url) {
+		return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${url}</a>`;
+	});
+	
+	// 频道链接
+	const channelRegex = /(#[\w-]+)/g;
+	text = text.replace(channelRegex, function (chan) {
+		return `<a href="#" onclick="joinChannel('${chan}'); return false;" style="color: var(--clr-purple); font-weight: 600;">${chan}</a>`;
+	});
+	
+	return text;
+}
+
+function formatTime(date) {
+	const now = new Date();
+	const diff = now - date;
+	
+	if (diff < 60000) return '刚刚';
+	if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`;
+	if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`;
+	if (diff < 604800000) return `${Math.floor(diff / 86400000)}天前`;
+	
+	return date.toLocaleTimeString('zh-CN', { hour12: false, hour: '2-digit', minute: '2-digit' });
+}
+
+function updateUnreadBadge(channelName, count) {
+	const button = channels.querySelector(`[value="${channelName}"]`);
+	if (button) {
+		let badge = button.querySelector('.unread-badge');
+		if (!badge) {
+			badge = document.createElement('span');
+			badge.className = 'unread-badge';
+			button.appendChild(badge);
+		}
+		badge.textContent = count;
+		badge.style.display = count > 0 ? 'block' : 'none';
+		button.classList.toggle('unread', count > 0);
+	}
+}
+
+function showScrollIndicator() {
+	const indicator = document.getElementById('scrollIndicator');
+	if (!indicator) return;
+	indicator.classList.add('visible');
+	setTimeout(() => indicator.classList.remove('visible'), 5000);
+}
+
+function scrollToBottom() {
+	if (activeChannel && activeChannel.content) {
+		activeChannel.content.scrollTop = activeChannel.content.scrollHeight;
+		document.getElementById('scrollIndicator').classList.remove('visible');
+	}
+}
+
+function checkScrollPosition() {
+	const output = activeChannel?.content;
+	if (!output) return;
+	const isAtBottom = output.scrollHeight - output.clientHeight <= output.scrollTop + 100;
+	if (isAtBottom) {
+		document.getElementById('scrollIndicator').classList.remove('visible');
+		unreadCounts.set(activeChannel.name, 0);
+		updateUnreadBadge(activeChannel.name, 0);
+	}
+}
+
+// 消息发送
+function send() {
+	let text = input ? input.value.trim() : "";
+	if (!text || !activeChannel) return;
+	
+	// 保存到历史
+	if (text) {
+		messageHistory.unshift(text);
+		if (messageHistory.length > 50) messageHistory.pop();
+		currentHistoryIndex = -1;
+	}
+	
+	let msg;
+	if (text[0] == "/") {
+		handleCommand(text.substring(1));
+	} else {
+		msg = "privmsg " + activeChannel.name + " :" + text + "\n";
+		writeToScreen("normal", text, activeChannel, nickname);
+	}
+	
+	if (msg) {
+		doSend(msg);
+	}
+	if (input) input.value = "";
+	document.getElementById('commandSuggestions').classList.remove('visible');
+}
+
+function handleCommand(command) {
+	const parts = command.split(' ');
+	const cmd = parts[0].toUpperCase();
+	const args = parts.slice(1).join(' ');
+	
+	switch(cmd) {
+		case 'ME':
+			if (args) {
+				doSend("privmsg " + activeChannel.name + " :\x
