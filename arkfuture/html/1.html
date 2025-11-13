@@ -1,65 +1,95 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>IRC Web Client</title>
 	<style>
 		:root {
-			--clr-background: #F5F7FA;
-			--clr-background2: #E4E7F4;
-			--clr-background3: #FFFFFF;
-			--clr-background4: #D1D5DB;
-			--clr-font: #1F2937;
-			--clr-brown: #92400E;
-			--clr-green: #065F46;
-			--clr-gold: #D97706;
-			--clr-red: #DC2626;
-			--clr-purple: #7C3AED;
-			--clr-blue: #2563EB;
-			--clr-accent: #4F46E5;
-			--clr-border: #9CA3AF;
-			--clr-warning: #F59E0B;
-			--clr-success: #10B981;
+			/* Modern Color Palette */
+			--clr-background: #f0f2f5;
+			--clr-background2: #e4e7f4;
+			--clr-background3: #ffffff;
+			--clr-background4: #dfe3f0;
+			--clr-font: #1f2937;
+			--clr-brown: #92400e;
+			--clr-green: #065f46;
+			--clr-gold: #d97706;
+			--clr-red: #dc2626;
+			--clr-purple: #7c3aed;
+			--clr-blue: #2563eb;
+			--clr-accent: #4f46e5;
+			--clr-accent-hover: #6366f1;
+			--clr-border: #d1d5db;
+			--clr-border-light: #e5e7eb;
+			--clr-warning: #f59e0b;
+			--clr-warning-bg: rgba(245, 158, 11, 0.1);
+			--clr-success: #10b981;
+			--clr-success-bg: rgba(16, 185, 129, 0.1);
+			--clr-shadow: rgba(0, 0, 0, 0.05);
+			--clr-shadow-hover: rgba(0, 0, 0, 0.1);
+			
+			/* Spacing System */
+			--spacing-xs: 4px;
 			--spacing-sm: 8px;
 			--spacing-md: 12px;
 			--spacing-lg: 16px;
-			--border-radius: 8px;
-			--transition: all 0.2s ease;
+			--spacing-xl: 20px;
+			--spacing-2xl: 24px;
+			
+			/* Typography */
+			--font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+			--font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+			
+			/* Effects */
+			--border-radius: 12px;
+			--border-radius-sm: 8px;
+			--border-radius-lg: 16px;
+			--transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+			--transition-fast: all 0.15s ease;
+			--shadow-sm: 0 2px 4px var(--clr-shadow);
+			--shadow-md: 0 4px 6px var(--clr-shadow);
+			--shadow-lg: 0 10px 15px var(--clr-shadow-hover);
+			--blur: blur(12px);
 		}
 
 		@media (prefers-color-scheme: dark) {
 			:root {
 				--clr-background: #111827;
-				--clr-background2: #1F2937;
-				--clr-background3: #1F2937;
-				--clr-background4: #4B5563;
-				--clr-font: #F9FAFB;
-				--clr-brown: #FDE68A;
-				--clr-green: #6EE7B7;
-				--clr-gold: #FBBF24;
-				--clr-red: #FCA5A5;
-				--clr-purple: #C4B5FD;
-				--clr-blue: #93C5FD;
-				--clr-accent: #818CF8;
-				--clr-border: #4B5563;
-				--clr-warning: #FCD34D;
-				--clr-success: #6EE7B7;
+				--clr-background2: #1f2937;
+				--clr-background3: #1f2937;
+				--clr-background4: #374151;
+				--clr-font: #f9fafb;
+				--clr-brown: #fde68a;
+				--clr-green: #6ee7b7;
+				--clr-gold: #fbbf24;
+				--clr-red: #fca5a5;
+				--clr-purple: #c4b5fd;
+				--clr-blue: #93c5fd;
+				--clr-accent: #818cf8;
+				--clr-accent-hover: #a5b4fc;
+				--clr-border: #4b5563;
+				--clr-border-light: #374151;
+				--clr-shadow: rgba(0, 0, 0, 0.2);
+				--clr-shadow-hover: rgba(0, 0, 0, 0.3);
 			}
 		}
 
-		* { box-sizing: border-box; }
+		* {
+			box-sizing: border-box;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
 
 		html, body {
-			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			font-family: var(--font-primary);
 			margin: 0;
 			padding: 0;
 			height: 100%;
 			background-color: var(--clr-background);
 			color: var(--clr-font);
 			font-size: 14px;
-			line-height: 1.5;
+			line-height: 1.6;
 			overflow: hidden;
 		}
 
@@ -68,37 +98,66 @@
 			flex-direction: column;
 			height: 100vh;
 			width: 100%;
+			background: linear-gradient(135deg, var(--clr-background) 0%, var(--clr-background2) 100%);
 		}
 
+		/* Header - Glassmorphism */
 		.header {
-			background: linear-gradient(90deg, var(--clr-background2), var(--clr-background));
-			padding: var(--spacing-md) var(--spacing-lg);
+			background: rgba(79, 70, 229, 0.85);
+			backdrop-filter: var(--blur);
+			-webkit-backdrop-filter: var(--blur);
+			padding: var(--spacing-lg) var(--spacing-xl);
 			flex: 0 0 auto;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			box-shadow: var(--shadow-sm);
+			position: relative;
+			z-index: 10;
 		}
 
 		.header h1 {
 			margin: 0;
-			font-size: 18px;
+			font-size: 20px;
 			font-weight: 700;
-		}
-
-		.settings-bar {
-			flex: 0 0 auto;
-			background-color: var(--clr-background2);
-			border-bottom: 1px solid var(--clr-border);
+			color: white;
 			display: flex;
 			align-items: center;
-			padding: var(--spacing-sm) var(--spacing-md);
 			gap: var(--spacing-sm);
+		}
+
+		.header h1::before {
+			content: '#';
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 28px;
+			height: 28px;
+			background: rgba(255, 255, 255, 0.2);
+			border-radius: var(--border-radius-sm);
+			font-size: 18px;
+			font-weight: 800;
+		}
+
+		/* Settings Bar - Modernized */
+		.settings-bar {
+			flex: 0 0 auto;
+			background: rgba(228, 231, 244, 0.7);
+			backdrop-filter: var(--blur);
+			-webkit-backdrop-filter: var(--blur);
+			border-bottom: 1px solid var(--clr-border-light);
+			display: flex;
+			align-items: center;
+			padding: var(--spacing-md) var(--spacing-xl);
+			gap: var(--spacing-md);
 			overflow-x: auto;
 			flex-wrap: nowrap;
-			min-height: 50px;
+			min-height: 64px;
+			box-shadow: var(--shadow-sm);
 		}
 
 		.settings-group {
 			display: flex;
 			align-items: center;
-			gap: 6px;
+			gap: var(--spacing-xs);
 			flex: 0 0 auto;
 		}
 
@@ -107,36 +166,51 @@
 			font-weight: 600;
 			color: var(--clr-font);
 			white-space: nowrap;
+			opacity: 0.8;
 		}
 
 		.settings-group input[type="text"] {
-			padding: 6px 10px;
-			background-color: var(--clr-background3);
+			padding: 8px 12px;
+			background: var(--clr-background3);
 			color: var(--clr-font);
 			border: 1px solid var(--clr-border);
-			border-radius: var(--border-radius);
+			border-radius: var(--border-radius-sm);
 			font-size: 13px;
-			min-width: 120px;
+			min-width: 140px;
 			transition: var(--transition);
+			box-shadow: var(--shadow-sm);
+		}
+
+		.settings-group input[type="text"]::placeholder {
+			color: var(--clr-border);
+			opacity: 0.6;
+		}
+
+		.settings-group input[type="text"]:focus {
+			outline: none;
+			border-color: var(--clr-accent);
+			box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+			transform: translateY(-1px);
 		}
 
 		.settings-group input[type="checkbox"] {
-			width: 16px;
-			height: 16px;
+			width: 18px;
+			height: 18px;
 			cursor: pointer;
 			margin: 0;
+			accent-color: var(--clr-accent);
+			transition: var(--transition-fast);
 		}
 
-		.settings-group input:focus {
-			outline: none;
-			border-color: var(--clr-accent);
-			box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+		.settings-group input[type="checkbox"]:hover {
+			transform: scale(1.1);
 		}
 
+		/* Modern Buttons */
 		.btn {
-			padding: 6px 12px;
+			padding: 8px 16px;
 			border: none;
-			border-radius: var(--border-radius);
+			border-radius: var(--border-radius-sm);
 			cursor: pointer;
 			font-weight: 600;
 			font-size: 13px;
@@ -145,16 +219,41 @@
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
+			gap: var(--spacing-xs);
+			box-shadow: var(--shadow-sm);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.btn::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(255, 255, 255, 0.1);
+			opacity: 0;
+			transition: var(--transition-fast);
+		}
+
+		.btn:hover::before {
+			opacity: 1;
 		}
 
 		.connect-btn {
 			background: linear-gradient(135deg, var(--clr-accent), var(--clr-purple));
 			color: white;
+			min-width: 80px;
 		}
 
 		.connect-btn:hover:not(:disabled) {
-			transform: translateY(-1px);
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-lg);
+		}
+
+		.connect-btn:active:not(:disabled) {
+			transform: translateY(0);
 		}
 
 		.connect-btn:disabled {
@@ -162,89 +261,112 @@
 			cursor: not-allowed;
 			transform: none;
 			box-shadow: none;
+			opacity: 0.6;
 		}
 
 		.connect-btn.disconnect {
-			background: linear-gradient(135deg, var(--clr-red), #EF4444);
+			background: linear-gradient(135deg, var(--clr-red), #ef4444);
+		}
+
+		.connect-btn.disconnect:hover {
+			background: linear-gradient(135deg, #ef4444, #dc2626);
 		}
 
 		.log-toggle-btn {
-			background-color: var(--clr-background4);
+			background: var(--clr-background4);
 			color: var(--clr-font);
 			border: 1px solid var(--clr-border);
 		}
 
 		.log-toggle-btn:hover {
-			background-color: var(--clr-accent);
+			background: var(--clr-accent);
 			color: white;
+			border-color: var(--clr-accent);
+			transform: translateY(-1px);
 		}
 
 		.ssl-help-btn {
-			background: linear-gradient(135deg, var(--clr-warning), #F59E0B);
+			background: linear-gradient(135deg, var(--clr-warning), #f59e0b);
 			color: #000;
-			padding: 6px 10px;
+			padding: 8px 12px;
+			font-weight: 700;
 		}
 
 		.ssl-help-btn:hover {
-			transform: translateY(-1px);
-			box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+			transform: translateY(-2px);
+			box-shadow: 0 6px 12px rgba(245, 158, 11, 0.25);
 		}
 
+		/* Connection Status - Modern Pulse */
 		.connection-status {
 			display: inline-flex;
 			align-items: center;
-			gap: 6px;
-			padding: 4px 10px;
-			background-color: var(--clr-background3);
+			gap: var(--spacing-sm);
+			padding: 6px 12px;
+			background: var(--clr-background3);
 			border: 1px solid var(--clr-border);
-			border-radius: var(--border-radius);
+			border-radius: 20px;
 			font-size: 11px;
-			font-weight: 500;
+			font-weight: 600;
 			margin-left: auto;
 			flex: 0 0 auto;
 			transition: var(--transition);
+			box-shadow: var(--shadow-sm);
 		}
 
 		.connection-status.connected {
 			border-color: var(--clr-success);
-			background-color: rgba(16, 185, 129, 0.1);
+			background: var(--clr-success-bg);
+			color: var(--clr-success);
 		}
 
 		.connection-status.disconnected {
 			border-color: var(--clr-red);
-			background-color: rgba(220, 38, 38, 0.1);
+			background: var(--clr-red-bg, rgba(220, 38, 38, 0.1));
+			color: var(--clr-red);
 		}
 
 		.connection-status .indicator {
-			width: 8px;
-			height: 8px;
+			width: 10px;
+			height: 10px;
 			border-radius: 50%;
-			background-color: var(--clr-border);
+			background: var(--clr-border);
 			transition: var(--transition);
+			position: relative;
 		}
 
 		.connection-status.connected .indicator {
-			background-color: var(--clr-success);
+			background: var(--clr-success);
+			box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+			animation: pulse 2s infinite;
 		}
 
 		.connection-status.disconnected .indicator {
-			background-color: var(--clr-red);
+			background: var(--clr-red);
 		}
 
+		@keyframes pulse {
+			0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+			70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+			100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+		}
+
+		/* SSL Warning - Toast Style */
 		.ssl-warning {
 			display: none;
-			position: absolute;
-			bottom: 20px;
-			right: 20px;
-			max-width: 380px;
-			background: linear-gradient(135deg, var(--clr-warning), #F59E0B);
+			position: fixed;
+			bottom: 24px;
+			right: 24px;
+			max-width: 420px;
+			background: linear-gradient(135deg, var(--clr-warning), #f59e0b);
 			color: #000;
-			padding: var(--spacing-md);
+			padding: var(--spacing-lg);
 			border-radius: var(--border-radius);
 			font-size: 13px;
-			z-index: 200;
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-			line-height: 1.4;
+			z-index: 1000;
+			box-shadow: var(--shadow-lg);
+			line-height: 1.5;
+			animation: slideIn 0.3s ease-out;
 		}
 
 		.ssl-warning.visible {
@@ -253,18 +375,30 @@
 
 		.ssl-warning a {
 			color: #000;
-			font-weight: 600;
+			font-weight: 700;
 			text-decoration: underline;
 			cursor: pointer;
+			transition: var(--transition-fast);
+		}
+
+		.ssl-warning a:hover {
+			opacity: 0.8;
 		}
 
 		.ssl-warning code {
 			background: rgba(0, 0, 0, 0.1);
-			padding: 2px 4px;
-			border-radius: 3px;
-			font-family: monospace;
+			padding: 2px 6px;
+			border-radius: 4px;
+			font-family: var(--font-mono);
+			font-size: 12px;
 		}
 
+		@keyframes slideIn {
+			from { transform: translateY(20px); opacity: 0; }
+			to { transform: translateY(0); opacity: 1; }
+		}
+
+		/* Chat Container */
 		.chat-container {
 			flex: 1 1 auto;
 			display: flex;
@@ -272,23 +406,28 @@
 			overflow: hidden;
 			position: relative;
 			min-height: 0;
+			background: var(--clr-background);
 		}
 
+		/* Channels - Modern Tabs */
 		.channels {
 			flex: 0 0 auto;
-			background-color: var(--clr-background2);
-			border-bottom: 1px solid var(--clr-border);
+			background: rgba(228, 231, 244, 0.6);
+			backdrop-filter: var(--blur);
+			-webkit-backdrop-filter: var(--blur);
+			border-bottom: 1px solid var(--clr-border-light);
 			display: flex;
 			align-items: center;
-			padding: var(--spacing-sm) 10px;
-			gap: 6px;
+			padding: var(--spacing-sm) var(--spacing-xl);
+			gap: var(--spacing-xs);
 			overflow-x: auto;
 			flex-wrap: nowrap;
+			min-height: 52px;
 		}
 
 		.channel {
-			padding: 6px 12px;
-			background-color: var(--clr-background3);
+			padding: 8px 16px;
+			background: var(--clr-background3);
 			border: 1px solid var(--clr-border);
 			border-radius: 20px;
 			cursor: pointer;
@@ -297,46 +436,61 @@
 			transition: var(--transition);
 			display: inline-flex;
 			align-items: center;
-			gap: 6px;
+			gap: var(--spacing-sm);
 			white-space: nowrap;
+			box-shadow: var(--shadow-sm);
+			position: relative;
 		}
 
 		.channel:hover {
-			background-color: var(--clr-background4);
+			background: var(--clr-background4);
+			transform: translateY(-1px);
+			box-shadow: var(--shadow-md);
 		}
 
 		.channel.active {
 			background: linear-gradient(135deg, var(--clr-accent), var(--clr-purple));
 			color: white;
 			border-color: var(--clr-accent);
+			box-shadow: var(--shadow-md);
 		}
 
 		.channel button.x {
-			background: none;
+			background: rgba(0, 0, 0, 0.05);
 			border: none;
 			color: inherit;
 			cursor: pointer;
-			padding: 2px 6px;
+			padding: 4px 8px;
 			font-weight: bold;
 			border-radius: 50%;
 			font-size: 14px;
-			transition: var(--transition);
+			transition: var(--transition-fast);
 			line-height: 1;
+			min-width: 20px;
+			height: 20px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
 		}
 
 		.channel button.x:hover {
-			background-color: rgba(255, 255, 255, 0.2);
+			background: rgba(220, 38, 38, 0.8);
+			color: white;
+			transform: scale(1.1);
 		}
 
+		/* Log Container - Modern Terminal */
 		.log-container {
 			position: absolute;
 			inset: 0;
-			background-color: var(--clr-background3);
+			background: var(--clr-background3);
 			border-bottom: 2px solid var(--clr-accent);
 			display: none;
 			flex-direction: column;
 			z-index: 100;
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			box-shadow: var(--shadow-lg);
+			border-radius: var(--border-radius) var(--border-radius) 0 0;
+			overflow: hidden;
 		}
 
 		.log-container.visible {
@@ -345,56 +499,60 @@
 
 		.log-header {
 			flex: 0 0 auto;
-			padding: var(--spacing-sm) var(--spacing-md);
-			background-color: var(--clr-background2);
-			border-bottom: 1px solid var(--clr-border);
+			padding: var(--spacing-md) var(--spacing-lg);
+			background: var(--clr-background2);
+			border-bottom: 1px solid var(--clr-border-light);
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
 			font-weight: 600;
 			font-size: 13px;
-			min-height: 35px;
+			min-height: 42px;
 		}
 
 		.log-controls {
 			display: flex;
-			gap: 6px;
+			gap: var(--spacing-xs);
 		}
 
 		.log-controls button {
-			padding: 4px 10px;
-			background-color: var(--clr-background4);
+			padding: 6px 12px;
+			background: var(--clr-background4);
 			border: none;
-			border-radius: 4px;
+			border-radius: var(--border-radius-sm);
 			cursor: pointer;
 			font-size: 11px;
-			transition: var(--transition);
+			transition: var(--transition-fast);
+			font-weight: 600;
 		}
 
 		.log-controls button:hover {
-			background-color: var(--clr-accent);
+			background: var(--clr-accent);
 			color: white;
+			transform: translateY(-1px);
 		}
 
 		#logOutput {
 			flex: 1 1 auto;
 			overflow-y: auto;
-			padding: var(--spacing-sm);
-			font-size: 11px;
-			font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-			background-color: var(--clr-background3);
+			padding: var(--spacing-md);
+			font-size: 12px;
+			font-family: var(--font-mono);
+			background: var(--clr-background3);
 			color: var(--clr-font);
 			white-space: pre-wrap;
 			word-wrap: break-word;
-			line-height: 1.4;
+			line-height: 1.5;
 		}
 
 		#logOutput:empty::before {
 			content: '日志为空...';
 			color: var(--clr-border);
 			font-style: italic;
+			opacity: 0.6;
 		}
 
+		/* Channel Content */
 		.channelcontents-wrapper {
 			flex: 1 1 auto;
 			display: flex;
@@ -427,66 +585,85 @@
 
 		.channelcontent.active {
 			display: flex;
+			animation: fadeIn 0.2s ease-out;
+		}
+
+		@keyframes fadeIn {
+			from { opacity: 0.9; }
+			to { opacity: 1; }
 		}
 
 		.channelcontent nav {
 			flex: 1 1 auto;
 			display: flex;
 			flex-direction: column;
-			background-color: var(--clr-background3);
+			background: var(--clr-background3);
 			border-radius: var(--border-radius);
 			overflow: hidden;
-			border: 1px solid var(--clr-border);
+			border: 1px solid var(--clr-border-light);
+			margin: var(--spacing-sm);
+			box-shadow: var(--shadow-sm);
 		}
 
 		.channelcontent nav h3 {
 			flex: 0 0 auto;
-			padding: var(--spacing-md);
+			padding: var(--spacing-md) var(--spacing-lg);
 			margin: 0;
-			background-color: var(--clr-background2);
-			border-bottom: 1px solid var(--clr-border);
+			background: var(--clr-background2);
+			border-bottom: 1px solid var(--clr-border-light);
 			font-weight: 600;
 			font-size: 14px;
-			min-height: 40px;
+			min-height: 44px;
 			display: flex;
 			align-items: center;
+			color: var(--clr-accent);
 		}
 
 		.channelcontent nav nav {
 			flex: 1 1 auto;
 			overflow-y: auto;
-			padding: var(--spacing-md);
-			min-height: 0;
+			padding: var(--spacing-sm) var(--spacing-md);
 		}
 
 		.channelcontent nav p {
 			margin: 0;
-			padding: 3px 0;
+			padding: 4px 0;
 			line-height: 1.5;
+			animation: messageAppear 0.15s ease-out;
 		}
 
+		@keyframes messageAppear {
+			from { opacity: 0; transform: translateY(4px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+
+		/* User List */
 		ul {
-			flex: 0 0 200px;
+			flex: 0 0 220px;
 			overflow-y: auto;
-			padding: var(--spacing-sm);
-			margin: 0;
-			border-left: 1px solid var(--clr-border);
+			padding: var(--spacing-sm) 0;
+			margin: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) 0;
+			border-left: 1px solid var(--clr-border-light);
 			list-style: none;
-			background-color: var(--clr-background3);
+			background: var(--clr-background3);
 			min-height: 0;
+			border-radius: var(--border-radius);
+			box-shadow: var(--shadow-sm);
 		}
 
 		.channelcontents li {
-			padding: 6px 10px;
-			margin: 1px 0;
+			padding: 8px 16px;
+			margin: 2px 0;
 			display: flex;
-			gap: 8px;
-			border-radius: 4px;
-			transition: var(--transition);
+			gap: var(--spacing-sm);
+			border-radius: 6px;
+			transition: var(--transition-fast);
+			align-items: center;
 		}
 
 		.channelcontents li:hover {
-			background-color: var(--clr-background2);
+			background: var(--clr-background2);
+			transform: translateX(2px);
 		}
 
 		.channelcontents li p {
@@ -494,45 +671,53 @@
 		}
 
 		.channelcontents li p:first-child {
-			width: 20px;
+			width: 24px;
 			color: var(--clr-purple);
-			font-weight: bold;
+			font-weight: 700;
 			text-align: center;
+			font-size: 12px;
 		}
 
 		.channelcontents li p:nth-child(2) {
 			flex: 1;
 			color: var(--clr-green);
+			font-weight: 500;
 		}
 
+		/* Input - Modern Chat Input */
 		#input {
 			flex: 0 0 auto;
-			padding: var(--spacing-md);
-			background-color: var(--clr-background3);
+			padding: var(--spacing-md) var(--spacing-lg);
+			background: var(--clr-background3);
 			color: var(--clr-font);
-			border: 1px solid var(--clr-border);
+			border: 1px solid var(--clr-border-light);
 			border-radius: var(--border-radius);
 			font-size: 14px;
 			transition: var(--transition);
-			margin: var(--spacing-sm);
+			margin: var(--spacing-sm) var(--spacing-sm) var(--spacing-lg) var(--spacing-sm);
 			width: auto;
 			position: static;
 			display: block;
+			box-shadow: var(--shadow-sm);
+			font-family: var(--font-primary);
 		}
 
 		#input:focus {
 			outline: none;
 			border-color: var(--clr-accent);
-			box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+			box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15), var(--shadow-md);
+			transform: translateY(-1px);
 		}
 
 		#input::placeholder {
 			color: var(--clr-border);
+			opacity: 0.7;
 		}
 
+		/* Modern Scrollbar */
 		::-webkit-scrollbar {
-			width: 8px;
-			height: 8px;
+			width: 10px;
+			height: 10px;
 		}
 
 		::-webkit-scrollbar-track {
@@ -541,25 +726,63 @@
 
 		::-webkit-scrollbar-thumb {
 			background: var(--clr-accent);
-			border-radius: 4px;
+			border-radius: 5px;
+			border: 2px solid var(--clr-background);
+			transition: var(--transition-fast);
 		}
 
 		::-webkit-scrollbar-thumb:hover {
 			background: var(--clr-purple);
 		}
 
-		/* 移动端优化 */
+		/* Empty State */
+		.empty-state {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100%;
+			color: var(--clr-border);
+			text-align: center;
+			padding: var(--spacing-2xl);
+			background: linear-gradient(135deg, var(--clr-background), transparent);
+		}
+
+		.empty-state h3 {
+			margin: 0 0 var(--spacing-sm) 0;
+			font-size: 18px;
+			font-weight: 700;
+			color: var(--clr-font);
+			opacity: 0.7;
+		}
+
+		.empty-state p {
+			margin: 0;
+			font-size: 14px;
+			opacity: 0.6;
+		}
+
+		.empty-state::before {
+			content: '💬';
+			font-size: 48px;
+			margin-bottom: var(--spacing-lg);
+			opacity: 0.3;
+		}
+
+		/* Mobile Optimizations */
 		@media (max-width: 768px) {
 			.settings-bar {
 				flex-wrap: wrap;
-				padding: 8px;
-				gap: 8px;
+				padding: var(--spacing-md);
+				gap: var(--spacing-sm);
 				min-height: auto;
+				backdrop-filter: none;
+				background: var(--clr-background2);
 			}
 
 			.settings-group {
 				flex: 1 1 45%;
-				min-width: 140px;
+				min-width: 160px;
 			}
 
 			.settings-group input {
@@ -571,11 +794,12 @@
 				margin-left: 0;
 				flex: 1 1 100%;
 				justify-content: center;
-				margin-top: 4px;
+				margin-top: var(--spacing-sm);
 			}
 
 			.log-container {
-				height: 40vh;
+				height: 50vh;
+				border-radius: 0;
 			}
 
 			.channelcontent {
@@ -583,18 +807,33 @@
 			}
 
 			ul {
-				flex: 0 0 120px;
+				flex: 0 0 140px;
 				border-left: none;
-				border-top: 1px solid var(--clr-border);
+				border-top: 1px solid var(--clr-border-light);
+				margin: 0;
+				border-radius: 0;
 			}
 
 			#input {
-				margin: 8px;
-				padding: 10px;
+				margin: var(--spacing-sm);
+				padding: var(--spacing-md);
+				border-radius: var(--border-radius-sm);
+			}
+
+			.channels {
+				padding: var(--spacing-sm) var(--spacing-md);
 			}
 		}
 
 		@media (max-width: 480px) {
+			.header {
+				padding: var(--spacing-md) var(--spacing-md);
+			}
+
+			.header h1 {
+				font-size: 18px;
+			}
+
 			.settings-group {
 				flex: 1 1 100%;
 			}
@@ -609,29 +848,33 @@
 			}
 
 			ul {
-				flex: 0 0 100px;
+				flex: 0 0 120px;
 			}
 
 			.log-header {
-				padding: 8px;
+				padding: var(--spacing-sm) var(--spacing-md);
 			}
 		}
 
-		/* 滚动到底部的提示 */
+		/* Scroll Indicator */
 		.scroll-indicator {
 			position: absolute;
-			bottom: 70px;
-			right: 20px;
+			bottom: 80px;
+			right: 24px;
 			background: var(--clr-accent);
 			color: white;
-			padding: 6px 12px;
+			padding: 8px 16px;
 			border-radius: 20px;
 			font-size: 12px;
 			cursor: pointer;
 			opacity: 0;
-			transition: opacity 0.3s;
+			transition: opacity 0.3s, transform 0.3s;
 			pointer-events: none;
 			z-index: 5;
+			box-shadow: var(--shadow-md);
+			display: flex;
+			align-items: center;
+			gap: var(--spacing-xs);
 		}
 
 		.scroll-indicator.visible {
@@ -639,27 +882,25 @@
 			pointer-events: all;
 		}
 
-		/* 空状态提示 */
-		.empty-state {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			height: 100%;
-			color: var(--clr-border);
-			text-align: center;
-			padding: var(--spacing-lg);
+		.scroll-indicator:hover {
+			transform: translateY(-2px);
+			background: var(--clr-accent-hover);
 		}
 
-		.empty-state h3 {
-			margin: 0 0 8px 0;
-			font-size: 16px;
-			font-weight: 600;
+		/* Loading Spinner */
+		.loading {
+			display: inline-block;
+			width: 16px;
+			height: 16px;
+			border: 2px solid var(--clr-border);
+			border-top: 2px solid var(--clr-accent);
+			border-radius: 50%;
+			animation: spin 0.8s linear infinite;
 		}
 
-		.empty-state p {
-			margin: 0;
-			font-size: 13px;
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
 		}
 	</style>
 </head>
@@ -667,9 +908,9 @@
 <body>
 	<div class="main">
 		<div class="header">
-			<h1 id="caption">IRC Client</h1>
+			<h1 id="caption">IRC Web Client</h1>
 		</div>
-		
+
 		<div class="settings-bar">
 			<div class="settings-group">
 				<label>WebSocket:</label>
@@ -690,11 +931,11 @@
 			</div>
 			<div class="settings-group">
 				<label title="SSL帮助">
-					<button class="btn ssl-help-btn" onclick="showSSLWarning()" title="点击查看SSL证书问题的解决方案">SSL帮助</button>
+					<button class="btn ssl-help-btn" onclick="showSSLWarning()" title="点击查看SSL证书问题的解决方案">🔒 SSL帮助</button>
 				</label>
 			</div>
 			<button class="btn connect-btn" id="connectBtn" onclick="toggleConnection()">连接</button>
-			<button class="btn log-toggle-btn" onclick="toggleLog()">查看日志</button>
+			<button class="btn log-toggle-btn" onclick="toggleLog()">📋 查看日志</button>
 			<div class="connection-status disconnected" id="connectionStatus">
 				<span class="indicator"></span>
 				<span id="statusText">未连接</span>
@@ -705,14 +946,15 @@
 			<strong>⚠️ 浏览器无法忽略SSL证书错误!</strong> 请使用以下方案：<br>
 			1. 改用 <code>ws://</code> 非加密连接(如果浏览器支持)<br>
 			2. 在浏览器中访问 <a id="sslLink" target="_blank">服务器URL</a> 并手动信任证书<br>
+			<button onclick="document.getElementById('sslWarning').classList.remove('visible')" style="margin-top: 8px; padding: 4px 8px; border: none; border-radius: 4px; background: rgba(0,0,0,0.2); cursor: pointer; font-weight: 600;">关闭</button>
 		</div>
 
 		<div class="log-container" id="logContainer">
 			<div class="log-header">
-				<span>WebSocket日志</span>
+				<span>📡 WebSocket日志</span>
 				<div class="log-controls">
-					<button onclick="clearLog()">清空</button>
-					<button onclick="toggleLog()">关闭</button>
+					<button onclick="clearLog()">🗑️ 清空</button>
+					<button onclick="toggleLog()">❌ 关闭</button>
 				</div>
 			</div>
 			<div id="logOutput"></div>
@@ -727,13 +969,14 @@
 				<h3>欢迎使用 IRC 客户端</h3>
 				<p>请先填写服务器信息并点击连接</p>
 			</div>
-			<input type="text" name="input" id="input" placeholder="输入消息..." style="display: none;" 
+			<input type="text" name="input" id="input" placeholder="输入消息..." style="display: none;"
 				   onkeydown="onKeyPress(event)" onkeydown="onKeyDown(event)" />
 		</div>
 	</div>
 </body>
 
 <script>
+	// 保留所有原始JavaScript功能
 	var nickname = "";
 	var channelName = "";
 	var wsUrl = "";
@@ -755,7 +998,7 @@
 		contentsWrapper = document.getElementById("contentsWrapper");
 		emptyState = document.getElementById("emptyState");
 		input = document.getElementById("input");
-		
+
 		let url = new URL(document.location);
 		if (url.hash) {
 			document.getElementById('channelInput').value = url.hash;
@@ -764,8 +1007,7 @@
 			document.getElementById("caption").style.display = "none";
 		}
 		updateConnectionStatus(false);
-		
-		// 添加输入框自动聚焦
+
 		if (input) {
 			input.addEventListener('blur', () => setTimeout(() => input.focus(), 100));
 		}
@@ -776,7 +1018,7 @@
 		const statusEl = document.getElementById('connectionStatus');
 		const statusText = document.getElementById('statusText');
 		if (!statusEl || !statusText) return;
-		
+
 		if (connected) {
 			statusEl.classList.remove('disconnected');
 			statusEl.classList.add('connected');
@@ -818,7 +1060,7 @@
 		const warning = document.getElementById('sslWarning');
 		const link = document.getElementById('sslLink');
 		if (!warning || !link) return;
-		
+
 		let displayUrl = url || document.getElementById('wsUrl')?.value.trim();
 		if (displayUrl) {
 			link.href = displayUrl.replace('wss://', 'https://').replace('ws://', 'http://');
@@ -867,17 +1109,17 @@
 		const channelInput = document.getElementById('channelInput');
 		const reconnectCheckbox = document.getElementById('autoReconnect');
 		const connectBtn = document.getElementById('connectBtn');
-		
+
 		if (!wsUrlInput || !nickInput || !channelInput || !connectBtn) {
 			alert("界面元素加载错误, 请刷新页面重试");
 			return;
 		}
-		
+
 		wsUrl = wsUrlInput.value.trim();
 		nickname = nickInput.value.trim();
 		channelName = channelInput.value.trim();
 		autoReconnect = reconnectCheckbox ? reconnectCheckbox.checked : false;
-		
+
 		if (!validateWsUrl(wsUrl)) {
 			alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
 			return;
@@ -889,27 +1131,25 @@
 		if (channelName && !channelName.startsWith('#')) {
 			channelName = '#' + channelName;
 		}
-		
+
 		reconnectAttempts = 0;
 		wsUrlInput.disabled = true;
 		nickInput.disabled = true;
 		channelInput.disabled = true;
 		if (reconnectCheckbox) reconnectCheckbox.disabled = true;
-		
+
 		connectBtn.textContent = '连接中...';
 		connectBtn.disabled = true;
-		
-		// 清空界面
+
 		channels.innerHTML = '';
 		channelContents.innerHTML = '';
 		channelMap.clear();
-		
-		// 显示聊天区域
+
 		contentsWrapper.classList.remove('hidden');
 		contentsWrapper.classList.add('visible');
 		if (emptyState) emptyState.style.display = 'none';
 		if (input) input.style.display = 'block';
-		
+
 		statusChannel = new Tab_Create("Status", "Status Window", false);
 		writeToLog(`[系统] 正在连接: ${wsUrl}`);
 		WebSocket_Connect(wsUrl);
@@ -922,29 +1162,28 @@
 		const channelInput = document.getElementById('channelInput');
 		const reconnectCheckbox = document.getElementById('autoReconnect');
 		const connectBtn = document.getElementById('connectBtn');
-		
+
 		if (wsUrlInput) wsUrlInput.disabled = false;
 		if (nickInput) nickInput.disabled = false;
 		if (channelInput) channelInput.disabled = false;
 		if (reconnectCheckbox) reconnectCheckbox.disabled = false;
-		
+
 		if (connectBtn) {
 			connectBtn.textContent = '连接';
 			connectBtn.disabled = false;
 			connectBtn.classList.remove('disconnect');
 		}
-		
+
 		updateConnectionStatus(false);
-		
-		// 隐藏聊天区域
+
 		contentsWrapper.classList.remove('visible');
 		contentsWrapper.classList.add('hidden');
 		if (emptyState) emptyState.style.display = 'flex';
 		if (input) input.style.display = 'none';
-		
+
 		writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel, "");
 		writeToLog(`[系统] 已断开连接`);
-		
+
 		if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
 			reconnectAttempts++;
 			const delay = reconnectDelay * reconnectAttempts;
@@ -986,7 +1225,7 @@
 	function Tabs_Hide() {
 		let tabcontent = document.querySelectorAll(".channelcontent");
 		tabcontent.forEach(content => content.classList.remove('active'));
-		
+
 		let tablinks = document.querySelectorAll(".channel");
 		tablinks.forEach(link => link.classList.remove("active"));
 	}
@@ -999,7 +1238,6 @@
 			channel.channel.classList.add('active');
 			channel.button.classList.add("active");
 			activeChannel = channel;
-			// 自动滚动到底部
 			setTimeout(() => {
 				if (channel.content) {
 					channel.content.scrollTop = channel.content.scrollHeight;
@@ -1032,42 +1270,42 @@
 		Tabs_Hide();
 		this.name = name;
 		let escapedName = HTML_escape(name);
-		
+
 		this.button = document.createElement("button");
 		this.button.innerHTML = escapedName;
 		this.button.value = escapedName;
 		this.button.onclick = Tab_onClick;
 		this.button.className = "channel";
-		
+
 		let x = document.createElement("button");
 		x.innerHTML = "×";
 		x.onclick = Tab_Close;
 		x.value = escapedName;
 		x.className = "x";
 		this.button.appendChild(x);
-		
+
 		channels.appendChild(this.button);
-		
+
 		this.channel = document.createElement("div");
 		this.channel.className = "channelcontent";
-		
+
 		let navWrapper = document.createElement("nav");
 		this.topic = document.createElement("h3");
 		this.topic.innerHTML = HTML_escape(topic || "无主题");
 		navWrapper.appendChild(this.topic);
-		
+
 		this.content = document.createElement("nav");
 		navWrapper.appendChild(this.content);
-		
+
 		this.channel.appendChild(navWrapper);
-		
+
 		if (createlist) {
 			this.userlist = document.createElement("ul");
 			this.users = [];
 			this.names_end = true;
 			this.channel.appendChild(this.userlist);
 		}
-		
+
 		channelContents.appendChild(this.channel);
 		channelMap.set(name, this);
 		activeChannel = this;
@@ -1196,7 +1434,7 @@
 		const utcTime = now.toISOString().substr(11, 8);
 		let displayMessage;
 		if (username && username !== "") {
-			displayMessage = `[${utcTime}] ${username} → ${linkify(message || "")}`;
+			displayMessage = `[${utcTime}] ${username}: ${linkify(message || "")}`;
 		} else {
 			displayMessage = `[${utcTime}] ${linkify(message || "")}`;
 		}
@@ -1207,7 +1445,6 @@
 			while (output.children.length > 200) {
 				output.removeChild(output.children[0]);
 			}
-			// 保持滚动在底部
 			requestAnimationFrame(() => {
 				output.scrollTop = output.scrollHeight;
 			});
@@ -1217,7 +1454,7 @@
 	function linkify(text) {
 		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
 		return text.replace(urlRegex, function (url) {
-			return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${url}</a>`;
+			return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all; font-weight: 500;">${url}</a>`;
 		});
 	}
 
@@ -1264,7 +1501,7 @@
 			writeToLog(`[WebSocket] 正在创建连接: ${wsUri}`);
 			websocket = new WebSocket(wsUri);
 			websocket.binaryType = 'blob';
-			
+
 			const connectTimeout = setTimeout(() => {
 				if (websocket && websocket.readyState === WebSocket.CONNECTING) {
 					writeToLog(`[ERROR] 连接超时 (30秒)`);
@@ -1275,7 +1512,7 @@
 					}
 				}
 			}, 30000);
-			
+
 			websocket.onclose = function (evt) {
 				clearTimeout(connectTimeout);
 				onClose(evt);
@@ -1305,7 +1542,7 @@
 		let reason = evt.reason || '连接关闭';
 		let code = evt.code;
 		let logMsg = `[CLOSE] Code: ${code}`;
-		
+
 		switch (code) {
 			case 1000: logMsg += ' (正常关闭)'; break;
 			case 1006: logMsg += ' (异常断开 - 可能SSL证书错误)'; break;
@@ -1314,10 +1551,10 @@
 			default: if (code >= 4000 && code <= 4999) { logMsg += ' (应用层错误)'; }
 		}
 		logMsg += ` - ${reason}`;
-		
+
 		writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel, "");
 		writeToLog(logMsg);
-		
+
 		if (websocket) {
 			try {
 				websocket.onclose = null;
@@ -1354,14 +1591,14 @@
 		writeToScreen("var(--clr-font)", "CONNECTED", statusChannel, "");
 		writeToLog(`[OPEN] WebSocket连接成功: ${wsUrl}`);
 		updateConnectionStatus(true);
-		
+
 		const connectBtn = document.getElementById('connectBtn');
 		if (connectBtn) {
 			connectBtn.textContent = '断开';
 			connectBtn.disabled = false;
 			connectBtn.classList.add('disconnect');
 		}
-		
+
 		doSend("user websocket * * :WebSocket User");
 		doSend("nick " + nickname);
 	}
