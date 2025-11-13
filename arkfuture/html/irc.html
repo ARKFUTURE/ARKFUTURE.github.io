@@ -1199,7 +1199,7 @@
 		const utcTime = now.toISOString().substr(11, 8);
 		let displayMessage;
 		if (username && username !== "") {
-			displayMessage = `[${utcTime}] ${username} → ${linkify(message || "")}`;
+			displayMessage = `[${utcTime}] ${username}: ${linkify(message || "")}`;
 		} else {
 			displayMessage = `[${utcTime}] ${linkify(message || "")}`;
 		}
