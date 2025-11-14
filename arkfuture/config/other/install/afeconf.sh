@@ -22,7 +22,13 @@ rm -rf *
 mkdir conf
 mkdir txt
 curl -L -O --anyauth http://192.168.1.1:5050/file/inspircd.conf
+read -rp "是否要生成自签名证书？ [y/N] "
+if [[ "${ans,,}" == "y" || "${ans,,}" == "yes" ]]; then
 openssl req -x509 -newkey rsa:4096 -sha256 -days 30 -nodes -keyout key.pem -out cert.pem -subj "/CN=irc.arkfuture.test" -addext "extendedKeyUsage = serverAuth"
+echo "成功生成自签名证书,证书仅用于测试环境"
+else
+echo "未生成任何证书,请稍自行获取证书并修改/usr/share/inspircd/deploy-ssl.sh后执行此移动证书脚本"
+fi
 cd /etc/inspircd/conf
 curl -L -O --anyauth http://192.168.1.1:5050/file/modules.conf
 curl -L -O --anyauth http://192.168.1.1:5050/file/opers.conf
