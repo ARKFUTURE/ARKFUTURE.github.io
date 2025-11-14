@@ -21,15 +21,16 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-curl -L -O --anyauth http://XXX/inspircd.conf
+curl -L -O --anyauth http://192.168.1.1:5050/file/inspircd.conf
 openssl req -x509 -newkey rsa:4096 -sha256 -days 30 -nodes -keyout key.pem -out cert.pem -subj "/CN=irc.arkfuture.test" -addext "extendedKeyUsage = serverAuth"
 cd /etc/inspircd/conf
-curl -L -O --anyauth http://XXX/modules.conf
-curl -L -O --anyauth http://XXX/opers.conf
+curl -L -O --anyauth http://192.168.1.1:5050/file/modules.conf
+curl -L -O --anyauth http://192.168.1.1:5050/file/opers.conf
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/conf/links.conf
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/conf/helpop.conf
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/conf/ascii.conf
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/conf/generic.conf
+curl -L -O --anyauth https://git.io/GeoLite2-Country.mmdb
 cd /etc/inspircd/txt
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/txt/motd.txt
 curl -L -O --anyauth https://arkfuture.github.io/arkfuture/config/inspircd/txt/opermotd.txt
