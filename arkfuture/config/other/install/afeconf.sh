@@ -22,7 +22,7 @@ rm -rf *
 mkdir conf
 mkdir txt
 curl -L -O --anyauth http://XXX/inspircd.conf
-openssl req -x509 -newkey rsa:4096 -sha256 -days 10 -nodes -keyout key.pem -out cert.pem -subj "/CN=irc.arkfuture.test" -addext "extendedKeyUsage = serverAuth"
+openssl req -x509 -newkey rsa:4096 -sha256 -days 30 -nodes -keyout key.pem -out cert.pem -subj "/CN=irc.arkfuture.test" -addext "extendedKeyUsage = serverAuth"
 cd /etc/inspircd/conf
 curl -L -O --anyauth http://XXX/modules.conf
 curl -L -O --anyauth http://XXX/opers.conf
