@@ -27,6 +27,10 @@
 			--spacing-lg: 16px;
 			--border-radius: 8px;
 			--transition: all 0.2s ease;
+			--header-height: 60px;
+			--settings-height: 60px;
+			--channels-height: 45px;
+			--input-height: 50px;
 		}
 
 		@media (prefers-color-scheme: dark) {
@@ -76,17 +80,21 @@
 		.header {
 			background: linear-gradient(90deg, var(--clr-background2), var(--clr-background));
 			padding: var(--spacing-md) var(--spacing-lg);
-			flex: 0 0 auto;
+			flex: 0 0 var(--header-height);
+			display: flex;
+			align-items: center;
+			border-bottom: 1px solid var(--clr-border);
 		}
 
 		.header h1 {
 			margin: 0;
 			font-size: 18px;
 			font-weight: 700;
+			color: var(--clr-accent);
 		}
 
 		.settings-bar {
-			flex: 0 0 auto;
+			flex: 0 0 var(--settings-height);
 			background-color: var(--clr-background2);
 			border-bottom: 1px solid var(--clr-border);
 			display: flex;
@@ -95,7 +103,6 @@
 			gap: var(--spacing-sm);
 			overflow-x: auto;
 			flex-wrap: nowrap;
-			min-height: 50px;
 		}
 
 		.settings-group {
@@ -121,6 +128,7 @@
 			font-size: 13px;
 			min-width: 120px;
 			transition: var(--transition);
+			height: 32px;
 		}
 
 		.settings-group input[type="checkbox"] {
@@ -148,6 +156,7 @@
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
+			height: 32px;
 		}
 
 		.connect-btn {
@@ -278,7 +287,7 @@
 		}
 
 		.channels {
-			flex: 0 0 auto;
+			flex: 0 0 var(--channels-height);
 			background-color: var(--clr-background2);
 			border-bottom: 1px solid var(--clr-border);
 			display: flex;
@@ -509,7 +518,7 @@
 		}
 
 		#input {
-			flex: 0 0 auto;
+			flex: 0 0 var(--input-height);
 			padding: var(--spacing-md);
 			background-color: var(--clr-background3);
 			color: var(--clr-font);
@@ -521,6 +530,7 @@
 			width: auto;
 			position: static;
 			display: block;
+			height: 34px;
 		}
 
 		#input:focus {
@@ -1406,16 +1416,45 @@
 		}
 	}
 
+	// 检测图片媒体类型 - 支持查询参数中的格式
 	function isImageMedia(url) {
-		return /\.(jpeg|jpg|gif|png|webp|bmp|svg)$/i.test(url);
+		// 检查URL路径中的扩展名
+		if (/\.(jpeg|jpg|gif|png|webp|bmp|svg)(\?.*)?$/i.test(url)) {
+			return true;
+		}
+		
+		// 检查查询参数中的格式
+		const urlObj = new URL(url);
+		const fmt = urlObj.searchParams.get('fmt');
+		const f = urlObj.searchParams.get('f');
+		const ext = urlObj.searchParams.get('ext');
+		
+		if (fmt && /jpeg|jpg|gif|png|webp|bmp|svg/i.test(fmt)) {
+			return true;
+		}
+		if (f && /jpeg|jpg|gif|png|webp|bmp|svg/i.test(f)) {
+			return true;
+		}
+		if (ext && /jpeg|jpg|gif|png|webp|bmp|svg/i.test(ext)) {
+			return true;
+		}
+		
+		// 检查百度图片等常见服务的特定参数
+		if (url.includes('baidu.com') && (url.includes('fmt=') || url.includes('f=JPEG') || url.includes('f=PNG'))) {
+			return true;
+		}
+		
+		return false;
 	}
 
+	// 检测视频媒体类型
 	function isVideoMedia(url) {
-		return /\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv)$/i.test(url);
+		return /\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv)(\?.*)?$/i.test(url);
 	}
 
+	// 检测音频媒体类型
 	function isAudioMedia(url) {
-		return /\.(mp3|wav|ogg|flac|m4a|aac)$/i.test(url);
+		return /\.(mp3|wav|ogg|flac|m4a|aac)(\?.*)?$/i.test(url);
 	}
 
 	function createMediaPreview(url, type) {
