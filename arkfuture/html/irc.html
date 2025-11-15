@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>IRC Web Client</title>
+	<title>现代化IRC Web客户端</title>
 	<style>
 		:root {
 			--clr-background: #F5F7FA;
@@ -77,12 +77,22 @@
 			background: linear-gradient(90deg, var(--clr-background2), var(--clr-background));
 			padding: var(--spacing-md) var(--spacing-lg);
 			flex: 0 0 auto;
+			border-bottom: 1px solid var(--clr-border);
 		}
 
 		.header h1 {
 			margin: 0;
-			font-size: 18px;
+			font-size: 22px;
 			font-weight: 700;
+			color: var(--clr-accent);
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.header h1::before {
+			content: "💬";
+			font-size: 24px;
 		}
 
 		.settings-bar {
@@ -113,19 +123,19 @@
 		}
 
 		.settings-group input[type="text"] {
-			padding: 6px 10px;
+			padding: 8px 12px;
 			background-color: var(--clr-background3);
 			color: var(--clr-font);
 			border: 1px solid var(--clr-border);
 			border-radius: var(--border-radius);
 			font-size: 13px;
-			min-width: 120px;
+			min-width: 140px;
 			transition: var(--transition);
 		}
 
 		.settings-group input[type="checkbox"] {
-			width: 16px;
-			height: 16px;
+			width: 18px;
+			height: 18px;
 			cursor: pointer;
 			margin: 0;
 		}
@@ -137,7 +147,7 @@
 		}
 
 		.btn {
-			padding: 6px 12px;
+			padding: 8px 16px;
 			border: none;
 			border-radius: var(--border-radius);
 			cursor: pointer;
@@ -148,6 +158,7 @@
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
+			gap: 6px;
 		}
 
 		.connect-btn {
@@ -197,11 +208,11 @@
 			display: inline-flex;
 			align-items: center;
 			gap: 6px;
-			padding: 4px 10px;
+			padding: 6px 12px;
 			background-color: var(--clr-background3);
 			border: 1px solid var(--clr-border);
 			border-radius: var(--border-radius);
-			font-size: 11px;
+			font-size: 12px;
 			font-weight: 500;
 			margin-left: auto;
 			flex: 0 0 auto;
@@ -219,8 +230,8 @@
 		}
 
 		.connection-status .indicator {
-			width: 8px;
-			height: 8px;
+			width: 10px;
+			height: 10px;
 			border-radius: 50%;
 			background-color: var(--clr-border);
 			transition: var(--transition);
@@ -290,7 +301,7 @@
 		}
 
 		.channel {
-			padding: 6px 12px;
+			padding: 8px 14px;
 			background-color: var(--clr-background3);
 			border: 1px solid var(--clr-border);
 			border-radius: 20px;
@@ -480,12 +491,13 @@
 		}
 
 		.channelcontents li {
-			padding: 6px 10px;
-			margin: 1px 0;
+			padding: 8px 12px;
+			margin: 2px 0;
 			display: flex;
 			gap: 8px;
 			border-radius: 4px;
 			transition: var(--transition);
+			cursor: pointer;
 		}
 
 		.channelcontents li:hover {
@@ -510,7 +522,7 @@
 
 		#input {
 			flex: 0 0 auto;
-			padding: var(--spacing-md);
+			padding: 12px 16px;
 			background-color: var(--clr-background3);
 			color: var(--clr-font);
 			border: 1px solid var(--clr-border);
@@ -593,7 +605,7 @@
 
 			#input {
 				margin: 8px;
-				padding: 10px;
+				padding: 12px;
 			}
 		}
 
@@ -617,7 +629,7 @@
 
 			#input {
 				margin: 8px;
-				padding: 10px;
+				padding: 12px;
 			}
 		}
 
@@ -657,13 +669,13 @@
 
 		.empty-state h3 {
 			margin: 0 0 8px 0;
-			font-size: 16px;
+			font-size: 18px;
 			font-weight: 600;
 		}
 
 		.empty-state p {
 			margin: 0;
-			font-size: 13px;
+			font-size: 14px;
 		}
 		
 		/* 媒体预览相关样式 */
@@ -804,13 +816,59 @@
 			border-radius: 4px;
 			font-size: 12px;
 		}
+		
+		/* 聊天消息样式优化 */
+		.chat-message {
+			margin: 4px 0;
+			padding: 6px 8px;
+			border-radius: 4px;
+			display: flex;
+			align-items: flex-start;
+		}
+		
+		.chat-message:hover {
+			background-color: var(--clr-background2);
+		}
+		
+		.chat-message .timestamp {
+			color: var(--clr-border);
+			font-size: 11px;
+			margin-right: 8px;
+		}
+		
+		.chat-message .username {
+			font-weight: 600;
+			margin-right: 6px;
+			color: var(--clr-accent);
+		}
+		
+		.chat-message .content {
+			flex: 1;
+		}
+		
+		.chat-message.system {
+			color: var(--clr-green);
+			font-style: italic;
+		}
+		
+		.chat-message.action {
+			color: var(--clr-red);
+		}
+		
+		.chat-message.error {
+			color: var(--clr-red);
+		}
+		
+		.chat-message.notice {
+			color: var(--clr-gold);
+		}
 	</style>
 </head>
 
 <body>
 	<div class="main">
 		<div class="header">
-			<h1 id="caption">IRC Client</h1>
+			<h1>现代化IRC客户端</h1>
 		</div>
 
 		<div class="settings-bar">
@@ -836,8 +894,11 @@
 					<button class="btn ssl-help-btn" onclick="showSSLWarning()" title="点击查看SSL证书问题的解决方案">SSL帮助</button>
 				</label>
 			</div>
-			<button class="btn connect-btn" id="connectBtn" onclick="toggleConnection()">连接</button>
-			<button class="btn log-toggle-btn" onclick="toggleLog()">查看日志</button>
+			<button class="btn connect-btn" id="connectBtn" onclick="toggleConnection()">
+				<span class="btn-icon">🔌</span>
+				<span class="btn-text">连接</span>
+			</button>
+			<button class="btn log-toggle-btn" onclick="toggleLog()">📋 日志</button>
 			<div class="connection-status disconnected" id="connectionStatus">
 				<span class="indicator"></span>
 				<span id="statusText">未连接</span>
@@ -1050,7 +1111,7 @@
 		channelInput.disabled = true;
 		if (reconnectCheckbox) reconnectCheckbox.disabled = true;
 
-		connectBtn.textContent = '连接中...';
+		connectBtn.innerHTML = '<span class="btn-icon">🔄</span><span class="btn-text">连接中...</span>';
 		connectBtn.disabled = true;
 
 		// 清空界面
@@ -1083,7 +1144,7 @@
 		if (reconnectCheckbox) reconnectCheckbox.disabled = false;
 
 		if (connectBtn) {
-			connectBtn.textContent = '连接';
+			connectBtn.innerHTML = '<span class="btn-icon">🔌</span><span class="btn-text">连接</span>';
 			connectBtn.disabled = false;
 			connectBtn.classList.remove('disconnect');
 		}
@@ -1344,20 +1405,39 @@
 
 	function writeToScreen(color, message, channel, username) {
 		if (!channel || !channel.content) return;
-		let pre = document.createElement("p");
-		pre.style.color = color;
+		let div = document.createElement("div");
+		div.className = "chat-message";
 		const now = new Date();
 		const utcTime = now.toISOString().substr(11, 8);
+		
 		let displayMessage;
 		if (username && username !== "") {
 			displayMessage = `[${utcTime}] ${username}: ${linkify(message || "")}`;
 		} else {
 			displayMessage = `[${utcTime}] ${linkify(message || "")}`;
 		}
-		pre.innerHTML = displayMessage;
+		
+		// 根据消息类型添加CSS类
+		if (username === "*" || username === "-") {
+			if (message.includes("加入频道") || message.includes("已加入频道")) {
+				div.className += " system";
+			} else if (message.includes("离开频道") || message.includes("退出IRC")) {
+				div.className += " system";
+			} else if (message.includes("设置模式") || message.includes("设置主题")) {
+				div.className += " system";
+			} else if (message.includes("ACTION")) {
+				div.className += " action";
+			}
+		} else if (username === "ERROR") {
+			div.className += " error";
+		} else if (username === "-") {
+			div.className += " notice";
+		}
+		
+		div.innerHTML = displayMessage;
 		let output = channel.content;
 		if (output) {
-			output.appendChild(pre);
+			output.appendChild(div);
 			while (output.children.length > 200) {
 				output.removeChild(output.children[0]);
 			}
@@ -1693,7 +1773,7 @@
 
 		const connectBtn = document.getElementById('connectBtn');
 		if (connectBtn) {
-			connectBtn.textContent = '断开';
+			connectBtn.innerHTML = '<span class="btn-icon">🔌</span><span class="btn-text">断开</span>';
 			connectBtn.disabled = false;
 			connectBtn.classList.add('disconnect');
 		}
@@ -1999,6 +2079,4 @@
 		writeToLog(`[DEBUG] ${rawData}`);
 	}
 </script>
-
-
-
+</html>
