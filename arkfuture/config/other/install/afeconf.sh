@@ -22,4 +22,6 @@ chmod 777 conf.sh
 head -n 1 /etc/inspircd/inspircd.conf
 ###### 说明
 echo "inspircd配置文件下载完成"
+echo "若您在/etc/inspircd文件夹下没有发现inspircd.conf"
+echo "则您需要执行./config.sh来重新下载配置文件"
 rm -rf ./afeconf.sh
