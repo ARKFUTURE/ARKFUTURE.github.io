@@ -664,6 +664,105 @@
 			margin: 0;
 			font-size: 13px;
 		}
+		
+		/* 图片预览相关样式 */
+		.image-container {
+			position: relative;
+			display: inline-block;
+			margin: 2px;
+			border-radius: 4px;
+			overflow: hidden;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+		}
+		
+		.image-container img {
+			max-width: 150px;
+			max-height: 150px;
+			object-fit: cover;
+			cursor: pointer;
+			border-radius: 4px;
+		}
+		
+		.image-overlay {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0, 0, 0, 0.5);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: white;
+			font-size: 12px;
+			opacity: 0;
+			transition: opacity 0.2s;
+			border-radius: 4px;
+		}
+		
+		.image-container:hover .image-overlay {
+			opacity: 1;
+		}
+		
+		.image-preview-modal {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.9);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 1000;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.3s;
+		}
+		
+		.image-preview-modal.visible {
+			opacity: 1;
+			pointer-events: all;
+		}
+		
+		.image-preview-content {
+			position: relative;
+			max-width: 90%;
+			max-height: 90%;
+		}
+		
+		.image-preview-content img {
+			max-width: 100%;
+			max-height: 80vh;
+			object-fit: contain;
+			border-radius: 4px;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+		}
+		
+		.close-preview {
+			position: absolute;
+			top: -40px;
+			right: 0;
+			background: var(--clr-red);
+			color: white;
+			border: none;
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			cursor: pointer;
+			font-weight: bold;
+			font-size: 18px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		
+		.image-info {
+			text-align: center;
+			color: white;
+			margin-top: 10px;
+			font-size: 14px;
+		}
 	</style>
 </head>
 
@@ -732,6 +831,15 @@
 			</div>
 			<input type="text" name="input" id="input" placeholder="输入消息..." style="display: none;"
 				   onkeydown="onKeyPress(event)" onkeydown="onKeyDown(event)" />
+		</div>
+		
+		<!-- 图片预览模态框 -->
+		<div class="image-preview-modal" id="imagePreviewModal">
+			<div class="image-preview-content">
+				<img id="previewImage" src="" alt="预览图片">
+				<button class="close-preview" onclick="closeImagePreview()">×</button>
+				<div class="image-info" id="imageInfo"></div>
+			</div>
 		</div>
 	</div>
 </body>
@@ -1220,9 +1328,63 @@
 	function linkify(text) {
 		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
 		return text.replace(urlRegex, function (url) {
+			// 检查是否是图片URL
+			if (isImageUrl(url)) {
+				return createImagePreview(url);
+			}
 			return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${url}</a>`;
 		});
 	}
+
+	function isImageUrl(url) {
+		return /\.(jpeg|jpg|gif|png|webp|bmp|svg)$/i.test(url);
+	}
+
+	function createImagePreview(url) {
+		return `
+			<span class="image-container">
+				<img src="${url}" alt="预览图片" onclick="openImagePreview('${url}')" />
+				<span class="image-overlay">点击放大</span>
+			</span>
+		`;
+	}
+
+	function openImagePreview(url) {
+		const modal = document.getElementById('imagePreviewModal');
+		const img = document.getElementById('previewImage');
+		const info = document.getElementById('imageInfo');
+		
+		img.src = url;
+		info.textContent = url;
+		
+		// 显示模态框
+		modal.classList.add('visible');
+		
+		// 防止背景滚动
+		document.body.style.overflow = 'hidden';
+	}
+
+	function closeImagePreview() {
+		const modal = document.getElementById('imagePreviewModal');
+		modal.classList.remove('visible');
+		
+		// 恢复背景滚动
+		document.body.style.overflow = 'auto';
+	}
+
+	// 点击模态框外部关闭
+	document.getElementById('imagePreviewModal').addEventListener('click', function(e) {
+		if (e.target === this) {
+			closeImagePreview();
+		}
+	});
+
+	// 按ESC键关闭
+	document.addEventListener('keydown', function(e) {
+		if (e.key === 'Escape') {
+			closeImagePreview();
+		}
+	});
 
 	function send() {
 		let text = input ? input.value.trim() : "";
@@ -1667,4 +1829,5 @@
 	}
 </script>
 
-</html>
+
+
