@@ -913,6 +913,11 @@
 	var maxReconnectAttempts = 5;
 	var reconnectDelay = 3000;
 
+	// 保持连接的心跳机制
+	var pingInterval = null;
+	var pongTimeout = null;
+	var lastPongReceived = null;
+
 	function onLoad() {
 		channels = document.getElementById("channelsContainer");
 		channelContents = document.getElementById("channelContents");
@@ -1108,6 +1113,16 @@
 
 		writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel, "");
 		writeToLog(`[系统] 已断开连接`);
+
+		// 清理心跳机制
+		if (pingInterval) {
+			clearInterval(pingInterval);
+			pingInterval = null;
+		}
+		if (pongTimeout) {
+			clearTimeout(pongTimeout);
+			pongTimeout = null;
+		}
 
 		if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
 			reconnectAttempts++;
@@ -1675,6 +1690,17 @@
 			}
 			websocket = null;
 		}
+		
+		// 清理心跳机制
+		if (pingInterval) {
+			clearInterval(pingInterval);
+			pingInterval = null;
+		}
+		if (pongTimeout) {
+			clearTimeout(pongTimeout);
+			pongTimeout = null;
+		}
+		
 		onDisconnect();
 	}
 
@@ -1708,8 +1734,42 @@
 			connectBtn.classList.add('disconnect');
 		}
 
+		// 启动心跳机制
+		startHeartbeat();
+
 		doSend("user websocket * * :WebSocket User");
 		doSend("nick " + nickname);
+	}
+
+	// 启动心跳机制
+	function startHeartbeat() {
+		// 清理旧的心跳
+		if (pingInterval) {
+			clearInterval(pingInterval);
+		}
+		if (pongTimeout) {
+			clearTimeout(pongTimeout);
+		}
+
+		// 设置心跳间隔（30秒）
+		pingInterval = setInterval(() => {
+			if (websocket && websocket.readyState === WebSocket.OPEN) {
+				// 发送ping消息
+				websocket.send("PING " + Date.now());
+				writeToLog(`→ PING: ${Date.now()}`);
+				
+				// 设置等待pong的超时
+				pongTimeout = setTimeout(() => {
+					writeToLog(`[ERROR] 未收到PONG响应，连接可能已断开`);
+					if (websocket) {
+						websocket.close(1000, "Pong timeout");
+					}
+				}, 10000); // 10秒后如果没收到pong就断开连接
+			}
+		}, 30000); // 每30秒发送一次ping
+
+		// 记录最后一次收到pong的时间
+		lastPongReceived = new Date();
 	}
 
 	function onMessage(evt) {
@@ -1721,7 +1781,17 @@
 			fileReader.addEventListener("loadend", handleBinaryInput);
 			fileReader.readAsText(rawData);
 		} else {
-			process(rawData);
+			// 检查是否是pong消息
+			if (rawData.startsWith('PONG')) {
+				lastPongReceived = new Date();
+				if (pongTimeout) {
+					clearTimeout(pongTimeout);
+					pongTimeout = null;
+				}
+				writeToLog(`← PONG: ${rawData}`);
+			} else {
+				process(rawData);
+			}
 		}
 	}
 
