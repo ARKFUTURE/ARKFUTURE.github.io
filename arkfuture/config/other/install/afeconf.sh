@@ -19,9 +19,8 @@ echo "安装完成"
 echo "开始下载配置文件到/etc/inspircd"
 cd /etc/inspircd
 rm -rf *
-mkdir conf
-mkdir txt
 curl -L -O --anyauth --user ##USERNAME##:##PASSWORD## http://frp.freefrp.net:10240/inspircd.conf
+curl -L -O --anyauth https://git.io/GeoLite2-Country.mmdb
 read -rp "是否要生成自签名证书？ [y/N] "
 if [[ "${ans,,}" == "y" || "${ans,,}" == "yes" ]]; then
 openssl req -x509 -newkey rsa:4096 -sha256 -days 30 -nodes -keyout key.pem -out cert.pem -subj "/CN=irc.arkfuture.test" -addext "extendedKeyUsage = serverAuth"
@@ -29,8 +28,6 @@ echo "成功生成自签名证书,证书仅用于测试环境"
 else
 echo "未生成任何证书,请稍自行获取证书并修改/usr/share/inspircd/deploy-ssl.sh后执行此移动证书脚本"
 fi
-cd /etc/inspircd/conf
-curl -L -O --anyauth https://git.io/GeoLite2-Country.mmdb
 cd /etc/inspircd/
 chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
