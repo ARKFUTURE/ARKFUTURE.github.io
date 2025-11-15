@@ -811,12 +811,16 @@
 	}
 
 	function writeToLog(message) {
-		const logOutput = document.getElementById('logOutput');
-		if (logOutput) {
-			const timestamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-			logOutput.textContent += `[${timestamp}] ${message}\n`;
-			logOutput.scrollTop = logOutput.scrollHeight;
-		}
+	const logOutput = document.getElementById('logOutput');
+	const timestamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+	const fullMessage = `[${timestamp}] ${message}`;
+
+	if (logOutput) {
+		logOutput.textContent += fullMessage + '\n';
+		logOutput.scrollTop = logOutput.scrollHeight;
+	}
+
+	console.log(fullMessage);
 	}
 
 	function showSSLWarning(url) {
