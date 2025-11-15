@@ -6,6 +6,8 @@ echo "现在是root用户权限"
 echo "---->>配置导入脚本,仅适于ARKFUTURE配置,进行中"
 cd /etc/inspircd
 rm -rf *
+mkdir conf
+mkdir txt
 curl -L -O --anyauth --user ##USERNAME##:##PASSWORD## http://frp.freefrp.net:10240/inspircd.conf
 curl -L -O --anyauth https://git.io/GeoLite2-Country.mmdb
 read -rp "是否要生成自签名证书？ [y/N] "
