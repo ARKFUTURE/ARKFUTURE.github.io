@@ -10,7 +10,7 @@ sleep 3
 ###### 安装依赖
 apt update && apt install -y wget curl openssl gnutls-bin
 ###### 安装inspircd
-curl -L -o inspircd.deb https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/download/20250310/inspircd_4.8.0_deb13u1_amd64.deb
+curl -L -o inspircd.deb https://github.com/ARKFUTURE/ARKFUTURE.github.io/releases/download/20250310/inspircd_4.8.0_deb12u1_amd64.deb
 chmod 777 ./inspircd.deb
 apt install ./inspircd.deb -y
 rm -rf ./inspircd.deb
