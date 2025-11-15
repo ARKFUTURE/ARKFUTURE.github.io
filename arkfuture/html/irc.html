@@ -751,6 +751,8 @@
 	var reconnectAttempts = 0;
 	var maxReconnectAttempts = 5;
 	var reconnectDelay = 3000;
+	var keepAliveTimer = null;
+	const keepAliveInterval = 90000; // 60秒保活功能
 
 	function onLoad() {
 		channels = document.getElementById("channelsContainer");
@@ -919,6 +921,7 @@
 	}
 
 	function onDisconnect() {
+		stopKeepAlive();
 		isConnected = false;
 		const wsUrlInput = document.getElementById('wsUrl');
 		const nickInput = document.getElementById('nickInput');
@@ -1311,9 +1314,13 @@
 
 		switch (code) {
 			case 1000: logMsg += ' (正常关闭)'; break;
-			case 1006: logMsg += ' (异常断开 - 可能SSL证书错误)'; break;
-			case 1005: logMsg += ' (无状态码)'; break;
+			case 1001: logMsg += ' (终端离开)'; break;
+			case 1002: logMsg += ' (协议错误)'; break;
+			case 1003: logMsg += ' (数据类型错误)'; break;
+			case 1005: logMsg += ' (无法获取状态码)'; break;
+			case 1006: logMsg += ' (连接异常断开-可能由于网络问题)'; break;
 			case 1011: logMsg += ' (服务器异常)'; break;
+			case 1015: logMsg += ' (TLS握手失败)'; break;
 			default: if (code >= 4000 && code <= 4999) { logMsg += ' (应用层错误)'; }
 		}
 		logMsg += ` - ${reason}`;
@@ -1367,6 +1374,8 @@
 
 		doSend("user websocket * * :WebSocket User");
 		doSend("nick " + nickname);
+
+		startKeepAlive();
 	}
 
 	function onMessage(evt) {
@@ -1664,6 +1673,23 @@
 		}
 		console.log("DEBUG:", rawData);
 		writeToLog(`[DEBUG] ${rawData}`);
+	}
+
+	function startKeepAlive() {
+		stopKeepAlive();
+		keepAliveTimer = setInterval(() => {
+			if (isConnected && websocket && websocket.readyState === WebSocket.OPEN) {
+				writeToLog("[KEEP-ALIVE] 发送 PING");
+				doSend("PING keepalive");
+			}
+		}, keepAliveInterval);
+	}
+
+	function stopKeepAlive() {
+		if (keepAliveTimer) {
+			clearInterval(keepAliveTimer);
+			keepAliveTimer = null;
+		}
 	}
 </script>
 
