@@ -8,13 +8,13 @@
 	<style>
 		/* ===== 全局变量：深色主题 ===== */
 		:root {
-			--clr-bg: #121212;
-			--clr-card-bg: #1e1e1e;
-			--clr-header-bg: #252525;
-			--clr-input-bg: #2d2d2d;
-			--clr-border: #444;
+			--clr-bg: #1a1a1a;
+			--clr-card-bg: #252525;
+			--clr-header-bg: #2d2d2d;
+			--clr-input-bg: #333333;
+			--clr-border: #444444;
 			--clr-font: #e0e0e0;
-			--clr-muted: #999;
+			--clr-muted: #aaaaaa;
 			--clr-accent: #4caf50;
 			--clr-red: #f44336;
 			--clr-green: #4caf50;
@@ -23,7 +23,7 @@
 			--clr-gold: #ff9800;
 			--clr-brown: #8d6e63;
 
-			--radius: 8px;
+			--radius: 6px;
 			--spacing-xs: 4px;
 			--spacing-sm: 8px;
 			--spacing-md: 12px;
@@ -31,7 +31,7 @@
 			--spacing-xl: 24px;
 
 			font-family: 'Segoe UI', system-ui, sans-serif;
-			font-size: 14px;
+			font-size: 15px;
 			color: var(--clr-font);
 			background-color: var(--clr-bg);
 		}
@@ -47,36 +47,41 @@
 			overflow: hidden;
 			display: flex;
 			flex-direction: column;
+			padding: 10px;
 		}
 
 		.main {
 			display: flex;
 			flex-direction: column;
 			height: 100%;
-			max-width: 1400px;
+			max-width: 1600px; /* 稍微放宽最大宽度 */
 			margin: 0 auto;
 			width: 100%;
-			padding: var(--spacing-md);
 			gap: var(--spacing-md);
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* 添加整体阴影 */
+			border-radius: var(--radius);
+			overflow: hidden;
 		}
 
 		.header {
+			background: var(--clr-header-bg);
 			text-align: center;
 			padding: var(--spacing-sm) 0;
+			border-bottom: 1px solid var(--clr-border);
 		}
 
 		.header h1 {
-			font-size: 1.5rem;
+			font-size: 1.6rem;
 			font-weight: 600;
 		}
 
 		.settings-bar {
 			display: flex;
-			flex-wrap: wrap;
-			gap: var(--spacing-sm);
+			flex-wrap: wrap; /* 允许换行以适应更长的设置 */
+			gap: var(--spacing-md);
 			background: var(--clr-card-bg);
-			padding: var(--spacing-md);
-			border-radius: var(--radius);
+			padding: var(--spacing-lg);
+			border-bottom: 1px solid var(--clr-border);
 			align-items: center;
 		}
 
@@ -87,13 +92,13 @@
 		}
 
 		.settings-group label {
-			font-size: 0.85rem;
+			font-size: 0.9rem;
 			color: var(--clr-muted);
 		}
 
 		.settings-group input[type="text"] {
-			width: 180px;
-			padding: var(--spacing-sm);
+			width: 220px; /* 增加输入框宽度 */
+			padding: var(--spacing-sm) var(--spacing-md);
 			background: var(--clr-input-bg);
 			border: 1px solid var(--clr-border);
 			border-radius: var(--radius);
@@ -102,12 +107,12 @@
 		}
 
 		.settings-group input[type="checkbox"] {
-			transform: scale(1.2);
+			transform: scale(1.3); /* 稍微放大复选框 */
 			margin-right: var(--spacing-xs);
 		}
 
 		.btn {
-			padding: var(--spacing-sm) var(--spacing-md);
+			padding: var(--spacing-sm) var(--spacing-lg);
 			background: var(--clr-accent);
 			color: white;
 			border: none;
@@ -115,6 +120,7 @@
 			cursor: pointer;
 			font-weight: 600;
 			transition: background 0.2s;
+			font-size: 1rem;
 		}
 
 		.btn:hover {
@@ -132,14 +138,15 @@
 		.connection-status {
 			display: flex;
 			align-items: center;
-			gap: var(--spacing-xs);
+			gap: var(--spacing-sm);
 			margin-left: auto;
 			font-weight: 600;
+			font-size: 0.95rem;
 		}
 
 		.connection-status .indicator {
-			width: 10px;
-			height: 10px;
+			width: 12px;
+			height: 12px;
 			border-radius: 50%;
 			background: var(--clr-red);
 		}
@@ -153,8 +160,9 @@
 			color: #ffeb3b;
 			padding: var(--spacing-md);
 			border-radius: var(--radius);
-			margin-top: var(--spacing-sm);
+			margin: var(--spacing-md) var(--spacing-lg);
 			display: none;
+			border: 1px solid var(--clr-yellow);
 		}
 
 		.ssl-warning.visible {
@@ -172,8 +180,10 @@
 			flex-direction: column;
 			background: var(--clr-card-bg);
 			border-radius: var(--radius);
-			height: 200px;
+			height: 220px; /* 稍微增加高度 */
 			overflow: hidden;
+			margin: 0 var(--spacing-md) var(--spacing-md);
+			box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
 		}
 
 		.log-container.visible {
@@ -187,10 +197,12 @@
 			padding: var(--spacing-sm) var(--spacing-md);
 			background: #2a2a2a;
 			font-weight: 600;
+			border-bottom: 1px solid var(--clr-border);
 		}
 
 		.log-controls button {
 			margin-left: var(--spacing-sm);
+			padding: var(--spacing-xs) var(--spacing-sm);
 		}
 
 		#logOutput {
@@ -201,21 +213,23 @@
 			font-size: 0.9rem;
 			color: var(--clr-muted);
 			white-space: pre-wrap;
+			background: #1e1e1e;
 		}
 
 		.chat-container {
 			display: flex;
 			flex: 1;
 			gap: var(--spacing-md);
-			position: relative;
+			padding: 0 var(--spacing-md) var(--spacing-md); /* 底部和左右增加内边距 */
 		}
 
 		.channels {
-			width: 180px;
+			width: 280px; /* 显著增加频道列表宽度 */
 			background: var(--clr-card-bg);
 			border-radius: var(--radius);
 			overflow-y: auto;
 			flex-shrink: 0;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 为频道列表添加阴影 */
 		}
 
 		.channel {
@@ -223,17 +237,23 @@
 			justify-content: space-between;
 			align-items: center;
 			width: 100%;
-			padding: var(--spacing-sm) var(--spacing-md);
+			padding: var(--spacing-md);
 			background: transparent;
 			color: var(--clr-font);
 			border: none;
 			text-align: left;
 			cursor: pointer;
 			transition: background 0.2s;
+			font-size: 1.1rem; /* 增大频道名字体 */
+			border-bottom: 1px solid var(--clr-border); /* 添加分割线 */
+		}
+
+		.channel:last-child {
+			border-bottom: none;
 		}
 
 		.channel:hover {
-			background: #2a2a2a;
+			background: #2f2f2f;
 		}
 
 		.channel.active {
@@ -242,17 +262,19 @@
 		}
 
 		.channel .x {
-			background: transparent;
+			background: rgba(255, 255, 255, 0.1);
 			color: inherit;
 			border: none;
 			font-weight: bold;
 			cursor: pointer;
-			padding: 0;
-			width: 16px;
-			height: 16px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
+			padding: 2px 6px;
+			border-radius: 4px;
+			opacity: 0.7;
+		}
+
+		.channel .x:hover {
+			opacity: 1;
+			background: rgba(255, 255, 255, 0.2);
 		}
 
 		.channelcontents-wrapper {
@@ -262,6 +284,7 @@
 			background: var(--clr-card-bg);
 			border-radius: var(--radius);
 			overflow: hidden;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 为聊天内容区添加阴影 */
 		}
 
 		.channelcontents-wrapper.hidden {
@@ -286,8 +309,8 @@
 		}
 
 		.channelcontent h3 {
-			font-size: 1rem;
-			margin-bottom: var(--spacing-sm);
+			font-size: 1.2rem;
+			margin-bottom: var(--spacing-xs);
 			color: var(--clr-accent);
 		}
 
@@ -295,10 +318,12 @@
 			flex: 1;
 			overflow-y: auto;
 			padding: var(--spacing-md);
+			background: #1e1e1e; /* 为消息内容区添加稍深背景 */
 		}
 
 		.channelcontent p {
 			margin-bottom: var(--spacing-xs);
+			line-height: 1.5;
 			word-break: break-word;
 		}
 
@@ -315,16 +340,17 @@
 
 		.empty-state h3 {
 			margin-bottom: var(--spacing-sm);
+			font-size: 1.5rem;
 		}
 
 		#input {
 			width: 100%;
-			padding: var(--spacing-md);
+			padding: var(--spacing-lg);
 			background: var(--clr-input-bg);
 			border: none;
 			border-top: 1px solid var(--clr-border);
 			color: var(--clr-font);
-			font-size: 1rem;
+			font-size: 1.1rem;
 			outline: none;
 		}
 
@@ -335,7 +361,7 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background: rgba(0, 0, 0, 0.9);
+			background: rgba(0, 0, 0, 0.95);
 			z-index: 1000;
 			justify-content: center;
 			align-items: center;
@@ -359,20 +385,22 @@
 			max-height: 80vh;
 			object-fit: contain;
 			border-radius: var(--radius);
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
 		}
 
 		.close-preview {
 			position: absolute;
-			top: -40px;
-			right: 0;
+			top: -10px;
+			right: -10px;
 			background: var(--clr-red);
 			color: white;
 			border: none;
 			width: 32px;
 			height: 32px;
 			border-radius: 50%;
-			font-size: 1.2rem;
+			font-size: 1.5rem;
 			cursor: pointer;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 		}
 
 		.media-info {
@@ -380,6 +408,9 @@
 			font-size: 0.9rem;
 			margin-top: var(--spacing-sm);
 			word-break: break-all;
+			background: rgba(0, 0, 0, 0.3);
+			padding: var(--spacing-xs);
+			border-radius: var(--radius);
 		}
 
 		.media-container {
@@ -396,7 +427,7 @@
 			background: rgba(0,0,0,0.6);
 			color: white;
 			font-size: 0.8rem;
-			padding: 2px 4px;
+			padding: 4px 8px;
 			opacity: 0;
 			transition: opacity 0.2s;
 		}
@@ -408,30 +439,7 @@
 		.media-error {
 			color: var(--clr-red);
 			font-style: italic;
-		}
-
-		/* 响应式：小屏设备 */
-		@media (max-width: 768px) {
-			.settings-bar {
-				flex-direction: column;
-				align-items: stretch;
-			}
-
-			.settings-group input[type="text"] {
-				width: 100%;
-			}
-
-			.channels {
-				width: 100%;
-				height: 120px;
-				overflow-x: auto;
-				white-space: nowrap;
-			}
-
-			.channels button.channel {
-				min-width: 120px;
-				display: inline-flex;
-			}
+			margin-top: var(--spacing-xs);
 		}
 	</style>
 </head>
