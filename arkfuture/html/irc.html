@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 
 <head>
 	<meta charset="UTF-8">
@@ -635,1189 +635,1193 @@
 			</div>
 		</div>
 	</div>
-</body>
 
-<script>
-	var nickname = "";
-	var channelName = "";
-	var wsUrl = "";
-	var channels, channelContents, contentsWrapper, emptyState, input;
-	var channelMap = new Map();
-	var activeChannel = null;
-	var statusChannel = null;
-	var PrefixChars;
-	var websocket = null;
-	var isConnected = false;
-	var autoReconnect = false;
-	var reconnectAttempts = 0;
-	var maxReconnectAttempts = 5;
-	var reconnectDelay = 3000;
+	<script>
+		var nickname = "";
+		var channelName = "";
+		var wsUrl = "";
+		var channels, channelContents, contentsWrapper, emptyState, input;
+		var channelMap = new Map();
+		var activeChannel = null;
+		var statusChannel = null;
+		var PrefixChars;
+		var websocket = null;
+		var isConnected = false;
+		var autoReconnect = false;
+		var reconnectAttempts = 0;
+		var maxReconnectAttempts = 5;
+		var reconnectDelay = 3000;
 
-	// 保持连接的心跳机制
-	var pingInterval = null;
-	var pongTimeout = null;
-	var lastPongReceived = null;
+		// 保持连接的心跳机制
+		var pingInterval = null;
+		var pongTimeout = null;
+		var lastPongReceived = null;
 
-	function onLoad() {
-		channels = document.getElementById("channelsContainer");
-		channelContents = document.getElementById("channelContents");
-		contentsWrapper = document.getElementById("contentsWrapper");
-		emptyState = document.getElementById("emptyState");
-		input = document.getElementById("input");
+		function onLoad() {
+			channels = document.getElementById("channelsContainer");
+			channelContents = document.getElementById("channelContents");
+			contentsWrapper = document.getElementById("chat-area");
+			emptyState = document.getElementById("emptyState");
+			input = document.getElementById("input");
 
-		let url = new URL(document.location);
-		if (url.hash) {
-			document.getElementById('channelInput').value = url.hash;
-		}
-		if (window.frameElement) {
-			document.getElementById("caption").style.display = "none";
-		}
-		updateConnectionStatus(false);
+			let url = new URL(document.location);
+			if (url.hash) {
+				document.getElementById('channelInput').value = url.hash;
+			}
+			if (window.frameElement) {
+				document.getElementById("caption").style.display = "none";
+			}
+			updateConnectionStatus(false);
 
-		// 添加输入框自动聚焦
-		if (input) {
-			input.addEventListener('blur', () => setTimeout(() => input.focus(), 100));
-		}
-	}
-	window.addEventListener("load", onLoad, false);
-
-	function updateConnectionStatus(connected) {
-		const statusEl = document.getElementById('connectionStatus');
-		const statusText = document.getElementById('statusText');
-		if (!statusEl || !statusText) return;
-
-		if (connected) {
-			statusEl.classList.remove('disconnected');
-			statusEl.classList.add('connected');
-			statusText.textContent = `已连接 (${nickname})`;
-		} else {
-			statusEl.classList.remove('connected');
-			statusEl.classList.add('disconnected');
-			statusText.textContent = '未连接';
-		}
-	}
-
-	function toggleLog() {
-		const logContainer = document.getElementById('logContainer');
-		if (logContainer) {
-			logContainer.classList.toggle('visible');
-			if (!logContainer.classList.contains('visible')) {
-				logContainer.scrollTop = logContainer.scrollHeight;
+			// 添加输入框自动聚焦
+			if (input) {
+				input.addEventListener('blur', () => setTimeout(() => input.focus(), 100));
 			}
 		}
-	}
+		window.addEventListener("load", onLoad, false);
 
-	function clearLog() {
-		const logOutput = document.getElementById('logOutput');
-		if (logOutput) {
-			logOutput.textContent = '';
+		function updateConnectionStatus(connected) {
+			const statusEl = document.getElementById('connectionStatus');
+			const statusText = document.getElementById('statusText');
+			if (!statusEl || !statusText) return;
+
+			if (connected) {
+				statusEl.classList.remove('disconnected');
+				statusEl.classList.add('connected');
+				statusText.textContent = `已连接 (${nickname})`;
+			} else {
+				statusEl.classList.remove('connected');
+				statusEl.classList.add('disconnected');
+				statusText.textContent = '未连接';
+			}
 		}
-	}
 
-	function writeToLog(message) {
-		const logOutput = document.getElementById('logOutput');
-		if (logOutput) {
-			const timestamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-			logOutput.textContent += `[${timestamp}] ${message}\n`;
-			logOutput.scrollTop = logOutput.scrollHeight;
+		function toggleLog() {
+			const logContainer = document.getElementById('logContainer');
+			if (logContainer) {
+				logContainer.classList.toggle('visible');
+				if (!logContainer.classList.contains('visible')) {
+					logContainer.scrollTop = logContainer.scrollHeight;
+				}
+			}
 		}
-	}
 
-	function showSSLWarning(url) {
-		const warning = document.getElementById('sslWarning');
-		const link = document.getElementById('sslLink');
-		if (!warning || !link) return;
-
-		let displayUrl = url || document.getElementById('wsUrl')?.value.trim();
-		if (displayUrl) {
-			link.href = displayUrl.replace('wss://', 'https://').replace('ws://', 'http://');
-			link.textContent = link.href;
-		} else {
-			link.href = '#';
-			link.textContent = '请先在WebSocket地址栏输入服务器地址';
+		function clearLog() {
+			const logOutput = document.getElementById('logOutput');
+			if (logOutput) {
+				logOutput.textContent = '';
+			}
 		}
-		warning.classList.add('visible');
-		setTimeout(() => {
-			if (warning) warning.classList.remove('visible');
-		}, 6000);
-	}
 
-	function toggleConnection() {
-		if (isConnected) {
-			autoReconnect = false;
+		function writeToLog(message) {
+			const logOutput = document.getElementById('logOutput');
+			if (logOutput) {
+				const timestamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+				logOutput.textContent += `[${timestamp}] ${message}\n`;
+				logOutput.scrollTop = logOutput.scrollHeight;
+			}
+		}
+
+		function showSSLWarning(url) {
+			const warning = document.getElementById('sslWarning');
+			const link = document.getElementById('sslLink');
+			if (!warning || !link) return;
+
+			let displayUrl = url || document.getElementById('wsUrl')?.value.trim();
+			if (displayUrl) {
+				link.href = displayUrl.replace('wss://', 'https://').replace('ws://', 'http://');
+				link.textContent = link.href;
+			} else {
+				link.href = '#';
+				link.textContent = '请先在WebSocket地址栏输入服务器地址';
+			}
+			warning.classList.add('visible');
+			setTimeout(() => {
+				if (warning) warning.classList.remove('visible');
+			}, 6000);
+		}
+
+		function toggleConnection() {
+			if (isConnected) {
+				autoReconnect = false;
+				const reconnectCheckbox = document.getElementById('autoReconnect');
+				if (reconnectCheckbox) reconnectCheckbox.checked = false;
+				if (websocket) {
+					try {
+						websocket.close(1000, "User disconnected");
+					} catch (e) {
+						writeToLog(`[ERROR] 关闭WebSocket时出错: ${e.message}`);
+					}
+				}
+				onDisconnect();
+			} else {
+				doConnect();
+			}
+		}
+
+		function validateNickname(nick) {
+			if (!nick || nick.trim() === "") return false;
+			return /^[a-zA-Z_\\`\[\]{}^|][a-zA-Z0-9_\\`\[\]{}^|-]*$/.test(nick);
+		}
+
+		function validateWsUrl(url) {
+			if (!url) return false;
+			return /^wss?:\/\/.+/.test(url);
+		}
+
+		function doConnect() {
+			const wsUrlInput = document.getElementById('wsUrl');
+			const nickInput = document.getElementById('nickInput');
+			const channelInput = document.getElementById('channelInput');
 			const reconnectCheckbox = document.getElementById('autoReconnect');
-			if (reconnectCheckbox) reconnectCheckbox.checked = false;
-			if (websocket) {
-				try {
-					websocket.close(1000, "User disconnected");
-				} catch (e) {
-					writeToLog(`[ERROR] 关闭WebSocket时出错: ${e.message}`);
-				}
+			const connectBtn = document.getElementById('connectBtn');
+
+			if (!wsUrlInput || !nickInput || !channelInput || !connectBtn) {
+				alert("界面元素加载错误, 请刷新页面重试");
+				return;
 			}
-			onDisconnect();
-		} else {
-			doConnect();
-		}
-	}
 
-	function validateNickname(nick) {
-		if (!nick || nick.trim() === "") return false;
-		return /^[a-zA-Z_\\`\[\]{}^|][a-zA-Z0-9_\\`\[\]{}^|-]*$/.test(nick);
-	}
+			wsUrl = wsUrlInput.value.trim();
+			nickname = nickInput.value.trim();
+			channelName = channelInput.value.trim();
+			autoReconnect = reconnectCheckbox ? reconnectCheckbox.checked : false;
 
-	function validateWsUrl(url) {
-		if (!url) return false;
-		return /^wss?:\/\/.+/.test(url);
-	}
-
-	function doConnect() {
-		const wsUrlInput = document.getElementById('wsUrl');
-		const nickInput = document.getElementById('nickInput');
-		const channelInput = document.getElementById('channelInput');
-		const reconnectCheckbox = document.getElementById('autoReconnect');
-		const connectBtn = document.getElementById('connectBtn');
-
-		if (!wsUrlInput || !nickInput || !channelInput || !connectBtn) {
-			alert("界面元素加载错误, 请刷新页面重试");
-			return;
-		}
-
-		wsUrl = wsUrlInput.value.trim();
-		nickname = nickInput.value.trim();
-		channelName = channelInput.value.trim();
-		autoReconnect = reconnectCheckbox ? reconnectCheckbox.checked : false;
-
-		if (!validateWsUrl(wsUrl)) {
-			alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
-			return;
-		}
-		if (!validateNickname(nickname)) {
-			alert("昵称格式无效!必须以字母或特定符号开头, 不能包含空格和特殊字符");
-			return;
-		}
-		if (channelName && !channelName.startsWith('#')) {
-			channelName = '#' + channelName;
-		}
-
-		reconnectAttempts = 0;
-		wsUrlInput.disabled = true;
-		nickInput.disabled = true;
-		channelInput.disabled = true;
-		if (reconnectCheckbox) reconnectCheckbox.disabled = true;
-
-		connectBtn.textContent = '连接中...';
-		connectBtn.disabled = true;
-
-		// 清空界面
-		channels.innerHTML = '';
-		channelContents.innerHTML = '';
-		channelMap.clear();
-
-		// 显示聊天区域
-		contentsWrapper.classList.remove('hidden');
-		contentsWrapper.classList.add('visible');
-		if (emptyState) emptyState.style.display = 'flex';
-		if (input) input.style.display = 'block';
-
-		statusChannel = new Tab_Create("Status", "Status Window", false);
-		writeToLog(`[系统] 正在连接: ${wsUrl}`);
-		WebSocket_Connect(wsUrl);
-	}
-
-	function onDisconnect() {
-		isConnected = false;
-		const wsUrlInput = document.getElementById('wsUrl');
-		const nickInput = document.getElementById('nickInput');
-		const channelInput = document.getElementById('channelInput');
-		const reconnectCheckbox = document.getElementById('autoReconnect');
-		const connectBtn = document.getElementById('connectBtn');
-
-		if (wsUrlInput) wsUrlInput.disabled = false;
-		if (nickInput) nickInput.disabled = false;
-		if (channelInput) channelInput.disabled = false;
-		if (reconnectCheckbox) reconnectCheckbox.disabled = false;
-
-		if (connectBtn) {
-			connectBtn.textContent = '连接';
-			connectBtn.disabled = false;
-			connectBtn.classList.remove('disconnect');
-		}
-
-		updateConnectionStatus(false);
-
-		// 隐藏聊天区域
-		contentsWrapper.classList.remove('visible');
-		contentsWrapper.classList.add('hidden');
-		if (emptyState) emptyState.style.display = 'flex';
-		if (input) input.style.display = 'none';
-
-		writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel, "");
-		writeToLog(`[系统] 已断开连接`);
-
-		// 清理心跳机制
-		if (pingInterval) {
-			clearInterval(pingInterval);
-			pingInterval = null;
-		}
-		if (pongTimeout) {
-			clearTimeout(pongTimeout);
-			pongTimeout = null;
-		}
-
-		if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
-			reconnectAttempts++;
-			const delay = reconnectDelay * reconnectAttempts;
-			writeToLog(`[重连] ${Math.floor(delay / 1000)}秒后尝试第 ${reconnectAttempts}/${maxReconnectAttempts} 次重连...`);
-			setTimeout(() => {
-				if (!isConnected && autoReconnect) {
-					writeToLog(`[重连] 正在尝试重新连接...`);
-					doConnect();
-				}
-			}, delay);
-		} else if (autoReconnect && reconnectAttempts >= maxReconnectAttempts) {
-			writeToLog(`[重连] 达到最大重连次数, 停止尝试`);
-			autoReconnect = false;
-			if (reconnectCheckbox) reconnectCheckbox.checked = false;
-			alert('自动重连失败, 请检查网络或服务器设置');
-		}
-	}
-
-	function onKeyPress(e) {
-		if (e && e.key === 'Enter') {
-			send();
-		}
-	}
-
-	function onKeyDown(e) {
-		if (e.key === 'Tab') {
-			e.preventDefault();
-			console.log("TODO: TAB KEY - Nickname completion");
-			return false;
-		}
-	}
-
-	function Tab_onClick(evt) {
-		if (!evt || !evt.currentTarget) return;
-		let chanName = evt.currentTarget.value;
-		Tab_Show(chanName);
-	}
-
-	function Tabs_Hide() {
-		let tabcontent = document.querySelectorAll(".channelcontent");
-		tabcontent.forEach(content => content.classList.remove('active'));
-
-		let tablinks = document.querySelectorAll(".channel");
-		tablinks.forEach(link => link.classList.remove("active"));
-	}
-
-	function Tab_Show(name) {
-		if (!name) return;
-		let channel = channelMap.get(name);
-		Tabs_Hide();
-		if (channel && channel.channel) {
-			channel.channel.classList.add('active');
-			channel.button.classList.add("active");
-			activeChannel = channel;
-			// 自动滚动到底部
-			setTimeout(() => {
-				if (channel.content) {
-					channel.content.scrollTop = channel.content.scrollHeight;
-				}
-			}, 10);
-		}
-	}
-
-	function HTML_escape(text) {
-		if (!text) return "";
-		let map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-		return text.replace(/[&<>"']/g, function (m) { return map[m]; });
-	}
-
-	function sortUserList(user_a, user_b) {
-		if (!user_a || !user_b || user_a.length < 2 || user_b.length < 2) return 0;
-		if (user_a[0][0] === user_b[0][0])
-			return user_a[1].localeCompare(user_b[1], undefined, { sensitivity: 'accent' });
-		if (!PrefixChars || !PrefixChars[1]) return 0;
-		let aIndex = PrefixChars[1].indexOf(user_a[0][0]);
-		let bIndex = PrefixChars[1].indexOf(user_b[0][0]);
-		return aIndex - bIndex;
-	}
-
-	function Tab_Create(name, topic, createlist) {
-		if (!name || !channels || !channelContents) {
-			console.error("Tab_Create: 缺少必要元素");
-			return;
-		}
-		Tabs_Hide();
-		this.name = name;
-		let escapedName = HTML_escape(name);
-
-		this.button = document.createElement("button");
-		this.button.innerHTML = escapedName;
-		this.button.value = escapedName;
-		this.button.onclick = Tab_onClick;
-		this.button.className = "channel";
-
-		let x = document.createElement("button");
-		x.innerHTML = "×";
-		x.onclick = Tab_Close;
-		x.value = escapedName;
-		x.className = "x";
-		this.button.appendChild(x);
-
-		channels.appendChild(this.button);
-
-		this.channel = document.createElement("div");
-		this.channel.className = "channelcontent";
-
-		let navWrapper = document.createElement("nav");
-		this.topic = document.createElement("h3");
-		this.topic.innerHTML = HTML_escape(topic || "无主题");
-		navWrapper.appendChild(this.topic);
-
-		this.content = document.createElement("nav");
-		navWrapper.appendChild(this.content);
-
-		this.channel.appendChild(navWrapper);
-
-		if (createlist) {
-			this.userlist = document.createElement("ul");
-			this.users = [];
-			this.names_end = true;
-			this.channel.appendChild(this.userlist);
-		}
-
-		channelContents.appendChild(this.channel);
-		channelMap.set(name, this);
-		activeChannel = this;
-		Tab_Show(name);
-		return this;
-	}
-
-	function Tab_Close(evt) {
-		evt.stopPropagation();
-		if (!evt || !evt.currentTarget) return;
-		doSend("part " + evt.currentTarget.value);
-	}
-
-	function Channel_Destroy(name) {
-		if (!name) return;
-		let channel = channelMap.get(name);
-		if (!channel) return;
-		channel.button.remove();
-		channel.channel.remove();
-		if (activeChannel == channel) {
-			activeChannel = statusChannel;
-		}
-		channelMap.delete(name);
-		if (activeChannel) {
-			Tab_Show(activeChannel.name);
-		}
-	}
-
-	function Channel_InsertUser(nick, channel, prefix) {
-		if (!nick || !channel || !channel.userlist) return;
-		let user = document.createElement("li");
-		let tmp = document.createElement("p");
-		if (prefix && prefix !== " ") tmp.innerHTML = prefix[0];
-		user.appendChild(tmp);
-		tmp = document.createElement("p");
-		tmp.innerHTML = HTML_escape(nick);
-		user.appendChild(tmp);
-		let i = 0;
-		for (i; i < channel.users.length; i++) {
-			if (channel.users[i] && channel.users[i][1]) {
-				if (channel.users[i][1].localeCompare(nick, undefined, { sensitivity: 'accent' }) < 0) continue;
+			if (!validateWsUrl(wsUrl)) {
+				alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
+				return;
 			}
-			break;
-		}
-		channel.users.splice(i, 0, [prefix || " ", nick]);
-		channel.userlist.insertBefore(user, channel.userlist.childNodes[i]);
-	}
-
-	function Channel_AppendUser(nick, channel, dontnotify, prefix) {
-		if (!nick || !channel || !channel.userlist) return;
-		let user = document.createElement("li");
-		let tmp = document.createElement("p");
-		if (prefix && prefix !== " ") tmp.innerHTML = prefix[0];
-		user.appendChild(tmp);
-		tmp = document.createElement("p");
-		tmp.innerHTML = HTML_escape(nick);
-		user.appendChild(tmp);
-		channel.userlist.appendChild(user);
-	}
-
-	function Channel_RemoveUser(nick, channel) {
-		if (!nick || !channel || !channel.userlist) return;
-		for (let i = 0; i < channel.userlist.children.length; i++) {
-			let userItem = channel.userlist.children[i];
-			if (!userItem || !userItem.children[1]) continue;
-			let anick = userItem.children[1].textContent;
-			if (anick == nick) {
-				userItem.remove();
-				if (channel.users && channel.users[i]) {
-					channel.users.splice(i, 1);
-				}
-				return true;
+			if (!validateNickname(nickname)) {
+				alert("昵称格式无效!必须以字母或特定符号开头, 不能包含空格和特殊字符");
+				return;
 			}
-		}
-	}
-
-	function Channel_RenameUser(nick, newnick, channel) {
-		if (!nick || !newnick || !channel) return;
-		if (!channel.userlist) return;
-		for (let i = 0; i < channel.users.length; i++) {
-			if (channel.users[i] && channel.users[i][1] == nick) {
-				let prefix = channel.users[i][0];
-				Channel_RemoveUser(nick, channel);
-				Channel_InsertUser(newnick, channel, prefix);
-				return true;
+			if (channelName && !channelName.startsWith('#')) {
+				channelName = '#' + channelName;
 			}
-		}
-	}
 
-	function Channel_UpdateUserPrefix(nick, channel, add, prefix) {
-		if (!nick || !channel || !channel.users || !PrefixChars) return;
-		for (let i = 0; i < channel.users.length; i++) {
-			if (channel.users[i] && channel.users[i][1] == nick) {
-				let pos = PrefixChars[0].indexOf(prefix);
-				if (pos < 0) return;
-				let prefixes = "";
-				if (add == "true" || add === true) {
-					let ii;
-					for (ii = 0; ii < channel.users[i][0].length; ii++) {
-						if (PrefixChars[1].indexOf(channel.users[i][0][ii]) >= pos) break;
-						prefixes += channel.users[i][0][ii];
+			reconnectAttempts = 0;
+			wsUrlInput.disabled = true;
+			nickInput.disabled = true;
+			channelInput.disabled = true;
+			if (reconnectCheckbox) reconnectCheckbox.disabled = true;
+
+			connectBtn.textContent = '连接中...';
+			connectBtn.disabled = true;
+
+			// 清空界面
+			channels.innerHTML = '';
+			channelContents.innerHTML = '';
+			channelMap.clear();
+
+			// 显示聊天区域
+			if (emptyState) emptyState.style.display = 'none';
+			if (input) input.style.display = 'block';
+
+			statusChannel = new Tab_Create("Status", "Status Window", false);
+			writeToLog(`[系统] 正在连接: ${wsUrl}`);
+			WebSocket_Connect(wsUrl);
+		}
+
+		function onDisconnect() {
+			isConnected = false;
+			const wsUrlInput = document.getElementById('wsUrl');
+			const nickInput = document.getElementById('nickInput');
+			const channelInput = document.getElementById('channelInput');
+			const reconnectCheckbox = document.getElementById('autoReconnect');
+			const connectBtn = document.getElementById('connectBtn');
+
+			if (wsUrlInput) wsUrlInput.disabled = false;
+			if (nickInput) nickInput.disabled = false;
+			if (channelInput) channelInput.disabled = false;
+			if (reconnectCheckbox) reconnectCheckbox.disabled = false;
+
+			if (connectBtn) {
+				connectBtn.textContent = '连接';
+				connectBtn.disabled = false;
+				connectBtn.classList.remove('disconnect');
+			}
+
+			updateConnectionStatus(false);
+
+			// 隐藏聊天区域
+			if (emptyState) emptyState.style.display = 'flex';
+			if (input) input.style.display = 'none';
+
+			writeToScreen("var(--clr-text)", "DISCONNECTED", statusChannel, "");
+			writeToLog(`[系统] 已断开连接`);
+
+			// 清理心跳机制
+			if (pingInterval) {
+				clearInterval(pingInterval);
+				pingInterval = null;
+			}
+			if (pongTimeout) {
+				clearTimeout(pongTimeout);
+				pongTimeout = null;
+			}
+
+			if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
+				reconnectAttempts++;
+				const delay = reconnectDelay * reconnectAttempts;
+				writeToLog(`[重连] ${Math.floor(delay / 1000)}秒后尝试第 ${reconnectAttempts}/${maxReconnectAttempts} 次重连...`);
+				setTimeout(() => {
+					if (!isConnected && autoReconnect) {
+						writeToLog(`[重连] 正在尝试重新连接...`);
+						doConnect();
 					}
-					prefixes += PrefixChars[1][pos];
-					for (; ii < channel.users[i][0].length; ii++) {
-						prefixes += channel.users[i][0][ii];
+				}, delay);
+			} else if (autoReconnect && reconnectAttempts >= maxReconnectAttempts) {
+				writeToLog(`[重连] 达到最大重连次数, 停止尝试`);
+				autoReconnect = false;
+				if (reconnectCheckbox) reconnectCheckbox.checked = false;
+				alert('自动重连失败, 请检查网络或服务器设置');
+			}
+		}
+
+		function onKeyPress(e) {
+			if (e && e.key === 'Enter') {
+				send();
+			}
+		}
+
+		function onKeyDown(e) {
+			if (e.key === 'Tab') {
+				e.preventDefault();
+				console.log("TODO: TAB KEY - Nickname completion");
+				return false;
+			}
+		}
+
+		function Tab_onClick(evt) {
+			if (!evt || !evt.currentTarget) return;
+			let chanName = evt.currentTarget.value;
+			Tab_Show(chanName);
+		}
+
+		function Tabs_Hide() {
+			let tabcontent = document.querySelectorAll(".channelview");
+			tabcontent.forEach(content => content.classList.remove('active'));
+
+			let tablinks = document.querySelectorAll(".channel-tab");
+			tablinks.forEach(link => link.classList.remove("active"));
+		}
+
+		function Tab_Show(name) {
+			if (!name) return;
+			let channel = channelMap.get(name);
+			Tabs_Hide();
+			if (channel && channel.channel) {
+				channel.channel.classList.add('active');
+				channel.button.classList.add("active");
+				activeChannel = channel;
+				// 自动滚动到底部
+				setTimeout(() => {
+					if (channel.content) {
+						channel.content.scrollTop = channel.content.scrollHeight;
 					}
-				} else {
-					let tmp = channel.users[i][0].indexOf(PrefixChars[1][pos]);
-					if (tmp >= 0) {
-						prefixes = channel.users[i][0].substring(0, tmp) + channel.users[i][0].substring(tmp + 1);
-					}
+				}, 10);
+			}
+		}
+
+		function HTML_escape(text) {
+			if (!text) return "";
+			let map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+			return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+		}
+
+		function sortUserList(user_a, user_b) {
+			if (!user_a || !user_b || user_a.length < 2 || user_b.length < 2) return 0;
+			if (user_a[0][0] === user_b[0][0])
+				return user_a[1].localeCompare(user_b[1], undefined, { sensitivity: 'accent' });
+			if (!PrefixChars || !PrefixChars[1]) return 0;
+			let aIndex = PrefixChars[1].indexOf(user_a[0][0]);
+			let bIndex = PrefixChars[1].indexOf(user_b[0][0]);
+			return aIndex - bIndex;
+		}
+
+		function Tab_Create(name, topic, createlist) {
+			if (!name || !channels || !channelContents) {
+				console.error("Tab_Create: 缺少必要元素");
+				return;
+			}
+			Tabs_Hide();
+			this.name = name;
+			let escapedName = HTML_escape(name);
+
+			this.button = document.createElement("div");
+			this.button.innerHTML = escapedName;
+			this.button.value = escapedName;
+			this.button.onclick = Tab_onClick;
+			this.button.className = "channel-tab";
+
+			let x = document.createElement("button");
+			x.innerHTML = "×";
+			x.onclick = Tab_Close;
+			x.value = escapedName;
+			x.className = "close";
+			this.button.appendChild(x);
+
+			channels.appendChild(this.button);
+
+			this.channel = document.createElement("div");
+			this.channel.className = "channel-view";
+
+			let navWrapper = document.createElement("div");
+			this.topic = document.createElement("div");
+			this.topic.className = "channel-header";
+			this.topic.innerHTML = HTML_escape(topic || "无主题");
+			navWrapper.appendChild(this.topic);
+
+			this.content = document.createElement("div");
+			this.content.className = "messages";
+			navWrapper.appendChild(this.content);
+
+			this.channel.appendChild(navWrapper);
+
+			if (createlist) {
+				this.userlist = document.createElement("ul");
+				this.userlist.className = "user-list";
+				this.users = [];
+				this.names_end = true;
+				this.channel.appendChild(this.userlist);
+			}
+
+			channelContents.appendChild(this.channel);
+			channelMap.set(name, this);
+			activeChannel = this;
+			Tab_Show(name);
+			return this;
+		}
+
+		function Tab_Close(evt) {
+			evt.stopPropagation();
+			if (!evt || !evt.currentTarget) return;
+			doSend("part " + evt.currentTarget.value);
+		}
+
+		function Channel_Destroy(name) {
+			if (!name) return;
+			let channel = channelMap.get(name);
+			if (!channel) return;
+			channel.button.remove();
+			channel.channel.remove();
+			if (activeChannel == channel) {
+				activeChannel = statusChannel;
+			}
+			channelMap.delete(name);
+			if (activeChannel) {
+				Tab_Show(activeChannel.name);
+			}
+		}
+
+		function Channel_InsertUser(nick, channel, prefix) {
+			if (!nick || !channel || !channel.userlist) return;
+			let user = document.createElement("li");
+			user.className = "user-item";
+			let tmp = document.createElement("div");
+			tmp.className = "user-prefix";
+			if (prefix && prefix !== " ") tmp.innerHTML = prefix[0];
+			user.appendChild(tmp);
+			tmp = document.createElement("div");
+			tmp.className = "user-nick";
+			tmp.innerHTML = HTML_escape(nick);
+			user.appendChild(tmp);
+			let i = 0;
+			for (i; i < channel.users.length; i++) {
+				if (channel.users[i] && channel.users[i][1]) {
+					if (channel.users[i][1].localeCompare(nick, undefined, { sensitivity: 'accent' }) < 0) continue;
 				}
-				if (prefixes == "") prefixes = " ";
-				channel.users[i][0] = prefixes;
-				Channel_RenameUser(nick, nick, channel);
 				break;
 			}
+			channel.users.splice(i, 0, [prefix || " ", nick]);
+			channel.userlist.insertBefore(user, channel.userlist.childNodes[i]);
 		}
-	}
 
-	function writeToScreen(color, message, channel, username) {
-		if (!channel || !channel.content) return;
-		let pre = document.createElement("p");
-		pre.style.color = color;
-		const now = new Date();
-		const utcTime = now.toISOString().substr(11, 8);
-		let displayMessage;
-		if (username && username !== "") {
-			displayMessage = `[${utcTime}] ${username}: ${linkify(message || "")}`;
-		} else {
-			displayMessage = `[${utcTime}] ${linkify(message || "")}`;
+		function Channel_AppendUser(nick, channel, dontnotify, prefix) {
+			if (!nick || !channel || !channel.userlist) return;
+			let user = document.createElement("li");
+			user.className = "user-item";
+			let tmp = document.createElement("div");
+			tmp.className = "user-prefix";
+			if (prefix && prefix !== " ") tmp.innerHTML = prefix[0];
+			user.appendChild(tmp);
+			tmp = document.createElement("div");
+			tmp.className = "user-nick";
+			tmp.innerHTML = HTML_escape(nick);
+			user.appendChild(tmp);
+			channel.userlist.appendChild(user);
 		}
-		pre.innerHTML = displayMessage;
-		let output = channel.content;
-		if (output) {
-			output.appendChild(pre);
-			while (output.children.length > 200) {
-				output.removeChild(output.children[0]);
+
+		function Channel_RemoveUser(nick, channel) {
+			if (!nick || !channel || !channel.userlist) return;
+			for (let i = 0; i < channel.userlist.children.length; i++) {
+				let userItem = channel.userlist.children[i];
+				if (!userItem || !userItem.children[1]) continue;
+				let anick = userItem.children[1].textContent;
+				if (anick == nick) {
+					userItem.remove();
+					if (channel.users && channel.users[i]) {
+						channel.users.splice(i, 1);
+					}
+					return true;
+				}
 			}
-			// 保持滚动在底部
-			requestAnimationFrame(() => {
-				output.scrollTop = output.scrollHeight;
+		}
+
+		function Channel_RenameUser(nick, newnick, channel) {
+			if (!nick || !newnick || !channel) return;
+			if (!channel.userlist) return;
+			for (let i = 0; i < channel.users.length; i++) {
+				if (channel.users[i] && channel.users[i][1] == nick) {
+					let prefix = channel.users[i][0];
+					Channel_RemoveUser(nick, channel);
+					Channel_InsertUser(newnick, channel, prefix);
+					return true;
+				}
+			}
+		}
+
+		function Channel_UpdateUserPrefix(nick, channel, add, prefix) {
+			if (!nick || !channel || !channel.users || !PrefixChars) return;
+			for (let i = 0; i < channel.users.length; i++) {
+				if (channel.users[i] && channel.users[i][1] == nick) {
+					let pos = PrefixChars[0].indexOf(prefix);
+					if (pos < 0) return;
+					let prefixes = "";
+					if (add == "true" || add === true) {
+						let ii;
+						for (ii = 0; ii < channel.users[i][0].length; ii++) {
+							if (PrefixChars[1].indexOf(channel.users[i][0][ii]) >= pos) break;
+							prefixes += channel.users[i][0][ii];
+						}
+						prefixes += PrefixChars[1][pos];
+						for (; ii < channel.users[i][0].length; ii++) {
+							prefixes += channel.users[i][0][ii];
+						}
+					} else {
+						let tmp = channel.users[i][0].indexOf(PrefixChars[1][pos]);
+						if (tmp >= 0) {
+							prefixes = channel.users[i][0].substring(0, tmp) + channel.users[i][0].substring(tmp + 1);
+						}
+					}
+					if (prefixes == "") prefixes = " ";
+					channel.users[i][0] = prefixes;
+					Channel_RenameUser(nick, nick, channel);
+					break;
+				}
+			}
+		}
+
+		function writeToScreen(color, message, channel, username) {
+			if (!channel || !channel.content) return;
+			let pre = document.createElement("p");
+			pre.style.color = color;
+			const now = new Date();
+			const utcTime = now.toISOString().substr(11, 8);
+			let displayMessage;
+			if (username && username !== "") {
+				displayMessage = `[${utcTime}] ${username}: ${linkify(message || "")}`;
+			} else {
+				displayMessage = `[${utcTime}] ${linkify(message || "")}`;
+			}
+			pre.innerHTML = displayMessage;
+			let output = channel.content;
+			if (output) {
+				output.appendChild(pre);
+				while (output.children.length > 200) {
+					output.removeChild(output.children[0]);
+				}
+				// 保持滚动在底部
+				requestAnimationFrame(() => {
+					output.scrollTop = output.scrollHeight;
+				});
+			}
+		}
+
+		function linkify(text) {
+			const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
+			return text.replace(urlRegex, function (url) {
+				// 验证URL安全性
+				if (!isValidUrl(url)) {
+					return url;
+				}
+
+				// 检查媒体类型
+				if (isImageMedia(url)) {
+					return createMediaPreview(url, 'image');
+				} else if (isVideoMedia(url)) {
+					return createMediaPreview(url, 'video');
+				} else if (isAudioMedia(url)) {
+					return createMediaPreview(url, 'audio');
+				}
+				return `<a href="${encodeURI(url)}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${HTML_escape(url)}</a>`;
 			});
 		}
-	}
-
-	function linkify(text) {
-		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
-		return text.replace(urlRegex, function (url) {
-			// 验证URL安全性
-			if (!isValidUrl(url)) {
-				return url;
-			}
-
-			// 检查媒体类型
-			if (isImageMedia(url)) {
-				return createMediaPreview(url, 'image');
-			} else if (isVideoMedia(url)) {
-				return createMediaPreview(url, 'video');
-			} else if (isAudioMedia(url)) {
-				return createMediaPreview(url, 'audio');
-			}
-			return `<a href="${encodeURI(url)}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${HTML_escape(url)}</a>`;
-		});
-	}
-
-	// 验证URL安全性
-	function isValidUrl(url) {
-		try {
-			const parsedUrl = new URL(url);
-			// 只允许HTTP和HTTPS协议
-			if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
-				return false;
-			}
-			// 阻止内部协议和javascript协议
-			if (url.startsWith('javascript:') || url.startsWith('data:') || url.startsWith('vbscript:')) {
-				return false;
-			}
-			return true;
-		} catch (e) {
-			return false;
-		}
-	}
-
-	// 检测图片媒体类型 - 支持查询参数中的格式
-	function isImageMedia(url) {
-		// 检查URL路径中的扩展名
-		if (/\.(jpeg|jpg|gif|png|webp|bmp|svg)(\?.*)?$/i.test(url)) {
-			return true;
-		}
-
-		// 检查查询参数中的格式
-		const urlObj = new URL(url);
-		const fmt = urlObj.searchParams.get('fmt');
-		const f = urlObj.searchParams.get('f');
-		const ext = urlObj.searchParams.get('ext');
-
-		if (fmt && /jpeg|jpg|gif|png|webp|bmp|svg/i.test(fmt)) {
-			return true;
-		}
-		if (f && /jpeg|jpg|gif|png|webp|bmp|svg/i.test(f)) {
-			return true;
-		}
-		if (ext && /jpeg|jpg|gif|png|webp|bmp|svg/i.test(ext)) {
-			return true;
-		}
-
-		// 检查百度图片等常见服务的特定参数
-		if (url.includes('baidu.com') && (url.includes('fmt=') || url.includes('f=JPEG') || url.includes('f=PNG'))) {
-			return true;
-		}
-
-		return false;
-	}
-
-	// 检测视频媒体类型
-	function isVideoMedia(url) {
-		return /\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv)(\?.*)?$/i.test(url);
-	}
-
-	// 检测音频媒体类型
-	function isAudioMedia(url) {
-		return /\.(mp3|wav|ogg|flac|m4a|aac)(\?.*)?$/i.test(url);
-	}
-
-	function createMediaPreview(url, type) {
-		if (type === 'image') {
-			return `
-				<span class="media-container">
-					<img src="${encodeURI(url)}" alt="预览图片" onclick="openMediaPreview('${encodeURI(url)}', 'image')" onerror="handleMediaError(this)" />
-					<span class="media-overlay">点击放大</span>
-				</span>
-			`;
-		} else if (type === 'video') {
-			return `
-				<span class="media-container">
-					<video src="${encodeURI(url)}" controls style="max-width: 300px; max-height: 200px; border-radius: 4px;" onerror="handleMediaError(this)"></video>
-					<span class="media-overlay">点击播放</span>
-				</span>
-			`;
-		} else if (type === 'audio') {
-			return `
-				<span class="media-container">
-					<audio src="${encodeURI(url)}" controls style="width: 300px;" onerror="handleMediaError(this)"></audio>
-				</span>
-			`;
-		}
-		return `<a href="${encodeURI(url)}" target="_blank">${HTML_escape(url)}</a>`;
-	}
-
-	// 处理媒体加载错误
-	function handleMediaError(element) {
-		element.style.display = 'none';
-		const errorDiv = document.createElement('div');
-		errorDiv.className = 'media-error';
-		errorDiv.textContent = '媒体加载失败';
-		element.parentNode.appendChild(errorDiv);
-	}
-
-	function openMediaPreview(url, type) {
-		const modal = document.getElementById('mediaPreviewModal');
-		const img = document.getElementById('previewImage');
-		const video = document.getElementById('previewVideo');
-		const audio = document.getElementById('previewAudio');
-		const info = document.getElementById('mediaInfo');
 
 		// 验证URL安全性
-		if (!isValidUrl(url)) {
-			alert('无效的媒体URL');
-			return;
-		}
-
-		// 隐藏所有媒体元素
-		img.style.display = 'none';
-		video.style.display = 'none';
-		audio.style.display = 'none';
-
-		// 显示对应类型的媒体元素
-		if (type === 'image') {
-			img.src = encodeURI(url);
-			img.style.display = 'block';
-		} else if (type === 'video') {
-			video.src = encodeURI(url);
-			video.style.display = 'block';
-			video.load();
-		} else if (type === 'audio') {
-			audio.src = encodeURI(url);
-			audio.style.display = 'block';
-			audio.load();
-		}
-
-		info.textContent = url;
-
-		// 显示模态框
-		modal.classList.add('visible');
-
-		// 防止背景滚动
-		document.body.style.overflow = 'hidden';
-	}
-
-	function closeMediaPreview() {
-		const modal = document.getElementById('mediaPreviewModal');
-		const video = document.getElementById('previewVideo');
-		const audio = document.getElementById('previewAudio');
-
-		// 停止视频和音频播放并重置src
-		if (video) {
-			video.pause();
-			video.src = '';
-		}
-		if (audio) {
-			audio.pause();
-			audio.src = '';
-		}
-
-		modal.classList.remove('visible');
-
-		// 恢复背景滚动
-		document.body.style.overflow = 'auto';
-	}
-
-	// 点击模态框外部关闭
-	document.getElementById('mediaPreviewModal').addEventListener('click', function (e) {
-		if (e.target === this) {
-			closeMediaPreview();
-		}
-	});
-
-	// 按ESC键关闭
-	document.addEventListener('keydown', function (e) {
-		if (e.key === 'Escape') {
-			closeMediaPreview();
-		}
-	});
-
-	function send() {
-		let text = input ? input.value.trim() : "";
-		if (!text || !activeChannel) return;
-		let msg;
-		if (text[0] == "/") {
-			if (text.indexOf("/me ") == 0) {
-				msg = "privmsg " + activeChannel.name + " :\x01ACTION " + text.substring(4) + "\n";
-				writeToScreen("var(--clr-red)", `${nickname} ${text.substring(4)}`, activeChannel, "*");
-			} else {
-				writeToScreen("var(--clr-font)", text, statusChannel, "");
-				msg = text.substring(1) + "\n";
+		function isValidUrl(url) {
+			try {
+				const parsedUrl = new URL(url);
+				// 只允许HTTP和HTTPS协议
+				if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+					return false;
+				}
+				// 阻止内部协议和javascript协议
+				if (url.startsWith('javascript:') || url.startsWith('data:') || url.startsWith('vbscript:')) {
+					return false;
+				}
+				return true;
+			} catch (e) {
+				return false;
 			}
-		} else {
-			msg = "privmsg " + activeChannel.name + " :" + text + "\n";
-			writeToScreen("var(--clr-font)", text, activeChannel, nickname);
 		}
-		doSend(msg);
-		if (input) input.value = "";
-	}
 
-	function WebSocket_Connect(wsUri) {
-		if (!wsUri) {
-			writeToLog("[ERROR] WebSocket地址为空");
-			return;
+		// 检测图片媒体类型 - 支持查询参数中的格式
+		function isImageMedia(url) {
+			// 检查URL路径中的扩展名
+			if (/\.(jpeg|jpg|gif|png|webp|bmp|svg)(\?.*)?$/i.test(url)) {
+				return true;
+			}
+
+			// 检查查询参数中的格式
+			const urlObj = new URL(url);
+			const fmt = urlObj.searchParams.get('fmt');
+			const f = urlObj.searchParams.get('f');
+			const ext = urlObj.searchParams.get('ext');
+
+			if (fmt && /jpeg|jpg|gif|png|webp|bmp|svg/i.test(fmt)) {
+				return true;
+			}
+			if (f && /jpeg|jpg|gif|png|webp|bmp|svg/i.test(f)) {
+				return true;
+			}
+			if (ext && /jpeg|jpg|gif|png|webp|bmp|svg/i.test(ext)) {
+				return true;
+			}
+
+			// 检查百度图片等常见服务的特定参数
+			if (url.includes('baidu.com') && (url.includes('fmt=') || url.includes('f=JPEG') || url.includes('f=PNG'))) {
+				return true;
+			}
+
+			return false;
 		}
-		try {
+
+		// 检测视频媒体类型
+		function isVideoMedia(url) {
+			return /\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv)(\?.*)?$/i.test(url);
+		}
+
+		// 检测音频媒体类型
+		function isAudioMedia(url) {
+			return /\.(mp3|wav|ogg|flac|m4a|aac)(\?.*)?$/i.test(url);
+		}
+
+		function createMediaPreview(url, type) {
+			if (type === 'image') {
+				return `
+					<span class="media-container">
+						<img src="${encodeURI(url)}" alt="预览图片" onclick="openMediaPreview('${encodeURI(url)}', 'image')" onerror="handleMediaError(this)" />
+						<span class="media-overlay">点击放大</span>
+					</span>
+				`;
+			} else if (type === 'video') {
+				return `
+					<span class="media-container">
+						<video src="${encodeURI(url)}" controls style="max-width: 300px; max-height: 200px; border-radius: 4px;" onerror="handleMediaError(this)"></video>
+						<span class="media-overlay">点击播放</span>
+					</span>
+				`;
+			} else if (type === 'audio') {
+				return `
+					<span class="media-container">
+						<audio src="${encodeURI(url)}" controls style="width: 300px;" onerror="handleMediaError(this)"></audio>
+					</span>
+				`;
+			}
+			return `<a href="${encodeURI(url)}" target="_blank">${HTML_escape(url)}</a>`;
+		}
+
+		// 处理媒体加载错误
+		function handleMediaError(element) {
+			element.style.display = 'none';
+			const errorDiv = document.createElement('div');
+			errorDiv.className = 'media-error';
+			errorDiv.textContent = '媒体加载失败';
+			element.parentNode.appendChild(errorDiv);
+		}
+
+		function openMediaPreview(url, type) {
+			const modal = document.getElementById('mediaPreviewModal');
+			const img = document.getElementById('previewImage');
+			const video = document.getElementById('previewVideo');
+			const audio = document.getElementById('previewAudio');
+			const info = document.getElementById('mediaInfo');
+
+			// 验证URL安全性
+			if (!isValidUrl(url)) {
+				alert('无效的媒体URL');
+				return;
+			}
+
+			// 隐藏所有媒体元素
+			img.style.display = 'none';
+			video.style.display = 'none';
+			audio.style.display = 'none';
+
+			// 显示对应类型的媒体元素
+			if (type === 'image') {
+				img.src = encodeURI(url);
+				img.style.display = 'block';
+			} else if (type === 'video') {
+				video.src = encodeURI(url);
+				video.style.display = 'block';
+				video.load();
+			} else if (type === 'audio') {
+				audio.src = encodeURI(url);
+				audio.style.display = 'block';
+				audio.load();
+			}
+
+			info.textContent = url;
+
+			// 显示模态框
+			modal.style.display = 'flex';
+
+			// 防止背景滚动
+			document.body.style.overflow = 'hidden';
+		}
+
+		function closeMediaPreview() {
+			const modal = document.getElementById('mediaPreviewModal');
+			const video = document.getElementById('previewVideo');
+			const audio = document.getElementById('previewAudio');
+
+			// 停止视频和音频播放并重置src
+			if (video) {
+				video.pause();
+				video.src = '';
+			}
+			if (audio) {
+				audio.pause();
+				audio.src = '';
+			}
+
+			modal.style.display = 'none';
+
+			// 恢复背景滚动
+			document.body.style.overflow = 'auto';
+		}
+
+		// 点击模态框外部关闭
+		document.getElementById('mediaPreviewModal').addEventListener('click', function (e) {
+			if (e.target === this) {
+				closeMediaPreview();
+			}
+		});
+
+		// 按ESC键关闭
+		document.addEventListener('keydown', function (e) {
+			if (e.key === 'Escape') {
+				closeMediaPreview();
+			}
+		});
+
+		function send() {
+			let text = input ? input.value.trim() : "";
+			if (!text || !activeChannel) return;
+			let msg;
+			if (text[0] == "/") {
+				if (text.indexOf("/me ") == 0) {
+					msg = "privmsg " + activeChannel.name + " :\x01ACTION " + text.substring(4) + "\n";
+					writeToScreen("var(--clr-error)", `${nickname} ${text.substring(4)}`, activeChannel, "*");
+				} else {
+					writeToScreen("var(--clr-text)", text, statusChannel, "");
+					msg = text.substring(1) + "\n";
+				}
+			} else {
+				msg = "privmsg " + activeChannel.name + " :" + text + "\n";
+				writeToScreen("var(--clr-text)", text, activeChannel, nickname);
+			}
+			doSend(msg);
+			if (input) input.value = "";
+		}
+
+		function WebSocket_Connect(wsUri) {
+			if (!wsUri) {
+				writeToLog("[ERROR] WebSocket地址为空");
+				return;
+			}
+			try {
+				if (websocket) {
+					try {
+						websocket.onclose = null;
+						websocket.onerror = null;
+						websocket.onopen = null;
+						websocket.onmessage = null;
+						if (websocket.readyState !== WebSocket.CLOSED) {
+							websocket.close(1000, "Reconnecting");
+						}
+					} catch (e) {
+						writeToLog(`[WARN] 清理旧连接时出错: ${e.message}`);
+					}
+					websocket = null;
+				}
+				writeToLog(`[WebSocket] 正在创建连接: ${wsUri}`);
+				websocket = new WebSocket(wsUri);
+				websocket.binaryType = 'blob';
+
+				const connectTimeout = setTimeout(() => {
+					if (websocket && websocket.readyState === WebSocket.CONNECTING) {
+						writeToLog(`[ERROR] 连接超时 (30秒)`);
+						try {
+							websocket.close(1006, "Connection timeout");
+						} catch (e) {
+							writeToLog(`[ERROR] 超时关闭连接失败: ${e.message}`);
+						}
+					}
+				}, 30000);
+
+				websocket.onclose = function (evt) {
+					clearTimeout(connectTimeout);
+					onClose(evt);
+				};
+				websocket.onerror = function (evt) {
+					onError(evt);
+				};
+				websocket.onopen = function (evt) {
+					clearTimeout(connectTimeout);
+					onOpen(evt);
+				};
+				websocket.onmessage = function (evt) {
+					onMessage(evt);
+				};
+			} catch (e) {
+				writeToLog(`[ERROR] WebSocket创建失败: ${e.message}`);
+				onDisconnect();
+				if (wsUrl && wsUrl.startsWith('wss://')) {
+					showSSLWarning(wsUrl);
+				}
+				alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
+			}
+		}
+
+		function onClose(evt) {
+			isConnected = false;
+			let reason = evt.reason || '连接关闭';
+			let code = evt.code;
+			let logMsg = `[CLOSE] Code: ${code}`;
+
+			switch (code) {
+				case 1000: logMsg += ' (正常关闭)'; break;
+				case 1006: logMsg += ' (异常断开 - 可能SSL证书错误)'; break;
+				case 1005: logMsg += ' (无状态码)'; break;
+				case 1011: logMsg += ' (服务器异常)'; break;
+				default: if (code >= 4000 && code <= 4999) { logMsg += ' (应用层错误)'; }
+			}
+			logMsg += ` - ${reason}`;
+
+			writeToScreen("var(--clr-text)", "DISCONNECTED", statusChannel, "");
+			writeToLog(logMsg);
+
 			if (websocket) {
 				try {
 					websocket.onclose = null;
 					websocket.onerror = null;
 					websocket.onopen = null;
 					websocket.onmessage = null;
-					if (websocket.readyState !== WebSocket.CLOSED) {
-						websocket.close(1000, "Reconnecting");
-					}
 				} catch (e) {
-					writeToLog(`[WARN] 清理旧连接时出错: ${e.message}`);
+					writeToLog(`[WARN] 清理事件监听器失败: ${e.message}`);
 				}
 				websocket = null;
 			}
-			writeToLog(`[WebSocket] 正在创建连接: ${wsUri}`);
-			websocket = new WebSocket(wsUri);
-			websocket.binaryType = 'blob';
 
-			const connectTimeout = setTimeout(() => {
-				if (websocket && websocket.readyState === WebSocket.CONNECTING) {
-					writeToLog(`[ERROR] 连接超时 (30秒)`);
-					try {
-						websocket.close(1006, "Connection timeout");
-					} catch (e) {
-						writeToLog(`[ERROR] 超时关闭连接失败: ${e.message}`);
-					}
-				}
-			}, 30000);
+			// 清理心跳机制
+			if (pingInterval) {
+				clearInterval(pingInterval);
+				pingInterval = null;
+			}
+			if (pongTimeout) {
+				clearTimeout(pongTimeout);
+				pongTimeout = null;
+			}
 
-			websocket.onclose = function (evt) {
-				clearTimeout(connectTimeout);
-				onClose(evt);
-			};
-			websocket.onerror = function (evt) {
-				onError(evt);
-			};
-			websocket.onopen = function (evt) {
-				clearTimeout(connectTimeout);
-				onOpen(evt);
-			};
-			websocket.onmessage = function (evt) {
-				onMessage(evt);
-			};
-		} catch (e) {
-			writeToLog(`[ERROR] WebSocket创建失败: ${e.message}`);
 			onDisconnect();
+		}
+
+		function onError(evt) {
+			let errorType = 'WebSocket错误';
+			if (evt && evt.target) {
+				if (evt.target.readyState === WebSocket.CONNECTING) {
+					errorType = '连接失败';
+				} else if (evt.target.readyState === WebSocket.OPEN) {
+					errorType = '消息错误';
+				}
+			}
+			writeToScreen("var(--clr-error)", `ERROR: ${errorType}`, statusChannel, "");
+			writeToLog(`[ERROR] ${errorType}: ${evt.data || '未知错误'}`);
 			if (wsUrl && wsUrl.startsWith('wss://')) {
 				showSSLWarning(wsUrl);
 			}
-			alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
 		}
-	}
 
-	function onClose(evt) {
-		isConnected = false;
-		let reason = evt.reason || '连接关闭';
-		let code = evt.code;
-		let logMsg = `[CLOSE] Code: ${code}`;
+		function onOpen(evt) {
+			isConnected = true;
+			reconnectAttempts = 0;
+			writeToScreen("var(--clr-text)", "CONNECTED", statusChannel, "");
+			writeToLog(`[OPEN] WebSocket连接成功: ${wsUrl}`);
+			updateConnectionStatus(true);
 
-		switch (code) {
-			case 1000: logMsg += ' (正常关闭)'; break;
-			case 1006: logMsg += ' (异常断开 - 可能SSL证书错误)'; break;
-			case 1005: logMsg += ' (无状态码)'; break;
-			case 1011: logMsg += ' (服务器异常)'; break;
-			default: if (code >= 4000 && code <= 4999) { logMsg += ' (应用层错误)'; }
-		}
-		logMsg += ` - ${reason}`;
-
-		writeToScreen("var(--clr-font)", "DISCONNECTED", statusChannel, "");
-		writeToLog(logMsg);
-
-		if (websocket) {
-			try {
-				websocket.onclose = null;
-				websocket.onerror = null;
-				websocket.onopen = null;
-				websocket.onmessage = null;
-			} catch (e) {
-				writeToLog(`[WARN] 清理事件监听器失败: ${e.message}`);
+			const connectBtn = document.getElementById('connectBtn');
+			if (connectBtn) {
+				connectBtn.textContent = '断开';
+				connectBtn.disabled = false;
+				connectBtn.classList.add('disconnect');
 			}
-			websocket = null;
-		}
 
-		// 清理心跳机制
-		if (pingInterval) {
-			clearInterval(pingInterval);
-			pingInterval = null;
-		}
-		if (pongTimeout) {
-			clearTimeout(pongTimeout);
-			pongTimeout = null;
-		}
+			// 启动心跳机制
+			startHeartbeat();
 
-		onDisconnect();
-	}
-
-	function onError(evt) {
-		let errorType = 'WebSocket错误';
-		if (evt && evt.target) {
-			if (evt.target.readyState === WebSocket.CONNECTING) {
-				errorType = '连接失败';
-			} else if (evt.target.readyState === WebSocket.OPEN) {
-				errorType = '消息错误';
-			}
-		}
-		writeToScreen("var(--clr-red)", `ERROR: ${errorType}`, statusChannel, "");
-		writeToLog(`[ERROR] ${errorType}: ${evt.data || '未知错误'}`);
-		if (wsUrl && wsUrl.startsWith('wss://')) {
-			showSSLWarning(wsUrl);
-		}
-	}
-
-	function onOpen(evt) {
-		isConnected = true;
-		reconnectAttempts = 0;
-		writeToScreen("var(--clr-font)", "CONNECTED", statusChannel, "");
-		writeToLog(`[OPEN] WebSocket连接成功: ${wsUrl}`);
-		updateConnectionStatus(true);
-
-		const connectBtn = document.getElementById('connectBtn');
-		if (connectBtn) {
-			connectBtn.textContent = '断开';
-			connectBtn.disabled = false;
-			connectBtn.classList.add('disconnect');
+			doSend("user websocket * * :WebSocket User");
+			doSend("nick " + nickname);
 		}
 
 		// 启动心跳机制
-		startHeartbeat();
+		function startHeartbeat() {
+			// 清理旧的心跳
+			if (pingInterval) {
+				clearInterval(pingInterval);
+			}
+			if (pongTimeout) {
+				clearTimeout(pongTimeout);
+			}
 
-		doSend("user websocket * * :WebSocket User");
-		doSend("nick " + nickname);
-	}
+			// 设置心跳间隔（30秒）
+			pingInterval = setInterval(() => {
+				if (websocket && websocket.readyState === WebSocket.OPEN) {
+					// 发送ping消息
+					websocket.send("PING " + Date.now());
+					writeToLog(`→ PING: ${Date.now()}`);
 
-	// 启动心跳机制
-	function startHeartbeat() {
-		// 清理旧的心跳
-		if (pingInterval) {
-			clearInterval(pingInterval);
+					// 设置等待pong的超时
+					pongTimeout = setTimeout(() => {
+						writeToLog(`[ERROR] 未收到PONG响应，连接可能已断开`);
+						if (websocket) {
+							websocket.close(1000, "Pong timeout");
+						}
+					}, 10000); // 10秒后如果没收到pong就断开连接
+				}
+			}, 30000); // 每30秒发送一次ping
+
+			// 记录最后一次收到pong的时间
+			lastPongReceived = new Date();
 		}
-		if (pongTimeout) {
-			clearTimeout(pongTimeout);
-		}
 
-		// 设置心跳间隔（30秒）
-		pingInterval = setInterval(() => {
-			if (websocket && websocket.readyState === WebSocket.OPEN) {
-				// 发送ping消息
-				websocket.send("PING " + Date.now());
-				writeToLog(`→ PING: ${Date.now()}`);
-
-				// 设置等待pong的超时
-				pongTimeout = setTimeout(() => {
-					writeToLog(`[ERROR] 未收到PONG响应，连接可能已断开`);
-					if (websocket) {
-						websocket.close(1000, "Pong timeout");
+		function onMessage(evt) {
+			if (!evt) return;
+			rawData = evt.data;
+			writeToLog(`← RECV: ${typeof rawData === 'string' ? rawData : '[二进制数据]'}`);
+			if (rawData instanceof Blob) {
+				let fileReader = new FileReader();
+				fileReader.addEventListener("loadend", handleBinaryInput);
+				fileReader.readAsText(rawData);
+			} else {
+				// 检查是否是pong消息
+				if (rawData.startsWith('PONG')) {
+					lastPongReceived = new Date();
+					if (pongTimeout) {
+						clearTimeout(pongTimeout);
+						pongTimeout = null;
 					}
-				}, 10000); // 10秒后如果没收到pong就断开连接
-			}
-		}, 30000); // 每30秒发送一次ping
-
-		// 记录最后一次收到pong的时间
-		lastPongReceived = new Date();
-	}
-
-	function onMessage(evt) {
-		if (!evt) return;
-		rawData = evt.data;
-		writeToLog(`← RECV: ${typeof rawData === 'string' ? rawData : '[二进制数据]'}`);
-		if (rawData instanceof Blob) {
-			let fileReader = new FileReader();
-			fileReader.addEventListener("loadend", handleBinaryInput);
-			fileReader.readAsText(rawData);
-		} else {
-			// 检查是否是pong消息
-			if (rawData.startsWith('PONG')) {
-				lastPongReceived = new Date();
-				if (pongTimeout) {
-					clearTimeout(pongTimeout);
-					pongTimeout = null;
-				}
-				writeToLog(`← PONG: ${rawData}`);
-			} else {
-				process(rawData);
-			}
-		}
-	}
-
-	function handleBinaryInput(event) {
-		if (!event || !event.target) return;
-		let fileReader = event.target;
-		let raw = fileReader.result;
-		writeToLog(`← RECV (Blob→Text): ${raw}`);
-		process(raw);
-	}
-
-	function doSend(message) {
-		if (!message) return;
-		if (websocket && websocket.readyState === WebSocket.OPEN) {
-			try {
-				websocket.send(message);
-				writeToLog(`→ SEND: ${message.trim()}`);
-			} catch (e) {
-				writeToLog(`[ERROR] 发送消息失败: ${e.message}`);
-				writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel, "");
-			}
-		} else {
-			writeToLog(`[ERROR] WebSocket未连接, 无法发送: ${message.trim()}`);
-			if (!isConnected) {
-				writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
-			}
-		}
-	}
-
-	var Commands = new Map();
-	Commands.set("001", function (nick, data) {
-		doSend("CAP REQ :multi-prefix");
-		if (channelName) {
-			doSend("join " + channelName);
-			writeToLog(`[IRC] 接收001, 准备加入频道: ${channelName}`);
-		} else {
-			writeToLog(`[IRC] 接收001, 未设置自动加入频道`);
-		}
-	});
-	Commands.set("005", function (nick, data) {
-		if (!data || !PrefixChars) return;
-		for (let i = 2; i < data.length; i++) {
-			if (data[i].indexOf("PREFIX=") == 0) {
-				let tmp = data[i].substring(8) + " ";
-				if (tmp) {
-					PrefixChars = tmp.split(")");
-					writeToScreen("var(--clr-brown)", "PREFIX CHARS: " + PrefixChars[0] + " " + PrefixChars[1], statusChannel, "");
-					writeToLog(`[IRC] 支持的PREFIX: ${PrefixChars[0]} ${PrefixChars[1]}`);
-				}
-			}
-		}
-	});
-	Commands.set("332", function (nick, data) {
-		if (!data || data.length < 5) return;
-		let channel = channelMap.get(data[3]);
-		if (!channel || !channel.topic) return;
-		let text = data[4].substring(1);
-		for (let i = 5; i < data.length; i++) {
-			text += " " + data[i];
-		}
-		channel.topic.innerHTML = HTML_escape(text || "无主题");
-		writeToLog(`[IRC] 频道主题: ${data[3]} - ${text}`);
-	});
-	Commands.set("353", function (nick, data) {
-		if (!data || data.length < 6) return;
-		let channel = channelMap.get(data[4]);
-		if (!channel) return;
-		if (channel.names_end == true) {
-			channel.users = [];
-			channel.names_end = false;
-		}
-		data[5] = data[5].substring(1);
-		for (let i = 5; i < data.length; i++) {
-			let prefix = "";
-			let ii = 0;
-			while (PrefixChars && PrefixChars[1] && PrefixChars[1].indexOf(data[i][ii]) >= 0) {
-				prefix += data[i][ii];
-				ii++;
-			}
-			if (prefix == "") prefix = " ";
-			channel.users.push([prefix, data[i].substring(ii)]);
-		}
-		writeToLog(`[IRC] 接收用户列表: ${channel.users.length} 用户`);
-	});
-	Commands.set("366", function (nick, data) {
-		if (!data || data.length < 4) return;
-		let channel = channelMap.get(data[3]);
-		if (!channel) return;
-		channel.users.sort(sortUserList);
-		channel.userlist.innerHTML = "";
-		for (let i = 0; i < channel.users.length; i++) {
-			Channel_AppendUser(channel.users[i][1], channel, true, channel.users[i][0]);
-		}
-		channel.names_end = true;
-		writeToLog(`[IRC] 用户列表加载完成`);
-	});
-	Commands.set("432", function (nick, data) {
-		nickname = prompt("错误: 昵称包含非法字符\n请输入新的昵称", "");
-		if (nickname) {
-			doSend("nick " + nickname);
-			writeToLog(`[IRC] 昵称错误, 重新输入: ${nickname}`);
-		}
-	});
-	Commands.set("433", function (nick, data) {
-		nickname = prompt("错误: 昵称已被占用\n请输入新的昵称", "");
-		if (nickname) {
-			doSend("nick " + nickname);
-			writeToLog(`[IRC] 昵称冲突, 新昵称: ${nickname}`);
-		}
-	});
-	Commands.set("JOIN", function (nick, data) {
-		if (!data || data.length < 3) return;
-		if (data[0].indexOf(":" + nickname + "!") != 0) {
-			if (data[2][0] == ":") data[2] = data[2].substring(1);
-			let channel = channelMap.get(data[2]);
-			if (!channel) return;
-			Channel_InsertUser(nick, channel, " ");
-			writeToScreen("var(--clr-green)", `${nick} 加入频道`, channel, "*");
-		} else {
-			let channel = new Tab_Create(data[2].substring(1), "", true);
-			nick = nickname;
-			writeToScreen("var(--clr-green)", `你已加入频道 ${data[2].substring(1)}`, channel, "*");
-		}
-		writeToLog(`[IRC] 用户加入: ${nick} → ${data[2]}`);
-	});
-	Commands.set("KICK", function (nick, data) {
-		if (!data || data.length < 5) return;
-		let channel = channelMap.get(data[2]);
-		if (!channel) return;
-		let text = data[4].substring(1);
-		for (let i = 5; i < data.length; i++) {
-			text += " " + data[i];
-		}
-		if (data[3] != nickname) {
-			if (Channel_RemoveUser(data[3], channel)) {
-				writeToScreen("var(--clr-red)", `${data[3]} 被 ${nick} 踢出 (原因: ${text})`, channel, "*");
-			}
-		} else {
-			Channel_Destroy(data[2]);
-			writeToScreen("var(--clr-red)", `你被 ${nick} 踢出 ${data[2]} (原因: ${text})`, statusChannel, "");
-		}
-		writeToLog(`[IRC] 被踢出: ${data[2]} by ${nick} - ${text}`);
-	});
-	Commands.set("MODE", function (nick, data) {
-		if (!data || data.length < 4) return;
-		let channel = channelMap.get(data[2]);
-		if (!channel) return;
-		let text = data[3];
-		for (let i = 4; i < data.length; i++) {
-			text += " " + data[i];
-		}
-		writeToScreen("var(--clr-blue)", `${nick} 设置模式: ${text}`, channel, "*");
-		if (!PrefixChars || data[3].length < 1) return;
-		let ii = 4;
-		let status = "false";
-		for (let i = 0; i < data[3].length; i++) {
-			if (data[3][i] == "+") status = "true";
-			else if (data[3][i] == "-") status = "false";
-			else {
-				if (ii < data.length) {
-					Channel_UpdateUserPrefix(data[ii], channel, status, data[3][i]);
-					ii++;
-				}
-			}
-		}
-		writeToLog(`[IRC] 模式变更: ${text}`);
-	});
-	Commands.set("NICK", function (nick, data) {
-		if (!data || data.length < 3) return;
-		let newnick = data[2].substring(1);
-		if (nick == nickname) nickname = newnick;
-		channelMap.forEach(function (channel, name) {
-			if (Channel_RenameUser(nick, newnick, channel)) {
-				if (newnick == nickname) {
-					writeToScreen("var(--clr-green)", `你现在的新昵称是 ${newnick}`, channel, "*");
+					writeToLog(`← PONG: ${rawData}`);
 				} else {
-					writeToScreen("var(--clr-green)", `${nick} 更名为 ${newnick}`, channel, "*");
+					process(rawData);
+				}
+			}
+		}
+
+		function handleBinaryInput(event) {
+			if (!event || !event.target) return;
+			let fileReader = event.target;
+			let raw = fileReader.result;
+			writeToLog(`← RECV (Blob→Text): ${raw}`);
+			process(raw);
+		}
+
+		function doSend(message) {
+			if (!message) return;
+			if (websocket && websocket.readyState === WebSocket.OPEN) {
+				try {
+					websocket.send(message);
+					writeToLog(`→ SEND: ${message.trim()}`);
+				} catch (e) {
+					writeToLog(`[ERROR] 发送消息失败: ${e.message}`);
+					writeToScreen("var(--clr-error)", "发送失败: " + e.message, statusChannel, "");
+				}
+			} else {
+				writeToLog(`[ERROR] WebSocket未连接, 无法发送: ${message.trim()}`);
+				if (!isConnected) {
+					writeToScreen("var(--clr-error)", "未连接, 消息未发送", statusChannel, "");
+				}
+			}
+		}
+
+		var Commands = new Map();
+		Commands.set("001", function (nick, data) {
+			doSend("CAP REQ :multi-prefix");
+			if (channelName) {
+				doSend("join " + channelName);
+				writeToLog(`[IRC] 接收001, 准备加入频道: ${channelName}`);
+			} else {
+				writeToLog(`[IRC] 接收001, 未设置自动加入频道`);
+			}
+		});
+		Commands.set("005", function (nick, data) {
+			if (!data || !PrefixChars) return;
+			for (let i = 2; i < data.length; i++) {
+				if (data[i].indexOf("PREFIX=") == 0) {
+					let tmp = data[i].substring(8) + " ";
+					if (tmp) {
+						PrefixChars = tmp.split(")");
+						writeToScreen("var(--clr-info)", "PREFIX CHARS: " + PrefixChars[0] + " " + PrefixChars[1], statusChannel, "");
+						writeToLog(`[IRC] 支持的PREFIX: ${PrefixChars[0]} ${PrefixChars[1]}`);
+					}
 				}
 			}
 		});
-		writeToLog(`[IRC] 昵称变更: ${nick} → ${newnick}`);
-	});
-	Commands.set("PART", function (nick, data) {
-		if (!data || data.length < 3) return;
-		if (data[0].indexOf(":" + nickname + "!") != 0) {
-			let channel = channelMap.get(data[2]);
-			if (!channel) return;
-			if (Channel_RemoveUser(nick, channel)) {
-				writeToScreen("var(--clr-green)", `${nick} 离开频道`, channel, "*");
-			}
-		} else {
-			Channel_Destroy(data[2]);
-			writeToScreen("var(--clr-green)", `你已离开频道 ${data[2]}`, statusChannel, "");
-		}
-		writeToLog(`[IRC] 离开频道: ${data[2]}`);
-	});
-	Commands.set("TOPIC", function (nick, data) {
-		if (!data || data.length < 4) return;
-		let channel = channelMap.get(data[2]);
-		if (!channel || !channel.topic) return;
-		let text = data[3].substring(1);
-		for (let i = 4; i < data.length; i++) {
-			text += " " + data[i];
-		}
-		channel.topic.innerHTML = HTML_escape(text || "无主题");
-		writeToScreen("var(--clr-blue)", `${nick} 设置主题为: ${text}`, channel, "*");
-		writeToLog(`[IRC] 主题变更: ${data[2]} - ${text}`);
-	});
-	Commands.set("QUIT", function (nick, data) {
-		channelMap.forEach(function (channel, name) {
-			if (Channel_RemoveUser(nick, channel)) {
-				writeToScreen("var(--clr-purple)", `${nick} 退出IRC`, channel, "*");
-			}
-		});
-		writeToLog(`[IRC] 用户退出: ${nick}`);
-	});
-	Commands.set("PRIVMSG", function (nick, data) {
-		if (!data || data.length < 4) return;
-		let channel = channelMap.get(data[2]);
-		if (!channel) channel = statusChannel;
-		let text = data[3].substring(1);
-		for (let i = 4; i < data.length; i++) {
-			text += " " + data[i];
-		}
-		nick = data[0].substring(1).split("!")[0];
-		if (text[0] == "\x01") {
-			if (text.indexOf("\x01ACTION ") == 0) {
-				writeToScreen("var(--clr-red)", `${nick} ${text.substring(8)}`, channel, "*");
-			} else {
-				writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*");
-			}
-		} else {
-			writeToScreen("var(--clr-font)", text, channel, nick);
-		}
-	});
-	Commands.set("NOTICE", function (nick, data) {
-		if (!data || data.length < 4) return;
-		let channel = channelMap.get(data[2]);
-		if (!channel) channel = statusChannel;
-		let text = data[3].substring(1);
-		for (let i = 4; i < data.length; i++) {
-			text += " " + data[i];
-		}
-		nick = data[0].substring(1).split("!")[0];
-		writeToScreen("var(--clr-gold)", `通知 ${nick}: ${text}`, channel, "-");
-		writeToLog(`[NOTICE] ${nick}: ${text}`);
-	});
-
-	function process(rawData) {
-		if (!rawData) return;
-		let data = rawData.split(" ");
-		if (!data || data.length < 2) {
-			writeToLog(`[DEBUG] 无效数据: ${rawData}`);
-			return;
-		}
-		let nick = data[0].substring(1).split("!")[0];
-		let command = data[1].toUpperCase();
-		let fn = Commands.get(command);
-		if (fn) {
-			fn(nick, data);
-			return;
-		}
-		if (!isNaN(parseInt(data[1]))) {
-			let text = data[1];
-			for (let i = 3; i < data.length; i++) {
+		Commands.set("332", function (nick, data) {
+			if (!data || data.length < 5) return;
+			let channel = channelMap.get(data[3]);
+			if (!channel || !channel.topic) return;
+			let text = data[4].substring(1);
+			for (let i = 5; i < data.length; i++) {
 				text += " " + data[i];
 			}
-			writeToScreen("var(--clr-gold)", text, statusChannel, "");
-			writeToLog(`[SERVER] ${data[1]}: ${text}`);
-			return;
-		}
-		if (data[0] == "PING") {
-			let pongResponse = rawData.replace("PING", "PONG");
-			writeToScreen("var(--clr-brown)", pongResponse, statusChannel, "");
-			doSend(pongResponse);
-			writeToLog(`[PING/PONG] ${pongResponse}`);
-			return;
-		}
-		if (data[0] == "ERROR") {
-			writeToScreen("var(--clr-font)", rawData, statusChannel, "");
-			writeToLog(`[ERROR] ${rawData}`);
-			return;
-		}
-		console.log("DEBUG:", rawData);
-		writeToLog(`[DEBUG] ${rawData}`);
-	}
-</script>
+			channel.topic.innerHTML = HTML_escape(text || "无主题");
+			writeToLog(`[IRC] 频道主题: ${data[3]} - ${text}`);
+		});
+		Commands.set("353", function (nick, data) {
+			if (!data || data.length < 6) return;
+			let channel = channelMap.get(data[4]);
+			if (!channel) return;
+			if (channel.names_end == true) {
+				channel.users = [];
+				channel.names_end = false;
+			}
+			data[5] = data[5].substring(1);
+			for (let i = 5; i < data.length; i++) {
+				let prefix = "";
+				let ii = 0;
+				while (PrefixChars && PrefixChars[1] && PrefixChars[1].indexOf(data[i][ii]) >= 0) {
+					prefix += data[i][ii];
+					ii++;
+				}
+				if (prefix == "") prefix = " ";
+				channel.users.push([prefix, data[i].substring(ii)]);
+			}
+			writeToLog(`[IRC] 接收用户列表: ${channel.users.length} 用户`);
+		});
+		Commands.set("366", function (nick, data) {
+			if (!data || data.length < 4) return;
+			let channel = channelMap.get(data[3]);
+			if (!channel) return;
+			channel.users.sort(sortUserList);
+			channel.userlist.innerHTML = "";
+			for (let i = 0; i < channel.users.length; i++) {
+				Channel_AppendUser(channel.users[i][1], channel, true, channel.users[i][0]);
+			}
+			channel.names_end = true;
+			writeToLog(`[IRC] 用户列表加载完成`);
+		});
+		Commands.set("432", function (nick, data) {
+			nickname = prompt("错误: 昵称包含非法字符\n请输入新的昵称", "");
+			if (nickname) {
+				doSend("nick " + nickname);
+				writeToLog(`[IRC] 昵称错误, 重新输入: ${nickname}`);
+			}
+		});
+		Commands.set("433", function (nick, data) {
+			nickname = prompt("错误: 昵称已被占用\n请输入新的昵称", "");
+			if (nickname) {
+				doSend("nick " + nickname);
+				writeToLog(`[IRC] 昵称冲突, 新昵称: ${nickname}`);
+			}
+		});
+		Commands.set("JOIN", function (nick, data) {
+			if (!data || data.length < 3) return;
+			if (data[0].indexOf(":" + nickname + "!") != 0) {
+				if (data[2][0] == ":") data[2] = data[2].substring(1);
+				let channel = channelMap.get(data[2]);
+				if (!channel) return;
+				Channel_InsertUser(nick, channel, " ");
+				writeToScreen("var(--clr-success)", `${nick} 加入频道`, channel, "*");
+			} else {
+				let channel = new Tab_Create(data[2].substring(1), "", true);
+				nick = nickname;
+				writeToScreen("var(--clr-success)", `你已加入频道 ${data[2].substring(1)}`, channel, "*");
+			}
+			writeToLog(`[IRC] 用户加入: ${nick} → ${data[2]}`);
+		});
+		Commands.set("KICK", function (nick, data) {
+			if (!data || data.length < 5) return;
+			let channel = channelMap.get(data[2]);
+			if (!channel) return;
+			let text = data[4].substring(1);
+			for (let i = 5; i < data.length; i++) {
+				text += " " + data[i];
+			}
+			if (data[3] != nickname) {
+				if (Channel_RemoveUser(data[3], channel)) {
+					writeToScreen("var(--clr-error)", `${data[3]} 被 ${nick} 踢出 (原因: ${text})`, channel, "*");
+				}
+			} else {
+				Channel_Destroy(data[2]);
+				writeToScreen("var(--clr-error)", `你被 ${nick} 踢出 ${data[2]} (原因: ${text})`, statusChannel, "");
+			}
+			writeToLog(`[IRC] 被踢出: ${data[2]} by ${nick} - ${text}`);
+		});
+		Commands.set("MODE", function (nick, data) {
+			if (!data || data.length < 4) return;
+			let channel = channelMap.get(data[2]);
+			if (!channel) return;
+			let text = data[3];
+			for (let i = 4; i < data.length; i++) {
+				text += " " + data[i];
+			}
+			writeToScreen("var(--clr-info)", `${nick} 设置模式: ${text}`, channel, "*");
+			if (!PrefixChars || data[3].length < 1) return;
+			let ii = 4;
+			let status = "false";
+			for (let i = 0; i < data[3].length; i++) {
+				if (data[3][i] == "+") status = "true";
+				else if (data[3][i] == "-") status = "false";
+				else {
+					if (ii < data.length) {
+						Channel_UpdateUserPrefix(data[ii], channel, status, data[3][i]);
+						ii++;
+					}
+				}
+			}
+			writeToLog(`[IRC] 模式变更: ${text}`);
+		});
+		Commands.set("NICK", function (nick, data) {
+			if (!data || data.length < 3) return;
+			let newnick = data[2].substring(1);
+			if (nick == nickname) nickname = newnick;
+			channelMap.forEach(function (channel, name) {
+				if (Channel_RenameUser(nick, newnick, channel)) {
+					if (newnick == nickname) {
+						writeToScreen("var(--clr-success)", `你现在的新昵称是 ${newnick}`, channel, "*");
+					} else {
+						writeToScreen("var(--clr-success)", `${nick} 更名为 ${newnick}`, channel, "*");
+					}
+				}
+			});
+			writeToLog(`[IRC] 昵称变更: ${nick} → ${newnick}`);
+		});
+		Commands.set("PART", function (nick, data) {
+			if (!data || data.length < 3) return;
+			if (data[0].indexOf(":" + nickname + "!") != 0) {
+				let channel = channelMap.get(data[2]);
+				if (!channel) return;
+				if (Channel_RemoveUser(nick, channel)) {
+					writeToScreen("var(--clr-success)", `${nick} 离开频道`, channel, "*");
+				}
+			} else {
+				Channel_Destroy(data[2]);
+				writeToScreen("var(--clr-success)", `你已离开频道 ${data[2]}`, statusChannel, "");
+			}
+			writeToLog(`[IRC] 离开频道: ${data[2]}`);
+		});
+		Commands.set("TOPIC", function (nick, data) {
+			if (!data || data.length < 4) return;
+			let channel = channelMap.get(data[2]);
+			if (!channel || !channel.topic) return;
+			let text = data[3].substring(1);
+			for (let i = 4; i < data.length; i++) {
+				text += " " + data[i];
+			}
+			channel.topic.innerHTML = HTML_escape(text || "无主题");
+			writeToScreen("var(--clr-info)", `${nick} 设置主题为: ${text}`, channel, "*");
+			writeToLog(`[IRC] 主题变更: ${data[2]} - ${text}`);
+		});
+		Commands.set("QUIT", function (nick, data) {
+			channelMap.forEach(function (channel, name) {
+				if (Channel_RemoveUser(nick, channel)) {
+					writeToScreen("var(--clr-info)", `${nick} 退出IRC`, channel, "*");
+				}
+			});
+			writeToLog(`[IRC] 用户退出: ${nick}`);
+		});
+		Commands.set("PRIVMSG", function (nick, data) {
+			if (!data || data.length < 4) return;
+			let channel = channelMap.get(data[2]);
+			if (!channel) channel = statusChannel;
+			let text = data[3].substring(1);
+			for (let i = 4; i < data.length; i++) {
+				text += " " + data[i];
+			}
+			nick = data[0].substring(1).split("!")[0];
+			if (text[0] == "\x01") {
+				if (text.indexOf("\x01ACTION ") == 0) {
+					writeToScreen("var(--clr-error)", `${nick} ${text.substring(8)}`, channel, "*");
+				} else {
+					writeToScreen("var(--clr-error)", `${nick} ${text}`, channel, "*");
+				}
+			} else {
+				writeToScreen("var(--clr-text)", text, channel, nick);
+			}
+		});
+		Commands.set("NOTICE", function (nick, data) {
+			if (!data || data.length < 4) return;
+			let channel = channelMap.get(data[2]);
+			if (!channel) channel = statusChannel;
+			let text = data[3].substring(1);
+			for (let i = 4; i < data.length; i++) {
+				text += " " + data[i];
+			}
+			nick = data[0].substring(1).split("!")[0];
+			writeToScreen("var(--clr-info)", `通知 ${nick}: ${text}`, channel, "-");
+			writeToLog(`[NOTICE] ${nick}: ${text}`);
+		});
 
+		function process(rawData) {
+			if (!rawData) return;
+			let data = rawData.split(" ");
+			if (!data || data.length < 2) {
+				writeToLog(`[DEBUG] 无效数据: ${rawData}`);
+				return;
+			}
+			let nick = data[0].substring(1).split("!")[0];
+			let command = data[1].toUpperCase();
+			let fn = Commands.get(command);
+			if (fn) {
+				fn(nick, data);
+				return;
+			}
+			if (!isNaN(parseInt(data[1]))) {
+				let text = data[1];
+				for (let i = 3; i < data.length; i++) {
+					text += " " + data[i];
+				}
+				writeToScreen("var(--clr-info)", text, statusChannel, "");
+				writeToLog(`[SERVER] ${data[1]}: ${text}`);
+				return;
+			}
+			if (data[0] == "PING") {
+				let pongResponse = rawData.replace("PING", "PONG");
+				writeToScreen("var(--clr-info)", pongResponse, statusChannel, "");
+				doSend(pongResponse);
+				writeToLog(`[PING/PONG] ${pongResponse}`);
+				return;
+			}
+			if (data[0] == "ERROR") {
+				writeToScreen("var(--clr-text)", rawData, statusChannel, "");
+				writeToLog(`[ERROR] ${rawData}`);
+				return;
+			}
+			console.log("DEBUG:", rawData);
+			writeToLog(`[DEBUG] ${rawData}`);
+		}
+	</script>
+</body>
 </html>
