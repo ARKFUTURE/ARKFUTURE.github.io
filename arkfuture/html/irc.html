@@ -1406,45 +1406,16 @@
 		}
 	}
 
-	// 检测图片媒体类型 - 支持查询参数中的格式
 	function isImageMedia(url) {
-		// 检查URL路径中的扩展名
-		if (/\.(jpeg|jpg|gif|png|webp|bmp|svg)(\?.*)?$/i.test(url)) {
-			return true;
-		}
-		
-		// 检查查询参数中的格式
-		const urlObj = new URL(url);
-		const fmt = urlObj.searchParams.get('fmt');
-		const f = urlObj.searchParams.get('f');
-		const ext = urlObj.searchParams.get('ext');
-		
-		if (fmt && /jpeg|jpg|gif|png|webp|bmp|svg/i.test(fmt)) {
-			return true;
-		}
-		if (f && /jpeg|jpg|gif|png|webp|bmp|svg/i.test(f)) {
-			return true;
-		}
-		if (ext && /jpeg|jpg|gif|png|webp|bmp|svg/i.test(ext)) {
-			return true;
-		}
-		
-		// 检查百度图片等常见服务的特定参数
-		if (url.includes('baidu.com') && (url.includes('fmt=') || url.includes('f=JPEG') || url.includes('f=PNG'))) {
-			return true;
-		}
-		
-		return false;
+		return /\.(jpeg|jpg|gif|png|webp|bmp|svg)$/i.test(url);
 	}
 
-	// 检测视频媒体类型
 	function isVideoMedia(url) {
-		return /\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv)(\?.*)?$/i.test(url);
+		return /\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv)$/i.test(url);
 	}
 
-	// 检测音频媒体类型
 	function isAudioMedia(url) {
-		return /\.(mp3|wav|ogg|flac|m4a|aac)(\?.*)?$/i.test(url);
+		return /\.(mp3|wav|ogg|flac|m4a|aac)$/i.test(url);
 	}
 
 	function createMediaPreview(url, type) {
