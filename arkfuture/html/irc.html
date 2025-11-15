@@ -71,8 +71,9 @@
 		}
 
 		.main {
-			display: flex;
-			flex-direction: column;
+			display: grid;
+			grid-template-rows: auto auto auto 1fr auto;
+			grid-template-columns: 1fr;
 			height: 100vh;
 			width: 100%;
 		}
@@ -80,10 +81,10 @@
 		.header {
 			background: linear-gradient(90deg, var(--clr-background2), var(--clr-background));
 			padding: var(--spacing-md) var(--spacing-lg);
-			flex: 0 0 var(--header-height);
 			display: flex;
 			align-items: center;
 			border-bottom: 1px solid var(--clr-border);
+			grid-row: 1;
 		}
 
 		.header h1 {
@@ -94,7 +95,7 @@
 		}
 
 		.settings-bar {
-			flex: 0 0 var(--settings-height);
+			grid-row: 2;
 			background-color: var(--clr-background2);
 			border-bottom: 1px solid var(--clr-border);
 			display: flex;
@@ -278,7 +279,7 @@
 		}
 
 		.chat-container {
-			flex: 1 1 auto;
+			grid-row: 3 / span 2;
 			display: flex;
 			flex-direction: column;
 			overflow: hidden;
@@ -423,18 +424,19 @@
 		}
 
 		.channelcontents {
-			display: flex;
-			flex-direction: row;
+			display: grid;
+			grid-template-columns: 1fr auto;
 			width: 100%;
 			height: 100%;
 			min-height: 0;
 		}
 
 		.channelcontent {
-			flex: 1 1 auto;
+			grid-column: 1;
 			display: none;
-			flex-direction: row;
+			flex-direction: column;
 			min-height: 0;
+			overflow: hidden;
 		}
 
 		.channelcontent.active {
@@ -478,6 +480,7 @@
 		}
 
 		ul {
+			grid-column: 2;
 			flex: 0 0 200px;
 			overflow-y: auto;
 			padding: var(--spacing-sm);
@@ -518,6 +521,7 @@
 		}
 
 		#input {
+			grid-row: 4;
 			flex: 0 0 var(--input-height);
 			padding: var(--spacing-md);
 			background-color: var(--clr-background3);
@@ -880,9 +884,10 @@
 				<h3>欢迎使用 IRC 客户端</h3>
 				<p>请先填写服务器信息并点击连接</p>
 			</div>
-			<input type="text" name="input" id="input" placeholder="输入消息..." style="display: none;"
-				   onkeydown="onKeyPress(event)" onkeydown="onKeyDown(event)" />
 		</div>
+		
+		<input type="text" name="input" id="input" placeholder="输入消息..." style="display: none;"
+			   onkeydown="onKeyPress(event)" onkeydown="onKeyDown(event)" />
 		
 		<!-- 媒体预览模态框 -->
 		<div class="media-preview-modal" id="mediaPreviewModal">
