@@ -1222,6 +1222,7 @@
 
 	function linkify(text) {
 		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
+		const mediaMaxWidth = '300px';
 
 		return text.replace(urlRegex, function (url) {
 			const lowerUrl = url.toLowerCase();
@@ -1231,11 +1232,11 @@
 
 
 			if (isImage) {
-				return `<div style="margin: 6px 0; text-align: center;"><img src="${url}" alt="Image" style="max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);"></div>`;
+				return `<img src="${url}" alt="Image" style="max-width: ${mediaMaxWidth}; height: auto; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">`;
 			} else if (isAudio) {
-				return `<div style="margin: 6px 0;"><audio controls src="${url}" style="width: 100%;"></audio></div>`;
+				return `<audio controls src="${url}" style="max-width: ${mediaMaxWidth};"></audio>`;
 			} else if (isVideo) {
-				return `<div style="margin: 6px 0;"><video controls src="${url}" style="max-width: 100%; height: auto; border-radius: 4px;"></video></div>`;
+				return `<video controls src="${url}" style="max-width: ${mediaMaxWidth}; height: auto; border-radius: 4px;"></video>`;
 			} else {
 				return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${url}</a>`;
 			}
