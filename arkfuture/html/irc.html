@@ -1224,12 +1224,33 @@
 		}
 	}
 
-	function linkify(text) {
-		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
-		return text.replace(urlRegex, function (url) {
-			return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${url}</a>`;
-		});
-	}
+function linkify(text) {
+	const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
+
+	return text.replace(urlRegex, function (url) {
+		// 尝试判断是否为媒体链接
+		const lowerUrl = url.toLowerCase();
+		const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/i.test(lowerUrl);
+		const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/i.test(lowerUrl);
+		const isVideo = /\.(mp4|webm|ogg|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/i.test(lowerUrl);
+
+		if (isImage) {
+			return `<img src="${HTML_escape_attr(url)}" alt="图片" style="max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0;">`;
+		} else if (isAudio) {
+			return `<audio controls src="${HTML_escape_attr(url)}" style="width: 100%; margin: 4px 0;"></audio>`;
+		} else if (isVideo) {
+			return `<video controls src="${HTML_escape_attr(url)}" style="max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0;"></video>`;
+		} else {
+			// 普通链接
+			return `<a href="${HTML_escape_attr(url)}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${HTML_escape(url)}</a>`;
+		}
+	});
+}
+
+function HTML_escape_attr(str) {
+	if (!str) return "";
+	return str.replace(/"/g, '&quot;').replace(/'/g, '&#039;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/&/g, '&amp;');
+}
 
 	function send() {
 		let text = input ? input.value.trim() : "";
