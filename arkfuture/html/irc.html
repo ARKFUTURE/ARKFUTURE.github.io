@@ -1231,17 +1231,17 @@
 			const lowerUrl = url.toLowerCase();
 			const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/i.test(lowerUrl);
 			const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/i.test(lowerUrl);
-			const isVideo = /\.(mp4|webm|ogg|mov|avi|mkv|flv|m4v)(\?.*)?$/i.test(lowerUrl);
+			const isVideo = /\.(mp4|webm|ogg|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/i.test(lowerUrl);
 
 
 			if (isImage) {
-				return `<img src="${url}" alt="图片" style="max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0;">`;
+				return `<div style="margin: 6px 0; text-align: center;"><img src="${url}" alt="Image" style="max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);"></div>`;
 			} else if (isAudio) {
-				return `<audio controls src="${url}" style="width: 100%; margin: 4px 0;"></audio>`;
+				return `<div style="margin: 6px 0;"><audio controls src="${url}" style="width: 100%;"></audio></div>`;
 			} else if (isVideo) {
-				return `<video controls src="${url}" style="max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0;"></video>`;
+				return `<div style="margin: 6px 0;"><video controls src="${url}" style="max-width: 100%; height: auto; border-radius: 4px;"></video></div>`;
 			} else {
-				return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${HTML_escape(url)}</a>`;
+				return `<iframe src="${url}" style="border: none; width: 100%; max-width: 400px; height: auto; margin: 20px 0 0; display: block;" title="Embedded Widget"></iframe>`;
 			}
 		});
 	}
