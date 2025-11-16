@@ -1241,7 +1241,7 @@
 			} else if (isVideo) {
 				return `<div style="margin: 6px 0;"><video controls src="${url}" style="max-width: 100%; height: auto; border-radius: 4px;"></video></div>`;
 			} else {
-				return `<iframe src="${url}" style="border: none; width: 100%; max-width: 400px; height: auto; margin: 20px 0 0; display: block;" title="Embedded Widget"></iframe>`;
+				return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${url}</a>`;
 			}
 		});
 	}
