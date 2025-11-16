@@ -1225,7 +1225,7 @@
 	function linkify(text) {
 		if (!text) return "";
 		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
-		return processedText.replace(urlRegex, function (url) {
+		return text.replace(urlRegex, function (url) {
 			const lowerUrl = url.toLowerCase();
 			const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/i.test(lowerUrl);
 			const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/i.test(lowerUrl);
@@ -1411,6 +1411,21 @@
 			process(rawData);
 		}
 	}
+
+	function setupScrollIndicator(contentEl) {
+  const indicator = document.createElement('div');
+  indicator.className = 'scroll-indicator';
+  indicator.textContent = '↓ 滚动到底部';
+  indicator.onclick = () => contentEl.scrollTop = contentEl.scrollHeight;
+  contentEl.parentNode.appendChild(indicator);
+
+  let isAtBottom = true;
+  contentEl.addEventListener('scroll', () => {
+    const diff = contentEl.scrollHeight - contentEl.scrollTop - contentEl.clientHeight;
+    isAtBottom = diff < 10;
+    indicator.classList.toggle('visible', !isAtBottom);
+  });
+}
 
 	function handleBinaryInput(event) {
 		if (!event || !event.target) return;
