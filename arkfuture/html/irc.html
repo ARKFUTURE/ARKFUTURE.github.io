@@ -1224,12 +1224,6 @@
 
 	function linkify(text) {
 		if (!text) return "";
-
-		const iframeRegex = /\[ifr\](https?:\/\/[^\s<>{}|\\^`[\]]+?)\[\/ifr\]/gi;
-		let processedText = text.replace(iframeRegex, function (match, url) {
-			return `<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="${HTML_escape_attr(url)}"></iframe>`;	
-		});
-
 		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
 		return processedText.replace(urlRegex, function (url) {
 			const lowerUrl = url.toLowerCase();
@@ -1246,8 +1240,8 @@
 			} else {
 				return `<a href="${HTML_escape_attr(url)}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${HTML_escape(url)}</a>`;
 			}
-		}); // ← 这个 } 是 replace 回调函数的闭合
-	} // ← 这个 } 是 linkify 函数的闭合
+		});
+	}
 
 	function HTML_escape_attr(str) {
 		if (!str) return "";
