@@ -751,8 +751,12 @@
 	var reconnectAttempts = 0;
 	var maxReconnectAttempts = 5;
 	var reconnectDelay = 3000;
+
+	// === 保活机制增强 ===
 	var keepAliveTimer = null;
-	const keepAliveInterval = 90000; // 60秒保活功能
+	var pongTimeoutId = null;
+	const keepAliveInterval = 45000; // 45秒发送一次 PING
+	const pongTimeout = 10000;       // 10秒内必须收到 PONG
 
 	function onLoad() {
 		channels = document.getElementById("channelsContainer");
@@ -770,7 +774,6 @@
 		}
 		updateConnectionStatus(false);
 
-		// 添加输入框自动聚焦
 		if (input) {
 			input.addEventListener('blur', () => setTimeout(() => input.focus(), 100));
 		}
@@ -811,16 +814,16 @@
 	}
 
 	function writeToLog(message) {
-	const logOutput = document.getElementById('logOutput');
-	const timestamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-	const fullMessage = `[${timestamp}] ${message}`;
+		const logOutput = document.getElementById('logOutput');
+		const timestamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+		const fullMessage = `[${timestamp}] ${message}`;
 
-	if (logOutput) {
-		logOutput.textContent += fullMessage + '\n';
-		logOutput.scrollTop = logOutput.scrollHeight;
-	}
+		if (logOutput) {
+			logOutput.textContent += fullMessage + '\n';
+			logOutput.scrollTop = logOutput.scrollHeight;
+		}
 
-	console.log(fullMessage);
+		console.log(fullMessage);
 	}
 
 	function showSSLWarning(url) {
@@ -908,12 +911,10 @@
 		connectBtn.textContent = '连接中...';
 		connectBtn.disabled = true;
 
-		// 清空界面
 		channels.innerHTML = '';
 		channelContents.innerHTML = '';
 		channelMap.clear();
 
-		// 显示聊天区域
 		contentsWrapper.classList.remove('hidden');
 		contentsWrapper.classList.add('visible');
 		if (emptyState) emptyState.style.display = 'none';
@@ -946,7 +947,6 @@
 
 		updateConnectionStatus(false);
 
-		// 隐藏聊天区域
 		contentsWrapper.classList.remove('visible');
 		contentsWrapper.classList.add('hidden');
 		if (emptyState) emptyState.style.display = 'flex';
@@ -1009,7 +1009,6 @@
 			channel.channel.classList.add('active');
 			channel.button.classList.add("active");
 			activeChannel = channel;
-			// 自动滚动到底部
 			setTimeout(() => {
 				if (channel.content) {
 					channel.content.scrollTop = channel.content.scrollHeight;
@@ -1217,40 +1216,43 @@
 			while (output.children.length > 200) {
 				output.removeChild(output.children[0]);
 			}
-			// 保持滚动在底部
 			requestAnimationFrame(() => {
 				output.scrollTop = output.scrollHeight;
 			});
 		}
 	}
 
-function linkify(text) {
-	const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
+	function linkify(text) {
+		if (!text) return "";
 
-	return text.replace(urlRegex, function (url) {
-		// 尝试判断是否为媒体链接
-		const lowerUrl = url.toLowerCase();
-		const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/i.test(lowerUrl);
-		const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/i.test(lowerUrl);
-		const isVideo = /\.(mp4|webm|ogg|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/i.test(lowerUrl);
+		const iframeRegex = /\[ifr\](https?:\/\/[^\s<>{}|\\^`[\]]+?)\[\/ifr\]/gi;
+		let processedText = text.replace(iframeRegex, function (match, url) {
+			return `<iframe src="${HTML_escape_attr(url)}" style="width:100%; height:300px; border:1px solid var(--clr-border); border-radius:6px; margin:6px 0;"></iframe>`;
+		});
 
-		if (isImage) {
-			return `<img src="${HTML_escape_attr(url)}" alt="图片" style="max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0;">`;
-		} else if (isAudio) {
-			return `<audio controls src="${HTML_escape_attr(url)}" style="width: 100%; margin: 4px 0;"></audio>`;
-		} else if (isVideo) {
-			return `<video controls src="${HTML_escape_attr(url)}" style="max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0;"></video>`;
-		} else {
-			// 普通链接
-			return `<a href="${HTML_escape_attr(url)}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${HTML_escape(url)}</a>`;
-		}
-	});
-}
+		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
+		return processedText.replace(urlRegex, function (url) {
+			const lowerUrl = url.toLowerCase();
+			const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/i.test(lowerUrl);
+			const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/i.test(lowerUrl);
+			const isVideo = /\.(mp4|webm|ogg|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/i.test(lowerUrl);
 
-function HTML_escape_attr(str) {
-	if (!str) return "";
-	return str.replace(/"/g, '&quot;').replace(/'/g, '&#039;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/&/g, '&amp;');
-}
+			if (isImage) {
+				return `<img src="${HTML_escape_attr(url)}" alt="图片" style="max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0;">`;
+			} else if (isAudio) {
+				return `<audio controls src="${HTML_escape_attr(url)}" style="width: 100%; margin: 4px 0;"></audio>`;
+			} else if (isVideo) {
+				return `<video controls src="${HTML_escape_attr(url)}" style="max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0;"></video>`;
+			} else {
+				return `<a href="${HTML_escape_attr(url)}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${HTML_escape(url)}</a>`;
+			}
+		}); // ← 这个 } 是 replace 回调函数的闭合
+	} // ← 这个 } 是 linkify 函数的闭合
+
+	function HTML_escape_attr(str) {
+		if (!str) return "";
+		return str.replace(/"/g, '&quot;').replace(/'/g, '&#039;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/&/g, '&amp;');
+	}
 
 	function send() {
 		let text = input ? input.value.trim() : "";
@@ -1696,16 +1698,36 @@ function HTML_escape_attr(str) {
 			writeToLog(`[ERROR] ${rawData}`);
 			return;
 		}
+		// 检查是否是服务器的 PONG 回复
+		if (data[0] === "PONG") {
+			if (pongTimeoutId) {
+				clearTimeout(pongTimeoutId);
+				pongTimeoutId = null;
+				writeToLog("[KEEP-ALIVE] 收到 PONG，连接正常");
+			}
+			return;
+		}
 		console.log("DEBUG:", rawData);
 		writeToLog(`[DEBUG] ${rawData}`);
 	}
 
+	// === 增强的保活机制 ===
 	function startKeepAlive() {
 		stopKeepAlive();
 		keepAliveTimer = setInterval(() => {
 			if (isConnected && websocket && websocket.readyState === WebSocket.OPEN) {
-				writeToLog("[KEEP-ALIVE] 发送 PING");
-				doSend("PING keepalive");
+				// 发送带时间戳的 PING，以便区分
+				const timestamp = Date.now();
+				writeToLog(`[KEEP-ALIVE] 发送 PING ${timestamp}`);
+				doSend(`PING ${timestamp}`);
+
+				// 设置超时检测
+				pongTimeoutId = setTimeout(() => {
+					writeToLog(`[KEEP-ALIVE] 未在 ${pongTimeout / 1000} 秒内收到 PONG，连接可能已断开`);
+					if (websocket) {
+						websocket.close(1006, "Keep-alive timeout");
+					}
+				}, pongTimeout);
 			}
 		}, keepAliveInterval);
 	}
@@ -1714,6 +1736,10 @@ function HTML_escape_attr(str) {
 		if (keepAliveTimer) {
 			clearInterval(keepAliveTimer);
 			keepAliveTimer = null;
+		}
+		if (pongTimeoutId) {
+			clearTimeout(pongTimeoutId);
+			pongTimeoutId = null;
 		}
 	}
 </script>
