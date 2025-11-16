@@ -31,8 +31,23 @@
         counter++;
     }
 
+    const currentDomain = window.location.hostname
+    const ircDomain = 'irc.' + currentDomain;
+    const link = document.getElementById('ircurl');
+    link.textContent = ircDomain;
+
     // 页面加载时执行
     document.addEventListener('DOMContentLoaded', () => {
     setInterval(incrementCounter, 1000);
     setInterval(updateTitle, 1500);
+    
+    const currentDomain = window.location.hostname;
+    const ircDomain = 'irc.' + currentDomain;
+    const link = document.getElementById('ircurl');
+    if (link) {
+        link.textContent = ircDomain;
+        link.href = 'irc://' + ircDomain; // 推荐加上 href，支持点击跳转
+    }
+
+
     });
