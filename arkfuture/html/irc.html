@@ -1712,7 +1712,7 @@
 			if (pongTimeoutId) {
 				clearTimeout(pongTimeoutId);
 				pongTimeoutId = null;
-				writeToLog("[KEEP-ALIVE] 收到 PONG，连接正常");
+				writeToLog("[KEEP-ALIVE] 收到 PONG,连接正常");
 			}
 			return;
 		}
@@ -1725,14 +1725,14 @@
 		stopKeepAlive();
 		keepAliveTimer = setInterval(() => {
 			if (isConnected && websocket && websocket.readyState === WebSocket.OPEN) {
-				// 发送带时间戳的 PING，以便区分
+				// 发送带时间戳的 PING,以便区分
 				const timestamp = Date.now();
 				writeToLog(`[KEEP-ALIVE] 发送 PING ${timestamp}`);
 				doSend(`PING ${timestamp}`);
 
 				// 设置超时检测
 				pongTimeoutId = setTimeout(() => {
-					writeToLog(`[KEEP-ALIVE] 未在 ${pongTimeout / 1000} 秒内收到 PONG，连接可能已断开`);
+					writeToLog(`[KEEP-ALIVE] 未在 ${pongTimeout / 1000} 秒内收到 PONG,连接可能已断开`);
 					if (websocket) {
 						websocket.close(1006, "Keep-alive timeout");
 					}
