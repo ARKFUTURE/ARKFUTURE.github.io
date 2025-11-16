@@ -731,7 +731,7 @@
 				<p>请先填写服务器信息并点击连接</p>
 			</div>
 			<input type="text" name="input" id="input" placeholder="输入消息..." style="display: none;"
-				   onkeydown="onKeyPress(event)" onkeydown="onKeyDown(event)" />
+				   onkeydown="onKeyDown(event)" />
 		</div>
 	</div>
 </body>
@@ -973,14 +973,10 @@
 		}
 	}
 
-	function onKeyPress(e) {
+	function onKeyDown(e) {
 		if (e && e.key === 'Enter') {
 			send();
-		}
-	}
-
-	function onKeyDown(e) {
-		if (e.key === 'Tab') {
+		} else if (e.key === 'Tab') {
 			e.preventDefault();
 			console.log("TODO: TAB KEY - Nickname completion");
 			return false;
@@ -1711,5 +1707,6 @@
 		}
 	}
 </script>
+
 
 </html>
