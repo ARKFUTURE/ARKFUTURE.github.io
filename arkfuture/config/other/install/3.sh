@@ -18,16 +18,16 @@ else
 echo "未生成任何证书,请稍自行获取证书并修改/usr/share/inspircd/deploy-ssl.sh后执行此移动证书脚本"
 fi
 cd /etc/inspircd/conf
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
+curl -L -O https://arkfuture.top/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
+curl -L -O https://arkfuture.top/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
+curl -L -O https://arkfuture.top/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
+curl -L -O https://arkfuture.top/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
+curl -L -O https://arkfuture.top/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
 cd /etc/inspircd/txt
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/motd.txt
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt
+curl -L -O https://arkfuture.top/ARKFUTURE/CONFIG/inspircd/txt/motd.txt
+curl -L -O https://arkfuture.top/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
+curl -L -O https://arkfuture.top/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt
+curl -L -O https://arkfuture.top/ARKFUTURE/CONFIG/inspircd/txt/rules.txt
 cd /etc/inspircd/
 chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
