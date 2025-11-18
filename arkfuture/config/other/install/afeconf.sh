@@ -36,6 +36,9 @@ curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
 curl -L -O https://git.io/GeoLite2-Country.mmdb
+mkdir filters.conf
+mkdir xline.db
+mkdir permchannels.conf
 cd /etc/inspircd/txt
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/motd.txt
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
