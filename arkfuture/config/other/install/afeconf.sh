@@ -35,7 +35,7 @@ curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.con
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
-curl -L -O --anyauth https://git.io/GeoLite2-Country.mmdb
+curl -L -O https://git.io/GeoLite2-Country.mmdb
 cd /etc/inspircd/txt
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/motd.txt
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
