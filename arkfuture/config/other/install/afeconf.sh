@@ -22,7 +22,6 @@ rm -rf *
 mkdir conf
 mkdir txt
 curl -L -O --anyauth --user ##USERNAME##:##PASSWORD## http://frp.freefrp.net:10240/inspircd.conf
-curl -L -O --anyauth https://git.io/GeoLite2-Country.mmdb
 read -rp "是否要生成自签名证书？ [y/N] " ans
 if [[ ${ans,,} == @(y|yes) ]]; then
     openssl req -x509 -newkey rsa:4096 -sha256 -days 360 -nodes -keyout key.pem -out cert.pem -subj "/CN=irc.arkfuture.test" -addext "extendedKeyUsage = serverAuth"
@@ -36,6 +35,7 @@ curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.con
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
+curl -L -O --anyauth https://git.io/GeoLite2-Country.mmdb
 cd /etc/inspircd/txt
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/motd.txt
 curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
