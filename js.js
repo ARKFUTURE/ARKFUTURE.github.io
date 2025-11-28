@@ -32,9 +32,12 @@
     }
 
     const currentDomain = window.location.hostname
-    const ircDomain = 'irc.' + currentDomain;
-    const link = document.getElementById('ircurl');
-    link.textContent = ircDomain;
+    const ircDomain = 'irc.' + currentDomain + ':6697';
+    const radioDomain = 'radio.' + currentDomain + ':10241';
+    const linirc = document.getElementById('ircurl');
+    const linkradio = document.getElementById('radiourl');
+    linirc.textContent = ircDomain;
+    linkradio.textContent = radioDomain;
 
     // 页面加载时执行
     document.addEventListener('DOMContentLoaded', () => {
