@@ -52,7 +52,7 @@
         linirc.href = 'irc://' + ircDomain; // 推荐加上 href，支持点击跳转
     }
     if (linkradio) {
-        linkradio.textContent = ircDomain;
+        linkradio.textContent = radioDomain;
         linkradio.href = 'http://' + radioDomain; // 推荐加上 href，支持点击跳转
     }
 
