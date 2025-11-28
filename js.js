@@ -32,8 +32,8 @@ function incrementCounter() {
 }
 
 const currentDomain = window.location.hostname;
-const ircUrl = `irc://${currentDomain}:6697`;
-const radioUrl = `http://${currentDomain}:10241`;
+const ircUrl = `irc.${currentDomain}`;
+const radioUrl = `radio.${currentDomain}:10241`;
 
 
 // 页面加载时执行
