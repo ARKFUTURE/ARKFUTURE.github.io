@@ -1,60 +1,46 @@
-    // 获取当前日期
-    function getCurrentDate() {
-        const today = new Date();
-        const day = today.getDate();
-        const month = today.getMonth() + 1; // 注意月份从0开始
-        return { day, month };
-    }
+// 获取当前日期
+function getCurrentDate() {
+    const today = new Date();
+    const day = today.getDate();
+    const month = today.getMonth() + 1; // 注意月份从0开始
+    return { day, month };
+}
 
-    // 设置标题的变化
-    const titles = ["ARKFUTURE", "技术无止,勇于创新", "以史为镜,洞察未来"];
-    let currentIndex = 0;
+// 设置标题的变化
+const titles = ["ARKFUTURE", "技术无止,勇于创新", "以史为镜,洞察未来"];
+let currentIndex = 0;
 
-    function updateTitle() {
-        currentIndex = (currentIndex + 1) % titles.length;
-        document.title = titles[currentIndex];
-    }
+function updateTitle() {
+    currentIndex = (currentIndex + 1) % titles.length;
+    document.title = titles[currentIndex];
+}
 
-    let counter = 0;
-    function incrementCounter() {
-        const now = new Date();
-        const utcString = now.toUTCString();
-        const timestamp = String(now.getTime());
-        const localString = now.toString();
-        console.log(`计: ${counter}; 时: ${localString}; UTC: ${utcString}; 戳: ${timestamp};`);
-        // document.cookie = `utcTIME=${utcString};`;
-        // document.cookie = `locTIME=${localString};`;
-        // document.cookie = `timestamp=${timestamp};`;
-        // sessionStorage.setItem('utcTIME', utcString);
-        // sessionStorage.setItem('locTIME', localString);
-        // sessionStorage.setItem('timestamp', timestamp);
-        counter++;
-    }
+let counter = 0;
+function incrementCounter() {
+    const now = new Date();
+    const utcString = now.toUTCString();
+    const timestamp = String(now.getTime());
+    const localString = now.toString();
+    console.log(`计: ${counter}; 时: ${localString}; UTC: ${utcString}; 戳: ${timestamp};`);
+    // document.cookie = `utcTIME=${utcString};`;
+    // document.cookie = `locTIME=${localString};`;
+    // document.cookie = `timestamp=${timestamp};`;
+    // sessionStorage.setItem('utcTIME', utcString);
+    // sessionStorage.setItem('locTIME', localString);
+    // sessionStorage.setItem('timestamp', timestamp);
+    counter++;
+}
 
-    const currentDomain = window.location.hostname
-    const ircDomain = 'irc.' + currentDomain + ':6697';
-    const radioDomain = 'radio.' + currentDomain + ':10241';
-    const linirc = document.getElementById('ircurl');
-    const linkradio = document.getElementById('radiourl');
-    linirc.textContent = ircDomain;
-    linkradio.textContent = radioDomain;
+const currentDomain = window.location.hostname;
+const ircUrl = `irc://${currentDomain}:6697`;
+const radioUrl = `http://${currentDomain}:10241`;
 
-    // 页面加载时执行
-    document.addEventListener('DOMContentLoaded', () => {
+
+// 页面加载时执行
+document.addEventListener('DOMContentLoaded', () => {
     setInterval(incrementCounter, 1000);
     setInterval(updateTitle, 1500);
-    
-    const currentDomain = window.location.hostname;
-    const ircDomain = 'irc.' + currentDomain;
-    const link = document.getElementById('ircurl');
-    if (linirc) {
-        linirc.textContent = ircDomain;
-        linirc.href = 'irc://' + ircDomain; // 推荐加上 href，支持点击跳转
-    }
-    if (linkradio) {
-        linkradio.textContent = radioDomain;
-        linkradio.href = 'http://' + radioDomain; // 推荐加上 href，支持点击跳转
-    }
+    document.getElementById("ircurl").textContent = ircUrl;
+    document.getElementById("radiourl").textContent = radioUrl;
 
-
-    });
+});
