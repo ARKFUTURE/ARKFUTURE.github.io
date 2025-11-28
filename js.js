@@ -47,9 +47,13 @@
     const currentDomain = window.location.hostname;
     const ircDomain = 'irc.' + currentDomain;
     const link = document.getElementById('ircurl');
-    if (link) {
-        link.textContent = ircDomain;
-        link.href = 'irc://' + ircDomain; // 推荐加上 href，支持点击跳转
+    if (linirc) {
+        linirc.textContent = ircDomain;
+        linirc.href = 'irc://' + ircDomain; // 推荐加上 href，支持点击跳转
+    }
+    if (linkradio) {
+        linkradio.textContent = ircDomain;
+        linkradio.href = 'http://' + radioDomain; // 推荐加上 href，支持点击跳转
     }
 
 
