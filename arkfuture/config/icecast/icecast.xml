@@ -1,0 +1,143 @@
+<icecast>
+    <!--基础-->
+    <!-- <hostname>ARKFUTURE</hostname> -->
+    <location>ARKFUTURE</location>
+    <admin>arkfuture@i2pmail.org</admin>
+    <fileserve>1</fileserve>
+
+    <!-- 限制 -->
+    <limits>
+        <clients>100000</clients>
+        <sources>10</sources>
+        <queue-size>102400</queue-size>
+        <client-timeout>30</client-timeout>
+        <header-timeout>15</header-timeout>
+        <source-timeout>10</source-timeout>
+        <burst-on-connect>1</burst-on-connect>
+        <burst-size>65536</burst-size>
+    </limits>
+
+    <!-- 验证 -->
+    <authentication>
+        <source-password>hackme</source-password>
+        <relay-password>hackme</relay-password>
+
+        <admin-user>admin</admin-user>
+        <admin-password>hackme</admin-password>
+    </authentication>
+
+    
+    <!-- 配置提交到公共服务器列表 -->
+    <!-- 
+    <directory>
+        <yp-url-timeout>15</yp-url-timeout>
+        <yp-url>http://dir.xiph.org/cgi-bin/yp-cgi</yp-url>
+    </directory> 
+    -->
+
+
+    <!-- TCP端口监听 -->
+    <listen-socket>
+        <port>5080</port>
+        <!-- <bind-address>127.0.0.1</bind-address> -->
+        <!-- <shoutcast-mount>/stream</shoutcast-mount> -->
+    </listen-socket>
+
+
+
+    <!-- HTTP头 -->
+    <http-headers>
+        <header name="Access-Control-Allow-Origin" value="*" />
+    </http-headers>
+
+
+    <!-- 中继设置 -->
+    <!-- 
+    <master-server>127.0.0.1</master-server>
+    <master-server-port>8001</master-server-port>
+    <master-update-interval>120</master-update-interval>
+    <master-password>hackme</master-password>
+
+    <relays-on-demand>1</relays-on-demand>
+
+    <relay>
+        <server>127.0.0.1</server>
+        <port>8080</port>
+        <mount>/example.ogg</mount>
+        <local-mount>/different.ogg</local-mount>
+        <on-demand>0</on-demand>
+
+        <relay-shoutcast-metadata>0</relay-shoutcast-metadata>
+    </relay> 
+    -->
+   
+
+
+    <!-- 音频流专属设置 -->
+    <!-- 
+    <mount type="default">
+    </mount>
+    -->
+
+    <mount type="normal">
+        <mount-name>/1.ogg</mount-name> <!-- 主流路径 -->
+
+        <username>user1</username> <!-- 源用户名 -->
+        <password>qwertyuiop</password> <!-- 源密码 -->
+        
+        <!-- <intro>/example_intro.ogg</intro> --> <!-- 播放前导音频文件 -->
+
+        <fallback-mount>/2.ogg</fallback-mount> <!-- 主流断开时切换到的备用流 -->
+        <fallback-override>1</fallback-override>
+        <fallback-when-full>1</fallback-when-full>
+    </mount>
+
+    <mount type="normal">
+        <mount-name>/2.ogg</mount-name> <!-- 主流路径 -->
+
+        <username>user2</username> <!-- 源用户名 -->
+        <password>asdfghjkl</password> <!-- 源密码 -->
+    </mount>
+
+    <mount type="normal">
+        <mount-name>/3.ogg</mount-name> <!-- 主流路径 -->
+
+        <username>user3</username> <!-- 源用户名 -->
+        <password>zxcvbnm</password> <!-- 源密码 -->
+    </mount>
+
+
+    <!-- 路径 -->
+    <paths>
+        <basedir>/usr/share/icecast2</basedir>
+        <logdir>/var/log/icecast2</logdir>
+        <webroot>/usr/share/icecast2/web</webroot>
+        <adminroot>/usr/share/icecast2/admin</adminroot>
+        <!-- <pidfile>/usr/share/icecast2/icecast.pid</pidfile> -->
+        <!-- <alias source="/foo" destination="/bar"/> -->
+        <alias source="/" destination="/status.xsl"/>
+        <!-- <ssl-certificate>/path/to/certificate.pem</ssl-certificate> -->
+        <!-- <ssl-allowed-ciphers>ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS</ssl-allowed-ciphers> -->
+    </paths>
+
+    <!-- 日志 -->
+    <logging>
+        <accesslog>access.log</accesslog>
+        <errorlog>error.log</errorlog>
+        <!-- <playlistlog>playlist.log</playlistlog> -->
+        <loglevel>3</loglevel> <!-- 4 Debug, 3 Info, 2 Warn, 1 Error -->
+        <logsize>10000</logsize>
+        <!-- <logarchive>1</logarchive> -->
+    </logging>
+
+    <!-- 安全 -->
+    <security>
+        <chroot>0</chroot>
+        <!--
+        <changeowner>
+            <user>nobody</user>
+            <group>nogroup</group>
+        </changeowner>
+        -->
+    </security>
+</icecast>
