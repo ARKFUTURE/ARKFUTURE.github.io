@@ -39,7 +39,7 @@
     <!-- TCP端口监听 -->
     <listen-socket>
         <port>5080</port>
-        <!-- <bind-address>127.0.0.1</bind-address> -->
+        <!-- <ssl>1</ssl> -->
         <!-- <shoutcast-mount>/stream</shoutcast-mount> -->
     </listen-socket>
 
@@ -74,10 +74,10 @@
 
 
     <!-- 音频流专属设置 -->
-    <!-- 
     <mount type="default">
+        <mount-name>/0.ogg</mount-name> <!-- 主流路径 -->
+        <!-- <intro>/example_intro.ogg</intro> --> <!-- 播放前导音频文件 -->
     </mount>
-    -->
 
     <mount type="normal">
         <mount-name>/1.ogg</mount-name> <!-- 主流路径 -->
@@ -133,10 +133,11 @@
     <!-- 安全 -->
     <security>
         <chroot>0</chroot>
-        <changeowner>
-            <user>icecast</user>
-            <group>icecast</group>
-        </changeowner>
+        <!-- <changeowner>
+            <user>nobody</user>
+            <group>nogroup</group>
+        </changeowner> -->
     </security>
+
 
 </icecast>
