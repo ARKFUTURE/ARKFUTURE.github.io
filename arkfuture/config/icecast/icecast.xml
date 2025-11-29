@@ -83,27 +83,27 @@
     </mount>
 
     <mount type="normal">
-        <mount-name>/1.ogg</mount-name> <!-- 主流路径 -->
+        <mount-name>/1</mount-name> <!-- 主流路径 -->
 
         <username>user1</username> <!-- 源用户名 -->
         <password>qwertyuiop</password> <!-- 源密码 -->
         
         <!-- <intro>/example_intro.ogg</intro> --> <!-- 播放前导音频文件 -->
 
-        <fallback-mount>/2.ogg</fallback-mount> <!-- 主流断开时切换到的备用流 -->
+        <fallback-mount>/2</fallback-mount> <!-- 主流断开时切换到的备用流 -->
         <fallback-override>1</fallback-override>
         <fallback-when-full>1</fallback-when-full>
     </mount>
 
     <mount type="normal">
-        <mount-name>/2.ogg</mount-name>
+        <mount-name>/2</mount-name>
 
         <username>user2</username>
         <password>asdfghjkl</password>
     </mount>
 
     <mount type="normal">
-        <mount-name>/3.ogg</mount-name>
+        <mount-name>/3</mount-name>
 
         <username>user3</username>
         <password>zxcvbnm</password>
