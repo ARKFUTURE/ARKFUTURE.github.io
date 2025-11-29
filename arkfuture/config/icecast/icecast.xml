@@ -80,7 +80,6 @@
         <http-headers>
                 <header name="foo" value="bar" />
         </http-headers>
-
     </mount>
 
     <mount type="normal">
