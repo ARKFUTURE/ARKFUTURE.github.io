@@ -31,16 +31,8 @@ function incrementCounter() {
     counter++;
 }
 
-const currentDomain = window.location.hostname;
-const ircUrl = `irc.${currentDomain}`;
-const radioUrl = `radio.${currentDomain}:10241`;
-
-
 // 页面加载时执行
 document.addEventListener('DOMContentLoaded', () => {
     setInterval(incrementCounter, 1000);
     setInterval(updateTitle, 1500);
-    document.getElementById("ircurl").textContent = ircUrl;
-    document.getElementById("radiourl").textContent = radioUrl;
-
 });
