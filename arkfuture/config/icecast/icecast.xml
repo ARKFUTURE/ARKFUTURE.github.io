@@ -75,8 +75,12 @@
 
     <!-- 音频流专属设置 -->
     <mount type="default">
-        <mount-name>/0.ogg</mount-name> <!-- 主流路径 -->
-        <!-- <intro>/example_intro.ogg</intro> --> <!-- 播放前导音频文件 -->
+        <public>0</public>
+        <!-- <intro>/example_intro.ogg</intro> -->
+        <http-headers>
+                <header name="foo" value="bar" />
+        </http-headers>
+
     </mount>
 
     <mount type="normal">
@@ -93,17 +97,17 @@
     </mount>
 
     <mount type="normal">
-        <mount-name>/2.ogg</mount-name> <!-- 主流路径 -->
+        <mount-name>/2.ogg</mount-name>
 
-        <username>user2</username> <!-- 源用户名 -->
-        <password>asdfghjkl</password> <!-- 源密码 -->
+        <username>user2</username>
+        <password>asdfghjkl</password>
     </mount>
 
     <mount type="normal">
-        <mount-name>/3.ogg</mount-name> <!-- 主流路径 -->
+        <mount-name>/3.ogg</mount-name>
 
-        <username>user3</username> <!-- 源用户名 -->
-        <password>zxcvbnm</password> <!-- 源密码 -->
+        <username>user3</username>
+        <password>zxcvbnm</password>
     </mount>
 
 
