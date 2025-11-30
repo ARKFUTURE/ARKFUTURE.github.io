@@ -3,7 +3,7 @@ image: debian:stable
 pages:
   stage: deploy
   script:
-    - apt-get update && apt-get dist-upgrade -y
+    - apt-get update && apt-get full-upgrade -y
     - apt-get install -y ca-certificates
     - mkdir .public
     - cp -r * .public
