@@ -19,7 +19,9 @@ curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/modules.co
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/helpop.conf
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/opers.conf
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/ascii.conf
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/links.conf
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/generic.conf
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/dnsbl.conf
 cd /etc/inspircd/txt
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/txt/motd.txt
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/txt/opermotd.txt

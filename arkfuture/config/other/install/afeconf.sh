@@ -38,6 +38,7 @@ curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/opers.conf
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/ascii.conf
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/links.conf
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/generic.conf
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/dnsbl.conf
 curl -L -O https://git.io/GeoLite2-Country.mmdb
 touch filters.conf
 touch xline.db
