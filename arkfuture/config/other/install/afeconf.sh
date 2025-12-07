@@ -22,6 +22,8 @@ rm -rf *
 mkdir conf
 mkdir txt
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/inspircd.conf
+touch cert.pem
+touch key.pem
 read -rp "是否要生成自签名证书？ [y/N] " ans
 if [[ ${ans,,} == @(y|yes) ]]; then
     openssl req -x509 -newkey rsa:4096 -sha256 -days 360 -nodes -keyout key.pem -out cert.pem -subj "/CN=irc.arkfuture.test" -addext "extendedKeyUsage = serverAuth"
