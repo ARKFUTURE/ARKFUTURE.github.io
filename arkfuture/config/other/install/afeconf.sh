@@ -41,8 +41,6 @@ curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/generic.co
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/dnsbl.conf
 curl -L -O https://git.io/GeoLite2-Country.mmdb
 touch filters.conf
-touch xline.db
-touch permchannels.conf
 cd /etc/inspircd/txt
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/txt/motd.txt
 curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/txt/opermotd.txt
