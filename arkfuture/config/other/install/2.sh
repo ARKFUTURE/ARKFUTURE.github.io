@@ -13,16 +13,16 @@ sleep 2
 echo "开始下载配置文件到/etc/anope"
 cd /etc/anope
 rm -rf *
-curl -L -O --anyauth https://ARKFUTURE.github.io/ARKFUTURE/CONFIG/anope/services.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/ARKFUTURE/CONFIG/anope/services.motd
-curl -L -O --anyauth https://ARKFUTURE.github.io/ARKFUTURE/CONFIG/anope/modules.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/ARKFUTURE/CONFIG/anope/nickserv.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/ARKFUTURE/CONFIG/anope/chanserv.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/ARKFUTURE/CONFIG/anope/operserv.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/ARKFUTURE/CONFIG/anope/botserv.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/ARKFUTURE/CONFIG/anope/global.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/ARKFUTURE/CONFIG/anope/memoserv.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/ARKFUTURE/CONFIG/anope/hostserv.conf
+curl -L -O --anyauth https://ARKFUTURE.github.io/arkfuture/config/anope/services.conf
+curl -L -O --anyauth https://ARKFUTURE.github.io/arkfuture/config/anope/services.motd
+curl -L -O --anyauth https://ARKFUTURE.github.io/arkfuture/config/anope/modules.conf
+curl -L -O --anyauth https://ARKFUTURE.github.io/arkfuture/config/anope/nickserv.conf
+curl -L -O --anyauth https://ARKFUTURE.github.io/arkfuture/config/anope/chanserv.conf
+curl -L -O --anyauth https://ARKFUTURE.github.io/arkfuture/config/anope/operserv.conf
+curl -L -O --anyauth https://ARKFUTURE.github.io/arkfuture/config/anope/botserv.conf
+curl -L -O --anyauth https://ARKFUTURE.github.io/arkfuture/config/anope/global.conf
+curl -L -O --anyauth https://ARKFUTURE.github.io/arkfuture/config/anope/memoserv.conf
+curl -L -O --anyauth https://ARKFUTURE.github.io/arkfuture/config/anope/hostserv.conf
 cd /etc/anope
 chown root:root /etc/anope
 chmod 755 /etc/anope

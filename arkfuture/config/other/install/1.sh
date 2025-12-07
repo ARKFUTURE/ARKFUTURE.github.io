@@ -13,18 +13,18 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/inspircd.conf
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/inspircd.conf
 cd /etc/inspircd/conf
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/modules.conf
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/helpop.conf
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/opers.conf
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/ascii.conf
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/generic.conf
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/modules.conf
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/helpop.conf
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/opers.conf
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/ascii.conf
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/generic.conf
 cd /etc/inspircd/txt
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/motd.txt
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/opermotd.txt
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/quotes.txt
-curl -L -O https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/txt/rules.txt
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/txt/motd.txt
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/txt/opermotd.txt
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/txt/quotes.txt
+curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/txt/rules.txt
 cd /etc/inspircd/
 chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
