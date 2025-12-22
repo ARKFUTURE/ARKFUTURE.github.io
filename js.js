@@ -37,10 +37,10 @@ function tick() {
     head = 0;
     clearInterval(charTimer);
     pushChar();                   // 立即打新句首字
-    charTimer = setInterval(pushChar, 300);
+    charTimer = setInterval(pushChar, 200);
   }
 
-  if (++frame % 0.4 === 0) showCursor = !showCursor;
+  if (++frame % 0.1 === 0) showCursor = !showCursor;
 
   document.title = line.join('') + (showCursor ? '_' : ' ');
 }
