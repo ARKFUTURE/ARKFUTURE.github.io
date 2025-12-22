@@ -13,7 +13,7 @@ let line = Array(COLS).fill(' ');
 let showCursor = true;
 let frame = 0;
 
-/* 字符推送定时器：每 320 ms 才往窗口塞一个新字符 */
+/* ---- 字符推送 ---- */
 let charTimer = 0;
 function pushChar() {
   const cur = titles[idx];
@@ -22,30 +22,35 @@ function pushChar() {
     line.push(cur[head++]);
   }
 }
-pushChar();                       // 先打第一个字
+pushChar();
 charTimer = setInterval(pushChar, 320);
 
+/* ---- 主循环 ---- */
 function tick() {
   const cur = titles[idx];
 
-  /* 清屏 & 换句 */
-  if (head >= cur.length && line.some(c => c !== ' ')) {
-    line.fill(' ');
-  } else if (head >= cur.length && line.every(c => c === ' ')) {
-    /* 已清空，切下一句，重置字符定时器 */
-    idx = (idx + 1) % titles.length;
-    head = 0;
-    clearInterval(charTimer);
-    pushChar();                   // 立即打新句首字
-    charTimer = setInterval(pushChar, 200);
+  /* 1. 尾巴已打完、且窗口里只剩当前句尾巴（或已清成空格）再开始清屏 */
+  if (head >= cur.length) {
+    /* 窗口里还有非空格字符 → 继续清屏 */
+    if (line.some(c => c !== ' ')) {
+      line.shift();
+      line.push(' ');          // 慢慢用空格把尾巴推出去
+    } else {
+      /* 已清空 → 切下一句 */
+      idx = (idx + 1) % titles.length;
+      head = 0;
+      clearInterval(charTimer);
+      pushChar();              // 立即打新句首字
+      charTimer = setInterval(pushChar, 320);
+    }
   }
 
-  if (++frame % 0.5 === 0) showCursor = !showCursor;
-
+  /* 2. 光标闪 */
+  if (++frame % 5 === 0) showCursor = !showCursor;
   document.title = line.join('') + (showCursor ? '_' : ' ');
 }
 
-setInterval(tick, 300);   // 160 ms 刷一次光标/清屏
+setInterval(tick, 160);
 
 let counter = 0;
 function incrementCounter() {
