@@ -7,29 +7,35 @@ function getCurrentDate() {
 }
 
 const titles = ["ARKFUTURE","ARK LAB","ARKFUTURE STUDIO/GROUP/TEAM","技术无止,勇于创新", "以史为镜,洞察未来"];
-const COLS = 18;               // 模拟终端宽度，自己调
-let idx   = 0;                 // 当前句子
-let head  = 0;                 // 下一个字符下标
-let line  = Array(COLS).fill(' ');
+const COLS = 18;
+let idx = 0, head = 0;
+let line = Array(COLS).fill(' ');
+let showCursor = true;
+let frame = 0;
 
-function tick(){
+function tick() {
   const cur = titles[idx];
 
-  if (head < cur.length){      // 还有字符：窗口右滑
+  /* 卷动字符 */
+  if (head < cur.length) {
     line.shift();
     line.push(cur[head++]);
-  } else {                     // 一句打完：清屏 + 切句
-    if (line.some(c=>c!==' ')){ // 先清成空格
+  } else {
+    if (line.some(c => c !== ' ')) {
       line.fill(' ');
-    } else {                    // 清空完成，换句
-      idx  = (idx+1)%titles.length;
+    } else {
+      idx = (idx + 1) % titles.length;
       head = 0;
     }
   }
-  document.title = line.join('');
+
+  /* 光标闪烁：每 8 帧切一次（≈1.28 s）*/
+  if (++frame % 8 === 0) showCursor = !showCursor;
+
+  document.title = line.join('') + (showCursor ? '_' : ' ');
 }
 
-setInterval(tick, 80);         // 80 ms 一帧
+setInterval(tick, 160);   // 160 ms 一帧
 
 let counter = 0;
 function incrementCounter() {
