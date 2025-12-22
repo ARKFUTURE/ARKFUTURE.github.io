@@ -6,34 +6,40 @@ function getCurrentDate() {
     return { day, month };
 }
 
-const titles = [
-    "ARKFUTURE",
-    "ARK LAB",
-    "ARKFUTURE STUDIO/GROUP/TEAM",
-    "技术无止,勇于创新",
-    "以史为镜,洞察未来"
-];
-const COLS = 20;          // 模拟终端列宽，自己看着改
-let idx = 0;              // 当前句子
-let head = 0;             // 下一个要打印的字符下标
-let line = new Array(COLS).fill(' '); // 滑动窗口缓冲区
+const titles = ["ARKFUTURE","ARK LAB","ARKFUTURE STUDIO/GROUP/TEAM","技术无止,勇于创新", "以史为镜,洞察未来"];
+const COLS   = 20;               // 模拟终端宽度，自己改
+const CLEAR_FRAMES = 6;          // 清屏后空屏停留帧数（80ms*6≈0.5s）
+
+let idx   = 0;                   // 当前句子
+let head  = 0;                   // 下一个待打印字符下标
+let line  = Array(COLS).fill(' ');
+let state = 'PRINT';             // 两种状态：'PRINT' 或 'CLEAR'
+let clearCnt = 0;                // 已经空屏了几帧
 
 function scrollChar() {
     const cur = titles[idx];
 
-    if (head < cur.length) {
-        // 还有字符没打完：窗口右滑
-        line.shift();               // 最左边掉出
-        line.push(cur[head]);       // 新字符从右边进来
-        head++;
-    } else {
-        // 一句打完了，清屏（全填空格）
-        if (line.some(ch => ch !== ' ')) {
-            line.fill(' ');
+    if (state === 'PRINT') {
+        if (head < cur.length) {
+            // 窗口右滑
+            line.shift();
+            line.push(cur[head]);
+            head++;
         } else {
-            // 清屏已完成，切到下一句
-            idx = (idx + 1) % titles.length;
+            // 一句打完了，进入清屏状态
+            state = 'CLEAR';
+            clearCnt = 0;
+        }
+    } else { // state === 'CLEAR'
+        if (clearCnt === 0) {
+            line.fill(' ');        // 第一次进入清屏时把整行变空格
+        }
+        clearCnt++;
+        if (clearCnt >= CLEAR_FRAMES) {
+            // 空屏停留结束，切到下一句，回到打印状态
+            idx  = (idx + 1) % titles.length;
             head = 0;
+            state = 'PRINT';
         }
     }
 
