@@ -40,7 +40,7 @@ function tick() {
     charTimer = setInterval(pushChar, 200);
   }
 
-  if (++frame % 0.2 === 0) showCursor = !showCursor;
+  if (++frame % 0.3 === 0) showCursor = !showCursor;
 
   document.title = line.join('') + (showCursor ? '_' : ' ');
 }
