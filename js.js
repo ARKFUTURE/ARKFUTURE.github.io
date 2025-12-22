@@ -13,29 +13,40 @@ let line = Array(COLS).fill(' ');
 let showCursor = true;
 let frame = 0;
 
-function tick() {
+/* 字符推送定时器：每 320 ms 才往窗口塞一个新字符 */
+let charTimer = 0;
+function pushChar() {
   const cur = titles[idx];
-
-  /* 卷动字符 */
   if (head < cur.length) {
     line.shift();
     line.push(cur[head++]);
-  } else {
-    if (line.some(c => c !== ' ')) {
-      line.fill(' ');
-    } else {
-      idx = (idx + 1) % titles.length;
-      head = 0;
-    }
+  }
+}
+pushChar();                       // 先打第一个字
+charTimer = setInterval(pushChar, 320);
+
+function tick() {
+  const cur = titles[idx];
+
+  /* 清屏 & 换句 */
+  if (head >= cur.length && line.some(c => c !== ' ')) {
+    line.fill(' ');
+  } else if (head >= cur.length && line.every(c => c === ' ')) {
+    /* 已清空，切下一句，重置字符定时器 */
+    idx = (idx + 1) % titles.length;
+    head = 0;
+    clearInterval(charTimer);
+    pushChar();                   // 立即打新句首字
+    charTimer = setInterval(pushChar, 320);
   }
 
-  /* 光标闪烁：每 8 帧切一次（≈1.28 s）*/
-  if (++frame % 8 === 0) showCursor = !showCursor;
+  /* 光标闪：每 5 帧切一次（≈0.8 s）*/
+  if (++frame % 1 === 0) showCursor = !showCursor;
 
   document.title = line.join('') + (showCursor ? '_' : ' ');
 }
 
-setInterval(tick, 160);   // 160 ms 一帧
+setInterval(tick, 160);   // 160 ms 刷一次光标/清屏
 
 let counter = 0;
 function incrementCounter() {
