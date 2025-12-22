@@ -37,16 +37,16 @@ function tick() {
     head = 0;
     clearInterval(charTimer);
     pushChar();                   // 立即打新句首字
-    charTimer = setInterval(pushChar, 320);
+    charTimer = setInterval(pushChar, 300);
   }
 
   /* 光标闪：每 5 帧切一次（≈0.8 s）*/
-  if (++frame % 1 === 0) showCursor = !showCursor;
+  if (++frame % 0.4 === 0) showCursor = !showCursor;
 
   document.title = line.join('') + (showCursor ? '_' : ' ');
 }
 
-setInterval(tick, 160);   // 160 ms 刷一次光标/清屏
+setInterval(tick, 150);   // 160 ms 刷一次光标/清屏
 
 let counter = 0;
 function incrementCounter() {
