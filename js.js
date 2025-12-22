@@ -7,7 +7,7 @@ function getCurrentDate() {
 }
 
 // 设置标题的变化
-const titles = ["ARKFUTURE", "技术无止,勇于创新", "以史为镜,洞察未来"];
+const titles = ["ARKFUTURE","ARK LAB","ARKFUTURE STUDIO/GROUP/TEAM","技术无止,勇于创新", "以史为镜,洞察未来"];
 let currentIndex = 0;
 
 function updateTitle() {
