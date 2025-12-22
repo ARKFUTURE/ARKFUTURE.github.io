@@ -40,7 +40,6 @@ function tick() {
     charTimer = setInterval(pushChar, 300);
   }
 
-  /* 光标闪：每 5 帧切一次（≈0.8 s）*/
   if (++frame % 0.4 === 0) showCursor = !showCursor;
 
   document.title = line.join('') + (showCursor ? '_' : ' ');
