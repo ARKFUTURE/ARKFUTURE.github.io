@@ -1,4 +1,4 @@
-// 获取当前日期
+
 function getCurrentDate() {
     const today = new Date();
     const day = today.getDate();
@@ -6,13 +6,27 @@ function getCurrentDate() {
     return { day, month };
 }
 
-// 设置标题的变化
 const titles = ["ARKFUTURE","ARK LAB","ARKFUTURE STUDIO/GROUP/TEAM","技术无止,勇于创新", "以史为镜,洞察未来"];
-let currentIndex = 0;
+let idx = 0, pos = 0, forward = true;   // idx:当前句子下标  pos:当前显示到第几个字  forward:正/反向
 
-function updateTitle() {
-    currentIndex = (currentIndex + 1) % titles.length;
-    document.title = titles[currentIndex];
+function typeWriter() {
+    const cur = titles[idx];
+    if (forward) {
+        pos++;
+        if (pos > cur.length) {
+            forward = false;
+            setTimeout(typeWriter, 1000);
+            return;
+        }
+    } else {
+        pos--;
+        if (pos === 0) {
+            forward = true;
+            idx = (idx + 1) % titles.length;
+        }
+    }
+    document.title = cur.slice(0, pos);
+    setTimeout(typeWriter, 120);
 }
 
 let counter = 0;
@@ -22,17 +36,11 @@ function incrementCounter() {
     const timestamp = String(now.getTime());
     const localString = now.toString();
     console.log(`计: ${counter}; 时: ${localString}; UTC: ${utcString}; 戳: ${timestamp};`);
-    // document.cookie = `utcTIME=${utcString};`;
-    // document.cookie = `locTIME=${localString};`;
-    // document.cookie = `timestamp=${timestamp};`;
-    // sessionStorage.setItem('utcTIME', utcString);
-    // sessionStorage.setItem('locTIME', localString);
-    // sessionStorage.setItem('timestamp', timestamp);
     counter++;
 }
 
 // 页面加载时执行
 document.addEventListener('DOMContentLoaded', () => {
     setInterval(incrementCounter, 1000);
-    setInterval(updateTitle, 1500);
+    typeWriter();   // 启动打字机效果（不再需要原来的 setInterval(updateTitle,1500)）
 });
