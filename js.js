@@ -40,12 +40,12 @@ function tick() {
     charTimer = setInterval(pushChar, 200);
   }
 
-  if (++frame % 0.3 === 0) showCursor = !showCursor;
+  if (++frame % 0.5 === 0) showCursor = !showCursor;
 
   document.title = line.join('') + (showCursor ? '_' : ' ');
 }
 
-setInterval(tick, 150);   // 160 ms 刷一次光标/清屏
+setInterval(tick, 300);   // 160 ms 刷一次光标/清屏
 
 let counter = 0;
 function incrementCounter() {
