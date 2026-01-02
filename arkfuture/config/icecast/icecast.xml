@@ -1,7 +1,7 @@
 <icecast>
     <!--基础-->
     <!-- <hostname>ARKFUTURE</hostname> -->
-    <location>ARKFUTURE</location>
+    <location>ARKFUTURE-NET Radio Server</location>
     <admin>arkfuture@i2pmail.org</admin>
     <fileserve>1</fileserve>
 
