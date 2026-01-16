@@ -74,6 +74,6 @@ ircs://IRC.DOMAN:6697
 * 我们是一群追寻自己梦想的人。
 
 * 团队所使用的系统：
-* *  红蓝对抗：Parrotsec, Kali, blackarch
+* * 红蓝对抗：Parrotsec, Kali, blackarch
 * * 隐私：Tails, Qubes
 * * OSINT开源情报及恶意软件分析：tsurugi-linux, REMnux, tracelabs.org, sherlock-linux
