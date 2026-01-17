@@ -1,3 +1,10 @@
+#!/bin/bash
+echo "此脚本仅用于inspircd/anope及arkfuture配置的安装"
+if [ "$(id -u)" -ne 0 ]; then
+    echo "错误: 请使用 sudo 或 root 权限执行本脚本"
+    exit 1
+fi
+echo "现在是root用户权限"
 ###### INSPIRCD配置
 cd /etc/inspircd
 rm -rf *
