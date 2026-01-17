@@ -17,7 +17,7 @@ rm -rf ./inspircd.deb
 systemctl disable inspircd
 echo "inspircd安装完成"
 ###### 安装anope(Local)
-apt install anope
+apt install anope -y
 systemctl disable anope
 echo "anope安装完成"
 ###### INSPIRCD配置
