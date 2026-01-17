@@ -78,7 +78,7 @@ cd ~
 echo "anope配置文件下载完成,请修改相关配置以便使用"
 ###### 说明
 head -n 1 /etc/inspircd/inspircd.conf
-head -n 1 /etc/anope/services.confi
+head -n 1 /etc/anope/services.conf
 curl -L -O --anyauth https://ARKFUTURE.github.io/arkfuture/config/other/install/config.sh
 echo "相关配置文件下载完成"
 echo "若您在/etc/inspircd文件夹下没有发现inspircd.conf"
