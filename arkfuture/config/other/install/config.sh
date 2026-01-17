@@ -61,3 +61,6 @@ find /etc/anope -type f -exec chown root:irc {} \;
 find /etc/anope -type f -exec chmod 640 {} \;
 cd ~
 echo "anope配置文件下载完成,请修改相关配置以便使用"
+###### 检测配置
+head -n 1 /etc/inspircd/inspircd.conf
+head -n 1 /etc/anope/services.conf
