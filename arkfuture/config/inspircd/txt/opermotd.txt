@@ -1,16 +1,21 @@
--TEST: \c00 0 \c01 1 \c02 2 \c03 3 \c04 4 \c05 5 \c06 6 \c07 7 \c08 8 \c09 9 \c10 10 \c11 11 \c1 12 \c13 13 \c14 14 \c15 15 \c99 99
+-TEST: \c00 0 \c01 1 \c02 2 \c03 3 \c04 4 
+-TEST: \c05 5 \c06 6 \c07 7 \c08 8 \c09 9 \c10 10 
+-TEST: \c11 11 \c1 12 \c13 13 \c14 14 \c15 15 \c99 99
 -TEST: \b A \i A \r A \u A \m A \s A 
--TEST: \c11,04 A\c --- \c{green} A\c --- \c{red,cyan} A\c --- \hea74dc A\h --- \h613583,2ec27e A\h
+-TEST: \c11,04 A\c --- \c{green} A\c --- \c{red,cyan} A\c
+-TEST: \hea74dc A\h --- \h613583,2ec27e A\h
 -
 ----------
 -\b ARKFUTURE-IRC
 -\c12 欢迎加入 ARKFUTURE 管理员组
 -\c06 https://www.geekshed.net/commands/ircop/ 使用命令
+-\c06 #arkfuture_ao\c - \c06管理员及管理信息通知频道(Admin/OPer/Snomask)
 - 
 -您好Server管理员, 使用Service管理员账户您需要注册一个账户来先固定Nickname:
 -注册命令:  /NickServ REGISTER 您的密码 您的邮箱
 -登录命令:  /NickServ IDENTIFY 您的用户名 您的密码
--说明: 注册(仅需要注册一次,不强制要求邮箱)>登录(即为Service管理员用户)
+-说明1: 注册(仅需要注册一次,不强制要求邮箱)>登录(即为Service管理员用户)
+-说明2: 当使用/oper登录后, 可以直接使用/operserv的功能
 -
 -
 -部分命令:
