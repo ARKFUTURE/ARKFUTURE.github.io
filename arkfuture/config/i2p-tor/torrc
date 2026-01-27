@@ -27,6 +27,7 @@ DormantCanceledByStartup 1
 ConnectionPadding auto
 ControlPort 9051
 CookieAuthentication 1
+ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed
 
 ##### 是否作为中继或出口中继
 #BridgeRelay 0
@@ -46,7 +47,5 @@ HiddenServiceDir /var/lib/tor/inspircd/
 HiddenServicePort 6697 127.0.0.1:6697
 
 ##### 网桥 一行一个 格式已给出
-UseBridges 1
-ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed
 obfs4 185.117.73.71:31337 E315A7F8A5E2C1B4819D09D79C5A627D65C182AB cert=uFpKPZe/wmdL4o+mGABkhUSh33w457bfY3r+D93o0bzda+NpdAkkr87dUkzihagV61WIOA iat-mode=0
 obfs4 99.229.13.103:30001 5DC082C91C2EF469EB5B30C90AF4E26DB4911321 cert=kY/aJAA8pp6FMtoZxBPBEC7atKAd/uajsMkvFybrmBUSQL4tZA1J6FH4N9X9W5sAWx8FAA iat-mode=0
