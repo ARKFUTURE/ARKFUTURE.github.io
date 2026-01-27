@@ -19,10 +19,8 @@ UseBridges 1
 #Socks5Proxy 127.0.0.1:1080
 
 ##### 基础设置
-SOCKSPort 127.0.0.1:9050
 Log notice file /var/log/tor/notices.log
 AvoidDiskWrites 1
-CookieAuthentication 1
 DormantCanceledByStartup 1
 ConnectionPadding auto
 ControlPort 9051
@@ -37,7 +35,7 @@ ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy managed
 #ExtORPort auto
 
 ##### 国家节点设置(出口节点 邪恶节点等)
-# StrictNodess 指定是否强制使用指定地区的节点 1为强制 0为可忽略
+# StrictNodes 指定是否强制使用指定地区的节点 1为强制 0为可忽略
 #StrictNodes 0
 # 指定出口端点 多个位置指纹使用逗号隔开 如{tw},{hk},{sg}
 #ExitNodes {tw}
