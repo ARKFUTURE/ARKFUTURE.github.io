@@ -831,6 +831,32 @@
 			color: var(--cyber-text-dim);
 		}
 
+		.char-count {
+			flex: 0 0 auto;
+			padding: var(--spacing-xs) var(--spacing-sm);
+			font-size: 11px;
+			color: var(--cyber-text-dim);
+			background-color: var(--cyber-dark);
+			border: 1px solid var(--cyber-border);
+			border-radius: var(--border-radius-sm);
+			min-width: 60px;
+			text-align: center;
+			transition: var(--transition);
+			font-family: 'Courier New', 'Consolas', monospace;
+		}
+
+		.char-count.warning {
+			color: var(--cyber-accent);
+			border-color: var(--cyber-accent);
+			box-shadow: var(--glow-secondary);
+		}
+
+		.char-count.danger {
+			color: var(--cyber-red);
+			border-color: var(--cyber-red);
+			box-shadow: var(--glow-red);
+		}
+
 		/* 自定义滚动条 */
 		::-webkit-scrollbar {
 			width: 6px;
@@ -1083,7 +1109,8 @@
 			</div>
 			<div class="input-container" id="inputContainer" style="display: none;">
 				<input type="text" name="input" id="input" placeholder="输入消息..."
-					   onkeydown="onKeyDown(event)" />
+					   onkeydown="onKeyDown(event)" oninput="updateCharCount()" />
+				<div class="char-count" id="charCount">0/512</div>
 			</div>
 		</div>
 	</div>
@@ -1440,6 +1467,25 @@
 		isDisconnecting = false;
 	}
 
+	function updateCharCount() {
+		const charCount = document.getElementById('charCount');
+		if (!charCount || !input) return;
+		
+		const text = input.value;
+		const length = text.length;
+		const maxLength = 512;
+		
+		charCount.textContent = `${length}/${maxLength}`;
+		
+		charCount.classList.remove('warning', 'danger');
+		
+		if (length > maxLength) {
+			charCount.classList.add('danger');
+		} else if (length > maxLength * 0.8) {
+			charCount.classList.add('warning');
+		}
+	}
+
 	function onKeyDown(e) {
 		if (e && e.key === 'Enter') {
 			send();
@@ -1454,6 +1500,7 @@
 			if (historyIndex > 0) {
 				historyIndex--;
 				input.value = messageHistory[historyIndex];
+				updateCharCount();
 			}
 			return false;
 		} else if (e.key === 'ArrowDown') {
@@ -1462,9 +1509,11 @@
 			if (historyIndex < messageHistory.length - 1) {
 				historyIndex++;
 				input.value = messageHistory[historyIndex];
+				updateCharCount();
 			} else {
 				historyIndex = messageHistory.length;
 				input.value = "";
+				updateCharCount();
 			}
 			return false;
 		}
@@ -1863,40 +1912,31 @@
 	}
 
 	function splitIRCMessage(message) {
-		const MAX_LENGTH = 450;
-		if (message.length <= MAX_LENGTH) {
-			return [message + "\n"];
+		const MAX_LENGTH = 512;
+		
+		const isPrivmsg = message.startsWith("privmsg ");
+		const fullMessage = message + "\n";
+		if (!isPrivmsg || fullMessage.length <= MAX_LENGTH) {
+			return [fullMessage];
+		}
+
+		const colonIndex = message.indexOf(':');
+		if (colonIndex === -1) {
+			return [fullMessage];
+		}
+		
+		const baseCommand = message.substring(0, colonIndex + 1);
+		const messageContent = message.substring(colonIndex + 1);
+		const maxContentLength = MAX_LENGTH - baseCommand.length - 2;
+		
+		if (messageContent.length <= maxContentLength) {
+			return [fullMessage];
 		}
 
 		const messages = [];
-		let current = "";
-		const words = message.split(' ');
-
-		for (let i = 0; i < words.length; i++) {
-			const word = words[i];
-			const testLength = current.length + (current ? 1 : 0) + word.length;
-
-			if (testLength <= MAX_LENGTH) {
-				current += (current ? " " : "") + word;
-			} else {
-				if (current) {
-					messages.push(current + "\n");
-				}
-				current = word;
-
-				if (current.length > MAX_LENGTH) {
-					const chunks = [];
-					for (let j = 0; j < current.length; j += MAX_LENGTH) {
-						chunks.push(current.substring(j, j + MAX_LENGTH));
-					}
-					messages.push(...chunks.map(chunk => chunk + "\n"));
-					current = "";
-				}
-			}
-		}
-
-		if (current) {
-			messages.push(current + "\n");
+		for (let i = 0; i < messageContent.length; i += maxContentLength) {
+			const chunk = messageContent.substring(i, i + maxContentLength);
+			messages.push(baseCommand + chunk + "\n");
 		}
 
 		return messages;
