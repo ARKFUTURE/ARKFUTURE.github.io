@@ -992,6 +992,7 @@
 
 		.channelcontent {
 			flex-direction: column;
+			min-height: 0;
 		}
 
 		.channelcontent > nav:first-of-type {
@@ -1001,7 +1002,9 @@
 		}
 
 		ul {
-			height: 20vh;
+			height: 20vh !important;
+			box-sizing: border-box;
+			flex-shrink: 0;
 			border-left: none;
 			border-top: 1px solid var(--cyber-border);
 			overflow-y: auto;
