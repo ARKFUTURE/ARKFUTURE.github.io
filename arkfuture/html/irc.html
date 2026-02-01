@@ -994,10 +994,19 @@
 			flex-direction: column;
 		}
 
+		.channelcontent > nav:first-of-type {
+			flex: 1 1 auto;
+			overflow-y: auto;
+			min-height: 0;
+		}
+
 		ul {
 			flex: 0 0 120px;
 			border-left: none;
 			border-top: 1px solid var(--cyber-border);
+			overflow-y: auto;
+			min-height: 80px;
+			max-height: 20vh;
 		}
 
 		#input {
