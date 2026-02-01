@@ -915,9 +915,8 @@
 			padding: var(--spacing-sm) var(--spacing-md);
 		}
 
-		/* 手机端固定输入框在底部 */
 		.chat-container {
-			padding-bottom: 60px; /* 给固定输入框留出空间 */
+			padding-bottom: 60px;
 		}
 
 		.input-container {
@@ -1190,16 +1189,13 @@
 	let isDisconnecting = false;
 	let headerMenuClickListener = null;
 
-	// 辅助函数：不区分大小写查找频道
 	function findChannel(channelName) {
 		if (!channelName) return null;
 		const lowerName = channelName.toLowerCase();
 		
-		// 先尝试直接查找（性能更好）
 		let channel = channelMap.get(channelName);
 		if (channel) return channel;
 		
-		// 如果不存在，进行不区分大小写的查找
 		for (let [key, value] of channelMap) {
 			if (key.toLowerCase() === lowerName) {
 				return value;
@@ -1232,16 +1228,13 @@
 	}
 	
 	function cleanupEventListeners() {
-		// 清理输入框失焦监听器
 		removeInputBlurListener();
 		
-		// 清理头部菜单点击事件监听器
 		if (headerMenuClickListener) {
 			document.removeEventListener('click', headerMenuClickListener);
 			headerMenuClickListener = null;
 		}
 		
-		// 清理所有打开的菜单的点击外部监听器
 		const menu = document.getElementById('headerMenuDropdown');
 		if (menu && menu.classList.contains('menu-attached')) {
 			menu.classList.remove('visible');
@@ -1304,7 +1297,6 @@
 
 		if (!menu.classList.contains('menu-attached')) {
 			menu.classList.add('menu-attached');
-			// 存储事件监听器引用以便后续清理
 			headerMenuClickListener = closeHeaderMenuOnClickOutside;
 			document.addEventListener('click', headerMenuClickListener);
 		}
@@ -1503,11 +1495,11 @@
 			alert("昵称格式无效!必须以字母或特定符号开头, 不能包含空格和特殊字符");
 			return;
 		}
-if (channelName && !channelName.startsWith('#')) {
-		channelName = '#' + channelName;
-	}
+		if (channelName && !channelName.startsWith('#')) {
+			channelName = '#' + channelName;
+		}
 
-	reconnectAttempts = 0;
+		reconnectAttempts = 0;
 		wsUrlInput.disabled = true;
 		nickInput.disabled = true;
 
@@ -1549,13 +1541,13 @@ if (channelName && !channelName.startsWith('#')) {
 		if (nickInput) nickInput.disabled = false;
 		if (channelInput) channelInput.disabled = false;
 
-if (connectBtn) {
-		connectBtn.textContent = '连接';
-		connectBtn.disabled = false;
-		connectBtn.classList.remove('disconnect');
-	}
+		if (connectBtn) {
+			connectBtn.textContent = '连接';
+			connectBtn.disabled = false;
+			connectBtn.classList.remove('disconnect');
+		}
 
-	const joinChannelBtn = document.getElementById('joinChannelBtn');
+		const joinChannelBtn = document.getElementById('joinChannelBtn');
 	if (joinChannelBtn) joinChannelBtn.disabled = true;
 
 	updateConnectionStatus('disconnected');
@@ -1574,7 +1566,6 @@ if (connectBtn) {
 			disconnectMessage = "连接异常断开";
 			logMessage = "[系统] 连接异常断开";
 		}
-
 
 		writeToScreen("var(--clr-font)", disconnectMessage, statusChannel, "");
 		writeToLog(logMessage);
@@ -1595,7 +1586,6 @@ if (connectBtn) {
 			updateAutoReconnectMenuItem();
 			alert('自动重连失败, 请检查网络或服务器设置');
 		}
-
 
 		isDisconnecting = false;
 	}
@@ -1624,12 +1614,10 @@ if (connectBtn) {
 			send();
 		} else if (e.key === 'Tab') {
 			e.preventDefault();
-
 			handleTabCompletion();
 			return false;
 		} else if (e.key === 'ArrowUp') {
 			e.preventDefault();
-
 			if (historyIndex > 0) {
 				historyIndex--;
 				input.value = messageHistory[historyIndex];
@@ -1638,7 +1626,6 @@ if (connectBtn) {
 			return false;
 		} else if (e.key === 'ArrowDown') {
 			e.preventDefault();
-
 			if (historyIndex < messageHistory.length - 1) {
 				historyIndex++;
 				input.value = messageHistory[historyIndex];
@@ -1816,7 +1803,6 @@ if (connectBtn) {
 		if (!evt || !evt.currentTarget) return;
 		const channelName = evt.currentTarget.value;
 
-
 		if (channelName === "Status") {
 			writeToScreen("var(--clr-warning)", "Status频道是系统状态窗口, 不能关闭", statusChannel, "*");
 			writeToLog("[警告] 尝试关闭Status频道(系统状态窗口, 不能关闭)");
@@ -1829,7 +1815,6 @@ if (connectBtn) {
 			Channel_Destroy(channelName);
 			return;
 		}
-
 
 		if (isConnected && websocket && websocket.readyState === WebSocket.OPEN) {
 			writeToLog(`[PART] 发送离开频道命令: ${channelName}`);
@@ -1922,28 +1907,28 @@ if (connectBtn) {
 		channel.userlist.appendChild(user);
 	}
 
-function Channel_RemoveUser(nick, channel) {
-	if (!nick || !channel || !channel.userlist) return false;
+	function Channel_RemoveUser(nick, channel) {
+		if (!nick || !channel || !channel.userlist) return false;
 
-	for (let i = 0; i < channel.users.length; i++) {
-		if (channel.users[i] && channel.users[i][1] === nick) {
-			for (let j = 0; j < channel.userlist.children.length; j++) {
-				let userItem = channel.userlist.children[j];
-				if (!userItem || !userItem.children[1]) continue;
-				let anick = userItem.children[1].textContent;
-				if (anick === nick) {
-					userItem.remove();
-					break;
+		for (let i = 0; i < channel.users.length; i++) {
+			if (channel.users[i] && channel.users[i][1] === nick) {
+				for (let j = 0; j < channel.userlist.children.length; j++) {
+					let userItem = channel.userlist.children[j];
+					if (!userItem || !userItem.children[1]) continue;
+					let anick = userItem.children[1].textContent;
+					if (anick === nick) {
+						userItem.remove();
+						break;
+					}
 				}
-			}
 
-			channel.users.splice(i, 1);
-			return true;
+				channel.users.splice(i, 1);
+				return true;
+			}
 		}
+		
+		return false;
 	}
-	
-	return false;
-}
 
 	function Channel_RenameUser(nick, newnick, channel) {
 		if (!nick || !newnick || !channel) return;
@@ -2171,7 +2156,6 @@ function Channel_RemoveUser(nick, channel) {
 				}
 			}, 30000);
 
-
 			websocket.onclose = function handleOnClose(evt) {
 				if (window.connectTimeout) {
 					clearTimeout(window.connectTimeout);
@@ -2204,7 +2188,6 @@ function Channel_RemoveUser(nick, channel) {
 
 
 	window.addEventListener('beforeunload', function cleanup() {
-		// 清理所有事件监听器
 		cleanupEventListeners();
 		
 		stopKeepAlive();
@@ -2223,7 +2206,6 @@ function Channel_RemoveUser(nick, channel) {
 	});
 
 	function onClose(evt) {
-		// WebSocket状态同步检查
 		if (websocket) {
 			websocket.onclose = null;
 			websocket.onerror = null;
@@ -2236,12 +2218,11 @@ function Channel_RemoveUser(nick, channel) {
 			return;
 		}
 
-		// 只有在websocket真正关闭时才设置isConnected为false
 		isConnected = false;
 		let reason = evt.reason || '连接关闭';
 		let code = evt.code;
 
-		let isUserDisconnect = false;
+			let isUserDisconnect = false;
 
 		if (isDisconnecting) {
 			isUserDisconnect = true;
@@ -2295,7 +2276,6 @@ function Channel_RemoveUser(nick, channel) {
 	}
 
 	function onOpen(evt) {
-		// WebSocket状态同步检查
 		if (websocket && websocket.readyState === WebSocket.OPEN) {
 			isConnected = true;
 			reconnectAttempts = 0;
@@ -2313,12 +2293,10 @@ function Channel_RemoveUser(nick, channel) {
 			const joinChannelBtn = document.getElementById('joinChannelBtn');
 			if (joinChannelBtn) joinChannelBtn.disabled = false;
 
-			// CAP协商: 先发送 CAP LS 302 请求服务器支持的能力
 			doSend("CAP LS 302");
 
 			startKeepAlive();
 		} else {
-			// 状态不一致，记录错误但不更新状态
 			writeToLog(`[ERROR] onOpen被调用但WebSocket状态异常: ${websocket ? websocket.readyState : 'null'}`);
 		}
 	}
@@ -2326,7 +2304,6 @@ function Channel_RemoveUser(nick, channel) {
 	function onMessage(evt) {
 		if (!evt) return;
 		
-		// WebSocket状态同步检查 - 确保我们真的处于连接状态
 		if (!websocket || websocket.readyState !== WebSocket.OPEN) {
 			if (isConnected) {
 				isConnected = false;
@@ -2336,7 +2313,6 @@ function Channel_RemoveUser(nick, channel) {
 			return;
 		}
 		
-		// 确保状态同步
 		if (!isConnected) {
 			isConnected = true;
 			updateConnectionStatus('connected');
@@ -2347,7 +2323,6 @@ function Channel_RemoveUser(nick, channel) {
 		if (rawData instanceof Blob) {
 			let fileReader = new FileReader();
 			
-			// 使用命名函数避免内存泄漏
 			fileReader.onloadend = function handleLoadEnd(event) {
 				if (!event || !event.target) return;
 				const fileReader = event.target;
@@ -2355,7 +2330,6 @@ function Channel_RemoveUser(nick, channel) {
 				writeToLog(`[Client]←[Server] (Blob→Text): ${raw}`);
 				process(raw);
 				
-				// 清理FileReader引用避免内存泄漏
 				fileReader.onloadend = null;
 			};
 			
@@ -2368,16 +2342,13 @@ function Channel_RemoveUser(nick, channel) {
 	function doSend(message) {
 		if (!message) return;
 		
-		// WebSocket状态同步检查
 		if (websocket) {
 			if (websocket.readyState === WebSocket.OPEN) {
-				// 状态正常，同步isConnected
 				if (!isConnected) {
 					isConnected = true;
 					updateConnectionStatus('connected');
 				}
 			} else if (websocket.readyState === WebSocket.CLOSED || websocket.readyState === WebSocket.CLOSING) {
-				// 连接已关闭，同步isConnected
 				if (isConnected) {
 					isConnected = false;
 					updateConnectionStatus('disconnected');
@@ -2387,7 +2358,6 @@ function Channel_RemoveUser(nick, channel) {
 				return;
 			}
 		} else {
-			// websocket对象不存在
 			if (isConnected) {
 				isConnected = false;
 				updateConnectionStatus('disconnected');
@@ -2397,14 +2367,12 @@ function Channel_RemoveUser(nick, channel) {
 			return;
 		}
 		
-		// 只有在readyState为OPEN时才执行发送
 		try {
 			websocket.send(message);
 			writeToLog(`[Client]→[Server] ${message.trim()}`);
 		} catch (e) {
 			writeToLog(`[ERROR] 发送消息失败: ${e.message}`);
 			writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel, "");
-			// 发送失败可能是连接问题，同步状态
 			if (isConnected) {
 				isConnected = false;
 				updateConnectionStatus('disconnected');
@@ -2424,13 +2392,6 @@ function Channel_RemoveUser(nick, channel) {
 	var Commands = new Map();
 	Commands.set("CAP", function (nick, data) {
 		if (!data || data.length < 4) return;
-
-		// CAP 消息格式: :server CAP <target> <subcommand> [:<params>]
-		// data[0] = :server
-		// data[1] = CAP
-		// data[2] = target (通常是 "*")
-		// data[3] = subcommand (LS, LIST, REQ, ACK, NAK, NEW, DEL)
-		// data[4] = :capabilities (如果存在)
 
 		const target = data[2];
 		const subCommand = data[3].toUpperCase();
@@ -2516,8 +2477,8 @@ function Channel_RemoveUser(nick, channel) {
 	});
 	Commands.set("332", function (nick, data) {
 		if (!data || data.length < 5) return;
-			let channel = findChannel(data[3]);
-			if (!channel || !channel.topic) return;
+		let channel = findChannel(data[3]);
+		if (!channel || !channel.topic) return;
 		let text = data[4].substring(1);
 		for (let i = 5; i < data.length; i++) {
 			text += " " + data[i];
@@ -2527,8 +2488,8 @@ function Channel_RemoveUser(nick, channel) {
 	});
 	Commands.set("353", function (nick, data) {
 		if (!data || data.length < 6) return;
-			let channel = findChannel(data[4]);
-			if (!channel) return;
+		let channel = findChannel(data[4]);
+		if (!channel) return;
 		if (channel.names_end == true) {
 			channel.users = [];
 			channel.names_end = false;
@@ -2548,8 +2509,8 @@ function Channel_RemoveUser(nick, channel) {
 	});
 	Commands.set("366", function (nick, data) {
 		if (!data || data.length < 4) return;
-			let channel = findChannel(data[3]);
-			if (!channel) return;
+		let channel = findChannel(data[3]);
+		if (!channel) return;
 		channel.users.sort(sortUserList);
 		channel.userlist.innerHTML = "";
 		for (let i = 0; i < channel.users.length; i++) {
@@ -2672,8 +2633,8 @@ function Channel_RemoveUser(nick, channel) {
 			}
 		} else {
 			let ii = 4;
-let status = false;
-					for (let i = 0; i < data[3].length; i++) {
+		let status = false;
+		for (let i = 0; i < data[3].length; i++) {
 						if (data[3][i] == "+") status = true;
 						else if (data[3][i] == "-") status = false;
 				else {
@@ -2730,8 +2691,8 @@ let status = false;
 	});
 	Commands.set("TOPIC", function (nick, data) {
 		if (!data || data.length < 4) return;
-			let channel = findChannel(data[2]);
-			if (!channel || !channel.topic) return;
+		let channel = findChannel(data[2]);
+		if (!channel || !channel.topic) return;
 		let text = data[3].substring(1);
 		for (let i = 4; i < data.length; i++) {
 			text += " " + data[i];
@@ -2794,8 +2755,8 @@ let status = false;
 	});
 	Commands.set("NOTICE", function (nick, data) {
 		if (!data || data.length < 4) return;
-			let channel = findChannel(data[2]);
-			if (!channel) channel = statusChannel;
+		let channel = findChannel(data[2]);
+		if (!channel) channel = statusChannel;
 		let text = data[3].substring(1);
 		for (let i = 4; i < data.length; i++) {
 			text += " " + data[i];
