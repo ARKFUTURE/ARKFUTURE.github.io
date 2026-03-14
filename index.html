@@ -14,7 +14,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@500;600&display=swap">
-    <noscript><link rel="stylesheet" href="theme.css"></noscript>
     <script src="/js.js"></script>
 </head>
 
@@ -22,9 +21,15 @@
 
 <body>
 
-    <!-- 语言切换导航 -->
-    <nav class="lang-nav">
-        <a href="index_en.html">En</a>
+    <!-- 顶部导航栏 -->
+    <nav class="top-nav">
+        <!-- 主题切换 -->
+        <div class="theme-switcher">
+            <button class="theme-btn" data-theme="theme.css"  title="Default">DEFAULT</button>
+            <button class="theme-btn" data-theme="theme2.css"     title="theme">F1</button>
+        </div>
+        <!-- 语言切换 -->
+        <a href="index_en.html" class="lang-btn">En</a>
     </nav>
 
     <!-- Hero 主标题区 -->

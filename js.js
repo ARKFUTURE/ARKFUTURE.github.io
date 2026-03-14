@@ -24,8 +24,8 @@ function loadCSS(href, id = 'theme-css') {
     document.head.appendChild(link);
 }
 
-// 立即加载默认主题，JS 接管 CSS 加载
-loadCSS('theme.css');
+// 立即加载主题（优先读取上次用户选择，否则用默认）
+loadCSS(localStorage.getItem('theme') || 'theme.css');
 
 
 
@@ -145,4 +145,26 @@ function incrementCounter() {
 // 页面加载时执行
 document.addEventListener('DOMContentLoaded', () => {
     setInterval(incrementCounter, 1000);
+
+    // ---- 主题切换按钮 ----
+    const themeBtns = document.querySelectorAll('.theme-btn');
+    const currentTheme = localStorage.getItem('theme') || 'theme.css';
+
+    // 高亮当前主题对应的按钮
+    function updateActiveBtn(href) {
+        themeBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.theme === href);
+        });
+    }
+    updateActiveBtn(currentTheme);
+
+    // 点击切换
+    themeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const href = btn.dataset.theme;
+            loadCSS(href);
+            localStorage.setItem('theme', href);
+            updateActiveBtn(href);
+        });
+    });
 });
