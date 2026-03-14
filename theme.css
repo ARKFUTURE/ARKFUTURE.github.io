@@ -188,25 +188,12 @@ h3.irc-server-label {
   background: rgba(8, 8, 23, 0.7);
   padding: 1.2rem 1.5rem;
   margin: 1rem 0;
-  border-left: 3px solid var(--neon-blue);
-  position: relative;
-  overflow: hidden;
-}
-
-.content-block::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 3px; height: 100%;
-  background: linear-gradient(to bottom, var(--neon-blue), transparent);
-  animation: scan 3s linear infinite;
 }
 
 /* ============================================================
    引用块
    ============================================================ */
 .site-quote {
-  border-left: 3px solid var(--neon-purple);
   margin: 1.2rem 0 1.2rem 1rem;
   padding: 0.8rem 1.2rem;
   background: rgba(176, 38, 255, 0.05);

@@ -38,51 +38,99 @@ function getCurrentDate() {
 }
 
 
-const titles = ["ARKFUTURE","ARK LAB","ARKFUTURE STUDIO/GROUP/TEAM","技术无止,勇于创新", "以史为镜,洞察未来"];
-const COLS = 18;
-let idx = 0, head = 0;
-let line = Array(COLS).fill(' ');
-let showCursor = true;
-let frame = 0;
+/* ---- 标签页标题打字机 ---- */
+const titles = [
+    "ARKFUTURE",
+    "ARK LAB",
+    "ARKFUTURE STUDIO",
+    "技术无止，勇于创新",
+    "以史为镜，洞察未来"
+];
 
-/* ---- 字符推送 ---- */
-let charTimer = 0;
-function pushChar() {
-  const cur = titles[idx];
-  if (head < cur.length) {
-    line.shift();
-    line.push(cur[head++]);
-  }
-}
-pushChar();
-charTimer = setInterval(pushChar, 320);
+const TYPEWRITER = {
+    idx:          0,       // 当前句子索引
+    pos:          0,       // 当前已显示字符数
+    deleting:     false,   // 是否正在删除
+    cursor:       true,    // 光标当前状态（亮/灭）
+    blinking:     false,   // 是否处于闲置闪烁模式
+    cursorTimer:  null,    // 光标闪烁定时器
 
-/* ---- 主循环 ---- */
-function tick() {
-  const cur = titles[idx];
+    // 节奏参数（ms）
+    TYPE_SPEED:   100,     // 打字速度
+    DELETE_SPEED: 55,      // 删除速度
+    PAUSE_FULL:   1600,    // 打完后停顿
+    PAUSE_EMPTY:  350,     // 清空后停顿
 
-  /* 1. 尾巴已打完、且窗口里只剩当前句尾巴（或已清成空格）再开始清屏 */
-  if (head >= cur.length) {
-    /* 窗口里还有非空格字符 → 继续清屏 */
-    if (line.some(c => c !== ' ')) {
-      line.shift();
-      line.push(' ');          // 慢慢用空格把尾巴推出去
-    } else {
-      /* 已清空 → 切下一句 */
-      idx = (idx + 1) % titles.length;
-      head = 0;
-      clearInterval(charTimer);
-      pushChar();              // 立即打新句首字
-      charTimer = setInterval(pushChar, 320);
+    timer: null,
+
+    render() {
+        const text = titles[this.idx].slice(0, this.pos);
+        document.title = text + (this.cursor ? '█' : ' ');
+    },
+
+    // 打字/删除中：光标常亮
+    setCursorSolid() {
+        clearInterval(this.cursorTimer);
+        this.blinking = false;
+        this.cursor = true;
+    },
+
+    // 停顿等待时：光标闪烁
+    setCursorBlink() {
+        if (this.blinking) return;
+        this.blinking = true;
+        this.cursorTimer = setInterval(() => {
+            this.cursor = !this.cursor;
+            this.render();
+        }, 500);
+    },
+
+    step() {
+        const cur = titles[this.idx];
+
+        if (!this.deleting) {
+            if (this.pos < cur.length) {
+                // 打字中：光标常亮
+                this.setCursorSolid();
+                this.pos++;
+                this.render();
+                this.schedule(this.TYPE_SPEED);
+            } else {
+                // 打完 → 光标闪烁，停顿后开始删除
+                this.setCursorBlink();
+                this.schedule(this.PAUSE_FULL, () => {
+                    this.deleting = true;
+                    this.step();
+                });
+            }
+        } else {
+            if (this.pos > 0) {
+                // 删除中：光标常亮
+                this.setCursorSolid();
+                this.pos--;
+                this.render();
+                this.schedule(this.DELETE_SPEED);
+            } else {
+                // 清空 → 光标闪烁，停顿后切下一句
+                this.setCursorBlink();
+                this.idx = (this.idx + 1) % titles.length;
+                this.deleting = false;
+                this.schedule(this.PAUSE_EMPTY);
+            }
+        }
+    },
+
+    schedule(delay, fn) {
+        clearTimeout(this.timer);
+        this.timer = setTimeout(fn || (() => this.step()), delay);
+    },
+
+    start() {
+        this.step();
     }
-  }
+};
 
-  /* 2. 光标闪 */
-  if (++frame % 5 === 0) showCursor = !showCursor;
-  document.title = line.join('') + (showCursor ? '_' : ' ');
-}
-
-setInterval(tick, 160);
+TYPEWRITER.start();
 
 let counter = 0;
 function incrementCounter() {
