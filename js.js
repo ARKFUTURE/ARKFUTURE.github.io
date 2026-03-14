@@ -24,6 +24,11 @@ function loadCSS(href, id = 'theme-css') {
     document.head.appendChild(link);
 }
 
+// 立即加载默认主题，JS 接管 CSS 加载
+loadCSS('theme.css');
+
+
+
 
 function getCurrentDate() {
     const today = new Date();
