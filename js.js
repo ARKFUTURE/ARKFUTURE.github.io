@@ -25,7 +25,7 @@ function loadCSS(href, id = 'theme-css') {
 }
 
 // 立即加载主题（优先读取上次用户选择，否则用默认）
-loadCSS(localStorage.getItem('theme') || 'theme.css');
+loadCSS(localStorage.getItem('theme') || 'theme0.css');
 
 
 
