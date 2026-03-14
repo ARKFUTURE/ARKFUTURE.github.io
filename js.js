@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---- 主题切换按钮 ----
     const themeBtns = document.querySelectorAll('.theme-btn');
-    const currentTheme = localStorage.getItem('theme') || 'theme.css';
+    const currentTheme = localStorage.getItem('theme') || 'theme0.css';
 
     // 高亮当前主题对应的按钮
     function updateActiveBtn(href) {
