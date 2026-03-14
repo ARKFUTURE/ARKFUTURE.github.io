@@ -57,7 +57,19 @@ h1, h2, h3 {
   letter-spacing: 1px;
 }
 
-h1.LM#LM {
+h1.section-heading {
+  color: #E0E0FF;
+  font-size: 1.8rem;
+  text-shadow: 0 0 6px rgba(0, 240, 255, 0.2);
+}
+
+h2.section-subheading {
+  font-size: 1.8rem;
+  color: var(--neon-purple);
+  text-shadow: 0 0 6px rgba(176, 38, 255, 0.3);
+}
+
+#hero-title {
   font-size:300%;
   font-weight: 700;
   font-family: 'Orbitron', sans-serif;
@@ -70,15 +82,15 @@ h1.LM#LM {
     0 0 5px #fff,
     0 0 10px var(--neon-blue),
     0 0 20px var(--neon-purple),
-    0 0 30px var(--neon-pink);
+    0 0 30px var(--neon-purple);
   animation: glitch 2s infinite alternate, pulse 1.5s infinite ease-in-out;
   z-index: 1;
 }
 
 @keyframes glitch {
   0%, 100% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-blue), 0 0 20px var(--neon-purple), 0 0 30px var(--neon-pink), 0 0 40px var(--neon-orange); }
-  40% { transform: translate(2px, -2px); text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-purple), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-orange), 0 0 40px var(--neon-pink); }
+  20% { transform: translate(-2px, 2px); text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-blue), 0 0 20px var(--neon-purple), 0 0 30px var(--neon-purple), 0 0 40px var(--neon-orange); }
+  40% { transform: translate(2px, -2px); text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-purple), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-orange), 0 0 40px var(--neon-purple); }
   60% { transform: translate(-2px, -2px); }
   80% { transform: translate(2px, 2px); }
 }
@@ -88,7 +100,7 @@ h1.LM#LM {
   50% { opacity: 1; }
 }
 
-h1.LM#LM::before {
+#hero-title::before {
   content: "ARKFUTURE";
   position: absolute;
   top: 0;
@@ -101,15 +113,15 @@ h1.LM#LM::before {
   animation: glitch-before 3s infinite alternate;
 }
 
-h1.LM#LM::after {
+#hero-title::after {
   content: "ARKFUTURE";
   position: absolute;
   top: 2px;
   left: 2px;
   width: 100%;
   color: transparent;
-  -webkit-text-stroke: 1px var(--neon-pink);
-  text-stroke: 1px var(--neon-pink);
+  -webkit-text-stroke: 1px var(--neon-purple);
+  text-stroke: 1px var(--neon-purple);
   z-index: -2;
   opacity: 0.7;
   animation: glitch-after 3s infinite alternate-reverse;
@@ -132,11 +144,7 @@ h1.LM#LM::after {
   100% { transform: translateY(100%); }
 }
 
-h2 {
-  font-size: 1.8rem;
-  color: var(--neon-purple);
-  text-shadow: 0 0 6px rgba(176, 38, 255, 0.3);
-}
+/* h2 默认样式由 h2.section-subheading 统一处理 */
 
 /* 统一链接样式 - 数据流效果 */
 a {
