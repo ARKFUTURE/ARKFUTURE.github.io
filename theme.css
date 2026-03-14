@@ -1,5 +1,7 @@
 /* 高级赛博朋克科技风格 */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Rajdhani:wght@500;600&display=swap');
+/* 字体已在 HTML <head> 中通过 <link> 加载，避免 @import 串行延迟 */
+
+
 
 :root {
   --neon-blue: #00F0FF;

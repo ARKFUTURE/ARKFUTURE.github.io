@@ -1,10 +1,37 @@
 
+/**
+ * @param {string} href
+ * @param {string} [id]
+ */
+function loadCSS(href, id = 'theme-css') {
+    const existing = document.getElementById(id);
+
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'style';
+    link.href = href;
+
+    link.onload = function () {
+        this.rel = 'stylesheet';
+        this.id = id;
+        if (existing && existing !== this) existing.remove();
+    };
+    link.onerror = function () {
+        console.warn('[loadCSS] 加载失败:', href);
+        this.remove();
+    };
+
+    document.head.appendChild(link);
+}
+
+
 function getCurrentDate() {
     const today = new Date();
     const day = today.getDate();
     const month = today.getMonth() + 1; // 注意月份从0开始
     return { day, month };
 }
+
 
 const titles = ["ARKFUTURE","ARK LAB","ARKFUTURE STUDIO/GROUP/TEAM","技术无止,勇于创新", "以史为镜,洞察未来"];
 const COLS = 18;
@@ -65,5 +92,4 @@ function incrementCounter() {
 // 页面加载时执行
 document.addEventListener('DOMContentLoaded', () => {
     setInterval(incrementCounter, 1000);
-    typeWriter();   // 启动打字机效果（不再需要原来的 setInterval(updateTitle,1500)）
 });
