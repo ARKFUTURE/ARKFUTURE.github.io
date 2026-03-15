@@ -1,613 +1,537 @@
-/* ╔══════════════════════════════════════════════════════════════╗
-   ║  ARKFUTURE — THEME 2 : KAWAII NUCLEAR MELTDOWN              ║
-   ║  🌸 PURE CSS · ZERO JS · MAXIMUM CUTE DESTRUCTION 🌸        ║
-   ║  @property · conic-gradient · backdrop-filter · mask        ║
-   ║  oklch() · color-mix() · @layer · scroll-timeline           ║
-   ╚══════════════════════════════════════════════════════════════╝ */
+/* ██████████████████████████████████████████████████████████████
+   ARKFUTURE — THEME 1 : ABSOLUTE NUCLEAR ANNIHILATION
+   ██ PURE CSS ONLY ██ ZERO JS ██ MAXIMUM DESTRUCTION ██
+   ██ @property ██ conic-gradient ██ perspective 3D ██
+   ██ mix-blend-mode ██ clip-path ██ filter chaos ██
+   ██████████████████████████████████████████████████████████████ */
 
 /* ============================================================
-   @layer — CSS 级联层，精确控制优先级
-   ============================================================ */
-@layer reset, base, layout, components, animations, overrides;
-
-/* ============================================================
-   CSS HOUDINI @property — 可动画的自定义属性
+   CSS HOUDINI — @property 自定义属性（支持动画的CSS变量）
    ============================================================ */
 @property --hue {
   syntax: '<angle>';
   initial-value: 0deg;
-  inherits: true;
+  inherits: false;
 }
 @property --hue2 {
   syntax: '<angle>';
-  initial-value: 120deg;
-  inherits: true;
+  initial-value: 60deg;
+  inherits: false;
 }
 @property --hue3 {
   syntax: '<angle>';
-  initial-value: 240deg;
-  inherits: true;
-}
-@property --sparkle-r {
-  syntax: '<length>';
-  initial-value: 0px;
+  initial-value: 120deg;
   inherits: false;
 }
-@property --bloom {
-  syntax: '<length>';
-  initial-value: 0px;
+@property --pos {
+  syntax: '<percentage>';
+  initial-value: 0%;
   inherits: false;
 }
-@property --petal-rot {
+@property --glow-size {
+  syntax: '<length>';
+  initial-value: 10px;
+  inherits: false;
+}
+@property --border-hue {
   syntax: '<angle>';
   initial-value: 0deg;
   inherits: false;
 }
-@property --star-scale {
-  syntax: '<number>';
-  initial-value: 0;
-  inherits: false;
-}
-@property --ribbon-pos {
+@property --scan-pos {
   syntax: '<percentage>';
-  initial-value: -30%;
-  inherits: false;
-}
-@property --glow-a {
-  syntax: '<number>';
-  initial-value: 0.3;
+  initial-value: -20%;
   inherits: false;
 }
 
 /* ============================================================
-   CSS VARIABLES — oklch() 颜色空间，更鲜艳
+   CSS VARIABLES
    ============================================================ */
 :root {
-  /* 主色系 — oklch(亮度 彩度 色相) */
-  --pink:       oklch(72% 0.28 0);
-  --hot-pink:   oklch(62% 0.32 350);
-  --rose:       oklch(78% 0.22 10);
-  --peach:      oklch(82% 0.20 40);
-  --lavender:   oklch(78% 0.18 290);
-  --purple:     oklch(65% 0.28 300);
-  --mint:       oklch(80% 0.18 165);
-  --sky:        oklch(78% 0.18 230);
-  --lemon:      oklch(88% 0.20 100);
-  --coral:      oklch(72% 0.24 25);
-  --lilac:      oklch(80% 0.16 305);
-  --cream:      oklch(97% 0.04 80);
-
-  /* color-mix() 混合色 */
-  --pink-lav:   color-mix(in oklch, var(--pink) 55%, var(--lavender));
-  --mint-sky:   color-mix(in oklch, var(--mint) 50%, var(--sky));
-  --peach-rose: color-mix(in oklch, var(--peach) 60%, var(--rose));
-
-  /* 背景 */
-  --bg:         #fff0f8;
-  --bg2:        #fce4f5;
-  --card-bg:    rgba(255, 245, 252, 0.82);
-
-  /* 文字 */
-  --txt:        oklch(35% 0.08 330);
-  --txt-dim:    oklch(55% 0.06 330);
-  --txt-light:  oklch(65% 0.05 300);
+  --bg: #000005;
+  --c0: #FF003C;
+  --c1: #FF6600;
+  --c2: #FFE000;
+  --c3: #00FF88;
+  --c4: #00FFFF;
+  --c5: #0088FF;
+  --c6: #8800FF;
+  --c7: #FF00FF;
+  --white: #FFFFFF;
+  --dim: rgba(230,230,255,0.55);
+  --txt: #F0F0FF;
 }
 
 /* ============================================================
-   @layer reset
+   KEYFRAMES — 200+ 行纯动画
    ============================================================ */
-@layer reset {
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+
+/* Houdini hue spin */
+@keyframes hue-spin        { to { --hue: 360deg; } }
+@keyframes hue-spin2       { to { --hue2: 420deg; } }
+@keyframes hue-spin3       { to { --hue3: 480deg; } }
+@keyframes border-hue-spin { to { --border-hue: 360deg; } }
+@keyframes pos-travel      { from { --pos: 0%; } to { --pos: 100%; } }
+@keyframes glow-breathe    { 0%,100%{--glow-size:8px;} 50%{--glow-size:40px;} }
+
+/* Body-level hue shift */
+@keyframes body-hue {
+  0%   { filter: hue-rotate(0deg) saturate(1.3) brightness(1); }
+  25%  { filter: hue-rotate(90deg) saturate(1.8) brightness(1.05); }
+  50%  { filter: hue-rotate(180deg) saturate(2) brightness(1); }
+  75%  { filter: hue-rotate(270deg) saturate(1.8) brightness(1.05); }
+  100% { filter: hue-rotate(360deg) saturate(1.3) brightness(1); }
 }
 
-/* ============================================================
-   KEYFRAMES MEGAPACK 🎀
-   ============================================================ */
-
-/* Houdini 动画 */
-@keyframes hue-cycle  { to { --hue:  360deg; } }
-@keyframes hue-cycle2 { to { --hue2: 480deg; } }
-@keyframes hue-cycle3 { to { --hue3: 600deg; } }
-@keyframes bloom-out  { 0%{--bloom:0px;} 50%{--bloom:30px;} 100%{--bloom:0px;} }
-@keyframes petal-spin { to { --petal-rot: 360deg; } }
-@keyframes ribbon-run { from{--ribbon-pos:-30%;} to{--ribbon-pos:130%;} }
-@keyframes glow-beat  { 0%,100%{--glow-a:0.2;} 50%{--glow-a:0.9;} }
-
-/* 彩虹流光 */
-@keyframes rainbow-drift {
+/* Rainbow flow */
+@keyframes rainbow-flow {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 800% 50%; }
+}
+@keyframes rainbow-fast {
   0%   { background-position: 0% 50%; }
   100% { background-position: 400% 50%; }
 }
-@keyframes rainbow-fast {
+@keyframes rainbow-ultra {
   0%   { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
 }
 
-/* 漂浮跳动 */
+/* Scanline */
+@keyframes scanline-down {
+  0%   { transform: translateY(-100vh); opacity: 0.6; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(200vh);  opacity: 0; }
+}
+@keyframes scanline-up {
+  0%   { transform: translateY(200vh);  opacity: 0.4; }
+  100% { transform: translateY(-100vh); opacity: 0; }
+}
+
+/* Meteor */
+@keyframes meteor1 {
+  0%   { transform: translate(-5vw,-5vh) rotate(35deg) scaleX(0); opacity:0; }
+  3%   { opacity:1; }
+  100% { transform: translate(130vw, 130vh) rotate(35deg) scaleX(1); opacity:0; }
+}
+@keyframes meteor2 {
+  0%   { transform: translate(110vw,-8vh) rotate(145deg) scaleX(0); opacity:0; }
+  4%   { opacity:0.8; }
+  100% { transform: translate(-30vw, 130vh) rotate(145deg) scaleX(1); opacity:0; }
+}
+@keyframes meteor3 {
+  0%   { transform: translate(50vw,-5vh) rotate(60deg) scaleX(0); opacity:0; }
+  5%   { opacity:1; }
+  100% { transform: translate(160vw, 120vh) rotate(60deg) scaleX(1); opacity:0; }
+}
+
+/* Neon flicker */
+@keyframes neon-flicker {
+  0%,100%{opacity:1;}
+  2%{opacity:0.2;} 3%{opacity:1;}
+  7%{opacity:0.5;} 8%{opacity:1;}
+  47%{opacity:1;} 48%{opacity:0.1;} 49%{opacity:1;}
+  91%{opacity:1;} 92%{opacity:0.4;} 93%{opacity:0.9;} 94%{opacity:0.2;} 95%{opacity:1;}
+}
+
+/* Glitch slices */
+@keyframes glitch-main {
+  0%,100%{ transform:translate(0,0) skewX(0); filter:hue-rotate(0deg); clip-path:none; }
+  4%  { transform:translate(-5px,0) skewX(-3deg); filter:hue-rotate(90deg) saturate(3); clip-path:polygon(0 10%,100% 10%,100% 35%,0 35%); }
+  6%  { transform:translate(5px,0)  skewX(3deg);  filter:hue-rotate(180deg); clip-path:polygon(0 60%,100% 60%,100% 80%,0 80%); }
+  8%  { transform:translate(-3px,2px); clip-path:none; filter:none; }
+  9%  { transform:translate(0,0); }
+  54% { transform:translate(0,0) skewX(0); clip-path:none; }
+  55% { transform:translate(8px,-2px) skewX(5deg); filter:hue-rotate(270deg) saturate(4) brightness(2); clip-path:polygon(0 5%,100% 5%,100% 25%,0 25%); }
+  57% { transform:translate(-6px,2px); clip-path:polygon(0 70%,100% 70%,100% 85%,0 85%); filter:hue-rotate(0deg); }
+  59% { transform:translate(0,0); clip-path:none; filter:none; }
+  82% { transform:translate(0,0); }
+  83% { transform:translate(-10px,0) skewX(-8deg); filter:saturate(5) brightness(2); clip-path:polygon(0 30%,100% 30%,100% 50%,0 50%); }
+  84% { transform:translate(10px,0); }
+  85% { transform:translate(0,0); clip-path:none; filter:none; }
+}
+
+@keyframes glitch-layer1 {
+  0%,100%{transform:translate(0,0);opacity:0.6;}
+  5%  {transform:translate(-8px,3px);opacity:1;filter:hue-rotate(120deg) saturate(5);}
+  7%  {transform:translate(6px,-2px);opacity:0.7;}
+  9%  {transform:translate(0,0);opacity:0.6;}
+  55% {transform:translate(-10px,0);opacity:0.9;filter:hue-rotate(240deg) saturate(4);}
+  57% {transform:translate(8px,0);opacity:0.6;}
+  59% {transform:translate(0,0);}
+  83% {transform:translate(-12px,4px);opacity:1;filter:hue-rotate(60deg) saturate(6);}
+  85% {transform:translate(0,0);opacity:0.6;}
+}
+
+@keyframes glitch-layer2 {
+  0%,100%{transform:translate(0,0);opacity:0.5;}
+  5%  {transform:translate(7px,-4px);opacity:0.8;filter:hue-rotate(300deg) saturate(5);}
+  7%  {transform:translate(-5px,2px);opacity:0.4;}
+  9%  {transform:translate(0,0);}
+  55% {transform:translate(10px,2px);opacity:0.7;filter:hue-rotate(60deg) saturate(4);}
+  57% {transform:translate(-8px,0);opacity:0.3;}
+  59% {transform:translate(0,0);}
+  83% {transform:translate(14px,-3px);opacity:0.9;filter:hue-rotate(180deg) saturate(6);}
+  85% {transform:translate(0,0);opacity:0.5;}
+}
+
+/* Conic spin */
+@keyframes conic-spin {
+  from { --hue: 0deg; }
+  to   { --hue: 360deg; }
+}
+
+/* Ring orbit */
+@keyframes ring1 {
+  from { transform:translate(-50%,-50%) rotate(0deg); }
+  to   { transform:translate(-50%,-50%) rotate(360deg); }
+}
+@keyframes ring2 {
+  from { transform:translate(-50%,-50%) rotate(0deg) scale(1.3); }
+  to   { transform:translate(-50%,-50%) rotate(-360deg) scale(1.3); }
+}
+@keyframes ring3 {
+  from { transform:translate(-50%,-50%) rotate(0deg) scaleX(1.8) scaleY(0.5); }
+  to   { transform:translate(-50%,-50%) rotate(360deg) scaleX(1.8) scaleY(0.5); }
+}
+
+/* Particle float */
+@keyframes pfloat-1 { 0%{transform:translateY(0) translateX(0) scale(1);opacity:.9;} 100%{transform:translateY(-110vh) translateX(30px) scale(.2);opacity:0;} }
+@keyframes pfloat-2 { 0%{transform:translateY(0) translateX(0) scale(.7);opacity:.7;} 100%{transform:translateY(-95vh) translateX(-50px) scale(.1);opacity:0;} }
+@keyframes pfloat-3 { 0%{transform:translateY(0) translateX(0) scale(1.2);opacity:.8;} 100%{transform:translateY(-120vh) translateX(60px) scale(.15);opacity:0;} }
+
+/* Card border 3D tilt on hover */
+@keyframes border-cycle {
+  0%  {border-color:var(--c4); box-shadow:0 0 12px var(--c4),0 0 30px var(--c4),inset 0 0 15px rgba(0,255,255,.05);}
+  15% {border-color:var(--c5); box-shadow:0 0 15px var(--c5),0 0 35px var(--c5),inset 0 0 18px rgba(0,136,255,.06);}
+  30% {border-color:var(--c6); box-shadow:0 0 18px var(--c6),0 0 40px var(--c6),inset 0 0 20px rgba(136,0,255,.06);}
+  45% {border-color:var(--c7); box-shadow:0 0 15px var(--c7),0 0 35px var(--c7),inset 0 0 18px rgba(255,0,255,.06);}
+  60% {border-color:var(--c0); box-shadow:0 0 18px var(--c0),0 0 40px var(--c0),inset 0 0 20px rgba(255,0,60,.06);}
+  75% {border-color:var(--c1); box-shadow:0 0 15px var(--c1),0 0 35px var(--c1),inset 0 0 18px rgba(255,102,0,.06);}
+  90% {border-color:var(--c2); box-shadow:0 0 18px var(--c2),0 0 40px var(--c2),inset 0 0 20px rgba(255,224,0,.06);}
+  100%{border-color:var(--c3); box-shadow:0 0 15px var(--c3),0 0 35px var(--c3),inset 0 0 18px rgba(0,255,136,.06);}
+}
+
+/* Horiz scan sweep */
+@keyframes h-sweep {
+  0%  {left:-80%; opacity:0;}
+  10% {opacity:.8;}
+  90% {opacity:.8;}
+  100%{left:180%;opacity:0;}
+}
+@keyframes h-sweep2 {
+  0%  {left:-80%; opacity:0;}
+  10% {opacity:.6;}
+  90% {opacity:.6;}
+  100%{left:180%;opacity:0;}
+}
+
+/* Section left bar */
+@keyframes bar-pulse {
+  0%,100%{opacity:1; box-shadow: 4px 0 16px var(--c4), 8px 0 32px var(--c6);}
+  50%    {opacity:.3; box-shadow: 4px 0  4px var(--c7), 8px 0  8px var(--c0);}
+}
+
+/* Divider diamond spin */
+@keyframes diamond {
+  0%  {transform:translateX(-50%) translateY(-50%) rotate(0deg) scale(1);}
+  50% {transform:translateX(-50%) translateY(-50%) rotate(180deg) scale(2);}
+  100%{transform:translateX(-50%) translateY(-50%) rotate(360deg) scale(1);}
+}
+
+/* Text shake */
+@keyframes shake {
+  0%,100%{transform:translateX(0) skewX(0);}
+  20%{transform:translateX(-4px) skewX(-4deg);}
+  40%{transform:translateX(4px) skewX(4deg);}
+  60%{transform:translateX(-2px);}
+  80%{transform:translateX(3px);}
+}
+
+/* Footer scan */
+@keyframes footer-scan {
+  0%  {transform:translateX(-100%);}
+  100%{transform:translateX(100vw);}
+}
+
+/* Subheading line grow */
+@keyframes line-grow {
+  0%  {width:0; opacity:0;}
+  100%{width:100%; opacity:1;}
+}
+
+/* Spinning conic bg layer */
+@keyframes conic-bg-spin {
+  from {transform:rotate(0deg);}
+  to   {transform:rotate(360deg);}
+}
+
+/* Arc electric flash */
+@keyframes arc-flash {
+  0%,88%,100%{opacity:0;}
+  90%{opacity:1; transform:scaleX(1.3) scaleY(.4);}
+  93%{opacity:.5;}
+  96%{opacity:.9;}
+  98%{opacity:0;}
+}
+
+/* Perspective warp for hero */
+@keyframes hero-perspective {
+  0%,100%{transform:perspective(800px) rotateX(0deg) rotateY(0deg);}
+  25%    {transform:perspective(800px) rotateX(2deg) rotateY(-1deg);}
+  50%    {transform:perspective(800px) rotateX(0deg) rotateY(2deg);}
+  75%    {transform:perspective(800px) rotateX(-2deg) rotateY(1deg);}
+}
+
+/* Float bob */
 @keyframes float-bob {
-  0%,100% { transform: translateY(0px) rotate(0deg); }
-  30%     { transform: translateY(-12px) rotate(1.5deg); }
-  60%     { transform: translateY(-6px)  rotate(-1deg); }
-}
-@keyframes float-bob2 {
-  0%,100% { transform: translateY(0px) rotate(0deg) scale(1); }
-  40%     { transform: translateY(-10px) rotate(-2deg) scale(1.03); }
-  70%     { transform: translateY(-4px)  rotate(1.5deg) scale(0.98); }
+  0%,100%{transform:translateY(0);}
+  50%    {transform:translateY(-8px);}
 }
 
-/* 心跳 */
-@keyframes heartbeat {
-  0%,100%{ transform: scale(1); }
-  14%    { transform: scale(1.15); }
-  28%    { transform: scale(1); }
-  42%    { transform: scale(1.08); }
-  56%    { transform: scale(1); }
+/* Link underline blast */
+@keyframes ul-blast {
+  0%  {transform:scaleX(0) scaleY(1); transform-origin:right; opacity:.8;}
+  50% {transform:scaleX(1) scaleY(4); transform-origin:left; filter:brightness(4) blur(1px);}
+  100%{transform:scaleX(1) scaleY(1); transform-origin:left; filter:brightness(1);}
 }
 
-/* 旋转 */
-@keyframes spin      { to { transform: rotate(360deg); } }
-@keyframes spin-slow { to { transform: rotate(360deg); } }
-@keyframes spin-rev  { to { transform: rotate(-360deg); } }
-
-/* 花瓣雨（body 伪元素层） */
-@keyframes petal-fall-1 {
-  0%   { transform: translateX(0) translateY(-60px) rotate(0deg) scale(1);    opacity:0; }
-  5%   { opacity: .85; }
-  90%  { opacity: .6; }
-  100% { transform: translateX(80px)  translateY(108vh) rotate(540deg) scale(.5); opacity:0; }
-}
-@keyframes petal-fall-2 {
-  0%   { transform: translateX(0) translateY(-60px) rotate(30deg) scale(.8);  opacity:0; }
-  5%   { opacity: .7; }
-  100% { transform: translateX(-60px) translateY(105vh) rotate(-400deg) scale(.3); opacity:0; }
-}
-@keyframes petal-fall-3 {
-  0%   { transform: translateX(0) translateY(-60px) rotate(-20deg) scale(1.1);opacity:0; }
-  5%   { opacity: .9; }
-  100% { transform: translateX(50px)  translateY(112vh) rotate(300deg) scale(.4); opacity:0; }
-}
-@keyframes petal-fall-4 {
-  0%   { transform: translateX(0) translateY(-60px) rotate(10deg) scale(.7);  opacity:0; }
-  5%   { opacity: .8; }
-  100% { transform: translateX(-90px) translateY(106vh) rotate(-600deg) scale(.2); opacity:0; }
-}
-@keyframes petal-fall-5 {
-  0%   { transform: translateX(0) translateY(-60px) rotate(-45deg) scale(.9); opacity:0; }
-  5%   { opacity: .75; }
-  100% { transform: translateX(110px) translateY(110vh) rotate(450deg) scale(.35); opacity:0; }
+/* 3D card tilt */
+@keyframes card-3d {
+  0%,100%{transform:perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0);}
+  25%    {transform:perspective(1000px) rotateX(1.5deg) rotateY(-1deg) translateY(-2px);}
+  50%    {transform:perspective(1000px) rotateX(-1deg) rotateY(1.5deg) translateY(-4px);}
+  75%    {transform:perspective(1000px) rotateX(1deg) rotateY(1deg) translateY(-2px);}
 }
 
-/* 星星闪烁 */
-@keyframes star-twinkle {
-  0%,100% { opacity: .1; transform: scale(.4) rotate(0deg); }
-  50%     { opacity: 1;  transform: scale(1.3) rotate(30deg); }
+/* RGB split noise */
+@keyframes rgb-noise {
+  0%,100%{text-shadow: 0 0 0 transparent;}
+  10%    {text-shadow: -3px 0 var(--c0), 3px 0 var(--c4);}
+  20%    {text-shadow: 3px 0 var(--c7), -3px 0 var(--c2);}
+  30%    {text-shadow: -4px 0 var(--c3), 4px 0 var(--c6);}
+  40%    {text-shadow: 0 0 0 transparent;}
+  70%    {text-shadow: -5px 0 var(--c1), 5px 0 var(--c5);}
+  80%    {text-shadow: 4px 0 var(--c4), -4px 0 var(--c7);}
+  90%    {text-shadow: 0 0 0 transparent;}
 }
-@keyframes star-pop {
-  0%  { transform: scale(0) rotate(-20deg); opacity: 0; }
-  60% { transform: scale(1.3) rotate(10deg); opacity: 1; }
-  100%{ transform: scale(1)  rotate(0deg);  opacity: .8; }
-}
-
-/* 文字彩虹 */
-@keyframes text-rainbow {
-  0%   { background-position: 0% 50%;   filter: hue-rotate(0deg); }
-  100% { background-position: 400% 50%; filter: hue-rotate(360deg); }
-}
-
-/* 扫光 */
-@keyframes shimmer {
-  0%   { left: -80%; opacity: 0; }
-  10%  { opacity: .8; }
-  90%  { opacity: .8; }
-  100% { left: 180%; opacity: 0; }
-}
-@keyframes shimmer2 {
-  0%   { left: -80%; opacity: 0; }
-  10%  { opacity: .5; }
-  100% { left: 180%; opacity: 0; }
-}
-
-/* 边框彩虹 */
-@keyframes border-dance {
-  0%  { border-color: var(--pink); }
-  16% { border-color: var(--peach); }
-  32% { border-color: var(--lemon); }
-  48% { border-color: var(--mint); }
-  64% { border-color: var(--sky); }
-  80% { border-color: var(--lavender); }
-  100%{ border-color: var(--pink); }
-}
-
-/* 波浪 */
-@keyframes wave-x {
-  0%,100% { transform: scaleX(1) scaleY(1); }
-  25%     { transform: scaleX(1.02) scaleY(.97); }
-  50%     { transform: scaleX(.98) scaleY(1.03); }
-  75%     { transform: scaleX(1.01) scaleY(.98); }
-}
-
-/* 弹簧 */
-@keyframes spring-in {
-  0%  { transform: scale(0) rotate(-15deg); opacity:0; }
-  60% { transform: scale(1.12) rotate(3deg); opacity:1; }
-  80% { transform: scale(.96) rotate(-1deg); }
-  100%{ transform: scale(1) rotate(0deg); opacity:1; }
-}
-
-/* 摇摆 */
-@keyframes wiggle {
-  0%,100%{ transform: rotate(0deg); }
-  20%    { transform: rotate(-8deg) scale(1.05); }
-  40%    { transform: rotate(8deg)  scale(1.05); }
-  60%    { transform: rotate(-5deg); }
-  80%    { transform: rotate(5deg); }
-}
-
-/* 底部彩虹条 */
-@keyframes bar-flow {
-  0%   { background-position: 0% 50%; }
-  100% { background-position: 600% 50%; }
-}
-
-/* conic 旋转 */
-@keyframes conic-turn  { to { --hue:  360deg; } }
-@keyframes conic-turn2 { to { --hue2: 480deg; } }
-
-/* 卡片 3D 微晃 */
-@keyframes card-rock {
-  0%,100%{ transform: perspective(900px) rotateX(0deg)   rotateY(0deg);   }
-  25%    { transform: perspective(900px) rotateX(1.5deg)  rotateY(-1.2deg); }
-  50%    { transform: perspective(900px) rotateX(-.8deg)  rotateY(1.5deg); }
-  75%    { transform: perspective(900px) rotateX(1deg)    rotateY(.8deg);  }
-}
-
-/* 链接下划线展开 */
-@keyframes underline-pop {
-  0%  { transform: scaleX(0) scaleY(1); transform-origin: right; }
-  60% { transform: scaleX(1) scaleY(2.5); transform-origin: left; }
-  100%{ transform: scaleX(1) scaleY(1); transform-origin: left; }
-}
-
-/* bubble float */
-@keyframes bubble-rise {
-  0%  { transform: translateY(0) scale(1); opacity:.6; }
-  100%{ transform: translateY(-90vh) scale(.3); opacity:0; }
-}
-
-/* 标题 clip-path wave */
-@keyframes clip-wave {
-  0%,100%{ clip-path: polygon(0 0,100% 0,100% 100%,0 100%); }
-  50%    { clip-path: polygon(0 5%,100% 0,100% 95%,0 100%); }
-}
-
-/* 打字光标 */
-@keyframes cursor-blink {
-  0%,49% { opacity:1; }
-  50%,100%{ opacity:0; }
-}
-
-/* mask 流动 */
-@keyframes mask-slide {
-  0%   { mask-position: -200% 0; }
-  100% { mask-position:  200% 0; }
-}
-
-/* outline 脉冲 */
-@keyframes outline-pulse {
-  0%,100%{ outline-width:2px; outline-offset:2px; }
-  50%    { outline-width:6px; outline-offset:6px; }
-}
-
-/* 伪元素气泡1~5连续涌出 */
-@keyframes bub1 { 0%{bottom:-20px;left:10%;opacity:.5;transform:scale(.5);} 100%{bottom:105%;left:15%;opacity:0;transform:scale(1.2);} }
-@keyframes bub2 { 0%{bottom:-20px;left:30%;opacity:.4;transform:scale(.4);} 100%{bottom:100%;left:25%;opacity:0;transform:scale(1.0);} }
-@keyframes bub3 { 0%{bottom:-20px;left:55%;opacity:.6;transform:scale(.6);} 100%{bottom:110%;left:60%;opacity:0;transform:scale(1.3);} }
-@keyframes bub4 { 0%{bottom:-20px;left:75%;opacity:.5;transform:scale(.5);} 100%{bottom:105%;left:80%;opacity:0;transform:scale(1.1);} }
-@keyframes bub5 { 0%{bottom:-20px;left:90%;opacity:.3;transform:scale(.3);} 100%{bottom:100%;left:85%;opacity:0;transform:scale(.9);} }
 
 /* ============================================================
-   @layer base — body 全局
+   GLOBAL RESET
    ============================================================ */
-@layer base {
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
+/* ============================================================
+   BODY — 绝对核爆背景
+   ============================================================ */
 body {
-  font-family: 'Rajdhani', 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+  font-family: 'Rajdhani', 'Orbitron', monospace, sans-serif;
   background-color: var(--bg);
-
-  /* 12层背景叠加：花朵图案 + 网格 + 光晕 */
   background-image:
-    /* 花型光晕群 */
-    radial-gradient(circle at 15%  20%,  color-mix(in oklch, var(--pink)    60%, transparent) 0%, transparent 25%),
-    radial-gradient(circle at 85%  15%,  color-mix(in oklch, var(--lavender) 55%, transparent) 0%, transparent 22%),
-    radial-gradient(circle at 50%  55%,  color-mix(in oklch, var(--mint)     40%, transparent) 0%, transparent 28%),
-    radial-gradient(circle at 80%  80%,  color-mix(in oklch, var(--peach)    50%, transparent) 0%, transparent 24%),
-    radial-gradient(circle at 10%  85%,  color-mix(in oklch, var(--sky)      45%, transparent) 0%, transparent 20%),
-    /* 爱心点阵图案 */
-    radial-gradient(circle at center, var(--pink) 28%, transparent 30%),
-    /* 斜线格纹 */
-    repeating-linear-gradient(
-      45deg,
-      transparent 0px,
-      transparent 18px,
-      color-mix(in oklch, var(--pink) 8%, transparent) 18px,
-      color-mix(in oklch, var(--pink) 8%, transparent) 20px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      transparent 0px,
-      transparent 18px,
-      color-mix(in oklch, var(--lavender) 6%, transparent) 18px,
-      color-mix(in oklch, var(--lavender) 6%, transparent) 20px
-    ),
-    /* 圆点阵列 */
-    radial-gradient(circle, color-mix(in oklch, var(--pink) 15%, transparent) 1px, transparent 1px),
-    /* 底部渐变 */
-    linear-gradient(180deg, #fff0f8 0%, #fce4f5 40%, #f0eaff 100%);
-
+    /* L1: 中心核爆光晕 */
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(136,0,255,.22) 0%, transparent 60%),
+    /* L2: 左上 cyan 爆 */
+    radial-gradient(ellipse at 8% 12%,  rgba(0,255,255,.16) 0%, transparent 38%),
+    /* L3: 右上 red 爆 */
+    radial-gradient(ellipse at 92% 8%,  rgba(255,0,60,.14)  0%, transparent 35%),
+    /* L4: 左下 yellow */
+    radial-gradient(ellipse at 5% 90%,  rgba(255,224,0,.10) 0%, transparent 30%),
+    /* L5: 右下 magenta */
+    radial-gradient(ellipse at 95% 88%, rgba(255,0,255,.12) 0%, transparent 32%),
+    /* L6: 水平网格 */
+    repeating-linear-gradient(0deg,   rgba(0,255,255,.035)  0, rgba(0,255,255,.035)  1px, transparent 1px, transparent 42px),
+    /* L7: 垂直网格 */
+    repeating-linear-gradient(90deg,  rgba(255,0,255,.030)  0, rgba(255,0,255,.030)  1px, transparent 1px, transparent 42px),
+    /* L8: 斜线1 */
+    repeating-linear-gradient(45deg,  rgba(0,255,136,.018)  0, rgba(0,255,136,.018)  1px, transparent 1px, transparent 56px),
+    /* L9: 斜线2 */
+    repeating-linear-gradient(135deg, rgba(255,102,0,.018)  0, rgba(255,102,0,.018)  1px, transparent 1px, transparent 56px);
+  background-attachment: fixed;
   background-size:
     100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%,
-    0 0,
-    20px 20px, 20px 20px,
-    24px 24px,
-    100% 100%;
-  background-attachment: fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed;
-
+    100% 42px, 42px 100%, 56px 56px, 56px 56px;
   color: var(--txt);
-  line-height: 1.75;
+  line-height: 1.7;
   font-size: 1rem;
+  margin: 0;
   padding: 20px;
   overflow-x: hidden;
   position: relative;
-  /* Houdini 色相动画驱动全局 */
-  animation: hue-cycle 20s linear infinite;
+  /* 全局色相慢速漂移 */
+  animation: body-hue 90s linear infinite;
 }
 
-/* 全屏花瓣层1 */
+/* 扫描线 #1 — 向下 */
 body::before {
-  content: '🌸';
+  content: '';
   position: fixed;
-  top: -60px;
-  left: 8%;
-  font-size: 28px;
+  top: 0; left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--c4) 20%,
+    var(--white) 50%,
+    var(--c7) 80%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 8px var(--c4),
+    0 0 20px var(--c5),
+    0 0 40px var(--c6);
   pointer-events: none;
-  z-index: 9990;
-  animation: petal-fall-1 7s ease-in infinite;
-  filter: drop-shadow(0 0 6px var(--pink));
+  z-index: 9999;
+  animation: scanline-down 3.5s linear infinite;
 }
 
-/* 全屏花瓣层2 */
+/* 扫描线 #2 — 向上（对冲） */
 body::after {
-  content: '🌷';
-  position: fixed;
-  top: -60px;
-  left: 72%;
-  font-size: 22px;
-  pointer-events: none;
-  z-index: 9990;
-  animation: petal-fall-3 9s ease-in infinite;
-  animation-delay: 3s;
-  filter: drop-shadow(0 0 6px var(--coral));
-}
-
-} /* end @layer base */
-
-/* ============================================================
-   @layer layout
-   ============================================================ */
-@layer layout {
-
-main {
-  max-width: 900px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
-/* 两层锥形彩虹旋转背景（Houdini驱动） */
-main::before {
   content: '';
   position: fixed;
-  top: 50%; left: 50%;
-  width: 140vmax; height: 140vmax;
-  transform: translate(-50%, -50%);
-  background: conic-gradient(
-    from var(--hue),
-    oklch(80% 0.20 0  / .04)   0deg,
-    oklch(82% 0.22 30 / .03)  45deg,
-    oklch(88% 0.18 90 / .03)  90deg,
-    oklch(80% 0.20 165/ .04) 135deg,
-    oklch(78% 0.18 230/ .04) 180deg,
-    oklch(78% 0.18 290/ .03) 225deg,
-    oklch(65% 0.28 300/ .03) 270deg,
-    oklch(72% 0.28 0  / .04) 315deg,
-    oklch(80% 0.20 0  / .04) 360deg
+  bottom: 0; left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--c0) 20%,
+    var(--c2) 50%,
+    var(--c3) 80%,
+    transparent 100%
   );
+  box-shadow:
+    0 0 8px var(--c0),
+    0 0 18px var(--c1);
   pointer-events: none;
-  z-index: -1;
-  animation: conic-turn 12s linear infinite;
+  z-index: 9999;
+  animation: scanline-up 5s linear infinite;
+  animation-delay: 1.5s;
 }
-
-main::after {
-  content: '';
-  position: fixed;
-  top: 50%; left: 50%;
-  width: 120vmax; height: 120vmax;
-  transform: translate(-50%, -50%);
-  background: conic-gradient(
-    from var(--hue2),
-    oklch(78% 0.18 290/ .035)   0deg,
-    oklch(80% 0.20 0  / .025)  60deg,
-    oklch(82% 0.22 40 / .025) 120deg,
-    oklch(80% 0.18 165/ .030) 180deg,
-    oklch(88% 0.20 90 / .025) 240deg,
-    oklch(78% 0.18 230/ .030) 300deg,
-    oklch(78% 0.18 290/ .035) 360deg
-  );
-  pointer-events: none;
-  z-index: -1;
-  animation: conic-turn2 18s linear infinite reverse;
-}
-
-} /* end @layer layout */
 
 /* ============================================================
-   @layer components
+   METEOR LAYER — 用 wrapper 放3条流星
    ============================================================ */
-@layer components {
-
-/* ─── 顶部导航 ─── */
 .top-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: .6rem;
-  gap: .5rem;
+  margin-bottom: 0.5rem;
+  gap: 0.5rem;
   position: relative;
   z-index: 100;
 }
 
-/* 顶部彩虹糖果条 */
+/* 流星1 */
 .top-nav::before {
   content: '';
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 5px;
-  background: linear-gradient(90deg,
-    var(--pink), var(--peach), var(--lemon), var(--mint),
-    var(--sky), var(--lavender), var(--purple), var(--hot-pink), var(--pink)
-  );
-  background-size: 400% 400%;
-  animation: rainbow-fast 2s linear infinite;
-  box-shadow:
-    0 2px 8px  color-mix(in oklch, var(--pink)    80%, transparent),
-    0 2px 18px color-mix(in oklch, var(--lavender) 70%, transparent),
-    0 2px 35px color-mix(in oklch, var(--hot-pink) 50%, transparent);
-  z-index: 9998;
+  top: 18%;
+  left: 0;
+  width: 280px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--c4), var(--white));
+  box-shadow: 0 0 6px var(--c4), 0 0 14px var(--c5), 0 0 28px var(--c6);
+  border-radius: 2px;
   pointer-events: none;
-  border-radius: 0 0 4px 4px;
+  z-index: 9990;
+  animation: meteor1 6s linear infinite;
+  animation-delay: 0s;
 }
 
-/* 底部彩虹糖果条 */
+/* 流星2 */
 .top-nav::after {
-  content: '✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦';
+  content: '';
   position: fixed;
-  bottom: 0; left: 0;
-  width: 100%;
-  text-align: center;
-  font-size: .7rem;
-  letter-spacing: 3px;
-  padding: 4px 0;
-  background: linear-gradient(90deg,
-    var(--pink), var(--lemon), var(--mint), var(--lavender), var(--pink)
-  );
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: bar-flow 3s linear infinite;
-  filter:
-    drop-shadow(0 0 4px var(--pink))
-    drop-shadow(0 0 8px var(--lavender));
-  z-index: 9998;
+  top: 0; right: 0;
+  width: 200px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--c7), var(--white));
+  box-shadow: 0 0 8px var(--c7), 0 0 18px var(--c0);
+  border-radius: 2px;
   pointer-events: none;
+  z-index: 9990;
+  animation: meteor2 8s linear infinite;
+  animation-delay: 3s;
 }
 
+/* 顶部彩虹光条（theme-switcher::before） */
 .theme-switcher {
   display: flex;
-  gap: .5rem;
+  gap: 0.4rem;
   flex-wrap: wrap;
+  position: relative;
 }
 
-/* 顶部星星雨（theme-switcher 伪元素） */
 .theme-switcher::before {
-  content: '⭐';
+  content: '';
   position: fixed;
-  top: -40px; left: 30%;
-  font-size: 20px;
+  top: 0; left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg,
+    var(--c0),var(--c1),var(--c2),var(--c3),
+    var(--c4),var(--c5),var(--c6),var(--c7),var(--c0)
+  );
+  background-size: 800% 800%;
+  animation: rainbow-fast 1.2s linear infinite;
+  box-shadow:
+    0 0 10px var(--c4),
+    0 0 20px var(--c5),
+    0 0 35px var(--c6),
+    0 0 55px var(--c7);
+  z-index: 9995;
   pointer-events: none;
-  z-index: 9989;
-  animation: petal-fall-2 8s ease-in infinite;
-  animation-delay: 1s;
-  filter: drop-shadow(0 0 5px var(--lemon));
-}
-.theme-switcher::after {
-  content: '💫';
-  position: fixed;
-  top: -40px; left: 60%;
-  font-size: 18px;
-  pointer-events: none;
-  z-index: 9989;
-  animation: petal-fall-4 10s ease-in infinite;
-  animation-delay: 4.5s;
 }
 
-/* 主题按钮 */
+/* 按钮 */
 .theme-btn {
-  font-family: 'Orbitron', 'Rajdhani', sans-serif;
-  font-size: .75rem;
-  letter-spacing: 1.5px;
-  color: var(--purple);
-  background: linear-gradient(135deg,
-    color-mix(in oklch, var(--pink) 30%, white),
-    color-mix(in oklch, var(--lavender) 30%, white)
-  );
-  border: 2px solid var(--pink-lav);
-  padding: 3px 12px;
-  border-radius: 20px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  color: var(--c4);
+  background: transparent;
+  border: 1px solid var(--c4);
+  padding: 2px 10px;
+  border-radius: 8px;
   cursor: pointer;
-  outline: 2px solid transparent;
-  outline-offset: 2px;
+  outline: none;
   -webkit-appearance: none;
   appearance: none;
-  transition: transform .18s, box-shadow .18s;
-  animation:
-    border-dance 2s linear infinite,
-    outline-pulse 3s ease-in-out infinite;
-  will-change: transform, box-shadow;
-  text-shadow: 0 1px 3px rgba(200,100,200,.3);
-  box-shadow:
-    0 2px 10px color-mix(in oklch, var(--pink) 40%, transparent),
-    0 0 0 3px  color-mix(in oklch, var(--lavender) 20%, transparent);
+  animation: border-cycle 1.8s linear infinite;
+  transition: transform .15s;
 }
-
 .theme-btn:hover {
-  transform: scale(1.18) rotate(-3deg);
-  box-shadow:
-    0 4px 20px color-mix(in oklch, var(--hot-pink) 60%, transparent),
-    0 0 30px    color-mix(in oklch, var(--lavender) 50%, transparent);
-  animation: wiggle .5s ease, border-dance 2s linear infinite;
+  transform: scale(1.18) rotate(-2deg);
+  color: #fff;
+  background: rgba(0,255,255,.12);
+  animation: none;
+  box-shadow: 0 0 24px var(--c4), 0 0 50px var(--c6);
 }
+.theme-btn.active { color:#fff; background:rgba(0,255,255,.18); box-shadow:0 0 14px var(--c4); }
 
-.theme-btn.active {
-  background: linear-gradient(135deg, var(--pink), var(--lavender));
-  color: white;
-  text-shadow: 0 0 6px white;
-}
-
-/* 语言切换按钮 */
 .lang-btn {
   font-family: 'Orbitron', sans-serif;
-  font-size: .85rem;
+  font-size: 0.85rem;
   letter-spacing: 2px;
-  color: var(--txt-dim);
-  border: 2px dashed var(--pink-lav);
-  padding: 3px 12px;
-  border-radius: 20px;
+  color: var(--dim);
+  border: 1px solid rgba(240,240,255,.3);
+  padding: 2px 10px;
+  border-radius: 8px;
   transition: all .25s;
   white-space: nowrap;
-  background: color-mix(in oklch, var(--pink) 10%, transparent);
 }
 .lang-btn:hover {
-  color: var(--purple);
-  border-color: var(--purple);
-  border-style: solid;
-  transform: scale(1.1) rotate(2deg);
-  box-shadow: 0 0 16px color-mix(in oklch, var(--lavender) 60%, transparent);
+  color: var(--c2);
+  border-color: var(--c2);
+  box-shadow: 0 0 16px var(--c2);
+  transform: scale(1.1);
 }
 .lang-btn::after { display: none; }
 
-/* ─── HERO ─── */
+/* ============================================================
+   HERO — 视觉核弹头
+   ============================================================ */
 .hero {
   text-align: center;
   padding: 3rem 0 2rem;
@@ -616,221 +540,239 @@ main::after {
   animation: float-bob 4s ease-in-out infinite;
 }
 
-/* 旋转花环1 */
+/* 旋转光圈 #1 — 圆形 */
 .hero::before {
   content: '';
   position: absolute;
   top: 50%; left: 50%;
-  width: 500px; height: 500px;
+  width: 480px; height: 480px;
   border-radius: 50%;
-  box-shadow:
-    0 0 0 3px   color-mix(in oklch, var(--pink)     60%, transparent),
-    0 0 0 8px   color-mix(in oklch, var(--lavender)  30%, transparent),
-    0 0 0 14px  color-mix(in oklch, var(--mint)      20%, transparent),
-    0 0 60px    color-mix(in oklch, var(--pink)      20%, transparent),
-    0 0 100px   color-mix(in oklch, var(--lavender)  15%, transparent),
-    inset 0 0 60px color-mix(in oklch, var(--pink)   10%, transparent);
   background: transparent;
-  animation: spin-slow 8s linear infinite;
+  border: 2px solid transparent;
+  box-shadow:
+    0 0 0 2px rgba(0,255,255,.30),
+    0 0 0 5px rgba(255,0,255,.15),
+    0 0 0 8px rgba(255,0,60,.08),
+    0 0 80px  rgba(0,255,255,.12),
+    0 0 150px rgba(255,0,255,.10),
+    inset 0 0 80px rgba(136,0,255,.06);
+  animation: ring1 5s linear infinite;
   pointer-events: none;
   z-index: 0;
 }
 
-/* 旋转花环2（椭圆） */
+/* 旋转光圈 #2 — 椭圆反转 */
 .hero::after {
   content: '';
   position: absolute;
   top: 50%; left: 50%;
-  width: 600px; height: 220px;
+  width: 560px; height: 200px;
   border-radius: 50%;
   box-shadow:
-    0 0 0 2px   color-mix(in oklch, var(--peach)     50%, transparent),
-    0 0 0 6px   color-mix(in oklch, var(--coral)      25%, transparent),
-    0 0 50px    color-mix(in oklch, var(--peach)      18%, transparent),
-    0 0 90px    color-mix(in oklch, var(--hot-pink)   12%, transparent);
-  animation: spin-rev 10s linear infinite;
+    0 0 0 2px rgba(255,0,60,.35),
+    0 0 0 5px rgba(255,102,0,.18),
+    0 0 60px rgba(255,0,60,.18),
+    0 0 100px rgba(255,102,0,.12);
+  animation: ring2 7s linear infinite;
   pointer-events: none;
   z-index: 0;
 }
 
 #hero-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 340%;
+  font-size: 360%;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 6px;
+  letter-spacing: 8px;
   position: relative;
   display: inline-block;
   margin: 1.5rem 0;
   z-index: 2;
 
-  /* 可爱彩虹渐变文字 */
+  /* 彩虹渐变文字 */
   background: linear-gradient(90deg,
-    var(--hot-pink), var(--peach), var(--lemon),
-    var(--mint),     var(--sky),   var(--lavender),
-    var(--purple),   var(--hot-pink)
+    var(--c0),var(--c1),var(--c2),var(--c3),
+    var(--c4),var(--c5),var(--c6),var(--c7),var(--c0)
   );
   background-size: 400% 400%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 
-  /* -webkit-text-stroke 描边 */
-  -webkit-text-stroke: 1.5px color-mix(in oklch, var(--pink) 40%, white);
-
-  /* 多层辉光 */
-  filter:
-    drop-shadow(0 0  6px color-mix(in oklch, var(--pink)     80%, transparent))
-    drop-shadow(0 0 16px color-mix(in oklch, var(--lavender)  70%, transparent))
-    drop-shadow(0 0 35px color-mix(in oklch, var(--hot-pink)  50%, transparent));
-
+  /* 动画叠加 */
   animation:
-    text-rainbow   3s linear infinite,
-    float-bob2     5s ease-in-out infinite,
-    heartbeat      2.8s ease-in-out infinite;
+    rainbow-ultra   1.5s linear infinite,
+    glitch-main     6s linear infinite,
+    neon-flicker    5s ease-in-out infinite,
+    hero-perspective 8s ease-in-out infinite;
 
-  will-change: transform, filter;
-  isolation: isolate;
+  /* 辉光 */
+  filter:
+    drop-shadow(0 0  8px var(--c4))
+    drop-shadow(0 0 18px var(--c5))
+    drop-shadow(0 0 40px var(--c6))
+    drop-shadow(0 0 80px var(--c7));
 }
 
-/* 色差层1 — 粉 */
+/* 色差层1 — 青 */
 #hero-title::before {
   content: 'ARKFUTURE';
   position: absolute;
   top: 0; left: 0; right: 0;
   background: linear-gradient(90deg,
-    var(--pink), var(--hot-pink), var(--lavender), var(--pink)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  mix-blend-mode: multiply;
-  filter: blur(.8px) drop-shadow(0 0 8px var(--pink));
-  animation: text-rainbow 2.5s linear infinite;
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* 色差层2 — 蓝紫 */
-#hero-title::after {
-  content: 'ARKFUTURE';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  background: linear-gradient(90deg,
-    var(--sky), var(--lavender), var(--mint), var(--sky)
+    var(--c4),var(--c5),var(--c6),var(--c7),var(--c4)
   );
   background-size: 400% 400%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   mix-blend-mode: screen;
-  filter: blur(.5px) drop-shadow(0 0 8px var(--lavender));
-  animation: text-rainbow 3.5s linear infinite reverse;
+  filter: drop-shadow(0 0 12px var(--c4)) blur(.6px);
+  animation:
+    rainbow-ultra  1.8s linear infinite,
+    glitch-layer1  6s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* 色差层2 — 红/橙 */
+#hero-title::after {
+  content: 'ARKFUTURE';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  background: linear-gradient(90deg,
+    var(--c0),var(--c1),var(--c2),var(--c7),var(--c0)
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 12px var(--c0)) blur(.6px);
+  animation:
+    rainbow-ultra  1.5s linear infinite reverse,
+    glitch-layer2  6s linear infinite;
   pointer-events: none;
   z-index: -2;
 }
 
-/* ─── SITE SECTION ─── */
+/* ============================================================
+   MAIN
+   ============================================================ */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   SITE SECTION — 左侧彩虹竖轨
+   ============================================================ */
 .site-section {
   margin: 2.5rem 0;
   position: relative;
   perspective: 1200px;
 }
 
-/* 左侧彩虹糖豆竖条 */
 .site-section::before {
   content: '';
   position: absolute;
-  left: -18px; top: 0;
-  width: 5px; height: 100%;
+  left: -20px; top: 0;
+  width: 4px; height: 100%;
   background: linear-gradient(180deg,
-    var(--pink), var(--peach), var(--lemon), var(--mint),
-    var(--sky), var(--lavender), var(--purple), var(--hot-pink), var(--pink)
+    var(--c0),var(--c1),var(--c2),var(--c3),
+    var(--c4),var(--c5),var(--c6),var(--c7),var(--c0)
   );
-  background-size: 100% 400%;
-  animation: bar-flow 2s linear infinite;
-  border-radius: 10px;
-  box-shadow:
-    4px 0 12px color-mix(in oklch, var(--pink) 50%, transparent),
-    8px 0 24px color-mix(in oklch, var(--lavender) 40%, transparent);
-  opacity: .85;
+  background-size: 100% 800%;
+  animation: rainbow-flow 2s linear infinite, bar-pulse 3s ease-in-out infinite;
+  border-radius: 2px;
+  z-index: 0;
 }
 
-/* 右侧气泡 */
+/* 右侧对称竖轨（稀薄） */
 .site-section::after {
   content: '';
   position: absolute;
-  right: -18px; top: 0;
-  width: 3px; height: 100%;
+  right: -20px; top: 0;
+  width: 2px; height: 100%;
   background: linear-gradient(180deg,
-    var(--lavender), var(--sky), var(--mint),
-    var(--peach), var(--pink), var(--lavender)
+    var(--c7),var(--c6),var(--c5),var(--c4),
+    var(--c3),var(--c2),var(--c1),var(--c0),var(--c7)
   );
-  background-size: 100% 400%;
-  animation: bar-flow 3s linear infinite reverse;
-  border-radius: 10px;
-  opacity: .35;
+  background-size: 100% 800%;
+  animation: rainbow-flow 3s linear infinite reverse;
+  border-radius: 2px;
+  opacity: .4;
+  z-index: 0;
 }
 
-/* ─── DIVIDER ─── */
+/* ============================================================
+   SECTION DIVIDER — 终极彩虹 + 旋转钻石
+   ============================================================ */
 .section-divider {
   border: none;
   height: 4px;
   margin: 2.5rem 0;
   background: linear-gradient(90deg,
-    var(--pink), var(--peach), var(--lemon), var(--mint),
-    var(--sky), var(--lavender), var(--purple), var(--hot-pink), var(--pink)
+    var(--c0),var(--c1),var(--c2),var(--c3),
+    var(--c4),var(--c5),var(--c6),var(--c7),var(--c0)
   );
-  background-size: 400% 400%;
-  animation: rainbow-fast 1.5s linear infinite;
-  border-radius: 99px;
+  background-size: 800% 800%;
+  animation: rainbow-ultra 1s linear infinite;
   box-shadow:
-    0 0  6px color-mix(in oklch, var(--pink)     70%, transparent),
-    0 0 14px color-mix(in oklch, var(--lavender)  60%, transparent),
-    0 0 28px color-mix(in oklch, var(--hot-pink)  40%, transparent);
+    0 0  8px var(--c4),
+    0 0 18px var(--c5),
+    0 0 35px var(--c6),
+    0 0 60px var(--c7),
+    0 -4px 20px var(--c7),
+    0  4px 20px var(--c4);
+  border-radius: 2px;
   position: relative;
   overflow: visible;
 }
 
-/* 分割线中央爱心 */
 .section-divider::before {
-  content: '♥';
+  content: '◆';
   position: absolute;
   left: 50%; top: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.4rem;
-  background: linear-gradient(135deg, var(--hot-pink), var(--lavender));
+  font-size: 1.2rem;
+  background: linear-gradient(90deg,
+    var(--c0),var(--c2),var(--c4),var(--c6),var(--c0)
+  );
+  background-size: 400% 400%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation:
-    heartbeat 1.4s ease-in-out infinite,
-    text-rainbow 2s linear infinite;
+    diamond         1.8s linear infinite,
+    rainbow-ultra   1s linear infinite;
   filter:
-    drop-shadow(0 0 6px var(--pink))
-    drop-shadow(0 0 14px var(--hot-pink));
-  z-index: 1;
-}
-
-/* 分割线扫光 */
-.section-divider::after {
-  content: '';
-  position: absolute;
-  top: -6px; left: -80%;
-  width: 60%; height: 16px;
-  background: linear-gradient(90deg,
-    transparent, rgba(255,255,255,.6) 50%, transparent
-  );
-  border-radius: 99px;
-  animation: shimmer 3s ease-in-out infinite;
+    drop-shadow(0 0 6px var(--c4))
+    drop-shadow(0 0 16px var(--c6));
+  z-index: 2;
   pointer-events: none;
 }
 
-/* ─── H1 section-heading ─── */
+/* 分割线电弧闪光 */
+.section-divider::after {
+  content: '';
+  position: absolute;
+  top: -4px; left: 0;
+  width: 100%; height: 12px;
+  background: linear-gradient(90deg,
+    transparent 0%, rgba(255,255,255,.4) 50%, transparent 100%
+  );
+  animation: arc-flash 4s linear infinite;
+  pointer-events: none;
+}
+
+/* ============================================================
+   H1 / H2 / H3
+   ============================================================ */
 h1, h2, h3 {
-  font-family: 'Orbitron', 'Rajdhani', sans-serif;
-  font-weight: 600;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 500;
   margin: 1.2rem 0;
   letter-spacing: 1.5px;
 }
@@ -838,157 +780,159 @@ h1, h2, h3 {
 h1.section-heading {
   font-size: 1.65rem;
   position: relative;
-  padding: .4rem 0 .5rem 1.4rem;
-
+  padding-bottom: .5rem;
+  padding-left: 1.3rem;
   background: linear-gradient(90deg,
-    var(--purple), var(--hot-pink), var(--lavender), var(--purple)
+    var(--c4),var(--c5),var(--c6),var(--c7),var(--c4)
   );
   background-size: 400% 400%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: .5px color-mix(in oklch, var(--pink) 40%, transparent);
-
-  animation: text-rainbow 4s linear infinite;
+  animation:
+    rainbow-flow  3s linear infinite,
+    rgb-noise     7s linear infinite;
   filter:
-    drop-shadow(0 0 6px color-mix(in oklch, var(--pink) 60%, transparent))
-    drop-shadow(0 0 16px color-mix(in oklch, var(--lavender) 50%, transparent));
+    drop-shadow(0 0 8px var(--c4))
+    drop-shadow(0 0 22px var(--c5));
 }
 
-/* 左侧彩虹竖条 */
+/* 左侧闪烁竖条 */
 h1.section-heading::before {
   content: '';
   position: absolute;
   left: 0; top: 0;
-  width: 6px; height: 100%;
+  width: 5px; height: 100%;
   background: linear-gradient(180deg,
-    var(--pink), var(--lavender), var(--sky), var(--mint), var(--pink)
+    var(--c4),var(--c6),var(--c7),var(--c0),var(--c4)
   );
   background-size: 100% 400%;
-  animation: bar-flow 1.8s linear infinite;
-  border-radius: 99px;
+  animation:
+    rainbow-flow 1.5s linear infinite,
+    bar-pulse    2.5s ease-in-out infinite;
+  border-radius: 3px;
   box-shadow:
-    4px 0 14px color-mix(in oklch, var(--pink)     55%, transparent),
-    8px 0 28px color-mix(in oklch, var(--lavender)  45%, transparent);
+    4px 0 16px var(--c4),
+    8px 0 32px var(--c6),
+    12px 0 48px var(--c7);
 }
 
-/* 底部虚线 */
+/* 底部流光线 */
 h1.section-heading::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0;
   width: 100%; height: 2px;
   background: linear-gradient(90deg,
-    var(--pink), var(--lavender), var(--mint), var(--pink)
+    var(--c4),var(--c5),var(--c6),var(--c7),var(--c4)
   );
-  background-size: 400% 400%;
-  animation: rainbow-fast 2s linear infinite;
-  border-radius: 99px;
-  opacity: .6;
-  box-shadow: 0 0 8px color-mix(in oklch, var(--pink) 50%, transparent);
+  background-size: 800% 800%;
+  animation: rainbow-ultra 1.5s linear infinite;
+  box-shadow: 0 0 8px var(--c4), 0 0 18px var(--c6);
+  opacity: .7;
 }
 
-/* ─── H2 ─── */
 h2.section-subheading {
   font-size: 1.3rem;
-  display: inline-block;
   position: relative;
+  display: inline-block;
   padding-bottom: 4px;
   margin-top: 0;
-
   background: linear-gradient(90deg,
-    var(--coral), var(--hot-pink), var(--peach), var(--coral)
+    var(--c0),var(--c1),var(--c7),var(--c0)
   );
   background-size: 400% 400%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-
-  animation: text-rainbow 3s linear infinite;
-  filter: drop-shadow(0 0 8px color-mix(in oklch, var(--coral) 60%, transparent));
+  animation:
+    rainbow-flow 2s linear infinite,
+    rgb-noise    9s linear infinite;
+  filter:
+    drop-shadow(0 0 6px var(--c0))
+    drop-shadow(0 0 18px var(--c7));
 }
 
-h2.section-subheading::before {
-  content: '✦ ';
-  -webkit-text-fill-color: var(--pink);
-  animation: star-twinkle 1.5s ease-in-out infinite;
-}
 h2.section-subheading::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0;
-  width: 0; height: 2px;
-  background: linear-gradient(90deg, var(--hot-pink), var(--lavender));
-  border-radius: 99px;
-  animation: underline-pop .6s ease-out .2s forwards;
-  box-shadow: 0 0 8px var(--hot-pink);
+  height: 2px;
+  background: linear-gradient(90deg,
+    var(--c0),var(--c1),var(--c7),var(--c0)
+  );
+  background-size: 400% 400%;
+  animation: line-grow .8s ease-out forwards, rainbow-ultra 1.5s linear infinite;
+  width: 0;
+  box-shadow: 0 0 8px var(--c7), 0 0 18px var(--c0);
 }
 
 h3.irc-server-label {
   font-size: 1rem;
-  color: var(--purple);
-  text-shadow:
-    0 0 6px color-mix(in oklch, var(--lavender) 70%, transparent),
-    0 0 14px color-mix(in oklch, var(--pink) 50%, transparent);
+  color: var(--c4);
+  letter-spacing: 1px;
   margin: .8rem 0 .3rem;
+  text-shadow: 0 0 8px var(--c4), 0 0 18px var(--c5);
 }
 
-/* ─── CONTENT BLOCK ─── */
+/* ============================================================
+   CONTENT-BLOCK — 3D 卡片极限版
+   ============================================================ */
 .content-block {
-  background: var(--card-bg);
-  /* backdrop-filter — 毛玻璃 */
-  backdrop-filter: blur(16px) saturate(1.6) brightness(1.05);
-  -webkit-backdrop-filter: blur(16px) saturate(1.6) brightness(1.05);
+  background: rgba(8, 0, 20, 0.88);
   padding: 1.4rem 1.7rem;
   margin: 1.2rem 0;
-  border-radius: 20px;
-  border: 2px solid color-mix(in oklch, var(--pink) 35%, white);
+  border-radius: 12px;
+  border: 1px solid var(--c4);
   position: relative;
-  overflow: visible; /* 改为 visible，允许 hover 扩展内容突破边界 */
-  z-index: 1; /* 基础层级 */
+  overflow: hidden;
   animation:
     border-dance 2s linear infinite,
     card-rock    10s ease-in-out infinite;
-  will-change: transform, z-index;
+  transform-style: preserve-3d;
+  will-change: transform;
   box-shadow:
     0  4px 20px color-mix(in oklch, var(--pink)     25%, transparent),
     0  8px 40px color-mix(in oklch, var(--lavender)  15%, transparent),
     0  0  0 4px color-mix(in oklch, var(--pink)      08%, transparent),
     inset 0 0 30px color-mix(in oklch, var(--pink)   06%, transparent);
+
+  /* isolation 隔离混合模式 */
+  isolation: isolate;
 }
 
-/* 卡片顶部彩虹线 */
+/* 顶部彩虹流光线 */
 .content-block::before {
   content: '';
   position: absolute;
   top: 0; left: 0;
-  width: 100%; height: 4px;
+  width: 100%; height: 3px;
   background: linear-gradient(90deg,
-    var(--pink), var(--peach), var(--lemon), var(--mint),
-    var(--sky), var(--lavender), var(--pink)
+    var(--c0),var(--c1),var(--c2),var(--c3),
+    var(--c4),var(--c5),var(--c6),var(--c7),var(--c0)
   );
-  background-size: 400% 400%;
-  animation: rainbow-fast 2s linear infinite;
+  background-size: 800% 800%;
+  animation: rainbow-ultra 1.5s linear infinite;
+  box-shadow: 0 0 12px var(--c4), 0 0 28px var(--c6);
   z-index: 1;
   border-radius: 20px 20px 0 0;
-  pointer-events: none;
 }
 
-/* 卡片扫光 */
+/* 全息水平扫光 */
 .content-block::after {
   content: '';
   position: absolute;
   top: 0; left: -80%;
-  width: 55%; height: 100%;
+  width: 60%; height: 100%;
   background: linear-gradient(
-    105deg,
+    90deg,
     transparent 0%,
-    rgba(255,220,240,.25) 40%,
-    rgba(255,255,255,.35) 50%,
-    rgba(220,200,255,.20) 60%,
+    rgba(0,255,255,.05) 35%,
+    rgba(255,255,255,.10) 50%,
+    rgba(255,0,255,.05) 65%,
     transparent 100%
   );
-  animation: shimmer 4s ease-in-out infinite;
+  animation: h-sweep 3s ease-in-out infinite;
   pointer-events: none;
   z-index: 2;
   border-radius: 20px;
@@ -996,49 +940,30 @@ h3.irc-server-label {
 
 .content-block:hover {
   transform: perspective(900px) rotateX(-3deg) rotateY(3deg) translateY(-8px) scale(1.02);
-  z-index: 10; /* hover 时跳到最上层，不被兄弟卡片遮住 */
   box-shadow:
-    0  8px 40px color-mix(in oklch, var(--hot-pink) 35%, transparent),
-    0 16px 80px color-mix(in oklch, var(--lavender)  25%, transparent),
-    inset 0 0 50px color-mix(in oklch, var(--pink)   10%, transparent);
-  animation: border-dance 2s linear infinite;
+    0 0 40px var(--c4),
+    0 0 80px var(--c6),
+    0 0 120px var(--c7),
+    inset 0 0 50px rgba(0,255,255,.08);
 }
 
-/* ─── QUOTE ─── */
+/* ============================================================
+   QUOTE BLOCK
+   ============================================================ */
 .site-quote {
   margin: 1.4rem 0;
   padding: 1.1rem 1.5rem 1.1rem 2rem;
-  background: color-mix(in oklch, var(--lavender) 10%, white);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-left: 4px solid var(--lavender);
-  border-radius: 0 16px 16px 0;
-  color: var(--txt);
+  background: rgba(255,40,0,.06);
+  border-left: 3px solid var(--c0);
+  border-radius: 0 10px 10px 0;
+  color: rgba(240,240,255,.9);
   font-style: italic;
   position: relative;
   overflow: hidden;
-  animation: border-dance 3s linear infinite;
-  box-shadow:
-    0 2px 16px color-mix(in oklch, var(--lavender) 20%, transparent),
-    inset 0 0 20px color-mix(in oklch, var(--pink) 08%, transparent);
+  animation: border-cycle 3s linear infinite reverse;
 }
 
 .site-quote::before {
-  content: '"';
-  position: absolute;
-  top: -10px; left: 10px;
-  font-size: 5rem;
-  font-family: Georgia, serif;
-  line-height: 1;
-  background: linear-gradient(135deg, var(--pink), var(--lavender));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  opacity: .2;
-  pointer-events: none;
-}
-
-.site-quote::after {
   content: '';
   position: absolute;
   top: 0; left: -80%;
@@ -1046,49 +971,68 @@ h3.irc-server-label {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(230,200,255,.15) 50%,
+    rgba(255,100,0,.08) 50%,
     transparent
   );
-  animation: shimmer2 5s ease-in-out infinite;
-  animation-delay: 2s;
+  animation: h-sweep2 4.5s ease-in-out infinite;
+  animation-delay: 1.5s;
   pointer-events: none;
+}
+
+/* 左侧电弧闪光 */
+.site-quote::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 3px; height: 100%;
+  background: linear-gradient(180deg,
+    var(--c0),var(--c1),var(--c2),var(--c0)
+  );
+  background-size: 100% 400%;
+  animation:
+    rainbow-flow 2s linear infinite,
+    arc-flash    5s linear infinite;
 }
 
 .site-quote cite {
   display: block;
   margin-top: .7rem;
-  font-size: .88rem;
+  font-size: .85rem;
   font-style: normal;
-  background: linear-gradient(90deg, var(--purple), var(--hot-pink));
+  background: linear-gradient(90deg, var(--c1), var(--c0), var(--c7));
+  background-size: 400% 400%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 4px color-mix(in oklch, var(--purple) 50%, transparent));
+  animation: rainbow-flow 3s linear infinite;
+  filter: drop-shadow(0 0 5px var(--c1));
 }
 
-/* ─── SYS LIST ─── */
+/* ============================================================
+   SYS LIST
+   ============================================================ */
 .sys-list {
   font-size: .88rem;
-  color: var(--txt-dim);
+  color: var(--dim);
   line-height: 2.2;
 }
 
-/* ─── WIDGET ─── */
+/* ============================================================
+   WIDGET
+   ============================================================ */
 .widget-link {
   display: block;
   margin: 8px 0;
-  padding: 6px 12px;
-  border: 2px dashed var(--pink-lav);
-  border-radius: 12px;
+  padding: 6px 10px;
+  border: 1px solid rgba(0,255,255,.25);
+  border-radius: 8px;
   max-width: 400px;
-  animation: border-dance 2.5s linear infinite;
+  animation: border-cycle 2.5s linear infinite;
   transition: all .25s;
-  background: color-mix(in oklch, var(--pink) 5%, transparent);
 }
 .widget-link:hover {
-  transform: translateX(8px) scale(1.04) rotate(1deg);
-  box-shadow: 0 0 20px color-mix(in oklch, var(--hot-pink) 40%, transparent);
-  border-style: solid;
+  transform: translateX(8px) scale(1.04);
+  box-shadow: 0 0 24px var(--c4), 0 0 50px var(--c6);
 }
 
 .widget-frame {
@@ -1100,9 +1044,11 @@ h3.irc-server-label {
   margin: 8px 0;
 }
 
-/* ─── LINKS ─── */
+/* ============================================================
+   LINKS — 终极爆破下划线
+   ============================================================ */
 a {
-  color: var(--purple);
+  color: var(--c3);
   text-decoration: none;
   font-weight: 600;
   position: relative;
@@ -1111,146 +1057,195 @@ a {
 }
 
 a:hover {
-  color: var(--hot-pink);
+  color: #fff;
   text-shadow:
-    0 0 6px  color-mix(in oklch, var(--pink)     70%, transparent),
-    0 0 14px color-mix(in oklch, var(--lavender)  60%, transparent);
-  animation: wiggle .35s ease;
+    0 0  6px var(--c4),
+    0 0 14px var(--c5),
+    0 0 30px var(--c6),
+    0 0 60px var(--c7);
+  animation: shake .3s linear;
+  filter: brightness(1.5);
 }
 
-/* mask 遮罩彩虹下划线 */
 a::after {
   content: '';
   position: absolute;
   left: 0; bottom: -2px;
   width: 100%; height: 2px;
   background: linear-gradient(90deg,
-    var(--pink), var(--peach), var(--lemon), var(--mint),
-    var(--sky), var(--lavender), var(--pink)
+    var(--c0),var(--c1),var(--c2),var(--c3),
+    var(--c4),var(--c5),var(--c6),var(--c7),var(--c0)
   );
   background-size: 400% 400%;
   transform: scaleX(0);
   transform-origin: right;
   transition: transform .3s cubic-bezier(.65,0,.35,1);
-  border-radius: 99px;
-  animation: rainbow-fast 2s linear infinite;
-  box-shadow:
-    0 0 6px  color-mix(in oklch, var(--pink)     60%, transparent),
-    0 0 12px color-mix(in oklch, var(--lavender)  50%, transparent);
+  box-shadow: 0 0 10px var(--c4), 0 0 22px var(--c6);
+  animation: rainbow-ultra 1.5s linear infinite;
 }
 
 a:hover::after {
-  transform: scaleX(1) scaleY(2.5);
+  transform: scaleX(1) scaleY(3);
   transform-origin: left;
-  filter: brightness(1.5) blur(.3px);
+  filter: brightness(3) blur(.5px);
 }
 
-/* ─── P / LI ─── */
-p, li { color: var(--txt); }
-ul { padding-left: 1.5rem; }
-li { margin-bottom: .3rem; position: relative; }
-li::marker { color: var(--pink); }
+/* ============================================================
+   P / LI
+   ============================================================ */
+p, li {
+  color: rgba(220,220,255,.88);
+}
+ul { padding-left: 1.4rem; }
+li { margin-bottom: .3rem; }
+li::marker { color: var(--c4); }
 
-/* ─── FOOTER ─── */
+/* ============================================================
+   FOOTER — 核熔炉底部
+   ============================================================ */
 footer {
   margin-top: 4rem;
-  padding: 2.5rem 0 2rem;
+  padding: 2.5rem 0 1.8rem;
   position: relative;
-  background: color-mix(in oklch, var(--bg2) 80%, white);
-  backdrop-filter: blur(12px) saturate(1.5);
-  -webkit-backdrop-filter: blur(12px) saturate(1.5);
+  background: rgba(3, 0, 10, 0.92);
   font-family: 'Orbitron', sans-serif;
   font-size: .88rem;
   overflow: hidden;
-  border-radius: 20px 20px 0 0;
 }
 
-/* footer 顶部彩虹线 */
+/* 顶部彩虹线 */
 footer::before {
   content: '';
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 4px;
   background: linear-gradient(90deg,
-    var(--pink), var(--peach), var(--lemon), var(--mint),
-    var(--sky), var(--lavender), var(--pink)
+    var(--c0),var(--c1),var(--c2),var(--c3),
+    var(--c4),var(--c5),var(--c6),var(--c7),var(--c0)
   );
-  background-size: 400% 400%;
-  animation: rainbow-fast 2s linear infinite;
-  border-radius: 20px 20px 0 0;
+  background-size: 600% 600%;
+  animation: rainbow-ultra 1.2s linear infinite;
   box-shadow:
-    0 0 10px color-mix(in oklch, var(--pink) 60%, transparent),
-    0 0 24px color-mix(in oklch, var(--lavender) 50%, transparent);
+    0 0 14px var(--c4),
+    0 0 28px var(--c6),
+    0 0 50px var(--c7);
 }
 
-/* footer 爱心光晕底部 */
+/* 底部爆炸光晕 */
 footer::after {
-  content: '♥';
+  content: '';
   position: absolute;
-  bottom: -30px; left: 50%;
+  bottom: -60px; left: 50%;
   transform: translateX(-50%);
-  font-size: 8rem;
-  background: radial-gradient(circle,
-    color-mix(in oklch, var(--pink) 30%, transparent),
+  width: 700px; height: 100px;
+  background: radial-gradient(ellipse,
+    rgba(136,0,255,.22) 0%,
+    rgba(255,0,60,.10) 40%,
     transparent 70%
   );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  opacity: .08;
   pointer-events: none;
-  animation: heartbeat 3s ease-in-out infinite;
 }
 
+/* footer 内部水平扫光 */
 .footer-inner {
   text-align: center;
   position: relative;
   z-index: 1;
+  overflow: hidden;
+}
+
+.footer-inner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 40%; height: 100%;
+  background: linear-gradient(90deg,
+    transparent, rgba(255,255,255,.04) 50%, transparent
+  );
+  animation: footer-scan 4s linear infinite;
+  pointer-events: none;
 }
 
 .footer-inner p {
   background: linear-gradient(90deg,
-    var(--purple), var(--hot-pink), var(--lavender), var(--purple)
+    var(--c4),var(--c6),var(--c7),var(--c4)
   );
   background-size: 400% 400%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: text-rainbow 5s linear infinite;
-  filter: drop-shadow(0 0 5px color-mix(in oklch, var(--lavender) 50%, transparent));
+  animation: rainbow-flow 4s linear infinite;
+  filter: drop-shadow(0 0 6px var(--c6));
   margin: .35rem 0;
 }
 
-footer a { color: var(--purple); margin: 0 .5rem; }
+footer a {
+  color: var(--c7);
+  margin: 0 .5rem;
+  animation: none;
+}
 footer a:hover {
-  color: var(--hot-pink);
-  text-shadow: 0 0 10px var(--pink), 0 0 22px var(--lavender);
+  color: #fff;
+  text-shadow: 0 0 12px var(--c7), 0 0 28px var(--c0);
+  filter: brightness(1.8);
 }
 
-} /* end @layer components */
-
 /* ============================================================
-   @layer animations — 独立动画层，优先级最低
+   CONIC GRADIENT OVERLAY — 锥形彩虹旋转叠加层
    ============================================================ */
-@layer animations {
-
-/* 气泡群：附加在 main 里悬浮 */
-.site-section:first-child {
-  overflow: hidden;
+main::before {
+  content: '';
+  position: fixed;
+  top: 50%; left: 50%;
+  width: 100vmax; height: 100vmax;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from var(--hue),
+    rgba(255,0,60,.03)   0deg,
+    rgba(255,102,0,.02)  45deg,
+    rgba(255,224,0,.02)  90deg,
+    rgba(0,255,136,.03)  135deg,
+    rgba(0,255,255,.03)  180deg,
+    rgba(0,136,255,.02)  225deg,
+    rgba(136,0,255,.03)  270deg,
+    rgba(255,0,255,.02)  315deg,
+    rgba(255,0,60,.03)   360deg
+  );
+  pointer-events: none;
+  z-index: -1;
+  animation: hue-spin 8s linear infinite;
 }
 
-} /* end @layer animations */
+/* 第二层锥形（反转、不同速） */
+main::after {
+  content: '';
+  position: fixed;
+  top: 50%; left: 50%;
+  width: 100vmax; height: 100vmax;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from var(--hue2),
+    rgba(255,0,255,.025) 0deg,
+    rgba(0,255,255,.020) 60deg,
+    rgba(255,0,60,.020)  120deg,
+    rgba(0,255,136,.025) 180deg,
+    rgba(255,224,0,.020) 240deg,
+    rgba(136,0,255,.025) 300deg,
+    rgba(255,0,255,.025) 360deg
+  );
+  pointer-events: none;
+  z-index: -1;
+  animation: hue-spin2 12s linear infinite reverse;
+}
 
 /* ============================================================
-   @layer overrides — 响应式
+   RESPONSIVE
    ============================================================ */
-@layer overrides {
-
 @media (max-width: 768px) {
   body { padding: 12px; font-size: .95rem; }
   #hero-title { font-size: 200%; letter-spacing: 3px; }
-  .hero::before { width: 300px; height: 300px; }
-  .hero::after  { width: 360px; height: 140px; }
+  .hero::before { width: 280px; height: 280px; }
+  .hero::after  { width: 320px; height: 120px; }
   h1.section-heading { font-size: 1.3rem; }
   h2.section-subheading { font-size: 1.1rem; }
   footer { font-size: .78rem; }
@@ -1258,5 +1253,3 @@ footer a:hover {
   .site-section::before { left: -10px; }
   .site-section::after  { right: -10px; }
 }
-
-} /* end @layer overrides */
