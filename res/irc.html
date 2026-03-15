@@ -9,238 +9,226 @@
 	<meta http-equiv="Pragma" content="no-cache">
 	<meta http-equiv="Expires" content="0">
 	<title>IRC Web Client</title>
-		<style>
+	<style>
+	/* ── Variables ─────────────────────────────────────── */
 	:root {
-		--cyber-primary: #00f0ff;
+		--cyber-primary:   #00f0ff;
 		--cyber-secondary: #ff00ff;
-		--cyber-accent: #ffff00;
-		--cyber-green: #00ff00;
-		--cyber-red: #ff0040;
-		--cyber-dark: #0a0a0a;
-		--cyber-dark2: #111111;
-		--cyber-dark3: #1a1a1a;
-		--cyber-border: #333333;
-		--cyber-text: #e0e0e0;
-		--cyber-text-dim: #888888;
-		--glow-primary: 0 0 10px #00f0ff, 0 0 20px #00f0ff40, 0 0 30px #00f0ff20;
-		--glow-secondary: 0 0 10px #ff00ff, 0 0 20px #ff00ff40, 0 0 30px #ff00ff20;
-		--glow-red: 0 0 10px #ff0040, 0 0 20px #ff004040;
-		--spacing-xs: 4px;
-		--spacing-sm: 8px;
-		--spacing-md: 12px;
-		--spacing-lg: 16px;
-		--spacing-xl: 24px;
-		--border-radius-sm: 2px;
-		--border-radius: 4px;
-		--transition: all 0.15s ease-out;
+		--cyber-accent:    #ffff00;
+		--cyber-green:     #00ff00;
+		--cyber-red:       #ff0040;
+		--cyber-dark:      #0a0a0a;
+		--cyber-dark2:     #111111;
+		--cyber-dark3:     #1a1a1a;
+		--cyber-border:    #333333;
+		--cyber-text:      #e0e0e0;
+		--cyber-text-dim:  #888888;
 
-		--clr-font: var(--cyber-text);
-		--clr-info: var(--cyber-primary);
+		--glow-primary:   0 0 10px #00f0ff, 0 0 20px #00f0ff40, 0 0 30px #00f0ff20;
+		--glow-secondary: 0 0 10px #ff00ff, 0 0 20px #ff00ff40, 0 0 30px #ff00ff20;
+		--glow-red:       0 0 10px #ff0040, 0 0 20px #ff004040;
+
+		--sp-xs: 4px;
+		--sp-sm: 8px;
+		--sp-md: 12px;
+		--sp-lg: 16px;
+
+		--transition: all 0.15s ease-out;
+		--font-mono: 'Courier New', 'Consolas', 'Monaco', monospace;
+
+		/* semantic colour aliases used by JS writeToScreen() */
+		--clr-font:    var(--cyber-text);
+		--clr-info:    var(--cyber-primary);
 		--clr-success: var(--cyber-green);
 		--clr-warning: var(--cyber-accent);
-		--clr-error: var(--cyber-red);
-		--clr-red: var(--cyber-red);
-		--clr-green: var(--cyber-green);
-		--clr-blue: var(--cyber-primary);
-		--clr-purple: var(--cyber-secondary);
-		--clr-gold: var(--cyber-accent);
-		--clr-brown: #cd853f;
-		--clr-accent: var(--cyber-accent);
+		--clr-error:   var(--cyber-red);
+		--clr-red:     var(--cyber-red);
+		--clr-green:   var(--cyber-green);
+		--clr-blue:    var(--cyber-primary);
+		--clr-purple:  var(--cyber-secondary);
+		--clr-gold:    var(--cyber-accent);
+		--clr-brown:   #cd853f;
+		--clr-accent:  var(--cyber-accent);
 	}
 
-	* {
+	/* ── Reset ─────────────────────────────────────────── */
+	*, *::before, *::after {
 		box-sizing: border-box;
 		margin: 0;
 		padding: 0;
 		user-select: text !important;
 		-webkit-user-select: text !important;
-		-moz-user-select: text !important;
-		-ms-user-select: text !important;
+		scrollbar-width: thin;
+		scrollbar-color: var(--cyber-border) var(--cyber-dark2);
 	}
 
-	html,
-	body {
-		font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+	::-webkit-scrollbar { width: 6px; height: 6px; }
+	::-webkit-scrollbar-track { background: var(--cyber-dark2); }
+	::-webkit-scrollbar-thumb { background: var(--cyber-border); }
+	::-webkit-scrollbar-thumb:hover { background: var(--cyber-primary); box-shadow: var(--glow-primary); }
+
+	html, body {
 		height: 100%;
-		background-color: var(--cyber-dark);
-		color: var(--cyber-text);
+		overflow: hidden;
+		font-family: var(--font-mono);
 		font-size: 13px;
 		line-height: 1.5;
-		overflow: hidden;
+		background-color: var(--cyber-dark);
+		color: var(--cyber-text);
 	}
 
-	.main {
+	/* ── App shell ─────────────────────────────────────── */
+	.irc-app {
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
 		overflow: hidden;
-		background: linear-gradient(180deg, #0a0a0a 0%, #0d0d0d 100%);
 	}
 
-	.header {
-		background: var(--cyber-dark2);
-		border-bottom: 1px solid var(--cyber-border);
-		padding: var(--spacing-sm) var(--spacing-lg);
+	/* ── Header ────────────────────────────────────────── */
+	.irc-header {
 		flex: 0 0 auto;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		position: relative;
+		padding: var(--sp-sm) var(--sp-lg);
+		background: var(--cyber-dark2);
+		border-bottom: 1px solid var(--cyber-border);
 	}
 
-	.header h1 {
+	.irc-header__title {
 		font-size: 16px;
 		font-weight: 600;
 		color: var(--cyber-primary);
 		text-transform: uppercase;
 		letter-spacing: 2px;
 		text-shadow: var(--glow-primary);
-		margin: 0;
 	}
 
-	.header-menu {
+	/* ── Header dropdown menu ──────────────────────────── */
+	.irc-menu {
 		position: relative;
 	}
 
-	.header-menu-btn {
+	.irc-menu__btn {
 		background: transparent;
 		color: var(--cyber-primary);
 		border: none;
-		padding: var(--spacing-sm) var(--spacing-md);
+		padding: var(--sp-sm) var(--sp-md);
 		cursor: pointer;
 		font-size: 11px;
-		transition: var(--transition);
+		font-family: var(--font-mono);
 		text-transform: uppercase;
 		letter-spacing: 1px;
-		font-family: 'Courier New', 'Consolas', monospace;
+		transition: var(--transition);
 	}
-
-	.header-menu-btn:hover {
+	.irc-menu__btn:hover {
 		color: var(--cyber-secondary);
 		text-shadow: var(--glow-secondary);
 	}
 
-	.header-menu-dropdown {
+	.irc-menu__dropdown {
+		display: none;
 		position: absolute;
 		top: calc(100% + 5px);
 		right: 0;
+		min-width: 150px;
 		background: var(--cyber-dark2);
 		border: 1px solid var(--cyber-border);
-		min-width: 150px;
-		z-index: 9999;
-		display: none;
 		box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+		z-index: 9999;
 	}
-
-	.header-menu-dropdown.visible {
-		display: block;
-	}
-
-	.header-menu-dropdown::before {
+	.irc-menu__dropdown::before {
 		content: '';
 		position: absolute;
-		top: -6px;
-		right: 10px;
-		width: 10px;
-		height: 10px;
+		top: -6px; right: 10px;
+		width: 10px; height: 10px;
 		background: var(--cyber-dark2);
 		border: 1px solid var(--cyber-border);
+		border-bottom: none; border-right: none;
 		transform: rotate(45deg);
-		border-bottom: none;
-		border-right: none;
 	}
+	.irc-menu__dropdown.visible { display: block; }
 
+	/* keep class names aligned with JS: .header-menu-item */
 	.header-menu-item {
-		padding: var(--spacing-sm) var(--spacing-md);
+		padding: var(--sp-sm) var(--sp-md);
 		cursor: pointer;
 		font-size: 11px;
-		transition: var(--transition);
+		font-family: var(--font-mono);
 		text-transform: uppercase;
 		letter-spacing: 0.5px;
-		border-bottom: 1px solid var(--cyber-dark3);
 		color: var(--cyber-text);
-		font-family: 'Courier New', 'Consolas', monospace;
+		border-bottom: 1px solid var(--cyber-dark3);
+		transition: var(--transition);
 	}
-
-	.header-menu-item:last-child {
-		border-bottom: none;
-	}
-
+	.header-menu-item:last-child { border-bottom: none; }
 	.header-menu-item:hover {
 		background: var(--cyber-primary);
 		color: var(--cyber-dark);
 		box-shadow: var(--glow-primary);
 	}
-
 	.header-menu-item.active {
 		background: var(--cyber-green);
 		color: var(--cyber-dark);
 	}
 
-	.settings-bar {
+	/* ── Settings bar ──────────────────────────────────── */
+	.irc-settings {
+		flex: 0 0 auto;
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--spacing-md);
-		padding: var(--spacing-md) var(--spacing-lg);
-		background-color: var(--cyber-dark2);
+		gap: var(--sp-md);
+		padding: var(--sp-md) var(--sp-lg);
+		background: var(--cyber-dark2);
 		border-bottom: 1px solid var(--cyber-border);
 		align-items: center;
 	}
 
-	.settings-bar .settings-group {
-		flex: 0 0 auto;
-	}
-
-	.settings-inputs {
+	.irc-settings__inputs {
 		display: flex;
-		gap: var(--spacing-md);
 		flex-wrap: wrap;
+		gap: var(--sp-md);
 		align-items: center;
 		flex: 1;
 		min-width: 0;
 	}
 
-	.settings-inputs .settings-group {
-		flex: 0 0 auto;
-		min-width: 140px;
-		max-width: 250px;
-	}
-
-	.settings-actions {
+	.irc-settings__actions {
 		display: flex;
-		gap: var(--spacing-md);
+		gap: var(--sp-md);
 		align-items: center;
 		flex: 0 0 auto;
 	}
 
+	/* field group */
 	.settings-group {
 		display: flex;
 		flex-direction: column;
-		gap: var(--spacing-xs);
+		gap: var(--sp-xs);
+		flex: 0 0 auto;
+		min-width: 140px;
+		max-width: 250px;
 	}
-
 	.settings-group label {
 		font-size: 10px;
 		color: var(--cyber-text-dim);
-		white-space: nowrap;
 		text-transform: uppercase;
 		letter-spacing: 1px;
+		white-space: nowrap;
 	}
-
 	.settings-group input[type="text"],
 	.settings-group input[type="password"] {
-		padding: var(--spacing-sm) var(--spacing-md);
-		background-color: var(--cyber-dark);
+		padding: var(--sp-sm) var(--sp-md);
+		background: var(--cyber-dark);
 		color: var(--cyber-text);
 		border: 1px solid var(--cyber-border);
 		font-size: 12px;
-		width: auto;
+		font-family: var(--font-mono);
 		min-width: 140px;
 		max-width: 200px;
 		transition: var(--transition);
-		font-family: 'Courier New', 'Consolas', monospace;
 	}
-
 	.settings-group input[type="text"]:focus,
 	.settings-group input[type="password"]:focus {
 		outline: none;
@@ -248,396 +236,152 @@
 		box-shadow: var(--glow-primary);
 	}
 
-	.settings-group input[type="checkbox"] {
-		width: 14px;
-		height: 14px;
-		cursor: pointer;
-		margin: 0;
-		accent-color: var(--cyber-primary);
-	}
-
-	.settings-group.checkbox-label {
-		flex-direction: row;
-		align-items: center;
-		gap: var(--spacing-sm);
-		cursor: pointer;
-		padding: var(--spacing-sm);
-		background: var(--cyber-dark);
-		border: 1px solid var(--cyber-border);
-		transition: var(--transition);
-	}
-
-	.settings-group.checkbox-label:hover {
-		border-color: var(--cyber-primary);
-	}
-
-	.settings-group.checkbox-label input[type="checkbox"] {
-		margin: 0;
-	}
-
-	.settings-group select {
-		padding: var(--spacing-sm);
-		background-color: var(--cyber-dark);
-		color: var(--cyber-text);
-		border: 1px solid var(--cyber-border);
-		font-size: 12px;
-		width: 100%;
-		transition: var(--transition);
-		font-family: 'Courier New', 'Consolas', monospace;
-		cursor: pointer;
-	}
-
-	.settings-group select:focus {
-		outline: none;
-		border-color: var(--cyber-primary);
-		box-shadow: var(--glow-primary);
-	}
-
-	.settings-group select option {
-		background: var(--cyber-dark);
-		color: var(--cyber-text);
-	}
-
-	.settings-inline {
+	/* channel row: input + join btn side by side */
+	.settings-group__row {
 		display: flex;
+		gap: var(--sp-xs);
 		align-items: center;
-		gap: var(--spacing-md);
-		padding: var(--spacing-sm) var(--spacing-md);
-		background: var(--cyber-dark);
-		border: 1px solid var(--cyber-border);
-		transition: var(--transition);
+	}
+	.settings-group__row input {
+		flex: 1;
+		min-width: 0;
 	}
 
-	.settings-inline:hover {
-		border-color: var(--cyber-primary);
-	}
-
+	/* ── Buttons ───────────────────────────────────────── */
 	.btn {
-		padding: var(--spacing-sm) var(--spacing-lg);
+		padding: var(--sp-sm) var(--sp-lg);
 		background: transparent;
 		color: var(--cyber-primary);
 		border: 1px solid var(--cyber-primary);
 		cursor: pointer;
 		font-size: 11px;
+		font-family: var(--font-mono);
 		white-space: nowrap;
-		transition: var(--transition);
 		text-transform: uppercase;
 		letter-spacing: 1px;
-		font-family: 'Courier New', 'Consolas', monospace;
+		transition: var(--transition);
 	}
-
 	.btn:hover {
 		background: var(--cyber-primary);
 		color: var(--cyber-dark);
 		box-shadow: var(--glow-primary);
 	}
-
-
-
-	.connect-btn {
-		border-color: var(--cyber-green);
-		color: var(--cyber-green);
-	}
-
-	.connect-btn:hover {
-		background: var(--cyber-green);
-		box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff0040;
-	}
-
-	.connect-btn:disabled {
+	.btn:disabled {
 		border-color: var(--cyber-border);
 		color: var(--cyber-text-dim);
 		cursor: not-allowed;
 	}
+	.btn:disabled:hover { background: transparent; box-shadow: none; }
 
-	.connect-btn:disabled:hover {
-		background: transparent;
-		box-shadow: none;
-	}
-
-	.connect-btn.disconnect {
-		border-color: var(--cyber-red);
-		color: var(--cyber-red);
-	}
-
-	.connect-btn.disconnect:hover {
-		background: var(--cyber-red);
-		box-shadow: var(--glow-red);
-	}
+	.connect-btn { border-color: var(--cyber-green); color: var(--cyber-green); }
+	.connect-btn:hover { background: var(--cyber-green); box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff0040; }
+	.connect-btn.disconnect { border-color: var(--cyber-red); color: var(--cyber-red); }
+	.connect-btn.disconnect:hover { background: var(--cyber-red); box-shadow: var(--glow-red); }
 
 	.send-btn {
-		padding: var(--spacing-sm) var(--spacing-lg);
+		padding: var(--sp-sm) var(--sp-lg);
 		background: var(--cyber-primary);
 		color: var(--cyber-dark);
 		border: 1px solid var(--cyber-primary);
 		cursor: pointer;
 		font-size: 11px;
+		font-family: var(--font-mono);
 		white-space: nowrap;
-		transition: var(--transition);
 		text-transform: uppercase;
 		letter-spacing: 1px;
-		font-family: 'Courier New', 'Consolas', monospace;
 		min-width: 60px;
+		transition: var(--transition);
 	}
+	.send-btn:hover { background: var(--cyber-secondary); border-color: var(--cyber-secondary); box-shadow: var(--glow-secondary); }
+	.send-btn:disabled { background: var(--cyber-dark); border-color: var(--cyber-border); color: var(--cyber-text-dim); cursor: not-allowed; }
 
-	.send-btn:hover {
-		background: var(--cyber-secondary);
-		border-color: var(--cyber-secondary);
-		box-shadow: var(--glow-secondary);
-	}
-
-	.send-btn:disabled {
-		border-color: var(--cyber-border);
-		background: var(--cyber-dark);
-		color: var(--cyber-text-dim);
-		cursor: not-allowed;
-	}
-
+	/* ── Connection status badge ───────────────────────── */
 	.connection-status {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--spacing-sm);
-		padding: var(--spacing-sm) var(--spacing-lg);
-		background-color: var(--cyber-dark3);
+		gap: var(--sp-sm);
+		padding: var(--sp-sm) var(--sp-lg);
+		background: var(--cyber-dark3);
 		border: 1px solid var(--cyber-border);
 		font-size: 10px;
-		margin-left: auto;
-		flex: 0 0 auto;
-		transition: var(--transition);
 		text-transform: uppercase;
 		letter-spacing: 1px;
 		min-height: 32px;
-		box-sizing: border-box;
-	}
-
-	.connection-status.connected {
-		border-color: var(--cyber-green);
-		color: var(--cyber-green);
-		box-shadow: 0 0 10px #00ff0040;
-	}
-
-	.connection-status.connecting {
-		border-color: var(--cyber-accent);
-		color: var(--cyber-accent);
-		animation: pulse 1s ease-in-out infinite;
-	}
-
-	.connection-status.disconnected {
-		border-color: var(--cyber-red);
-		color: var(--cyber-red);
-	}
-
-	.connection-status .indicator {
-		width: 8px;
-		height: 8px;
-		border-radius: 50%;
-		background-color: var(--cyber-border);
+		flex: 0 0 auto;
 		transition: var(--transition);
 	}
-
-	.connection-status.connected .indicator {
-		background-color: var(--cyber-green);
-		box-shadow: 0 0 10px #00ff00;
+	.connection-status .indicator {
+		width: 8px; height: 8px;
+		border-radius: 50%;
+		background: var(--cyber-border);
+		transition: var(--transition);
 	}
+	.connection-status.connected  { border-color: var(--cyber-green);  color: var(--cyber-green);  box-shadow: 0 0 10px #00ff0040; }
+	.connection-status.connecting { border-color: var(--cyber-accent);  color: var(--cyber-accent); animation: pulse 1s ease-in-out infinite; }
+	.connection-status.disconnected { border-color: var(--cyber-red);   color: var(--cyber-red); }
+	.connection-status.connected  .indicator { background: var(--cyber-green);  box-shadow: 0 0 10px #00ff00; }
+	.connection-status.connecting .indicator { background: var(--cyber-accent); box-shadow: 0 0 10px #ffff00; animation: pulse 1s ease-in-out infinite; }
+	.connection-status.disconnected .indicator { background: var(--cyber-red);  box-shadow: 0 0 10px #ff0040; }
 
-	.connection-status.connecting .indicator {
-		background-color: var(--cyber-accent);
-		box-shadow: 0 0 10px #ffff00;
-		animation: pulse 1s ease-in-out infinite;
-	}
+	@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-	.connection-status.disconnected .indicator {
-		background-color: var(--cyber-red);
-		box-shadow: 0 0 10px #ff0040;
-	}
-
-	@keyframes pulse {
-
-		0%,
-		100% {
-			opacity: 1;
-		}
-
-		50% {
-			opacity: 0.5;
-		}
-	}
-
+	/* ── SSL warning toast ─────────────────────────────── */
 	.ssl-warning {
 		display: none;
-		position: absolute;
-		bottom: 20px;
-		right: 20px;
+		position: fixed;
+		bottom: 20px; right: 20px;
 		max-width: 380px;
 		background: var(--cyber-dark2);
 		border: 1px solid var(--cyber-accent);
 		color: var(--cyber-text);
-		padding: var(--spacing-md);
+		padding: var(--sp-md);
 		font-size: 12px;
-		z-index: 200;
-		box-shadow: 0 0 20px rgba(255, 255, 0, 0.2);
 		line-height: 1.4;
+		z-index: 9000;
+		box-shadow: 0 0 20px rgba(255, 255, 0, 0.2);
 	}
+	.ssl-warning.visible { display: block; }
+	.ssl-warning a { color: var(--cyber-primary); text-decoration: underline; cursor: pointer; }
+	.ssl-warning code { background: var(--cyber-dark3); padding: 2px 4px; border: 1px solid var(--cyber-border); font-family: var(--font-mono); }
 
-	.ssl-warning.visible {
-		display: block;
-	}
-
-	.ssl-warning a {
-		color: var(--cyber-primary);
-		text-decoration: underline;
-		cursor: pointer;
-	}
-
-	.ssl-warning code {
-		background: var(--cyber-dark3);
-		padding: 2px 4px;
-		border: 1px solid var(--cyber-border);
-		font-family: 'Courier New', monospace;
-	}
-
-	.chat-container {
+	/* ── Chat area (fills remaining height) ────────────── */
+	.irc-chat {
 		flex: 1 1 auto;
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
 		position: relative;
 		min-height: 0;
-		background-color: var(--cyber-dark);
 	}
 
-	.input-container {
-		flex: 0 0 auto;
-		display: flex;
-		gap: var(--spacing-sm);
-		padding: var(--spacing-sm);
-		background-color: var(--cyber-dark3);
-		border-top: 1px solid var(--cyber-border);
-		align-items: center;
-	}
-
-	.input-container input {
-		flex: 1;
-	}
-
-	.channels {
-		flex: 0 0 auto;
-		background-color: var(--cyber-dark2);
-		border-bottom: 1px solid var(--cyber-border);
-		display: flex;
-		align-items: center;
-		padding: var(--spacing-xs) var(--spacing-sm);
-		gap: var(--spacing-sm);
-		overflow-x: auto;
-		flex-wrap: nowrap;
-		position: relative;
-	}
-
-	.channels::-webkit-scrollbar {
-		height: 3px;
-	}
-
-	.channel {
-		padding: var(--spacing-xs) var(--spacing-md);
-		background-color: var(--cyber-dark3);
-		border: 1px solid var(--cyber-border);
-		cursor: pointer;
-		font-size: 11px;
-		transition: var(--transition);
-		display: inline-flex;
-		align-items: center;
-		gap: var(--spacing-xs);
-		white-space: nowrap;
-		position: relative;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-	}
-
-	.channel:hover {
-		border-color: var(--cyber-primary);
-	}
-
-	.channel.active {
-		background: var(--cyber-primary);
-		color: var(--cyber-dark);
-		border-color: var(--cyber-primary);
-		box-shadow: var(--glow-primary);
-	}
-
-	.channel .unread-badge {
-		position: absolute;
-		top: -4px;
-		right: -4px;
-		background-color: var(--cyber-red);
-		color: var(--cyber-dark);
-		font-size: 9px;
-		padding: 1px 4px;
-		font-weight: 700;
-		min-width: 14px;
-		text-align: center;
-		box-shadow: var(--glow-red);
-	}
-
-	.channel button.x {
-		background: none;
-		border: none;
-		color: inherit;
-		cursor: pointer;
-		padding: 2px 4px;
-		font-weight: bold;
-		font-size: 12px;
-		transition: var(--transition);
-		line-height: 1;
-		opacity: 0.7;
-	}
-
-	.channel button.x:hover {
-		opacity: 1;
-	}
-
-	.channel:not(.active) button.x {
-		opacity: 0;
-	}
-
-	.channel:not(.active):hover button.x {
-		opacity: 0.5;
-	}
-
+	/* ── Log overlay ───────────────────────────────────── */
 	.log-container {
+		display: none;
 		position: absolute;
 		inset: 0;
-		background-color: var(--cyber-dark2);
-		border-bottom: 1px solid var(--cyber-primary);
-		display: none;
 		flex-direction: column;
-		z-index: 100;
+		background: var(--cyber-dark2);
+		border-bottom: 1px solid var(--cyber-primary);
 		box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+		z-index: 100;
 	}
-
-	.log-container.visible {
-		display: flex;
-	}
+	.log-container.visible { display: flex; }
 
 	.log-header {
 		flex: 0 0 auto;
-		padding: var(--spacing-sm) var(--spacing-md);
-		background-color: var(--cyber-dark3);
-		border-bottom: 1px solid var(--cyber-border);
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		padding: var(--sp-sm) var(--sp-md);
+		background: var(--cyber-dark3);
+		border-bottom: 1px solid var(--cyber-border);
 		font-size: 11px;
-		min-height: 30px;
 		text-transform: uppercase;
 		letter-spacing: 1px;
 		color: var(--cyber-primary);
+		min-height: 30px;
 	}
-
-	.log-controls {
-		display: flex;
-		gap: var(--spacing-xs);
-	}
-
+	.log-controls { display: flex; gap: var(--sp-xs); }
 	.log-controls button {
 		padding: 3px 8px;
 		background: transparent;
@@ -645,11 +389,11 @@
 		color: var(--cyber-text-dim);
 		cursor: pointer;
 		font-size: 10px;
-		transition: var(--transition);
+		font-family: var(--font-mono);
 		text-transform: uppercase;
 		letter-spacing: 0.5px;
+		transition: var(--transition);
 	}
-
 	.log-controls button:hover {
 		border-color: var(--cyber-primary);
 		color: var(--cyber-primary);
@@ -659,39 +403,91 @@
 	#logOutput {
 		flex: 1 1 auto;
 		overflow-y: auto;
-		padding: var(--spacing-sm);
+		padding: var(--sp-sm);
 		font-size: 11px;
-		font-family: 'Courier New', 'Consolas', monospace;
-		background-color: var(--cyber-dark3);
+		font-family: var(--font-mono);
+		background: var(--cyber-dark3);
 		color: var(--cyber-text);
 		white-space: pre-wrap;
 		word-wrap: break-word;
 		line-height: 1.4;
-		user-select: text;
-		-webkit-user-select: text;
-		-moz-user-select: text;
-		-ms-user-select: text;
 	}
+	#logOutput:empty::before { content: '[ NO DATA ]'; color: var(--cyber-text-dim); }
 
-	#logOutput:empty::before {
-		content: '[ NO DATA ]';
-		color: var(--cyber-text-dim);
+	/* ── Tab bar ───────────────────────────────────────── */
+	.channels {
+		flex: 0 0 auto;
+		display: flex;
+		align-items: center;
+		gap: var(--sp-sm);
+		padding: var(--sp-xs) var(--sp-sm);
+		background: var(--cyber-dark2);
+		border-bottom: 1px solid var(--cyber-border);
+		overflow-x: auto;
+		flex-wrap: nowrap;
 	}
+	.channels::-webkit-scrollbar { height: 3px; }
 
+	.channel {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--sp-xs);
+		padding: var(--sp-xs) var(--sp-md);
+		background: var(--cyber-dark3);
+		border: 1px solid var(--cyber-border);
+		cursor: pointer;
+		font-size: 11px;
+		font-family: var(--font-mono);
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		white-space: nowrap;
+		position: relative;
+		transition: var(--transition);
+	}
+	.channel:hover { border-color: var(--cyber-primary); }
+	.channel.active {
+		background: var(--cyber-primary);
+		color: var(--cyber-dark);
+		border-color: var(--cyber-primary);
+		box-shadow: var(--glow-primary);
+	}
+	.channel .unread-badge {
+		position: absolute;
+		top: -4px; right: -4px;
+		background: var(--cyber-red);
+		color: var(--cyber-dark);
+		font-size: 9px;
+		font-weight: 700;
+		padding: 1px 4px;
+		min-width: 14px;
+		text-align: center;
+		box-shadow: var(--glow-red);
+	}
+	.channel button.x {
+		background: none;
+		border: none;
+		color: inherit;
+		cursor: pointer;
+		padding: 2px 4px;
+		font-size: 12px;
+		font-weight: bold;
+		line-height: 1;
+		opacity: 0.7;
+		transition: var(--transition);
+	}
+	.channel button.x:hover { opacity: 1; }
+	.channel:not(.active) button.x { opacity: 0; }
+	.channel:not(.active):hover button.x { opacity: 0.5; }
+
+	/* ── Channel contents wrapper ──────────────────────── */
 	.channelcontents-wrapper {
 		flex: 1 1 auto;
 		display: flex;
 		overflow: hidden;
 		min-height: 0;
 	}
-
-	.channelcontents-wrapper.visible {
-		display: flex;
-	}
-
-	.channelcontents-wrapper.hidden {
-		display: none;
-	}
+	.channelcontents-wrapper.hidden { display: none; }
+	.channelcontents-wrapper.visible { display: flex; }
 
 	.channelcontents {
 		display: flex;
@@ -701,365 +497,122 @@
 		min-height: 0;
 	}
 
+	/* ── Single channel pane ───────────────────────────── */
 	.channelcontent {
-		flex: 1 1 auto;
 		display: none;
+		flex: 1 1 auto;
 		flex-direction: row;
 		min-height: 0;
 	}
+	.channelcontent.active { display: flex; }
 
-	.channelcontent.active {
-		display: flex;
-	}
+	/*
+	 * JS (Tab_Create) creates:
+	 *   div.channelcontent
+	 *     nav.ch-panel          ← navWrapper  (flex column, message area)
+	 *       h3                  ← this.topic
+	 *       nav.ch-messages     ← this.content (scrollable messages)
+	 *     ul.ch-userlist        ← this.userlist
+	 *
+	 * We target via descendant selectors from .channelcontent to avoid globals.
+	 */
 
-	.channelcontent nav {
+	/* message panel */
+	.channelcontent > nav {
 		flex: 1 1 auto;
 		display: flex;
 		flex-direction: column;
-		background-color: var(--cyber-dark3);
-		overflow: hidden;
+		background: var(--cyber-dark3);
 		border: 1px solid var(--cyber-border);
+		overflow: hidden;
+		min-width: 0;
 	}
 
-	.channelcontent nav h3 {
+	/* topic bar */
+	.channelcontent > nav > h3 {
 		flex: 0 0 auto;
-		padding: var(--spacing-sm) var(--spacing-md);
-		margin: 0;
-		background-color: var(--cyber-dark2);
+		display: flex;
+		align-items: center;
+		padding: var(--sp-sm) var(--sp-md);
+		background: var(--cyber-dark2);
 		border-bottom: 1px solid var(--cyber-border);
 		font-size: 12px;
 		min-height: 35px;
-		display: flex;
-		align-items: center;
 		text-transform: uppercase;
 		letter-spacing: 1px;
 		color: var(--cyber-primary);
+		font-weight: 600;
 	}
 
-	.channelcontent nav nav {
+	/* message scroll area */
+	.channelcontent > nav > nav {
 		flex: 1 1 auto;
 		overflow-y: auto;
-		padding: var(--spacing-md);
+		padding: var(--sp-sm) var(--sp-md);
 		min-height: 0;
 	}
 
-	.channelcontent nav p {
+	/* each message line */
+	.channelcontent > nav > nav > p {
 		margin: 0;
-		padding: var(--spacing-sm) 0;
+		padding: 2px 0;
 		line-height: 1.5;
+		word-wrap: break-word;
 	}
 
-	ul {
+	/* user list */
+	.channelcontent > ul {
 		flex: 0 0 200px;
 		overflow-y: auto;
-		padding: var(--spacing-sm);
-		margin: 0;
-		border-left: 1px solid var(--cyber-border);
+		padding: var(--sp-sm);
 		list-style: none;
-		background-color: var(--cyber-dark2);
+		background: var(--cyber-dark2);
+		border-left: 1px solid var(--cyber-border);
 		min-height: 0;
 	}
 
-	.channelcontents li {
-		padding: var(--spacing-xs) var(--spacing-sm);
-		margin: 1px 0;
+	/* user list item */
+	.channelcontent > ul > li {
 		display: flex;
-		gap: var(--spacing-sm);
-		transition: var(--transition);
-		cursor: pointer;
 		align-items: center;
+		gap: var(--sp-sm);
+		padding: var(--sp-xs) var(--sp-sm);
+		margin: 1px 0;
 		font-size: 11px;
+		cursor: pointer;
+		transition: var(--transition);
 	}
+	.channelcontent > ul > li:hover { background: var(--cyber-dark3); }
 
-	.channelcontents li:hover {
-		background-color: var(--cyber-dark3);
-	}
-
-	.channelcontents li p {
+	/* prefix column */
+	.channelcontent > ul > li > p:first-child {
+		width: 18px;
+		flex-shrink: 0;
+		text-align: center;
+		font-weight: bold;
+		color: var(--cyber-secondary);
 		margin: 0;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
 
-	.channelcontents li p:first-child {
-		width: 18px;
-		color: var(--cyber-secondary);
-		font-weight: bold;
-		text-align: center;
-		flex-shrink: 0;
-	}
-
-	.channelcontents li p:nth-child(2) {
+	/* nick column */
+	.channelcontent > ul > li > p:nth-child(2) {
 		flex: 1;
+		margin: 0;
 		color: var(--cyber-text);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 		cursor: pointer;
 	}
-
-	.channelcontents li p:nth-child(2):hover {
+	.channelcontent > ul > li > p:nth-child(2):hover {
 		color: var(--cyber-primary);
 		text-decoration: underline;
 	}
 
-	.message {
-		padding: var(--spacing-xs) var(--spacing-md);
-		margin-bottom: 1px;
-		transition: var(--transition);
-	}
-
-	.message:hover {
-		background-color: var(--cyber-dark2);
-	}
-
-	.message .timestamp {
-		color: var(--cyber-text-dim);
-		font-size: 10px;
-		margin-right: var(--spacing-sm);
-	}
-
-	.message .username {
-		font-weight: 600;
-		margin-right: var(--spacing-sm);
-		color: var(--cyber-secondary);
-	}
-
-	.message .content {
-		word-wrap: break-word;
-		line-height: 1.5;
-	}
-
-	.message .content a {
-		color: var(--cyber-primary);
-		text-decoration: none;
-	}
-
-	.message .content a:hover {
-		text-decoration: underline;
-	}
-
-	#input {
-		flex: 1;
-		padding: var(--spacing-sm) var(--spacing-md);
-		background-color: var(--cyber-dark);
-		color: var(--cyber-text);
-		border: 1px solid var(--cyber-border);
-		font-size: 13px;
-		transition: var(--transition);
-		font-family: 'Courier New', 'Consolas', monospace;
-	}
-
-	#input:focus {
-		outline: none;
-		border-color: var(--cyber-primary);
-		box-shadow: var(--glow-primary);
-	}
-
-	#input::placeholder {
-		color: var(--cyber-text-dim);
-	}
-
-	.char-count {
-		flex: 0 0 auto;
-		padding: var(--spacing-xs) var(--spacing-sm);
-		font-size: 11px;
-		color: var(--cyber-text-dim);
-		background-color: var(--cyber-dark);
-		border: 1px solid var(--cyber-border);
-		border-radius: var(--border-radius-sm);
-		min-width: 60px;
-		text-align: center;
-		transition: var(--transition);
-		font-family: 'Courier New', 'Consolas', monospace;
-	}
-
-	.char-count.warning {
-		color: var(--cyber-accent);
-		border-color: var(--cyber-accent);
-		box-shadow: var(--glow-secondary);
-	}
-
-	.char-count.danger {
-		color: var(--cyber-red);
-		border-color: var(--cyber-red);
-		box-shadow: var(--glow-red);
-	}
-
-	::-webkit-scrollbar {
-		width: 6px;
-		height: 6px;
-	}
-
-	::-webkit-scrollbar-track {
-		background: var(--cyber-dark2);
-	}
-
-	::-webkit-scrollbar-thumb {
-		background: var(--cyber-border);
-		transition: var(--transition);
-	}
-
-	::-webkit-scrollbar-thumb:hover {
-		background: var(--cyber-primary);
-		box-shadow: var(--glow-primary);
-	}
-
-	* {
-		scrollbar-width: thin;
-		scrollbar-color: var(--cyber-border) var(--cyber-dark2);
-	}
-
-	@media (max-width: 768px) {
-		.settings-bar {
-			flex-direction: column;
-			gap: var(--spacing-sm);
-			padding: var(--spacing-sm) var(--spacing-md);
-		}
-
-		.chat-container {
-			padding-bottom: 60px;
-		}
-
-		.input-container {
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			z-index: 1000;
-			background-color: var(--cyber-dark3);
-			border-top: 1px solid var(--cyber-border);
-			padding: var(--spacing-sm);
-			display: flex !important;
-			box-sizing: border-box;
-		}
-
-		.settings-inputs {
-			flex-direction: column;
-			width: 100%;
-			gap: var(--spacing-sm);
-		}
-
-		.settings-inputs .settings-group {
-			width: 100%;
-			flex: 1 1 auto;
-			min-width: unset;
-			max-width: unset;
-		}
-
-		.settings-group {
-			width: 100%;
-		}
-
-		.settings-group input[type="text"],
-		.settings-group input[type="password"] {
-			width: 100%;
-			min-width: unset;
-			padding: var(--spacing-sm) var(--spacing-md);
-		}
-
-		.settings-group label {
-			font-size: 10px;
-		}
-
-		.settings-actions {
-			width: 100%;
-			justify-content: space-between;
-		}
-
-		.header h1 {
-			font-size: 14px;
-		}
-
-		.header-menu-btn {
-			font-size: 10px;
-			padding: var(--spacing-xs) var(--spacing-sm);
-		}
-
-		.connection-status {
-			margin-left: auto;
-			flex: 0 0 auto;
-			padding: 4px 8px;
-			font-size: 9px;
-		}
-
-		.connection-status span:last-child {
-			display: none;
-		}
-
-		.log-container {
-			height: 40vh;
-		}
-
-		.channelcontent {
-			flex-direction: column;
-			min-height: 0;
-		}
-
-		.channelcontent > nav:first-of-type {
-			flex: 1 1 0%;
-			overflow-y: auto;
-			min-height: 0;
-		}
-
-		ul {
-			height: 20vh !important;
-			box-sizing: border-box;
-			flex-shrink: 0;
-			border-left: none;
-			border-top: 1px solid var(--cyber-border);
-			overflow-y: auto;
-			min-height: 80px;
-		}
-
-		#input {
-			margin: var(--spacing-sm);
-			padding: var(--spacing-sm) var(--spacing-md);
-			font-size: 16px;
-		}
-
-		.input-container {
-			padding: var(--spacing-sm);
-		}
-
-		.channel {
-			font-size: 10px;
-			padding: 4px 10px;
-		}
-
-		.unread-badge {
-			top: -3px;
-			right: -3px;
-			font-size: 8px;
-			padding: 1px 4px;
-			min-width: 12px;
-		}
-	}
-
-	@media (max-width: 480px) {
-			.header h1 {
-				font-size: 12px;
-			}
-
-			ul {
-			flex: 0 0 100px;
-		}
-
-		.log-header {
-			padding: var(--spacing-sm);
-		}
-
-		.btn {
-			padding: 6px 10px;
-			font-size: 10px;
-		}
-	}
-
-	@media (max-width: 360px) {
-		.channel {
-			padding: 3px 6px;
-			font-size: 10px;
-		}
-	}
-
+	/* ── Empty state ───────────────────────────────────── */
 	.empty-state {
 		display: flex;
 		flex-direction: column;
@@ -1068,60 +621,167 @@
 		height: 100%;
 		color: var(--cyber-text-dim);
 		text-align: center;
-		padding: var(--spacing-lg);
+		padding: var(--sp-lg);
 	}
-
 	.empty-state h3 {
-		margin: 0 0 8px 0;
+		margin: 0 0 8px;
 		font-size: 14px;
 		text-transform: uppercase;
 		letter-spacing: 1px;
 		color: var(--cyber-primary);
 	}
+	.empty-state p { margin: 0; font-size: 12px; }
 
-	.empty-state p {
-		margin: 0;
-		font-size: 12px;
+	/* ── Input bar ─────────────────────────────────────── */
+	.input-container {
+		flex: 0 0 auto;
+		display: flex;
+		align-items: center;
+		gap: var(--sp-sm);
+		padding: var(--sp-sm);
+		background: var(--cyber-dark3);
+		border-top: 1px solid var(--cyber-border);
 	}
 
+	#input {
+		flex: 1;
+		padding: var(--sp-sm) var(--sp-md);
+		background: var(--cyber-dark);
+		color: var(--cyber-text);
+		border: 1px solid var(--cyber-border);
+		font-size: 13px;
+		font-family: var(--font-mono);
+		transition: var(--transition);
+	}
+	#input:focus {
+		outline: none;
+		border-color: var(--cyber-primary);
+		box-shadow: var(--glow-primary);
+	}
+	#input::placeholder { color: var(--cyber-text-dim); }
+
+	.char-count {
+		flex: 0 0 auto;
+		padding: var(--sp-xs) var(--sp-sm);
+		font-size: 11px;
+		font-family: var(--font-mono);
+		color: var(--cyber-text-dim);
+		background: var(--cyber-dark);
+		border: 1px solid var(--cyber-border);
+		min-width: 60px;
+		text-align: center;
+		transition: var(--transition);
+	}
+	.char-count.warning { color: var(--cyber-accent); border-color: var(--cyber-accent); }
+	.char-count.danger  { color: var(--cyber-red);    border-color: var(--cyber-red);    box-shadow: var(--glow-red); }
+
+	/* ── Responsive: tablet ────────────────────────────── */
+	@media (max-width: 768px) {
+		.irc-settings {
+			flex-direction: column;
+			gap: var(--sp-sm);
+			padding: var(--sp-sm) var(--sp-md);
+		}
+		.irc-settings__inputs {
+			flex-direction: column;
+			width: 100%;
+		}
+		.irc-settings__actions { width: 100%; justify-content: space-between; }
+		.settings-group {
+			width: 100%;
+			min-width: unset;
+			max-width: unset;
+		}
+		.settings-group input[type="text"],
+		.settings-group input[type="password"] {
+			width: 100%;
+			min-width: unset;
+			max-width: unset;
+		}
+
+		.irc-header__title { font-size: 14px; }
+		.irc-menu__btn { font-size: 10px; padding: var(--sp-xs) var(--sp-sm); }
+
+		.connection-status { padding: 4px 8px; font-size: 9px; }
+		.connection-status span:last-child { display: none; }
+
+		.irc-chat { padding-bottom: 56px; }
+		.input-container {
+			position: fixed;
+			bottom: 0; left: 0; right: 0;
+			z-index: 1000;
+			display: flex !important;
+		}
+		#input { font-size: 16px; }
+
+		.channelcontent { flex-direction: column; }
+		.channelcontent > nav { flex: 1 1 0%; overflow-y: auto; min-height: 0; }
+		.channelcontent > ul {
+			flex: 0 0 auto;
+			height: 20vh;
+			min-height: 80px;
+			border-left: none;
+			border-top: 1px solid var(--cyber-border);
+		}
+
+		.channel { font-size: 10px; padding: 4px 10px; }
+		.channel .unread-badge { top: -3px; right: -3px; font-size: 8px; padding: 1px 4px; min-width: 12px; }
+	}
+
+	/* ── Responsive: phone ─────────────────────────────── */
+	@media (max-width: 480px) {
+		.irc-header__title { font-size: 12px; }
+		.channelcontent > ul { flex: 0 0 100px; height: 100px; }
+		.log-header { padding: var(--sp-sm); }
+		.btn { padding: 6px 10px; font-size: 10px; }
+	}
+
+	@media (max-width: 360px) {
+		.channel { padding: 3px 6px; }
+	}
 	</style>
 </head>
 
 <body>
-	<div class="main">
-		<div class="header">
-			<h1 id="caption">IRC Client</h1>
-			<div class="header-menu">
-				<button class="header-menu-btn" onclick="toggleHeaderMenu()">菜单</button>
-				<div class="header-menu-dropdown" id="headerMenuDropdown">
+	<div class="irc-app">
+
+		<!-- ── Top header ─────────────────────────────── -->
+		<header class="irc-header">
+			<h1 class="irc-header__title" id="caption">IRC Client</h1>
+			<div class="irc-menu">
+				<button class="irc-menu__btn header-menu-btn" onclick="toggleHeaderMenu()">菜单</button>
+				<div class="irc-menu__dropdown" id="headerMenuDropdown">
 					<div class="header-menu-item" onclick="toggleLog()">查看日志</div>
 					<div class="header-menu-item" onclick="showPrivateChatList()">私聊列表</div>
 					<div class="header-menu-item" onclick="showSSLWarning()">SSL帮助</div>
 					<div class="header-menu-item" onclick="toggleAutoReconnect()">自动重连</div>
 				</div>
 			</div>
-		</div>
+		</header>
 
-		<div class="settings-bar">
-			<div class="settings-inputs">
+		<!-- ── Settings / connection bar ─────────────── -->
+		<div class="irc-settings">
+			<div class="irc-settings__inputs">
 				<div class="settings-group">
-					<label>WebSocket:</label>
+					<label for="wsUrl">WebSocket</label>
 					<input type="text" id="wsUrl" value="wss://irc.arkfuture.top:8097" placeholder="wss://irc.example.com:port/">
 				</div>
 				<div class="settings-group">
-					<label>昵称:</label>
+					<label for="nickInput">昵称</label>
 					<input type="text" id="nickInput" value="" placeholder="输入昵称">
 				</div>
 				<div class="settings-group">
-					<label>频道:</label>
-					<div style="display: flex; gap: var(--spacing-xs); align-items: center;">
-						<input type="text" id="channelInput" value="#arkfuture_studio" placeholder="#channe" style="flex: 1;">
-							<button class="btn" onclick="joinChannel()" id="joinChannelBtn" disabled style="padding: var(--spacing-xs) var(--spacing-sm); font-size: 10px; min-width: 50px;">加入</button>
+					<label for="channelInput">频道</label>
+					<div class="settings-group__row">
+						<input type="text" id="channelInput" value="#arkfuture_studio" placeholder="#channel">
+						<button class="btn" onclick="joinChannel()" id="joinChannelBtn" disabled
+							style="padding: var(--sp-xs) var(--sp-sm); font-size: 10px; min-width: 50px;">加入</button>
 					</div>
 				</div>
-				<input type="checkbox" id="autoReconnect" style="display: none;">
+				<!-- hidden checkbox; toggled via JS -->
+				<input type="checkbox" id="autoReconnect" style="display:none;">
 			</div>
-			<div class="settings-actions">
+			<div class="irc-settings__actions">
 				<button class="btn connect-btn" id="connectBtn" onclick="toggleConnection()">连接</button>
 				<div class="connection-status disconnected" id="connectionStatus">
 					<span class="indicator"></span>
@@ -1130,40 +790,52 @@
 			</div>
 		</div>
 
+		<!-- ── SSL warning toast (fixed) ─────────────── -->
 		<div class="ssl-warning" id="sslWarning">
-			<strong>浏览器无法忽略SSL证书错误!</strong> 请使用以下方案: <br>
-			1. 改用 <code>ws://</code> 非加密连接(如果浏览器支持)<br>
-			2. 在浏览器中访问 <a id="sslLink" target="_blank">服务器URL</a> 并手动信任证书<br>
+			<strong>浏览器无法忽略SSL证书错误!</strong> 请使用以下方案:<br>
+			1. 改用 <code>ws://</code> 非加密连接（如果浏览器支持）<br>
+			2. 在浏览器中访问 <a id="sslLink" target="_blank">服务器URL</a> 并手动信任证书
 		</div>
 
-		<div class="log-container" id="logContainer">
-			<div class="log-header">
-				<span>WebSocket日志</span>
-				<div class="log-controls">
-					<button onclick="clearLog()">清空</button>
-					<button onclick="toggleLog()">关闭</button>
+		<!-- ── Main chat area ─────────────────────────── -->
+		<div class="irc-chat">
+
+			<!-- Log overlay (hidden by default) -->
+			<div class="log-container" id="logContainer">
+				<div class="log-header">
+					<span>WebSocket 日志</span>
+					<div class="log-controls">
+						<button onclick="clearLog()">清空</button>
+						<button onclick="toggleLog()">关闭</button>
+					</div>
 				</div>
+				<div id="logOutput"></div>
 			</div>
-			<div id="logOutput"></div>
-		</div>
 
-		<div class="chat-container">
+			<!-- Tab bar -->
 			<div class="channels" id="channelsContainer"></div>
+
+			<!-- Channel panes -->
 			<div class="channelcontents-wrapper hidden" id="contentsWrapper">
 				<div class="channelcontents" id="channelContents"></div>
 			</div>
+
+			<!-- Empty / welcome state -->
 			<div class="empty-state" id="emptyState">
 				<h3>欢迎使用 IRC 客户端</h3>
 				<p>请先填写服务器信息并点击连接</p>
 			</div>
-			<div class="input-container" id="inputContainer" style="display: none;">
+
+			<!-- Message input -->
+			<div class="input-container" id="inputContainer" style="display:none;">
 				<input type="text" name="input" id="input" placeholder="输入消息..."
-					   onkeydown="onKeyDown(event)" oninput="updateCharCount()" />
+					onkeydown="onKeyDown(event)" oninput="updateCharCount()">
 				<button class="btn send-btn" id="sendBtn" onclick="send()">发送</button>
 				<div class="char-count" id="charCount">0/512</div>
 			</div>
-		</div>
-	</div>
+
+		</div><!-- /.irc-chat -->
+	</div><!-- /.irc-app -->
 </body>
 
 <script>
