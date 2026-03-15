@@ -962,21 +962,7 @@ h3.irc-server-label {
     inset 0 0 30px color-mix(in oklch, var(--pink)   06%, transparent);
 }
 
-/* 卡片顶部彩虹线 */
-.content-block::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 4px;
-  background: linear-gradient(90deg,
-    var(--pink), var(--peach), var(--lemon), var(--mint),
-    var(--sky), var(--lavender), var(--pink)
-  );
-  background-size: 400% 400%;
-  animation: rainbow-fast 2s linear infinite;
-  z-index: 1;
-  border-radius: 20px 20px 0 0;
-}
+/* 卡片顶部彩虹线 — 已移除 */
 
 /* 卡片扫光 */
 .content-block::after {
