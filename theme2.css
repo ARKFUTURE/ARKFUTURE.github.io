@@ -944,20 +944,17 @@ h3.irc-server-label {
   border-radius: 20px;
   border: 2px solid color-mix(in oklch, var(--pink) 35%, white);
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* 改为 visible，允许 hover 扩展内容突破边界 */
+  z-index: 1; /* 基础层级 */
   animation:
     border-dance 2s linear infinite,
     card-rock    10s ease-in-out infinite;
-  transform-style: preserve-3d;
-  will-change: transform;
+  will-change: transform, z-index;
   box-shadow:
     0  4px 20px color-mix(in oklch, var(--pink)     25%, transparent),
     0  8px 40px color-mix(in oklch, var(--lavender)  15%, transparent),
     0  0  0 4px color-mix(in oklch, var(--pink)      08%, transparent),
     inset 0 0 30px color-mix(in oklch, var(--pink)   06%, transparent);
-
-  /* isolation 隔离混合模式 */
-  isolation: isolate;
 }
 
 /* 卡片顶部彩虹线 */
@@ -974,6 +971,7 @@ h3.irc-server-label {
   animation: rainbow-fast 2s linear infinite;
   z-index: 1;
   border-radius: 20px 20px 0 0;
+  pointer-events: none;
 }
 
 /* 卡片扫光 */
@@ -993,10 +991,12 @@ h3.irc-server-label {
   animation: shimmer 4s ease-in-out infinite;
   pointer-events: none;
   z-index: 2;
+  border-radius: 20px;
 }
 
 .content-block:hover {
   transform: perspective(900px) rotateX(-3deg) rotateY(3deg) translateY(-8px) scale(1.02);
+  z-index: 10; /* hover 时跳到最上层，不被兄弟卡片遮住 */
   box-shadow:
     0  8px 40px color-mix(in oklch, var(--hot-pink) 35%, transparent),
     0 16px 80px color-mix(in oklch, var(--lavender)  25%, transparent),
