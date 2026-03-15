@@ -1303,18 +1303,7 @@
 
 	function onDisconnect(reason = "", wasConnected = false) {
 
-		if (isDisconnecting) {
-			return;
-		}
-		isDisconnecting = true;
-
-		stopKeepAlive();
-		writeToLog(`[SYSTEM] ── Disconnect handler ────────────────────`);
-		writeToLog(`[SYSTEM] Reason: "${reason || 'normal'}" | was-connected: ${wasConnected}`);
-		if (sessionStartTime) {
-			writeToLog(`[SYSTEM] Session ended — duration: ${formatSessionDuration(sessionStartTime)} | sent: ${sentCount} | recv: ${recvCount}`);
-			sessionStartTime = null;
-		}
+		// 无论是主动断开还是异常断开，UI 恢复必须始终执行
 		isConnected = false;
 		const wsUrlInput = document.getElementById('wsUrl');
 		const nickInput = document.getElementById('nickInput');
@@ -1333,6 +1322,22 @@
 		if (joinChannelBtn) joinChannelBtn.disabled = true;
 
 		updateConnectionStatus('disconnected');
+
+		// 防重入保护：日志/消息/重连逻辑只执行一次
+		if (isDisconnecting) {
+			isDisconnecting = false;
+			return;
+		}
+		isDisconnecting = true;
+
+		stopKeepAlive();
+		writeToLog(`[SYSTEM] ── Disconnect handler ────────────────────`);
+		writeToLog(`[SYSTEM] Reason: "${reason || 'normal'}" | was-connected: ${wasConnected}`);
+		if (sessionStartTime) {
+			writeToLog(`[SYSTEM] Session ended — duration: ${formatSessionDuration(sessionStartTime)} | sent: ${sentCount} | recv: ${recvCount}`);
+			sessionStartTime = null;
+		}
+
 
 		if (statusChannel) {
 			Tab_Show("Status");
