@@ -1083,28 +1083,31 @@
 	}
 
 	// ── Log-level colour palette ────────────────────────
+	// 所有键均为大写，与 writeToLog 中的 tag.toUpperCase() 一致
 	const LOG_COLORS = {
-		'ERROR':      '#ff0040',
-		'WARN':       '#ffff00',
-		'WARNING':    '#ffff00',
-		'INFO':       '#00f0ff',
-		'DEBUG':      '#888888',
-		'OPEN':       '#00ff00',
-		'CLOSE':      '#ff6600',
-		'CLIENT→SERVER': '#00d4ff',   // outgoing IRC messages
-		'SERVER→CLIENT': '#cc88ff',   // incoming IRC messages
-		'IRC':           '#aaffaa',
-		'CAP':           '#88ddff',
-		'NOTICE':        '#ffcc44',
-		'PING':          '#558855',
-		'KEEP-ALIVE':    '#445544',
-		'RECONNECT':     '#ffaa00',
-		'PM':            '#ff88ff',
-		'SETTINGS':      '#aaaaff',
-		'TAB':           '#77bbdd',
-		'SYSTEM':        '#cccccc',
-		'PART':          '#ff8844',
-		'WebSocket':     '#44ccff',
+		'ERROR':          '#ff0040',
+		'WARN':           '#ffff00',
+		'WARNING':        '#ffff00',
+		'INFO':           '#00f0ff',
+		'DEBUG':          '#888888',
+		'OPEN':           '#00ff00',
+		'CLOSE':          '#ff6600',
+		'CLIENT→SERVER':  '#00d4ff',   // outgoing IRC messages
+		'SERVER→CLIENT':  '#cc88ff',   // incoming IRC messages
+		'SERVER':         '#cc88ff',   // numeric reply fallback (e.g. [SERVER] 372)
+		'IRC':            '#aaffaa',
+		'CAP':            '#88ddff',
+		'NOTICE':         '#ffcc44',
+		'PING':           '#558855',
+		'PING/PONG':      '#558855',   // PING/PONG combined tag
+		'KEEP-ALIVE':     '#445544',
+		'RECONNECT':      '#ffaa00',
+		'PM':             '#ff88ff',
+		'SETTINGS':       '#aaaaff',
+		'TAB':            '#77bbdd',
+		'SYSTEM':         '#cccccc',
+		'PART':           '#ff8844',
+		'WEBSOCKET':      '#44ccff',   // 大写化后匹配 [WebSocket]
 	};
 
 	let _logOutputEl = null;
@@ -1123,8 +1126,10 @@
 			const tagMatch = message.match(/^\[([^\]]+)\]/);
 			const line = document.createElement('span');
 			if (tagMatch) {
+				// 统一转大写后查表；若精确匹配失败，再取第一个单词段做模糊匹配
 				const tag = tagMatch[1].toUpperCase();
-				line.style.color = LOG_COLORS[tag] || LOG_COLORS[tag.split(/[\s\/→←]/)[0]] || '#e0e0e0';
+				const firstSeg = tag.split(/[\s\/]/)[0];  // 只按空格和斜杠拆，不影响 → 箭头
+				line.style.color = LOG_COLORS[tag] || LOG_COLORS[firstSeg] || '#e0e0e0';
 			} else {
 				line.style.color = '#e0e0e0';
 			}
