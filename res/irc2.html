@@ -1981,18 +1981,26 @@
 				const messages = splitIRCMessage(text.substring(1));
 				messages.forEach(msg => doSend(msg));
 			}
-		} else {
-			const target = activeChannel.name;
-			const messages = splitIRCMessage("privmsg " + target + " :" + text);
-			messages.forEach((msg, index) => {
-				doSend(msg);
-				if (index === 0) {
-					writeToScreen("var(--clr-font)", text, activeChannel, nickname);
-				}
-			});
-			if (activeChannel.isPrivate) {
-				writeToLog(`[PM] You → ${target}: ${text}`);
+	} else {
+		const target = activeChannel.name;
+
+		// Status 是本地虚拟窗口，不能向服务器发送 PRIVMSG
+		if (target === "Status") {
+			writeToScreen("var(--clr-warning)", "Status 是系统状态窗口，无法发送消息。请使用 /join #频道 加入频道，或使用 /msg 昵称 内容 与用户私聊。", activeChannel, "*");
+			if (input) { input.value = ""; updateCharCount(); }
+			return;
+		}
+
+		const messages = splitIRCMessage("privmsg " + target + " :" + text);
+		messages.forEach((msg, index) => {
+			doSend(msg);
+			if (index === 0) {
+				writeToScreen("var(--clr-font)", text, activeChannel, nickname);
 			}
+		});
+		if (activeChannel.isPrivate) {
+			writeToLog(`[PM] You → ${target}: ${text}`);
+		}
 			if (messageHistory.length >= 200) messageHistory.shift();
 			messageHistory.push(text);
 			historyIndex = messageHistory.length;
