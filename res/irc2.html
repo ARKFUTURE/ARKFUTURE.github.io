@@ -865,6 +865,7 @@
 	let keepAliveTimer = null;
 	const keepAliveInterval = 90000;
 	let inputBlurTimeoutId = null;
+	let connectTimeout = null;
 	let messageHistory = [];
 	let historyIndex = -1;
 	let isDisconnecting = false;
@@ -976,10 +977,9 @@
 
 	function toggleHeaderMenu() {
 		const menu = document.getElementById('headerMenuDropdown');
-		if (menu) {
-			menu.classList.toggle('visible');
-			updateAutoReconnectMenuItem();
-		}
+		if (!menu) return;
+		menu.classList.toggle('visible');
+		updateAutoReconnectMenuItem();
 
 		if (!menu.classList.contains('menu-attached')) {
 			menu.classList.add('menu-attached');
@@ -1179,9 +1179,9 @@
 			updateAutoReconnectMenuItem();
 			if (websocket) {
 				try {
-					if (window.connectTimeout) {
-						clearTimeout(window.connectTimeout);
-						window.connectTimeout = null;
+					if (connectTimeout) {
+						clearTimeout(connectTimeout);
+						connectTimeout = null;
 					}
 					writeToLog('[SYSTEM] Closing WebSocket (code 1000 — user disconnected)');
 					websocket.close(1000, "User disconnected");
@@ -1360,18 +1360,18 @@
 	function updateCharCount() {
 		const charCount = document.getElementById('charCount');
 		if (!charCount || !input) return;
-		
+
 		const text = input.value;
-		const length = text.length;
-		const maxLength = 512;
-		
-		charCount.textContent = `${length}/${maxLength}`;
-		
+		const bytes = new TextEncoder().encode(text).length;
+		const maxBytes = 512;
+
+		charCount.textContent = `${bytes}/${maxBytes}`;
+
 		charCount.classList.remove('warning', 'danger');
-		
-		if (length > maxLength) {
+
+		if (bytes > maxBytes) {
 			charCount.classList.add('danger');
-		} else if (length > maxLength * 0.8) {
+		} else if (bytes > maxBytes * 0.8) {
 			charCount.classList.add('warning');
 		}
 	}
@@ -1822,21 +1822,21 @@
 			const safeUrl = sanitizeUrl(rawUrl);
 			if (!safeUrl) return escapedUrl;   // rejected: render as plain text
 
-			const lowerUrl = safeUrl.toLowerCase();
-			const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/.test(lowerUrl);
-			const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/.test(lowerUrl);
-			const isVideo = /\.(mp4|webm|ogg|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/.test(lowerUrl);
-			const safeAttr = HTML_escape(safeUrl);
+		const lowerUrl = safeUrl.toLowerCase();
+		const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/.test(lowerUrl);
+		const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/.test(lowerUrl);
+		const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/.test(lowerUrl);
+		const safeAttr = HTML_escape(safeUrl);
 
-			if (isImage) {
-				return `<img src="${safeAttr}" alt="Image" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.1);">`;
-			} else if (isAudio) {
-				return `<audio controls src="${safeAttr}" style="max-width:${mediaMaxWidth};"></audio>`;
-			} else if (isVideo) {
-				return `<video controls src="${safeAttr}" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;"></video>`;
-			} else {
-				return `<a href="${safeAttr}" target="_blank" rel="noopener noreferrer" style="color:var(--clr-accent);text-decoration:underline;word-break:break-all;">${safeAttr}</a>`;
-			}
+		if (isImage) {
+			return `<img src="${safeAttr}" alt="Image" referrerpolicy="no-referrer" crossorigin="anonymous" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.1);">`;
+		} else if (isAudio) {
+			return `<audio controls src="${safeAttr}" referrerpolicy="no-referrer" style="max-width:${mediaMaxWidth};"></audio>`;
+		} else if (isVideo) {
+			return `<video controls src="${safeAttr}" referrerpolicy="no-referrer" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;"></video>`;
+		} else {
+			return `<a href="${safeAttr}" target="_blank" rel="noopener noreferrer" style="color:var(--clr-accent);text-decoration:underline;word-break:break-all;">${safeAttr}</a>`;
+		}
 		});
 	}
 
@@ -1857,24 +1857,28 @@
 			} else {
 				const lowerUrl = safeUrl.toLowerCase();
 				const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/.test(lowerUrl);
-				const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/.test(lowerUrl);
-				const isVideo = /\.(mp4|webm|ogg|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/.test(lowerUrl);
-				if (isImage) {
-					const img = document.createElement('img');
-					img.src = safeUrl; img.alt = 'Image';
-					img.style.cssText = 'max-width:300px;height:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.1);';
-					frag.appendChild(img);
-				} else if (isAudio) {
-					const audio = document.createElement('audio');
-					audio.controls = true; audio.src = safeUrl;
-					audio.style.maxWidth = '300px';
-					frag.appendChild(audio);
-				} else if (isVideo) {
-					const video = document.createElement('video');
-					video.controls = true; video.src = safeUrl;
-					video.style.cssText = 'max-width:300px;height:auto;border-radius:4px;';
-					frag.appendChild(video);
-				} else {
+			const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/.test(lowerUrl);
+			const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/.test(lowerUrl);
+			if (isImage) {
+				const img = document.createElement('img');
+				img.src = safeUrl; img.alt = 'Image';
+				img.referrerPolicy = 'no-referrer';
+				img.crossOrigin = 'anonymous';
+				img.style.cssText = 'max-width:300px;height:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.1);';
+				frag.appendChild(img);
+			} else if (isAudio) {
+				const audio = document.createElement('audio');
+				audio.controls = true; audio.src = safeUrl;
+				audio.referrerPolicy = 'no-referrer';
+				audio.style.maxWidth = '300px';
+				frag.appendChild(audio);
+			} else if (isVideo) {
+				const video = document.createElement('video');
+				video.controls = true; video.src = safeUrl;
+				video.referrerPolicy = 'no-referrer';
+				video.style.cssText = 'max-width:300px;height:auto;border-radius:4px;';
+				frag.appendChild(video);
+			} else {
 					const a = document.createElement('a');
 					a.href = safeUrl; a.target = '_blank';
 					a.rel = 'noopener noreferrer';
@@ -1895,58 +1899,55 @@
 		let text = input ? input.value.trim() : "";
 		if (!text || !activeChannel) return;
 
-	if (text[0] == "/") {
-		if (text.indexOf("/me ") == 0) {
-			const actionText = text.substring(4);
-			const messages = splitIRCMessage("privmsg " + activeChannel.name + " :\x01ACTION " + actionText + "\x01");
-			messages.forEach(msg => doSend(msg));
-			writeToScreen("var(--clr-red)", `${nickname} ${actionText}`, activeChannel, "*");
-		} else if (text.indexOf("/msg ") == 0) {
-			const parts = text.substring(5).split(' ');
-			if (parts.length >= 2) {
-				const targetNick = parts[0];
-				const msgText = parts.slice(1).join(' ');
-				let pmChannel = findChannel(targetNick);
-				if (!pmChannel) {
-					pmChannel = new Tab_Create(targetNick, `与 ${targetNick} 的私聊`, false);
-					pmChannel.isPrivate = true;
-					if (pmChannel.button) {
-						pmChannel.button.classList.add('private');
+		if (text[0] === "/") {
+			if (text.indexOf("/me ") === 0) {
+				const actionText = text.substring(4);
+				const messages = splitIRCMessage("privmsg " + activeChannel.name + " :\x01ACTION " + actionText + "\x01");
+				messages.forEach(msg => doSend(msg));
+				writeToScreen("var(--clr-red)", `${nickname} ${actionText}`, activeChannel, "*");
+			} else if (text.indexOf("/msg ") === 0) {
+				const parts = text.substring(5).split(' ');
+				if (parts.length >= 2) {
+					const targetNick = parts[0];
+					const msgText = parts.slice(1).join(' ');
+					let pmChannel = findChannel(targetNick);
+					if (!pmChannel) {
+						pmChannel = new Tab_Create(targetNick, `与 ${targetNick} 的私聊`, false);
+						pmChannel.isPrivate = true;
+						if (pmChannel.button) {
+							pmChannel.button.classList.add('private');
+						}
 					}
+					Tab_Show(targetNick);
+					const messages = splitIRCMessage("privmsg " + targetNick + " :" + msgText);
+					messages.forEach((msg, index) => {
+						doSend(msg);
+						if (index === 0) {
+							writeToScreen("var(--clr-font)", msgText, pmChannel, nickname);
+						}
+					});
+					writeToLog(`[PM] You → ${targetNick}: ${msgText}`);
+				} else {
+					writeToScreen("var(--clr-warning)", "用法: /msg <昵称> <消息>", statusChannel, "*");
 				}
-				Tab_Show(targetNick);
-				const messages = splitIRCMessage("privmsg " + targetNick + " :" + msgText);
-				messages.forEach((msg, index) => {
-					doSend(msg);
-					if (index === 0) {
-						writeToScreen("var(--clr-font)", msgText, pmChannel, nickname);
-					}
-				});
-				writeToLog(`[PM] You → ${targetNick}: ${msgText}`);
 			} else {
-				writeToScreen("var(--clr-warning)", "用法: /msg <昵称> <消息>", statusChannel, "*");
+				writeToScreen("var(--clr-font)", text, statusChannel, "");
+				const messages = splitIRCMessage(text.substring(1));
+				messages.forEach(msg => doSend(msg));
 			}
 		} else {
-			writeToScreen("var(--clr-font)", text, statusChannel, "");
-			const messages = splitIRCMessage(text.substring(1));
-			messages.forEach(msg => doSend(msg));
-		}
-	} else {
-		const target = activeChannel.name;
-		const messages = splitIRCMessage("privmsg " + target + " :" + text);
-		messages.forEach((msg, index) => {
-			doSend(msg);
-			if (index === 0) {
-				writeToScreen("var(--clr-font)", text, activeChannel, nickname);
+			const target = activeChannel.name;
+			const messages = splitIRCMessage("privmsg " + target + " :" + text);
+			messages.forEach((msg, index) => {
+				doSend(msg);
+				if (index === 0) {
+					writeToScreen("var(--clr-font)", text, activeChannel, nickname);
+				}
+			});
+			if (activeChannel.isPrivate) {
+				writeToLog(`[PM] You → ${target}: ${text}`);
 			}
-		});
-		if (activeChannel.isPrivate) {
-			writeToLog(`[PM] You → ${target}: ${text}`);
-		}
-	}
-
-		if (text[0] != "/") {
-			if (messageHistory.length >= 200) messageHistory.shift();   // cap history at 200
+			if (messageHistory.length >= 200) messageHistory.shift();
 			messageHistory.push(text);
 			historyIndex = messageHistory.length;
 		}
@@ -2018,54 +2019,54 @@
 					writeToLog(`[WARN] Error cleaning up previous connection: ${e.message}`);
 				}
 				websocket = null;
-			}
-			writeToLog(`[WebSocket] Creating new WebSocket → ${wsUri}`);
-			websocket = new WebSocket(wsUri);
-			websocket.binaryType = 'blob';
-
-			if (window.connectTimeout) {
-				clearTimeout(window.connectTimeout);
-			}
-			window.connectTimeout = setTimeout(() => {
-				if (websocket && websocket.readyState === WebSocket.CONNECTING) {
-					writeToLog(`[ERROR] Connection timeout (30s) — forcing close → ${wsUri}`);
-					try {
-						websocket.close(1006, "Connection timeout");
-					} catch (e) {
-						writeToLog(`[ERROR] Failed to close timed-out WebSocket: ${e.message}`);
-					}
-				}
-			}, 30000);
-
-			websocket.onclose = function handleOnClose(evt) {
-				if (window.connectTimeout) {
-					clearTimeout(window.connectTimeout);
-					window.connectTimeout = null;
-				}
-				onClose(evt);
-			};
-			websocket.onerror = function handleOnError(evt) {
-				onError(evt);
-			};
-			websocket.onopen = function handleOnOpen(evt) {
-				if (window.connectTimeout) {
-					clearTimeout(window.connectTimeout);
-					window.connectTimeout = null;
-				}
-				onOpen(evt);
-			};
-			websocket.onmessage = function handleOnMessage(evt) {
-				onMessage(evt);
-			};
-		} catch (e) {
-			writeToLog(`[ERROR] WebSocket creation failed: ${e.message}`);
-			onDisconnect();
-			if (wsUrl && wsUrl.startsWith('wss://')) {
-				showSSLWarning(wsUrl);
-			}
-			alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
 		}
+		writeToLog(`[WebSocket] Creating new WebSocket → ${wsUri}`);
+		websocket = new WebSocket(wsUri);
+		websocket.binaryType = 'blob';
+
+		if (connectTimeout) {
+			clearTimeout(connectTimeout);
+		}
+		connectTimeout = setTimeout(() => {
+			if (websocket && websocket.readyState === WebSocket.CONNECTING) {
+				writeToLog(`[ERROR] Connection timeout (30s) — forcing close → ${wsUri}`);
+				try {
+					websocket.close(1006, "Connection timeout");
+				} catch (e) {
+					writeToLog(`[ERROR] Failed to close timed-out WebSocket: ${e.message}`);
+				}
+			}
+		}, 30000);
+
+		websocket.onclose = function handleOnClose(evt) {
+			if (connectTimeout) {
+				clearTimeout(connectTimeout);
+				connectTimeout = null;
+			}
+			onClose(evt);
+		};
+		websocket.onerror = function handleOnError(evt) {
+			onError(evt);
+		};
+		websocket.onopen = function handleOnOpen(evt) {
+			if (connectTimeout) {
+				clearTimeout(connectTimeout);
+				connectTimeout = null;
+			}
+			onOpen(evt);
+		};
+		websocket.onmessage = function handleOnMessage(evt) {
+			onMessage(evt);
+		};
+	} catch (e) {
+		writeToLog(`[ERROR] WebSocket creation failed: ${e.message}`);
+		onDisconnect();
+		if (wsUrl && wsUrl.startsWith('wss://')) {
+			showSSLWarning(wsUrl);
+		}
+		alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
 	}
+}
 
 
 	window.addEventListener('beforeunload', function cleanup() {
@@ -2074,6 +2075,10 @@
 		stopKeepAlive();
 		if (inputBlurTimeoutId !== null) {
 			clearTimeout(inputBlurTimeoutId);
+		}
+		if (connectTimeout !== null) {
+			clearTimeout(connectTimeout);
+			connectTimeout = null;
 		}
 		if (websocket) {
 			websocket.onclose = null;
@@ -2103,7 +2108,7 @@
 		let reason = evt.reason || 'Connection closed';
 		let code = evt.code;
 
-			let isUserDisconnect = false;
+		let isUserDisconnect = false;
 
 		if (isDisconnecting) {
 			isUserDisconnect = true;
@@ -2203,22 +2208,19 @@
 			updateConnectionStatus('connected');
 		}
 		
-	const rawData = evt.data;
-	recvCount++;
-	writeToLog(`[SERVER→CLIENT] ${typeof rawData === 'string' ? rawData.trim() : '[binary data]'}`);
-	if (rawData instanceof Blob) {
-		let fileReader = new FileReader();
-		
-		fileReader.onloadend = function handleLoadEnd(event) {
-			if (!event || !event.target) return;
-			const fileReader = event.target;
-			const raw = fileReader.result;
-			writeToLog(`[SERVER→CLIENT] (Blob→Text): ${raw.trim()}`);
+		const rawData = evt.data;
+		recvCount++;
+		writeToLog(`[SERVER→CLIENT] ${typeof rawData === 'string' ? rawData.trim() : '[binary data]'}`);
+		if (rawData instanceof Blob) {
+			let fileReader = new FileReader();
+			fileReader.onloadend = function handleLoadEnd(event) {
+				if (!event || !event.target) return;
+				const reader = event.target;
+				const raw = reader.result;
+				writeToLog(`[SERVER→CLIENT] (Blob→Text): ${raw.trim()}`);
 				process(raw);
-				
-				fileReader.onloadend = null;
+				reader.onloadend = null;
 			};
-			
 			fileReader.readAsText(rawData);
 		} else {
 			process(rawData);
@@ -2253,11 +2255,11 @@
 			return;
 		}
 
-		try {
+	try {
 		websocket.send(message);
 		if (!message.trim().toUpperCase().startsWith('PING')) sentCount++;
 		writeToLog(`[CLIENT→SERVER] ${message.trim()}`);
-		} catch (e) {
+	} catch (e) {
 			writeToLog(`[ERROR] Failed to send message: ${e.message}`);
 			writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel, "");
 			if (isConnected) {
@@ -2370,7 +2372,7 @@
 		for (let i = 5; i < data.length; i++) {
 			text += " " + data[i];
 		}
-		channel.topic.innerHTML = HTML_escape(text || "No topic set");
+		channel.topic.textContent = text || "No topic set";
 		writeToLog(`[IRC] RPL_TOPIC (332): channel=${data[3]} topic="${text}"`);
 	});
 	Commands.set("353", function (nick, data) {
@@ -2407,18 +2409,36 @@
 		writeToLog(`[IRC] RPL_ENDOFNAMES (366): channel=${data[3]} total users=${channel.users.length}`);
 	});
 	Commands.set("432", function (nick, data) {
-		nickname = prompt("错误: 昵称包含非法字符\n请输入新的昵称", "");
-		if (nickname) {
-			doSend("nick " + nickname);
-			writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — retrying with: "${nickname}"`);
+		const input432 = prompt("错误: 昵称包含非法字符\n请输入新的昵称", "");
+		if (input432 === null || input432.trim() === "") {
+			writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — user cancelled nickname prompt`);
+			return;
 		}
+		const trimmed432 = input432.trim();
+		if (!validateNickname(trimmed432)) {
+			writeToScreen("var(--clr-warning)", `昵称格式仍然非法: ${trimmed432}`, statusChannel, "*");
+			writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — new nickname still invalid: "${trimmed432}"`);
+			return;
+		}
+		nickname = trimmed432;
+		doSend("NICK " + nickname);
+		writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — retrying with: "${nickname}"`);
 	});
 	Commands.set("433", function (nick, data) {
-		nickname = prompt("错误: 昵称已被占用\n请输入新的昵称", "");
-		if (nickname) {
-			doSend("nick " + nickname);
-			writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — retrying with: "${nickname}"`);
+		const input433 = prompt("错误: 昵称已被占用\n请输入新的昵称", "");
+		if (input433 === null || input433.trim() === "") {
+			writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — user cancelled nickname prompt`);
+			return;
 		}
+		const trimmed433 = input433.trim();
+		if (!validateNickname(trimmed433)) {
+			writeToScreen("var(--clr-warning)", `昵称格式非法: ${trimmed433}`, statusChannel, "*");
+			writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — new nickname invalid: "${trimmed433}"`);
+			return;
+		}
+		nickname = trimmed433;
+		doSend("NICK " + nickname);
+		writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — retrying with: "${nickname}"`);
 	});
 	Commands.set("477", function (nick, data) {
 		if (!data || data.length < 4) return;
@@ -2504,15 +2524,21 @@
 		if (!PrefixChars || data[3].length < 1) return;
 
 		if (data.length >= 5 && data[4].startsWith(":")) {
-			const modeChar = data[3][data[3].length - 1];
+			const modeString = data[3];
+			const modeChar = modeString[modeString.length - 1];
 			const targetNick = data[4].substring(1);
+
+			// Determine add/remove from the leading + or - in the mode string
+			let status = true;
+			for (let c of modeString) {
+				if (c === '+') { status = true; break; }
+				if (c === '-') { status = false; break; }
+			}
 
 			let mappedPrefix = modeChar;
 			if (modeChar === 'y') mappedPrefix = '~';
 			else if (modeChar === 'a') mappedPrefix = '&';
 			else if (modeChar === 'h') mappedPrefix = '%';
-
-			const status = true;
 
 			const prefixPos = PrefixChars[1].indexOf(mappedPrefix);
 			if (prefixPos >= 0) {
@@ -2520,10 +2546,10 @@
 			}
 		} else {
 			let ii = 4;
-		let status = false;
-		for (let i = 0; i < data[3].length; i++) {
-						if (data[3][i] == "+") status = true;
-						else if (data[3][i] == "-") status = false;
+			let status = false;
+			for (let i = 0; i < data[3].length; i++) {
+				if (data[3][i] == "+") status = true;
+				else if (data[3][i] == "-") status = false;
 				else {
 					if (ii < data.length) {
 						Channel_UpdateUserPrefix(data[ii], channel, status, data[3][i]);
@@ -2584,7 +2610,7 @@
 		for (let i = 4; i < data.length; i++) {
 			text += " " + data[i];
 		}
-		channel.topic.innerHTML = HTML_escape(text || "No topic set");
+		channel.topic.textContent = text || "No topic set";
 		writeToScreen("var(--clr-blue)", `${nick} 设置主题为: ${text}`, channel, "*");
 		writeToLog(`[IRC] TOPIC changed: channel=${data[2]} new-topic="${text}" by ${nick}`);
 	});
