@@ -1219,6 +1219,16 @@
 			writeToLog('[SYSTEM] User requested disconnect — disabling auto-reconnect');
 			autoReconnect = false;
 			updateAutoReconnectMenuItem();
+			isDisconnecting = true;   // ← 提前标记，让 onClose 能正确识别为用户主动断开
+			if (websocket && websocket.readyState === WebSocket.OPEN) {
+				try {
+					// 先发 IRC QUIT 命令，礼貌地通知服务端退出
+					websocket.send(`QUIT :User disconnected\r\n`);
+					writeToLog('[SYSTEM] Sent IRC QUIT to server');
+				} catch (e) {
+					writeToLog(`[WARN] Could not send QUIT: ${e.message}`);
+				}
+			}
 			if (websocket) {
 				try {
 					if (connectTimeout) {
@@ -2394,10 +2404,6 @@
 			websocket.onmessage = null;
 			websocket = null;
 		}
-
-	if (!isConnected && isDisconnecting) {
-		return;
-	}
 
 	const wasConnected = isConnected;   // 记录断线前的连接状态，供日志诊断使用
 	isConnected = false;
