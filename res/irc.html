@@ -2007,9 +2007,9 @@
 			if (!safeUrl) return escapedUrl;
 
 		const lowerUrl = safeUrl.toLowerCase();
-		const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/.test(lowerUrl);
-		const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/.test(lowerUrl);
-		const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/.test(lowerUrl);
+		const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|ico|tiff|tif|avif|heic|heif|jfif|pjpeg|pjp|apng)(\?.*)?$/i.test(lowerUrl);
+		const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac|opus|weba|wma|aiff|au|mid|midi|ra|ram|mka)(\?.*)?$/i.test(lowerUrl);
+		const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8|wmv|rmvb|rm|ts|mts|m2ts|3gp|3g2|divx|xvid|asf|vob|mpg|mpeg|mp2|mpe|mpv|m2v|svi|mxf|roq|nsv|f4v|f4p|f4a|f4b)(\?.*)?$/i.test(lowerUrl);
 		const safeAttr = HTML_escape(safeUrl);
 
 		if (isImage) {
