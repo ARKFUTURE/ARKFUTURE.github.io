@@ -29,7 +29,7 @@ make install
 sleep 3
 echo "编译安装完成,开始下载初始配置到/etc/inspircd/"
 cd ~
-wget https://arkfuture.github.io/ARKFUTURE/CONFIG/inspircd/conf/config.sh
+wget https://arkfuture.github.io/config/inspircd/conf/config.sh
 chmod 777 ./config.sh
 ./config.sh
 echo "若网络不好请手动重新执行./config.sh脚本 他会替换掉配置文件"

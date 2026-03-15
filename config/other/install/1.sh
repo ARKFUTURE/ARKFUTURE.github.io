@@ -13,20 +13,20 @@ cd /etc/inspircd
 rm -rf *
 mkdir conf
 mkdir txt
-curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/inspircd.conf
+curl -L -O https://arkfuture.github.io/config/inspircd/inspircd.conf
 cd /etc/inspircd/conf
-curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/modules.conf
-curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/helpop.conf
-curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/opers.conf
-curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/ascii.conf
-curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/links.conf
-curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/generic.conf
-curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/conf/dnsbl.conf
+curl -L -O https://arkfuture.github.io/config/inspircd/conf/modules.conf
+curl -L -O https://arkfuture.github.io/config/inspircd/conf/helpop.conf
+curl -L -O https://arkfuture.github.io/config/inspircd/conf/opers.conf
+curl -L -O https://arkfuture.github.io/config/inspircd/conf/ascii.conf
+curl -L -O https://arkfuture.github.io/config/inspircd/conf/links.conf
+curl -L -O https://arkfuture.github.io/config/inspircd/conf/generic.conf
+curl -L -O https://arkfuture.github.io/config/inspircd/conf/dnsbl.conf
 cd /etc/inspircd/txt
-curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/txt/motd.txt
-curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/txt/opermotd.txt
-curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/txt/quotes.txt
-curl -L -O https://arkfuture.github.io/arkfuture/config/inspircd/txt/rules.txt
+curl -L -O https://arkfuture.github.io/config/inspircd/txt/motd.txt
+curl -L -O https://arkfuture.github.io/config/inspircd/txt/opermotd.txt
+curl -L -O https://arkfuture.github.io/config/inspircd/txt/quotes.txt
+curl -L -O https://arkfuture.github.io/config/inspircd/txt/rules.txt
 cd /etc/inspircd/
 chown -R irc:irc /etc/inspircd/
 find /etc/inspircd -type d -exec chmod 755 {} \;
