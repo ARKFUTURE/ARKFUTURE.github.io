@@ -136,28 +136,49 @@ body::before {
   font-family: 'Orbitron', sans-serif;
   text-transform: uppercase;
   letter-spacing: 4px;
-  color: var(--neon-blue);
+  /* 字色降饱和度压亮度，不再是纯霓虹青 */
+  color: rgba(0, 200, 220, 0.78);
   position: relative;
   margin: 1.5rem 0;
-  text-shadow:
-    0 0 5px #fff,
-    0 0 10px var(--neon-blue),
-    0 0 20px var(--neon-purple),
-    0 0 30px var(--neon-purple);
-  animation: glitch 2s infinite alternate, pulse 1.5s infinite ease-in-out;
   z-index: 1;
+  text-shadow:
+    0 0 4px  #fff,
+    0 0 10px var(--neon-blue),
+    0 0 20px var(--neon-blue),
+    0 0 35px var(--neon-purple),
+    0 0 55px var(--neon-purple);
+  animation: neon-flicker 3.5s infinite;
 }
 
+/* 霓虹闪烁：模拟真实霓虹灯亮暗跳变，大部分时间亮，偶尔快速暗一下 */
+@keyframes neon-flicker {
+  0%   { opacity: 1; }
+  4%   { opacity: 0.85; }
+  5%   { opacity: 1; }
+  7%   { opacity: 0.7; }
+  8%   { opacity: 1; }
+  45%  { opacity: 1; }
+  46%  { opacity: 0.9; }
+  47%  { opacity: 1; }
+  90%  { opacity: 1; }
+  91%  { opacity: 0.75; }
+  92%  { opacity: 0.95; }
+  93%  { opacity: 0.6; }
+  94%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* glitch 错位层：偶尔出现，强调动感 */
 #hero-title::before {
   content: "ARKFUTURE";
   position: absolute;
   top: 0; left: 0;
   width: 100%;
   color: transparent;
-  -webkit-text-stroke: 1px var(--neon-purple);
-  text-stroke: 1px var(--neon-purple);
+  -webkit-text-stroke: 1px rgba(0, 240, 255, 0.5);
+  text-stroke: 1px rgba(0, 240, 255, 0.5);
   z-index: -1;
-  animation: glitch-before 3s infinite alternate;
+  animation: glitch-before 4s infinite alternate;
 }
 
 #hero-title::after {
@@ -166,11 +187,11 @@ body::before {
   top: 2px; left: 2px;
   width: 100%;
   color: transparent;
-  -webkit-text-stroke: 1px var(--neon-purple);
-  text-stroke: 1px var(--neon-purple);
+  -webkit-text-stroke: 1px rgba(176, 38, 255, 0.4);
+  text-stroke: 1px rgba(176, 38, 255, 0.4);
   z-index: -2;
   opacity: 0.7;
-  animation: glitch-after 3s infinite alternate-reverse;
+  animation: glitch-after 4s infinite alternate-reverse;
 }
 
 /* ============================================================
