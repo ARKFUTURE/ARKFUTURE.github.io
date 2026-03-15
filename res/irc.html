@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 
 <head>
 	<meta charset="UTF-8" version="1.7">
@@ -151,27 +151,39 @@
 	}
 	.irc-menu__dropdown.visible { display: block; }
 
-	/* keep class names aligned with JS: .header-menu-item */
 	.header-menu-item {
-		padding: var(--sp-sm) var(--sp-md);
 		cursor: pointer;
 		font-size: 11px;
 		font-family: var(--font-mono);
 		text-transform: uppercase;
 		letter-spacing: 0.5px;
-		color: var(--cyber-text);
-		border-bottom: 1px solid var(--cyber-dark3);
+		padding: 7px 14px;
+		color: var(--cyber-primary);
+		border: 1px solid var(--cyber-border);
+		margin: 4px 6px;
+		border-radius: 2px;
 		transition: var(--transition);
+		display: flex;
+		align-items: center;
+		gap: 7px;
 	}
-	.header-menu-item:last-child { border-bottom: none; }
+	.header-menu-item:last-child { }
+	.header-menu-item:nth-child(1) { color: var(--cyber-primary);   border-color: var(--cyber-primary);   --item-glow: var(--cyber-primary);   }
+	.header-menu-item:nth-child(2) { color: var(--cyber-secondary); border-color: var(--cyber-secondary); --item-glow: var(--cyber-secondary); }
+	.header-menu-item:nth-child(3) { color: var(--cyber-accent);    border-color: var(--cyber-accent);    --item-glow: var(--cyber-accent);    }
+	.header-menu-item:nth-child(4) { color: var(--cyber-green);     border-color: var(--cyber-green);     --item-glow: var(--cyber-green);     }
 	.header-menu-item:hover {
-		background: var(--cyber-primary);
-		color: var(--cyber-dark);
-		box-shadow: var(--glow-primary);
+		background: currentColor;
+		color: var(--cyber-dark) !important;
+		box-shadow: 0 0 8px var(--item-glow, var(--cyber-primary));
+		text-shadow: none;
 	}
 	.header-menu-item.active {
 		background: var(--cyber-green);
-		color: var(--cyber-dark);
+		border-color: var(--cyber-green);
+		color: var(--cyber-dark) !important;
+		text-shadow: none;
+		box-shadow: 0 0 8px var(--cyber-green);
 	}
 
 	/* ── Settings bar ──────────────────────────────────── */
@@ -202,7 +214,6 @@
 		flex: 0 0 auto;
 	}
 
-	/* field group */
 	.settings-group {
 		display: flex;
 		flex-direction: column;
@@ -236,8 +247,19 @@
 		border-color: var(--cyber-primary);
 		box-shadow: var(--glow-primary);
 	}
+	.settings-group input.input-error {
+		border-color: var(--cyber-red) !important;
+		box-shadow: var(--glow-red) !important;
+		animation: shake 0.35s ease;
+	}
+	@keyframes shake {
+		0%,100% { transform: translateX(0); }
+		20%      { transform: translateX(-4px); }
+		40%      { transform: translateX(4px); }
+		60%      { transform: translateX(-3px); }
+		80%      { transform: translateX(3px); }
+	}
 
-	/* channel row: input + join btn side by side */
 	.settings-group__row {
 		display: flex;
 		gap: var(--sp-xs);
@@ -510,18 +532,7 @@
 	}
 	.channelcontent.active { display: flex; }
 
-	/*
-	 * JS (Tab_Create) creates:
-	 *   div.channelcontent
-	 *     nav.ch-panel          ← navWrapper  (flex column, message area)
-	 *       h3                  ← this.topic
-	 *       nav.ch-messages     ← this.content (scrollable messages)
-	 *     ul.ch-userlist        ← this.userlist
-	 *
-	 * We target via descendant selectors from .channelcontent to avoid globals.
-	 */
 
-	/* message panel */
 	.channelcontent > nav {
 		flex: 1 1 auto;
 		display: flex;
@@ -532,7 +543,6 @@
 		min-width: 0;
 	}
 
-	/* topic bar */
 	.channelcontent > nav > h3 {
 		flex: 0 0 auto;
 		display: flex;
@@ -548,7 +558,6 @@
 		font-weight: 600;
 	}
 
-	/* message scroll area */
 	.channelcontent > nav > nav {
 		flex: 1 1 auto;
 		overflow-y: auto;
@@ -556,7 +565,6 @@
 		min-height: 0;
 	}
 
-	/* each message line */
 	.channelcontent > nav > nav > p {
 		margin: 0;
 		padding: 2px 0;
@@ -564,7 +572,6 @@
 		word-wrap: break-word;
 	}
 
-	/* user list */
 	.channelcontent > ul {
 		flex: 0 0 200px;
 		overflow-y: auto;
@@ -575,7 +582,6 @@
 		min-height: 0;
 	}
 
-	/* user list item */
 	.channelcontent > ul > li {
 		display: flex;
 		align-items: center;
@@ -588,7 +594,6 @@
 	}
 	.channelcontent > ul > li:hover { background: var(--cyber-dark3); }
 
-	/* prefix column */
 	.channelcontent > ul > li > p:first-child {
 		width: 18px;
 		flex-shrink: 0;
@@ -601,7 +606,6 @@
 		white-space: nowrap;
 	}
 
-	/* nick column */
 	.channelcontent > ul > li > p:nth-child(2) {
 		flex: 1;
 		margin: 0;
@@ -749,9 +753,8 @@
 <body>
 	<div class="irc-app">
 
-		<!-- ── Top header ─────────────────────────────── -->
-		<header class="irc-header">
-			<h1 class="irc-header__title" id="caption">IRC Client</h1>
+	<header class="irc-header">
+		<h1 class="irc-header__title" id="caption">IRC Client</h1>
 			<div class="irc-menu">
 				<button class="irc-menu__btn header-menu-btn" onclick="toggleHeaderMenu()">菜单</button>
 				<div class="irc-menu__dropdown" id="headerMenuDropdown">
@@ -763,8 +766,7 @@
 			</div>
 		</header>
 
-		<!-- ── Settings / connection bar ─────────────── -->
-		<div class="irc-settings">
+	<div class="irc-settings">
 			<div class="irc-settings__inputs">
 				<div class="settings-group">
 					<label for="wsUrl">WebSocket</label>
@@ -782,8 +784,7 @@
 							style="padding: var(--sp-xs) var(--sp-sm); font-size: 10px; min-width: 50px;">加入</button>
 					</div>
 				</div>
-				<!-- hidden checkbox; toggled via JS -->
-				<input type="checkbox" id="autoReconnect" style="display:none;">
+			<input type="checkbox" id="autoReconnect" style="display:none;">
 			</div>
 			<div class="irc-settings__actions">
 				<button class="btn connect-btn" id="connectBtn" onclick="toggleConnection()">连接</button>
@@ -794,18 +795,15 @@
 			</div>
 		</div>
 
-		<!-- ── SSL warning toast (fixed) ─────────────── -->
-		<div class="ssl-warning" id="sslWarning">
+	<div class="ssl-warning" id="sslWarning">
 			<strong>浏览器无法忽略SSL证书错误!</strong> 请使用以下方案:<br>
 			1. 改用 <code>ws://</code> 非加密连接（如果浏览器支持）<br>
 			2. 在浏览器中访问 <a id="sslLink" target="_blank">服务器URL</a> 并手动信任证书
 		</div>
 
-		<!-- ── Main chat area ─────────────────────────── -->
-		<div class="irc-chat">
+	<div class="irc-chat">
 
-			<!-- Log overlay (hidden by default) -->
-			<div class="log-container" id="logContainer">
+		<div class="log-container" id="logContainer">
 				<div class="log-header">
 					<span>WebSocket 日志</span>
 					<div class="log-controls">
@@ -816,33 +814,31 @@
 				<div id="logOutput"></div>
 			</div>
 
-			<!-- Tab bar -->
-			<div class="channels" id="channelsContainer"></div>
+		<div class="channels" id="channelsContainer"></div>
 
-			<!-- Channel panes -->
-			<div class="channelcontents-wrapper hidden" id="contentsWrapper">
-				<div class="channelcontents" id="channelContents"></div>
-			</div>
+		<div class="channelcontents-wrapper hidden" id="contentsWrapper">
+			<div class="channelcontents" id="channelContents"></div>
+		</div>
 
-			<!-- Empty / welcome state -->
-			<div class="empty-state" id="emptyState">
-				<h3>欢迎使用 IRC 客户端</h3>
-				<p>请先填写服务器信息并点击连接</p>
-			</div>
+		<div class="empty-state" id="emptyState">
+			<h3>欢迎使用 IRC 客户端</h3>
+			<p>请先填写服务器信息并点击连接</p>
+		</div>
 
-			<!-- Message input -->
-			<div class="input-container" id="inputContainer" style="display:none;">
+		<div class="input-container" id="inputContainer" style="display:none;">
 				<input type="text" name="input" id="input" placeholder="输入消息..."
 					onkeydown="onKeyDown(event)" oninput="updateCharCount()">
 				<button class="btn send-btn" id="sendBtn" onclick="send()">发送</button>
 				<div class="char-count" id="charCount">0/512</div>
 			</div>
 
-		</div><!-- /.irc-chat -->
-	</div><!-- /.irc-app -->
+		</div>
+	</div>
 </body>
 
 <script>
+(function () {
+'use strict';
 	let nickname = "";
 	let channelName = "";
 	let wsUrl = "";
@@ -860,15 +856,15 @@
 	let keepAliveTimer = null;
 	const keepAliveInterval = 90000;
 	let inputBlurTimeoutId = null;
+	let connectTimeout = null;
 	let messageHistory = [];
 	let historyIndex = -1;
 	let isDisconnecting = false;
 	let headerMenuClickListener = null;
 
-	// ── Session & message counters ──────────────────────
-	let sessionStartTime = null;   // Date when WebSocket onOpen fired
-	let sentCount = 0;             // PRIVMSG / raw sends (excluding PING keepalive)
-	let recvCount = 0;             // all raw messages received from server
+	let sessionStartTime = null;
+	let sentCount = 0;
+	let recvCount = 0;
 
 	function findChannel(channelName) {
 		if (!channelName) return null;
@@ -896,7 +892,8 @@
 
 		let url = new URL(document.location);
 		if (url.hash) {
-			document.getElementById('channelInput').value = url.hash;
+			const safeHash = url.hash.replace(/[^\w#&\-]/g, '').substring(0, 64);
+			if (safeHash) document.getElementById('channelInput').value = safeHash;
 		}
 		if (window.frameElement) {
 			document.getElementById("caption").style.display = "none";
@@ -950,15 +947,21 @@
 		}
 	}
 
+	const FOCUS_WHITELIST = '#channelInput, #wsUrl, #nickInput, #joinChannelBtn, .btn, button, a, input, textarea, select';
+
 	function handleInputBlur() {
 		if (inputBlurTimeoutId !== null) {
 			clearTimeout(inputBlurTimeoutId);
 		}
 		inputBlurTimeoutId = setTimeout(() => {
-			if (isConnected && document.activeElement !== input && document.hasFocus()) {
+			const active = document.activeElement;
+			if (active && active !== input && active !== document.body) {
+				return;
+			}
+			if (isConnected && document.hasFocus()) {
 				input.focus();
 			}
-		}, 100);
+		}, 150);
 	}
 	
 	function removeInputBlurListener() {
@@ -971,14 +974,18 @@
 
 	function toggleHeaderMenu() {
 		const menu = document.getElementById('headerMenuDropdown');
-		if (menu) {
-			menu.classList.toggle('visible');
-			updateAutoReconnectMenuItem();
-		}
+		if (!menu) return;
+		menu.classList.toggle('visible');
+		updateAutoReconnectMenuItem();
 
-		if (!menu.classList.contains('menu-attached')) {
-			menu.classList.add('menu-attached');
+		if (headerMenuClickListener) {
+			document.removeEventListener('click', headerMenuClickListener);
+			headerMenuClickListener = null;
+			menu.classList.remove('menu-attached');
+		}
+		if (menu.classList.contains('visible')) {
 			headerMenuClickListener = closeHeaderMenuOnClickOutside;
+			menu.classList.add('menu-attached');
 			document.addEventListener('click', headerMenuClickListener);
 		}
 	}
@@ -990,6 +997,7 @@
 			menu.classList.remove('visible');
 			menu.classList.remove('menu-attached');
 			document.removeEventListener('click', closeHeaderMenuOnClickOutside);
+			headerMenuClickListener = null;
 		}
 	}
 
@@ -1056,8 +1064,11 @@
 		const logContainer = document.getElementById('logContainer');
 		if (logContainer) {
 			logContainer.classList.toggle('visible');
-			if (!logContainer.classList.contains('visible')) {
-				logContainer.scrollTop = logContainer.scrollHeight;
+		if (logContainer.classList.contains('visible')) {
+			const logOutput = getLogOutput();
+				if (logOutput) {
+					requestAnimationFrame(() => { logOutput.scrollTop = logOutput.scrollHeight; });
+				}
 			}
 		}
 	}
@@ -1069,52 +1080,58 @@
 		}
 	}
 
-	// ── Log-level colour palette ────────────────────────
+	// 所有键均为大写,与 writeToLog 中的 tag.toUpperCase() 一致
 	const LOG_COLORS = {
-		'ERROR':      '#ff0040',
-		'WARN':       '#ffff00',
-		'WARNING':    '#ffff00',
-		'INFO':       '#00f0ff',
-		'DEBUG':      '#888888',
-		'OPEN':       '#00ff00',
-		'CLOSE':      '#ff6600',
-		'SEND':       '#00d4ff',
-		'RECV':       '#cc88ff',
-		'IRC':        '#aaffaa',
-		'CAP':        '#88ddff',
-		'NOTICE':     '#ffcc44',
-		'PING':       '#558855',
-		'KEEP-ALIVE': '#445544',
-		'RECONNECT':  '#ffaa00',
-		'PM':         '#ff88ff',
-		'SETTINGS':   '#aaaaff',
-		'SERVER':     '#ddddaa',
-		'TAB':        '#77bbdd',
-		'SYSTEM':     '#cccccc',
-		'PART':       '#ff8844',
-		'WebSocket':  '#44ccff',
+		'ERROR':          '#ff0040',
+		'WARN':           '#ffff00',
+		'WARNING':        '#ffff00',
+		'INFO':           '#00f0ff',
+		'DEBUG':          '#888888',
+		'OPEN':           '#00ff00',
+		'CLOSE':          '#ff6600',
+		'CLIENT→SERVER':  '#00d4ff',
+		'SERVER→CLIENT':  '#cc88ff',
+		'SERVER':         '#cc88ff',
+		'IRC':            '#aaffaa',
+		'CAP':            '#88ddff',
+		'NOTICE':         '#ffcc44',
+		'PING':           '#558855',
+		'PING/PONG':      '#558855',
+		'KEEP-ALIVE':     '#445544',
+		'RECONNECT':      '#ffaa00',
+		'PM':             '#ff88ff',
+		'SETTINGS':       '#aaaaff',
+		'TAB':            '#77bbdd',
+		'SYSTEM':         '#cccccc',
+		'PART':           '#ff8844',
+		'WEBSOCKET':      '#44ccff',
 	};
 
+	let _logOutputEl = null;
+	function getLogOutput() {
+		if (!_logOutputEl) _logOutputEl = document.getElementById('logOutput');
+		return _logOutputEl;
+	}
+
 	function writeToLog(message) {
-		const logOutput = document.getElementById('logOutput');
+		const logOutput = getLogOutput();
 		const now = new Date();
 		const ts = now.toISOString().replace('T', ' ').substring(0, 23) + 'Z';
 		const fullMessage = `[${ts}] ${message}`;
 
 		if (logOutput) {
-			// Detect level tag like [ERROR], [WARN], [IRC], etc.
-			const tagMatch = message.match(/^\[([A-Za-z_\-\/→←]+)/);
+			const tagMatch = message.match(/^\[([^\]]+)\]/);
 			const line = document.createElement('span');
-			if (tagMatch) {
-				const tag = tagMatch[1].toUpperCase().split('/')[0].split('→')[0].split('←')[0];
-				line.style.color = LOG_COLORS[tag] || '#e0e0e0';
+		if (tagMatch) {
+			const tag = tagMatch[1].toUpperCase();
+			const firstSeg = tag.split(/[\s\/]/)[0];
+				line.style.color = LOG_COLORS[tag] || LOG_COLORS[firstSeg] || '#e0e0e0';
 			} else {
 				line.style.color = '#e0e0e0';
 			}
 			line.textContent = fullMessage;
 			logOutput.appendChild(line);
 
-			// Keep max 500 log lines to avoid memory growth
 			while (logOutput.children.length > 500) {
 				logOutput.removeChild(logOutput.firstChild);
 			}
@@ -1146,22 +1163,22 @@
 	function joinChannel() {
 		const channelInput = document.getElementById('channelInput');
 		if (!channelInput) return;
-		
+
 		let targetChannel = channelInput.value.trim();
 		if (!targetChannel) return;
-		
+
 		if (!targetChannel.startsWith('#')) {
 			targetChannel = '#' + targetChannel;
 			channelInput.value = targetChannel;
 		}
-		
-	if (isConnected && websocket && websocket.readyState === WebSocket.OPEN) {
-		writeToLog(`[IRC] Sending JOIN → ${targetChannel}`);
-		doSend("JOIN " + targetChannel);
-	} else {
-		writeToLog(`[WARN] JOIN requested but not connected — target: ${targetChannel}`);
-		writeToScreen("var(--clr-warning)", "未连接, 无法加入频道", statusChannel, "*");
-	}
+
+		if (isConnected && websocket && websocket.readyState === WebSocket.OPEN) {
+			writeToLog(`[IRC] Sending JOIN → ${targetChannel}`);
+			doSend("JOIN " + targetChannel);
+		} else {
+			writeToLog(`[WARN] JOIN requested but not connected — target: ${targetChannel}`);
+			writeToScreen("var(--clr-warning)", "未连接, 无法加入频道", statusChannel, "*");
+		}
 	}
 	
 	function toggleConnection() {
@@ -1169,11 +1186,20 @@
 			writeToLog('[SYSTEM] User requested disconnect — disabling auto-reconnect');
 			autoReconnect = false;
 			updateAutoReconnectMenuItem();
+			isDisconnecting = true;
+			if (websocket && websocket.readyState === WebSocket.OPEN) {
+				try {
+					websocket.send(`QUIT :User disconnected\r\n`);
+					writeToLog('[SYSTEM] Sent IRC QUIT to server');
+				} catch (e) {
+					writeToLog(`[WARN] Could not send QUIT: ${e.message}`);
+				}
+			}
 			if (websocket) {
 				try {
-					if (window.connectTimeout) {
-						clearTimeout(window.connectTimeout);
-						window.connectTimeout = null;
+					if (connectTimeout) {
+						clearTimeout(connectTimeout);
+						connectTimeout = null;
 					}
 					writeToLog('[SYSTEM] Closing WebSocket (code 1000 — user disconnected)');
 					websocket.close(1000, "User disconnected");
@@ -1219,9 +1245,23 @@
 			alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
 			return;
 		}
+
+		if (!nickname) {
+			nickname = "Guest_" + Math.floor(Math.random() * 9000 + 1000);
+			nickInput.value = nickname;
+			writeToLog(`[SYSTEM] Nickname was empty — auto-generated: ${nickname}`);
+		}
+
 		if (!validateNickname(nickname)) {
 			writeToLog(`[ERROR] Invalid nickname: "${nickname}" — must start with a letter or [_\`[]{}^|]`);
-			alert("昵称格式无效!必须以字母或特定符号开头, 不能包含空格和特殊字符");
+			nickInput.classList.add('input-error');
+			nickInput.focus();
+			nickInput.select();
+			setTimeout(() => nickInput.classList.remove('input-error'), 1200);
+			connectBtn.textContent = '连接';
+			connectBtn.disabled = false;
+			wsUrlInput.disabled = false;
+			nickInput.disabled = false;
 			return;
 		}
 		if (channelName && !channelName.startsWith('#')) {
@@ -1246,6 +1286,8 @@
 		writeToLog(`[SYSTEM] Channel : ${channelName || '(none)'}`);
 		writeToLog(`[SYSTEM] Auto-reconnect: ${autoReconnect} | Attempt: ${reconnectAttempts + 1}`);
 
+		statusChannel = null;
+		activeChannel = null;
 		channels.innerHTML = '';
 		channelContents.innerHTML = '';
 		channelMap.clear();
@@ -1259,7 +1301,7 @@
 		WebSocket_Connect(wsUrl);
 	}
 
-	function onDisconnect(reason = "") {
+	function onDisconnect(reason = "", wasConnected = false) {
 
 		if (isDisconnecting) {
 			return;
@@ -1268,7 +1310,7 @@
 
 		stopKeepAlive();
 		writeToLog(`[SYSTEM] ── Disconnect handler ────────────────────`);
-		writeToLog(`[SYSTEM] Reason: "${reason || 'normal'}" | was-connected: ${isConnected}`);
+		writeToLog(`[SYSTEM] Reason: "${reason || 'normal'}" | was-connected: ${wasConnected}`);
 		if (sessionStartTime) {
 			writeToLog(`[SYSTEM] Session ended — duration: ${formatSessionDuration(sessionStartTime)} | sent: ${sentCount} | recv: ${recvCount}`);
 			sessionStartTime = null;
@@ -1276,13 +1318,10 @@
 		isConnected = false;
 		const wsUrlInput = document.getElementById('wsUrl');
 		const nickInput = document.getElementById('nickInput');
-		const channelInput = document.getElementById('channelInput');
-		const reconnectCheckbox = document.getElementById('autoReconnect');
 		const connectBtn = document.getElementById('connectBtn');
 
 		if (wsUrlInput) wsUrlInput.disabled = false;
 		if (nickInput) nickInput.disabled = false;
-		if (channelInput) channelInput.disabled = false;
 
 		if (connectBtn) {
 			connectBtn.textContent = '连接';
@@ -1291,9 +1330,9 @@
 		}
 
 		const joinChannelBtn = document.getElementById('joinChannelBtn');
-	if (joinChannelBtn) joinChannelBtn.disabled = true;
+		if (joinChannelBtn) joinChannelBtn.disabled = true;
 
-	updateConnectionStatus('disconnected');
+		updateConnectionStatus('disconnected');
 
 		if (statusChannel) {
 			Tab_Show("Status");
@@ -1338,18 +1377,18 @@
 	function updateCharCount() {
 		const charCount = document.getElementById('charCount');
 		if (!charCount || !input) return;
-		
+
 		const text = input.value;
-		const length = text.length;
-		const maxLength = 512;
-		
-		charCount.textContent = `${length}/${maxLength}`;
-		
+		const bytes = new TextEncoder().encode(text).length;
+		const maxBytes = 512;
+
+		charCount.textContent = `${bytes}/${maxBytes}`;
+
 		charCount.classList.remove('warning', 'danger');
-		
-		if (length > maxLength) {
+
+		if (bytes > maxBytes) {
 			charCount.classList.add('danger');
-		} else if (length > maxLength * 0.8) {
+		} else if (bytes > maxBytes * 0.8) {
 			charCount.classList.add('warning');
 		}
 	}
@@ -1406,31 +1445,30 @@
 		}
 	}
 
-	function Tab_onClick(evt) {
+	function tabOnClick(evt) {
 		if (!evt || !evt.currentTarget) return;
-		let chanName = evt.currentTarget.value;
-		Tab_Show(chanName);
+		const chanName = evt.currentTarget.value;
+		tabShow(chanName);
 	}
+	const Tab_onClick = tabOnClick;
 
-	function Tabs_Hide() {
-		let tabcontent = document.querySelectorAll(".channelcontent");
-		tabcontent.forEach(content => content.classList.remove('active'));
-
-		let tablinks = document.querySelectorAll(".channel");
-		tablinks.forEach(link => link.classList.remove("active"));
+	function tabsHide() {
+		channelMap.forEach(ch => {
+			if (ch.channel) ch.channel.classList.remove('active');
+			if (ch.button) ch.button.classList.remove('active');
+		});
 	}
+	const Tabs_Hide = tabsHide;
 
-	function Tab_Show(name) {
+	function tabShow(name) {
 		if (!name) return;
-		let channel = findChannel(name);
-		Tabs_Hide();
+		const channel = findChannel(name);
+		tabsHide();
 		if (channel && channel.channel) {
 			channel.channel.classList.add('active');
 			channel.button.classList.add("active");
 			activeChannel = channel;
-
 			clearUnreadBadge(channel);
-
 			setTimeout(() => {
 				if (channel.content) {
 					channel.content.scrollTop = channel.content.scrollHeight;
@@ -1438,6 +1476,7 @@
 			}, 10);
 		}
 	}
+	const Tab_Show = tabShow;
 
 	function addUnreadBadge(channel) {
 		if (!channel || !channel.button) return;
@@ -1476,10 +1515,144 @@
 		Tab_Show(targetNick);
 	}
 
-	function HTML_escape(text) {
+	function htmlEscape(text) {
 		if (!text) return "";
-		let map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+		const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
 		return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+	}
+	const HTML_escape = htmlEscape;
+
+	function stripMircCodes(text) {
+		if (!text) return "";
+		return text
+			.replace(/\x03(\d{1,2}(,\d{1,2})?)?/g, '')
+			.replace(/[\x02\x0F\x16\x1D\x1E\x1F\x11]/g, '');
+	}
+
+	const MIRC_COLORS = [
+		'#ffffff',
+		'#000000',
+		'#00007f',
+		'#009300',
+		'#ff0000',
+		'#7f0000',
+		'#9c009c',
+		'#fc7f00',
+		'#ffff00',
+		'#00fc00',
+		'#009393',
+		'#00ffff',
+		'#0000fc',
+		'#ff00ff',
+		'#7f7f7f',
+		'#d2d2d2'
+	];
+
+	function mircToHtml(text) {
+		if (!text) return "";
+
+		let fg = null, bg = null;
+		let bold = false, italic = false, underline = false, strike = false;
+		let result = "";
+		let spanOpen = false;
+
+		function closeSpan() {
+			if (spanOpen) { result += "</span>"; spanOpen = false; }
+		}
+		function openSpan() {
+			const styles = [];
+			if (fg !== null) styles.push("color:" + fg);
+			if (bg !== null) styles.push("background:" + bg);
+			if (bold)        styles.push("font-weight:bold");
+			if (italic)      styles.push("font-style:italic");
+			if (underline && strike) styles.push("text-decoration:underline line-through");
+			else if (underline)      styles.push("text-decoration:underline");
+			else if (strike)         styles.push("text-decoration:line-through");
+			if (styles.length > 0) {
+				result += `<span style="${styles.join(';')}">`;
+				spanOpen = true;
+			}
+		}
+		function hasFormat() {
+			return fg !== null || bg !== null || bold || italic || underline || strike;
+		}
+		function resetAll() {
+			closeSpan();
+			fg = null; bg = null;
+			bold = false; italic = false; underline = false; strike = false;
+		}
+		function applyFormat() {
+			closeSpan();
+			if (hasFormat()) openSpan();
+		}
+
+	const colorRe = /^\x03(\d{1,2})(?:,(\d{1,2}))?/;
+
+		let i = 0;
+		while (i < text.length) {
+			const ch = text[i];
+
+		if (ch === '\x02') {
+			applyFormat();
+			bold = !bold;
+			if (hasFormat()) openSpan();
+			i++; continue;
+		}
+		if (ch === '\x1D') {
+			applyFormat();
+			italic = !italic;
+			if (hasFormat()) openSpan();
+			i++; continue;
+		}
+		if (ch === '\x1F') {
+			applyFormat();
+			underline = !underline;
+			if (hasFormat()) openSpan();
+			i++; continue;
+		}
+		if (ch === '\x1E') {
+			applyFormat();
+			strike = !strike;
+			if (hasFormat()) openSpan();
+			i++; continue;
+		}
+		if (ch === '\x0F') {
+			resetAll();
+			i++; continue;
+		}
+		if (ch === '\x16' || ch === '\x11') {
+			i++; continue;
+		}
+		if (ch === '\x03') {
+			const sub = text.slice(i);
+				const m = colorRe.exec(sub);
+				if (m) {
+					applyFormat();
+					const fgIdx = parseInt(m[1], 10);
+					fg = (fgIdx >= 0 && fgIdx < MIRC_COLORS.length) ? MIRC_COLORS[fgIdx] : null;
+					if (m[2] !== undefined) {
+						const bgIdx = parseInt(m[2], 10);
+						bg = (bgIdx >= 0 && bgIdx < MIRC_COLORS.length) ? MIRC_COLORS[bgIdx] : null;
+					}
+					if (hasFormat()) openSpan();
+			i += m[0].length; continue;
+		}
+		applyFormat();
+		fg = null; bg = null;
+		if (hasFormat()) openSpan();
+		i++; continue;
+	}
+
+		if (ch === '&')       { result += '&amp;';  i++; continue; }
+			if (ch === '<')       { result += '&lt;';   i++; continue; }
+			if (ch === '>')       { result += '&gt;';   i++; continue; }
+			if (ch === '"')       { result += '&quot;'; i++; continue; }
+			if (ch === "'")       { result += '&#039;'; i++; continue; }
+			result += ch;
+			i++;
+		}
+		closeSpan();
+		return result;
 	}
 
 	function sortUserList(user_a, user_b) {
@@ -1492,60 +1665,61 @@
 		return aIndex - bIndex;
 	}
 
-	function Tab_Create(name, topic, createlist) {
-		if (!name || !channels || !channelContents) {
-			console.error("Tab_Create: missing required elements");
-			writeToLog(`[ERROR] Tab_Create failed — name: "${name}", channels: ${!!channels}, contents: ${!!channelContents}`);
-			return;
+		// ── Tab class ────────────────────────────────────────
+	class Tab_Create {
+		constructor(name, topic, createlist) {
+			if (!name || !channels || !channelContents) {
+				console.error("Tab_Create: missing required elements");
+				writeToLog(`[ERROR] Tab_Create failed — name: "${name}", channels: ${!!channels}, contents: ${!!channelContents}`);
+				return;
+			}
+			Tabs_Hide();
+			this.name = name;
+			this.isPrivate = false;
+
+			this.button = document.createElement("button");
+			this.button.textContent = name;
+			this.button.value = name;
+			this.button.className = "channel";
+			this.button.addEventListener("click", Tab_onClick);
+
+			const closeBtn = document.createElement("button");
+			closeBtn.textContent = "x";
+			closeBtn.value = name;
+			closeBtn.className = "x";
+			closeBtn.addEventListener("click", Tab_Close);
+			this.button.appendChild(closeBtn);
+
+			channels.appendChild(this.button);
+
+			this.channel = document.createElement("div");
+			this.channel.className = "channelcontent";
+
+			const navWrapper = document.createElement("nav");
+			this.topic = document.createElement("h3");
+			this.topic.textContent = topic || "No topic set";
+			navWrapper.appendChild(this.topic);
+
+			this.content = document.createElement("nav");
+			navWrapper.appendChild(this.content);
+			this.channel.appendChild(navWrapper);
+
+			if (createlist) {
+				this.userlist = document.createElement("ul");
+				this.users = [];
+				this.names_end = true;
+				this.channel.appendChild(this.userlist);
+			}
+
+			channelContents.appendChild(this.channel);
+			channelMap.set(name, this);
+			activeChannel = this;
+			Tab_Show(name);
+			writeToLog(`[TAB] Tab created: "${name}" | has-userlist: ${!!createlist} | total tabs: ${channelMap.size}`);
 		}
-		Tabs_Hide();
-		this.name = name;
-		let escapedName = HTML_escape(name);
-
-		this.button = document.createElement("button");
-		this.button.innerHTML = escapedName;
-		this.button.value = name;
-		this.button.onclick = Tab_onClick;
-		this.button.className = "channel";
-
-		let x = document.createElement("button");
-		x.innerHTML = "x";
-		x.onclick = Tab_Close;
-		x.value = name;
-		x.className = "x";
-		this.button.appendChild(x);
-
-		channels.appendChild(this.button);
-
-		this.channel = document.createElement("div");
-		this.channel.className = "channelcontent";
-
-		let navWrapper = document.createElement("nav");
-		this.topic = document.createElement("h3");
-		this.topic.innerHTML = HTML_escape(topic || "No topic set");
-		navWrapper.appendChild(this.topic);
-
-		this.content = document.createElement("nav");
-		navWrapper.appendChild(this.content);
-
-		this.channel.appendChild(navWrapper);
-
-		if (createlist) {
-			this.userlist = document.createElement("ul");
-			this.users = [];
-			this.names_end = true;
-			this.channel.appendChild(this.userlist);
-		}
-
-		channelContents.appendChild(this.channel);
-		channelMap.set(name, this);
-		activeChannel = this;
-		Tab_Show(name);
-		writeToLog(`[TAB] Tab created: "${name}" | has-userlist: ${!!createlist} | total tabs: ${channelMap.size}`);
-		return this;
 	}
 
-	function Tab_Close(evt) {
+	function tabClose(evt) {
 		evt.stopPropagation();
 		if (!evt || !evt.currentTarget) return;
 		const channelName = evt.currentTarget.value;
@@ -1556,10 +1730,10 @@
 			return;
 		}
 
-		let channel = findChannel(channelName);
+		const channel = findChannel(channelName);
 		if (channel && channel.isPrivate) {
 			writeToLog(`[PM] Closing private chat session: "${channelName}"`);
-			Channel_Destroy(channelName);
+			channelDestroy(channelName);
 			return;
 		}
 
@@ -1568,138 +1742,150 @@
 			doSend("PART " + channelName);
 		} else {
 			writeToLog(`[TAB] Not connected — destroying tab locally: "${channelName}"`);
-			Channel_Destroy(channelName);
+			channelDestroy(channelName);
 		}
 	}
+	const Tab_Close = tabClose;
 
-	function Channel_Destroy(name) {
+	function channelDestroy(name) {
 		if (!name) return;
-		let channel = findChannel(name);
+		const channel = findChannel(name);
 		if (!channel) {
-			writeToLog(`[WARN] Channel_Destroy: tab "${name}" not found`);
+			writeToLog(`[WARN] channelDestroy: tab "${name}" not found`);
 			return;
 		}
 		const wasActive = (activeChannel === channel);
+		const actualKey = channel.name;
 		channel.button.remove();
 		channel.channel.remove();
 		if (wasActive) {
 			activeChannel = statusChannel;
 		}
-		channelMap.delete(name);
-		writeToLog(`[TAB] Tab destroyed: "${name}" | was-active: ${wasActive} | remaining tabs: ${channelMap.size}`);
+		channelMap.delete(actualKey);
+		writeToLog(`[TAB] Tab destroyed: "${actualKey}" | was-active: ${wasActive} | remaining tabs: ${channelMap.size}`);
 		if (activeChannel) {
-			Tab_Show(activeChannel.name);
+			tabShow(activeChannel.name);
 		}
 	}
+	const Channel_Destroy = channelDestroy;
 
-	function Channel_InsertUser(nick, channel, prefix) {
+	function channelInsertUser(nick, channel, prefix) {
 		if (!nick || !channel || !channel.userlist) return;
-		let user = document.createElement("li");
+		const user = document.createElement("li");
 		let tmp = document.createElement("p");
+		let nickColor = "";
 
 		if (prefix && prefix !== " ") {
 			const prefixChar = prefix[0];
 			const prefixInfo = DefaultPrefixMap[prefixChar];
 			if (prefixInfo) {
-				tmp.innerHTML = prefixInfo.symbol;
+				tmp.textContent = prefixInfo.symbol;
 				tmp.style.color = prefixInfo.color;
 				tmp.title = prefixInfo.name;
+				nickColor = prefixInfo.color;
 			} else {
-				tmp.innerHTML = prefixChar;
+				tmp.textContent = prefixChar;
 			}
 		}
 		user.appendChild(tmp);
 
 		tmp = document.createElement("p");
-		tmp.innerHTML = HTML_escape(nick);
+		tmp.textContent = nick;
 		tmp.title = "点击与 " + nick + " 私聊";
 		tmp.style.cursor = "pointer";
-		tmp.onclick = function(e) {
+		if (nickColor) tmp.style.color = nickColor;
+		tmp.addEventListener("click", function (e) {
 			e.stopPropagation();
 			openPrivateChat(nick);
-		};
+		});
 		user.appendChild(tmp);
+
 		let i = 0;
+		const newEntry = [prefix || " ", nick];
 		for (i; i < channel.users.length; i++) {
 			if (channel.users[i] && channel.users[i][1]) {
-				if (channel.users[i][1].localeCompare(nick, undefined, { sensitivity: 'accent' }) < 0) continue;
+				if (sortUserList(newEntry, channel.users[i]) <= 0) break;
 			}
-			break;
 		}
 		channel.users.splice(i, 0, [prefix || " ", nick]);
 		channel.userlist.insertBefore(user, channel.userlist.childNodes[i]);
 	}
+	const Channel_InsertUser = channelInsertUser;
 
-	function Channel_AppendUser(nick, channel, prefix) {
+	function channelAppendUser(nick, channel, prefix) {
 		if (!nick || !channel || !channel.userlist) return;
-		let user = document.createElement("li");
+		const user = document.createElement("li");
 		let tmp = document.createElement("p");
+		let nickColor = "";
+
 		if (prefix && prefix !== " ") {
 			const prefixChar = prefix[0];
 			const prefixInfo = DefaultPrefixMap[prefixChar];
 			if (prefixInfo) {
-				tmp.innerHTML = prefixInfo.symbol;
+				tmp.textContent = prefixInfo.symbol;
 				tmp.style.color = prefixInfo.color;
 				tmp.title = prefixInfo.name;
+				nickColor = prefixInfo.color;
 			} else {
-				tmp.innerHTML = prefixChar;
+				tmp.textContent = prefixChar;
 			}
 		}
 		user.appendChild(tmp);
 
 		tmp = document.createElement("p");
-		tmp.innerHTML = HTML_escape(nick);
+		tmp.textContent = nick;
 		tmp.title = "点击与 " + nick + " 私聊";
 		tmp.style.cursor = "pointer";
-		tmp.onclick = function(e) {
+		if (nickColor) tmp.style.color = nickColor;
+		tmp.addEventListener("click", function (e) {
 			e.stopPropagation();
 			openPrivateChat(nick);
-		};
+		});
 		user.appendChild(tmp);
 		channel.userlist.appendChild(user);
 	}
+	const Channel_AppendUser = channelAppendUser;
 
-	function Channel_RemoveUser(nick, channel) {
+	function channelRemoveUser(nick, channel) {
 		if (!nick || !channel || !channel.userlist) return false;
 
 		for (let i = 0; i < channel.users.length; i++) {
 			if (channel.users[i] && channel.users[i][1] === nick) {
 				for (let j = 0; j < channel.userlist.children.length; j++) {
-					let userItem = channel.userlist.children[j];
+					const userItem = channel.userlist.children[j];
 					if (!userItem || !userItem.children[1]) continue;
-					let anick = userItem.children[1].textContent;
-					if (anick === nick) {
+					if (userItem.children[1].textContent === nick) {
 						userItem.remove();
 						break;
 					}
 				}
-
 				channel.users.splice(i, 1);
 				return true;
 			}
 		}
-		
 		return false;
 	}
+	const Channel_RemoveUser = channelRemoveUser;
 
-	function Channel_RenameUser(nick, newnick, channel) {
+	function channelRenameUser(nick, newnick, channel) {
 		if (!nick || !newnick || !channel) return;
 		if (!channel.userlist) return;
 		for (let i = 0; i < channel.users.length; i++) {
 			if (channel.users[i] && channel.users[i][1] == nick) {
-				let prefix = channel.users[i][0];
-				Channel_RemoveUser(nick, channel);
-				Channel_InsertUser(newnick, channel, prefix);
+				const prefix = channel.users[i][0];
+				channelRemoveUser(nick, channel);
+				channelInsertUser(newnick, channel, prefix);
 				return true;
 			}
 		}
 	}
+	const Channel_RenameUser = channelRenameUser;
 
-	function Channel_UpdateUserPrefix(nick, channel, add, prefix) {
+	function channelUpdateUserPrefix(nick, channel, add, prefix) {
 		if (!nick || !channel || !channel.users || !PrefixChars) return;
 		for (let i = 0; i < channel.users.length; i++) {
 			if (channel.users[i] && channel.users[i][1] == nick) {
-				let pos = PrefixChars[0].indexOf(prefix);
+				const pos = PrefixChars[0].indexOf(prefix);
 				if (pos < 0) return;
 
 				let prefixes = "";
@@ -1714,82 +1900,220 @@
 						prefixes += channel.users[i][0][ii];
 					}
 				} else {
-					let tmp = channel.users[i][0].indexOf(PrefixChars[1][pos]);
+					const tmp = channel.users[i][0].indexOf(PrefixChars[1][pos]);
 					if (tmp >= 0) {
 						prefixes = channel.users[i][0].substring(0, tmp) + channel.users[i][0].substring(tmp + 1);
 					}
 				}
 				if (prefixes == "") prefixes = " ";
 				channel.users[i][0] = prefixes;
-
-				Channel_RenameUser(nick, nick, channel);
+				channelRenameUser(nick, nick, channel);
 				break;
 			}
 		}
 	}
+	const Channel_UpdateUserPrefix = channelUpdateUserPrefix;
 
 	function writeToScreen(color, message, channel, username) {
 		if (!channel || !channel.content) return;
+		const renderedMessage = mircAndLinkify(message || "");
 		let pre = document.createElement("p");
 		pre.style.color = color;
 		const now = new Date();
 		const utcTime = now.toISOString().substr(11, 8);
-		let displayMessage;
+
 		if (username && username !== "" && username !== "*" && username !== "-") {
-			const escapedUsername = HTML_escape(username);
-			const usernameHtml = `<span class="clickable-username" onclick="openPrivateChat('${escapedUsername}')" title="点击与 ${escapedUsername} 私聊" style="cursor: pointer; color: var(--clr-secondary); font-weight: bold;">${escapedUsername}</span>`;
-			displayMessage = `[${utcTime}] ${usernameHtml}: ${linkify(message || "")}`;
+			const nickSpan = document.createElement("span");
+			nickSpan.className = "clickable-username";
+			nickSpan.title = "点击与 " + username + " 私聊";
+			nickSpan.style.cssText = "cursor:pointer;color:var(--clr-secondary);font-weight:bold;";
+			nickSpan.textContent = username;
+			nickSpan.addEventListener("click", function () {
+				openPrivateChat(username);
+			});
+
+			const ts = document.createTextNode("[" + utcTime + "] ");
+			const sep = document.createTextNode(": ");
+			const msgSpan = document.createElement("span");
+			msgSpan.innerHTML = renderedMessage;
+			pre.appendChild(ts);
+			pre.appendChild(nickSpan);
+			pre.appendChild(sep);
+			pre.appendChild(msgSpan);
 		} else {
-			displayMessage = `[${utcTime}] ${linkify(message || "")}`;
+			pre.innerHTML = "[" + utcTime + "] " + renderedMessage;
 		}
-		pre.innerHTML = displayMessage;
-		let output = channel.content;
+
+		const output = channel.content;
 		if (output) {
 			output.appendChild(pre);
 			while (output.children.length > 200) {
 				output.removeChild(output.children[0]);
 			}
-
 			requestAnimationFrame(() => {
 				output.scrollTop = output.scrollHeight;
 			});
 		}
 	}
 
+	function sanitizeUrl(url) {
+		try {
+			const parsed = new URL(url);
+		if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
+		return parsed.href;
+		} catch (e) {
+			return null;
+		}
+	}
+
+	function mircAndLinkify(text) {
+		if (!text) return "";
+		const coloredHtml = mircToHtml(text);
+		const mediaMaxWidth = '300px';
+		return coloredHtml.replace(/(<[^>]*>)|([^<]+)/g, function (match, tag, txt) {
+			if (tag) return tag;
+			if (!txt) return "";
+			return txt.replace(/https?:\/\/[^\s<>{}|\\^`[\]]+/g, function (escapedUrl) {
+				const rawUrl = escapedUrl
+					.replace(/&amp;/g, '&').replace(/&lt;/g, '<')
+					.replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+					.replace(/&#039;/g, "'");
+				const safeUrl = sanitizeUrl(rawUrl);
+				if (!safeUrl) return escapedUrl;
+				const lowerUrl = safeUrl.toLowerCase();
+				const safeAttr = HTML_escape(safeUrl);
+				const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/.test(lowerUrl);
+				const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/.test(lowerUrl);
+				const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/.test(lowerUrl);
+				if (isImage) return `<img src="${safeAttr}" alt="Image" referrerpolicy="no-referrer" crossorigin="anonymous" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.1);">`;
+				if (isAudio) return `<audio controls src="${safeAttr}" referrerpolicy="no-referrer" style="max-width:${mediaMaxWidth};"></audio>`;
+				if (isVideo) return `<video controls src="${safeAttr}" referrerpolicy="no-referrer" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;"></video>`;
+				return `<a href="${safeAttr}" target="_blank" rel="noopener noreferrer" style="color:var(--clr-accent);text-decoration:underline;word-break:break-all;">${safeAttr}</a>`;
+			});
+		});
+	}
+
 	function linkify(text) {
-		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
 		const mediaMaxWidth = '300px';
 
-		return text.replace(urlRegex, function (url) {
-			const lowerUrl = url.toLowerCase();
-			const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/i.test(lowerUrl);
-			const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/i.test(lowerUrl);
-			const isVideo = /\.(mp4|webm|ogg|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/i.test(lowerUrl);
+		return HTML_escape(text).replace(/https?:\/\/[^\s<>{}|\\^`[\]]+/g, function (escapedUrl) {
+			const rawUrl = escapedUrl
+				.replace(/&amp;/g, '&')
+				.replace(/&lt;/g, '<')
+				.replace(/&gt;/g, '>')
+				.replace(/&quot;/g, '"')
+				.replace(/&#039;/g, "'");
+			const safeUrl = sanitizeUrl(rawUrl);
+			if (!safeUrl) return escapedUrl;
 
-			if (isImage) {
-				return `<img src="${url}" alt="Image" style="max-width: ${mediaMaxWidth}; height: auto; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">`;
-			} else if (isAudio) {
-				return `<audio controls src="${url}" style="max-width: ${mediaMaxWidth};"></audio>`;
-			} else if (isVideo) {
-				return `<video controls src="${url}" style="max-width: ${mediaMaxWidth}; height: auto; border-radius: 4px;"></video>`;
-			} else {
-				return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--clr-accent); text-decoration: underline; word-break: break-all;">${url}</a>`;
-			}
+		const lowerUrl = safeUrl.toLowerCase();
+		const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/.test(lowerUrl);
+		const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/.test(lowerUrl);
+		const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/.test(lowerUrl);
+		const safeAttr = HTML_escape(safeUrl);
+
+		if (isImage) {
+			return `<img src="${safeAttr}" alt="Image" referrerpolicy="no-referrer" crossorigin="anonymous" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.1);">`;
+		} else if (isAudio) {
+			return `<audio controls src="${safeAttr}" referrerpolicy="no-referrer" style="max-width:${mediaMaxWidth};"></audio>`;
+		} else if (isVideo) {
+			return `<video controls src="${safeAttr}" referrerpolicy="no-referrer" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;"></video>`;
+		} else {
+			return `<a href="${safeAttr}" target="_blank" rel="noopener noreferrer" style="color:var(--clr-accent);text-decoration:underline;word-break:break-all;">${safeAttr}</a>`;
+		}
 		});
+	}
+
+	function linkifyToDom(text) {
+		const frag = document.createDocumentFragment();
+		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
+		let lastIndex = 0;
+		let match;
+		while ((match = urlRegex.exec(text)) !== null) {
+			if (match.index > lastIndex) {
+				frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+			}
+			const safeUrl = sanitizeUrl(match[1]);
+			if (!safeUrl) {
+				frag.appendChild(document.createTextNode(match[1]));
+			} else {
+				const lowerUrl = safeUrl.toLowerCase();
+				const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/.test(lowerUrl);
+			const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/.test(lowerUrl);
+			const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/.test(lowerUrl);
+			if (isImage) {
+				const img = document.createElement('img');
+				img.src = safeUrl; img.alt = 'Image';
+				img.referrerPolicy = 'no-referrer';
+				img.crossOrigin = 'anonymous';
+				img.style.cssText = 'max-width:300px;height:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.1);';
+				frag.appendChild(img);
+			} else if (isAudio) {
+				const audio = document.createElement('audio');
+				audio.controls = true; audio.src = safeUrl;
+				audio.referrerPolicy = 'no-referrer';
+				audio.style.maxWidth = '300px';
+				frag.appendChild(audio);
+			} else if (isVideo) {
+				const video = document.createElement('video');
+				video.controls = true; video.src = safeUrl;
+				video.referrerPolicy = 'no-referrer';
+				video.style.cssText = 'max-width:300px;height:auto;border-radius:4px;';
+				frag.appendChild(video);
+			} else {
+					const a = document.createElement('a');
+					a.href = safeUrl; a.target = '_blank';
+					a.rel = 'noopener noreferrer';
+					a.style.cssText = 'color:var(--clr-accent);text-decoration:underline;word-break:break-all;';
+					a.textContent = safeUrl;
+					frag.appendChild(a);
+				}
+			}
+			lastIndex = urlRegex.lastIndex;
+		}
+		if (lastIndex < text.length) {
+			frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+		}
+		return frag;
+	}
+
+	function writeMotdLine(rawText) {
+		if (!statusChannel || !statusChannel.content) return;
+		const now = new Date();
+		const utcTime = now.toISOString().substr(11, 8);
+		const p = document.createElement("p");
+		p.style.color = "var(--clr-font)";
+		p.innerHTML = "[" + utcTime + "] " + mircToHtml(rawText);
+		const output = statusChannel.content;
+		output.appendChild(p);
+		while (output.children.length > 500) output.removeChild(output.children[0]);
+		requestAnimationFrame(() => { output.scrollTop = output.scrollHeight; });
+	}
+
+	function pushHistory(msg) {
+		if (messageHistory.length >= 200) messageHistory.shift();
+		messageHistory.push(msg);
+		historyIndex = messageHistory.length;
 	}
 
 	function send() {
 		let text = input ? input.value.trim() : "";
 		if (!text || !activeChannel) return;
 
-		if (text[0] == "/") {
-			if (text.indexOf("/me ") == 0) {
+		if (text[0] === "/") {
+			if (text.indexOf("/me ") === 0) {
+				if (activeChannel.name === "Status") {
+					writeToScreen("var(--clr-warning)", "Status 是系统状态窗口，无法发送消息。", activeChannel, "*");
+					if (input) { input.value = ""; updateCharCount(); }
+					return;
+				}
 				const actionText = text.substring(4);
 				const messages = splitIRCMessage("privmsg " + activeChannel.name + " :\x01ACTION " + actionText + "\x01");
 				messages.forEach(msg => doSend(msg));
 				writeToScreen("var(--clr-red)", `${nickname} ${actionText}`, activeChannel, "*");
-				} else if (text.indexOf("/msg ") == 0) {
-					const parts = text.substring(5).split(' ');
+				pushHistory(text);
+			} else if (text.indexOf("/msg ") === 0) {
+				const parts = text.substring(5).split(' ');
 				if (parts.length >= 2) {
 					const targetNick = parts[0];
 					const msgText = parts.slice(1).join(' ');
@@ -1810,16 +2134,25 @@
 						}
 					});
 					writeToLog(`[PM] You → ${targetNick}: ${msgText}`);
+					pushHistory(text);
 				} else {
-					writeToScreen("var(--clr-warning)", "用法: /msg <昵称> <消息>", statusChannel, "*");
+					writeToScreen("var(--clr-warning)", "用法: /msg <昵称> <消息>", activeChannel, "*");
 				}
 			} else {
-				writeToScreen("var(--clr-font)", text, statusChannel, "");
-				const messages = splitIRCMessage(text.substring(1));
-				messages.forEach(msg => doSend(msg));
+			writeToScreen("var(--clr-font)", text, activeChannel, "");
+			const messages = splitIRCMessage(text.substring(1));
+			messages.forEach(msg => doSend(msg));
+			pushHistory(text);
+		}
+	} else {
+		const target = activeChannel.name;
+
+		if (target === "Status") {
+				writeToScreen("var(--clr-warning)", "Status 是系统状态窗口，无法发送消息。请使用 /join #频道 加入频道，或使用 /msg 昵称 内容 与用户私聊。", activeChannel, "*");
+				if (input) { input.value = ""; updateCharCount(); }
+				return;
 			}
-		} else {
-			const target = activeChannel.isPrivate ? activeChannel.name : activeChannel.name;
+
 			const messages = splitIRCMessage("privmsg " + target + " :" + text);
 			messages.forEach((msg, index) => {
 				doSend(msg);
@@ -1827,24 +2160,24 @@
 					writeToScreen("var(--clr-font)", text, activeChannel, nickname);
 				}
 			});
-		if (activeChannel.isPrivate) {
-			writeToLog(`[PM] You → ${target}: ${text}`);
+			if (activeChannel.isPrivate) {
+				writeToLog(`[PM] You → ${target}: ${text}`);
+			}
+			pushHistory(text);
 		}
-		}
+		if (input) { input.value = ""; updateCharCount(); }
+	}
 
-		if (text[0] != "/") {
-			messageHistory.push(text);
-			historyIndex = messageHistory.length;
-		}
-		if (input) input.value = "";
+	function byteLength(str) {
+		return new TextEncoder().encode(str).length;
 	}
 
 	function splitIRCMessage(message) {
-		const MAX_LENGTH = 512;
-		
+		const MAX_BYTES = 510;
+
 		const isPrivmsg = message.startsWith("privmsg ");
-		const fullMessage = message + "\n";
-		if (!isPrivmsg || fullMessage.length <= MAX_LENGTH) {
+		const fullMessage = message + "\r\n";
+		if (!isPrivmsg || byteLength(fullMessage) <= MAX_BYTES + 2) {
 			return [fullMessage];
 		}
 
@@ -1852,21 +2185,27 @@
 		if (colonIndex === -1) {
 			return [fullMessage];
 		}
-		
+
 		const baseCommand = message.substring(0, colonIndex + 1);
 		const messageContent = message.substring(colonIndex + 1);
-		const maxContentLength = MAX_LENGTH - baseCommand.length - 2;
-		
-		if (messageContent.length <= maxContentLength) {
+		const baseBytes = byteLength(baseCommand) + 2; // +2 for \r\n
+		const maxContentBytes = MAX_BYTES - baseBytes;
+
+		if (byteLength(messageContent) <= maxContentBytes) {
 			return [fullMessage];
 		}
 
+		const encoder = new TextEncoder();
+		const contentBytes = encoder.encode(messageContent);
 		const messages = [];
-		for (let i = 0; i < messageContent.length; i += maxContentLength) {
-			const chunk = messageContent.substring(i, i + maxContentLength);
-			messages.push(baseCommand + chunk + "\n");
+		let offset = 0;
+		while (offset < contentBytes.length) {
+			let end = Math.min(offset + maxContentBytes, contentBytes.length);
+			while (end > offset && (contentBytes[end] & 0xC0) === 0x80) end--;
+			const chunk = new TextDecoder().decode(contentBytes.slice(offset, end));
+			messages.push(baseCommand + chunk + "\r\n");
+			offset = end;
 		}
-
 		return messages;
 	}
 
@@ -1895,10 +2234,10 @@
 			websocket = new WebSocket(wsUri);
 			websocket.binaryType = 'blob';
 
-			if (window.connectTimeout) {
-				clearTimeout(window.connectTimeout);
+			if (connectTimeout) {
+				clearTimeout(connectTimeout);
 			}
-			window.connectTimeout = setTimeout(() => {
+			connectTimeout = setTimeout(() => {
 				if (websocket && websocket.readyState === WebSocket.CONNECTING) {
 					writeToLog(`[ERROR] Connection timeout (30s) — forcing close → ${wsUri}`);
 					try {
@@ -1910,9 +2249,9 @@
 			}, 30000);
 
 			websocket.onclose = function handleOnClose(evt) {
-				if (window.connectTimeout) {
-					clearTimeout(window.connectTimeout);
-					window.connectTimeout = null;
+				if (connectTimeout) {
+					clearTimeout(connectTimeout);
+					connectTimeout = null;
 				}
 				onClose(evt);
 			};
@@ -1920,9 +2259,9 @@
 				onError(evt);
 			};
 			websocket.onopen = function handleOnOpen(evt) {
-				if (window.connectTimeout) {
-					clearTimeout(window.connectTimeout);
-					window.connectTimeout = null;
+				if (connectTimeout) {
+					clearTimeout(connectTimeout);
+					connectTimeout = null;
 				}
 				onOpen(evt);
 			};
@@ -1947,6 +2286,10 @@
 		if (inputBlurTimeoutId !== null) {
 			clearTimeout(inputBlurTimeoutId);
 		}
+		if (connectTimeout !== null) {
+			clearTimeout(connectTimeout);
+			connectTimeout = null;
+		}
 		if (websocket) {
 			websocket.onclose = null;
 			websocket.onerror = null;
@@ -1967,15 +2310,12 @@
 			websocket = null;
 		}
 
-		if (!isConnected && isDisconnecting) {
-			return;
-		}
-
-		isConnected = false;
-		let reason = evt.reason || 'Connection closed';
+	const wasConnected = isConnected;
+	isConnected = false;
+	let reason = evt.reason || 'Connection closed';
 		let code = evt.code;
 
-			let isUserDisconnect = false;
+		let isUserDisconnect = false;
 
 		if (isDisconnecting) {
 			isUserDisconnect = true;
@@ -2009,7 +2349,7 @@
 		} else if (code === 1006 || code >= 4000) {
 			disconnectReason = "error";
 		}
-		onDisconnect(disconnectReason);
+		onDisconnect(disconnectReason, wasConnected);
 	}
 
 	function onError(evt) {
@@ -2077,20 +2417,17 @@
 		
 		const rawData = evt.data;
 		recvCount++;
-		writeToLog(`[RECV] ${typeof rawData === 'string' ? rawData.trim() : '[binary data]'}`);
+		writeToLog(`[SERVER→CLIENT] ${typeof rawData === 'string' ? rawData.trim() : '[binary data]'}`);
 		if (rawData instanceof Blob) {
 			let fileReader = new FileReader();
-			
 			fileReader.onloadend = function handleLoadEnd(event) {
 				if (!event || !event.target) return;
-				const fileReader = event.target;
-				const raw = fileReader.result;
-				writeToLog(`[RECV] (Blob→Text): ${raw.trim()}`);
+				const reader = event.target;
+				const raw = reader.result;
+				writeToLog(`[SERVER→CLIENT] (Blob→Text): ${raw.trim()}`);
 				process(raw);
-				
-				fileReader.onloadend = null;
+				reader.onloadend = null;
 			};
-			
 			fileReader.readAsText(rawData);
 		} else {
 			process(rawData);
@@ -2099,7 +2436,7 @@
 
 	function doSend(message) {
 		if (!message) return;
-		
+
 		if (websocket) {
 			if (websocket.readyState === WebSocket.OPEN) {
 				if (!isConnected) {
@@ -2111,33 +2448,33 @@
 					isConnected = false;
 					updateConnectionStatus('disconnected');
 				}
-			writeToLog(`[ERROR] WebSocket not connected — cannot send: ${message.trim()}`);
+				writeToLog(`[ERROR] WebSocket not connected — cannot send: ${message.trim()}`);
+				writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
+				return;
+			}
+		} else {
+			if (isConnected) {
+				isConnected = false;
+				updateConnectionStatus('disconnected');
+			}
+			writeToLog(`[ERROR] WebSocket is null — cannot send: ${message.trim()}`);
 			writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
 			return;
 		}
-	} else {
-		if (isConnected) {
-			isConnected = false;
-			updateConnectionStatus('disconnected');
-		}
-		writeToLog(`[ERROR] WebSocket is null — cannot send: ${message.trim()}`);
-		writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
-		return;
-	}
-	
-	try {
-		websocket.send(message);
-		if (!message.trim().toUpperCase().startsWith('PING')) sentCount++;
-		writeToLog(`[SEND] ${message.trim()}`);
-	} catch (e) {
-		writeToLog(`[ERROR] Failed to send message: ${e.message}`);
-		writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel, "");
-		if (isConnected) {
-			isConnected = false;
-			updateConnectionStatus('disconnected');
+
+		try {
+			websocket.send(message);
+			if (!message.trim().toUpperCase().startsWith('PING')) sentCount++;
+			writeToLog(`[CLIENT→SERVER] ${message.trim()}`);
+		} catch (e) {
+			writeToLog(`[ERROR] Failed to send message: ${e.message}`);
+			writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel, "");
+			if (isConnected) {
+				isConnected = false;
+				updateConnectionStatus('disconnected');
+			}
 		}
 	}
-}
 
 
 	const DefaultPrefixMap = {
@@ -2242,7 +2579,7 @@
 		for (let i = 5; i < data.length; i++) {
 			text += " " + data[i];
 		}
-		channel.topic.innerHTML = HTML_escape(text || "No topic set");
+		channel.topic.textContent = text || "No topic set";
 		writeToLog(`[IRC] RPL_TOPIC (332): channel=${data[3]} topic="${text}"`);
 	});
 	Commands.set("353", function (nick, data) {
@@ -2279,18 +2616,36 @@
 		writeToLog(`[IRC] RPL_ENDOFNAMES (366): channel=${data[3]} total users=${channel.users.length}`);
 	});
 	Commands.set("432", function (nick, data) {
-		nickname = prompt("错误: 昵称包含非法字符\n请输入新的昵称", "");
-		if (nickname) {
-			doSend("nick " + nickname);
-			writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — retrying with: "${nickname}"`);
+		const input432 = prompt("错误: 昵称包含非法字符\n请输入新的昵称", "");
+		if (input432 === null || input432.trim() === "") {
+			writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — user cancelled nickname prompt`);
+			return;
 		}
+		const trimmed432 = input432.trim();
+		if (!validateNickname(trimmed432)) {
+			writeToScreen("var(--clr-warning)", `昵称格式仍然非法: ${trimmed432}`, statusChannel, "*");
+			writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — new nickname still invalid: "${trimmed432}"`);
+			return;
+		}
+		nickname = trimmed432;
+		doSend("NICK " + nickname);
+		writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — retrying with: "${nickname}"`);
 	});
 	Commands.set("433", function (nick, data) {
-		nickname = prompt("错误: 昵称已被占用\n请输入新的昵称", "");
-		if (nickname) {
-			doSend("nick " + nickname);
-			writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — retrying with: "${nickname}"`);
+		const input433 = prompt("错误: 昵称已被占用\n请输入新的昵称", "");
+		if (input433 === null || input433.trim() === "") {
+			writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — user cancelled nickname prompt`);
+			return;
 		}
+		const trimmed433 = input433.trim();
+		if (!validateNickname(trimmed433)) {
+			writeToScreen("var(--clr-warning)", `昵称格式非法: ${trimmed433}`, statusChannel, "*");
+			writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — new nickname invalid: "${trimmed433}"`);
+			return;
+		}
+		nickname = trimmed433;
+		doSend("NICK " + nickname);
+		writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — retrying with: "${nickname}"`);
 	});
 	Commands.set("477", function (nick, data) {
 		if (!data || data.length < 4) return;
@@ -2299,19 +2654,41 @@
 		writeToScreen("var(--clr-red)", `错误: ${errorMsg}`, statusChannel, "*");
 		writeToLog(`[ERROR] ERR_NOCHANMODES (477): target=${targetNick} — ${errorMsg}`);
 	});
+	Commands.set("375", function (nick, data) {
+		if (!data || data.length < 3) return;
+		let text = data.length >= 4
+			? (data[3].startsWith(':') ? data.slice(3).join(' ').substring(1) : data.slice(3).join(' '))
+			: "";
+		writeMotdLine(text);
+		writeToLog(`[MOTD] START: ${text}`);
+	});
+	Commands.set("372", function (nick, data) {
+		if (!data || data.length < 3) return;
+		let text = data.length >= 4 ? data.slice(3).join(' ') : "";
+		if (text.startsWith(':')) text = text.substring(1);
+		writeMotdLine(text);
+		writeToLog(`[MOTD] ${text}`);
+	});
+	Commands.set("376", function (nick, data) {
+		if (!data || data.length < 3) return;
+		let text = data.length >= 4 ? data.slice(3).join(' ') : "";
+		if (text.startsWith(':')) text = text.substring(1);
+		writeMotdLine(text);
+		writeToLog(`[MOTD] END: ${text}`);
+	});
 	Commands.set("JOIN", function (nick, data) {
 		if (!data || data.length < 3) return;
 
 		let serverChannelName = data[2];
 		if (serverChannelName[0] == ":") serverChannelName = serverChannelName.substring(1);
 
-		writeToLog(`[IRC] JOIN event: nick=${nick}, channel=${serverChannelName}, isSelf=${isSelfJoin}`);
-
 		const isSelfJoin = data[0].startsWith(":" + nickname + "!") ||
 						   data[0].toLowerCase().startsWith(":" + nickname.toLowerCase() + "!");
 
+		writeToLog(`[IRC] JOIN event: nick=${nick}, channel=${serverChannelName}, isSelf=${isSelfJoin}`);
+
 		if (!isSelfJoin) {
-			let channel = findChannel(serverChannelName);
+			const channel = findChannel(serverChannelName);
 			if (!channel) return;
 
 			let userPrefix = " ";
@@ -2320,7 +2697,7 @@
 				userPrefix = prefixMatch[2] || " ";
 			}
 
-			Channel_InsertUser(nick, channel, userPrefix);
+			channelInsertUser(nick, channel, userPrefix);
 			writeToScreen("var(--clr-green)", `${nick} 加入频道`, channel, "*");
 			writeToLog(`[IRC] User joined: ${nick} → ${serverChannelName}`);
 		} else {
@@ -2330,16 +2707,16 @@
 				if (channel.name !== serverChannelName) {
 					channelMap.delete(channel.name);
 					channel.name = serverChannelName;
-					channel.button.innerHTML = HTML_escape(serverChannelName);
-					channel.button.value = HTML_escape(serverChannelName);
-					channel.button.querySelector('.x').value = HTML_escape(serverChannelName);
+				channel.button.textContent = serverChannelName;
+				channel.button.value = serverChannelName;
+					channel.button.querySelector('.x').value = serverChannelName;
 					channelMap.set(serverChannelName, channel);
 				}
 			} else {
 				channel = new Tab_Create(serverChannelName, "", true);
 			}
 
-			window.channelName = serverChannelName;
+			channelName = serverChannelName;
 			writeToScreen("var(--clr-green)", `你已加入频道 ${serverChannelName}`, channel, "*");
 			writeToLog(`[IRC] Self joined channel: ${serverChannelName}`);
 		}
@@ -2376,15 +2753,20 @@
 		if (!PrefixChars || data[3].length < 1) return;
 
 		if (data.length >= 5 && data[4].startsWith(":")) {
-			const modeChar = data[3][data[3].length - 1];
+			const modeString = data[3];
+			const modeChar = modeString[modeString.length - 1];
 			const targetNick = data[4].substring(1);
+
+			let status = true;
+			for (let c of modeString) {
+				if (c === '+') { status = true; break; }
+				if (c === '-') { status = false; break; }
+			}
 
 			let mappedPrefix = modeChar;
 			if (modeChar === 'y') mappedPrefix = '~';
 			else if (modeChar === 'a') mappedPrefix = '&';
 			else if (modeChar === 'h') mappedPrefix = '%';
-
-			const status = true;
 
 			const prefixPos = PrefixChars[1].indexOf(mappedPrefix);
 			if (prefixPos >= 0) {
@@ -2392,10 +2774,10 @@
 			}
 		} else {
 			let ii = 4;
-		let status = false;
-		for (let i = 0; i < data[3].length; i++) {
-						if (data[3][i] == "+") status = true;
-						else if (data[3][i] == "-") status = false;
+			let status = false;
+			for (let i = 0; i < data[3].length; i++) {
+				if (data[3][i] == "+") status = true;
+				else if (data[3][i] == "-") status = false;
 				else {
 					if (ii < data.length) {
 						Channel_UpdateUserPrefix(data[ii], channel, status, data[3][i]);
@@ -2409,28 +2791,29 @@
 	Commands.set("NICK", function (nick, data) {
 		if (!data || data.length < 3) return;
 		let newnick = data[2].substring(1);
-		if (nick == nickname) nickname = newnick;
+		const isSelf = (nick == nickname);
+		if (isSelf) nickname = newnick;
 		channelMap.forEach(function (channel, name) {
 			if (Channel_RenameUser(nick, newnick, channel)) {
-				if (newnick == nickname) {
+				if (isSelf) {
 					writeToScreen("var(--clr-green)", `你现在的新昵称是 ${newnick}`, channel, "*");
 				} else {
 					writeToScreen("var(--clr-green)", `${nick} 更名为 ${newnick}`, channel, "*");
 				}
 			}
 		});
-		writeToLog(`[IRC] NICK change: ${nick} → ${newnick}${nick === nickname ? ' (self)' : ''}`);
+		writeToLog(`[IRC] NICK change: ${nick} → ${newnick}${isSelf ? ' (self)' : ''}`);
 	});
 	Commands.set("PART", function (nick, data) {
 		if (!data || data.length < 3) return;
 
-		let channelName = data[2];
-		if (channelName[0] == ":") channelName = channelName.substring(1);
+		let partChannel = data[2];
+		if (partChannel[0] == ":") partChannel = partChannel.substring(1);
 
-		let channel = findChannel(channelName);
+		let channel = findChannel(partChannel);
 
 		if (!channel) {
-			writeToLog(`[WARN] PART received for unknown channel: "${channelName}"`);
+			writeToLog(`[WARN] PART received for unknown channel: "${partChannel}"`);
 			return;
 		}
 
@@ -2440,12 +2823,12 @@
 		if (isSelf) {
 			Channel_Destroy(channel.name);
 			writeToScreen("var(--clr-green)", `你已离开频道 ${channel.name}`, statusChannel, "");
-			writeToLog(`[IRC] Self parted channel: ${channelName}`);
+			writeToLog(`[IRC] Self parted channel: ${partChannel}`);
 		} else {
 			if (Channel_RemoveUser(nick, channel)) {
 				writeToScreen("var(--clr-green)", `${nick} 离开频道`, channel, "*");
 			}
-			writeToLog(`[IRC] User parted: ${nick} ← ${channelName}`);
+			writeToLog(`[IRC] User parted: ${nick} ← ${partChannel}`);
 		}
 	});
 	Commands.set("TOPIC", function (nick, data) {
@@ -2456,7 +2839,7 @@
 		for (let i = 4; i < data.length; i++) {
 			text += " " + data[i];
 		}
-		channel.topic.innerHTML = HTML_escape(text || "No topic set");
+		channel.topic.textContent = text || "No topic set";
 		writeToScreen("var(--clr-blue)", `${nick} 设置主题为: ${text}`, channel, "*");
 		writeToLog(`[IRC] TOPIC changed: channel=${data[2]} new-topic="${text}" by ${nick}`);
 	});
@@ -2495,11 +2878,16 @@
 			if (!channel) channel = statusChannel;
 		}
 
-		if (text[0] == "\x01") {
-			if (text.indexOf("\x01ACTION ") == 0) {
-				writeToScreen("var(--clr-red)", `${nick} ${text.substring(8)}`, channel, "*");
-			} else {
-				writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*");
+	if (text[0] == "\x01") {
+		if (text.indexOf("\x01ACTION ") == 0) {
+			let actionText = text.substring(8);
+			if (actionText.endsWith("\x01")) actionText = actionText.slice(0, -1);
+			writeToScreen("var(--clr-red)", `${nick} ${actionText}`, channel, "*");
+		} else {
+			writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*");
+		}
+		if (channel && channel !== activeChannel && channel !== statusChannel) {
+				addUnreadBadge(channel);
 			}
 		} else {
 			writeToScreen("var(--clr-font)", text, channel, nick);
@@ -2521,7 +2909,7 @@
 			text += " " + data[i];
 		}
 		nick = data[0].substring(1).split("!")[0];
-		writeToScreen("var(--clr-gold)", `通知 ${nick}: ${text}`, channel, "-");
+		writeToScreen("var(--clr-blue)", `通知 ${nick}: ${text}`, channel, "-");
 		writeToLog(`[NOTICE] ${nick}: ${text}`);
 	});
 
@@ -2531,6 +2919,20 @@
 		if (!data || data.length < 2) {
 			return;
 		}
+
+		if (data[0] === "PING") {
+			let pongResponse = rawData.replace("PING", "PONG");
+			writeToScreen("var(--clr-brown)", pongResponse, statusChannel, "");
+			doSend(pongResponse);
+			writeToLog(`[PING/PONG] ${pongResponse}`);
+			return;
+		}
+		if (data[0] === "ERROR") {
+			writeToScreen("var(--clr-font)", rawData, statusChannel, "");
+			writeToLog(`[ERROR] ${rawData}`);
+			return;
+		}
+
 		let nick = data[0].substring(1).split("!")[0];
 		let command = data[1].toUpperCase();
 		let fn = Commands.get(command);
@@ -2538,28 +2940,21 @@
 			fn(nick, data);
 			return;
 		}
+
 		if (!isNaN(parseInt(data[1]))) {
-			let text = data[1];
-			for (let i = 3; i < data.length; i++) {
-				text += " " + data[i];
+			let text = "";
+			if (data.length > 3) {
+				let first = data[3];
+				if (first.startsWith(':')) first = first.substring(1);
+				text = first;
+				for (let i = 4; i < data.length; i++) {
+					text += " " + data[i];
+				}
 			}
-			writeToScreen("var(--clr-gold)", text, statusChannel, "");
+			writeToScreen("var(--clr-font)", text || data[1], statusChannel, "");
 			writeToLog(`[SERVER] ${data[1]}: ${text}`);
 			return;
 		}
-		if (data[0] == "PING") {
-			let pongResponse = rawData.replace("PING", "PONG");
-			writeToScreen("var(--clr-brown)", pongResponse, statusChannel, "");
-			doSend(pongResponse);
-			writeToLog(`[PING/PONG] ${pongResponse}`);
-			return;
-		}
-		if (data[0] == "ERROR") {
-			writeToScreen("var(--clr-font)", rawData, statusChannel, "");
-			writeToLog(`[ERROR] ${rawData}`);
-			return;
-		}
-
 	}
 
 	function startKeepAlive() {
@@ -2579,7 +2974,6 @@
 		}
 	}
 
-	// Returns a human-readable duration string from a start Date to now
 	function formatSessionDuration(startTime) {
 		if (!startTime) return 'N/A';
 		const secs = Math.floor((Date.now() - startTime.getTime()) / 1000);
@@ -2597,6 +2991,20 @@
 		writeToLog(`[IRC] Sending registration: NICK=${nickname}, USER=websocket`);
 	}
 
+	window.toggleConnection      = toggleConnection;
+	window.toggleHeaderMenu      = toggleHeaderMenu;
+	window.toggleLog             = toggleLog;
+	window.clearLog              = clearLog;
+	window.showPrivateChatList   = showPrivateChatList;
+	window.showSSLWarning        = showSSLWarning;
+	window.toggleAutoReconnect   = toggleAutoReconnect;
+	window.joinChannel           = joinChannel;
+	window.send                  = send;
+	window.onKeyDown             = onKeyDown;
+	window.updateCharCount       = updateCharCount;
+	window.openPrivateChat       = openPrivateChat;
+
+}());
 </script>
 
 </html>
