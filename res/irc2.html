@@ -956,15 +956,23 @@
 		}
 	}
 
+	// 允许焦点合法停留的元素选择器（设置区域的输入框和按钮不应被抢焦点）
+	const FOCUS_WHITELIST = '#channelInput, #wsUrl, #nickInput, #joinChannelBtn, .btn, button, a, input, textarea, select';
+
 	function handleInputBlur() {
 		if (inputBlurTimeoutId !== null) {
 			clearTimeout(inputBlurTimeoutId);
 		}
 		inputBlurTimeoutId = setTimeout(() => {
-			if (isConnected && document.activeElement !== input && document.hasFocus()) {
+			const active = document.activeElement;
+			// 如果焦点去往了白名单内的元素，不要抢回焦点
+			if (active && active !== input && active !== document.body) {
+				return;
+			}
+			if (isConnected && document.hasFocus()) {
 				input.focus();
 			}
-		}, 100);
+		}, 150);
 	}
 	
 	function removeInputBlurListener() {
@@ -1505,6 +1513,22 @@
 	}
 	const HTML_escape = htmlEscape;
 
+	/**
+	 * 去除 mIRC/IRC 格式控制码，包括：
+	 *   \x02 (bold)  \x03 (color, 带可选数字)  \x0F (reset)
+	 *   \x16 (italic/reverse)  \x1D (italic)  \x1F (underline)
+	 *   \x1E (strikethrough)  \x11 (monospace)
+	 * 颜色码格式：\x03[fg[,bg]]  fg/bg 最多 2 位数字
+	 */
+	function stripMircCodes(text) {
+		if (!text) return "";
+		return text
+			// \x03 颜色码：可能跟着 fg 或 fg,bg，各最多两位数字
+			.replace(/\x03(\d{1,2}(,\d{1,2})?)?/g, '')
+			// 其余格式控制字符
+			.replace(/[\x02\x0F\x16\x1D\x1E\x1F\x11]/g, '');
+	}
+
 	function sortUserList(user_a, user_b) {
 		if (!user_a || !user_b || user_a.length < 2 || user_b.length < 2) return 0;
 		if (user_a[0][0] === user_b[0][0])
@@ -1758,6 +1782,8 @@
 
 	function writeToScreen(color, message, channel, username) {
 		if (!channel || !channel.content) return;
+		// 过滤 mIRC 格式控制码
+		const cleanMessage = stripMircCodes(message || "");
 		let pre = document.createElement("p");
 		pre.style.color = color;
 		const now = new Date();
@@ -1779,10 +1805,10 @@
 			pre.appendChild(nickSpan);
 			pre.appendChild(sep);
 			// linkify operates on the message body only, username never passes through it
-			const msgFrag = linkifyToDom(message || "");
+			const msgFrag = linkifyToDom(cleanMessage);
 			pre.appendChild(msgFrag);
 		} else {
-			pre.innerHTML = "[" + utcTime + "] " + linkify(message || "");
+			pre.innerHTML = "[" + utcTime + "] " + linkify(cleanMessage);
 		}
 
 		const output = channel.content;
@@ -2692,15 +2718,21 @@
 			fn(nick, data);
 			return;
 		}
-		if (!isNaN(parseInt(data[1]))) {
-			let text = data[1];
-			for (let i = 3; i < data.length; i++) {
+	if (!isNaN(parseInt(data[1]))) {
+		// data[3] 是消息体，前面可能有 ':' 前缀
+		let text = "";
+		if (data.length > 3) {
+			let first = data[3];
+			if (first.startsWith(':')) first = first.substring(1);
+			text = first;
+			for (let i = 4; i < data.length; i++) {
 				text += " " + data[i];
 			}
-			writeToScreen("var(--clr-gold)", text, statusChannel, "");
-			writeToLog(`[SERVER] ${data[1]}: ${text}`);
-			return;
 		}
+		writeToScreen("var(--clr-gold)", text || data[1], statusChannel, "");
+		writeToLog(`[SERVER] ${data[1]}: ${data[1]} ${text}`);
+		return;
+	}
 		if (data[0] == "PING") {
 			let pongResponse = rawData.replace("PING", "PONG");
 			writeToScreen("var(--clr-brown)", pongResponse, statusChannel, "");
