@@ -2767,7 +2767,7 @@
 			text += " " + data[i];
 		}
 		nick = data[0].substring(1).split("!")[0];
-		writeToScreen("var(--clr-gold)", `通知 ${nick}: ${text}`, channel, "-");
+		writeToScreen("var(--clr-blue)", `通知 ${nick}: ${text}`, channel, "-");
 		writeToLog(`[NOTICE] ${nick}: ${text}`);
 	});
 
@@ -2811,7 +2811,7 @@
 					text += " " + data[i];
 				}
 			}
-			writeToScreen("var(--clr-gold)", text || data[1], statusChannel, "");
+			writeToScreen("var(--clr-font)", text || data[1], statusChannel, "");
 			writeToLog(`[SERVER] ${data[1]}: ${text}`);
 			return;
 		}
