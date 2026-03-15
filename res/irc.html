@@ -2920,13 +2920,14 @@
 			return;
 		}
 
-		if (data[0] === "PING") {
-			let pongResponse = rawData.replace("PING", "PONG");
-			writeToScreen("var(--clr-brown)", pongResponse, statusChannel, "");
-			doSend(pongResponse);
-			writeToLog(`[PING/PONG] ${pongResponse}`);
-			return;
-		}
+	if (data[0] === "PING") {
+		const pingToken = data[1] ? data[1].replace(/^:/, '') : 'pong';
+		const pongResponse = "PONG :" + pingToken.trim();
+		writeToScreen("var(--clr-brown)", "PING → " + pongResponse, statusChannel, "");
+		doSend(pongResponse);
+		writeToLog(`[PING/PONG] ${pongResponse}`);
+		return;
+	}
 		if (data[0] === "ERROR") {
 			writeToScreen("var(--clr-font)", rawData, statusChannel, "");
 			writeToLog(`[ERROR] ${rawData}`);
@@ -2962,7 +2963,7 @@
 		keepAliveTimer = setInterval(() => {
 			if (isConnected && websocket && websocket.readyState === WebSocket.OPEN) {
 				writeToLog(`[KEEP-ALIVE] Sending PING keepalive | session: ${formatSessionDuration(sessionStartTime)} | sent: ${sentCount} | recv: ${recvCount}`);
-				doSend("PING keepalive");
+				doSend("PING :" + wsUrl);
 			}
 		}, keepAliveInterval);
 	}
