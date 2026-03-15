@@ -980,7 +980,7 @@
 		}
 		inputBlurTimeoutId = setTimeout(() => {
 			const active = document.activeElement;
-			// 如果焦点去往了白名单内的元素，不要抢回焦点
+			// 如果焦点去往了白名单内的元素,不要抢回焦点
 			if (active && active !== input && active !== document.body) {
 				return;
 			}
@@ -1098,7 +1098,7 @@
 	}
 
 	// ── Log-level colour palette ────────────────────────
-	// 所有键均为大写，与 writeToLog 中的 tag.toUpperCase() 一致
+	// 所有键均为大写,与 writeToLog 中的 tag.toUpperCase() 一致
 	const LOG_COLORS = {
 		'ERROR':          '#ff0040',
 		'WARN':           '#ffff00',
@@ -1141,9 +1141,9 @@
 			const tagMatch = message.match(/^\[([^\]]+)\]/);
 			const line = document.createElement('span');
 			if (tagMatch) {
-				// 统一转大写后查表；若精确匹配失败，再取第一个单词段做模糊匹配
+				// 统一转大写后查表;若精确匹配失败,再取第一个单词段做模糊匹配
 				const tag = tagMatch[1].toUpperCase();
-				const firstSeg = tag.split(/[\s\/]/)[0];  // 只按空格和斜杠拆，不影响 → 箭头
+				const firstSeg = tag.split(/[\s\/]/)[0];  // 只按空格和斜杠拆,不影响 → 箭头
 				line.style.color = LOG_COLORS[tag] || LOG_COLORS[firstSeg] || '#e0e0e0';
 			} else {
 				line.style.color = '#e0e0e0';
@@ -1534,16 +1534,16 @@
 	const HTML_escape = htmlEscape;
 
 	/**
-	 * 去除 mIRC/IRC 格式控制码，包括：
+	 * 去除 mIRC/IRC 格式控制码,包括: 
 	 *   \x02 (bold)  \x03 (color, 带可选数字)  \x0F (reset)
 	 *   \x16 (italic/reverse)  \x1D (italic)  \x1F (underline)
 	 *   \x1E (strikethrough)  \x11 (monospace)
-	 * 颜色码格式：\x03[fg[,bg]]  fg/bg 最多 2 位数字
+	 * 颜色码格式: \x03[fg[,bg]]  fg/bg 最多 2 位数字
 	 */
 	function stripMircCodes(text) {
 		if (!text) return "";
 		return text
-			// \x03 颜色码：可能跟着 fg 或 fg,bg，各最多两位数字
+			// \x03 颜色码: 可能跟着 fg 或 fg,bg,各最多两位数字
 			.replace(/\x03(\d{1,2}(,\d{1,2})?)?/g, '')
 			// 其余格式控制字符
 			.replace(/[\x02\x0F\x16\x1D\x1E\x1F\x11]/g, '');
@@ -1984,9 +1984,9 @@
 	} else {
 		const target = activeChannel.name;
 
-		// Status 是本地虚拟窗口，不能向服务器发送 PRIVMSG
+		// Status 是本地虚拟窗口,不能向服务器发送 PRIVMSG
 		if (target === "Status") {
-			writeToScreen("var(--clr-warning)", "Status 是系统状态窗口，无法发送消息。请使用 /join #频道 加入频道，或使用 /msg 昵称 内容 与用户私聊。", activeChannel, "*");
+			writeToScreen("var(--clr-warning)", "Status 是系统状态窗口,无法发送消息.请使用 /join #频道 加入频道,或使用 /msg 昵称 内容 与用户私聊.", activeChannel, "*");
 			if (input) { input.value = ""; updateCharCount(); }
 			return;
 		}
@@ -2747,7 +2747,7 @@
 			return;
 		}
 	if (!isNaN(parseInt(data[1]))) {
-		// data[3] 是消息体，前面可能有 ':' 前缀
+		// data[3] 是消息体,前面可能有 ':' 前缀
 		let text = "";
 		if (data.length > 3) {
 			let first = data[3];
