@@ -1982,9 +1982,9 @@
 				if (!safeUrl) return escapedUrl;
 				const lowerUrl = safeUrl.toLowerCase();
 				const safeAttr = HTML_escape(safeUrl);
-				const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/.test(lowerUrl);
-				const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/.test(lowerUrl);
-				const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/.test(lowerUrl);
+				const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|ico|tiff|tif|avif|heic|heif|jfif|pjpeg|pjp|apng)(\?.*)?$/i.test(lowerUrl);
+				const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac|opus|weba|wma|aiff|au|mid|midi|ra|ram|mka)(\?.*)?$/i.test(lowerUrl);
+				const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8|wmv|rmvb|rm|ts|mts|m2ts|3gp|3g2|divx|xvid|asf|vob|mpg|mpeg|mp2|mpe|mpv|m2v|svi|mxf|roq|nsv|f4v|f4p|f4a|f4b)(\?.*)?$/i.test(lowerUrl);
 				if (isImage) return `<img src="${safeAttr}" alt="Image" referrerpolicy="no-referrer" crossorigin="anonymous" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.1);">`;
 				if (isAudio) return `<audio controls src="${safeAttr}" referrerpolicy="no-referrer" style="max-width:${mediaMaxWidth};"></audio>`;
 				if (isVideo) return `<video controls src="${safeAttr}" referrerpolicy="no-referrer" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;"></video>`;
