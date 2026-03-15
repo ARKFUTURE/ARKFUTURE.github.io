@@ -1329,7 +1329,7 @@
 		WebSocket_Connect(wsUrl);
 	}
 
-	function onDisconnect(reason = "") {
+	function onDisconnect(reason = "", wasConnected = false) {
 
 		if (isDisconnecting) {
 			return;
@@ -1338,7 +1338,7 @@
 
 		stopKeepAlive();
 		writeToLog(`[SYSTEM] ── Disconnect handler ────────────────────`);
-		writeToLog(`[SYSTEM] Reason: "${reason || 'normal'}" | was-connected: ${isConnected}`);
+		writeToLog(`[SYSTEM] Reason: "${reason || 'normal'}" | was-connected: ${wasConnected}`);
 		if (sessionStartTime) {
 			writeToLog(`[SYSTEM] Session ended — duration: ${formatSessionDuration(sessionStartTime)} | sent: ${sentCount} | recv: ${recvCount}`);
 			sessionStartTime = null;
