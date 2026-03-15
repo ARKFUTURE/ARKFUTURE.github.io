@@ -168,7 +168,6 @@
 		gap: 7px;
 	}
 	.header-menu-item:last-child { }
-	/* 各菜单项独立配色 */
 	.header-menu-item:nth-child(1) { color: var(--cyber-primary);   border-color: var(--cyber-primary);   --item-glow: var(--cyber-primary);   }
 	.header-menu-item:nth-child(2) { color: var(--cyber-secondary); border-color: var(--cyber-secondary); --item-glow: var(--cyber-secondary); }
 	.header-menu-item:nth-child(3) { color: var(--cyber-accent);    border-color: var(--cyber-accent);    --item-glow: var(--cyber-accent);    }
@@ -534,7 +533,6 @@
 	.channelcontent.active { display: flex; }
 
 
-	/* message panel */
 	.channelcontent > nav {
 		flex: 1 1 auto;
 		display: flex;
@@ -545,7 +543,6 @@
 		min-width: 0;
 	}
 
-	/* topic bar */
 	.channelcontent > nav > h3 {
 		flex: 0 0 auto;
 		display: flex;
@@ -561,7 +558,6 @@
 		font-weight: 600;
 	}
 
-	/* message scroll area */
 	.channelcontent > nav > nav {
 		flex: 1 1 auto;
 		overflow-y: auto;
@@ -569,7 +565,6 @@
 		min-height: 0;
 	}
 
-	/* each message line */
 	.channelcontent > nav > nav > p {
 		margin: 0;
 		padding: 2px 0;
@@ -577,7 +572,6 @@
 		word-wrap: break-word;
 	}
 
-	/* user list */
 	.channelcontent > ul {
 		flex: 0 0 200px;
 		overflow-y: auto;
@@ -588,7 +582,6 @@
 		min-height: 0;
 	}
 
-	/* user list item */
 	.channelcontent > ul > li {
 		display: flex;
 		align-items: center;
@@ -601,7 +594,6 @@
 	}
 	.channelcontent > ul > li:hover { background: var(--cyber-dark3); }
 
-	/* prefix column */
 	.channelcontent > ul > li > p:first-child {
 		width: 18px;
 		flex-shrink: 0;
@@ -614,7 +606,6 @@
 		white-space: nowrap;
 	}
 
-	/* nick column */
 	.channelcontent > ul > li > p:nth-child(2) {
 		flex: 1;
 		margin: 0;
@@ -762,9 +753,8 @@
 <body>
 	<div class="irc-app">
 
-		<!-- ── Top header ─────────────────────────────── -->
-		<header class="irc-header">
-			<h1 class="irc-header__title" id="caption">IRC Client</h1>
+	<header class="irc-header">
+		<h1 class="irc-header__title" id="caption">IRC Client</h1>
 			<div class="irc-menu">
 				<button class="irc-menu__btn header-menu-btn" onclick="toggleHeaderMenu()">菜单</button>
 				<div class="irc-menu__dropdown" id="headerMenuDropdown">
@@ -776,8 +766,7 @@
 			</div>
 		</header>
 
-		<!-- ── Settings / connection bar ─────────────── -->
-		<div class="irc-settings">
+	<div class="irc-settings">
 			<div class="irc-settings__inputs">
 				<div class="settings-group">
 					<label for="wsUrl">WebSocket</label>
@@ -806,18 +795,15 @@
 			</div>
 		</div>
 
-		<!-- ── SSL warning toast (fixed) ─────────────── -->
-		<div class="ssl-warning" id="sslWarning">
+	<div class="ssl-warning" id="sslWarning">
 			<strong>浏览器无法忽略SSL证书错误!</strong> 请使用以下方案:<br>
 			1. 改用 <code>ws://</code> 非加密连接（如果浏览器支持）<br>
 			2. 在浏览器中访问 <a id="sslLink" target="_blank">服务器URL</a> 并手动信任证书
 		</div>
 
-		<!-- ── Main chat area ─────────────────────────── -->
-		<div class="irc-chat">
+	<div class="irc-chat">
 
-			<!-- Log overlay (hidden by default) -->
-			<div class="log-container" id="logContainer">
+		<div class="log-container" id="logContainer">
 				<div class="log-header">
 					<span>WebSocket 日志</span>
 					<div class="log-controls">
@@ -828,39 +814,29 @@
 				<div id="logOutput"></div>
 			</div>
 
-			<!-- Tab bar -->
-			<div class="channels" id="channelsContainer"></div>
+		<div class="channels" id="channelsContainer"></div>
 
-			<!-- Channel panes -->
-			<div class="channelcontents-wrapper hidden" id="contentsWrapper">
-				<div class="channelcontents" id="channelContents"></div>
-			</div>
+		<div class="channelcontents-wrapper hidden" id="contentsWrapper">
+			<div class="channelcontents" id="channelContents"></div>
+		</div>
 
-			<!-- Empty / welcome state -->
-			<div class="empty-state" id="emptyState">
-				<h3>欢迎使用 IRC 客户端</h3>
-				<p>请先填写服务器信息并点击连接</p>
-			</div>
+		<div class="empty-state" id="emptyState">
+			<h3>欢迎使用 IRC 客户端</h3>
+			<p>请先填写服务器信息并点击连接</p>
+		</div>
 
-			<!-- Message input -->
-			<div class="input-container" id="inputContainer" style="display:none;">
+		<div class="input-container" id="inputContainer" style="display:none;">
 				<input type="text" name="input" id="input" placeholder="输入消息..."
 					onkeydown="onKeyDown(event)" oninput="updateCharCount()">
 				<button class="btn send-btn" id="sendBtn" onclick="send()">发送</button>
 				<div class="char-count" id="charCount">0/512</div>
 			</div>
 
-		</div><!-- /.irc-chat -->
-	</div><!-- /.irc-app -->
+		</div>
+	</div>
 </body>
 
 <script>
-// ══════════════════════════════════════════════════════
-//  IRC Web Client — wrapped in IIFE to prevent global
-//  variable pollution.  Functions that the HTML markup
-//  calls via onclick / onkeydown are explicitly
-//  re-exported onto window at the bottom of this block.
-// ══════════════════════════════════════════════════════
 (function () {
 'use strict';
 	let nickname = "";
@@ -886,10 +862,9 @@
 	let isDisconnecting = false;
 	let headerMenuClickListener = null;
 
-	// ── Session & message counters ──────────────────────
-	let sessionStartTime = null;   // Date when WebSocket onOpen fired
-	let sentCount = 0;             // PRIVMSG / raw sends (excluding PING keepalive)
-	let recvCount = 0;             // all raw messages received from server
+	let sessionStartTime = null;
+	let sentCount = 0;
+	let recvCount = 0;
 
 	function findChannel(channelName) {
 		if (!channelName) return null;
@@ -917,7 +892,6 @@
 
 		let url = new URL(document.location);
 		if (url.hash) {
-			// 只允许合法的 IRC 频道名字符，避免脏数据注入
 			const safeHash = url.hash.replace(/[^\w#&\-]/g, '').substring(0, 64);
 			if (safeHash) document.getElementById('channelInput').value = safeHash;
 		}
@@ -973,7 +947,6 @@
 		}
 	}
 
-	// 允许焦点合法停留的元素选择器（设置区域的输入框和按钮不应被抢焦点）
 	const FOCUS_WHITELIST = '#channelInput, #wsUrl, #nickInput, #joinChannelBtn, .btn, button, a, input, textarea, select';
 
 	function handleInputBlur() {
@@ -982,7 +955,6 @@
 		}
 		inputBlurTimeoutId = setTimeout(() => {
 			const active = document.activeElement;
-			// 如果焦点去往了白名单内的元素,不要抢回焦点
 			if (active && active !== input && active !== document.body) {
 				return;
 			}
@@ -1006,7 +978,6 @@
 		menu.classList.toggle('visible');
 		updateAutoReconnectMenuItem();
 
-		// 先移除旧的监听器，再根据菜单状态决定是否添加
 		if (headerMenuClickListener) {
 			document.removeEventListener('click', headerMenuClickListener);
 			headerMenuClickListener = null;
@@ -1025,7 +996,6 @@
 		if (menu && !menu.contains(event.target) && !menuBtn.contains(event.target)) {
 			menu.classList.remove('visible');
 			menu.classList.remove('menu-attached');
-			// 同时清除监听器变量，保持和 toggleHeaderMenu 的状态一致
 			document.removeEventListener('click', closeHeaderMenuOnClickOutside);
 			headerMenuClickListener = null;
 		}
@@ -1094,9 +1064,8 @@
 		const logContainer = document.getElementById('logContainer');
 		if (logContainer) {
 			logContainer.classList.toggle('visible');
-			if (logContainer.classList.contains('visible')) {
-				// 打开日志时滚动到最新行
-				const logOutput = getLogOutput();
+		if (logContainer.classList.contains('visible')) {
+			const logOutput = getLogOutput();
 				if (logOutput) {
 					requestAnimationFrame(() => { logOutput.scrollTop = logOutput.scrollHeight; });
 				}
@@ -1111,7 +1080,6 @@
 		}
 	}
 
-	// ── Log-level colour palette ────────────────────────
 	// 所有键均为大写,与 writeToLog 中的 tag.toUpperCase() 一致
 	const LOG_COLORS = {
 		'ERROR':          '#ff0040',
@@ -1121,14 +1089,14 @@
 		'DEBUG':          '#888888',
 		'OPEN':           '#00ff00',
 		'CLOSE':          '#ff6600',
-		'CLIENT→SERVER':  '#00d4ff',   // outgoing IRC messages
-		'SERVER→CLIENT':  '#cc88ff',   // incoming IRC messages
-		'SERVER':         '#cc88ff',   // numeric reply fallback (e.g. [SERVER] 372)
+		'CLIENT→SERVER':  '#00d4ff',
+		'SERVER→CLIENT':  '#cc88ff',
+		'SERVER':         '#cc88ff',
 		'IRC':            '#aaffaa',
 		'CAP':            '#88ddff',
 		'NOTICE':         '#ffcc44',
 		'PING':           '#558855',
-		'PING/PONG':      '#558855',   // PING/PONG combined tag
+		'PING/PONG':      '#558855',
 		'KEEP-ALIVE':     '#445544',
 		'RECONNECT':      '#ffaa00',
 		'PM':             '#ff88ff',
@@ -1136,7 +1104,7 @@
 		'TAB':            '#77bbdd',
 		'SYSTEM':         '#cccccc',
 		'PART':           '#ff8844',
-		'WEBSOCKET':      '#44ccff',   // 大写化后匹配 [WebSocket]
+		'WEBSOCKET':      '#44ccff',
 	};
 
 	let _logOutputEl = null;
@@ -1154,10 +1122,9 @@
 		if (logOutput) {
 			const tagMatch = message.match(/^\[([^\]]+)\]/);
 			const line = document.createElement('span');
-			if (tagMatch) {
-				// 统一转大写后查表;若精确匹配失败,再取第一个单词段做模糊匹配
-				const tag = tagMatch[1].toUpperCase();
-				const firstSeg = tag.split(/[\s\/]/)[0];  // 只按空格和斜杠拆,不影响 → 箭头
+		if (tagMatch) {
+			const tag = tagMatch[1].toUpperCase();
+			const firstSeg = tag.split(/[\s\/]/)[0];
 				line.style.color = LOG_COLORS[tag] || LOG_COLORS[firstSeg] || '#e0e0e0';
 			} else {
 				line.style.color = '#e0e0e0';
@@ -1219,10 +1186,9 @@
 			writeToLog('[SYSTEM] User requested disconnect — disabling auto-reconnect');
 			autoReconnect = false;
 			updateAutoReconnectMenuItem();
-			isDisconnecting = true;   // ← 提前标记，让 onClose 能正确识别为用户主动断开
+			isDisconnecting = true;
 			if (websocket && websocket.readyState === WebSocket.OPEN) {
 				try {
-					// 先发 IRC QUIT 命令，礼貌地通知服务端退出
 					websocket.send(`QUIT :User disconnected\r\n`);
 					writeToLog('[SYSTEM] Sent IRC QUIT to server');
 				} catch (e) {
@@ -1280,7 +1246,6 @@
 			return;
 		}
 
-		// Auto-generate nickname if blank
 		if (!nickname) {
 			nickname = "Guest_" + Math.floor(Math.random() * 9000 + 1000);
 			nickInput.value = nickname;
@@ -1289,12 +1254,10 @@
 
 		if (!validateNickname(nickname)) {
 			writeToLog(`[ERROR] Invalid nickname: "${nickname}" — must start with a letter or [_\`[]{}^|]`);
-			// Inline error: highlight the input, focus it — no alert()
 			nickInput.classList.add('input-error');
 			nickInput.focus();
 			nickInput.select();
 			setTimeout(() => nickInput.classList.remove('input-error'), 1200);
-			// Restore button state
 			connectBtn.textContent = '连接';
 			connectBtn.disabled = false;
 			wsUrlInput.disabled = false;
@@ -1323,7 +1286,6 @@
 		writeToLog(`[SYSTEM] Channel : ${channelName || '(none)'}`);
 		writeToLog(`[SYSTEM] Auto-reconnect: ${autoReconnect} | Attempt: ${reconnectAttempts + 1}`);
 
-		// 先清空 statusChannel，防止重连时写入已被 innerHTML='' 销毁的旧 DOM 节点
 		statusChannel = null;
 		activeChannel = null;
 		channels.innerHTML = '';
@@ -1560,58 +1522,35 @@
 	}
 	const HTML_escape = htmlEscape;
 
-	/**
-	 * 去除 mIRC/IRC 格式控制码,包括: 
-	 *   \x02 (bold)  \x03 (color, 带可选数字)  \x0F (reset)
-	 *   \x16 (italic/reverse)  \x1D (italic)  \x1F (underline)
-	 *   \x1E (strikethrough)  \x11 (monospace)
-	 * 颜色码格式: \x03[fg[,bg]]  fg/bg 最多 2 位数字
-	 */
 	function stripMircCodes(text) {
 		if (!text) return "";
 		return text
-			// \x03 颜色码: 可能跟着 fg 或 fg,bg,各最多两位数字
 			.replace(/\x03(\d{1,2}(,\d{1,2})?)?/g, '')
-			// 其余格式控制字符
 			.replace(/[\x02\x0F\x16\x1D\x1E\x1F\x11]/g, '');
 	}
 
-	/**
-	 * mircToHtml — 将含有 mIRC 格式控制码的文本转换为安全的 HTML 字符串。
-	 * 支持:
-	 *   \x03[fg[,bg]]  颜色 (mIRC 0-15 标准色板)
-	 *   \x02           粗体
-	 *   \x1D           斜体
-	 *   \x1F           下划线
-	 *   \x1E           删除线
-	 *   \x0F           重置所有格式
-	 *   \x16           反色 (简单处理为跳过)
-	 *   \x11           等宽 (monospace，简单处理为跳过)
-	 * 输出 HTML 已对文本内容做 htmlEscape，安全无 XSS。
-	 */
 	const MIRC_COLORS = [
-		'#ffffff', // 0  White
-		'#000000', // 1  Black
-		'#00007f', // 2  Navy
-		'#009300', // 3  Green
-		'#ff0000', // 4  Red
-		'#7f0000', // 5  Maroon
-		'#9c009c', // 6  Purple
-		'#fc7f00', // 7  Orange
-		'#ffff00', // 8  Yellow
-		'#00fc00', // 9  Light Green
-		'#009393', // 10 Teal
-		'#00ffff', // 11 Cyan
-		'#0000fc', // 12 Royal Blue
-		'#ff00ff', // 13 Magenta
-		'#7f7f7f', // 14 Gray
-		'#d2d2d2'  // 15 Silver
+		'#ffffff',
+		'#000000',
+		'#00007f',
+		'#009300',
+		'#ff0000',
+		'#7f0000',
+		'#9c009c',
+		'#fc7f00',
+		'#ffff00',
+		'#00fc00',
+		'#009393',
+		'#00ffff',
+		'#0000fc',
+		'#ff00ff',
+		'#7f7f7f',
+		'#d2d2d2'
 	];
 
 	function mircToHtml(text) {
 		if (!text) return "";
 
-		// 当前格式状态
 		let fg = null, bg = null;
 		let bold = false, italic = false, underline = false, strike = false;
 		let result = "";
@@ -1653,40 +1592,39 @@
 		while (i < text.length) {
 			const ch = text[i];
 
-			if (ch === '\x02') {           // 粗体 toggle
-				applyFormat();
-				bold = !bold;
-				if (hasFormat()) openSpan();
-				i++; continue;
-			}
-			if (ch === '\x1D') {           // 斜体 toggle
-				applyFormat();
-				italic = !italic;
-				if (hasFormat()) openSpan();
-				i++; continue;
-			}
-			if (ch === '\x1F') {           // 下划线 toggle
-				applyFormat();
-				underline = !underline;
-				if (hasFormat()) openSpan();
-				i++; continue;
-			}
-			if (ch === '\x1E') {           // 删除线 toggle
-				applyFormat();
-				strike = !strike;
-				if (hasFormat()) openSpan();
-				i++; continue;
-			}
-			if (ch === '\x0F') {           // 重置
-				resetAll();
-				i++; continue;
-			}
-			if (ch === '\x16' || ch === '\x11') {  // 反色/等宽: 直接跳过
-				i++; continue;
-			}
-			if (ch === '\x03') {
-				// 尝试匹配颜色码
-				const sub = text.slice(i);
+		if (ch === '\x02') {
+			applyFormat();
+			bold = !bold;
+			if (hasFormat()) openSpan();
+			i++; continue;
+		}
+		if (ch === '\x1D') {
+			applyFormat();
+			italic = !italic;
+			if (hasFormat()) openSpan();
+			i++; continue;
+		}
+		if (ch === '\x1F') {
+			applyFormat();
+			underline = !underline;
+			if (hasFormat()) openSpan();
+			i++; continue;
+		}
+		if (ch === '\x1E') {
+			applyFormat();
+			strike = !strike;
+			if (hasFormat()) openSpan();
+			i++; continue;
+		}
+		if (ch === '\x0F') {
+			resetAll();
+			i++; continue;
+		}
+		if (ch === '\x16' || ch === '\x11') {
+			i++; continue;
+		}
+		if (ch === '\x03') {
+			const sub = text.slice(i);
 				const m = colorRe.exec(sub);
 				if (m) {
 					applyFormat();
@@ -1697,17 +1635,15 @@
 						bg = (bgIdx >= 0 && bgIdx < MIRC_COLORS.length) ? MIRC_COLORS[bgIdx] : null;
 					}
 					if (hasFormat()) openSpan();
-					i += m[0].length; continue;
-				}
-				// \x03 后面没有数字 → 重置颜色
-				applyFormat();
-				fg = null; bg = null;
-				if (hasFormat()) openSpan();
-				i++; continue;
-			}
+			i += m[0].length; continue;
+		}
+		applyFormat();
+		fg = null; bg = null;
+		if (hasFormat()) openSpan();
+		i++; continue;
+	}
 
-			// 普通字符：HTML 转义后追加
-			if (ch === '&')       { result += '&amp;';  i++; continue; }
+		if (ch === '&')       { result += '&amp;';  i++; continue; }
 			if (ch === '<')       { result += '&lt;';   i++; continue; }
 			if (ch === '>')       { result += '&gt;';   i++; continue; }
 			if (ch === '"')       { result += '&quot;'; i++; continue; }
@@ -1729,7 +1665,7 @@
 		return aIndex - bIndex;
 	}
 
-	// ── Tab class ────────────────────────────────────────
+		// ── Tab class ────────────────────────────────────────
 	class Tab_Create {
 		constructor(name, topic, createlist) {
 			if (!name || !channels || !channelContents) {
@@ -1742,7 +1678,7 @@
 			this.isPrivate = false;
 
 			this.button = document.createElement("button");
-			this.button.textContent = name;   // safe: textContent, not innerHTML
+			this.button.textContent = name;
 			this.button.value = name;
 			this.button.className = "channel";
 			this.button.addEventListener("click", Tab_onClick);
@@ -1819,7 +1755,7 @@
 			return;
 		}
 		const wasActive = (activeChannel === channel);
-		const actualKey = channel.name;  // 用 Map 中实际存的 key，避免大小写不匹配删除失败
+		const actualKey = channel.name;
 		channel.button.remove();
 		channel.channel.remove();
 		if (wasActive) {
@@ -1980,7 +1916,6 @@
 
 	function writeToScreen(color, message, channel, username) {
 		if (!channel || !channel.content) return;
-		// mircAndLinkify: 解析 IRC 颜色/格式码 + URL linkify，内部已做 htmlEscape
 		const renderedMessage = mircAndLinkify(message || "");
 		let pre = document.createElement("p");
 		pre.style.color = color;
@@ -1999,7 +1934,6 @@
 
 			const ts = document.createTextNode("[" + utcTime + "] ");
 			const sep = document.createTextNode(": ");
-			// 用 span 容器承载 mircAndLinkify 的 HTML 输出
 			const msgSpan = document.createElement("span");
 			msgSpan.innerHTML = renderedMessage;
 			pre.appendChild(ts);
@@ -2025,32 +1959,21 @@
 	function sanitizeUrl(url) {
 		try {
 			const parsed = new URL(url);
-			if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
-			return parsed.href;           // re-serialised: canonical, no extra tricks
+		if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
+		return parsed.href;
 		} catch (e) {
 			return null;
 		}
 	}
 
-	/**
-	 * mircAndLinkify — 先将 IRC mIRC 格式码转为 HTML span，
-	 * 再对其中的纯文本部分（标签之间）做 URL linkify（图片/音频/视频/链接）。
-	 * 返回可安全用于 innerHTML 的 HTML 字符串。
-	 */
 	function mircAndLinkify(text) {
 		if (!text) return "";
-		// Step 1: IRC 颜色/格式 → HTML（内部已 htmlEscape 文本内容）
 		const coloredHtml = mircToHtml(text);
-		// Step 2: 只对标签之间的文本部分做 URL linkify
-		// 思路: 将 HTML 分割为 [标签, 文本, 标签, 文本, ...] 交替处理
 		const mediaMaxWidth = '300px';
 		return coloredHtml.replace(/(<[^>]*>)|([^<]+)/g, function (match, tag, txt) {
-			if (tag) return tag;   // 标签原样保留
+			if (tag) return tag;
 			if (!txt) return "";
-			// txt 已经是 htmlEscape 过的文本，对其做 URL 识别
-			// URL 在 htmlEscape 后 & → &amp;，需要用 escaped 模式匹配
 			return txt.replace(/https?:\/\/[^\s<>{}|\\^`[\]]+/g, function (escapedUrl) {
-				// 反转 htmlEscape 还原真实 URL
 				const rawUrl = escapedUrl
 					.replace(/&amp;/g, '&').replace(/&lt;/g, '<')
 					.replace(/&gt;/g, '>').replace(/&quot;/g, '"')
@@ -2070,12 +1993,10 @@
 		});
 	}
 
-	// linkify: returns an HTML string for insertion via innerHTML (no username path)
 	function linkify(text) {
 		const mediaMaxWidth = '300px';
 
 		return HTML_escape(text).replace(/https?:\/\/[^\s<>{}|\\^`[\]]+/g, function (escapedUrl) {
-			// un-escape the URL we just HTML-escaped, then sanitize it properly
 			const rawUrl = escapedUrl
 				.replace(/&amp;/g, '&')
 				.replace(/&lt;/g, '<')
@@ -2083,7 +2004,7 @@
 				.replace(/&quot;/g, '"')
 				.replace(/&#039;/g, "'");
 			const safeUrl = sanitizeUrl(rawUrl);
-			if (!safeUrl) return escapedUrl;   // rejected: render as plain text
+			if (!safeUrl) return escapedUrl;
 
 		const lowerUrl = safeUrl.toLowerCase();
 		const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/.test(lowerUrl);
@@ -2103,8 +2024,6 @@
 		});
 	}
 
-	// linkifyToDom: returns a DocumentFragment, used when building DOM nodes manually
-	// (e.g. the username message path in writeToScreen) to keep everything injection-free.
 	function linkifyToDom(text) {
 		const frag = document.createDocumentFragment();
 		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
@@ -2158,18 +2077,12 @@
 		return frag;
 	}
 
-	/**
-	 * writeMotdLine — 向 Status 频道输出一行 MOTD，保留 IRC mIRC 颜色/格式。
-	 * 与 writeToScreen 不同，它直接把 mircToHtml 的输出注入 innerHTML，
-	 * 外层颜色不强制覆盖（让 mIRC 颜色自己说话），默认用浅灰作底色。
-	 */
 	function writeMotdLine(rawText) {
 		if (!statusChannel || !statusChannel.content) return;
 		const now = new Date();
 		const utcTime = now.toISOString().substr(11, 8);
 		const p = document.createElement("p");
-		p.style.color = "var(--clr-font)";   // 无颜色码时用默认色
-		// mircToHtml 内部已做 htmlEscape，安全
+		p.style.color = "var(--clr-font)";
 		p.innerHTML = "[" + utcTime + "] " + mircToHtml(rawText);
 		const output = statusChannel.content;
 		output.appendChild(p);
@@ -2177,7 +2090,6 @@
 		requestAnimationFrame(() => { output.scrollTop = output.scrollHeight; });
 	}
 
-	// 统一的历史记录函数（模块级，供 send() 及将来其他地方调用）
 	function pushHistory(msg) {
 		if (messageHistory.length >= 200) messageHistory.shift();
 		messageHistory.push(msg);
@@ -2190,7 +2102,6 @@
 
 		if (text[0] === "/") {
 			if (text.indexOf("/me ") === 0) {
-				// /me 也不能在 Status 频道发送
 				if (activeChannel.name === "Status") {
 					writeToScreen("var(--clr-warning)", "Status 是系统状态窗口，无法发送消息。", activeChannel, "*");
 					if (input) { input.value = ""; updateCharCount(); }
@@ -2228,17 +2139,15 @@
 					writeToScreen("var(--clr-warning)", "用法: /msg <昵称> <消息>", activeChannel, "*");
 				}
 			} else {
-				// 其他斜杠命令：回显在当前频道（Status 也可以），然后发送给服务器
-				writeToScreen("var(--clr-font)", text, activeChannel, "");
-				const messages = splitIRCMessage(text.substring(1));
-				messages.forEach(msg => doSend(msg));
-				pushHistory(text);
-			}
-		} else {
-			const target = activeChannel.name;
+			writeToScreen("var(--clr-font)", text, activeChannel, "");
+			const messages = splitIRCMessage(text.substring(1));
+			messages.forEach(msg => doSend(msg));
+			pushHistory(text);
+		}
+	} else {
+		const target = activeChannel.name;
 
-			// Status 是本地虚拟窗口，不能向服务器发送 PRIVMSG
-			if (target === "Status") {
+		if (target === "Status") {
 				writeToScreen("var(--clr-warning)", "Status 是系统状态窗口，无法发送消息。请使用 /join #频道 加入频道，或使用 /msg 昵称 内容 与用户私聊。", activeChannel, "*");
 				if (input) { input.value = ""; updateCharCount(); }
 				return;
@@ -2259,17 +2168,15 @@
 		if (input) { input.value = ""; updateCharCount(); }
 	}
 
-	// IRC protocol limit is 512 *bytes* (UTF-8), not characters.
-	// Count bytes properly so CJK text is split correctly.
 	function byteLength(str) {
 		return new TextEncoder().encode(str).length;
 	}
 
 	function splitIRCMessage(message) {
-		const MAX_BYTES = 510;  // 512 minus CRLF
+		const MAX_BYTES = 510;
 
 		const isPrivmsg = message.startsWith("privmsg ");
-		const fullMessage = message + "\r\n";  // IRC 协议要求 \r\n 结尾
+		const fullMessage = message + "\r\n";
 		if (!isPrivmsg || byteLength(fullMessage) <= MAX_BYTES + 2) {
 			return [fullMessage];
 		}
@@ -2288,14 +2195,12 @@
 			return [fullMessage];
 		}
 
-		// Split by bytes, respecting multi-byte char boundaries
 		const encoder = new TextEncoder();
 		const contentBytes = encoder.encode(messageContent);
 		const messages = [];
 		let offset = 0;
 		while (offset < contentBytes.length) {
 			let end = Math.min(offset + maxContentBytes, contentBytes.length);
-			// Back up to a UTF-8 char boundary if needed
 			while (end > offset && (contentBytes[end] & 0xC0) === 0x80) end--;
 			const chunk = new TextDecoder().decode(contentBytes.slice(offset, end));
 			messages.push(baseCommand + chunk + "\r\n");
@@ -2405,7 +2310,7 @@
 			websocket = null;
 		}
 
-	const wasConnected = isConnected;   // 记录断线前的连接状态，供日志诊断使用
+	const wasConnected = isConnected;
 	isConnected = false;
 	let reason = evt.reason || 'Connection closed';
 		let code = evt.code;
@@ -2749,27 +2654,21 @@
 		writeToScreen("var(--clr-red)", `错误: ${errorMsg}`, statusChannel, "*");
 		writeToLog(`[ERROR] ERR_NOCHANMODES (477): target=${targetNick} — ${errorMsg}`);
 	});
-	// RPL_MOTDSTART (375) — MOTD 开始
 	Commands.set("375", function (nick, data) {
 		if (!data || data.length < 3) return;
-		// 消息体可能缺失（服务器只发3段），此时显示空行
 		let text = data.length >= 4
 			? (data[3].startsWith(':') ? data.slice(3).join(' ').substring(1) : data.slice(3).join(' '))
 			: "";
 		writeMotdLine(text);
 		writeToLog(`[MOTD] START: ${text}`);
 	});
-	// RPL_MOTD (372) — MOTD 内容行
 	Commands.set("372", function (nick, data) {
 		if (!data || data.length < 3) return;
-		// 格式: :server 372 nick :- text
-		// data[3] 开头是 ':-' 或 ':'，跳过 ':' 前缀，保留 '- ' 风格
 		let text = data.length >= 4 ? data.slice(3).join(' ') : "";
 		if (text.startsWith(':')) text = text.substring(1);
 		writeMotdLine(text);
 		writeToLog(`[MOTD] ${text}`);
 	});
-	// RPL_ENDOFMOTD (376) — MOTD 结束
 	Commands.set("376", function (nick, data) {
 		if (!data || data.length < 3) return;
 		let text = data.length >= 4 ? data.slice(3).join(' ') : "";
@@ -2808,8 +2707,8 @@
 				if (channel.name !== serverChannelName) {
 					channelMap.delete(channel.name);
 					channel.name = serverChannelName;
-					channel.button.textContent = serverChannelName;  // textContent: safe
-					channel.button.value = serverChannelName;
+				channel.button.textContent = serverChannelName;
+				channel.button.value = serverChannelName;
 					channel.button.querySelector('.x').value = serverChannelName;
 					channelMap.set(serverChannelName, channel);
 				}
@@ -2858,7 +2757,6 @@
 			const modeChar = modeString[modeString.length - 1];
 			const targetNick = data[4].substring(1);
 
-			// Determine add/remove from the leading + or - in the mode string
 			let status = true;
 			for (let c of modeString) {
 				if (c === '+') { status = true; break; }
@@ -2893,7 +2791,7 @@
 	Commands.set("NICK", function (nick, data) {
 		if (!data || data.length < 3) return;
 		let newnick = data[2].substring(1);
-		const isSelf = (nick == nickname);   // 必须在修改 nickname 之前判断
+		const isSelf = (nick == nickname);
 		if (isSelf) nickname = newnick;
 		channelMap.forEach(function (channel, name) {
 			if (Channel_RenameUser(nick, newnick, channel)) {
@@ -2909,7 +2807,7 @@
 	Commands.set("PART", function (nick, data) {
 		if (!data || data.length < 3) return;
 
-		let partChannel = data[2];  // 用 partChannel 避免遮蔽闭包外的全局 channelName
+		let partChannel = data[2];
 		if (partChannel[0] == ":") partChannel = partChannel.substring(1);
 
 		let channel = findChannel(partChannel);
@@ -2982,15 +2880,13 @@
 
 	if (text[0] == "\x01") {
 		if (text.indexOf("\x01ACTION ") == 0) {
-			// 去掉开头 "\x01ACTION " (8字节) 和末尾可能的 "\x01"
 			let actionText = text.substring(8);
 			if (actionText.endsWith("\x01")) actionText = actionText.slice(0, -1);
 			writeToScreen("var(--clr-red)", `${nick} ${actionText}`, channel, "*");
 		} else {
 			writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*");
 		}
-			// ACTION 消息同样需要触发未读角标
-			if (channel && channel !== activeChannel && channel !== statusChannel) {
+		if (channel && channel !== activeChannel && channel !== statusChannel) {
 				addUnreadBadge(channel);
 			}
 		} else {
@@ -3024,7 +2920,6 @@
 			return;
 		}
 
-		// PING / ERROR 必须最先检测，避免被后面的数字命令解析误处理
 		if (data[0] === "PING") {
 			let pongResponse = rawData.replace("PING", "PONG");
 			writeToScreen("var(--clr-brown)", pongResponse, statusChannel, "");
@@ -3047,7 +2942,6 @@
 		}
 
 		if (!isNaN(parseInt(data[1]))) {
-			// data[3] 是消息体，前面可能有 ':' 前缀
 			let text = "";
 			if (data.length > 3) {
 				let first = data[3];
@@ -3097,8 +2991,6 @@
 		writeToLog(`[IRC] Sending registration: NICK=${nickname}, USER=websocket`);
 	}
 
-	// ── Export public API to window so HTML markup can call them ──
-	// (onclick="toggleConnection()", onkeydown="onKeyDown(event)", etc.)
 	window.toggleConnection      = toggleConnection;
 	window.toggleHeaderMenu      = toggleHeaderMenu;
 	window.toggleLog             = toggleLog;
@@ -3112,9 +3004,7 @@
 	window.updateCharCount       = updateCharCount;
 	window.openPrivateChat       = openPrivateChat;
 
-}()); // end IIFE
-
-
+}());
 </script>
 
 </html>
