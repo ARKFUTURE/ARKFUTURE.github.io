@@ -2395,12 +2395,13 @@
 			websocket = null;
 		}
 
-		if (!isConnected && isDisconnecting) {
-			return;
-		}
+	if (!isConnected && isDisconnecting) {
+		return;
+	}
 
-		isConnected = false;
-		let reason = evt.reason || 'Connection closed';
+	const wasConnected = isConnected;   // 记录断线前的连接状态，供日志诊断使用
+	isConnected = false;
+	let reason = evt.reason || 'Connection closed';
 		let code = evt.code;
 
 		let isUserDisconnect = false;
@@ -2437,7 +2438,7 @@
 		} else if (code === 1006 || code >= 4000) {
 			disconnectReason = "error";
 		}
-		onDisconnect(disconnectReason);
+		onDisconnect(disconnectReason, wasConnected);
 	}
 
 	function onError(evt) {
