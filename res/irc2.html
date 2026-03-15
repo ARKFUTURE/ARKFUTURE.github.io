@@ -1025,7 +1025,9 @@
 		if (menu && !menu.contains(event.target) && !menuBtn.contains(event.target)) {
 			menu.classList.remove('visible');
 			menu.classList.remove('menu-attached');
+			// 同时清除监听器变量，保持和 toggleHeaderMenu 的状态一致
 			document.removeEventListener('click', closeHeaderMenuOnClickOutside);
+			headerMenuClickListener = null;
 		}
 	}
 
@@ -1957,22 +1959,30 @@
 		return frag;
 	}
 
+	// 统一的历史记录函数（模块级，供 send() 及将来其他地方调用）
+	function pushHistory(msg) {
+		if (messageHistory.length >= 200) messageHistory.shift();
+		messageHistory.push(msg);
+		historyIndex = messageHistory.length;
+	}
+
 	function send() {
 		let text = input ? input.value.trim() : "";
 		if (!text || !activeChannel) return;
 
-	if (text[0] === "/") {
-		if (text.indexOf("/me ") === 0) {
-			// /me 也不能在 Status 频道发送
-			if (activeChannel.name === "Status") {
-				writeToScreen("var(--clr-warning)", "Status 是系统状态窗口，无法发送消息。", activeChannel, "*");
-				if (input) { input.value = ""; updateCharCount(); }
-				return;
-			}
-			const actionText = text.substring(4);
-			const messages = splitIRCMessage("privmsg " + activeChannel.name + " :\x01ACTION " + actionText + "\x01");
-			messages.forEach(msg => doSend(msg));
-			writeToScreen("var(--clr-red)", `${nickname} ${actionText}`, activeChannel, "*");
+		if (text[0] === "/") {
+			if (text.indexOf("/me ") === 0) {
+				// /me 也不能在 Status 频道发送
+				if (activeChannel.name === "Status") {
+					writeToScreen("var(--clr-warning)", "Status 是系统状态窗口，无法发送消息。", activeChannel, "*");
+					if (input) { input.value = ""; updateCharCount(); }
+					return;
+				}
+				const actionText = text.substring(4);
+				const messages = splitIRCMessage("privmsg " + activeChannel.name + " :\x01ACTION " + actionText + "\x01");
+				messages.forEach(msg => doSend(msg));
+				writeToScreen("var(--clr-red)", `${nickname} ${actionText}`, activeChannel, "*");
+				pushHistory(text);
 			} else if (text.indexOf("/msg ") === 0) {
 				const parts = text.substring(5).split(' ');
 				if (parts.length >= 2) {
@@ -1995,37 +2005,38 @@
 						}
 					});
 					writeToLog(`[PM] You → ${targetNick}: ${msgText}`);
+					pushHistory(text);
 				} else {
-					writeToScreen("var(--clr-warning)", "用法: /msg <昵称> <消息>", statusChannel, "*");
+					writeToScreen("var(--clr-warning)", "用法: /msg <昵称> <消息>", activeChannel, "*");
 				}
 			} else {
-				writeToScreen("var(--clr-font)", text, statusChannel, "");
+				// 其他斜杠命令：回显在当前频道（Status 也可以），然后发送给服务器
+				writeToScreen("var(--clr-font)", text, activeChannel, "");
 				const messages = splitIRCMessage(text.substring(1));
 				messages.forEach(msg => doSend(msg));
+				pushHistory(text);
 			}
-	} else {
-		const target = activeChannel.name;
+		} else {
+			const target = activeChannel.name;
 
-		// Status 是本地虚拟窗口,不能向服务器发送 PRIVMSG
-		if (target === "Status") {
-			writeToScreen("var(--clr-warning)", "Status 是系统状态窗口,无法发送消息.请使用 /join #频道 加入频道,或使用 /msg 昵称 内容 与用户私聊.", activeChannel, "*");
-			if (input) { input.value = ""; updateCharCount(); }
-			return;
-		}
-
-		const messages = splitIRCMessage("privmsg " + target + " :" + text);
-		messages.forEach((msg, index) => {
-			doSend(msg);
-			if (index === 0) {
-				writeToScreen("var(--clr-font)", text, activeChannel, nickname);
+			// Status 是本地虚拟窗口，不能向服务器发送 PRIVMSG
+			if (target === "Status") {
+				writeToScreen("var(--clr-warning)", "Status 是系统状态窗口，无法发送消息。请使用 /join #频道 加入频道，或使用 /msg 昵称 内容 与用户私聊。", activeChannel, "*");
+				if (input) { input.value = ""; updateCharCount(); }
+				return;
 			}
-		});
-		if (activeChannel.isPrivate) {
-			writeToLog(`[PM] You → ${target}: ${text}`);
-		}
-			if (messageHistory.length >= 200) messageHistory.shift();
-			messageHistory.push(text);
-			historyIndex = messageHistory.length;
+
+			const messages = splitIRCMessage("privmsg " + target + " :" + text);
+			messages.forEach((msg, index) => {
+				doSend(msg);
+				if (index === 0) {
+					writeToScreen("var(--clr-font)", text, activeChannel, nickname);
+				}
+			});
+			if (activeChannel.isPrivate) {
+				writeToLog(`[PM] You → ${target}: ${text}`);
+			}
+			pushHistory(text);
 		}
 		if (input) { input.value = ""; updateCharCount(); }
 	}
@@ -2095,54 +2106,54 @@
 					writeToLog(`[WARN] Error cleaning up previous connection: ${e.message}`);
 				}
 				websocket = null;
-		}
-		writeToLog(`[WebSocket] Creating new WebSocket → ${wsUri}`);
-		websocket = new WebSocket(wsUri);
-		websocket.binaryType = 'blob';
+			}
+			writeToLog(`[WebSocket] Creating new WebSocket → ${wsUri}`);
+			websocket = new WebSocket(wsUri);
+			websocket.binaryType = 'blob';
 
-		if (connectTimeout) {
-			clearTimeout(connectTimeout);
-		}
-		connectTimeout = setTimeout(() => {
-			if (websocket && websocket.readyState === WebSocket.CONNECTING) {
-				writeToLog(`[ERROR] Connection timeout (30s) — forcing close → ${wsUri}`);
-				try {
-					websocket.close(1006, "Connection timeout");
-				} catch (e) {
-					writeToLog(`[ERROR] Failed to close timed-out WebSocket: ${e.message}`);
+			if (connectTimeout) {
+				clearTimeout(connectTimeout);
+			}
+			connectTimeout = setTimeout(() => {
+				if (websocket && websocket.readyState === WebSocket.CONNECTING) {
+					writeToLog(`[ERROR] Connection timeout (30s) — forcing close → ${wsUri}`);
+					try {
+						websocket.close(1006, "Connection timeout");
+					} catch (e) {
+						writeToLog(`[ERROR] Failed to close timed-out WebSocket: ${e.message}`);
+					}
 				}
-			}
-		}, 30000);
+			}, 30000);
 
-		websocket.onclose = function handleOnClose(evt) {
-			if (connectTimeout) {
-				clearTimeout(connectTimeout);
-				connectTimeout = null;
+			websocket.onclose = function handleOnClose(evt) {
+				if (connectTimeout) {
+					clearTimeout(connectTimeout);
+					connectTimeout = null;
+				}
+				onClose(evt);
+			};
+			websocket.onerror = function handleOnError(evt) {
+				onError(evt);
+			};
+			websocket.onopen = function handleOnOpen(evt) {
+				if (connectTimeout) {
+					clearTimeout(connectTimeout);
+					connectTimeout = null;
+				}
+				onOpen(evt);
+			};
+			websocket.onmessage = function handleOnMessage(evt) {
+				onMessage(evt);
+			};
+		} catch (e) {
+			writeToLog(`[ERROR] WebSocket creation failed: ${e.message}`);
+			onDisconnect();
+			if (wsUrl && wsUrl.startsWith('wss://')) {
+				showSSLWarning(wsUrl);
 			}
-			onClose(evt);
-		};
-		websocket.onerror = function handleOnError(evt) {
-			onError(evt);
-		};
-		websocket.onopen = function handleOnOpen(evt) {
-			if (connectTimeout) {
-				clearTimeout(connectTimeout);
-				connectTimeout = null;
-			}
-			onOpen(evt);
-		};
-		websocket.onmessage = function handleOnMessage(evt) {
-			onMessage(evt);
-		};
-	} catch (e) {
-		writeToLog(`[ERROR] WebSocket creation failed: ${e.message}`);
-		onDisconnect();
-		if (wsUrl && wsUrl.startsWith('wss://')) {
-			showSSLWarning(wsUrl);
+			alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
 		}
-		alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
 	}
-}
 
 
 	window.addEventListener('beforeunload', function cleanup() {
@@ -2331,11 +2342,11 @@
 			return;
 		}
 
-	try {
-		websocket.send(message);
-		if (!message.trim().toUpperCase().startsWith('PING')) sentCount++;
-		writeToLog(`[CLIENT→SERVER] ${message.trim()}`);
-	} catch (e) {
+		try {
+			websocket.send(message);
+			if (!message.trim().toUpperCase().startsWith('PING')) sentCount++;
+			writeToLog(`[CLIENT→SERVER] ${message.trim()}`);
+		} catch (e) {
 			writeToLog(`[ERROR] Failed to send message: ${e.message}`);
 			writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel, "");
 			if (isConnected) {
@@ -2639,28 +2650,29 @@
 	Commands.set("NICK", function (nick, data) {
 		if (!data || data.length < 3) return;
 		let newnick = data[2].substring(1);
-		if (nick == nickname) nickname = newnick;
+		const isSelf = (nick == nickname);   // 必须在修改 nickname 之前判断
+		if (isSelf) nickname = newnick;
 		channelMap.forEach(function (channel, name) {
 			if (Channel_RenameUser(nick, newnick, channel)) {
-				if (newnick == nickname) {
+				if (isSelf) {
 					writeToScreen("var(--clr-green)", `你现在的新昵称是 ${newnick}`, channel, "*");
 				} else {
 					writeToScreen("var(--clr-green)", `${nick} 更名为 ${newnick}`, channel, "*");
 				}
 			}
 		});
-		writeToLog(`[IRC] NICK change: ${nick} → ${newnick}${nick === nickname ? ' (self)' : ''}`);
+		writeToLog(`[IRC] NICK change: ${nick} → ${newnick}${isSelf ? ' (self)' : ''}`);
 	});
 	Commands.set("PART", function (nick, data) {
 		if (!data || data.length < 3) return;
 
-		let channelName = data[2];
-		if (channelName[0] == ":") channelName = channelName.substring(1);
+		let partChannel = data[2];  // 用 partChannel 避免遮蔽闭包外的全局 channelName
+		if (partChannel[0] == ":") partChannel = partChannel.substring(1);
 
-		let channel = findChannel(channelName);
+		let channel = findChannel(partChannel);
 
 		if (!channel) {
-			writeToLog(`[WARN] PART received for unknown channel: "${channelName}"`);
+			writeToLog(`[WARN] PART received for unknown channel: "${partChannel}"`);
 			return;
 		}
 
@@ -2670,12 +2682,12 @@
 		if (isSelf) {
 			Channel_Destroy(channel.name);
 			writeToScreen("var(--clr-green)", `你已离开频道 ${channel.name}`, statusChannel, "");
-			writeToLog(`[IRC] Self parted channel: ${channelName}`);
+			writeToLog(`[IRC] Self parted channel: ${partChannel}`);
 		} else {
 			if (Channel_RemoveUser(nick, channel)) {
 				writeToScreen("var(--clr-green)", `${nick} 离开频道`, channel, "*");
 			}
-			writeToLog(`[IRC] User parted: ${nick} ← ${channelName}`);
+			writeToLog(`[IRC] User parted: ${nick} ← ${partChannel}`);
 		}
 	});
 	Commands.set("TOPIC", function (nick, data) {
@@ -2731,6 +2743,10 @@
 			} else {
 				writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*");
 			}
+			// ACTION 消息同样需要触发未读角标
+			if (channel && channel !== activeChannel && channel !== statusChannel) {
+				addUnreadBadge(channel);
+			}
 		} else {
 			writeToScreen("var(--clr-font)", text, channel, nick);
 			if (channel && channel !== activeChannel && channel !== statusChannel) {
@@ -2761,6 +2777,21 @@
 		if (!data || data.length < 2) {
 			return;
 		}
+
+		// PING / ERROR 必须最先检测，避免被后面的数字命令解析误处理
+		if (data[0] === "PING") {
+			let pongResponse = rawData.replace("PING", "PONG");
+			writeToScreen("var(--clr-brown)", pongResponse, statusChannel, "");
+			doSend(pongResponse);
+			writeToLog(`[PING/PONG] ${pongResponse}`);
+			return;
+		}
+		if (data[0] === "ERROR") {
+			writeToScreen("var(--clr-font)", rawData, statusChannel, "");
+			writeToLog(`[ERROR] ${rawData}`);
+			return;
+		}
+
 		let nick = data[0].substring(1).split("!")[0];
 		let command = data[1].toUpperCase();
 		let fn = Commands.get(command);
@@ -2768,34 +2799,22 @@
 			fn(nick, data);
 			return;
 		}
-	if (!isNaN(parseInt(data[1]))) {
-		// data[3] 是消息体,前面可能有 ':' 前缀
-		let text = "";
-		if (data.length > 3) {
-			let first = data[3];
-			if (first.startsWith(':')) first = first.substring(1);
-			text = first;
-			for (let i = 4; i < data.length; i++) {
-				text += " " + data[i];
-			}
-		}
-	writeToScreen("var(--clr-gold)", text || data[1], statusChannel, "");
-	writeToLog(`[SERVER] ${data[1]}: ${text}`);
-		return;
-	}
-		if (data[0] == "PING") {
-			let pongResponse = rawData.replace("PING", "PONG");
-			writeToScreen("var(--clr-brown)", pongResponse, statusChannel, "");
-			doSend(pongResponse);
-			writeToLog(`[PING/PONG] ${pongResponse}`);
-			return;
-		}
-		if (data[0] == "ERROR") {
-			writeToScreen("var(--clr-font)", rawData, statusChannel, "");
-			writeToLog(`[ERROR] ${rawData}`);
-			return;
-		}
 
+		if (!isNaN(parseInt(data[1]))) {
+			// data[3] 是消息体，前面可能有 ':' 前缀
+			let text = "";
+			if (data.length > 3) {
+				let first = data[3];
+				if (first.startsWith(':')) first = first.substring(1);
+				text = first;
+				for (let i = 4; i < data.length; i++) {
+					text += " " + data[i];
+				}
+			}
+			writeToScreen("var(--clr-gold)", text || data[1], statusChannel, "");
+			writeToLog(`[SERVER] ${data[1]}: ${text}`);
+			return;
+		}
 	}
 
 	function startKeepAlive() {
