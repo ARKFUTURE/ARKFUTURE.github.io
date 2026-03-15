@@ -1566,6 +1566,149 @@
 			.replace(/[\x02\x0F\x16\x1D\x1E\x1F\x11]/g, '');
 	}
 
+	/**
+	 * mircToHtml — 将含有 mIRC 格式控制码的文本转换为安全的 HTML 字符串。
+	 * 支持:
+	 *   \x03[fg[,bg]]  颜色 (mIRC 0-15 标准色板)
+	 *   \x02           粗体
+	 *   \x1D           斜体
+	 *   \x1F           下划线
+	 *   \x1E           删除线
+	 *   \x0F           重置所有格式
+	 *   \x16           反色 (简单处理为跳过)
+	 *   \x11           等宽 (monospace，简单处理为跳过)
+	 * 输出 HTML 已对文本内容做 htmlEscape，安全无 XSS。
+	 */
+	const MIRC_COLORS = [
+		'#ffffff', // 0  White
+		'#000000', // 1  Black
+		'#00007f', // 2  Navy
+		'#009300', // 3  Green
+		'#ff0000', // 4  Red
+		'#7f0000', // 5  Maroon
+		'#9c009c', // 6  Purple
+		'#fc7f00', // 7  Orange
+		'#ffff00', // 8  Yellow
+		'#00fc00', // 9  Light Green
+		'#009393', // 10 Teal
+		'#00ffff', // 11 Cyan
+		'#0000fc', // 12 Royal Blue
+		'#ff00ff', // 13 Magenta
+		'#7f7f7f', // 14 Gray
+		'#d2d2d2'  // 15 Silver
+	];
+
+	function mircToHtml(text) {
+		if (!text) return "";
+
+		// 当前格式状态
+		let fg = null, bg = null;
+		let bold = false, italic = false, underline = false, strike = false;
+		let result = "";
+		let spanOpen = false;
+
+		function closeSpan() {
+			if (spanOpen) { result += "</span>"; spanOpen = false; }
+		}
+		function openSpan() {
+			const styles = [];
+			if (fg !== null) styles.push("color:" + fg);
+			if (bg !== null) styles.push("background:" + bg);
+			if (bold)        styles.push("font-weight:bold");
+			if (italic)      styles.push("font-style:italic");
+			if (underline && strike) styles.push("text-decoration:underline line-through");
+			else if (underline)      styles.push("text-decoration:underline");
+			else if (strike)         styles.push("text-decoration:line-through");
+			if (styles.length > 0) {
+				result += `<span style="${styles.join(';')}">`;
+				spanOpen = true;
+			}
+		}
+		function hasFormat() {
+			return fg !== null || bg !== null || bold || italic || underline || strike;
+		}
+		function resetAll() {
+			closeSpan();
+			fg = null; bg = null;
+			bold = false; italic = false; underline = false; strike = false;
+		}
+		function applyFormat() {
+			closeSpan();
+			if (hasFormat()) openSpan();
+		}
+
+	const colorRe = /^\x03(\d{1,2})(?:,(\d{1,2}))?/;
+
+		let i = 0;
+		while (i < text.length) {
+			const ch = text[i];
+
+			if (ch === '\x02') {           // 粗体 toggle
+				applyFormat();
+				bold = !bold;
+				if (hasFormat()) openSpan();
+				i++; continue;
+			}
+			if (ch === '\x1D') {           // 斜体 toggle
+				applyFormat();
+				italic = !italic;
+				if (hasFormat()) openSpan();
+				i++; continue;
+			}
+			if (ch === '\x1F') {           // 下划线 toggle
+				applyFormat();
+				underline = !underline;
+				if (hasFormat()) openSpan();
+				i++; continue;
+			}
+			if (ch === '\x1E') {           // 删除线 toggle
+				applyFormat();
+				strike = !strike;
+				if (hasFormat()) openSpan();
+				i++; continue;
+			}
+			if (ch === '\x0F') {           // 重置
+				resetAll();
+				i++; continue;
+			}
+			if (ch === '\x16' || ch === '\x11') {  // 反色/等宽: 直接跳过
+				i++; continue;
+			}
+			if (ch === '\x03') {
+				// 尝试匹配颜色码
+				const sub = text.slice(i);
+				const m = colorRe.exec(sub);
+				if (m) {
+					applyFormat();
+					const fgIdx = parseInt(m[1], 10);
+					fg = (fgIdx >= 0 && fgIdx < MIRC_COLORS.length) ? MIRC_COLORS[fgIdx] : null;
+					if (m[2] !== undefined) {
+						const bgIdx = parseInt(m[2], 10);
+						bg = (bgIdx >= 0 && bgIdx < MIRC_COLORS.length) ? MIRC_COLORS[bgIdx] : null;
+					}
+					if (hasFormat()) openSpan();
+					i += m[0].length; continue;
+				}
+				// \x03 后面没有数字 → 重置颜色
+				applyFormat();
+				fg = null; bg = null;
+				if (hasFormat()) openSpan();
+				i++; continue;
+			}
+
+			// 普通字符：HTML 转义后追加
+			if (ch === '&')       { result += '&amp;';  i++; continue; }
+			if (ch === '<')       { result += '&lt;';   i++; continue; }
+			if (ch === '>')       { result += '&gt;';   i++; continue; }
+			if (ch === '"')       { result += '&quot;'; i++; continue; }
+			if (ch === "'")       { result += '&#039;'; i++; continue; }
+			result += ch;
+			i++;
+		}
+		closeSpan();
+		return result;
+	}
+
 	function sortUserList(user_a, user_b) {
 		if (!user_a || !user_b || user_a.length < 2 || user_b.length < 2) return 0;
 		if (user_a[0][0] === user_b[0][0])
@@ -1684,6 +1827,7 @@
 		if (!nick || !channel || !channel.userlist) return;
 		const user = document.createElement("li");
 		let tmp = document.createElement("p");
+		let nickColor = "";
 
 		if (prefix && prefix !== " ") {
 			const prefixChar = prefix[0];
@@ -1692,6 +1836,7 @@
 				tmp.textContent = prefixInfo.symbol;
 				tmp.style.color = prefixInfo.color;
 				tmp.title = prefixInfo.name;
+				nickColor = prefixInfo.color;
 			} else {
 				tmp.textContent = prefixChar;
 			}
@@ -1702,6 +1847,7 @@
 		tmp.textContent = nick;
 		tmp.title = "点击与 " + nick + " 私聊";
 		tmp.style.cursor = "pointer";
+		if (nickColor) tmp.style.color = nickColor;
 		tmp.addEventListener("click", function (e) {
 			e.stopPropagation();
 			openPrivateChat(nick);
@@ -1724,6 +1870,8 @@
 		if (!nick || !channel || !channel.userlist) return;
 		const user = document.createElement("li");
 		let tmp = document.createElement("p");
+		let nickColor = "";
+
 		if (prefix && prefix !== " ") {
 			const prefixChar = prefix[0];
 			const prefixInfo = DefaultPrefixMap[prefixChar];
@@ -1731,6 +1879,7 @@
 				tmp.textContent = prefixInfo.symbol;
 				tmp.style.color = prefixInfo.color;
 				tmp.title = prefixInfo.name;
+				nickColor = prefixInfo.color;
 			} else {
 				tmp.textContent = prefixChar;
 			}
@@ -1741,6 +1890,7 @@
 		tmp.textContent = nick;
 		tmp.title = "点击与 " + nick + " 私聊";
 		tmp.style.cursor = "pointer";
+		if (nickColor) tmp.style.color = nickColor;
 		tmp.addEventListener("click", function (e) {
 			e.stopPropagation();
 			openPrivateChat(nick);
@@ -1820,8 +1970,8 @@
 
 	function writeToScreen(color, message, channel, username) {
 		if (!channel || !channel.content) return;
-		// 过滤 mIRC 格式控制码
-		const cleanMessage = stripMircCodes(message || "");
+		// mircAndLinkify: 解析 IRC 颜色/格式码 + URL linkify，内部已做 htmlEscape
+		const renderedMessage = mircAndLinkify(message || "");
 		let pre = document.createElement("p");
 		pre.style.color = color;
 		const now = new Date();
@@ -1839,14 +1989,15 @@
 
 			const ts = document.createTextNode("[" + utcTime + "] ");
 			const sep = document.createTextNode(": ");
+			// 用 span 容器承载 mircAndLinkify 的 HTML 输出
+			const msgSpan = document.createElement("span");
+			msgSpan.innerHTML = renderedMessage;
 			pre.appendChild(ts);
 			pre.appendChild(nickSpan);
 			pre.appendChild(sep);
-			// linkify operates on the message body only, username never passes through it
-			const msgFrag = linkifyToDom(cleanMessage);
-			pre.appendChild(msgFrag);
+			pre.appendChild(msgSpan);
 		} else {
-			pre.innerHTML = "[" + utcTime + "] " + linkify(cleanMessage);
+			pre.innerHTML = "[" + utcTime + "] " + renderedMessage;
 		}
 
 		const output = channel.content;
@@ -1869,6 +2020,44 @@
 		} catch (e) {
 			return null;
 		}
+	}
+
+	/**
+	 * mircAndLinkify — 先将 IRC mIRC 格式码转为 HTML span，
+	 * 再对其中的纯文本部分（标签之间）做 URL linkify（图片/音频/视频/链接）。
+	 * 返回可安全用于 innerHTML 的 HTML 字符串。
+	 */
+	function mircAndLinkify(text) {
+		if (!text) return "";
+		// Step 1: IRC 颜色/格式 → HTML（内部已 htmlEscape 文本内容）
+		const coloredHtml = mircToHtml(text);
+		// Step 2: 只对标签之间的文本部分做 URL linkify
+		// 思路: 将 HTML 分割为 [标签, 文本, 标签, 文本, ...] 交替处理
+		const mediaMaxWidth = '300px';
+		return coloredHtml.replace(/(<[^>]*>)|([^<]+)/g, function (match, tag, txt) {
+			if (tag) return tag;   // 标签原样保留
+			if (!txt) return "";
+			// txt 已经是 htmlEscape 过的文本，对其做 URL 识别
+			// URL 在 htmlEscape 后 & → &amp;，需要用 escaped 模式匹配
+			return txt.replace(/https?:\/\/[^\s<>{}|\\^`[\]]+/g, function (escapedUrl) {
+				// 反转 htmlEscape 还原真实 URL
+				const rawUrl = escapedUrl
+					.replace(/&amp;/g, '&').replace(/&lt;/g, '<')
+					.replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+					.replace(/&#039;/g, "'");
+				const safeUrl = sanitizeUrl(rawUrl);
+				if (!safeUrl) return escapedUrl;
+				const lowerUrl = safeUrl.toLowerCase();
+				const safeAttr = HTML_escape(safeUrl);
+				const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/.test(lowerUrl);
+				const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/.test(lowerUrl);
+				const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/.test(lowerUrl);
+				if (isImage) return `<img src="${safeAttr}" alt="Image" referrerpolicy="no-referrer" crossorigin="anonymous" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.1);">`;
+				if (isAudio) return `<audio controls src="${safeAttr}" referrerpolicy="no-referrer" style="max-width:${mediaMaxWidth};"></audio>`;
+				if (isVideo) return `<video controls src="${safeAttr}" referrerpolicy="no-referrer" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;"></video>`;
+				return `<a href="${safeAttr}" target="_blank" rel="noopener noreferrer" style="color:var(--clr-accent);text-decoration:underline;word-break:break-all;">${safeAttr}</a>`;
+			});
+		});
 	}
 
 	// linkify: returns an HTML string for insertion via innerHTML (no username path)
@@ -1957,6 +2146,25 @@
 			frag.appendChild(document.createTextNode(text.slice(lastIndex)));
 		}
 		return frag;
+	}
+
+	/**
+	 * writeMotdLine — 向 Status 频道输出一行 MOTD，保留 IRC mIRC 颜色/格式。
+	 * 与 writeToScreen 不同，它直接把 mircToHtml 的输出注入 innerHTML，
+	 * 外层颜色不强制覆盖（让 mIRC 颜色自己说话），默认用浅灰作底色。
+	 */
+	function writeMotdLine(rawText) {
+		if (!statusChannel || !statusChannel.content) return;
+		const now = new Date();
+		const utcTime = now.toISOString().substr(11, 8);
+		const p = document.createElement("p");
+		p.style.color = "var(--clr-font)";   // 无颜色码时用默认色
+		// mircToHtml 内部已做 htmlEscape，安全
+		p.innerHTML = "[" + utcTime + "] " + mircToHtml(rawText);
+		const output = statusChannel.content;
+		output.appendChild(p);
+		while (output.children.length > 500) output.removeChild(output.children[0]);
+		requestAnimationFrame(() => { output.scrollTop = output.scrollHeight; });
 	}
 
 	// 统一的历史记录函数（模块级，供 send() 及将来其他地方调用）
@@ -2534,6 +2742,34 @@
 		writeToScreen("var(--clr-red)", `错误: ${errorMsg}`, statusChannel, "*");
 		writeToLog(`[ERROR] ERR_NOCHANMODES (477): target=${targetNick} — ${errorMsg}`);
 	});
+	// RPL_MOTDSTART (375) — MOTD 开始
+	Commands.set("375", function (nick, data) {
+		if (!data || data.length < 3) return;
+		// 消息体可能缺失（服务器只发3段），此时显示空行
+		let text = data.length >= 4
+			? (data[3].startsWith(':') ? data.slice(3).join(' ').substring(1) : data.slice(3).join(' '))
+			: "";
+		writeMotdLine(text);
+		writeToLog(`[MOTD] START: ${text}`);
+	});
+	// RPL_MOTD (372) — MOTD 内容行
+	Commands.set("372", function (nick, data) {
+		if (!data || data.length < 3) return;
+		// 格式: :server 372 nick :- text
+		// data[3] 开头是 ':-' 或 ':'，跳过 ':' 前缀，保留 '- ' 风格
+		let text = data.length >= 4 ? data.slice(3).join(' ') : "";
+		if (text.startsWith(':')) text = text.substring(1);
+		writeMotdLine(text);
+		writeToLog(`[MOTD] ${text}`);
+	});
+	// RPL_ENDOFMOTD (376) — MOTD 结束
+	Commands.set("376", function (nick, data) {
+		if (!data || data.length < 3) return;
+		let text = data.length >= 4 ? data.slice(3).join(' ') : "";
+		if (text.startsWith(':')) text = text.substring(1);
+		writeMotdLine(text);
+		writeToLog(`[MOTD] END: ${text}`);
+	});
 	Commands.set("JOIN", function (nick, data) {
 		if (!data || data.length < 3) return;
 
@@ -2737,12 +2973,15 @@
 			if (!channel) channel = statusChannel;
 		}
 
-		if (text[0] == "\x01") {
-			if (text.indexOf("\x01ACTION ") == 0) {
-				writeToScreen("var(--clr-red)", `${nick} ${text.substring(8)}`, channel, "*");
-			} else {
-				writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*");
-			}
+	if (text[0] == "\x01") {
+		if (text.indexOf("\x01ACTION ") == 0) {
+			// 去掉开头 "\x01ACTION " (8字节) 和末尾可能的 "\x01"
+			let actionText = text.substring(8);
+			if (actionText.endsWith("\x01")) actionText = actionText.slice(0, -1);
+			writeToScreen("var(--clr-red)", `${nick} ${actionText}`, channel, "*");
+		} else {
+			writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*");
+		}
 			// ACTION 消息同样需要触发未读角标
 			if (channel && channel !== activeChannel && channel !== statusChannel) {
 				addUnreadBadge(channel);
