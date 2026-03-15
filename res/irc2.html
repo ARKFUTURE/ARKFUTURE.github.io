@@ -157,19 +157,34 @@
 		font-family: var(--font-mono);
 		text-transform: uppercase;
 		letter-spacing: 0.5px;
-		color: var(--cyber-text);
-		border-bottom: 1px solid var(--cyber-dark3);
+		padding: 7px 14px;
+		color: var(--cyber-primary);
+		border: 1px solid var(--cyber-border);
+		margin: 4px 6px;
+		border-radius: 2px;
 		transition: var(--transition);
+		display: flex;
+		align-items: center;
+		gap: 7px;
 	}
-	.header-menu-item:last-child { border-bottom: none; }
+	.header-menu-item:last-child { }
+	/* 各菜单项独立配色 */
+	.header-menu-item:nth-child(1) { color: var(--cyber-primary);   border-color: var(--cyber-primary);   }  /* 查看日志  — 青 */
+	.header-menu-item:nth-child(2) { color: var(--cyber-secondary); border-color: var(--cyber-secondary); }  /* 私聊列表  — 紫 */
+	.header-menu-item:nth-child(3) { color: var(--cyber-accent);    border-color: var(--cyber-accent);    }  /* SSL帮助   — 黄 */
+	.header-menu-item:nth-child(4) { color: var(--cyber-green);     border-color: var(--cyber-green);     }  /* 自动重连  — 绿 */
 	.header-menu-item:hover {
-		background: var(--cyber-primary);
-		color: var(--cyber-dark);
-		box-shadow: var(--glow-primary);
+		background: currentColor;
+		color: var(--cyber-dark) !important;
+		box-shadow: 0 0 8px currentColor;
+		text-shadow: none;
 	}
 	.header-menu-item.active {
 		background: var(--cyber-green);
-		color: var(--cyber-dark);
+		border-color: var(--cyber-green);
+		color: var(--cyber-dark) !important;
+		text-shadow: none;
+		box-shadow: 0 0 8px var(--cyber-green);
 	}
 
 	/* ── Settings bar ──────────────────────────────────── */
