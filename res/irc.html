@@ -2037,10 +2037,10 @@
 			if (!safeUrl) {
 				frag.appendChild(document.createTextNode(match[1]));
 			} else {
-				const lowerUrl = safeUrl.toLowerCase();
-				const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/.test(lowerUrl);
-			const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac)(\?.*)?$/.test(lowerUrl);
-			const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8)(\?.*)?$/.test(lowerUrl);
+			const lowerUrl = safeUrl.toLowerCase();
+			const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|ico|tiff|tif|avif|heic|heif|jfif|pjpeg|pjp|apng)(\?.*)?$/i.test(lowerUrl);
+			const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac|opus|weba|wma|aiff|au|mid|midi|ra|ram|mka)(\?.*)?$/i.test(lowerUrl);
+			const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8|wmv|rmvb|rm|ts|mts|m2ts|3gp|3g2|divx|xvid|asf|vob|mpg|mpeg|mp2|mpe|mpv|m2v|svi|mxf|roq|nsv|f4v|f4p|f4a|f4b)(\?.*)?$/i.test(lowerUrl);
 			if (isImage) {
 				const img = document.createElement('img');
 				img.src = safeUrl; img.alt = 'Image';
@@ -2099,6 +2099,11 @@
 	function send() {
 		let text = input ? input.value.trim() : "";
 		if (!text || !activeChannel) return;
+
+		if (!isConnected) {
+			writeToScreen("var(--clr-warning)", "未连接，无法发送消息", activeChannel || statusChannel, "*");
+			return;
+		}
 
 		if (text[0] === "/") {
 			if (text.indexOf("/me ") === 0) {
@@ -2553,7 +2558,7 @@
 	Commands.set("001", function (nick, data) {
 		if (channelName) {
 			writeToLog(`[IRC] RPL_WELCOME (001) received — auto-joining: ${channelName}`);
-			doSend("join " + channelName);
+			doSend("JOIN " + channelName);
 		} else {
 			writeToLog(`[IRC] RPL_WELCOME (001) received — no auto-join channel configured`);
 		}
@@ -2606,7 +2611,7 @@
 	Commands.set("366", function (nick, data) {
 		if (!data || data.length < 4) return;
 		let channel = findChannel(data[3]);
-		if (!channel) return;
+		if (!channel || !channel.userlist) return;
 		channel.users.sort(sortUserList);
 		channel.userlist.innerHTML = "";
 		for (let i = 0; i < channel.users.length; i++) {
@@ -2722,20 +2727,23 @@
 		}
 	});
 	Commands.set("KICK", function (nick, data) {
-		if (!data || data.length < 5) return;
+		if (!data || data.length < 4) return;
 		let channel = findChannel(data[2]);
 		if (!channel) return;
-		let text = data[4].substring(1);
-		for (let i = 5; i < data.length; i++) {
-			text += " " + data[i];
+		let text = "";
+		if (data.length >= 5) {
+			text = data[4].startsWith(':') ? data[4].substring(1) : data[4];
+			for (let i = 5; i < data.length; i++) {
+				text += " " + data[i];
+			}
 		}
 		if (data[3] != nickname) {
 			if (Channel_RemoveUser(data[3], channel)) {
-				writeToScreen("var(--clr-red)", `${data[3]} 被 ${nick} 踢出 (原因: ${text})`, channel, "*");
+				writeToScreen("var(--clr-red)", `${data[3]} 被 ${nick} 踢出 (原因: ${text || '无'})`, channel, "*");
 			}
 		} else {
 			Channel_Destroy(data[2]);
-			writeToScreen("var(--clr-red)", `你被 ${nick} 踢出 ${data[2]} (原因: ${text})`, statusChannel, "");
+			writeToScreen("var(--clr-red)", `你被 ${nick} 踢出 ${data[2]} (原因: ${text || '无'})`, statusChannel, "");
 		}
 		writeToLog(`[IRC] KICK: channel=${data[2]}, kicked=${data[3]}, by=${nick}, reason="${text}"`);
 	});
@@ -2915,7 +2923,7 @@
 
 	function process(rawData) {
 		if (!rawData) return;
-		let data = rawData.split(" ");
+		let data = rawData.replace(/\r\n$/, '').replace(/\r$/, '').split(" ");
 		if (!data || data.length < 2) {
 			return;
 		}
