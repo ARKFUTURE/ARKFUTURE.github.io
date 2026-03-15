@@ -673,6 +673,12 @@ main {
   margin: 2.5rem 0;
   position: relative;
   perspective: 1200px;
+  z-index: 1; /* 确保 section 有层叠上下文，hover 时可超出 */
+}
+
+/* section 内有卡片 hover 时，整个 section 提升到最上层 */
+.site-section:has(.content-block:hover) {
+  z-index: 10;
 }
 
 .site-section::before {
