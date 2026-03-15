@@ -169,14 +169,14 @@
 	}
 	.header-menu-item:last-child { }
 	/* 各菜单项独立配色 */
-	.header-menu-item:nth-child(1) { color: var(--cyber-primary);   border-color: var(--cyber-primary);   }  /* 查看日志  — 青 */
-	.header-menu-item:nth-child(2) { color: var(--cyber-secondary); border-color: var(--cyber-secondary); }  /* 私聊列表  — 紫 */
-	.header-menu-item:nth-child(3) { color: var(--cyber-accent);    border-color: var(--cyber-accent);    }  /* SSL帮助   — 黄 */
-	.header-menu-item:nth-child(4) { color: var(--cyber-green);     border-color: var(--cyber-green);     }  /* 自动重连  — 绿 */
+	.header-menu-item:nth-child(1) { color: var(--cyber-primary);   border-color: var(--cyber-primary);   --item-glow: var(--cyber-primary);   }
+	.header-menu-item:nth-child(2) { color: var(--cyber-secondary); border-color: var(--cyber-secondary); --item-glow: var(--cyber-secondary); }
+	.header-menu-item:nth-child(3) { color: var(--cyber-accent);    border-color: var(--cyber-accent);    --item-glow: var(--cyber-accent);    }
+	.header-menu-item:nth-child(4) { color: var(--cyber-green);     border-color: var(--cyber-green);     --item-glow: var(--cyber-green);     }
 	.header-menu-item:hover {
 		background: currentColor;
 		color: var(--cyber-dark) !important;
-		box-shadow: 0 0 8px currentColor;
+		box-shadow: 0 0 8px var(--item-glow, var(--cyber-primary));
 		text-shadow: none;
 	}
 	.header-menu-item.active {
@@ -917,7 +917,9 @@
 
 		let url = new URL(document.location);
 		if (url.hash) {
-			document.getElementById('channelInput').value = url.hash;
+			// 只允许合法的 IRC 频道名字符，避免脏数据注入
+			const safeHash = url.hash.replace(/[^\w#&\-]/g, '').substring(0, 64);
+			if (safeHash) document.getElementById('channelInput').value = safeHash;
 		}
 		if (window.frameElement) {
 			document.getElementById("caption").style.display = "none";
@@ -1004,9 +1006,15 @@
 		menu.classList.toggle('visible');
 		updateAutoReconnectMenuItem();
 
-		if (!menu.classList.contains('menu-attached')) {
-			menu.classList.add('menu-attached');
+		// 先移除旧的监听器，再根据菜单状态决定是否添加
+		if (headerMenuClickListener) {
+			document.removeEventListener('click', headerMenuClickListener);
+			headerMenuClickListener = null;
+			menu.classList.remove('menu-attached');
+		}
+		if (menu.classList.contains('visible')) {
 			headerMenuClickListener = closeHeaderMenuOnClickOutside;
+			menu.classList.add('menu-attached');
 			document.addEventListener('click', headerMenuClickListener);
 		}
 	}
@@ -1084,8 +1092,12 @@
 		const logContainer = document.getElementById('logContainer');
 		if (logContainer) {
 			logContainer.classList.toggle('visible');
-			if (!logContainer.classList.contains('visible')) {
-				logContainer.scrollTop = logContainer.scrollHeight;
+			if (logContainer.classList.contains('visible')) {
+				// 打开日志时滚动到最新行
+				const logOutput = getLogOutput();
+				if (logOutput) {
+					requestAnimationFrame(() => { logOutput.scrollTop = logOutput.scrollHeight; });
+				}
 			}
 		}
 	}
@@ -1299,6 +1311,9 @@
 		writeToLog(`[SYSTEM] Channel : ${channelName || '(none)'}`);
 		writeToLog(`[SYSTEM] Auto-reconnect: ${autoReconnect} | Attempt: ${reconnectAttempts + 1}`);
 
+		// 先清空 statusChannel，防止重连时写入已被 innerHTML='' 销毁的旧 DOM 节点
+		statusChannel = null;
+		activeChannel = null;
 		channels.innerHTML = '';
 		channelContents.innerHTML = '';
 		channelMap.clear();
@@ -1649,13 +1664,14 @@
 			return;
 		}
 		const wasActive = (activeChannel === channel);
+		const actualKey = channel.name;  // 用 Map 中实际存的 key，避免大小写不匹配删除失败
 		channel.button.remove();
 		channel.channel.remove();
 		if (wasActive) {
 			activeChannel = statusChannel;
 		}
-		channelMap.delete(name);
-		writeToLog(`[TAB] Tab destroyed: "${name}" | was-active: ${wasActive} | remaining tabs: ${channelMap.size}`);
+		channelMap.delete(actualKey);
+		writeToLog(`[TAB] Tab destroyed: "${actualKey}" | was-active: ${wasActive} | remaining tabs: ${channelMap.size}`);
 		if (activeChannel) {
 			tabShow(activeChannel.name);
 		}
@@ -1691,11 +1707,11 @@
 		user.appendChild(tmp);
 
 		let i = 0;
+		const newEntry = [prefix || " ", nick];
 		for (i; i < channel.users.length; i++) {
 			if (channel.users[i] && channel.users[i][1]) {
-				if (channel.users[i][1].localeCompare(nick, undefined, { sensitivity: 'accent' }) < 0) continue;
+				if (sortUserList(newEntry, channel.users[i]) <= 0) break;
 			}
-			break;
 		}
 		channel.users.splice(i, 0, [prefix || " ", nick]);
 		channel.userlist.insertBefore(user, channel.userlist.childNodes[i]);
@@ -1945,12 +1961,18 @@
 		let text = input ? input.value.trim() : "";
 		if (!text || !activeChannel) return;
 
-		if (text[0] === "/") {
-			if (text.indexOf("/me ") === 0) {
-				const actionText = text.substring(4);
-				const messages = splitIRCMessage("privmsg " + activeChannel.name + " :\x01ACTION " + actionText + "\x01");
-				messages.forEach(msg => doSend(msg));
-				writeToScreen("var(--clr-red)", `${nickname} ${actionText}`, activeChannel, "*");
+	if (text[0] === "/") {
+		if (text.indexOf("/me ") === 0) {
+			// /me 也不能在 Status 频道发送
+			if (activeChannel.name === "Status") {
+				writeToScreen("var(--clr-warning)", "Status 是系统状态窗口，无法发送消息。", activeChannel, "*");
+				if (input) { input.value = ""; updateCharCount(); }
+				return;
+			}
+			const actionText = text.substring(4);
+			const messages = splitIRCMessage("privmsg " + activeChannel.name + " :\x01ACTION " + actionText + "\x01");
+			messages.forEach(msg => doSend(msg));
+			writeToScreen("var(--clr-red)", `${nickname} ${actionText}`, activeChannel, "*");
 			} else if (text.indexOf("/msg ") === 0) {
 				const parts = text.substring(5).split(' ');
 				if (parts.length >= 2) {
@@ -2018,7 +2040,7 @@
 		const MAX_BYTES = 510;  // 512 minus CRLF
 
 		const isPrivmsg = message.startsWith("privmsg ");
-		const fullMessage = message + "\n";
+		const fullMessage = message + "\r\n";  // IRC 协议要求 \r\n 结尾
 		if (!isPrivmsg || byteLength(fullMessage) <= MAX_BYTES + 2) {
 			return [fullMessage];
 		}
@@ -2047,7 +2069,7 @@
 			// Back up to a UTF-8 char boundary if needed
 			while (end > offset && (contentBytes[end] & 0xC0) === 0x80) end--;
 			const chunk = new TextDecoder().decode(contentBytes.slice(offset, end));
-			messages.push(baseCommand + chunk + "\n");
+			messages.push(baseCommand + chunk + "\r\n");
 			offset = end;
 		}
 		return messages;
@@ -2757,8 +2779,8 @@
 				text += " " + data[i];
 			}
 		}
-		writeToScreen("var(--clr-gold)", text || data[1], statusChannel, "");
-		writeToLog(`[SERVER] ${data[1]}: ${data[1]} ${text}`);
+	writeToScreen("var(--clr-gold)", text || data[1], statusChannel, "");
+	writeToLog(`[SERVER] ${data[1]}: ${text}`);
 		return;
 	}
 		if (data[0] == "PING") {
