@@ -2083,7 +2083,7 @@
 		const utcTime = now.toISOString().substr(11, 8);
 		const p = document.createElement("p");
 		p.style.color = "var(--clr-font)";
-		p.innerHTML = "[" + utcTime + "] " + mircToHtml(rawText);
+		p.innerHTML = "[" + utcTime + "] " + mircAndLinkify(rawText);
 		const output = statusChannel.content;
 		output.appendChild(p);
 		while (output.children.length > 500) output.removeChild(output.children[0]);
