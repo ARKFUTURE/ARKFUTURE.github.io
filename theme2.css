@@ -1223,11 +1223,6 @@ footer a:hover {
    ============================================================ */
 @layer animations {
 
-/* 气泡群：附加在 main 里悬浮 */
-.site-section:first-child {
-  /* overflow: hidden 已移除，避免裁掉 hover 浮起的卡片 */
-}
-
 } /* end @layer animations */
 
 /* ============================================================
