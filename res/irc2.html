@@ -261,26 +261,21 @@
 		box-shadow: 0 0 5px var(--c-yellow);
 		animation: pulse 1.2s ease infinite;
 	}
-	/* Connected state — show ONLINE, hover turns red to prompt disconnect */
+	/* Connected state — red, click to disconnect */
 	.conn-pill.connected {
-		background: rgba(105,255,71,.1);
-		border-color: rgba(105,255,71,.45);
-		color: var(--c-green);
+		background: rgba(255,23,68,.1);
+		border-color: rgba(255,23,68,.45);
+		color: var(--c-red);
 		pointer-events: auto;
 	}
 	.conn-pill.connected .conn-pill__dot {
-		background: var(--c-green);
-		box-shadow: 0 0 6px var(--c-green);
-	}
-	.conn-pill.connected:hover {
-		background: rgba(255,23,68,.15);
-		border-color: rgba(255,23,68,.55);
-		color: var(--c-red);
-		box-shadow: 0 0 8px rgba(255,23,68,.25);
-	}
-	.conn-pill.connected:hover .conn-pill__dot {
 		background: var(--c-red);
 		box-shadow: 0 0 6px var(--c-red);
+	}
+	.conn-pill.connected:hover {
+		background: rgba(255,23,68,.22);
+		border-color: var(--c-red);
+		box-shadow: 0 0 10px rgba(255,23,68,.35);
 	}
 	/* Disconnecting — red dim, blocked */
 	.conn-pill.disconnecting {
