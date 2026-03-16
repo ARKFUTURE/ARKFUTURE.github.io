@@ -1171,6 +1171,16 @@
 			if (active && active !== input && active !== document.body) {
 				return;
 			}
+			// 若设置面板展开中，不抢焦点（让用户能正常操作设置）
+			const settingsPanel = document.getElementById('settingsPanel');
+			if (settingsPanel && settingsPanel.classList.contains('open')) {
+				return;
+			}
+			// 若菜单展开中，不抢焦点
+			const menuDropdown = document.getElementById('headerMenuDropdown');
+			if (menuDropdown && menuDropdown.classList.contains('visible')) {
+				return;
+			}
 			if (isConnected && document.hasFocus()) {
 				input.focus();
 			}
@@ -1207,7 +1217,7 @@
 		if (menu.classList.contains('visible')) {
 			headerMenuClickListener = closeHeaderMenuOnClickOutside;
 			menu.classList.add('menu-attached');
-			document.addEventListener('click', headerMenuClickListener);
+			setTimeout(() => { document.addEventListener('click', headerMenuClickListener); }, 0);
 		}
 	}
 
@@ -1373,7 +1383,7 @@
 			while (logOutput.children.length > 500) {
 				logOutput.removeChild(logOutput.firstChild);
 			}
-			logOutput.scrollTop = logOutput.scrollHeight;
+			requestAnimationFrame(() => { logOutput.scrollTop = logOutput.scrollHeight; });
 		}
 
 		console.log(fullMessage);
