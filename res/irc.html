@@ -97,8 +97,14 @@
 	*, *::before, *::after {
 		box-sizing: border-box;
 		margin: 0; padding: 0;
-		user-select: text !important;
-		-webkit-user-select: text !important;
+	}
+
+	button, input, select, textarea, [role="button"],
+	.irc-menu__btn, .settings-toggle-btn, .header-menu-item,
+	.channel-item, .user-item, .sidebar-header, .tab-btn,
+	.irc-header, .irc-sidebar, .irc-tabbar {
+		user-select: none;
+		-webkit-user-select: none;
 	}
 	::-webkit-scrollbar { width: 4px; height: 4px; }
 	::-webkit-scrollbar-track { background: transparent; }
