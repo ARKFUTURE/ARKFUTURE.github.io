@@ -971,7 +971,6 @@
 						style="padding:5px 10px;font-size:11px;white-space:nowrap;">加入</button>
 				</div>
 			</div>
-			<!-- ── IRCv3 功能3: SASL ── -->
 			<div class="settings-group" id="saslGroup" title="SASL 认证账号">
 				<label for="saslAccountInput">SASL 账号</label>
 				<input type="text" id="saslAccountInput" value="" placeholder="账号 (可选)" autocomplete="username">
@@ -1026,7 +1025,6 @@
 		</div>
 
 		<div class="input-container" id="inputContainer" style="display:none;">
-			<!-- IRCv3 typing indicator -->
 			<div class="typing-indicator" id="typingIndicator"></div>
 			<div class="input-container__row">
 				<span class="input-prefix" id="inputPrefix">&gt;</span>
@@ -1072,11 +1070,9 @@
 	let sessionStartTime = null;
 	let sentCount = 0;
 	let recvCount = 0;
-
-	// IRCv3 batch/labeled-response 状态
-	let batchBuffer = new Map();   // ref → { type, params, messages }
+	let batchBuffer = new Map();
 	let labelCounter = 0;
-	let pendingLabels = new Map(); // label → { description, ts }
+	let pendingLabels = new Map();
 
 	function findChannel(channelName) {
 		if (!channelName) return null;
@@ -1538,7 +1534,6 @@
 		writeToLog(`[DEBUG] Channel name auto-prefixed with '#': ${channelName}`);
 	}
 
-	// 只有手动触发连接时才重置重连计数；自动重连时保持计数以正确限制次数
 	if (!isAutoReconnect) {
 		reconnectAttempts = 0;
 	}
@@ -1579,8 +1574,6 @@
 	}
 
 	function onDisconnect(reason = "", wasConnected = false) {
-
-		// 无论是主动断开还是异常断开，UI 恢复必须始终执行
 		isConnected = false;
 		const wsUrlInput = document.getElementById('wsUrl');
 		const nickInput = document.getElementById('nickInput');
@@ -1606,8 +1599,6 @@
 		const typingEl = document.getElementById('typingIndicator');
 		if (typingEl) typingEl.textContent = '';
 		saslPending = false;
-
-		// 防重入保护：日志/消息/重连逻辑只执行一次
 		if (isDisconnecting) {
 			isDisconnecting = false;
 			return;
@@ -1647,7 +1638,7 @@
 			setTimeout(() => {
 				if (!isConnected && autoReconnect) {
 					writeToLog(`[RECONNECT] Attempt ${reconnectAttempts}/${maxReconnectAttempts} starting now...`);
-					doConnect(true); // isAutoReconnect=true，不重置重连计数
+					doConnect(true); 
 				} else {
 					writeToLog(`[RECONNECT] Skipped — already connected or auto-reconnect cancelled`);
 				}
@@ -1695,7 +1686,6 @@
 			input.value = messageHistory[historyIndex];
 			updateCharCount();
 		} else if (historyIndex === 0) {
-			// 已在第一条，不再向上移动，但保持显示
 			input.value = messageHistory[0] || "";
 			updateCharCount();
 		}
@@ -2148,7 +2138,6 @@
 		});
 	user.appendChild(tmp);
 	channel.userlist.appendChild(user);
-	// 同步更新 users 数组，保持 DOM 与数据一致
 	if (channel.users) {
 		channel.users.push([prefix || " ", nick]);
 	}
@@ -2228,9 +2217,6 @@ const Channel_AppendUser = channelAppendUser;
 		const renderedMessage = mircAndLinkify(message || "");
 		let pre = document.createElement("p");
 		pre.style.color = color;
-
-		// 优先使用服务器提供的时间标签 (time=YYYY-MM-DDThh:mm:ss.sssZ)
-		// 如无服务器时间则降级使用本地时间
 		let displayTime;
 		if (serverTime) {
 			try {
@@ -2238,7 +2224,7 @@ const Channel_AppendUser = channelAppendUser;
 				if (!isNaN(d.getTime())) {
 					displayTime = d.toISOString().substr(11, 8);
 				}
-			} catch (e) { /* 解析失败则忽略 */ }
+			} catch (e) { }
 		}
 		if (!displayTime) {
 			const now = new Date();
@@ -2656,7 +2642,7 @@ const Channel_AppendUser = channelAppendUser;
 	}
 
 	function splitIRCMessage(message) {
-		const MAX_BYTES = 512; // IRC 规范：整条消息（含 \r\n）不超过 512 字节
+		const MAX_BYTES = 512;
 
 		const isPrivmsg = message.startsWith("privmsg ");
 		const fullMessage = message + "\r\n";
@@ -2671,7 +2657,7 @@ const Channel_AppendUser = channelAppendUser;
 
 		const baseCommand = message.substring(0, colonIndex + 1);
 		const messageContent = message.substring(colonIndex + 1);
-		const baseBytes = byteLength(baseCommand) + 2; // +2 for \r\n
+		const baseBytes = byteLength(baseCommand) + 2;
 		const maxContentBytes = MAX_BYTES - baseBytes;
 
 		if (byteLength(messageContent) <= maxContentBytes) {
@@ -2966,25 +2952,20 @@ const Channel_AppendUser = channelAppendUser;
 		'+': { symbol: '+', name: 'voice', color: 'var(--clr-gold)' }
 	};
 
-	// IRCv3 spec: https://ircv3.net/specs/extensions/message-tags
-	// 消息格式: @key=val;key2=val2 :prefix COMMAND [params...]
-	// 标签转义规则: \: → ; | \s → 空格 | \\ → \ | \r → CR | \n → LF
-
 	/**
-	 * 解码单个消息标签值的 IRCv3 转义序列
-	 * @param {string} val 原始标签值字符串
-	 * @returns {string} 解码后的字符串
+	 * @param {string} val 
+	 * @returns {string} 
 	 */
 	function unescapeTagValue(val) {
 		if (!val) return "";
 		return val
 			.replace(/\\:/g, ';')
 			.replace(/\\s/g, ' ')
-			.replace(/\\\\/g, '\x00')  // 先占位，防止二次替换
+			.replace(/\\\\/g, '\x00')
 			.replace(/\\r/g, '\r')
 			.replace(/\\n/g, '\n')
 			.replace(/\x00/g, '\\')
-			.replace(/\\./g, '');      // 未知转义序列，去掉反斜杠
+			.replace(/\\./g, '');
 	}
 
 	/**
@@ -3011,9 +2992,7 @@ const Channel_AppendUser = channelAppendUser;
 	}
 
 	/**
-	 * 从原始 IRC 消息行中提取 IRCv3 消息标签
-	 * 如果消息以 '@' 开头，则解析并剥离标签部分
-	 * @param {string} rawLine 原始消息行（已去掉末尾 \r\n）
+	 * @param {string} rawLine 
 	 * @returns {{ tags: Map<string, string|boolean>, rest: string }}
 	 */
 	function extractMsgTags(rawLine) {
