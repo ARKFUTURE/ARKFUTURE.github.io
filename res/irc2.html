@@ -1016,6 +1016,8 @@
 	body.embedded .typing-indicator { display: none; }
 	/* 嵌入模式：禁用手机媒体查询里的 fixed 输入框，避免触发父页面 viewport 重算 */
 	body.embedded .input-container { position: static !important; }
+	/* 嵌入模式：取消手机媒体查询为 fixed 输入框预留的 padding-bottom */
+	body.embedded .irc-chat { padding-bottom: 0 !important; }
 	/* tabbar */
 	body.embedded .channel { padding: 0 8px; font-size: 11px; }
 	body.embedded .channels { padding: 0 70px 0 6px; }
