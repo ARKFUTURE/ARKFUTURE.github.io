@@ -1645,13 +1645,14 @@
 			const delay = reconnectDelay * reconnectAttempts;
 			writeToLog(`[RECONNECT] Attempt ${reconnectAttempts}/${maxReconnectAttempts} scheduled in ${Math.floor(delay / 1000)}s — server: ${wsUrl}`);
 			setTimeout(() => {
-				if (!isConnected && autoReconnect) {
-					writeToLog(`[RECONNECT] Attempt ${reconnectAttempts}/${maxReconnectAttempts} starting now...`);
-					doConnect(true);
-				} else {
-					writeToLog(`[RECONNECT] Skipped — already connected or auto-reconnect cancelled`);
-				}
-			}, delay);
+			setTimeout(() => {
+			if (!isConnected && autoReconnect) {
+				writeToLog(`[RECONNECT] Attempt ${reconnectAttempts}/${maxReconnectAttempts} starting now...`);
+				doConnect(true); // isAutoReconnect=true，不重置重连计数
+			} else {
+				writeToLog(`[RECONNECT] Skipped — already connected or auto-reconnect cancelled`);
+			}
+		}, delay);
 		} else if (autoReconnect && reconnectAttempts >= maxReconnectAttempts) {
 			writeToLog(`[RECONNECT] Max attempts reached (${maxReconnectAttempts}/${maxReconnectAttempts}) — giving up`);
 			autoReconnect = false;
