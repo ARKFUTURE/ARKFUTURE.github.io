@@ -1693,15 +1693,9 @@
 		}
 	}
 
-	// Pill button handler:
-	// - Not connected → open settings drawer so user can fill in server/nick then connect
-	// - Connected      → disconnect immediately (same as main button)
+	// Pill button handler: directly toggle connection (same as main connect/disconnect button)
 	function connPillClick() {
-		if (isConnected) {
-			toggleConnection();
-		} else {
-			toggleSettings();
-		}
+		toggleConnection();
 	}
 
 	function validateNickname(nick) {
@@ -1847,6 +1841,10 @@
 
 		const joinChannelBtn = document.getElementById('joinChannelBtn');
 		if (joinChannelBtn) joinChannelBtn.disabled = true;
+
+		// Hide input box on disconnect
+		const inputContainer = document.getElementById('inputContainer');
+		if (inputContainer) inputContainer.style.display = 'none';
 
 		updateConnectionStatus('disconnected');
 
