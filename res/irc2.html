@@ -1129,7 +1129,7 @@
 			<span id="statusText"></span>
 		</div>
 		<!-- Quick connect/disconnect pill button (always visible in toolbar) -->
-		<button class="conn-pill" id="connPillBtn" onclick="toggleConnection()" title="Connect / Disconnect">
+		<button class="conn-pill" id="connPillBtn" onclick="connPillClick()" title="Connect / Disconnect">
 			<span class="conn-pill__dot"></span>
 			<span class="conn-pill__label" id="connPillLabel">CONNECT</span>
 		</button>
@@ -1192,7 +1192,6 @@
 		</div>
 		<input type="checkbox" id="autoReconnect" style="display:none;">
 		<div class="irc-settings__actions">
-			<span class="settings-connect-hint">Changes apply on next connect</span>
 			<button class="btn connect-btn" id="connectBtn" onclick="toggleConnection()">Connect</button>
 		</div>
 	</div>
@@ -1694,6 +1693,17 @@
 		}
 	}
 
+	// Pill button handler:
+	// - Not connected → open settings drawer so user can fill in server/nick then connect
+	// - Connected      → disconnect immediately (same as main button)
+	function connPillClick() {
+		if (isConnected) {
+			toggleConnection();
+		} else {
+			toggleSettings();
+		}
+	}
+
 	function validateNickname(nick) {
 		if (!nick || nick.trim() === "") return false;
 		return /^[a-zA-Z_\\`\[\]{}^|][a-zA-Z0-9_\\`\[\]{}^|-]*$/.test(nick);
@@ -1846,11 +1856,11 @@
 		const typingEl = document.getElementById('typingIndicator');
 		if (typingEl) typingEl.textContent = '';
 		saslPending = false;
+
+		const wasUserDisconnect = isDisconnecting;
 		if (isDisconnecting) {
 			isDisconnecting = false;
-			return;
 		}
-		isDisconnecting = true;
 
 		stopKeepAlive();
 		writeToLog(`[SYSTEM] ── Disconnect handler ────────────────────`);
@@ -1867,7 +1877,7 @@
 		let disconnectMessage = "DISCONNECTED";
 		let logMessage = "[SYSTEM] Connection closed";
 
-		if (reason === "user") {
+		if (reason === "user" || wasUserDisconnect) {
 			disconnectMessage = "用户主动断开连接";
 			logMessage = "[SYSTEM] User-initiated disconnect";
 		} else if (reason === "error") {
@@ -1877,6 +1887,9 @@
 
 		writeToScreen("var(--clr-font)", disconnectMessage, statusChannel, "");
 		writeToLog(logMessage);
+
+		// Skip auto-reconnect for user-initiated disconnects
+		if (wasUserDisconnect) return;
 
 		if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
 			reconnectAttempts++;
@@ -4800,6 +4813,7 @@ const Channel_AppendUser = channelAppendUser;
 	}
 
 	window.toggleConnection      = toggleConnection;
+	window.connPillClick         = connPillClick;
 	window.toggleHeaderMenu      = toggleHeaderMenu;
 	window.toggleSettings        = toggleSettings;
 	window.toggleLog             = toggleLog;
