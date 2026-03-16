@@ -1013,6 +1013,8 @@
 	body.embedded #input { padding: 4px 8px; font-size: 12px; }
 	body.embedded .send-btn { padding: 4px 9px; font-size: 10px; letter-spacing: .4px; }
 	body.embedded .typing-indicator { display: none; }
+	/* 嵌入模式：禁用手机媒体查询里的 fixed 输入框，避免触发父页面 viewport 重算 */
+	body.embedded .input-container { position: static !important; }
 	/* tabbar */
 	body.embedded .channel { padding: 0 8px; font-size: 11px; }
 	body.embedded .channels { padding: 0 70px 0 6px; }
