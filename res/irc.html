@@ -1244,10 +1244,10 @@
 	}
 
 	function updateAutoReconnectMenuItem() {
-		const menuItems = document.querySelectorAll('.header-menu-item');
 		const autoReconnectCheckbox = document.getElementById('autoReconnect');
-		if (menuItems.length >= 4 && autoReconnectCheckbox) {
-			const menuItem = menuItems[3];
+		// 精确匹配调用 toggleAutoReconnect() 的菜单项，避免硬编码索引
+		const menuItem = document.querySelector('.header-menu-item[onclick="toggleAutoReconnect()"]');
+		if (menuItem && autoReconnectCheckbox) {
 			if (autoReconnectCheckbox.checked) {
 				menuItem.classList.add('active');
 			} else {
@@ -1966,6 +1966,9 @@
 		if (!PrefixChars || !PrefixChars[1]) return 0;
 		let aIndex = PrefixChars[1].indexOf(user_a[0][0]);
 		let bIndex = PrefixChars[1].indexOf(user_b[0][0]);
+		// indexOf 返回 -1 表示无前缀（普通用户），应排在所有有前缀用户之后
+		if (aIndex === -1) aIndex = Infinity;
+		if (bIndex === -1) bIndex = Infinity;
 		return aIndex - bIndex;
 	}
 
@@ -3611,13 +3614,11 @@ const Channel_AppendUser = channelAppendUser;
 		}
 	});
 	Commands.set("332", function (nick, data) {
-		if (!data || data.length < 5) return;
+		if (!data || data.length < 4) return;
 		let channel = findChannel(data[3]);
 		if (!channel || !channel.topic) return;
-		let text = data[4].substring(1);
-		for (let i = 5; i < data.length; i++) {
-			text += " " + data[i];
-		}
+		// data[4] 可能不存在（无主题时服务器可能省略），统一处理
+		let text = data.length >= 5 ? data.slice(4).join(' ').replace(/^:/, '') : '';
 		channel.topic.textContent = text || "No topic set";
 		writeToLog(`[IRC] RPL_TOPIC (332): channel=${data[3]} topic="${text}"`);
 	});
@@ -4033,7 +4034,6 @@ const Channel_AppendUser = channelAppendUser;
 	if (data[0] === "PING") {
 		const pingToken = data[1] ? data[1].replace(/^:/, '') : 'pong';
 		const pongResponse = "PONG :" + pingToken.trim();
-		writeToScreen("var(--clr-brown)", "PING → " + pongResponse, statusChannel, "");
 		doSend(pongResponse);
 		writeToLog(`[PING/PONG] ${pongResponse}`);
 		return;
