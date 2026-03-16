@@ -1204,13 +1204,11 @@
 			headerMenuClickListener = null;
 			menu.classList.remove('menu-attached');
 		}
-	if (menu.classList.contains('visible')) {
-		headerMenuClickListener = closeHeaderMenuOnClickOutside;
-		menu.classList.add('menu-attached');
-		setTimeout(() => {
+		if (menu.classList.contains('visible')) {
+			headerMenuClickListener = closeHeaderMenuOnClickOutside;
+			menu.classList.add('menu-attached');
 			document.addEventListener('click', headerMenuClickListener);
-		}, 0);
-	}
+		}
 	}
 
 	function closeHeaderMenuOnClickOutside(event) {
@@ -1353,46 +1351,29 @@
 		return _logOutputEl;
 	}
 
-	// 日志批处理队列：收集本帧所有日志，下一帧统一写入 DOM，避免频繁同步 DOM 操作卡死 UI
-	let _logQueue = [];
-	let _logFlushPending = false;
-	function _flushLogQueue() {
-		_logFlushPending = false;
-		if (_logQueue.length === 0) return;
-		const logOutput = getLogOutput();
-		if (!logOutput) { _logQueue = []; return; }
-		const frag = document.createDocumentFragment();
-		for (const { fullMessage, color } of _logQueue) {
-			const line = document.createElement('span');
-			line.style.color = color;
-			line.textContent = fullMessage;
-			frag.appendChild(line);
-		}
-		_logQueue = [];
-		logOutput.appendChild(frag);
-		// 超出上限时裁剪
-		while (logOutput.children.length > 500) {
-			logOutput.removeChild(logOutput.firstChild);
-		}
-		logOutput.scrollTop = logOutput.scrollHeight;
-	}
-
 	function writeToLog(message) {
+		const logOutput = getLogOutput();
 		const now = new Date();
 		const ts = now.toISOString().replace('T', ' ').substring(0, 23) + 'Z';
 		const fullMessage = `[${ts}] ${message}`;
 
-		const tagMatch = message.match(/^\[([^\]]+)\]/);
-		let color = '#e0e0e0';
+		if (logOutput) {
+			const tagMatch = message.match(/^\[([^\]]+)\]/);
+			const line = document.createElement('span');
 		if (tagMatch) {
 			const tag = tagMatch[1].toUpperCase();
 			const firstSeg = tag.split(/[\s\/]/)[0];
-			color = LOG_COLORS[tag] || LOG_COLORS[firstSeg] || '#e0e0e0';
-		}
-		_logQueue.push({ fullMessage, color });
-		if (!_logFlushPending) {
-			_logFlushPending = true;
-			requestAnimationFrame(_flushLogQueue);
+				line.style.color = LOG_COLORS[tag] || LOG_COLORS[firstSeg] || '#e0e0e0';
+			} else {
+				line.style.color = '#e0e0e0';
+			}
+			line.textContent = fullMessage;
+			logOutput.appendChild(line);
+
+			while (logOutput.children.length > 500) {
+				logOutput.removeChild(logOutput.firstChild);
+			}
+			logOutput.scrollTop = logOutput.scrollHeight;
 		}
 
 		console.log(fullMessage);
