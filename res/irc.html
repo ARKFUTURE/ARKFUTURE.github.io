@@ -10,75 +10,112 @@
 	<meta http-equiv="Expires" content="0">
 	<title>IRC Web Client</title>
 	<style>
-	/* ── Variables ─────────────────────────────────────── */
 	:root {
-		--cyber-primary:   #00f0ff;
-		--cyber-secondary: #ff00ff;
-		--cyber-accent:    #ffff00;
-		--cyber-green:     #00ff00;
-		--cyber-red:       #ff0040;
-		--cyber-dark:      #0a0a0a;
-		--cyber-dark2:     #111111;
-		--cyber-dark3:     #1a1a1a;
-		--cyber-border:    #333333;
-		--cyber-text:      #e0e0e0;
-		--cyber-text-dim:  #888888;
+		--c-cyan:    #00e5ff;
+		--c-magenta: #e040fb;
+		--c-yellow:  #ffd740;
+		--c-green:   #69ff47;
+		--c-red:     #ff1744;
+		--c-orange:  #ff6d00;
 
-		--glow-primary:   0 0 10px #00f0ff, 0 0 20px #00f0ff40, 0 0 30px #00f0ff20;
-		--glow-secondary: 0 0 10px #ff00ff, 0 0 20px #ff00ff40, 0 0 30px #ff00ff20;
-		--glow-red:       0 0 10px #ff0040, 0 0 20px #ff004040;
+		--bg-base:   #0d0d0f;
+		--bg-raised: #141418;
+		--bg-overlay:#1a1a20;
+		--bg-hover:  #202028;
+		--bg-active: #252530;
 
-		--sp-xs: 4px;
-		--sp-sm: 8px;
-		--sp-md: 12px;
-		--sp-lg: 16px;
+		--bd-subtle:  #242430;
+		--bd-default: #2e2e3c;
+		--bd-strong:  #3a3a4a;
 
-		--transition: all 0.15s ease-out;
-		--font-mono: 'Courier New', 'Consolas', 'Monaco', monospace;
+		--tx-primary:  #e8e8f0;
+		--tx-secondary:#9898b0;
+		--tx-muted:    #55556a;
+		--tx-link:     var(--c-cyan);
 
-		/* semantic colour aliases used by JS writeToScreen() */
-		--clr-font:    var(--cyber-text);
-		--clr-info:    var(--cyber-primary);
-		--clr-success: var(--cyber-green);
-		--clr-warning: var(--cyber-accent);
-		--clr-error:   var(--cyber-red);
-		--clr-red:     var(--cyber-red);
-		--clr-green:   var(--cyber-green);
-		--clr-blue:    var(--cyber-primary);
-		--clr-purple:  var(--cyber-secondary);
-		--clr-gold:    var(--cyber-accent);
-		--clr-brown:   #cd853f;
-		--clr-accent:     var(--cyber-accent);
-		--clr-secondary:  var(--cyber-secondary);
+		--glow-cyan:    0 0 8px rgba(0,229,255,.5), 0 0 20px rgba(0,229,255,.2);
+		--glow-magenta: 0 0 8px rgba(224,64,251,.5), 0 0 20px rgba(224,64,251,.2);
+		--glow-green:   0 0 8px rgba(105,255,71,.5), 0 0 20px rgba(105,255,71,.2);
+		--glow-red:     0 0 8px rgba(255,23,68,.5),  0 0 20px rgba(255,23,68,.2);
+
+		--sp-1: 4px;
+		--sp-2: 8px;
+		--sp-3: 12px;
+		--sp-4: 16px;
+		--sp-5: 20px;
+		--sp-6: 24px;
+
+		--font-ui:   -apple-system, 'Segoe UI', system-ui, sans-serif;
+		--font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+		--font-size-xs:  10px;
+		--font-size-sm:  11px;
+		--font-size-md:  13px;
+		--font-size-lg:  15px;
+
+		--sidebar-w: 220px;
+		--panel-w:   260px;
+		--header-h:  48px;
+		--tabbar-h:  36px;
+		--input-h:   56px;
+
+		--radius-sm: 4px;
+		--radius-md: 6px;
+		--radius-lg: 10px;
+		--transition: all 0.18s cubic-bezier(.4,0,.2,1);
+
+		/* JS colour aliases – DO NOT REMOVE */
+		--cyber-primary:   var(--c-cyan);
+		--cyber-secondary: var(--c-magenta);
+		--cyber-accent:    var(--c-yellow);
+		--cyber-green:     var(--c-green);
+		--cyber-red:       var(--c-red);
+		--cyber-dark:      var(--bg-base);
+		--cyber-dark2:     var(--bg-raised);
+		--cyber-dark3:     var(--bg-overlay);
+		--cyber-border:    var(--bd-default);
+		--cyber-text:      var(--tx-primary);
+		--cyber-text-dim:  var(--tx-secondary);
+		--glow-primary:    var(--glow-cyan);
+		--glow-secondary:  var(--glow-magenta);
+
+		--clr-font:       var(--tx-primary);
+		--clr-info:       var(--c-cyan);
+		--clr-success:    var(--c-green);
+		--clr-warning:    var(--c-yellow);
+		--clr-error:      var(--c-red);
+		--clr-red:        var(--c-red);
+		--clr-green:      var(--c-green);
+		--clr-blue:       var(--c-cyan);
+		--clr-purple:     var(--c-magenta);
+		--clr-gold:       var(--c-yellow);
+		--clr-brown:      #cd853f;
+		--clr-accent:     var(--c-yellow);
+		--clr-secondary:  var(--c-magenta);
+		--clr-text-dim:   var(--tx-secondary);
 	}
 
-	/* ── Reset ─────────────────────────────────────────── */
 	*, *::before, *::after {
 		box-sizing: border-box;
-		margin: 0;
-		padding: 0;
+		margin: 0; padding: 0;
 		user-select: text !important;
 		-webkit-user-select: text !important;
-		scrollbar-width: thin;
-		scrollbar-color: var(--cyber-border) var(--cyber-dark2);
 	}
-
-	::-webkit-scrollbar { width: 6px; height: 6px; }
-	::-webkit-scrollbar-track { background: var(--cyber-dark2); }
-	::-webkit-scrollbar-thumb { background: var(--cyber-border); }
-	::-webkit-scrollbar-thumb:hover { background: var(--cyber-primary); box-shadow: var(--glow-primary); }
+	::-webkit-scrollbar { width: 4px; height: 4px; }
+	::-webkit-scrollbar-track { background: transparent; }
+	::-webkit-scrollbar-thumb { background: var(--bd-strong); border-radius: 99px; }
+	::-webkit-scrollbar-thumb:hover { background: var(--c-cyan); }
+	* { scrollbar-width: thin; scrollbar-color: var(--bd-strong) transparent; }
 
 	html, body {
-		height: 100%;
-		overflow: hidden;
+		height: 100%; overflow: hidden;
 		font-family: var(--font-mono);
-		font-size: 13px;
-		line-height: 1.5;
-		background-color: var(--cyber-dark);
-		color: var(--cyber-text);
+		font-size: var(--font-size-md);
+		line-height: 1.6;
+		background: var(--bg-base);
+		color: var(--tx-primary);
+		-webkit-font-smoothing: antialiased;
 	}
 
-	/* ── App shell ─────────────────────────────────────── */
 	.irc-app {
 		display: flex;
 		flex-direction: column;
@@ -86,288 +123,341 @@
 		overflow: hidden;
 	}
 
-	/* ── Header ────────────────────────────────────────── */
 	.irc-header {
-		flex: 0 0 auto;
+		flex: 0 0 var(--header-h);
 		display: flex;
-		justify-content: space-between;
 		align-items: center;
-		padding: var(--sp-sm) var(--sp-lg);
-		background: var(--cyber-dark2);
-		border-bottom: 1px solid var(--cyber-border);
+		justify-content: space-between;
+		padding: 0 var(--sp-4);
+		background: var(--bg-raised);
+		border-bottom: 1px solid var(--bd-subtle);
+		gap: var(--sp-3);
+		z-index: 200;
+	}
+
+	.irc-header__left {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-3);
+		min-width: 0;
 	}
 
 	.irc-header__title {
-		font-size: 16px;
-		font-weight: 600;
-		color: var(--cyber-primary);
+		font-size: 14px;
+		font-weight: 700;
+		color: var(--c-cyan);
+		letter-spacing: 3px;
 		text-transform: uppercase;
-		letter-spacing: 2px;
-		text-shadow: var(--glow-primary);
+		white-space: nowrap;
+		text-shadow: 0 0 12px rgba(0,229,255,.6);
 	}
 
-	/* ── Header dropdown menu ──────────────────────────── */
-	.irc-menu {
-		position: relative;
-	}
-
-	.irc-menu__btn {
-		background: transparent;
-		color: var(--cyber-primary);
-		border: none;
-		padding: var(--sp-sm) var(--sp-md);
-		cursor: pointer;
-		font-size: 11px;
+	.connection-status {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 3px 10px;
+		background: var(--bg-overlay);
+		border: 1px solid var(--bd-default);
+		border-radius: 99px;
+		font-size: var(--font-size-xs);
 		font-family: var(--font-mono);
-		text-transform: uppercase;
-		letter-spacing: 1px;
+		letter-spacing: .5px;
+		white-space: nowrap;
 		transition: var(--transition);
 	}
+	.connection-status .indicator {
+		width: 7px; height: 7px;
+		border-radius: 50%;
+		background: var(--tx-muted);
+		flex-shrink: 0;
+		transition: var(--transition);
+	}
+	.connection-status.connected    { border-color: rgba(105,255,71,.4);  color: var(--c-green);  }
+	.connection-status.connecting   { border-color: rgba(255,215,64,.4);  color: var(--c-yellow); animation: pulse 1.2s ease infinite; }
+	.connection-status.disconnected { border-color: rgba(255,23,68,.35);  color: var(--c-red);   }
+	.connection-status.connected  .indicator { background: var(--c-green);  box-shadow: 0 0 6px var(--c-green); }
+	.connection-status.connecting .indicator { background: var(--c-yellow); box-shadow: 0 0 6px var(--c-yellow); animation: pulse 1.2s ease infinite; }
+	.connection-status.disconnected .indicator { background: var(--c-red); box-shadow: 0 0 6px var(--c-red); }
+
+	@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.45} }
+	@keyframes shake {
+		0%,100%{transform:translateX(0)}
+		20%{transform:translateX(-4px)} 40%{transform:translateX(4px)}
+		60%{transform:translateX(-3px)} 80%{transform:translateX(3px)}
+	}
+	@keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+	@keyframes slideIn { from{transform:translateX(8px);opacity:0} to{transform:translateX(0);opacity:1} }
+
+	.irc-header__right {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-2);
+		flex-shrink: 0;
+	}
+
+	.irc-menu { position: relative; }
+
+	.irc-menu__btn {
+		background: var(--bg-overlay);
+		color: var(--tx-secondary);
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-sm);
+		padding: 5px 12px;
+		cursor: pointer;
+		font-size: var(--font-size-sm);
+		font-family: var(--font-mono);
+		letter-spacing: .5px;
+		transition: var(--transition);
+		display: flex; align-items: center; gap: 5px;
+	}
 	.irc-menu__btn:hover {
-		color: var(--cyber-secondary);
-		text-shadow: var(--glow-secondary);
+		background: var(--bg-hover);
+		color: var(--c-cyan);
+		border-color: rgba(0,229,255,.35);
+	}
+
+	.settings-toggle-btn {
+		background: var(--bg-overlay);
+		color: var(--tx-secondary);
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-sm);
+		padding: 5px 12px;
+		cursor: pointer;
+		font-size: var(--font-size-sm);
+		font-family: var(--font-mono);
+		letter-spacing: .5px;
+		transition: var(--transition);
+		display: flex; align-items: center; gap: 5px;
+		white-space: nowrap;
+	}
+	.settings-toggle-btn:hover {
+		background: var(--bg-hover);
+		color: var(--c-cyan);
+		border-color: rgba(0,229,255,.35);
+	}
+	.settings-toggle-btn.active {
+		background: rgba(0,229,255,.1);
+		color: var(--c-cyan);
+		border-color: rgba(0,229,255,.5);
 	}
 
 	.irc-menu__dropdown {
 		display: none;
 		position: absolute;
-		top: calc(100% + 5px);
+		top: calc(100% + 6px);
 		right: 0;
-		min-width: 150px;
-		background: var(--cyber-dark2);
-		border: 1px solid var(--cyber-border);
-		box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+		min-width: 160px;
+		background: var(--bg-overlay);
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-md);
+		box-shadow: 0 8px 32px rgba(0,0,0,.6), 0 0 0 1px rgba(0,229,255,.06);
 		z-index: 9999;
-	}
-	.irc-menu__dropdown::before {
-		content: '';
-		position: absolute;
-		top: -6px; right: 10px;
-		width: 10px; height: 10px;
-		background: var(--cyber-dark2);
-		border: 1px solid var(--cyber-border);
-		border-bottom: none; border-right: none;
-		transform: rotate(45deg);
+		padding: 6px;
+		animation: fadeIn .15s ease;
 	}
 	.irc-menu__dropdown.visible { display: block; }
 
 	.header-menu-item {
 		cursor: pointer;
-		font-size: 11px;
+		font-size: var(--font-size-sm);
 		font-family: var(--font-mono);
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-		padding: 7px 14px;
-		color: var(--cyber-primary);
-		border: 1px solid var(--cyber-border);
-		margin: 4px 6px;
-		border-radius: 2px;
+		letter-spacing: .3px;
+		padding: 7px 12px;
+		color: var(--tx-secondary);
+		border-radius: var(--radius-sm);
 		transition: var(--transition);
-		display: flex;
-		align-items: center;
-		gap: 7px;
+		display: flex; align-items: center; gap: 8px;
 	}
-	.header-menu-item:last-child { }
-	.header-menu-item:nth-child(1) { color: var(--cyber-primary);   border-color: var(--cyber-primary);   --item-glow: var(--cyber-primary);   }
-	.header-menu-item:nth-child(2) { color: var(--cyber-secondary); border-color: var(--cyber-secondary); --item-glow: var(--cyber-secondary); }
-	.header-menu-item:nth-child(3) { color: var(--cyber-accent);    border-color: var(--cyber-accent);    --item-glow: var(--cyber-accent);    }
-	.header-menu-item:nth-child(4) { color: var(--cyber-green);     border-color: var(--cyber-green);     --item-glow: var(--cyber-green);     }
-	.header-menu-item:hover {
-		background: currentColor;
-		color: var(--cyber-dark) !important;
-		box-shadow: 0 0 8px var(--item-glow, var(--cyber-primary));
-		text-shadow: none;
-	}
+	.header-menu-item:hover { background: var(--bg-hover); color: var(--tx-primary); }
+	.header-menu-item:nth-child(1):hover { color: var(--c-cyan); }
+	.header-menu-item:nth-child(2):hover { color: var(--c-magenta); }
+	.header-menu-item:nth-child(3):hover { color: var(--c-yellow); }
+	.header-menu-item:nth-child(4):hover { color: var(--c-green); }
 	.header-menu-item.active {
-		background: var(--cyber-green);
-		border-color: var(--cyber-green);
-		color: var(--cyber-dark) !important;
-		text-shadow: none;
-		box-shadow: 0 0 8px var(--cyber-green);
+		background: rgba(105,255,71,.12);
+		color: var(--c-green);
 	}
+	.header-menu-item.active::before { content:'✓'; margin-right: 2px; }
 
-	/* ── Settings bar ──────────────────────────────────── */
 	.irc-settings {
 		flex: 0 0 auto;
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--sp-md);
-		padding: var(--sp-md) var(--sp-lg);
-		background: var(--cyber-dark2);
-		border-bottom: 1px solid var(--cyber-border);
-		align-items: center;
+		overflow: hidden;
+		max-height: 0;
+		transition: max-height .3s cubic-bezier(.4,0,.2,1), border-color .3s;
+		background: var(--bg-raised);
+		border-bottom: 1px solid transparent;
+	}
+	.irc-settings.open {
+		max-height: 200px;
+		border-bottom-color: var(--bd-subtle);
 	}
 
-	.irc-settings__inputs {
+	.irc-settings__inner {
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--sp-md);
-		align-items: center;
-		flex: 1;
-		min-width: 0;
-	}
-
-	.irc-settings__actions {
-		display: flex;
-		gap: var(--sp-md);
-		align-items: center;
-		flex: 0 0 auto;
+		align-items: flex-end;
+		gap: var(--sp-3) var(--sp-4);
+		padding: var(--sp-3) var(--sp-4);
 	}
 
 	.settings-group {
 		display: flex;
 		flex-direction: column;
-		gap: var(--sp-xs);
+		gap: 4px;
 		flex: 0 0 auto;
-		min-width: 140px;
-		max-width: 250px;
 	}
 	.settings-group label {
-		font-size: 10px;
-		color: var(--cyber-text-dim);
+		font-size: var(--font-size-xs);
+		color: var(--tx-muted);
 		text-transform: uppercase;
-		letter-spacing: 1px;
-		white-space: nowrap;
+		letter-spacing: .8px;
+		font-family: var(--font-ui);
 	}
 	.settings-group input[type="text"],
 	.settings-group input[type="password"] {
-		padding: var(--sp-sm) var(--sp-md);
-		background: var(--cyber-dark);
-		color: var(--cyber-text);
-		border: 1px solid var(--cyber-border);
-		font-size: 12px;
+		padding: 6px 10px;
+		background: var(--bg-base);
+		color: var(--tx-primary);
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-sm);
+		font-size: var(--font-size-sm);
 		font-family: var(--font-mono);
-		min-width: 140px;
-		max-width: 200px;
+		width: 170px;
 		transition: var(--transition);
 	}
-	.settings-group input[type="text"]:focus,
-	.settings-group input[type="password"]:focus {
+	.settings-group input:focus {
 		outline: none;
-		border-color: var(--cyber-primary);
-		box-shadow: var(--glow-primary);
+		border-color: rgba(0,229,255,.6);
+		box-shadow: 0 0 0 2px rgba(0,229,255,.12);
 	}
 	.settings-group input.input-error {
-		border-color: var(--cyber-red) !important;
-		box-shadow: var(--glow-red) !important;
-		animation: shake 0.35s ease;
-	}
-	@keyframes shake {
-		0%,100% { transform: translateX(0); }
-		20%      { transform: translateX(-4px); }
-		40%      { transform: translateX(4px); }
-		60%      { transform: translateX(-3px); }
-		80%      { transform: translateX(3px); }
+		border-color: var(--c-red) !important;
+		box-shadow: 0 0 0 2px rgba(255,23,68,.2) !important;
+		animation: shake .35s ease;
 	}
 
 	.settings-group__row {
 		display: flex;
-		gap: var(--sp-xs);
+		gap: var(--sp-1);
 		align-items: center;
 	}
-	.settings-group__row input {
-		flex: 1;
-		min-width: 0;
+	.settings-group__row input { flex: 1; min-width: 0; }
+
+	.irc-settings__actions {
+		display: flex;
+		gap: var(--sp-2);
+		align-items: center;
+		margin-left: auto;
+		flex-shrink: 0;
 	}
 
-	/* ── Buttons ───────────────────────────────────────── */
+	#saslGroup label, #saslPassGroup label { color: rgba(255,215,64,.7); }
+
 	.btn {
-		padding: var(--sp-sm) var(--sp-lg);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 5px;
+		padding: 6px 14px;
 		background: transparent;
-		color: var(--cyber-primary);
-		border: 1px solid var(--cyber-primary);
+		color: var(--c-cyan);
+		border: 1px solid rgba(0,229,255,.4);
+		border-radius: var(--radius-sm);
 		cursor: pointer;
-		font-size: 11px;
+		font-size: var(--font-size-sm);
 		font-family: var(--font-mono);
 		white-space: nowrap;
-		text-transform: uppercase;
-		letter-spacing: 1px;
+		letter-spacing: .3px;
 		transition: var(--transition);
 	}
 	.btn:hover {
-		background: var(--cyber-primary);
-		color: var(--cyber-dark);
-		box-shadow: var(--glow-primary);
+		background: rgba(0,229,255,.1);
+		border-color: var(--c-cyan);
+		color: var(--c-cyan);
+		box-shadow: var(--glow-cyan);
 	}
 	.btn:disabled {
-		border-color: var(--cyber-border);
-		color: var(--cyber-text-dim);
+		border-color: var(--bd-default);
+		color: var(--tx-muted);
 		cursor: not-allowed;
 	}
 	.btn:disabled:hover { background: transparent; box-shadow: none; }
 
-	.connect-btn { border-color: var(--cyber-green); color: var(--cyber-green); }
-	.connect-btn:hover { background: var(--cyber-green); box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff0040; }
-	.connect-btn.disconnect { border-color: var(--cyber-red); color: var(--cyber-red); }
-	.connect-btn.disconnect:hover { background: var(--cyber-red); box-shadow: var(--glow-red); }
+	.connect-btn {
+		color: var(--c-green);
+		border-color: rgba(105,255,71,.4);
+		background: rgba(105,255,71,.07);
+	}
+	.connect-btn:hover {
+		background: rgba(105,255,71,.18);
+		border-color: var(--c-green);
+		box-shadow: var(--glow-green);
+		color: var(--c-green);
+	}
+	.connect-btn.disconnect {
+		color: var(--c-red);
+		border-color: rgba(255,23,68,.4);
+		background: rgba(255,23,68,.07);
+	}
+	.connect-btn.disconnect:hover {
+		background: rgba(255,23,68,.18);
+		border-color: var(--c-red);
+		box-shadow: var(--glow-red);
+	}
 
 	.send-btn {
-		padding: var(--sp-sm) var(--sp-lg);
-		background: var(--cyber-primary);
-		color: var(--cyber-dark);
-		border: 1px solid var(--cyber-primary);
+		padding: 6px 18px;
+		background: rgba(0,229,255,.15);
+		color: var(--c-cyan);
+		border: 1px solid rgba(0,229,255,.5);
+		border-radius: var(--radius-sm);
 		cursor: pointer;
-		font-size: 11px;
+		font-size: var(--font-size-sm);
 		font-family: var(--font-mono);
 		white-space: nowrap;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		min-width: 60px;
+		letter-spacing: .5px;
 		transition: var(--transition);
+		flex-shrink: 0;
 	}
-	.send-btn:hover { background: var(--cyber-secondary); border-color: var(--cyber-secondary); box-shadow: var(--glow-secondary); }
-	.send-btn:disabled { background: var(--cyber-dark); border-color: var(--cyber-border); color: var(--cyber-text-dim); cursor: not-allowed; }
-
-	/* ── Connection status badge ───────────────────────── */
-	.connection-status {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--sp-sm);
-		padding: var(--sp-sm) var(--sp-lg);
-		background: var(--cyber-dark3);
-		border: 1px solid var(--cyber-border);
-		font-size: 10px;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		min-height: 32px;
-		flex: 0 0 auto;
-		transition: var(--transition);
+	.send-btn:hover {
+		background: rgba(0,229,255,.28);
+		border-color: var(--c-cyan);
+		box-shadow: var(--glow-cyan);
 	}
-	.connection-status .indicator {
-		width: 8px; height: 8px;
-		border-radius: 50%;
-		background: var(--cyber-border);
-		transition: var(--transition);
+	.send-btn:disabled {
+		background: var(--bg-base);
+		border-color: var(--bd-default);
+		color: var(--tx-muted);
+		cursor: not-allowed;
 	}
-	.connection-status.connected  { border-color: var(--cyber-green);  color: var(--cyber-green);  box-shadow: 0 0 10px #00ff0040; }
-	.connection-status.connecting { border-color: var(--cyber-accent);  color: var(--cyber-accent); animation: pulse 1s ease-in-out infinite; }
-	.connection-status.disconnected { border-color: var(--cyber-red);   color: var(--cyber-red); }
-	.connection-status.connected  .indicator { background: var(--cyber-green);  box-shadow: 0 0 10px #00ff00; }
-	.connection-status.connecting .indicator { background: var(--cyber-accent); box-shadow: 0 0 10px #ffff00; animation: pulse 1s ease-in-out infinite; }
-	.connection-status.disconnected .indicator { background: var(--cyber-red);  box-shadow: 0 0 10px #ff0040; }
 
-	@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-	/* ── SSL warning toast ─────────────────────────────── */
 	.ssl-warning {
 		display: none;
 		position: fixed;
-		bottom: 20px; right: 20px;
+		bottom: 24px; right: 24px;
 		max-width: 380px;
-		background: var(--cyber-dark2);
-		border: 1px solid var(--cyber-accent);
-		color: var(--cyber-text);
-		padding: var(--sp-md);
+		background: var(--bg-overlay);
+		border: 1px solid rgba(255,215,64,.5);
+		border-radius: var(--radius-md);
+		color: var(--tx-primary);
+		padding: var(--sp-3) var(--sp-4);
 		font-size: 12px;
-		line-height: 1.4;
+		line-height: 1.5;
 		z-index: 9000;
-		box-shadow: 0 0 20px rgba(255, 255, 0, 0.2);
+		box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 20px rgba(255,215,64,.1);
 	}
-	.ssl-warning.visible { display: block; }
-	.ssl-warning a { color: var(--cyber-primary); text-decoration: underline; cursor: pointer; }
-	.ssl-warning code { background: var(--cyber-dark3); padding: 2px 4px; border: 1px solid var(--cyber-border); font-family: var(--font-mono); }
+	.ssl-warning.visible { display: block; animation: slideIn .2s ease; }
+	.ssl-warning a { color: var(--c-cyan); text-decoration: underline; cursor: pointer; }
+	.ssl-warning code {
+		background: var(--bg-base);
+		padding: 1px 5px;
+		border: 1px solid var(--bd-default);
+		border-radius: 3px;
+		font-family: var(--font-mono);
+		font-size: 11px;
+	}
 
-	/* ── Chat area (fills remaining height) ────────────── */
 	.irc-chat {
 		flex: 1 1 auto;
 		display: flex;
@@ -377,135 +467,135 @@
 		min-height: 0;
 	}
 
-	/* ── Log overlay ───────────────────────────────────── */
 	.log-container {
 		display: none;
 		position: absolute;
 		inset: 0;
 		flex-direction: column;
-		background: var(--cyber-dark2);
-		border-bottom: 1px solid var(--cyber-primary);
-		box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+		background: rgba(13,13,15,.97);
+		border-bottom: 1px solid rgba(0,229,255,.2);
+		backdrop-filter: blur(4px);
 		z-index: 100;
 	}
-	.log-container.visible { display: flex; }
+	.log-container.visible { display: flex; animation: fadeIn .15s ease; }
 
 	.log-header {
 		flex: 0 0 auto;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: var(--sp-sm) var(--sp-md);
-		background: var(--cyber-dark3);
-		border-bottom: 1px solid var(--cyber-border);
-		font-size: 11px;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		color: var(--cyber-primary);
-		min-height: 30px;
-	}
-	.log-controls { display: flex; gap: var(--sp-xs); }
-	.log-controls button {
-		padding: 3px 8px;
-		background: transparent;
-		border: 1px solid var(--cyber-border);
-		color: var(--cyber-text-dim);
-		cursor: pointer;
-		font-size: 10px;
+		padding: 8px 14px;
+		background: var(--bg-raised);
+		border-bottom: 1px solid var(--bd-subtle);
+		font-size: var(--font-size-sm);
 		font-family: var(--font-mono);
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
+		color: var(--c-cyan);
+		letter-spacing: .5px;
+	}
+	.log-controls { display: flex; gap: 6px; }
+	.log-controls button {
+		padding: 3px 10px;
+		background: transparent;
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-sm);
+		color: var(--tx-muted);
+		cursor: pointer;
+		font-size: var(--font-size-xs);
+		font-family: var(--font-mono);
 		transition: var(--transition);
 	}
-	.log-controls button:hover {
-		border-color: var(--cyber-primary);
-		color: var(--cyber-primary);
-		box-shadow: var(--glow-primary);
-	}
+	.log-controls button:hover { border-color: var(--c-cyan); color: var(--c-cyan); }
 
 	#logOutput {
 		flex: 1 1 auto;
 		overflow-y: auto;
-		padding: var(--sp-sm);
-		font-size: 11px;
+		padding: var(--sp-2) var(--sp-3);
+		font-size: var(--font-size-sm);
 		font-family: var(--font-mono);
-		background: var(--cyber-dark3);
-		color: var(--cyber-text);
+		color: var(--tx-secondary);
 		word-wrap: break-word;
-		line-height: 1.5;
+		line-height: 1.6;
 	}
-	#logOutput span {
-		display: block;
-		white-space: pre-wrap;
-	}
-	#logOutput:empty::before { content: '[ NO DATA ]'; color: var(--cyber-text-dim); }
+	#logOutput span { display: block; white-space: pre-wrap; }
+	#logOutput:empty::before { content:'[ NO LOG DATA ]'; color: var(--tx-muted); font-size: 12px; }
 
-	/* ── Tab bar ───────────────────────────────────────── */
 	.channels {
-		flex: 0 0 auto;
+		flex: 0 0 var(--tabbar-h);
 		display: flex;
 		align-items: center;
-		gap: var(--sp-sm);
-		padding: var(--sp-xs) var(--sp-sm);
-		background: var(--cyber-dark2);
-		border-bottom: 1px solid var(--cyber-border);
+		gap: 3px;
+		padding: 0 var(--sp-3);
+		background: var(--bg-raised);
+		border-bottom: 1px solid var(--bd-subtle);
 		overflow-x: auto;
+		overflow-y: hidden;
 		flex-wrap: nowrap;
 	}
-	.channels::-webkit-scrollbar { height: 3px; }
+	.channels::-webkit-scrollbar { height: 2px; }
 
 	.channel {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--sp-xs);
-		padding: var(--sp-xs) var(--sp-md);
-		background: var(--cyber-dark3);
-		border: 1px solid var(--cyber-border);
+		gap: 5px;
+		padding: 0 12px;
+		height: calc(var(--tabbar-h) - 6px);
+		background: transparent;
+		border: 1px solid transparent;
+		border-radius: var(--radius-sm);
 		cursor: pointer;
-		font-size: 11px;
+		font-size: var(--font-size-sm);
 		font-family: var(--font-mono);
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
+		color: var(--tx-secondary);
 		white-space: nowrap;
 		position: relative;
 		transition: var(--transition);
+		letter-spacing: .2px;
 	}
-	.channel:hover { border-color: var(--cyber-primary); }
+	.channel:hover {
+		background: var(--bg-hover);
+		color: var(--tx-primary);
+	}
 	.channel.active {
-		background: var(--cyber-primary);
-		color: var(--cyber-dark);
-		border-color: var(--cyber-primary);
-		box-shadow: var(--glow-primary);
+		background: var(--bg-active);
+		color: var(--c-cyan);
+		border-color: rgba(0,229,255,.2);
+		box-shadow: inset 0 -2px 0 var(--c-cyan);
 	}
+	.channel.private { color: var(--tx-secondary); }
+	.channel.private.active { color: var(--c-magenta); border-color: rgba(224,64,251,.2); box-shadow: inset 0 -2px 0 var(--c-magenta); }
+
 	.channel .unread-badge {
 		position: absolute;
-		top: -4px; right: -4px;
-		background: var(--cyber-red);
-		color: var(--cyber-dark);
-		font-size: 9px;
+		top: 2px; right: 2px;
+		background: var(--c-red);
+		color: #fff;
+		font-size: 8px;
 		font-weight: 700;
-		padding: 1px 4px;
+		padding: 0 4px;
 		min-width: 14px;
+		height: 14px;
+		line-height: 14px;
 		text-align: center;
-		box-shadow: var(--glow-red);
+		border-radius: 99px;
+		box-shadow: 0 0 6px var(--c-red);
 	}
 	.channel button.x {
 		background: none;
 		border: none;
 		color: inherit;
 		cursor: pointer;
-		padding: 2px 4px;
-		font-size: 12px;
-		font-weight: bold;
+		padding: 0 2px;
+		font-size: 13px;
+		font-weight: 300;
 		line-height: 1;
-		opacity: 0.7;
-		transition: var(--transition);
+		opacity: 0;
+		transition: opacity .15s;
+		margin-left: 2px;
 	}
-	.channel button.x:hover { opacity: 1; }
-	.channel:not(.active) button.x { opacity: 0; }
-	.channel:not(.active):hover button.x { opacity: 0.5; }
+	.channel:hover button.x { opacity: .5; }
+	.channel.active button.x { opacity: .6; }
+	.channel button.x:hover { opacity: 1 !important; color: var(--c-red); }
 
-	/* ── Channel contents wrapper ──────────────────────── */
 	.channelcontents-wrapper {
 		flex: 1 1 auto;
 		display: flex;
@@ -523,7 +613,6 @@
 		min-height: 0;
 	}
 
-	/* ── Single channel pane ───────────────────────────── */
 	.channelcontent {
 		display: none;
 		flex: 1 1 auto;
@@ -532,220 +621,299 @@
 	}
 	.channelcontent.active { display: flex; }
 
-
 	.channelcontent > nav {
 		flex: 1 1 auto;
 		display: flex;
 		flex-direction: column;
-		background: var(--cyber-dark3);
-		border: 1px solid var(--cyber-border);
+		background: var(--bg-base);
 		overflow: hidden;
 		min-width: 0;
+		border-right: 1px solid var(--bd-subtle);
 	}
 
 	.channelcontent > nav > h3 {
 		flex: 0 0 auto;
 		display: flex;
 		align-items: center;
-		padding: var(--sp-sm) var(--sp-md);
-		background: var(--cyber-dark2);
-		border-bottom: 1px solid var(--cyber-border);
-		font-size: 12px;
-		min-height: 35px;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		color: var(--cyber-primary);
-		font-weight: 600;
+		padding: 0 var(--sp-4);
+		height: 36px;
+		background: var(--bg-raised);
+		border-bottom: 1px solid var(--bd-subtle);
+		font-size: var(--font-size-sm);
+		font-family: var(--font-mono);
+		color: var(--tx-secondary);
+		font-weight: 400;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.channelcontent > nav > h3::before {
+		content: '#';
+		color: var(--c-cyan);
+		margin-right: 6px;
+		font-weight: 700;
+		flex-shrink: 0;
 	}
 
 	.channelcontent > nav > nav {
 		flex: 1 1 auto;
 		overflow-y: auto;
-		padding: var(--sp-sm) var(--sp-md);
+		padding: var(--sp-3) var(--sp-4);
 		min-height: 0;
 	}
 
 	.channelcontent > nav > nav > p {
 		margin: 0;
-		padding: 2px 0;
-		line-height: 1.5;
+		padding: 1px 0;
+		line-height: 1.65;
 		word-wrap: break-word;
+		word-break: break-word;
+		font-size: var(--font-size-md);
+		border-radius: 2px;
+		transition: background .12s;
+	}
+	.channelcontent > nav > nav > p:hover {
+		background: rgba(255,255,255,.025);
 	}
 
 	.channelcontent > ul {
-		flex: 0 0 200px;
+		flex: 0 0 var(--panel-w);
 		overflow-y: auto;
-		padding: var(--sp-sm);
+		padding: var(--sp-2);
 		list-style: none;
-		background: var(--cyber-dark2);
-		border-left: 1px solid var(--cyber-border);
+		background: var(--bg-raised);
 		min-height: 0;
 	}
 
 	.channelcontent > ul > li {
 		display: flex;
 		align-items: center;
-		gap: var(--sp-sm);
-		padding: var(--sp-xs) var(--sp-sm);
-		margin: 1px 0;
-		font-size: 11px;
+		gap: var(--sp-2);
+		padding: 5px var(--sp-2);
+		border-radius: var(--radius-sm);
+		font-size: var(--font-size-sm);
 		cursor: pointer;
 		transition: var(--transition);
 	}
-	.channelcontent > ul > li:hover { background: var(--cyber-dark3); }
+	.channelcontent > ul > li:hover { background: var(--bg-hover); }
 
-	.channelcontent > ul > li > p:first-child {
-		width: 18px;
+	.channelcontent > ul > li::before {
+		content: attr(data-initial);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 26px; height: 26px;
+		border-radius: 50%;
+		background: var(--bd-default);
+		color: var(--tx-secondary);
+		font-size: 10px;
+		font-weight: 700;
 		flex-shrink: 0;
-		text-align: center;
-		font-weight: bold;
-		color: var(--cyber-secondary);
-		margin: 0;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		letter-spacing: 0;
+		text-transform: uppercase;
 	}
 
+	.channelcontent > ul > li > p:first-child {
+		width: 14px;
+		flex-shrink: 0;
+		text-align: center;
+		font-weight: 700;
+		font-size: 12px;
+		margin: 0;
+		overflow: hidden;
+	}
 	.channelcontent > ul > li > p:nth-child(2) {
 		flex: 1;
 		margin: 0;
-		color: var(--cyber-text);
+		color: var(--tx-primary);
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-		cursor: pointer;
+		font-size: var(--font-size-sm);
 	}
 	.channelcontent > ul > li > p:nth-child(2):hover {
-		color: var(--cyber-primary);
-		text-decoration: underline;
+		color: var(--c-cyan);
 	}
 
-	/* ── Empty state ───────────────────────────────────── */
+	.channelcontent > ul > li[data-prefix="~"] > p:first-child { color: var(--c-magenta); }
+	.channelcontent > ul > li[data-prefix="~"]::before { background: rgba(224,64,251,.2); color: var(--c-magenta); }
+	.channelcontent > ul > li[data-prefix="&"] > p:first-child { color: var(--c-red); }
+	.channelcontent > ul > li[data-prefix="&"]::before { background: rgba(255,23,68,.2); color: var(--c-red); }
+	.channelcontent > ul > li[data-prefix="@"] > p:first-child { color: var(--c-yellow); }
+	.channelcontent > ul > li[data-prefix="@"]::before { background: rgba(255,215,64,.2); color: var(--c-yellow); }
+	.channelcontent > ul > li[data-prefix="%"] > p:first-child { color: var(--c-green); }
+	.channelcontent > ul > li[data-prefix="%"]::before { background: rgba(105,255,71,.2); color: var(--c-green); }
+	.channelcontent > ul > li[data-prefix="+"] > p:first-child { color: var(--c-cyan); }
+	.channelcontent > ul > li[data-prefix="+"]::before { background: rgba(0,229,255,.15); color: var(--c-cyan); }
+
 	.empty-state {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		height: 100%;
-		color: var(--cyber-text-dim);
+		color: var(--tx-muted);
 		text-align: center;
-		padding: var(--sp-lg);
+		padding: var(--sp-6);
+		gap: var(--sp-3);
+	}
+	.empty-state__icon {
+		font-size: 48px;
+		opacity: .25;
+		line-height: 1;
 	}
 	.empty-state h3 {
-		margin: 0 0 8px;
-		font-size: 14px;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		color: var(--cyber-primary);
+		font-size: 16px;
+		font-weight: 600;
+		color: var(--tx-secondary);
+		letter-spacing: .5px;
 	}
-	.empty-state p { margin: 0; font-size: 12px; }
+	.empty-state p { font-size: 12px; color: var(--tx-muted); line-height: 1.6; }
+	.empty-state__hint {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		margin-top: var(--sp-2);
+		padding: var(--sp-3) var(--sp-4);
+		background: var(--bg-raised);
+		border: 1px solid var(--bd-subtle);
+		border-radius: var(--radius-md);
+		font-size: var(--font-size-sm);
+		color: var(--tx-muted);
+		text-align: left;
+		min-width: 220px;
+	}
+	.empty-state__hint span { color: var(--c-cyan); font-weight: 600; }
 
-	/* ── Input bar ─────────────────────────────────────── */
 	.input-container {
 		flex: 0 0 auto;
 		display: flex;
+		flex-direction: column;
+		background: var(--bg-raised);
+		border-top: 1px solid var(--bd-subtle);
+	}
+
+	.typing-indicator {
+		flex: 0 0 auto;
+		height: 0;
+		overflow: hidden;
+		padding: 0 var(--sp-4);
+		font-size: var(--font-size-xs);
+		font-style: italic;
+		color: var(--tx-muted);
+		background: var(--bg-raised);
+		transition: height .2s ease, padding .2s ease;
+		display: flex;
 		align-items: center;
-		gap: var(--sp-sm);
-		padding: var(--sp-sm);
-		background: var(--cyber-dark3);
-		border-top: 1px solid var(--cyber-border);
+		gap: 6px;
+		white-space: nowrap;
+	}
+	.typing-indicator:not(:empty) {
+		height: 22px;
+		padding-top: 4px;
+		padding-bottom: 2px;
+	}
+	.typing-indicator::before {
+		content: '';
+		display: inline-block;
+		width: 6px; height: 6px;
+		border-radius: 50%;
+		background: var(--c-cyan);
+		animation: pulse 1.2s ease infinite;
+		flex-shrink: 0;
+	}
+	.typing-indicator:empty::before { display: none; }
+
+	.input-container__row {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-2);
+		padding: var(--sp-2) var(--sp-3);
+	}
+
+	.input-prefix {
+		flex-shrink: 0;
+		color: var(--tx-muted);
+		font-family: var(--font-mono);
+		font-size: var(--font-size-md);
+		user-select: none !important;
 	}
 
 	#input {
 		flex: 1;
-		padding: var(--sp-sm) var(--sp-md);
-		background: var(--cyber-dark);
-		color: var(--cyber-text);
-		border: 1px solid var(--cyber-border);
-		font-size: 13px;
+		padding: 8px 12px;
+		background: var(--bg-base);
+		color: var(--tx-primary);
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-sm);
+		font-size: var(--font-size-md);
 		font-family: var(--font-mono);
 		transition: var(--transition);
+		min-width: 0;
 	}
 	#input:focus {
 		outline: none;
-		border-color: var(--cyber-primary);
-		box-shadow: var(--glow-primary);
+		border-color: rgba(0,229,255,.5);
+		background: var(--bg-overlay);
+		box-shadow: 0 0 0 2px rgba(0,229,255,.1);
 	}
-	#input::placeholder { color: var(--cyber-text-dim); }
+	#input::placeholder { color: var(--tx-muted); }
 
 	.char-count {
-		flex: 0 0 auto;
-		padding: var(--sp-xs) var(--sp-sm);
-		font-size: 11px;
+		flex-shrink: 0;
+		font-size: var(--font-size-xs);
 		font-family: var(--font-mono);
-		color: var(--cyber-text-dim);
-		background: var(--cyber-dark);
-		border: 1px solid var(--cyber-border);
-		min-width: 60px;
-		text-align: center;
-		transition: var(--transition);
+		color: var(--tx-muted);
+		min-width: 52px;
+		text-align: right;
+		letter-spacing: .2px;
 	}
-	.char-count.warning { color: var(--cyber-accent); border-color: var(--cyber-accent); }
-	.char-count.danger  { color: var(--cyber-red);    border-color: var(--cyber-red);    box-shadow: var(--glow-red); }
+	.char-count.warning { color: var(--c-yellow); }
+	.char-count.danger  { color: var(--c-red); }
 
-	/* ── Responsive: tablet ────────────────────────────── */
+	.clickable-username {
+		cursor: pointer;
+		font-weight: 600;
+		color: var(--c-cyan);
+		transition: color .12s;
+	}
+	.clickable-username:hover { color: var(--c-magenta); text-decoration: underline; }
+
+	.channelcontent > ul > li.user-away { opacity: .4; }
+	.channelcontent > ul > li.user-away > p:nth-child(2) { font-style: italic; }
+
+	@media (max-width: 900px) {
+		:root { --panel-w: 180px; }
+	}
 	@media (max-width: 768px) {
-		.irc-settings {
-			flex-direction: column;
-			gap: var(--sp-sm);
-			padding: var(--sp-sm) var(--sp-md);
-		}
-		.irc-settings__inputs {
-			flex-direction: column;
+		:root { --panel-w: 0px; }
+		.channelcontent > ul {
+			flex: 0 0 auto;
 			width: 100%;
+			height: 18vh;
+			min-height: 70px;
+			border-left: none;
+			border-top: 1px solid var(--bd-subtle);
 		}
-		.irc-settings__actions { width: 100%; justify-content: space-between; }
-		.settings-group {
-			width: 100%;
-			min-width: unset;
-			max-width: unset;
-		}
+		.channelcontent { flex-direction: column; }
+		.channelcontent > nav { flex: 1 1 0%; min-height: 0; }
+		.irc-settings.open .irc-settings__inner { flex-direction: column; gap: var(--sp-2); }
+		.settings-group { width: 100%; }
 		.settings-group input[type="text"],
-		.settings-group input[type="password"] {
-			width: 100%;
-			min-width: unset;
-			max-width: unset;
-		}
-
-		.irc-header__title { font-size: 14px; }
-		.irc-menu__btn { font-size: 10px; padding: var(--sp-xs) var(--sp-sm); }
-
-		.connection-status { padding: 4px 8px; font-size: 9px; }
-		.connection-status span:last-child { display: none; }
-
+		.settings-group input[type="password"] { width: 100%; }
 		.irc-chat { padding-bottom: 56px; }
 		.input-container {
 			position: fixed;
 			bottom: 0; left: 0; right: 0;
 			z-index: 1000;
-			display: flex !important;
 		}
 		#input { font-size: 16px; }
-
-		.channelcontent { flex-direction: column; }
-		.channelcontent > nav { flex: 1 1 0%; overflow-y: auto; min-height: 0; }
-		.channelcontent > ul {
-			flex: 0 0 auto;
-			height: 20vh;
-			min-height: 80px;
-			border-left: none;
-			border-top: 1px solid var(--cyber-border);
-		}
-
-		.channel { font-size: 10px; padding: 4px 10px; }
-		.channel .unread-badge { top: -3px; right: -3px; font-size: 8px; padding: 1px 4px; min-width: 12px; }
 	}
-
-	/* ── Responsive: phone ─────────────────────────────── */
 	@media (max-width: 480px) {
-		.irc-header__title { font-size: 12px; }
-		.channelcontent > ul { flex: 0 0 100px; height: 100px; }
-		.log-header { padding: var(--sp-sm); }
-		.btn { padding: 6px 10px; font-size: 10px; }
-	}
-
-	@media (max-width: 360px) {
-		.channel { padding: 3px 6px; }
+		:root { --header-h: 44px; }
+		.irc-header__title { font-size: 12px; letter-spacing: 2px; }
+		.connection-status span:last-child { display: none; }
+		.channel { font-size: var(--font-size-xs); padding: 0 8px; }
 	}
 	</style>
 </head>
@@ -754,65 +922,84 @@
 	<div class="irc-app">
 
 	<header class="irc-header">
-		<h1 class="irc-header__title" id="caption">IRC Client</h1>
-			<div class="irc-menu">
-				<button class="irc-menu__btn header-menu-btn" onclick="toggleHeaderMenu()">菜单</button>
-				<div class="irc-menu__dropdown" id="headerMenuDropdown">
-					<div class="header-menu-item" onclick="toggleLog()">查看日志</div>
-					<div class="header-menu-item" onclick="showPrivateChatList()">私聊列表</div>
-					<div class="header-menu-item" onclick="showSSLWarning()">SSL帮助</div>
-					<div class="header-menu-item" onclick="toggleAutoReconnect()">自动重连</div>
-				</div>
+		<div class="irc-header__left">
+			<h1 class="irc-header__title" id="caption">IRC</h1>
+			<div class="connection-status disconnected" id="connectionStatus">
+				<span class="indicator"></span>
+				<span id="statusText">未连接</span>
 			</div>
-		</header>
+		</div>
 
-	<div class="irc-settings">
-			<div class="irc-settings__inputs">
-				<div class="settings-group">
-					<label for="wsUrl">WebSocket</label>
-					<input type="text" id="wsUrl" value="wss://irc.arkfuture.top:8097" placeholder="wss://irc.example.com:port/">
+		<div class="irc-header__right">
+			<button class="settings-toggle-btn" id="settingsToggleBtn" onclick="toggleSettings()">
+				⚙ 设置
+			</button>
+
+			<div class="irc-menu">
+				<button class="irc-menu__btn header-menu-btn" onclick="toggleHeaderMenu()">≡ 菜单</button>
+				<div class="irc-menu__dropdown" id="headerMenuDropdown">
+					<div class="header-menu-item" onclick="toggleLog()">📋 调试日志</div>
+					<div class="header-menu-item" onclick="showPrivateChatList()">💬 私聊列表</div>
+					<div class="header-menu-item" onclick="showSSLWarning()">🔒 SSL 帮助</div>
+					<div class="header-menu-item" onclick="toggleAutoReconnect()">🔄 自动重连</div>
 				</div>
-				<div class="settings-group">
-					<label for="nickInput">昵称</label>
-					<input type="text" id="nickInput" value="" placeholder="输入昵称">
-				</div>
-				<div class="settings-group">
-					<label for="channelInput">频道</label>
-					<div class="settings-group__row">
-						<input type="text" id="channelInput" value="#arkfuture_studio" placeholder="#channel">
-						<button class="btn" onclick="joinChannel()" id="joinChannelBtn" disabled
-							style="padding: var(--sp-xs) var(--sp-sm); font-size: 10px; min-width: 50px;">加入</button>
-					</div>
-				</div>
-			<input type="checkbox" id="autoReconnect" style="display:none;">
 			</div>
+		</div>
+	</header>
+
+	<div class="irc-settings" id="settingsPanel">
+		<div class="irc-settings__inner">
+			<div class="settings-group">
+				<label for="wsUrl">WebSocket 服务器</label>
+				<input type="text" id="wsUrl" value="wss://irc.arkfuture.top:8097" placeholder="wss://host:port">
+			</div>
+			<div class="settings-group">
+				<label for="nickInput">昵称</label>
+				<input type="text" id="nickInput" value="" placeholder="Your nickname">
+			</div>
+			<div class="settings-group">
+				<label for="channelInput">频道</label>
+				<div class="settings-group__row">
+					<input type="text" id="channelInput" value="#arkfuture_studio" placeholder="#channel">
+					<button class="btn" onclick="joinChannel()" id="joinChannelBtn" disabled
+						style="padding:5px 10px;font-size:11px;white-space:nowrap;">加入</button>
+				</div>
+			</div>
+			<!-- ── IRCv3 功能3: SASL ── -->
+			<div class="settings-group" id="saslGroup" title="SASL 认证账号">
+				<label for="saslAccountInput">SASL 账号</label>
+				<input type="text" id="saslAccountInput" value="" placeholder="账号 (可选)" autocomplete="username">
+			</div>
+			<div class="settings-group" id="saslPassGroup" title="SASL PLAIN 密码">
+				<label for="saslPasswordInput">SASL 密码</label>
+				<input type="password" id="saslPasswordInput" value="" placeholder="密码 (可选)" autocomplete="current-password">
+			</div>
+			<input type="checkbox" id="autoReconnect" style="display:none;">
 			<div class="irc-settings__actions">
 				<button class="btn connect-btn" id="connectBtn" onclick="toggleConnection()">连接</button>
-				<div class="connection-status disconnected" id="connectionStatus">
-					<span class="indicator"></span>
-					<span id="statusText">未连接</span>
-				</div>
 			</div>
 		</div>
+	</div>
 
 	<div class="ssl-warning" id="sslWarning">
-			<strong>浏览器无法忽略SSL证书错误!</strong> 请使用以下方案:<br>
-			1. 改用 <code>ws://</code> 非加密连接（如果浏览器支持）<br>
-			2. 在浏览器中访问 <a id="sslLink" target="_blank">服务器URL</a> 并手动信任证书
-		</div>
+		<strong>⚠ 浏览器无法忽略 SSL 证书错误</strong><br>
+		请使用以下方案：<br>
+		1. 改用 <code>ws://</code> 非加密连接<br>
+		2. 在浏览器中访问 <a id="sslLink" target="_blank">服务器地址</a> 并手动信任证书
+	</div>
 
 	<div class="irc-chat">
 
 		<div class="log-container" id="logContainer">
-				<div class="log-header">
-					<span>WebSocket 日志</span>
-					<div class="log-controls">
-						<button onclick="clearLog()">清空</button>
-						<button onclick="toggleLog()">关闭</button>
-					</div>
+			<div class="log-header">
+				<span>WebSocket 调试日志</span>
+				<div class="log-controls">
+					<button onclick="clearLog()">清空</button>
+					<button onclick="toggleLog()">关闭</button>
 				</div>
-				<div id="logOutput"></div>
 			</div>
+			<div id="logOutput"></div>
+		</div>
 
 		<div class="channels" id="channelsContainer"></div>
 
@@ -821,18 +1008,32 @@
 		</div>
 
 		<div class="empty-state" id="emptyState">
-			<h3>欢迎使用 IRC 客户端</h3>
-			<p>请先填写服务器信息并点击连接</p>
+			<div class="empty-state__icon">⌨</div>
+			<h3>IRC Web Client</h3>
+			<p>点击右上角 <strong>⚙ 设置</strong> 填写服务器信息后连接</p>
+			<div class="empty-state__hint">
+				<div>🔗 <span>WebSocket</span> — wss://host:port</div>
+				<div>👤 <span>昵称</span> — 设置你的显示名</div>
+				<div>📡 <span>频道</span> — #channel 回车加入</div>
+				<div>💡 <span>/help</span> — 查看所有命令</div>
+			</div>
 		</div>
 
 		<div class="input-container" id="inputContainer" style="display:none;">
-				<input type="text" name="input" id="input" placeholder="输入消息..."
-					onkeydown="onKeyDown(event)" oninput="updateCharCount()">
+			<!-- IRCv3 typing indicator -->
+			<div class="typing-indicator" id="typingIndicator"></div>
+			<div class="input-container__row">
+				<span class="input-prefix" id="inputPrefix">&gt;</span>
+				<input type="text" name="input" id="input"
+					placeholder="输入消息，/ 开头为命令，/help 查看帮助…"
+					onkeydown="onKeyDown(event)"
+					oninput="updateCharCount(); handleTypingInput();">
 				<button class="btn send-btn" id="sendBtn" onclick="send()">发送</button>
-				<div class="char-count" id="charCount">0/512</div>
+				<span class="char-count" id="charCount">0</span>
 			</div>
-
 		</div>
+
+	</div>
 	</div>
 </body>
 
@@ -866,6 +1067,11 @@
 	let sentCount = 0;
 	let recvCount = 0;
 
+	// IRCv3 batch/labeled-response 状态
+	let batchBuffer = new Map();   // ref → { type, params, messages }
+	let labelCounter = 0;
+	let pendingLabels = new Map(); // label → { description, ts }
+
 	function findChannel(channelName) {
 		if (!channelName) return null;
 		const lowerName = channelName.toLowerCase();
@@ -895,9 +1101,10 @@
 			const safeHash = url.hash.replace(/[^\w#&\-]/g, '').substring(0, 64);
 			if (safeHash) document.getElementById('channelInput').value = safeHash;
 		}
-		if (window.frameElement) {
-			document.getElementById("caption").style.display = "none";
-		}
+	if (window.frameElement) {
+		const captionEl = document.getElementById("caption");
+		if (captionEl) captionEl.style.display = "none";
+	}
 		updateConnectionStatus('disconnected');
 
 		if (input) {
@@ -927,7 +1134,8 @@
 				wsUrl: document.getElementById('wsUrl').value,
 				nickname: document.getElementById('nickInput').value,
 				channel: document.getElementById('channelInput').value,
-				autoReconnect: document.getElementById('autoReconnect').checked
+				autoReconnect: document.getElementById('autoReconnect').checked,
+				saslAccount: document.getElementById('saslAccountInput') ? document.getElementById('saslAccountInput').value : ''
 			};
 			localStorage.setItem('ircSettings', JSON.stringify(settings));
 		} catch (e) {
@@ -942,6 +1150,9 @@
 			if (settings.nickname) document.getElementById('nickInput').value = settings.nickname;
 			if (settings.channel) document.getElementById('channelInput').value = settings.channel;
 			if (settings.autoReconnect !== undefined) document.getElementById('autoReconnect').checked = settings.autoReconnect;
+			if (settings.saslAccount && document.getElementById('saslAccountInput')) {
+				document.getElementById('saslAccountInput').value = settings.saslAccount;
+			}
 		} catch (e) {
 			writeToLog(`[WARN] Failed to load settings: ${e.message}`);
 		}
@@ -972,6 +1183,14 @@
 
 	window.addEventListener("load", onLoad, false);
 
+	function toggleSettings() {
+		const panel = document.getElementById('settingsPanel');
+		const btn   = document.getElementById('settingsToggleBtn');
+		if (!panel) return;
+		const isOpen = panel.classList.toggle('open');
+		if (btn) btn.classList.toggle('active', isOpen);
+	}
+
 	function toggleHeaderMenu() {
 		const menu = document.getElementById('headerMenuDropdown');
 		if (!menu) return;
@@ -993,7 +1212,7 @@
 	function closeHeaderMenuOnClickOutside(event) {
 		const menu = document.getElementById('headerMenuDropdown');
 		const menuBtn = document.querySelector('.header-menu-btn');
-		if (menu && !menu.contains(event.target) && !menuBtn.contains(event.target)) {
+		if (menu && !menu.contains(event.target) && (!menuBtn || !menuBtn.contains(event.target))) {
 			menu.classList.remove('visible');
 			menu.classList.remove('menu-attached');
 			document.removeEventListener('click', closeHeaderMenuOnClickOutside);
@@ -1105,6 +1324,23 @@
 		'SYSTEM':         '#cccccc',
 		'PART':           '#ff8844',
 		'WEBSOCKET':      '#44ccff',
+		'MSGTAG':         '#99ccff',
+		'SASL':           '#ffaa55',
+		'AWAY':           '#aaaaaa',
+		'CHGHOST':        '#ddaaff',
+		'ACCOUNT':        '#88ffcc',
+		'ECHO':           '#ccff88',
+		'TYPING':         '#ffccaa',
+		'BATCH':          '#88ccff',
+		'MONITOR':        '#ffddaa',
+		'CHATHISTORY':    '#aaddff',
+		'INVITE':         '#ffaadd',
+		'LABELED':        '#ccddff',
+		'WHOX':           '#ddffaa',
+		'REACT':          '#ffddcc',
+		'REPLY':          '#ccffdd',
+		'FAIL':           '#ff8888',
+		'MULTILINE':      '#ddccff',
 	};
 
 	let _logOutputEl = null;
@@ -1222,7 +1458,7 @@
 		return /^wss?:\/\/.+/.test(url);
 	}
 
-	function doConnect() {
+	function doConnect(isAutoReconnect) {
 		const wsUrlInput = document.getElementById('wsUrl');
 		const nickInput = document.getElementById('nickInput');
 		const channelInput = document.getElementById('channelInput');
@@ -1240,6 +1476,33 @@
 		channelName = channelInput.value.trim();
 		autoReconnect = reconnectCheckbox ? reconnectCheckbox.checked : false;
 
+		const saslAccountInput = document.getElementById('saslAccountInput');
+		const saslPasswordInput = document.getElementById('saslPasswordInput');
+		saslAccount  = saslAccountInput  ? saslAccountInput.value.trim()  : "";
+		saslPassword = saslPasswordInput ? saslPasswordInput.value.trim() : "";
+		saslEnabled  = !!(saslAccount && saslPassword);
+		saslPending  = false;
+		if (saslEnabled) {
+			writeToLog(`[SASL] SASL PLAIN enabled for account: ${saslAccount}`);
+		}
+	ircv3ActiveCaps.clear();
+	ircv3ServerTime    = false;
+	ircv3EchoMessage   = false;
+	ircv3MessageTags   = false;
+	ircv3AccountTag    = false;
+	ircv3AwayNotify    = false;
+	ircv3AccountNotify = false;
+	ircv3ExtendedJoin  = false;
+	ircv3ChgHost       = false;
+	ircv3MultiPrefix   = false;
+	ircv3UserhostInNames = false;
+	ircv3Batch         = false;
+	ircv3LabeledResponse = false;
+	ircv3ChatHistory   = false;
+	ircv3InviteNotify  = false;
+	ircv3Multiline     = false;
+	ircv3Whox          = false;
+
 		if (!validateWsUrl(wsUrl)) {
 			writeToLog(`[ERROR] Invalid WebSocket URL: "${wsUrl}" — must start with ws:// or wss://`);
 			alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
@@ -1252,8 +1515,8 @@
 			writeToLog(`[SYSTEM] Nickname was empty — auto-generated: ${nickname}`);
 		}
 
-		if (!validateNickname(nickname)) {
-			writeToLog(`[ERROR] Invalid nickname: "${nickname}" — must start with a letter or [_\`[]{}^|]`);
+	if (!validateNickname(nickname)) {
+		writeToLog(`[ERROR] Invalid nickname: "${nickname}" — must start with a letter or [_\`[]{}^|]`);
 			nickInput.classList.add('input-error');
 			nickInput.focus();
 			nickInput.select();
@@ -1264,13 +1527,16 @@
 			nickInput.disabled = false;
 			return;
 		}
-		if (channelName && !channelName.startsWith('#')) {
-			channelName = '#' + channelName;
-			writeToLog(`[DEBUG] Channel name auto-prefixed with '#': ${channelName}`);
-		}
+	if (channelName && !channelName.startsWith('#')) {
+		channelName = '#' + channelName;
+		writeToLog(`[DEBUG] Channel name auto-prefixed with '#': ${channelName}`);
+	}
 
+	// 只有手动触发连接时才重置重连计数；自动重连时保持计数以正确限制次数
+	if (!isAutoReconnect) {
 		reconnectAttempts = 0;
-		wsUrlInput.disabled = true;
+	}
+	wsUrlInput.disabled = true;
 		nickInput.disabled = true;
 
 		connectBtn.textContent = '连接中...';
@@ -1295,6 +1561,11 @@
 		contentsWrapper.classList.add('visible');
 		if (emptyState) emptyState.style.display = 'none';
 		if (input) document.getElementById('inputContainer').style.display = 'flex';
+
+		const settingsPanel = document.getElementById('settingsPanel');
+		const settingsBtn   = document.getElementById('settingsToggleBtn');
+		if (settingsPanel) settingsPanel.classList.remove('open');
+		if (settingsBtn)   settingsBtn.classList.remove('active');
 
 		statusChannel = new Tab_Create("Status", "Status Window", false);
 		writeToLog(`[SYSTEM] Status tab created — calling WebSocket_Connect`);
@@ -1323,6 +1594,13 @@
 
 		updateConnectionStatus('disconnected');
 
+		if (typingInputTimer) { clearTimeout(typingInputTimer); typingInputTimer = null; }
+		typingLastSent = 0;
+		remoteTypingState.clear();
+		const typingEl = document.getElementById('typingIndicator');
+		if (typingEl) typingEl.textContent = '';
+		saslPending = false;
+
 		// 防重入保护：日志/消息/重连逻辑只执行一次
 		if (isDisconnecting) {
 			isDisconnecting = false;
@@ -1337,7 +1615,6 @@
 			writeToLog(`[SYSTEM] Session ended — duration: ${formatSessionDuration(sessionStartTime)} | sent: ${sentCount} | recv: ${recvCount}`);
 			sessionStartTime = null;
 		}
-
 
 		if (statusChannel) {
 			Tab_Show("Status");
@@ -1362,13 +1639,14 @@
 			const delay = reconnectDelay * reconnectAttempts;
 			writeToLog(`[RECONNECT] Attempt ${reconnectAttempts}/${maxReconnectAttempts} scheduled in ${Math.floor(delay / 1000)}s — server: ${wsUrl}`);
 			setTimeout(() => {
-				if (!isConnected && autoReconnect) {
-					writeToLog(`[RECONNECT] Attempt ${reconnectAttempts}/${maxReconnectAttempts} starting now...`);
-					doConnect();
-				} else {
-					writeToLog(`[RECONNECT] Skipped — already connected or auto-reconnect cancelled`);
-				}
-			}, delay);
+			setTimeout(() => {
+			if (!isConnected && autoReconnect) {
+				writeToLog(`[RECONNECT] Attempt ${reconnectAttempts}/${maxReconnectAttempts} starting now...`);
+				doConnect(true); // isAutoReconnect=true，不重置重连计数
+			} else {
+				writeToLog(`[RECONNECT] Skipped — already connected or auto-reconnect cancelled`);
+			}
+		}, delay);
 		} else if (autoReconnect && reconnectAttempts >= maxReconnectAttempts) {
 			writeToLog(`[RECONNECT] Max attempts reached (${maxReconnectAttempts}/${maxReconnectAttempts}) — giving up`);
 			autoReconnect = false;
@@ -1387,12 +1665,12 @@
 		const bytes = new TextEncoder().encode(text).length;
 		const maxBytes = 512;
 
-		charCount.textContent = `${bytes}/${maxBytes}`;
-
+		charCount.textContent = `${bytes}`;
 		charCount.classList.remove('warning', 'danger');
 
 		if (bytes > maxBytes) {
 			charCount.classList.add('danger');
+			charCount.textContent = `${bytes}!`;
 		} else if (bytes > maxBytes * 0.8) {
 			charCount.classList.add('warning');
 		}
@@ -1405,14 +1683,18 @@
 			e.preventDefault();
 			handleTabCompletion();
 			return false;
-		} else if (e.key === 'ArrowUp') {
-			e.preventDefault();
-			if (historyIndex > 0) {
-				historyIndex--;
-				input.value = messageHistory[historyIndex];
-				updateCharCount();
-			}
-			return false;
+	} else if (e.key === 'ArrowUp') {
+		e.preventDefault();
+		if (historyIndex > 0) {
+			historyIndex--;
+			input.value = messageHistory[historyIndex];
+			updateCharCount();
+		} else if (historyIndex === 0) {
+			// 已在第一条，不再向上移动，但保持显示
+			input.value = messageHistory[0] || "";
+			updateCharCount();
+		}
+		return false;
 		} else if (e.key === 'ArrowDown') {
 			e.preventDefault();
 			if (historyIndex < messageHistory.length - 1) {
@@ -1479,6 +1761,22 @@
 					channel.content.scrollTop = channel.content.scrollHeight;
 				}
 			}, 10);
+			if (typeof updateTypingIndicatorUI === 'function') {
+				updateTypingIndicatorUI(channel.name);
+			}
+			const prefixEl = document.getElementById('inputPrefix');
+			if (prefixEl) {
+				if (channel.isPrivate) {
+					prefixEl.textContent = '→ ' + channel.name;
+					prefixEl.style.color = 'var(--c-magenta)';
+				} else if (channel.name === 'Status') {
+					prefixEl.textContent = '»';
+					prefixEl.style.color = 'var(--tx-muted)';
+				} else {
+					prefixEl.textContent = channel.name;
+					prefixEl.style.color = 'var(--c-cyan)';
+				}
+			}
 		}
 	}
 	const Tab_Show = tabShow;
@@ -1597,30 +1895,26 @@
 		while (i < text.length) {
 			const ch = text[i];
 
-		if (ch === '\x02') {
-			applyFormat();
-			bold = !bold;
-			if (hasFormat()) openSpan();
-			i++; continue;
-		}
-		if (ch === '\x1D') {
-			applyFormat();
-			italic = !italic;
-			if (hasFormat()) openSpan();
-			i++; continue;
-		}
-		if (ch === '\x1F') {
-			applyFormat();
-			underline = !underline;
-			if (hasFormat()) openSpan();
-			i++; continue;
-		}
-		if (ch === '\x1E') {
-			applyFormat();
-			strike = !strike;
-			if (hasFormat()) openSpan();
-			i++; continue;
-		}
+	if (ch === '\x02') {
+		bold = !bold;
+		applyFormat();
+		i++; continue;
+	}
+	if (ch === '\x1D') {
+		italic = !italic;
+		applyFormat();
+		i++; continue;
+	}
+	if (ch === '\x1F') {
+		underline = !underline;
+		applyFormat();
+		i++; continue;
+	}
+	if (ch === '\x1E') {
+		strike = !strike;
+		applyFormat();
+		i++; continue;
+	}
 		if (ch === '\x0F') {
 			resetAll();
 			i++; continue;
@@ -1670,7 +1964,6 @@
 		return aIndex - bIndex;
 	}
 
-		// ── Tab class ────────────────────────────────────────
 	class Tab_Create {
 		constructor(name, topic, createlist) {
 			if (!name || !channels || !channelContents) {
@@ -1777,17 +2070,19 @@
 	function channelInsertUser(nick, channel, prefix) {
 		if (!nick || !channel || !channel.userlist) return;
 		const user = document.createElement("li");
+
+		const initial = nick.replace(/^[^a-zA-Z0-9]/, '')[0] || nick[0] || '?';
+		user.setAttribute('data-initial', initial.toUpperCase());
+
 		let tmp = document.createElement("p");
-		let nickColor = "";
 
 		if (prefix && prefix !== " ") {
 			const prefixChar = prefix[0];
 			const prefixInfo = DefaultPrefixMap[prefixChar];
+			user.setAttribute('data-prefix', prefixChar);
 			if (prefixInfo) {
 				tmp.textContent = prefixInfo.symbol;
-				tmp.style.color = prefixInfo.color;
 				tmp.title = prefixInfo.name;
-				nickColor = prefixInfo.color;
 			} else {
 				tmp.textContent = prefixChar;
 			}
@@ -1798,7 +2093,6 @@
 		tmp.textContent = nick;
 		tmp.title = "点击与 " + nick + " 私聊";
 		tmp.style.cursor = "pointer";
-		if (nickColor) tmp.style.color = nickColor;
 		tmp.addEventListener("click", function (e) {
 			e.stopPropagation();
 			openPrivateChat(nick);
@@ -1820,17 +2114,19 @@
 	function channelAppendUser(nick, channel, prefix) {
 		if (!nick || !channel || !channel.userlist) return;
 		const user = document.createElement("li");
+
+		const initial = nick.replace(/^[^a-zA-Z0-9]/, '')[0] || nick[0] || '?';
+		user.setAttribute('data-initial', initial.toUpperCase());
+
 		let tmp = document.createElement("p");
-		let nickColor = "";
 
 		if (prefix && prefix !== " ") {
 			const prefixChar = prefix[0];
 			const prefixInfo = DefaultPrefixMap[prefixChar];
+			user.setAttribute('data-prefix', prefixChar);
 			if (prefixInfo) {
 				tmp.textContent = prefixInfo.symbol;
-				tmp.style.color = prefixInfo.color;
 				tmp.title = prefixInfo.name;
-				nickColor = prefixInfo.color;
 			} else {
 				tmp.textContent = prefixChar;
 			}
@@ -1841,15 +2137,18 @@
 		tmp.textContent = nick;
 		tmp.title = "点击与 " + nick + " 私聊";
 		tmp.style.cursor = "pointer";
-		if (nickColor) tmp.style.color = nickColor;
 		tmp.addEventListener("click", function (e) {
 			e.stopPropagation();
 			openPrivateChat(nick);
 		});
-		user.appendChild(tmp);
-		channel.userlist.appendChild(user);
+	user.appendChild(tmp);
+	channel.userlist.appendChild(user);
+	// 同步更新 users 数组，保持 DOM 与数据一致
+	if (channel.users) {
+		channel.users.push([prefix || " ", nick]);
 	}
-	const Channel_AppendUser = channelAppendUser;
+}
+const Channel_AppendUser = channelAppendUser;
 
 	function channelRemoveUser(nick, channel) {
 		if (!nick || !channel || !channel.userlist) return false;
@@ -1919,34 +2218,57 @@
 	}
 	const Channel_UpdateUserPrefix = channelUpdateUserPrefix;
 
-	function writeToScreen(color, message, channel, username) {
+	function writeToScreen(color, message, channel, username, serverTime) {
 		if (!channel || !channel.content) return;
 		const renderedMessage = mircAndLinkify(message || "");
 		let pre = document.createElement("p");
 		pre.style.color = color;
-		const now = new Date();
-		const utcTime = now.toISOString().substr(11, 8);
+
+		// 优先使用服务器提供的时间标签 (time=YYYY-MM-DDThh:mm:ss.sssZ)
+		// 如无服务器时间则降级使用本地时间
+		let displayTime;
+		if (serverTime) {
+			try {
+				const d = new Date(serverTime);
+				if (!isNaN(d.getTime())) {
+					displayTime = d.toISOString().substr(11, 8);
+				}
+			} catch (e) { /* 解析失败则忽略 */ }
+		}
+		if (!displayTime) {
+			const now = new Date();
+			displayTime = now.toISOString().substr(11, 8);
+		}
 
 		if (username && username !== "" && username !== "*" && username !== "-") {
 			const nickSpan = document.createElement("span");
 			nickSpan.className = "clickable-username";
 			nickSpan.title = "点击与 " + username + " 私聊";
-			nickSpan.style.cssText = "cursor:pointer;color:var(--clr-secondary);font-weight:bold;";
 			nickSpan.textContent = username;
 			nickSpan.addEventListener("click", function () {
 				openPrivateChat(username);
 			});
 
-			const ts = document.createTextNode("[" + utcTime + "] ");
-			const sep = document.createTextNode(": ");
+			const tsSpan = document.createElement("span");
+			tsSpan.textContent = displayTime + " ";
+			tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;user-select:none !important;margin-right:2px;";
+
+			const sep = document.createTextNode(" ");
 			const msgSpan = document.createElement("span");
 			msgSpan.innerHTML = renderedMessage;
-			pre.appendChild(ts);
+			pre.appendChild(tsSpan);
 			pre.appendChild(nickSpan);
 			pre.appendChild(sep);
 			pre.appendChild(msgSpan);
 		} else {
-			pre.innerHTML = "[" + utcTime + "] " + renderedMessage;
+			// System / info message — dim timestamp
+			const tsSpan = document.createElement("span");
+			tsSpan.textContent = displayTime + " ";
+			tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;user-select:none !important;";
+			const msgSpan = document.createElement("span");
+			msgSpan.innerHTML = renderedMessage;
+			pre.appendChild(tsSpan);
+			pre.appendChild(msgSpan);
 		}
 
 		const output = channel.content;
@@ -2120,7 +2442,9 @@
 				const actionText = text.substring(4);
 				const messages = splitIRCMessage("privmsg " + activeChannel.name + " :\x01ACTION " + actionText + "\x01");
 				messages.forEach(msg => doSend(msg));
-				writeToScreen("var(--clr-red)", `${nickname} ${actionText}`, activeChannel, "*");
+				if (!ircv3EchoMessage) {
+					writeToScreen("var(--clr-red)", `${nickname} ${actionText}`, activeChannel, "*");
+				}
 				pushHistory(text);
 			} else if (text.indexOf("/msg ") === 0) {
 				const parts = text.substring(5).split(' ');
@@ -2139,7 +2463,7 @@
 					const messages = splitIRCMessage("privmsg " + targetNick + " :" + msgText);
 					messages.forEach((msg, index) => {
 						doSend(msg);
-						if (index === 0) {
+						if (!ircv3EchoMessage && index === 0) {
 							writeToScreen("var(--clr-font)", msgText, pmChannel, nickname);
 						}
 					});
@@ -2148,6 +2472,145 @@
 				} else {
 					writeToScreen("var(--clr-warning)", "用法: /msg <昵称> <消息>", activeChannel, "*");
 				}
+			} else if (text.indexOf("/away") === 0) {
+				const awayMsg = text.substring(5).trim();
+				if (awayMsg) {
+					doSend("AWAY :" + awayMsg + "\r\n");
+					writeToScreen("var(--clr-warning)", `已设置离开状态: ${awayMsg}`, activeChannel, "*");
+				} else {
+					doSend("AWAY\r\n");
+					writeToScreen("var(--clr-info)", `已取消离开状态`, activeChannel, "*");
+				}
+				pushHistory(text);
+			} else if (text.indexOf("/whois ") === 0) {
+				const whoisNick = text.substring(7).trim();
+				if (whoisNick) {
+					doSend("WHOIS " + whoisNick + "\r\n");
+					writeToScreen("var(--clr-info)", `正在查询: ${whoisNick}`, activeChannel, "*");
+				} else {
+					writeToScreen("var(--clr-warning)", "用法: /whois <昵称>", activeChannel, "*");
+				}
+				pushHistory(text);
+			} else if (text.indexOf("/list") === 0) {
+				const listFilter = text.substring(5).trim();
+				doSend(listFilter ? `LIST ${listFilter}\r\n` : "LIST\r\n");
+				writeToScreen("var(--clr-info)", `正在获取频道列表...`, statusChannel, "*");
+				pushHistory(text);
+			} else if (text.indexOf("/nick ") === 0) {
+				const newNick = text.substring(6).trim();
+				if (newNick && validateNickname(newNick)) {
+					doSend("NICK " + newNick + "\r\n");
+				} else {
+					writeToScreen("var(--clr-warning)", "用法: /nick <新昵称> (只能包含字母、数字和 _ ` [ ] { } ^ | - )", activeChannel, "*");
+				}
+				pushHistory(text);
+			} else if (text.indexOf("/topic") === 0) {
+				const topicText = text.substring(6).trim();
+				const topicTarget = activeChannel.name !== 'Status' ? activeChannel.name : null;
+				if (!topicTarget) {
+					writeToScreen("var(--clr-warning)", "请在频道窗口中使用 /topic", activeChannel, "*");
+				} else if (topicText) {
+					doSend(`TOPIC ${topicTarget} :${topicText}\r\n`);
+				} else {
+					doSend(`TOPIC ${topicTarget}\r\n`);
+					writeToScreen("var(--clr-info)", `正在查询 ${topicTarget} 的主题...`, activeChannel, "*");
+				}
+				pushHistory(text);
+			} else if (text.indexOf("/kick ") === 0) {
+				const kickParts = text.substring(6).split(' ');
+				const kickNick = kickParts[0];
+				const kickReason = kickParts.slice(1).join(' ') || '无原因';
+				const kickChannel = activeChannel.name;
+				if (kickChannel.startsWith('#') && kickNick) {
+					doSend(`KICK ${kickChannel} ${kickNick} :${kickReason}\r\n`);
+				} else {
+					writeToScreen("var(--clr-warning)", "用法: /kick <昵称> [原因]", activeChannel, "*");
+				}
+				pushHistory(text);
+			} else if (text.indexOf("/mode ") === 0) {
+				const modeArgs = text.substring(6).trim();
+				doSend(`MODE ${modeArgs}\r\n`);
+				writeToScreen("var(--clr-info)", `发送: MODE ${modeArgs}`, activeChannel, "*");
+				pushHistory(text);
+			} else if (text.indexOf("/join ") === 0) {
+				let joinTarget = text.substring(6).trim();
+				if (joinTarget && !joinTarget.startsWith('#')) joinTarget = '#' + joinTarget;
+				if (joinTarget) {
+					doSend("JOIN " + joinTarget + "\r\n");
+				} else {
+					writeToScreen("var(--clr-warning)", "用法: /join <#频道名>", activeChannel, "*");
+				}
+				pushHistory(text);
+			} else if (text.indexOf("/part") === 0) {
+				const partArgs = text.substring(5).trim();
+				const partTarget = partArgs.startsWith('#') ? partArgs.split(' ')[0] : activeChannel.name;
+				const partMsg = partArgs.startsWith('#') ? partArgs.substring(partTarget.length).trim() : partArgs;
+				if (partTarget && partTarget.startsWith('#')) {
+					doSend(`PART ${partTarget}${partMsg ? ' :' + partMsg : ''}\r\n`);
+				} else {
+					writeToScreen("var(--clr-warning)", "请在频道窗口中使用 /part", activeChannel, "*");
+				}
+				pushHistory(text);
+			} else if (text.indexOf("/quit") === 0) {
+				const quitMsg = text.substring(5).trim() || 'Bye!';
+				doSend(`QUIT :${quitMsg}\r\n`);
+				pushHistory(text);
+		} else if (text.indexOf("/monitor ") === 0) {
+			const monArgs = text.substring(9).trim();
+			doSend(`MONITOR ${monArgs}\r\n`);
+			writeToScreen("var(--clr-info)", `MONITOR: ${monArgs}`, activeChannel, "*");
+			pushHistory(text);
+		} else if (text.indexOf("/invite ") === 0) {
+			const invArgs = text.substring(8).trim().split(' ');
+			const invNick = invArgs[0];
+			const invChannel = invArgs[1] || (activeChannel && activeChannel.name !== 'Status' ? activeChannel.name : '');
+			if (invNick && invChannel) {
+				doSend(`INVITE ${invNick} ${invChannel}\r\n`);
+				writeToScreen("var(--clr-info)", `向 ${invNick} 发送邀请加入 ${invChannel}...`, activeChannel, "*");
+			} else {
+				writeToScreen("var(--clr-warning)", "用法: /invite <昵称> [#频道]", activeChannel, "*");
+			}
+			pushHistory(text);
+		} else if (text.indexOf("/chathistory") === 0) {
+			const chArgs = text.substring(12).trim().split(' ');
+			let chTarget = chArgs[0];
+			let chCount  = parseInt(chArgs[1]) || 50;
+			if (!chTarget && activeChannel && activeChannel.name !== 'Status') {
+				chTarget = activeChannel.name;
+			}
+			if (chTarget) {
+				requestChatHistory(chTarget, chCount);
+				writeToScreen("var(--clr-info)", `正在拉取 ${chTarget} 的历史消息 (${chCount}条)...`, activeChannel, "*");
+			} else {
+				writeToScreen("var(--clr-warning)", "用法: /chathistory [#频道] [数量]", activeChannel, "*");
+			}
+			pushHistory(text);
+			} else if (text === "/caps") {
+				const capsList = [...ircv3ActiveCaps].join(', ') || '(无)';
+				writeToScreen("var(--clr-info)", `当前已启用的 IRCv3 能力: ${capsList}`, activeChannel, "*");
+		} else if (text === "/help") {
+			const helpMsg = [
+				"== 可用命令 ==",
+				"/me <动作>         — 发送动作消息",
+				"/msg <nick> <消息> — 私聊消息",
+				"/away [原因]       — 设置/取消离开状态",
+				"/whois <nick>      — 查询用户信息",
+				"/nick <新昵称>     — 更改昵称",
+				"/join <#频道>      — 加入频道",
+				"/part [#频道]      — 离开当前或指定频道",
+				"/topic [主题]      — 查询或设置频道主题",
+				"/kick <nick> [原因] — 踢出用户",
+				"/mode <参数>       — 设置模式",
+				"/list [过滤]       — 获取频道列表",
+				"/invite <nick> [#频道] — 邀请用户加入频道",
+				"/monitor + nick   — 监控用户上下线",
+				"/monitor - nick   — 取消监控",
+				"/monitor l        — 查看监控列表",
+				"/chathistory [#频道] [数量] — 拉取频道历史消息",
+				"/caps             — 查看已启用的 IRCv3 能力",
+				"/quit [消息]       — 退出 IRC",
+			].join('<br>');
+			writeToScreen("var(--clr-info)", helpMsg, activeChannel, "*");
 			} else {
 			writeToScreen("var(--clr-font)", text, activeChannel, "");
 			const messages = splitIRCMessage(text.substring(1));
@@ -2166,7 +2629,7 @@
 			const messages = splitIRCMessage("privmsg " + target + " :" + text);
 			messages.forEach((msg, index) => {
 				doSend(msg);
-				if (index === 0) {
+				if (!ircv3EchoMessage && index === 0) {
 					writeToScreen("var(--clr-font)", text, activeChannel, nickname);
 				}
 			});
@@ -2175,7 +2638,12 @@
 			}
 			pushHistory(text);
 		}
-		if (input) { input.value = ""; updateCharCount(); }
+		if (input) {
+			if (activeChannel && activeChannel.name !== 'Status') {
+				sendTypingDone(activeChannel.name);
+			}
+			input.value = ""; updateCharCount();
+		}
 	}
 
 	function byteLength(str) {
@@ -2183,11 +2651,11 @@
 	}
 
 	function splitIRCMessage(message) {
-		const MAX_BYTES = 510;
+		const MAX_BYTES = 512; // IRC 规范：整条消息（含 \r\n）不超过 512 字节
 
 		const isPrivmsg = message.startsWith("privmsg ");
 		const fullMessage = message + "\r\n";
-		if (!isPrivmsg || byteLength(fullMessage) <= MAX_BYTES + 2) {
+		if (!isPrivmsg || byteLength(fullMessage) <= MAX_BYTES) {
 			return [fullMessage];
 		}
 
@@ -2287,7 +2755,6 @@
 			alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
 		}
 	}
-
 
 	window.addEventListener('beforeunload', function cleanup() {
 		cleanupEventListeners();
@@ -2486,7 +2953,6 @@
 		}
 	}
 
-
 	const DefaultPrefixMap = {
 		'~': { symbol: '~', name: 'founder', color: 'var(--clr-purple)' },
 		'&': { symbol: '&', name: 'admin', color: 'var(--clr-red)' },
@@ -2495,7 +2961,225 @@
 		'+': { symbol: '+', name: 'voice', color: 'var(--clr-gold)' }
 	};
 
+	// IRCv3 spec: https://ircv3.net/specs/extensions/message-tags
+	// 消息格式: @key=val;key2=val2 :prefix COMMAND [params...]
+	// 标签转义规则: \: → ; | \s → 空格 | \\ → \ | \r → CR | \n → LF
+
+	/**
+	 * 解码单个消息标签值的 IRCv3 转义序列
+	 * @param {string} val 原始标签值字符串
+	 * @returns {string} 解码后的字符串
+	 */
+	function unescapeTagValue(val) {
+		if (!val) return "";
+		return val
+			.replace(/\\:/g, ';')
+			.replace(/\\s/g, ' ')
+			.replace(/\\\\/g, '\x00')  // 先占位，防止二次替换
+			.replace(/\\r/g, '\r')
+			.replace(/\\n/g, '\n')
+			.replace(/\x00/g, '\\')
+			.replace(/\\./g, '');      // 未知转义序列，去掉反斜杠
+	}
+
+	/**
+	 * 解析 IRCv3 消息标签字符串（@号后面的部分，分号分隔）
+	 * @param {string} tagStr 标签字符串，如 "time=2024-01-01T00:00:00Z;account=Alice"
+	 * @returns {Map<string, string|boolean>} 标签 Map，无值标签的 value 为 true
+	 */
+	function parseMsgTags(tagStr) {
+		const tags = new Map();
+		if (!tagStr) return tags;
+		const parts = tagStr.split(';');
+		for (const part of parts) {
+			if (!part) continue;
+			const eqIdx = part.indexOf('=');
+			if (eqIdx === -1) {
+				tags.set(part, true);
+			} else {
+				const key = part.substring(0, eqIdx);
+				const val = unescapeTagValue(part.substring(eqIdx + 1));
+				tags.set(key, val);
+			}
+		}
+		return tags;
+	}
+
+	/**
+	 * 从原始 IRC 消息行中提取 IRCv3 消息标签
+	 * 如果消息以 '@' 开头，则解析并剥离标签部分
+	 * @param {string} rawLine 原始消息行（已去掉末尾 \r\n）
+	 * @returns {{ tags: Map<string, string|boolean>, rest: string }}
+	 */
+	function extractMsgTags(rawLine) {
+		if (!rawLine || rawLine[0] !== '@') {
+			return { tags: new Map(), rest: rawLine };
+		}
+		const spaceIdx = rawLine.indexOf(' ');
+		if (spaceIdx === -1) {
+			return { tags: parseMsgTags(rawLine.substring(1)), rest: "" };
+		}
+		const tagStr = rawLine.substring(1, spaceIdx);
+		const rest = rawLine.substring(spaceIdx + 1);
+		const tags = parseMsgTags(tagStr);
+		writeToLog(`[MSGTAG] Parsed ${tags.size} tag(s): ${tagStr.substring(0, 80)}`);
+		return { tags, rest };
+	}
+
+	// 记录服务器确认 (ACK) 的 IRCv3 能力集合
+	let ircv3ActiveCaps = new Set();
+
+	// 各功能开关（由 CAP ACK 后自动激活）
+	let ircv3ServerTime    = false;  // server-time: 使用服务器时间戳
+	let ircv3EchoMessage   = false;  // echo-message: 服务器回显自己消息
+	let ircv3MessageTags   = false;  // message-tags: 通用标签支持 (typing等)
+	let ircv3AccountTag    = false;  // account-tag: 消息中包含账号信息
+	let ircv3AwayNotify    = false;  // away-notify: 实时离开通知
+	let ircv3AccountNotify = false;  // account-notify: 账号变更通知
+	let ircv3ExtendedJoin  = false;  // extended-join: JOIN含账号信息
+	let ircv3ChgHost       = false;  // chghost: 主机名变更通知
+	let ircv3MultiPrefix   = false;  // multi-prefix: 多前缀支持
+	let ircv3UserhostInNames = false; // userhost-in-names: NAMES含完整主机
+	let ircv3Batch         = false;  // batch: 批量消息支持
+	let ircv3LabeledResponse = false; // labeled-response: 请求-响应匹配
+	let ircv3ChatHistory   = false;  // chathistory: 频道历史消息
+	let ircv3InviteNotify  = false;  // invite-notify: 邀请通知推送
+	let ircv3Multiline     = false;  // draft/multiline: 多行消息
+	let ircv3Whox          = false;  // whox: 扩展 WHO 查询
+
+	// SASL 认证相关状态
+	let saslEnabled = false;
+	let saslAccount = "";
+	let saslPassword = "";
+	let saslPending = false;
+
 	var Commands = new Map();
+	// 311 RPL_WHOISUSER
+	Commands.set("311", function (nick, data) {
+		if (!data || data.length < 6) return;
+		const target = data[3];
+		const user = data[4];
+		const host = data[5];
+		const realname = data.slice(7).join(' ').replace(/^:/, '');
+		writeToScreen("var(--clr-info)", `[WHOIS] ${target} (${user}@${host}) — 真名: ${realname}`, statusChannel, "*");
+	});
+	// 312 RPL_WHOISSERVER
+	Commands.set("312", function (nick, data) {
+		if (!data || data.length < 5) return;
+		const target = data[3];
+		const server = data[4];
+		const serverInfo = data.slice(5).join(' ').replace(/^:/, '');
+		writeToScreen("var(--clr-info)", `[WHOIS] ${target} 连接自服务器: ${server} (${serverInfo})`, statusChannel, "*");
+	});
+	// 313 RPL_WHOISOPERATOR
+	Commands.set("313", function (nick, data) {
+		if (!data || data.length < 4) return;
+		const target = data[3];
+		writeToScreen("var(--clr-gold)", `[WHOIS] ${target} 是 IRC 管理员`, statusChannel, "*");
+	});
+	// 317 RPL_WHOISIDLE
+	Commands.set("317", function (nick, data) {
+		if (!data || data.length < 5) return;
+		const target = data[3];
+		const idleSec = parseInt(data[4]) || 0;
+		const idleMin = Math.floor(idleSec / 60);
+		const idleSecs = idleSec % 60;
+		writeToScreen("var(--clr-info)", `[WHOIS] ${target} 已闲置: ${idleMin}分${idleSecs}秒`, statusChannel, "*");
+	});
+	// 318 RPL_ENDOFWHOIS
+	Commands.set("318", function (nick, data) {
+		if (!data || data.length < 4) return;
+		const target = data[3];
+		writeToScreen("var(--clr-text-dim)", `[WHOIS] ${target} 的信息结束`, statusChannel, "*");
+		writeToLog(`[IRC] RPL_ENDOFWHOIS: ${target}`);
+	});
+	// 319 RPL_WHOISCHANNELS
+	Commands.set("319", function (nick, data) {
+		if (!data || data.length < 5) return;
+		const target = data[3];
+		const chans = data.slice(4).join(' ').replace(/^:/, '');
+		writeToScreen("var(--clr-info)", `[WHOIS] ${target} 在频道: ${chans}`, statusChannel, "*");
+	});
+	// 320 WHOISSPECIAL (extended info)
+	Commands.set("320", function (nick, data) {
+		if (!data || data.length < 4) return;
+		const msg = data.slice(3).join(' ').replace(/^:/, '');
+		writeToScreen("var(--clr-info)", `[WHOIS] ${msg}`, statusChannel, "*");
+	});
+	// 330 RPL_WHOISACCOUNT
+	Commands.set("330", function (nick, data) {
+		if (!data || data.length < 5) return;
+		const target = data[3];
+		const account = data[4];
+		writeToScreen("var(--clr-green)", `[WHOIS] ${target} 已登录账号: ${account}`, statusChannel, "*");
+	});
+	// 338 RPL_WHOISACTUALLY (actual IP)
+	Commands.set("338", function (nick, data) {
+		if (!data || data.length < 5) return;
+		const target = data[3];
+		const actualHost = data.slice(4).join(' ').replace(/^:/, '');
+		writeToScreen("var(--clr-info)", `[WHOIS] ${target} 实际地址: ${actualHost}`, statusChannel, "*");
+	});
+	// 671 RPL_WHOISSECURE (using SSL)
+	Commands.set("671", function (nick, data) {
+		if (!data || data.length < 4) return;
+		const target = data[3];
+		writeToScreen("var(--clr-green)", `[WHOIS] ${target} 使用 SSL/TLS 加密连接`, statusChannel, "*");
+	});
+
+	// 321 RPL_LISTSTART
+	Commands.set("321", function (nick, data) {
+		writeToScreen("var(--clr-info)", `频道列表:`, statusChannel, "*");
+		writeToLog(`[IRC] RPL_LISTSTART (321)`);
+	});
+	// 322 RPL_LIST: 单个频道信息
+	Commands.set("322", function (nick, data) {
+		if (!data || data.length < 6) return;
+		const chanName   = data[3];
+		const userCount  = data[4];
+		const topic      = data.slice(5).join(' ').replace(/^:/, '');
+		writeToScreen("var(--clr-font)", `  ${chanName} [${userCount}人] ${topic}`, statusChannel, "*");
+	});
+	// 323 RPL_LISTEND
+	Commands.set("323", function (nick, data) {
+		writeToScreen("var(--clr-text-dim)", `频道列表结束`, statusChannel, "*");
+		writeToLog(`[IRC] RPL_LISTEND (323)`);
+	});
+
+	// IRCv3 spec: https://ircv3.net/specs/extensions/monitor
+	// MONITOR + nick — 添加监控; MONITOR - nick — 取消; MONITOR l — 列表
+
+	// 730 RPL_MONONLINE: 被监控用户上线
+	Commands.set("730", function (nick, data) {
+		if (!data || data.length < 4) return;
+		const targets = data.slice(3).join(' ').replace(/^:/, '');
+		writeToScreen("var(--clr-green)", `[MONITOR] 上线: ${targets}`, statusChannel, "*");
+		writeToLog(`[MONITOR] RPL_MONONLINE: ${targets}`);
+	});
+	// 731 RPL_MONOFFLINE: 被监控用户下线
+	Commands.set("731", function (nick, data) {
+		if (!data || data.length < 4) return;
+		const targets = data.slice(3).join(' ').replace(/^:/, '');
+		writeToScreen("var(--clr-text-dim)", `[MONITOR] 下线: ${targets}`, statusChannel, "*");
+		writeToLog(`[MONITOR] RPL_MONOFFLINE: ${targets}`);
+	});
+	// 732 RPL_MONLIST
+	Commands.set("732", function (nick, data) {
+		if (!data || data.length < 4) return;
+		const targets = data.slice(3).join(' ').replace(/^:/, '');
+		writeToScreen("var(--clr-info)", `[MONITOR] 监控列表: ${targets}`, statusChannel, "*");
+	});
+	// 733 RPL_ENDOFMONLIST
+	Commands.set("733", function (nick, data) {
+		writeToScreen("var(--clr-text-dim)", `[MONITOR] 监控列表结束`, statusChannel, "*");
+	});
+	// 734 ERR_MONLISTFULL
+	Commands.set("734", function (nick, data) {
+		if (!data || data.length < 4) return;
+		const msg = data.slice(3).join(' ').replace(/^:/, '');
+		writeToScreen("var(--clr-red)", `[MONITOR] 监控列表已满: ${msg}`, statusChannel, "*");
+	});
+
 	Commands.set("CAP", function (nick, data) {
 		if (!data || data.length < 4) return;
 
@@ -2520,8 +3204,32 @@
 		if (subCommand === "LS") {
 			writeToScreen("var(--clr-info)", `服务器支持的能力: ${caps}`, statusChannel, "*");
 
-			const availableCaps = caps.split(' ').map(c => c.trim().toLowerCase()).filter(c => c);
-			const requestedCaps = ["multi-prefix", "away-notify", "account-notify", "extended-join"]
+			const availableCaps = caps.split(' ').map(c => c.trim().split('=')[0].toLowerCase()).filter(c => c);
+
+		// 能力列表优先级排列: 先请求核心能力，再请求功能性能力
+		const wantedCaps = [
+			"message-tags",        // 功能1基础: 消息标签支持 (必须优先请求)
+			"server-time",         // 功能2: 服务器时间戳
+			"sasl",                // 功能3: SASL 认证
+			"away-notify",         // 功能4: 离开状态实时通知
+			"chghost",             // 功能5: 主机名变更通知
+			"account-tag",         // 功能6: 消息携带账号信息
+			"account-notify",      // 功能6: 账号变更通知
+			"extended-join",       // 功能6: JOIN含账号信息
+			"echo-message",        // 功能7: 服务器回显消息
+			"multi-prefix",        // 用户前缀支持
+			"userhost-in-names",   // NAMES含完整主机
+			"cap-notify",          // 能力变更通知
+			"setname",             // 用户真名变更支持
+			"batch",               // 批量消息支持（chathistory依赖）
+			"labeled-response",    // 请求-响应标签匹配
+			"chathistory",         // 频道历史消息
+			"invite-notify",       // 邀请通知
+			"draft/multiline",     // 多行消息支持
+			"whox",                // 扩展 WHO 查询
+		];
+
+			const requestedCaps = wantedCaps
 				.filter(cap => availableCaps.includes(cap.toLowerCase()))
 				.join(' ');
 
@@ -2539,8 +3247,40 @@
 			writeToScreen("var(--clr-green)", `已启用能力: ${ackedCaps}`, statusChannel, "*");
 			writeToLog(`[CAP] Capabilities acknowledged (ACK): ${ackedCaps}`);
 
-			doSend("CAP END");
-			sendRegistration();
+			const ackedList = ackedCaps.split(' ').map(c => c.trim().toLowerCase()).filter(c => c);
+			for (const cap of ackedList) {
+				ircv3ActiveCaps.add(cap);
+			}
+		// 按能力名称激活对应功能开关
+		if (ircv3ActiveCaps.has('server-time'))        ircv3ServerTime      = true;
+		if (ircv3ActiveCaps.has('echo-message'))        ircv3EchoMessage     = true;
+		if (ircv3ActiveCaps.has('message-tags'))        ircv3MessageTags     = true;
+		if (ircv3ActiveCaps.has('account-tag'))         ircv3AccountTag      = true;
+		if (ircv3ActiveCaps.has('away-notify'))         ircv3AwayNotify      = true;
+		if (ircv3ActiveCaps.has('account-notify'))      ircv3AccountNotify   = true;
+		if (ircv3ActiveCaps.has('extended-join'))       ircv3ExtendedJoin    = true;
+		if (ircv3ActiveCaps.has('chghost'))             ircv3ChgHost         = true;
+		if (ircv3ActiveCaps.has('multi-prefix'))        ircv3MultiPrefix     = true;
+		if (ircv3ActiveCaps.has('userhost-in-names'))   ircv3UserhostInNames = true;
+		if (ircv3ActiveCaps.has('batch'))               ircv3Batch           = true;
+		if (ircv3ActiveCaps.has('labeled-response'))    ircv3LabeledResponse = true;
+		if (ircv3ActiveCaps.has('chathistory'))         ircv3ChatHistory     = true;
+		if (ircv3ActiveCaps.has('invite-notify'))       ircv3InviteNotify    = true;
+		if (ircv3ActiveCaps.has('draft/multiline'))     ircv3Multiline       = true;
+		if (ircv3ActiveCaps.has('whox'))                ircv3Whox            = true;
+
+			writeToLog(`[CAP] Active caps: ${[...ircv3ActiveCaps].join(', ')}`);
+
+			// 如果 SASL 已启用且需要认证，先进行 SASL 认证再发送 CAP END
+			if (ircv3ActiveCaps.has('sasl') && saslEnabled && saslAccount && saslPassword) {
+				writeToLog(`[SASL] Starting SASL PLAIN authentication for: ${saslAccount}`);
+				saslPending = true;
+				doSend("AUTHENTICATE PLAIN");
+				// 不立即发送 CAP END，等 SASL 完成后再发
+			} else {
+				doSend("CAP END");
+				sendRegistration();
+			}
 
 		} else if (subCommand === "NAK") {
 			const rejectedCaps = caps || "(none)";
@@ -2555,9 +3295,304 @@
 			writeToScreen("var(--clr-info)", `当前启用的能力: ${activeCaps}`, statusChannel, "*");
 		} else if (subCommand === "NEW") {
 			writeToScreen("var(--clr-info)", `服务器新增能力: ${caps}`, statusChannel, "*");
+			writeToLog(`[CAP] cap-notify NEW: ${caps}`);
 		} else if (subCommand === "DEL") {
 			writeToScreen("var(--clr-warning)", `服务器移除能力: ${caps}`, statusChannel, "*");
+			writeToLog(`[CAP] cap-notify DEL: ${caps}`);
+			// 更新本地能力状态
+			const delList = caps.split(' ').map(c => c.trim().toLowerCase()).filter(c => c);
+			for (const cap of delList) {
+				ircv3ActiveCaps.delete(cap);
+			}
 		}
+	});
+
+	// IRCv3 spec: https://ircv3.net/specs/extensions/sasl-3.1
+	// 流程: CAP REQ sasl → CAP ACK sasl → AUTHENTICATE PLAIN →
+	//        服务器: AUTHENTICATE + → 客户端发 Base64(authzid\0user\0pass) →
+	//        服务器: 900 (RPL_LOGGEDIN) + 903 (RPL_SASLSUCCESS) → CAP END → 注册
+
+	Commands.set("AUTHENTICATE", function (nick, data) {
+		if (!data || data.length < 2) return;
+		// 服务器发送 AUTHENTICATE 时可能带前缀 (:server AUTHENTICATE +)
+		// 此时 data[0]=":server", data[1]="AUTHENTICATE", data[2]="+"
+		// 也可能无前缀 (AUTHENTICATE +): data[0]="AUTHENTICATE", data[1]="+"
+		// 统一处理：找到 payload（非命令名的那个参数）
+		let payload = "";
+		if (data[0].toUpperCase() === "AUTHENTICATE") {
+			// 无前缀形式: data[0]=AUTHENTICATE, data[1]=payload
+			payload = (data[1] || "").replace(/^:/, '');
+		} else {
+			// 有前缀形式: data[0]=:server, data[1]=AUTHENTICATE, data[2]=payload
+			payload = (data[2] || "").replace(/^:/, '');
+		}
+
+		if (payload === '+') {
+			// 服务器发送空挑战，客户端开始发送认证数据
+			if (!saslPending || !saslAccount || !saslPassword) {
+				writeToLog('[SASL] AUTHENTICATE + received but no pending SASL auth — aborting');
+				doSend("AUTHENTICATE *");
+				return;
+			}
+			// PLAIN 格式: authzid\0authcid\0passwd (authzid 为空则使用 authcid)
+			const authStr = `\x00${saslAccount}\x00${saslPassword}`;
+			const encoded = btoa(unescape(encodeURIComponent(authStr)));
+			writeToLog(`[SASL] Sending PLAIN credentials for: ${saslAccount}`);
+			doSend("AUTHENTICATE " + encoded);
+		} else {
+			writeToLog(`[SASL] Unexpected AUTHENTICATE payload: ${payload}`);
+		}
+	});
+
+	// 900 RPL_LOGGEDIN: SASL 登录成功
+	Commands.set("900", function (nick, data) {
+		if (!data || data.length < 4) return;
+		// 格式: :server 900 nick nick!user@host accountname :message
+		// data[3]=nick!user@host, data[4]=accountname(才是账号名)
+		const accountName = data.length >= 5 ? data[4].replace(/^:/, '') : (data[3] || '');
+		writeToScreen("var(--clr-green)", `已登录账号: ${accountName}`, statusChannel, "*");
+		writeToLog(`[SASL] RPL_LOGGEDIN (900): logged in as ${accountName}`);
+		// 更新本地账号信息（用真实账号名，不是 nick!user@host）
+		if (accountName && accountName !== '*') {
+			saslAccount = accountName;
+		}
+	});
+
+	// 901 RPL_LOGGEDOUT: 退出账号
+	Commands.set("901", function (nick, data) {
+		writeToScreen("var(--clr-warning)", `账号已登出`, statusChannel, "*");
+		writeToLog(`[SASL] RPL_LOGGEDOUT (901)`);
+	});
+
+	// 902 ERR_NICKLOCKED: 昵称被锁定
+	Commands.set("902", function (nick, data) {
+		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'Nick locked';
+		writeToScreen("var(--clr-red)", `SASL 错误: 昵称已锁定 — ${msg}`, statusChannel, "*");
+		writeToLog(`[SASL] ERR_NICKLOCKED (902): ${msg}`);
+		saslPending = false;
+		doSend("CAP END");
+		sendRegistration();
+	});
+
+	// 903 RPL_SASLSUCCESS: SASL 认证成功
+	Commands.set("903", function (nick, data) {
+		writeToScreen("var(--clr-green)", `SASL 认证成功!`, statusChannel, "*");
+		writeToLog(`[SASL] RPL_SASLSUCCESS (903)`);
+		saslPending = false;
+		doSend("CAP END");
+		sendRegistration();
+	});
+
+	// 904 ERR_SASLFAIL: SASL 认证失败
+	Commands.set("904", function (nick, data) {
+		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'Authentication failed';
+		writeToScreen("var(--clr-red)", `SASL 认证失败: ${msg}`, statusChannel, "*");
+		writeToLog(`[SASL] ERR_SASLFAIL (904): ${msg}`);
+		saslPending = false;
+		// 认证失败后仍然继续连接（不携带账号）
+		doSend("CAP END");
+		sendRegistration();
+	});
+
+	// 905 ERR_SASLTOLONG: 认证数据过长
+	Commands.set("905", function (nick, data) {
+		writeToScreen("var(--clr-red)", `SASL 数据过长`, statusChannel, "*");
+		writeToLog(`[SASL] ERR_SASLTOLONG (905)`);
+		saslPending = false;
+		doSend("CAP END");
+		sendRegistration();
+	});
+
+	// 906 ERR_SASLABORTED: SASL 被中止
+	Commands.set("906", function (nick, data) {
+		writeToScreen("var(--clr-warning)", `SASL 认证已中止`, statusChannel, "*");
+		writeToLog(`[SASL] ERR_SASLABORTED (906)`);
+		saslPending = false;
+	});
+
+	// 907 ERR_SASLALREADY: 已经认证
+	Commands.set("907", function (nick, data) {
+		writeToScreen("var(--clr-warning)", `已经完成 SASL 认证`, statusChannel, "*");
+		writeToLog(`[SASL] ERR_SASLALREADY (907)`);
+	});
+
+	// 908 RPL_SASLMECHS: 支持的 SASL 机制列表
+	Commands.set("908", function (nick, data) {
+		const mechs = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '';
+		writeToScreen("var(--clr-info)", `支持的 SASL 机制: ${mechs}`, statusChannel, "*");
+		writeToLog(`[SASL] RPL_SASLMECHS (908): ${mechs}`);
+	});
+
+	// IRCv3 spec: https://ircv3.net/specs/extensions/chghost
+	// 当用户的 ident 或 hostname 变更时，服务器推送 CHGHOST 通知
+	// 格式: :nick!oldident@oldhost CHGHOST newident newhost
+
+	Commands.set("CHGHOST", function (nick, data) {
+		if (!data || data.length < 4) return;
+		const newIdent = data[2];
+		const newHost  = data[3].replace(/^:/, '');
+		const isSelf   = (nick === nickname);
+
+		if (isSelf) {
+			writeToScreen("var(--clr-info)", `你的主机信息已更新: ${newIdent}@${newHost}`, statusChannel, "*");
+		} else {
+			// 在所有包含该用户的频道通知
+			channelMap.forEach(function (channel) {
+				if (!channel.users) return;
+				const hasUser = channel.users.some(u => u[1] === nick);
+				if (hasUser) {
+					writeToScreen("var(--clr-text-dim)", `${nick} 的主机已变更为 ${newIdent}@${newHost}`, channel, "*");
+				}
+			});
+		}
+		writeToLog(`[CHGHOST] ${nick}: new ident=${newIdent} host=${newHost}`);
+	});
+
+	// ── IRCv3 功能6: account-notify + account-tag + extended-join ─────────
+	// IRCv3 specs:
+	//   https://ircv3.net/specs/extensions/account-notify
+	//   https://ircv3.net/specs/extensions/account-tag
+	//   https://ircv3.net/specs/extensions/extended-join
+	//
+	// ACCOUNT: 用户登录/退出账号时通知
+	// 格式: :nick!user@host ACCOUNT accountname  (*=退出)
+	// extended-join: JOIN 消息包含账号和真名
+	// 格式: :nick!user@host JOIN #chan accountname :realname
+
+	Commands.set("ACCOUNT", function (nick, data) {
+		if (!data || data.length < 3) return;
+		const accountName = data[2].replace(/^:/, '');
+		const isSelf = (nick === nickname);
+
+		if (accountName === '*') {
+			// 用户退出账号
+			if (isSelf) {
+				writeToScreen("var(--clr-warning)", `你已退出账号登录`, statusChannel, "*");
+			} else {
+				channelMap.forEach(function (channel) {
+					if (!channel.users) return;
+					if (channel.users.some(u => u[1] === nick)) {
+						writeToScreen("var(--clr-text-dim)", `${nick} 已退出账号`, channel, "*");
+					}
+				});
+			}
+			writeToLog(`[ACCOUNT] ${nick}: logged out`);
+		} else {
+			// 用户登录到账号
+			if (isSelf) {
+				writeToScreen("var(--clr-green)", `你已登录账号: ${accountName}`, statusChannel, "*");
+			} else {
+				channelMap.forEach(function (channel) {
+					if (!channel.users) return;
+					if (channel.users.some(u => u[1] === nick)) {
+						writeToScreen("var(--clr-info)", `${nick} 已登录账号: ${accountName}`, channel, "*");
+					}
+				});
+			}
+			writeToLog(`[ACCOUNT] ${nick}: logged in as ${accountName}`);
+		}
+	});
+
+	// SETNAME: 用户更新真名 (IRCv3 setname 扩展)
+	// 格式: :nick!user@host SETNAME :new real name
+	Commands.set("SETNAME", function (nick, data) {
+		if (!data || data.length < 3) return;
+		const newRealname = data.slice(2).join(' ').replace(/^:/, '');
+		const isSelf = (nick === nickname);
+		if (isSelf) {
+			writeToScreen("var(--clr-info)", `你的真名已更新为: ${newRealname}`, statusChannel, "*");
+		} else {
+			channelMap.forEach(function (channel) {
+				if (!channel.users) return;
+				if (channel.users.some(u => u[1] === nick)) {
+					writeToScreen("var(--clr-text-dim)", `${nick} 更新了真名: ${newRealname}`, channel, "*");
+				}
+			});
+		}
+		writeToLog(`[ACCOUNT] SETNAME: ${nick} → "${newRealname}"`);
+	});
+	// IRCv3 spec: https://ircv3.net/specs/extensions/away-notify
+	// 当用户设置或取消 AWAY 状态时，服务器向所有共同在线的用户推送 AWAY 消息
+	// 格式: :nick!user@host AWAY [:reason]  (有原因=设置, 无原因=取消)
+
+	Commands.set("AWAY", function (nick, data) {
+		const isSelf = (nick === nickname);
+
+		// 提取 AWAY 原因（如果有）
+		let reason = "";
+		if (data && data.length >= 3) {
+			reason = data.slice(2).join(' ');
+			if (reason.startsWith(':')) reason = reason.substring(1);
+		}
+
+		const isSettingAway = reason.length > 0;
+
+		if (isSelf) {
+			if (isSettingAway) {
+				writeToScreen("var(--clr-warning)", `你已设置离开状态: ${reason}`, statusChannel, "*");
+			} else {
+				writeToScreen("var(--clr-info)", `你已取消离开状态`, statusChannel, "*");
+			}
+		} else {
+			channelMap.forEach(function (channel) {
+				if (!channel.userlist || !channel.users) return;
+				// 检查该用户是否在此频道
+				const userEntry = channel.users.find(u => u[1] === nick);
+				if (!userEntry) return;
+
+				if (isSettingAway) {
+					writeToScreen("var(--clr-text-dim)", `${nick} 离开 (${reason || '忙碌'})`, channel, "*");
+				} else {
+					writeToScreen("var(--clr-info)", `${nick} 回来了`, channel, "*");
+				}
+				// 在用户列表项上标记离开状态
+				updateUserAwayStatus(nick, channel, isSettingAway);
+			});
+		}
+		writeToLog(`[AWAY] ${nick}: ${isSettingAway ? `away (${reason})` : 'back'}`);
+	});
+
+	/**
+	 * 在用户列表中标记/取消用户的离开状态（显示为灰色斜体）
+	 */
+	function updateUserAwayStatus(nick, channel, isAway) {
+		if (!channel || !channel.userlist) return;
+		for (const li of channel.userlist.children) {
+			const nickEl = li.children[1];
+			if (nickEl && nickEl.textContent === nick) {
+				if (isAway) {
+					li.style.opacity = '0.5';
+					li.title = `${nick} (离开中)`;
+				} else {
+					li.style.opacity = '';
+					li.title = '';
+				}
+				break;
+			}
+		}
+	}
+
+	// 301 RPL_AWAY: WHOIS 返回的离开信息
+	Commands.set("301", function (nick, data) {
+		if (!data || data.length < 5) return;
+		const targetNick = data[3];
+		const awayMsg = data.slice(4).join(' ').replace(/^:/, '');
+		writeToScreen("var(--clr-text-dim)", `${targetNick} 正在离开: ${awayMsg}`, statusChannel, "*");
+		writeToLog(`[AWAY] RPL_AWAY (301): ${targetNick} is away: ${awayMsg}`);
+	});
+
+	// 305 RPL_UNAWAY: 服务器确认取消离开状态
+	Commands.set("305", function (nick, data) {
+		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '你不再处于离开状态';
+		writeToScreen("var(--clr-info)", `✓ ${msg}`, activeChannel || statusChannel, "*");
+		writeToLog(`[AWAY] RPL_UNAWAY (305): you are no longer away`);
+	});
+
+	// 306 RPL_NOWAWAY: 服务器确认已设置离开状态
+	Commands.set("306", function (nick, data) {
+		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '你已标记为离开状态';
+		writeToScreen("var(--clr-warning)", `✓ ${msg}`, activeChannel || statusChannel, "*");
+		writeToLog(`[AWAY] RPL_NOWAWAY (306): you are now marked as away`);
 	});
 
 	Commands.set("001", function (nick, data) {
@@ -2603,13 +3638,22 @@
 		data[5] = data[5].substring(1);
 		for (let i = 5; i < data.length; i++) {
 			let prefix = "";
+			let entry = data[i];
+
+			// 若启用了 userhost-in-names，NAMES 中的昵称格式为 nick!user@host
+			// 或带前缀: @nick!user@host，需要剥离 !user@host 部分存储显示名
+			let displayNick = entry;
+			if (ircv3UserhostInNames && entry.includes('!')) {
+				displayNick = entry.split('!')[0]; // 仅保留 nick 部分（含前缀字符）
+			}
+
 			let ii = 0;
-			while (PrefixChars && PrefixChars[1] && PrefixChars[1].indexOf(data[i][ii]) >= 0) {
-				prefix += data[i][ii];
+			while (PrefixChars && PrefixChars[1] && PrefixChars[1].indexOf(displayNick[ii]) >= 0) {
+				prefix += displayNick[ii];
 				ii++;
 			}
 			if (prefix == "") prefix = " ";
-			channel.users.push([prefix, data[i].substring(ii)]);
+			channel.users.push([prefix, displayNick.substring(ii)]);
 		}
 		writeToLog(`[IRC] RPL_NAMREPLY (353): channel=${data[4]} users so far=${channel.users.length}`);
 	});
@@ -2695,7 +3739,18 @@
 		const isSelfJoin = data[0].startsWith(":" + nickname + "!") ||
 						   data[0].toLowerCase().startsWith(":" + nickname.toLowerCase() + "!");
 
-		writeToLog(`[IRC] JOIN event: nick=${nick}, channel=${serverChannelName}, isSelf=${isSelfJoin}`);
+		// extended-join 格式: :nick!user@host JOIN #chan accountname :realname
+		// 第4个参数 = 账号名（*=未登录），第5个参数 = 真名
+		let joinAccount = null;
+		let joinRealname = null;
+		if (ircv3ExtendedJoin && data.length >= 4) {
+			joinAccount = data[3] !== '*' ? data[3] : null;
+			if (data.length >= 5) {
+				joinRealname = data.slice(4).join(' ').replace(/^:/, '');
+			}
+		}
+
+		writeToLog(`[IRC] JOIN event: nick=${nick}, channel=${serverChannelName}, isSelf=${isSelfJoin}${joinAccount ? ', account='+joinAccount : ''}`);
 
 		if (!isSelfJoin) {
 			const channel = findChannel(serverChannelName);
@@ -2708,7 +3763,11 @@
 			}
 
 			channelInsertUser(nick, channel, userPrefix);
-			writeToScreen("var(--clr-green)", `${nick} 加入频道`, channel, "*");
+			if (joinAccount) {
+				writeToScreen("var(--clr-green)", `${nick} 加入频道 (账号: ${joinAccount})`, channel, "*");
+			} else {
+				writeToScreen("var(--clr-green)", `${nick} 加入频道`, channel, "*");
+			}
 			writeToLog(`[IRC] User joined: ${nick} → ${serverChannelName}`);
 		} else {
 			let channel = findChannel(serverChannelName);
@@ -2729,6 +3788,11 @@
 			channelName = serverChannelName;
 			writeToScreen("var(--clr-green)", `你已加入频道 ${serverChannelName}`, channel, "*");
 			writeToLog(`[IRC] Self joined channel: ${serverChannelName}`);
+			// 加入频道后自动拉取历史消息（chathistory）和 WHO 信息（away状态）
+			setTimeout(() => {
+				requestChatHistory(serverChannelName, 50);
+				requestWho(serverChannelName);
+			}, 300);
 		}
 	});
 	Commands.set("KICK", function (nick, data) {
@@ -2763,39 +3827,32 @@
 		}
 		writeToScreen("var(--clr-blue)", `${nick} 设置模式: ${text}`, channel, "*");
 
-		if (!PrefixChars || data[3].length < 1) return;
+		if (!PrefixChars || !PrefixChars[0] || data[3].length < 1) return;
 
-		if (data.length >= 5 && data[4].startsWith(":")) {
-			const modeString = data[3];
-			const modeChar = modeString[modeString.length - 1];
-			const targetNick = data[4].substring(1);
+		// 遍历 mode 字符串，按顺序与参数对应
+		// 前缀相关 mode（o/v/h/a 等）需要消耗一个参数（目标昵称）
+		const modeString = data[3];
+		let paramIndex = 4;
+		let adding = true;
 
-			let status = true;
-			for (let c of modeString) {
-				if (c === '+') { status = true; break; }
-				if (c === '-') { status = false; break; }
-			}
+		for (let i = 0; i < modeString.length; i++) {
+			const ch = modeString[i];
+			if (ch === '+') { adding = true; continue; }
+			if (ch === '-') { adding = false; continue; }
 
-			let mappedPrefix = modeChar;
-			if (modeChar === 'y') mappedPrefix = '~';
-			else if (modeChar === 'a') mappedPrefix = '&';
-			else if (modeChar === 'h') mappedPrefix = '%';
-
-			const prefixPos = PrefixChars[1].indexOf(mappedPrefix);
-			if (prefixPos >= 0) {
-				Channel_UpdateUserPrefix(targetNick, channel, status, PrefixChars[0][prefixPos]);
-			}
-		} else {
-			let ii = 4;
-			let status = false;
-			for (let i = 0; i < data[3].length; i++) {
-				if (data[3][i] == "+") status = true;
-				else if (data[3][i] == "-") status = false;
-				else {
-					if (ii < data.length) {
-						Channel_UpdateUserPrefix(data[ii], channel, status, data[3][i]);
-						ii++;
-					}
+			// 检查此 mode 字符是否是前缀 mode（需要参数）
+			const posInModes = PrefixChars[0].indexOf(ch);
+			if (posInModes >= 0 && paramIndex < data.length) {
+				let targetNick = data[paramIndex].replace(/^:/, '');
+				paramIndex++;
+				Channel_UpdateUserPrefix(targetNick, channel, adding, ch);
+			} else if (posInModes < 0 && paramIndex < data.length) {
+				// 其他带参数的 mode（如 +k key, +l limit 等），跳过参数
+				// +b/+e/+I（ban/except/invite）也带参数，不影响用户列表
+				if (adding && (ch === 'k' || ch === 'l' || ch === 'b' || ch === 'e' || ch === 'I')) {
+					paramIndex++;
+				} else if (!adding && (ch === 'k' || ch === 'b' || ch === 'e' || ch === 'I')) {
+					paramIndex++;
 				}
 			}
 		}
@@ -2864,7 +3921,7 @@
 		});
 		writeToLog(`[IRC] User quit: ${nick}`);
 	});
-	Commands.set("PRIVMSG", function (nick, data) {
+	Commands.set("PRIVMSG", function (nick, data, msgTags) {
 		if (!data || data.length < 4) return;
 		let target = data[2];
 		let text = data[3].substring(1);
@@ -2873,7 +3930,12 @@
 		}
 		nick = data[0].substring(1).split("!")[0];
 
-		const isPrivateMessage = !target.startsWith('#') && target.toLowerCase() === nickname.toLowerCase();
+		const serverTime = msgTags && msgTags.get('time') || null;
+		const accountName = msgTags && msgTags.get('account') || null;
+		const msgId = msgTags && msgTags.get('msgid') || null;
+		const replyTo = msgTags && msgTags.get('+reply') || null;
+
+		const isPrivateMessage = !/^[#&+!]/.test(target) && target.toLowerCase() === nickname.toLowerCase();
 
 		let channel;
 		if (isPrivateMessage) {
@@ -2891,29 +3953,39 @@
 			if (!channel) channel = statusChannel;
 		}
 
+		// 如果是服务器回显自己发送的消息，且 echo-message 已启用，则正常显示
+		// （因为 send() 已不再本地显示，这里是唯一的显示时机）
+		// 注意: ircv3EchoMessage=true 时自己的消息也走这里正常显示
+
 	if (text[0] == "\x01") {
 		if (text.indexOf("\x01ACTION ") == 0) {
 			let actionText = text.substring(8);
 			if (actionText.endsWith("\x01")) actionText = actionText.slice(0, -1);
-			writeToScreen("var(--clr-red)", `${nick} ${actionText}`, channel, "*");
+			writeToScreen("var(--clr-red)", `${nick} ${actionText}`, channel, "*", serverTime);
 		} else {
-			writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*");
+			writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*", serverTime);
 		}
 		if (channel && channel !== activeChannel && channel !== statusChannel) {
-				addUnreadBadge(channel);
-			}
-		} else {
-			writeToScreen("var(--clr-font)", text, channel, nick);
-			if (channel && channel !== activeChannel && channel !== statusChannel) {
-				addUnreadBadge(channel);
-			}
+			addUnreadBadge(channel);
 		}
+	} else {
+		let displayNick = nick;
+		// 若有 +reply 标签，在消息前加 "↩ 回复" 前缀
+		let displayText = text;
+		if (replyTo) {
+			displayText = `↩ ${text}`;
+		}
+		writeToScreen("var(--clr-font)", displayText, channel, displayNick, serverTime);
+		if (channel && channel !== activeChannel && channel !== statusChannel) {
+			addUnreadBadge(channel);
+		}
+	}
 
 		if (isPrivateMessage) {
 			writeToLog(`[PM] ${nick} → you: ${text}`);
 		}
 	});
-	Commands.set("NOTICE", function (nick, data) {
+	Commands.set("NOTICE", function (nick, data, msgTags) {
 		if (!data || data.length < 4) return;
 		let channel = findChannel(data[2]);
 		if (!channel) channel = statusChannel;
@@ -2922,13 +3994,38 @@
 			text += " " + data[i];
 		}
 		nick = data[0].substring(1).split("!")[0];
-		writeToScreen("var(--clr-blue)", `通知 ${nick}: ${text}`, channel, "-");
+		const serverTime = msgTags && msgTags.get('time') || null;
+		writeToScreen("var(--clr-blue)", `通知 ${nick}: ${text}`, channel, "-", serverTime);
 		writeToLog(`[NOTICE] ${nick}: ${text}`);
 	});
 
 	function process(rawData) {
 		if (!rawData) return;
-		let data = rawData.replace(/\r\n$/, '').replace(/\r$/, '').split(" ");
+
+		const lines = rawData.split('\n');
+		for (const line of lines) {
+			const trimmedLine = line.replace(/\r$/, '').replace(/\r\n$/, '');
+			if (trimmedLine) processLine(trimmedLine);
+		}
+	}
+
+	function processLine(rawLine) {
+		if (!rawLine) return;
+
+		const { tags: msgTags, rest: lineAfterTags } = extractMsgTags(rawLine);
+		// msgTags 现在包含所有 @key=value 标签
+		// lineAfterTags 是去掉标签部分的消息正文
+
+		// batch 支持：如果消息带有 batch= 标签，且对应 batch 还在缓冲中，先缓冲
+		if (msgTags.has('batch')) {
+			const batchRef = msgTags.get('batch');
+			if (batchBuffer && batchBuffer.has(batchRef)) {
+				batchBuffer.get(batchRef).messages.push(rawLine);
+				return; // 暂存，等 BATCH -ref 时统一处理
+			}
+		}
+
+		let data = lineAfterTags.split(" ");
 		if (!data || data.length < 2) {
 			return;
 		}
@@ -2941,19 +4038,34 @@
 		writeToLog(`[PING/PONG] ${pongResponse}`);
 		return;
 	}
-		if (data[0] === "ERROR") {
-			writeToScreen("var(--clr-font)", rawData, statusChannel, "");
-			writeToLog(`[ERROR] ${rawData}`);
-			return;
-		}
+	if (data[0] === "ERROR") {
+		writeToScreen("var(--clr-font)", lineAfterTags, statusChannel, "");
+		writeToLog(`[ERROR] ${lineAfterTags}`);
+		return;
+	}
 
-		let nick = data[0].substring(1).split("!")[0];
-		let command = data[1].toUpperCase();
-		let fn = Commands.get(command);
-		if (fn) {
-			fn(nick, data);
+	// IRC 协议中部分服务器消息没有 ":server" 前缀，data[0] 直接就是命令
+	// 这类消息：data[0] 不以 ":" 开头，且不是已经处理过的 PING/ERROR
+	if (!data[0].startsWith(':')) {
+		const bareCommand = data[0].toUpperCase();
+		const bareFn = Commands.get(bareCommand);
+		if (bareFn) {
+			// 构造 data 使处理函数能正常访问参数：
+			// data[0] = "" (空前缀), data[1] = 命令, data[2...] = 参数
+			// 但现有 AUTHENTICATE 处理器用 data[1] 作为 payload，需要对齐
+			// 所以这里把原始 data 整体右移一位，data[0]="" 作为虚拟前缀
+			bareFn("", data, msgTags);
 			return;
 		}
+	}
+
+	let nick = data[0].substring(1).split("!")[0];
+	let command = data[1].toUpperCase();
+	let fn = Commands.get(command);
+	if (fn) {
+		fn(nick, data, msgTags);
+		return;
+	}
 
 		if (!isNaN(parseInt(data[1]))) {
 			let text = "";
@@ -2970,6 +4082,401 @@
 			return;
 		}
 	}
+
+	// IRCv3 spec: https://ircv3.net/specs/client-tags/typing
+	// 需要 message-tags 能力
+	// 发送: TAGMSG 目标 :  (带 +typing=active/paused/done 标签)
+	// 接收: 来自其他用户的 TAGMSG 消息，解析 +typing 标签
+	//
+	// 节流规则: 连续 active 通知间隔 ≥ 3秒
+	// 超时规则: active → 6秒无续发视为停止; paused → 30秒无续发视为停止
+
+	let typingLastSent = 0;          // 上次发送 typing active 的时间戳
+	const TYPING_THROTTLE_MS = 3000; // 节流间隔 3秒
+	let typingInputTimer = null;     // 输入暂停检测定时器
+	const TYPING_PAUSE_DELAY = 4000; // 输入停止 4秒后发送 paused
+
+	// 其他用户输入状态追踪: Map<目标, Map<nick, {status, timer}>>
+	let remoteTypingState = new Map();
+
+	/**
+	 * 发送 typing 状态通知 (TAGMSG + +typing 标签)
+	 * @param {'active'|'paused'|'done'} status 输入状态
+	 * @param {string} target 目标频道或昵称
+	 */
+	function sendTypingStatus(status, target) {
+		if (!ircv3MessageTags || !isConnected || !target || target === 'Status') return;
+		doSend(`@+typing=${status} TAGMSG ${target}\r\n`);
+		writeToLog(`[TYPING] Sent: target=${target} status=${status}`);
+	}
+
+	/**
+	 * 当用户在输入框中输入时调用，处理 typing active/paused 状态发送
+	 */
+	function handleTypingInput() {
+		if (!ircv3MessageTags || !activeChannel || activeChannel.name === 'Status') return;
+		const target = activeChannel.name;
+		const now = Date.now();
+
+		// 节流: 距离上次发送 active 超过 3秒才重新发送
+		if (now - typingLastSent >= TYPING_THROTTLE_MS) {
+			sendTypingStatus('active', target);
+			typingLastSent = now;
+		}
+
+		// 重置暂停检测定时器
+		if (typingInputTimer) clearTimeout(typingInputTimer);
+		typingInputTimer = setTimeout(() => {
+			// 用户停止输入但未清空输入框 → paused
+			if (input && input.value.trim().length > 0) {
+				sendTypingStatus('paused', target);
+			}
+			typingInputTimer = null;
+		}, TYPING_PAUSE_DELAY);
+	}
+
+	/**
+	 * 当用户发送消息后，发送 done 状态并重置定时器
+	 */
+	function sendTypingDone(target) {
+		if (!ircv3MessageTags || !target || target === 'Status') return;
+		if (typingInputTimer) { clearTimeout(typingInputTimer); typingInputTimer = null; }
+		typingLastSent = 0;
+		sendTypingStatus('done', target);
+	}
+
+	/**
+	 * 更新 typing 指示器 UI
+	 * @param {string} target 当前活跃频道/会话名
+	 */
+	function updateTypingIndicatorUI(target) {
+		const el = document.getElementById('typingIndicator');
+		if (!el) return;
+		const channelTyping = remoteTypingState.get(target);
+		if (!channelTyping || channelTyping.size === 0) {
+			el.textContent = '';
+			return;
+		}
+		const activeTypers = [];
+		channelTyping.forEach((state, nick) => {
+			if (state.status === 'active' || state.status === 'paused') {
+				activeTypers.push(nick);
+			}
+		});
+		if (activeTypers.length === 0) {
+			el.textContent = '';
+		} else if (activeTypers.length === 1) {
+			el.textContent = `✎ ${activeTypers[0]} 正在输入...`;
+		} else if (activeTypers.length <= 3) {
+			el.textContent = `✎ ${activeTypers.join('、')} 正在输入...`;
+		} else {
+			el.textContent = `✎ ${activeTypers.length} 人正在输入...`;
+		}
+	}
+
+	/**
+	 * 设置远程用户的输入状态，并启动超时清理
+	 */
+	function setRemoteTypingState(nick, target, status) {
+		if (!remoteTypingState.has(target)) {
+			remoteTypingState.set(target, new Map());
+		}
+		const channelTyping = remoteTypingState.get(target);
+
+		// 清除已有的超时定时器
+		if (channelTyping.has(nick)) {
+			const prev = channelTyping.get(nick);
+			if (prev.timer) clearTimeout(prev.timer);
+		}
+
+		if (status === 'done') {
+			channelTyping.delete(nick);
+		} else {
+			const timeoutMs = status === 'active' ? 6000 : 30000;
+			const timer = setTimeout(() => {
+				const ct = remoteTypingState.get(target);
+				if (ct) { ct.delete(nick); updateTypingIndicatorUI(target); }
+			}, timeoutMs);
+			channelTyping.set(nick, { status, timer });
+		}
+
+		// 只有当前活跃频道才更新 UI
+		if (activeChannel && activeChannel.name === target) {
+			updateTypingIndicatorUI(target);
+		}
+	}
+
+	// TAGMSG 命令处理器: 接收其他用户的 typing 通知
+	Commands.set("TAGMSG", function (nick, data, msgTags) {
+		if (!data || data.length < 3) return;
+		nick = data[0].substring(1).split("!")[0];
+		const target = data[2];
+
+		if (msgTags && msgTags.has('+typing')) {
+			const typingStatus = msgTags.get('+typing');
+			// TAGMSG 的目标是频道时，在该频道显示; 目标是自己时，在 PM 对话显示
+			let displayTarget = target;
+			if (!target.startsWith('#') && target.toLowerCase() === nickname.toLowerCase()) {
+				// 这是发给自己的 TAGMSG（PM 场景），显示在对方的 PM tab 中
+				displayTarget = nick;
+			}
+			writeToLog(`[TYPING] Received: ${nick} → ${displayTarget} = ${typingStatus}`);
+			setRemoteTypingState(nick, displayTarget, typingStatus);
+		}
+
+		// +react client-tag: 消息表情反应
+		if (msgTags && msgTags.has('+react')) {
+			const reaction = msgTags.get('+react');
+			const replyTo  = msgTags.get('+reply') || '';
+			let displayTarget = target;
+			if (!/^[#&+!]/.test(target) && target.toLowerCase() === nickname.toLowerCase()) {
+				displayTarget = nick;
+			}
+			const channel = findChannel(displayTarget) || statusChannel;
+			if (channel) {
+				writeToScreen("var(--clr-text-dim)", `${nick} 对消息回应了 ${reaction}${replyTo ? ' (msgid:'+replyTo+')' : ''}`, channel, "*");
+			}
+			writeToLog(`[REACT] ${nick} → ${displayTarget}: ${reaction}`);
+		}
+	});
+
+	// ── IRCv3: BATCH 批量消息支持 ──────────────────────────────────────────
+	// 规范: https://ircv3.net/specs/extensions/batch
+	// BATCH +ref type [params...]  开始批次
+	// BATCH -ref                   结束批次
+	// 批次内消息带 batch=ref 标签
+
+	Commands.set("BATCH", function (nick, data) {
+		if (!data || data.length < 2) return;
+		const refStr = data[1] || '';
+		if (refStr.startsWith('+')) {
+			const ref  = refStr.substring(1);
+			const type = data[2] ? data[2].toUpperCase() : '';
+			const params = data.slice(3).map(p => p.replace(/^:/, ''));
+			batchBuffer.set(ref, { type, params, messages: [] });
+			writeToLog(`[BATCH] Start: ref=${ref} type=${type} params=${params.join(',')}`);
+		} else if (refStr.startsWith('-')) {
+			const ref = refStr.substring(1);
+			const batch = batchBuffer.get(ref);
+			if (!batch) return;
+			batchBuffer.delete(ref);
+			writeToLog(`[BATCH] End: ref=${ref} type=${batch.type} msgs=${batch.messages.length}`);
+			// 处理已缓冲的批次消息
+			processBatch(ref, batch);
+		}
+	});
+
+	function processBatch(ref, batch) {
+		const type = batch.type;
+		if (type === 'CHATHISTORY' || type === 'chathistory') {
+			// 历史消息批次: 按顺序显示
+			const channelName = batch.params[0] || '';
+			const ch = findChannel(channelName);
+			if (ch) {
+				writeToScreen("var(--clr-text-dim)", `── 频道历史消息 (${batch.messages.length}条) ──`, ch, "*");
+			}
+			for (const msg of batch.messages) {
+				processLine(msg);
+			}
+		} else if (type === 'LABELED-RESPONSE' || type === 'labeled-response') {
+			// labeled-response 批次：顺序处理
+			for (const msg of batch.messages) {
+				processLine(msg);
+			}
+		} else {
+			// 通用批次：顺序处理
+			for (const msg of batch.messages) {
+				processLine(msg);
+			}
+		}
+	}
+
+	// ── IRCv3: labeled-response ──────────────────────────────────────────
+	// 规范: https://ircv3.net/specs/extensions/labeled-response
+	// 给发出的命令打 label 标签，服务器回复带相同 label，实现请求-响应配对
+
+	function doSendLabeled(message, description) {
+		if (!ircv3LabeledResponse) {
+			doSend(message);
+			return null;
+		}
+		const label = 'lbl' + (++labelCounter);
+		pendingLabels.set(label, { description: description || message.trim(), ts: Date.now() });
+		// 发送带 label 标签的消息
+		const tagged = `@label=${label} ${message}`;
+		doSend(tagged.endsWith('\r\n') ? tagged : tagged + '\r\n');
+		writeToLog(`[LABELED] Sent label=${label}: ${message.trim()}`);
+		// 30秒超时清理
+		setTimeout(() => {
+			if (pendingLabels.has(label)) {
+				pendingLabels.delete(label);
+				writeToLog(`[LABELED] Label ${label} timed out`);
+			}
+		}, 30000);
+		return label;
+	}
+
+	// ── IRCv3: chathistory ──────────────────────────────────────────────
+	// 规范: https://ircv3.net/specs/extensions/chathistory
+	// 加入频道后请求最近历史消息
+
+	function requestChatHistory(channelName, limit) {
+		if (!ircv3ChatHistory) return;
+		limit = limit || 50;
+		// CHATHISTORY LATEST #chan * count
+		doSend(`CHATHISTORY LATEST ${channelName} * ${limit}\r\n`);
+		writeToLog(`[CHATHISTORY] Requesting last ${limit} messages for ${channelName}`);
+	}
+
+	// 收到 CHATHISTORY 错误回复
+	Commands.set("FAIL", function (nick, data) {
+		if (!data || data.length < 3) return;
+		const command = data[2] || '';
+		const code    = data[3] || '';
+		const msg     = data.slice(4).join(' ').replace(/^:/, '');
+		writeToScreen("var(--clr-warning)", `[${command}] 失败 (${code}): ${msg}`, statusChannel, "*");
+		writeToLog(`[FAIL] command=${command} code=${code}: ${msg}`);
+	});
+
+	// ── IRCv3: invite-notify + INVITE 命令处理 ──────────────────────────
+	// 规范: https://ircv3.net/specs/extensions/invite-notify
+	// 服务器推送 INVITE 通知：:op!u@h INVITE targetNick #channel
+	// 有 invite-notify 时：其他用户被邀请时我们也能看到
+
+	Commands.set("INVITE", function (nick, data) {
+		if (!data || data.length < 4) return;
+		const invitedNick  = data[2];
+		const inviteChannel = data[3].replace(/^:/, '');
+		const isSelf = invitedNick.toLowerCase() === nickname.toLowerCase();
+
+		if (isSelf) {
+			// 我被邀请加入某频道
+			const targetCh = findChannel(inviteChannel);
+			const displayCh = targetCh || statusChannel;
+			writeToScreen("var(--clr-green)", `🔔 ${nick} 邀请你加入 ${inviteChannel}，输入 /join ${inviteChannel} 加入`, displayCh, "*");
+			// 在状态栏也显示一次
+			if (displayCh !== statusChannel) {
+				writeToScreen("var(--clr-green)", `🔔 ${nick} 邀请你加入 ${inviteChannel}`, statusChannel, "*");
+			}
+			writeToLog(`[INVITE] You were invited to ${inviteChannel} by ${nick}`);
+		} else {
+			// invite-notify: 其他用户被邀请，显示在相关频道
+			const ch = findChannel(inviteChannel) || statusChannel;
+			writeToScreen("var(--clr-text-dim)", `${nick} 邀请 ${invitedNick} 加入 ${inviteChannel}`, ch, "*");
+			writeToLog(`[INVITE] ${nick} invited ${invitedNick} to ${inviteChannel}`);
+		}
+	});
+
+	// 341 RPL_INVITING: 服务器确认邀请已发送
+	Commands.set("341", function (nick, data) {
+		if (!data || data.length < 4) return;
+		const invitedNick  = data[3];
+		const inviteChannel = data.length >= 5 ? data[4].replace(/^:/, '') : '';
+		writeToScreen("var(--clr-info)", `已向 ${invitedNick} 发送邀请${inviteChannel ? ' 加入 ' + inviteChannel : ''}`, statusChannel, "*");
+		writeToLog(`[INVITE] RPL_INVITING (341): invited ${invitedNick} to ${inviteChannel}`);
+	});
+
+	// /invite 命令: /invite nick [#channel]
+	// 在 send() 函数中注册这个命令在 help 中（处理逻辑在 send() 里）
+
+	// ── IRCv3: draft/multiline ──────────────────────────────────────────
+	// 规范: https://ircv3.net/specs/extensions/multiline
+	// 服务器推送多行消息时带 draft/multiline batch 类型
+	// 客户端发送时暂不实现 (UI 层需要额外改动)
+
+	// 多行消息接收处理：在 processBatch 中已包含；
+	// 多行消息 batch 类型为 "draft/multiline" 或 "multiline"
+	// 消息内容在 batch.messages 中，按行连接显示
+
+	// ── IRCv3: WHOX 扩展 WHO 查询 ──────────────────────────────────────
+	// 规范: https://ircv3.net/specs/extensions/whox
+	// 使用 WHO #chan %tuihnrfa,1 可以批量获取用户信息（含账号名、away状态）
+	// 352 RPL_WHOREPLY (标准), 354 RPL_WHOSPCRPL (whox扩展)
+
+	// 加入频道后请求 WHO 信息（含账号和 away 状态）
+	function requestWho(channelName) {
+		if (!isConnected) return;
+		if (ircv3Whox) {
+			// WHOX: 请求 nick、user、host、account、away flag
+			doSend(`WHO ${channelName} %tuihnrfa,1\r\n`);
+			writeToLog(`[WHOX] Requesting WHO for ${channelName}`);
+		} else {
+			doSend(`WHO ${channelName}\r\n`);
+			writeToLog(`[IRC] Requesting WHO for ${channelName}`);
+		}
+	}
+
+	// 352 RPL_WHOREPLY: 标准 WHO 回复
+	// :server 352 me #chan user host server nick H/G [0 realname]
+	Commands.set("352", function (nick, data) {
+		if (!data || data.length < 8) return;
+		const channel    = data[3];
+		const whoNick    = data[7];
+		const flags      = data[8] || '';
+		const isAway     = flags.startsWith('G'); // G=Gone(away), H=Here
+		const ch = findChannel(channel);
+		if (ch && ch.userlist) {
+			updateUserAwayStatus(whoNick, ch, isAway);
+		}
+		writeToLog(`[IRC] RPL_WHOREPLY (352): ${whoNick} in ${channel} flags=${flags}`);
+	});
+
+	// 354 RPL_WHOSPCRPL: WHOX 扩展回复（含账号信息）
+	// 格式随 WHO 请求的字段标志变化；我们请求了 %tuihnrfa,1
+	// :server 354 me 1 user host nick H/G account realname
+	Commands.set("354", function (nick, data) {
+		if (!data || data.length < 7) return;
+		// querytype=1, user, host, nick, flags, account
+		const whoNick  = data[5] || '';
+		const flags    = data[6] || '';
+		const account  = data[7] || '';
+		const isAway   = flags.startsWith('G');
+		// 在所有含此用户的频道更新 away 状态
+		channelMap.forEach(function (ch) {
+			if (!ch.users) return;
+			if (ch.users.some(u => u[1] === whoNick)) {
+				updateUserAwayStatus(whoNick, ch, isAway);
+			}
+		});
+		writeToLog(`[WHOX] RPL_WHOSPCRPL (354): ${whoNick} flags=${flags} account=${account}`);
+	});
+
+	// 315 RPL_ENDOFWHO
+	Commands.set("315", function (nick, data) {
+		if (!data || data.length < 4) return;
+		const target = data[3];
+		writeToLog(`[IRC] RPL_ENDOFWHO (315): ${target}`);
+	});
+
+	// ── +reply client-tag: 消息引用回复 ────────────────────────────────
+	// 规范: https://ircv3.net/specs/client-tags/reply
+	// 发送带 +reply=<msgid> 标签的 PRIVMSG/NOTICE
+	// 客户端在 PRIVMSG 处理时检测并显示引用信息
+
+	// 在 PRIVMSG 处理中已通过 msgTags 支持显示；
+	// 发送端通过 sendWithReply() 函数支持
+
+	function sendWithReply(replyToMsgid, targetChannel, text) {
+		if (!replyToMsgid || !ircv3MessageTags) {
+			// 不支持时直接发普通消息
+			const msgs = splitIRCMessage('privmsg ' + targetChannel + ' :' + text);
+			msgs.forEach(m => doSend(m));
+			return;
+		}
+		// 发送带 +reply 标签的消息
+		const msgs = splitIRCMessage('privmsg ' + targetChannel + ' :' + text);
+		msgs.forEach((m, idx) => {
+			if (idx === 0) {
+				// 首条带 reply 标签
+				const tagged = `@+reply=${replyToMsgid} ${m.trim()}\r\n`;
+				doSend(tagged);
+			} else {
+				doSend(m);
+			}
+		});
+		writeToLog(`[REPLY] Sent reply to msgid=${replyToMsgid}`);
+	}
+
 
 	function startKeepAlive() {
 		stopKeepAlive();
@@ -3007,6 +4514,7 @@
 
 	window.toggleConnection      = toggleConnection;
 	window.toggleHeaderMenu      = toggleHeaderMenu;
+	window.toggleSettings        = toggleSettings;
 	window.toggleLog             = toggleLog;
 	window.clearLog              = clearLog;
 	window.showPrivateChatList   = showPrivateChatList;
@@ -3017,6 +4525,11 @@
 	window.onKeyDown             = onKeyDown;
 	window.updateCharCount       = updateCharCount;
 	window.openPrivateChat       = openPrivateChat;
+	window.handleTypingInput     = handleTypingInput;
+	window.sendWithReply         = sendWithReply;
+	window.doSendLabeled         = doSendLabeled;
+	window.requestChatHistory    = requestChatHistory;
+	window.requestWho            = requestWho;
 
 }());
 </script>
