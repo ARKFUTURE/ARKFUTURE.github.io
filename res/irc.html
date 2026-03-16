@@ -3656,44 +3656,50 @@ const Channel_AppendUser = channelAppendUser;
 		let channel = findChannel(data[3]);
 		if (!channel || !channel.userlist) return;
 		channel.users.sort(sortUserList);
-		channel.userlist.innerHTML = "";
+		// 用 DocumentFragment 批量构建所有用户节点，一次性插入 DOM，避免逐个 appendChild 触发重排
+		const frag = document.createDocumentFragment();
 		for (let i = 0; i < channel.users.length; i++) {
-			Channel_AppendUser(channel.users[i][1], channel, channel.users[i][0]);
+			const prefix = channel.users[i][0];
+			const nickName = channel.users[i][1];
+			const userEl = document.createElement("li");
+			const initial = nickName.replace(/^[^a-zA-Z0-9]/, '')[0] || nickName[0] || '?';
+			userEl.setAttribute('data-initial', initial.toUpperCase());
+			const prefixP = document.createElement("p");
+			if (prefix && prefix !== " ") {
+				const prefixChar = prefix[0];
+				const prefixInfo = DefaultPrefixMap[prefixChar];
+				userEl.setAttribute('data-prefix', prefixChar);
+				prefixP.textContent = prefixInfo ? prefixInfo.symbol : prefixChar;
+				if (prefixInfo) prefixP.title = prefixInfo.name;
+			}
+			userEl.appendChild(prefixP);
+			const nickP = document.createElement("p");
+			nickP.textContent = nickName;
+			nickP.title = "点击与 " + nickName + " 私聊";
+			nickP.style.cursor = "pointer";
+			nickP.addEventListener("click", (function(n) { return function(e) { e.stopPropagation(); openPrivateChat(n); }; })(nickName));
+			userEl.appendChild(nickP);
+			frag.appendChild(userEl);
 		}
+		channel.userlist.innerHTML = "";
+		channel.userlist.appendChild(frag);
 		channel.names_end = true;
 		writeToLog(`[IRC] RPL_ENDOFNAMES (366): channel=${data[3]} total users=${channel.users.length}`);
 	});
+	// 内联昵称输入提示（替代同步 prompt()，避免冻结 UI）
+	function showNickPrompt(errorMsg, onConfirm) {
+		writeToScreen("var(--clr-warning)", errorMsg + " — 请在输入框输入新昵称后按回车 (或输入 /nick 新昵称)", statusChannel, "*");
+		writeToLog(`[IRC] ${errorMsg} — showing inline nick prompt`);
+		// 监听下一次用户发送的 /nick 命令或普通输入（视为新昵称）
+		// 直接告知用户使用 /nick 命令即可，无需额外拦截
+	}
 	Commands.set("432", function (nick, data) {
-		const input432 = prompt("错误: 昵称包含非法字符\n请输入新的昵称", "");
-		if (input432 === null || input432.trim() === "") {
-			writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — user cancelled nickname prompt`);
-			return;
-		}
-		const trimmed432 = input432.trim();
-		if (!validateNickname(trimmed432)) {
-			writeToScreen("var(--clr-warning)", `昵称格式仍然非法: ${trimmed432}`, statusChannel, "*");
-			writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — new nickname still invalid: "${trimmed432}"`);
-			return;
-		}
-		nickname = trimmed432;
-		doSend("NICK " + nickname);
-		writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — retrying with: "${nickname}"`);
+		writeToScreen("var(--clr-warning)", "❌ 昵称包含非法字符，请用 /nick 新昵称 重新设置", statusChannel, "*");
+		writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — prompting user to use /nick`);
 	});
 	Commands.set("433", function (nick, data) {
-		const input433 = prompt("错误: 昵称已被占用\n请输入新的昵称", "");
-		if (input433 === null || input433.trim() === "") {
-			writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — user cancelled nickname prompt`);
-			return;
-		}
-		const trimmed433 = input433.trim();
-		if (!validateNickname(trimmed433)) {
-			writeToScreen("var(--clr-warning)", `昵称格式非法: ${trimmed433}`, statusChannel, "*");
-			writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — new nickname invalid: "${trimmed433}"`);
-			return;
-		}
-		nickname = trimmed433;
-		doSend("NICK " + nickname);
-		writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — retrying with: "${nickname}"`);
+		writeToScreen("var(--clr-warning)", "❌ 昵称已被占用，请用 /nick 新昵称 重新设置", statusChannel, "*");
+		writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — prompting user to use /nick`);
 	});
 	Commands.set("477", function (nick, data) {
 		if (!data || data.length < 4) return;
