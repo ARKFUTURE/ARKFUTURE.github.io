@@ -132,7 +132,7 @@
 		overflow: hidden;
 	}
 
-	/* ── Floating Toolbar (右上角浮动，无标题栏) ── */
+	/* ── Floating Toolbar (top-right, no title bar) ── */
 	.irc-header {
 		position: fixed;
 		top: 0;
@@ -143,19 +143,19 @@
 		gap: 4px;
 		padding: 0 8px;
 		z-index: 500;
-		/* 不占布局空间，浮于 Tab bar 右侧 */
+		/* Out-of-flow, floats to the right of the tab bar */
 	}
 
-	/* 标题和状态文字区 — 隐藏 */
+	/* Title and status text area — hidden */
 	.irc-header__left { display: none; }
 	.irc-header__title { display: none; }
 
-	/* 状态圆点 — 贴在右上角按钮左侧，极简 pill */
+	/* Status dot — minimal pill, sits left of toolbar buttons */
 	.connection-status {
 		display: inline-flex;
 		align-items: center;
 		gap: 4px;
-		font-size: 0; /* 文字全隐，只显示圆点 */
+		font-size: 0; /* Hide text, show dot only */
 		white-space: nowrap;
 		transition: var(--transition);
 	}
@@ -188,7 +188,7 @@
 		flex-shrink: 0;
 	}
 
-	/* 图标按钮 — 融入 Tab bar，hover 时突出 */
+	/* Icon button — blends into tab bar, highlights on hover */
 	.icon-btn {
 		display: flex;
 		align-items: center;
@@ -294,7 +294,7 @@
 	body.embedded .conn-pill__label { display: none; }
 	body.embedded .conn-pill { padding: 0 6px; gap: 0; }
 
-	/* ── 菜单下拉 ── */
+	/* ── Dropdown Menu ── */
 	.irc-menu { position: relative; }
 
 	.irc-menu__btn {
@@ -316,7 +316,7 @@
 		border-color: rgba(0,229,255,.25);
 	}
 
-	/* 保留旧的 settings-toggle-btn 别名 */
+	/* Keep legacy settings-toggle-btn alias */
 	.settings-toggle-btn { display: none; }
 
 	.irc-menu__dropdown {
@@ -357,7 +357,7 @@
 	}
 	.header-menu-item.active::before { content:'✓'; margin-right: 2px; }
 
-	/* ── Settings Drawer（右侧抽屉） ── */
+	/* ── Settings Drawer (right side) ── */
 	.settings-drawer-overlay {
 		display: none;
 		position: fixed;
@@ -387,7 +387,7 @@
 		transform: translateX(0);
 	}
 
-	/* 抽屉头部 */
+	/* Drawer header */
 	.drawer-header {
 		flex: 0 0 auto;
 		display: flex;
@@ -419,7 +419,7 @@
 	}
 	.drawer-close:hover { color: var(--c-red); background: rgba(255,23,68,.1); }
 
-	/* 抽屉内容滚动区 */
+	/* Drawer scrollable content area */
 	.irc-settings__inner {
 		flex: 1 1 auto;
 		overflow-y: auto;
@@ -429,7 +429,7 @@
 		gap: 20px;
 	}
 
-	/* 设置分组 */
+	/* Settings group */
 	.settings-section {
 		display: flex;
 		flex-direction: column;
@@ -684,7 +684,7 @@
 		display: flex;
 		align-items: center;
 		gap: 3px;
-		padding: 0 90px 0 var(--sp-3); /* 右侧留出浮动按钮的空间 */
+		padding: 0 90px 0 var(--sp-3); /* Reserve space for floating toolbar on the right */
 		background: var(--bg-raised);
 		border-bottom: 1px solid var(--bd-subtle);
 		overflow-x: auto;
@@ -820,6 +820,8 @@
 		overflow-y: auto;
 		padding: var(--sp-3) var(--sp-4);
 		min-height: 0;
+		user-select: text;
+		-webkit-user-select: text;
 	}
 
 	.channelcontent > nav > nav > p {
@@ -1026,7 +1028,7 @@
 	}
 	#input::placeholder { color: var(--tx-muted); font-size: 11px; }
 
-	/* 字符计数 — 仅超限时浮现 */
+	/* Character counter — appears only when over limit */
 	.char-count {
 		flex-shrink: 0;
 		font-size: var(--font-size-xs);
@@ -1079,9 +1081,9 @@
 		.channel { font-size: var(--font-size-xs); padding: 0 8px; }
 	}
 
-	/* ── 嵌入模式（iframe 内） ── */
+	/* ── Embedded mode (inside iframe) ── */
 	body.embedded {
-		/* 用户列表收起，只保留聊天+输入 */
+		/* User list collapsed, chat and input only */
 		--panel-w: 0px;
 		--font-size-md: 12px;
 		--font-size-sm: 11px;
@@ -1147,10 +1149,10 @@
 		</div>
 	</header>
 
-	<!-- 设置抽屉遮罩 -->
+	<!-- Settings drawer overlay -->
 	<div class="settings-drawer-overlay" id="settingsOverlay" onclick="toggleSettings()"></div>
 
-	<!-- 设置抽屉 -->
+	<!-- Settings drawer -->
 	<div class="irc-settings" id="settingsPanel">
 		<div class="drawer-header">
 			<span class="drawer-header__title">设置</span>
@@ -2503,7 +2505,7 @@ const Channel_AppendUser = channelAppendUser;
 
 			const tsSpan = document.createElement("span");
 			tsSpan.textContent = displayTime + " ";
-			tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;user-select:none !important;margin-right:2px;";
+			tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;margin-right:2px;";
 
 			const sep = document.createTextNode(" ");
 			const msgSpan = document.createElement("span");
@@ -2516,7 +2518,7 @@ const Channel_AppendUser = channelAppendUser;
 			// System / info message — dim timestamp
 			const tsSpan = document.createElement("span");
 			tsSpan.textContent = displayTime + " ";
-			tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;user-select:none !important;";
+			tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;";
 			const msgSpan = document.createElement("span");
 			msgSpan.innerHTML = renderedMessage;
 			pre.appendChild(tsSpan);
@@ -4393,9 +4395,9 @@ const Channel_AppendUser = channelAppendUser;
 	let remoteTypingState = new Map();
 
 	/**
-	 * 发送 typing 状态通知 (TAGMSG + +typing 标签)
-	 * @param {'active'|'paused'|'done'} status 输入状态
-	 * @param {string} target 目标频道或昵称
+	 * Send typing status notification (TAGMSG + +typing tag)
+	 * @param {'active'|'paused'|'done'} status  typing state
+	 * @param {string} target  target channel or nick
 	 */
 	function sendTypingStatus(status, target) {
 		if (!ircv3MessageTags || !isConnected || !target || target === 'Status') return;
@@ -4404,7 +4406,7 @@ const Channel_AppendUser = channelAppendUser;
 	}
 
 	/**
-	 * 当用户在输入框中输入时调用，处理 typing active/paused 状态发送
+	 * Called when the user types in the input box; handles sending typing active/paused state
 	 */
 	function handleTypingInput() {
 		if (!ircv3MessageTags || !activeChannel || activeChannel.name === 'Status') return;
@@ -4429,7 +4431,7 @@ const Channel_AppendUser = channelAppendUser;
 	}
 
 	/**
-	 * 当用户发送消息后，发送 done 状态并重置定时器
+	 * Called after the user sends a message; sends done state and resets the timer
 	 */
 	function sendTypingDone(target) {
 		if (!ircv3MessageTags || !target || target === 'Status') return;
@@ -4439,8 +4441,8 @@ const Channel_AppendUser = channelAppendUser;
 	}
 
 	/**
-	 * 更新 typing 指示器 UI
-	 * @param {string} target 当前活跃频道/会话名
+	 * Update the typing indicator UI
+	 * @param {string} target  currently active channel or session name
 	 */
 	function updateTypingIndicatorUI(target) {
 		const el = document.getElementById('typingIndicator');
@@ -4468,7 +4470,7 @@ const Channel_AppendUser = channelAppendUser;
 	}
 
 	/**
-	 * 设置远程用户的输入状态，并启动超时清理
+	 * Set remote user typing state and start timeout cleanup
 	 */
 	function setRemoteTypingState(nick, target, status) {
 		if (!remoteTypingState.has(target)) {
@@ -4585,7 +4587,7 @@ const Channel_AppendUser = channelAppendUser;
 	}
 
 	// ── IRCv3: labeled-response ──────────────────────────────────────────
-	// 规范: https://ircv3.net/specs/extensions/labeled-response
+	// spec: https://ircv3.net/specs/extensions/labeled-response
 	// Attach a label tag to outgoing commands; the server includes the same label in its reply, enabling request/response correlation
 
 	function doSendLabeled(message, description) {
@@ -4610,7 +4612,7 @@ const Channel_AppendUser = channelAppendUser;
 	}
 
 	// ── IRCv3: chathistory ──────────────────────────────────────────────
-	// 规范: https://ircv3.net/specs/extensions/chathistory
+	// spec: https://ircv3.net/specs/extensions/chathistory
 	// Request recent channel message history upon joining
 
 	function requestChatHistory(channelName, limit) {
@@ -4632,7 +4634,7 @@ const Channel_AppendUser = channelAppendUser;
 	});
 
 	// ── IRCv3: invite-notify + INVITE Command Handler ───────────────────────────
-	// 规范: https://ircv3.net/specs/extensions/invite-notify
+	// spec: https://ircv3.net/specs/extensions/invite-notify
 	// Server-pushed INVITE notification: :op!u@h INVITE targetNick #channel
 	// With invite-notify: we receive notifications when other users are invited
 
@@ -4673,7 +4675,7 @@ const Channel_AppendUser = channelAppendUser;
 	// This command is registered in the help output inside send(); its logic is also handled there
 
 	// ── IRCv3: draft/multiline ──────────────────────────────────────────
-	// 规范: https://ircv3.net/specs/extensions/multiline
+	// spec: https://ircv3.net/specs/extensions/multiline
 	// Server delivers multi-line messages using the draft/multiline batch type
 	// Client-side sending of multi-line messages is not yet implemented (requires additional UI changes)
 
@@ -4682,7 +4684,7 @@ const Channel_AppendUser = channelAppendUser;
 	// Message lines are stored in batch.messages and joined for display
 
 	// ── IRCv3: WHOX Extended WHO queries ──────────────────────────────────────
-	// 规范: https://ircv3.net/specs/extensions/whox
+	// spec: https://ircv3.net/specs/extensions/whox
 	// Use WHO #chan %tunhfa,1 to bulk-fetch user info including account name and away status
 	// Fixed field return order: t(token) u(user) h(host) n(nick) f(flags) a(account)
 	// 352 RPL_WHOREPLY (standard), 354 RPL_WHOSPCRPL (WHOX extension)
@@ -4747,7 +4749,7 @@ const Channel_AppendUser = channelAppendUser;
 	});
 
 	// ── +reply client-tag: quoted message reply ────────────────────────────────
-	// 规范: https://ircv3.net/specs/client-tags/reply
+	// spec: https://ircv3.net/specs/client-tags/reply
 	// Send a PRIVMSG/NOTICE with a +reply=<msgid> client tag attached
 	// The client detects and renders the quoted message when processing incoming PRIVMSG
 
