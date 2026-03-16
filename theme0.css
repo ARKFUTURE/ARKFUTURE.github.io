@@ -443,4 +443,10 @@ footer a:hover {
   h2.section-subheading { font-size: 1.1rem; }
   footer { font-size: 0.8rem; }
   .content-block { padding: 1rem; }
+  /* 手机端 IRC iframe 防溢出 */
+  .irc-embed-item { overflow: hidden; }
+  .irc-embed-frame {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
 }

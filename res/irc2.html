@@ -852,7 +852,9 @@
 		font-size: var(--font-size-sm);
 		color: var(--tx-muted);
 		text-align: left;
-		min-width: 220px;
+		min-width: 0;
+		max-width: 100%;
+		box-sizing: border-box;
 	}
 	.empty-state__hint span { color: var(--c-cyan); font-weight: 600; }
 
@@ -1007,6 +1009,7 @@
 	body.embedded .channelcontent > nav > h3 { height: 26px; font-size: 11px; padding: 0 10px; }
 	/* 输入区紧凑 */
 	body.embedded .input-container__row { padding: 4px 7px; gap: 5px; }
+	body.embedded .input-prefix { display: none; }
 	body.embedded #input { padding: 4px 8px; font-size: 12px; }
 	body.embedded .send-btn { padding: 4px 9px; font-size: 10px; letter-spacing: .4px; }
 	body.embedded .typing-indicator { display: none; }

@@ -1241,6 +1241,9 @@ footer a:hover {
   .content-block { padding: 1rem; }
   .site-section::before { left: -10px; }
   .site-section::after  { right: -10px; }
+  /* 手机端 IRC iframe 防溢出 */
+  .irc-embed-item { overflow: hidden; }
+  .irc-embed-frame { max-width: 100% !important; width: 100% !important; }
 }
 
 } /* end @layer overrides */
