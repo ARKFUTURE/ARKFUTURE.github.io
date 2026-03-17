@@ -98,7 +98,12 @@
    ============================================================ */
 @layer reset {
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    /* 彻底锁死横向溢出，防止绝对定位元素撑宽页面 */
+    overflow-x: hidden;
+    width: 100%;
+  }
 }
 
 /* ============================================================
@@ -621,7 +626,7 @@ main::after {
   content: '';
   position: absolute;
   top: 50%; left: 50%;
-  width: 500px; height: 500px;
+  width: min(500px, 90vw); height: min(500px, 90vw);
   border-radius: 50%;
   box-shadow:
     0 0 0 3px   color-mix(in oklch, var(--pink)     60%, transparent),
@@ -641,7 +646,7 @@ main::after {
   content: '';
   position: absolute;
   top: 50%; left: 50%;
-  width: 600px; height: 220px;
+  width: min(600px, 95vw); height: min(220px, 34vw);
   border-radius: 50%;
   box-shadow:
     0 0 0 2px   color-mix(in oklch, var(--peach)     50%, transparent),
@@ -1233,8 +1238,8 @@ footer a:hover {
 @media (max-width: 768px) {
   body { padding: 12px; font-size: .95rem; }
   #hero-title { font-size: 200%; letter-spacing: 3px; }
-  .hero::before { width: 300px; height: 300px; }
-  .hero::after  { width: 360px; height: 140px; }
+  .hero::before { width: min(300px, 85vw); height: min(300px, 85vw); }
+  .hero::after  { width: min(360px, 92vw); height: min(140px, 22vw); }
   h1.section-heading { font-size: 1.3rem; }
   h2.section-subheading { font-size: 1.1rem; }
   footer { font-size: .78rem; }

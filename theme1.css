@@ -354,6 +354,9 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* 彻底锁死横向溢出，防止绝对定位元素撑宽页面 */
+  overflow-x: hidden;
+  width: 100%;
 }
 }
 
@@ -755,7 +758,7 @@ main::after {
   content: '';
   position: absolute;
   top: 50%; left: 50%;
-  width: 520px; height: 520px;
+  width: min(520px, 90vw); height: min(520px, 90vw);
   border-radius: 50%;
   box-shadow:
     0 0 0 2px  rgba(0,255,65,.22),
@@ -775,7 +778,7 @@ main::after {
   content: '';
   position: absolute;
   top: 50%; left: 50%;
-  width: 600px; height: 230px;
+  width: min(600px, 95vw); height: min(230px, 36vw);
   border-radius: 50%;
   box-shadow:
     0 0 0 2px  rgba(255,0,60,.28),
@@ -1559,8 +1562,8 @@ footer a:hover::before {
 @media (max-width: 768px) {
   body { padding: 12px; font-size: .93rem }
   #hero-title { font-size: clamp(1.6rem, 10vw, 3rem); letter-spacing: 3px }
-  .hero::before { width: 300px; height: 300px }
-  .hero::after  { width: 360px; height: 140px }
+  .hero::before { width: min(300px, 85vw); height: min(300px, 85vw) }
+  .hero::after  { width: min(360px, 92vw); height: min(140px, 22vw) }
   h1.section-heading  { font-size: 1.3rem }
   h2.section-subheading { font-size: 1.1rem }
   footer { font-size: .76rem }
