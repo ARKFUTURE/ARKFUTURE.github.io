@@ -452,7 +452,31 @@ footer a:hover {
 }
 
 /* ============================================================
-   iframe 点击放大 — 遮罩层
+   iframe 点击放大 — 包裹层和点击遮罩
+   ============================================================ */
+
+/* 包裹容器 */
+.iframe-zoom-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+/* 点击遮罩层 — 覆盖在 iframe 上 */
+.iframe-click-cap {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  cursor: zoom-in;
+  transition: background 0.25s ease;
+  border-radius: inherit;
+}
+/* 默认完全透明，hover 时稍微亮一点提示可点击 */
+.iframe-click-cap:hover {
+  background: rgba(0, 240, 255, 0.08);
+}
+
+/* ============================================================
+   iframe 点击放大 — 全屏遮罩层
    ============================================================ */
 
 .iframe-overlay {
@@ -529,20 +553,6 @@ footer a:hover {
   user-select: none;
 }
 
-.irc-embed-frame,
-.widget-frame {
-  cursor: zoom-in;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
-.irc-embed-frame:hover {
-  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
-  border-color: rgba(0, 240, 255, 0.6) !important;
-}
-.widget-frame:hover {
-  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
-  outline: 1px solid rgba(0, 240, 255, 0.45);
-}
-
 /* 移动端适配 */
 @media (max-width: 768px) {
   .iframe-expanded-box {
@@ -555,18 +565,13 @@ footer a:hover {
     top: 6px; right: 8px;
     letter-spacing: 1px;
   }
-  /* 触摸设备不显示 hover 光晕，改用 tap 时的 active 反馈 */
+  /* 触摸设备：改用 active 反馈 */
   @media (hover: none) {
-    .irc-embed-frame:hover,
-    .widget-frame:hover {
-      box-shadow: none;
-      border-color: inherit !important;
-      outline: none;
+    .iframe-click-cap:hover {
+      background: transparent;
     }
-    .irc-embed-frame:active,
-    .widget-frame:active {
-      box-shadow: 0 0 16px rgba(0, 240, 255, 0.5);
-      border-color: rgba(0, 240, 255, 0.7) !important;
+    .iframe-click-cap:active {
+      background: rgba(0, 240, 255, 0.18);
     }
   }
 }

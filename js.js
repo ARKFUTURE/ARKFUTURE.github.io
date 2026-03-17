@@ -174,15 +174,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const expandedIframe = overlay.querySelector('#iframe-expanded-content');
     const expandedBox    = overlay.querySelector('.iframe-expanded-box');
 
-    // 收集所有需要放大功能的 iframe
+    // 收集所有需要放大功能的包裹层
     function bindIframes() {
-        document.querySelectorAll('.irc-embed-frame, .widget-frame').forEach(frame => {
-            if (frame.dataset.zoomBound) return;   // 避免重复绑定
-            frame.dataset.zoomBound = '1';
+        document.querySelectorAll('.iframe-zoom-wrap').forEach(wrap => {
+            if (wrap.dataset.zoomBound) return;   // 避免重复绑定
+            wrap.dataset.zoomBound = '1';
 
-            frame.addEventListener('click', (e) => {
+            wrap.addEventListener('click', (e) => {
                 e.stopPropagation();
-                expandedIframe.src = frame.src;
+                expandedIframe.src = wrap.dataset.iframeSrc;
                 overlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
             });

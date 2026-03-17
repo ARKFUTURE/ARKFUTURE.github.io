@@ -1852,7 +1852,28 @@ a:hover {
 }
 
 /* ============================================================
-   iframe 点击放大 — 遮罩层
+   iframe 点击放大 — 包裹层和点击遮罩
+   ============================================================ */
+
+.iframe-zoom-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.iframe-click-cap {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  cursor: zoom-in;
+  transition: background 0.25s ease;
+  border-radius: inherit;
+}
+.iframe-click-cap:hover {
+  background: color-mix(in oklch, var(--pink, #ff80c8) 08%, transparent);
+}
+
+/* ============================================================
+   iframe 点击放大 — 全屏遮罩层
    ============================================================ */
 
 .iframe-overlay {
@@ -1934,21 +1955,6 @@ a:hover {
   user-select: none;
 }
 
-.irc-embed-frame,
-.widget-frame {
-  cursor: zoom-in;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
-.irc-embed-frame:hover {
-  box-shadow: 0 0 14px color-mix(in oklch, var(--pink, #ff80c8) 50%, transparent);
-  border-color: color-mix(in oklch, var(--pink, #ff80c8) 70%, transparent) !important;
-}
-.widget-frame:hover {
-  box-shadow: 0 0 14px color-mix(in oklch, var(--pink, #ff80c8) 50%, transparent);
-  outline: 2px solid color-mix(in oklch, var(--pink, #ff80c8) 55%, transparent);
-  border-radius: 4px;
-}
-
 /* 移动端适配 */
 @media (max-width: 768px) {
   .iframe-expanded-box {
@@ -1962,16 +1968,11 @@ a:hover {
     letter-spacing: 1px;
   }
   @media (hover: none) {
-    .irc-embed-frame:hover,
-    .widget-frame:hover {
-      box-shadow: none;
-      border-color: inherit !important;
-      outline: none;
+    .iframe-click-cap:hover {
+      background: transparent;
     }
-    .irc-embed-frame:active,
-    .widget-frame:active {
-      box-shadow: 0 0 16px color-mix(in oklch, var(--pink, #ff80c8) 60%, transparent);
-      border-color: color-mix(in oklch, var(--pink, #ff80c8) 80%, transparent) !important;
+    .iframe-click-cap:active {
+      background: color-mix(in oklch, var(--pink, #ff80c8) 20%, transparent);
     }
   }
 }
