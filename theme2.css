@@ -1664,46 +1664,68 @@ a:hover {
 
 @media (max-width: 768px) {
 
-  /* ── 全局：彻底锁死横向溢出 ── */
+  /* ── 全局：锁死横向溢出，但只在 html/body 上裁，不在子元素上裁 ── */
   html, body { overflow-x: hidden; max-width: 100%; }
 
-  /* 所有绝对/固定定位的伪元素装饰，超出部分直接裁掉 */
-  .hero,
-  .site-section,
-  .content-block,
-  .site-quote,
-  footer { overflow: hidden; }
+  /* ── Hero：
+       - 不加 overflow:hidden，让圆环装饰自然溢出不被截断
+       - 副标语文字允许换行，不用 ellipsis 截断
+  ── */
+  .hero { padding-bottom: 3.5rem; overflow: visible; }
 
-  /* ── Hero 副标语：缩小字号+字距，防止撑宽 ── */
   .hero::after {
-    font-size: .48rem;
-    letter-spacing: 2px;
-    padding: .25rem .8rem;
-    /* 限制最大宽度，超出截断而不是撑宽 */
-    max-width: calc(100vw - 2rem);
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;          /* 允许换行，不撑宽 */
+    text-overflow: clip;
+    overflow: visible;
+    max-width: calc(100vw - 3rem);
+    font-size: .5rem;
+    letter-spacing: 2.5px;
+    padding: .3rem 1rem;
+    text-align: center;
+    width: max-content;
+    /* 保持居中定位 */
+    left: 50%;
+    transform: translateX(-50%);
   }
-  .hero { padding-bottom: 3.5rem; }
 
-  /* ── Section ── */
-  .site-section { margin: 2.4rem 0; }
+  /* ── Section：不加 overflow:hidden，左侧竖条需要负值 left ── */
+  .site-section { margin: 2.4rem 0; overflow: visible; }
+
+  /* 左侧竖条贴近正常边缘，右侧隐藏 */
+  .site-section::before { left: -6px; }
+  .site-section::after  { display: none; }
 
   h1.section-heading {
     font-size: 1.4rem;
     margin-bottom: 1.2rem;
   }
 
-  /* ── 卡片 ── */
+  /* ── 卡片：
+       - 保留正常 overflow，不截断 border 和 box-shadow
+       - 简化阴影：移动端只保留 2 层，减少突兀感
+       - 关掉扫光伪元素（left:-80% 会撑宽）
+  ── */
   .content-block {
     padding: 1.1rem 1.2rem;
-    /* 扫光伪元素在移动端关掉，它是 left:-80% 跑出去的主因 */
+    overflow: visible;
+    box-shadow:
+      0  2px  8px color-mix(in oklch, var(--pink)     14%, transparent),
+      0  6px 20px color-mix(in oklch, var(--lavender)  10%, transparent),
+      inset 0 1px 0 rgba(255,255,255,.7);
   }
   .content-block::after { display: none; }
 
-  /* ── NET section → 强制单列，彻底禁网格 ── */
+  /* hover 阴影也同步简化 */
+  .content-block:hover {
+    box-shadow:
+      0  4px 14px color-mix(in oklch, var(--hot-pink)  22%, transparent),
+      0 12px 36px color-mix(in oklch, var(--lavender)  16%, transparent),
+      inset 0 1px 0 rgba(255,255,255,.9);
+  }
+
+  /* ── NET section → 强制单列 ── */
   #section-net {
-    display: block;        /* 直接退出 grid，最稳 */
+    display: block;
     column-gap: 0;
   }
   #section-net > .content-block { margin: 0 0 1rem; }
@@ -1712,8 +1734,8 @@ a:hover {
   .site-quote {
     padding: 1.3rem 1.2rem 1.1rem 1.6rem;
     margin: 1.6rem 0 1.2rem;
+    overflow: hidden;   /* 引用块内大引号水印可以裁，不影响外框 */
   }
-  /* 大引号水印缩小，防止撑出 */
   .site-quote::after {
     font-size: 5rem;
     right: .6rem;
@@ -1724,15 +1746,15 @@ a:hover {
   .sys-list {
     padding: .6rem .8rem;
     font-size: .78rem;
-    word-break: break-all;  /* 长路径自动折行 */
+    word-break: break-all;
   }
 
-  /* ── 左右两侧 section 彩虹竖条收缩，不超出 body ── */
-  .site-section::before { left: -8px; }
-  .site-section::after  { display: none; }   /* 右侧竖条在窄屏直接隐藏 */
-
   /* ── footer ── */
-  footer { padding: 2rem 0 1.6rem; margin-top: 3.5rem; overflow: hidden; }
+  footer {
+    padding: 2rem 0 1.6rem;
+    margin-top: 3.5rem;
+    overflow: hidden;   /* footer 本身无竖条伪元素，可以裁 */
+  }
 
   /* ── iframe 防溢出 ── */
   .irc-embed-item { overflow: hidden; }
