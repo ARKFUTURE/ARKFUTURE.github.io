@@ -967,7 +967,7 @@ h3.irc-server-label {
     inset 0 0 30px color-mix(in oklch, var(--pink)   06%, transparent);
 }
 
-/* 卡片顶部彩虹线 — 已移除 */
+/* .content-block::before 无伪元素 */
 
 /* 卡片扫光 */
 .content-block::after {
@@ -1252,3 +1252,489 @@ footer a:hover {
 }
 
 } /* end @layer overrides */
+
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║  THEME 2 — TYPOGRAPHIC EDITION                              ║
+   ║  空间 · 比例 · 层次 · 节奏                                   ║
+   ╚══════════════════════════════════════════════════════════════╝ */
+
+/* ============================================================
+   1. HERO — 副标语 + 底部呼吸空间
+   ============================================================ */
+
+/* 把原椭圆花环换成副标语文字 */
+.hero::after {
+  width: auto; height: auto;
+  top: auto; left: 50%; bottom: 1.2rem;
+  transform: translateX(-50%);
+  border-radius: 99px;
+  content: 'HACK  ·  BUILD  ·  DREAM  ·  SHARE';
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(.55rem, 1.4vw, .78rem);
+  font-weight: 500;
+  letter-spacing: 6px;
+  white-space: nowrap;
+  padding: .35rem 1.8rem;
+  background: linear-gradient(90deg,
+    var(--hot-pink), var(--peach), var(--lemon),
+    var(--mint), var(--sky), var(--lavender), var(--hot-pink)
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklch, var(--pink-lav) 35%, transparent),
+    0 2px 16px color-mix(in oklch, var(--pink) 15%, transparent);
+  background-color: color-mix(in oklch, var(--pink) 5%, white);
+  animation: text-rainbow 5s linear infinite, float-bob2 8s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px color-mix(in oklch, var(--pink) 40%, transparent));
+  z-index: 3; pointer-events: none;
+}
+
+/* hero 底部留白，让副标语有呼吸空间 */
+.hero { padding-bottom: 4.5rem; }
+
+/* ============================================================
+   2. SECTION 入场动画 — 错开时序，有节奏感
+   ============================================================ */
+
+@keyframes section-enter {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.site-section {
+  animation: section-enter .7s cubic-bezier(.16,1,.3,1) both;
+}
+.site-section:nth-child(1) { animation-delay: .06s; }
+.site-section:nth-child(2) { animation-delay: .14s; }
+.site-section:nth-child(3) { animation-delay: .22s; }
+.site-section:nth-child(4) { animation-delay: .30s; }
+.site-section:nth-child(5) { animation-delay: .38s; }
+
+/* ============================================================
+   3. SECTION — 上下间距放大，让每个区块独立呼吸
+   ============================================================ */
+
+.site-section {
+  margin: 3.5rem 0;
+}
+
+/* ============================================================
+   4. SECTION HEADING — 恢复干净的竖条+底线，加大字号
+   ============================================================ */
+
+/* 还原左竖条（精确复原原版逻辑，只加大） */
+h1.section-heading {
+  font-size: 1.85rem;
+  padding: .5rem 0 .6rem 1.6rem;
+  margin-bottom: 1.6rem;        /* 标题和第一张卡片之间留足间距 */
+}
+
+h1.section-heading::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 6px; height: 100%;
+  background: linear-gradient(180deg,
+    var(--pink), var(--lavender), var(--sky), var(--mint), var(--pink)
+  );
+  background-size: 100% 400%;
+  animation: bar-flow 1.8s linear infinite;
+  border-radius: 99px;
+  box-shadow:
+    4px 0 14px color-mix(in oklch, var(--pink)     55%, transparent),
+    8px 0 28px color-mix(in oklch, var(--lavender)  45%, transparent);
+}
+
+h1.section-heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg,
+    var(--pink), var(--lavender), var(--mint), transparent
+  );
+  background-size: 400% 400%;
+  animation: rainbow-fast 2.5s linear infinite;
+  border-radius: 99px;
+  opacity: .5;
+  box-shadow: 0 0 8px color-mix(in oklch, var(--pink) 40%, transparent);
+}
+
+/* ============================================================
+   5. BENTO GRID — NET section 卡片布局
+      Repo(小) + Radio(小) 一行
+      RSS(中)  + Widgets(中) 一行
+      IRC(大，全宽)
+   ============================================================ */
+
+#section-net {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "heading   heading"
+    "repo      radio"
+    "rss       widgets"
+    "irc       irc";
+  column-gap: 1.4rem;
+  row-gap: 0;
+  align-items: start;
+}
+
+#section-net > h1.section-heading { grid-area: heading; }
+#section-repo                      { grid-area: repo; }
+#section-radio                     { grid-area: radio; }
+#section-rss                       { grid-area: rss; }
+#section-widgets                   { grid-area: widgets; }
+#section-irc                       { grid-area: irc; }
+
+/* 网格内卡片底部间距用 margin 控制 */
+#section-net > .content-block {
+  margin: 0 0 1.4rem;
+  height: auto;
+}
+
+/* 小卡片（Repo / Radio）内容精简，字号稍小 */
+#section-repo h2.section-subheading,
+#section-radio h2.section-subheading {
+  font-size: 1.1rem;
+  margin-bottom: .6rem;
+}
+
+/* ============================================================
+   6. CONTENT-BLOCK — 精细阴影 + 克制 hover
+   ============================================================ */
+
+.content-block {
+  /* 增大内边距，内容不要贴边 */
+  padding: 1.6rem 2rem;
+  /* 精细多层阴影：近阴影清晰 + 远阴影柔和 */
+  box-shadow:
+    0  1px  3px color-mix(in oklch, var(--pink)     20%, transparent),
+    0  4px 12px color-mix(in oklch, var(--lavender)  16%, transparent),
+    0 12px 32px color-mix(in oklch, var(--hot-pink)   8%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.8),
+    inset 0 0  1px color-mix(in oklch, var(--pink) 20%, transparent);
+  transition:
+    transform .32s cubic-bezier(.34,1.56,.64,1),
+    box-shadow .32s ease;
+  /* 取消原版的持续晃动动画，改为静止+hover触发 */
+  animation: border-dance 3s linear infinite;
+}
+
+/* hover：向上提升 + 阴影扩散，不做 3D 旋转（太眩晕） */
+.content-block:hover {
+  transform: translateY(-8px) scale(1.012);
+  z-index: 10;
+  box-shadow:
+    0  2px  6px color-mix(in oklch, var(--pink)     22%, transparent),
+    0  8px 24px color-mix(in oklch, var(--hot-pink)  32%, transparent),
+    0 20px 56px color-mix(in oklch, var(--lavender)  22%, transparent),
+    0 32px 80px color-mix(in oklch, var(--pink)      10%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.9),
+    inset 0 0 40px color-mix(in oklch, var(--pink)    6%, transparent);
+  animation: border-dance 1.5s linear infinite;
+}
+
+/* ============================================================
+   7. H2 section-subheading — 加大间距，和下方内容拉开
+   ============================================================ */
+
+h2.section-subheading {
+  margin-bottom: 1rem;
+  margin-top: .2rem;
+}
+
+/* ============================================================
+   8. LIST — 行距放大，更易读
+   ============================================================ */
+
+.content-block ul {
+  padding-left: 1.2rem;
+}
+
+.content-block li {
+  line-height: 2.0;
+  margin-bottom: .2rem;
+}
+
+/* ============================================================
+   9. SITE-QUOTE — 独立全宽卡片，最强视觉层级
+   ============================================================ */
+
+.site-quote {
+  /* 独立成一张大卡，脱离普通 content-block 风格 */
+  margin: 2.4rem 0 1.6rem;
+  padding: 2.2rem 2.6rem 1.8rem 3.2rem;
+  border-left: none;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+
+  /* 独特背景：比普通卡片更深的紫色调 */
+  background: linear-gradient(135deg,
+    color-mix(in oklch, var(--lavender) 16%, white) 0%,
+    color-mix(in oklch, var(--pink)     10%, white) 60%,
+    color-mix(in oklch, var(--sky)       8%, white) 100%
+  );
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  box-shadow:
+    0 0 0 1.5px color-mix(in oklch, var(--lavender) 35%, transparent),
+    0  4px 20px color-mix(in oklch, var(--lavender)  20%, transparent),
+    0 12px 48px color-mix(in oklch, var(--pink)      12%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.8);
+  animation: border-dance 5s linear infinite;
+}
+
+/* 左侧彩虹粗竖条（覆写原大引号 ::before） */
+.site-quote::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg,
+    var(--hot-pink) 0%,
+    var(--lavender) 35%,
+    var(--sky)      65%,
+    var(--mint)     100%
+  );
+  background-size: 100% 300%;
+  animation: bar-flow 2.5s linear infinite;
+  border-radius: 20px 0 0 20px;
+  opacity: .9;
+  /* 覆写原版的字体大小和字体颜色 */
+  font-size: 0;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 右侧大引号水印（覆写原扫光 ::after） */
+.site-quote::after {
+  content: '\201C';
+  position: absolute;
+  right: 1.6rem; top: -.8rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 9rem;
+  line-height: 1;
+  background: linear-gradient(135deg,
+    var(--lavender), var(--hot-pink)
+  );
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: .1;
+  pointer-events: none;
+  /* 覆写原版扫光的几何属性 */
+  left: auto; width: auto; height: auto;
+  background-color: transparent;
+  animation: heartbeat 8s ease-in-out infinite;
+  filter: none;
+}
+
+/* 引用内文字 */
+.site-quote p {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--txt);
+  font-style: normal;
+  margin-bottom: .6rem;
+}
+
+/* 第一段（短语）加粗显示 */
+.site-quote p:first-of-type {
+  font-weight: 600;
+  font-size: 1.04rem;
+  color: oklch(40% 0.1 330);
+}
+
+/* 来源标签 */
+.site-quote cite {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  margin-top: 1.1rem;
+  font-size: .8rem;
+  font-style: normal;
+  padding: .22rem 1rem;
+  border-radius: 99px;
+  background: color-mix(in oklch, var(--lavender) 12%, white);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklch, var(--lavender) 35%, transparent),
+    0 2px 8px color-mix(in oklch, var(--lavender) 15%, transparent);
+  background-clip: initial;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: initial;
+  color: var(--purple);
+  filter: none;
+}
+
+.site-quote cite::before {
+  content: '—';
+  color: var(--hot-pink);
+  font-style: normal;
+}
+
+/* ============================================================
+   10. IRC — 在线绿点
+   ============================================================ */
+
+h3.irc-server-label {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+h3.irc-server-label::before {
+  content: '';
+  display: inline-block;
+  flex-shrink: 0;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow:
+    0 0 6px var(--mint),
+    0 0 14px color-mix(in oklch, var(--mint) 55%, transparent);
+  animation: heartbeat 2.2s ease-in-out infinite;
+}
+
+/* ============================================================
+   11. SECTION-DIVIDER — 细而精准，不抢镜
+   ============================================================ */
+
+.section-divider {
+  height: 2px;
+  margin: 0;
+  opacity: .7;
+  box-shadow:
+    0 0  4px color-mix(in oklch, var(--pink)     70%, transparent),
+    0 0 12px color-mix(in oklch, var(--lavender)  60%, transparent),
+    0 0 28px color-mix(in oklch, var(--hot-pink)  40%, transparent);
+}
+
+/* ============================================================
+   12. FOOTER — 更多内边距，更轻盈
+   ============================================================ */
+
+footer {
+  margin-top: 5rem;
+  padding: 3rem 0 2.5rem;
+}
+
+footer::before {
+  box-shadow:
+    0 0 10px color-mix(in oklch, var(--pink)     60%, transparent),
+    0 0 22px color-mix(in oklch, var(--lavender)  50%, transparent),
+    0 0 40px color-mix(in oklch, var(--hot-pink)  30%, transparent);
+}
+
+.footer-inner p {
+  margin: .5rem 0;
+  font-size: .84rem;
+  line-height: 1.8;
+}
+
+/* ============================================================
+   13. 链接 — hover 辉光
+   ============================================================ */
+
+a:hover {
+  filter: drop-shadow(0 0 5px color-mix(in oklch, var(--pink) 75%, transparent));
+}
+
+/* ============================================================
+   14. SYS-LIST — 等宽字体，代码感
+   ============================================================ */
+
+.sys-list {
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: .82rem;
+  line-height: 2;
+  color: var(--txt-dim);
+  background: color-mix(in oklch, var(--lavender) 6%, white);
+  border-radius: 10px;
+  padding: .8rem 1.2rem;
+  margin-top: 1rem;
+  border-left: 3px solid color-mix(in oklch, var(--lavender) 40%, transparent);
+}
+
+/* ============================================================
+   15. RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+  /* ── 全局：彻底锁死横向溢出 ── */
+  html, body { overflow-x: hidden; max-width: 100%; }
+
+  /* 所有绝对/固定定位的伪元素装饰，超出部分直接裁掉 */
+  .hero,
+  .site-section,
+  .content-block,
+  .site-quote,
+  footer { overflow: hidden; }
+
+  /* ── Hero 副标语：缩小字号+字距，防止撑宽 ── */
+  .hero::after {
+    font-size: .48rem;
+    letter-spacing: 2px;
+    padding: .25rem .8rem;
+    /* 限制最大宽度，超出截断而不是撑宽 */
+    max-width: calc(100vw - 2rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .hero { padding-bottom: 3.5rem; }
+
+  /* ── Section ── */
+  .site-section { margin: 2.4rem 0; }
+
+  h1.section-heading {
+    font-size: 1.4rem;
+    margin-bottom: 1.2rem;
+  }
+
+  /* ── 卡片 ── */
+  .content-block {
+    padding: 1.1rem 1.2rem;
+    /* 扫光伪元素在移动端关掉，它是 left:-80% 跑出去的主因 */
+  }
+  .content-block::after { display: none; }
+
+  /* ── NET section → 强制单列，彻底禁网格 ── */
+  #section-net {
+    display: block;        /* 直接退出 grid，最稳 */
+    column-gap: 0;
+  }
+  #section-net > .content-block { margin: 0 0 1rem; }
+
+  /* ── 引用块 ── */
+  .site-quote {
+    padding: 1.3rem 1.2rem 1.1rem 1.6rem;
+    margin: 1.6rem 0 1.2rem;
+  }
+  /* 大引号水印缩小，防止撑出 */
+  .site-quote::after {
+    font-size: 5rem;
+    right: .6rem;
+    opacity: .08;
+  }
+
+  /* ── sys-list ── */
+  .sys-list {
+    padding: .6rem .8rem;
+    font-size: .78rem;
+    word-break: break-all;  /* 长路径自动折行 */
+  }
+
+  /* ── 左右两侧 section 彩虹竖条收缩，不超出 body ── */
+  .site-section::before { left: -8px; }
+  .site-section::after  { display: none; }   /* 右侧竖条在窄屏直接隐藏 */
+
+  /* ── footer ── */
+  footer { padding: 2rem 0 1.6rem; margin-top: 3.5rem; overflow: hidden; }
+
+  /* ── iframe 防溢出 ── */
+  .irc-embed-item { overflow: hidden; }
+  .irc-embed-frame { max-width: 100% !important; width: 100% !important; }
+}
