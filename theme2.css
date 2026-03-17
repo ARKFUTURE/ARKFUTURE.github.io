@@ -1659,82 +1659,194 @@ a:hover {
 }
 
 /* ============================================================
-   15. RESPONSIVE
+   15. RESPONSIVE — 手机端完整重写
    ============================================================ */
 
 @media (max-width: 768px) {
 
-  /* ── 全局：彻底锁死横向溢出 ── */
-  html, body { overflow-x: hidden; max-width: 100%; }
-
-  /* 所有绝对/固定定位的伪元素装饰，超出部分直接裁掉 */
-  .hero,
-  .site-section,
-  .content-block,
-  .site-quote,
-  footer { overflow: hidden; }
-
-  /* ── Hero 副标语：缩小字号+字距，防止撑宽 ── */
-  .hero::after {
-    font-size: .48rem;
-    letter-spacing: 2px;
-    padding: .25rem .8rem;
-    /* 限制最大宽度，超出截断而不是撑宽 */
-    max-width: calc(100vw - 2rem);
-    overflow: hidden;
-    text-overflow: ellipsis;
+  /* ── 第一道防线：html/body 锁死横向 ── */
+  html {
+    overflow-x: hidden;
+    width: 100%;
   }
-  .hero { padding-bottom: 3.5rem; }
+  body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    padding: 10px 14px;   /* 上下10px，左右14px */
+    font-size: .95rem;
+  }
+
+  /* ── main：撑满屏幕，禁横向溢出 ── */
+  main {
+    padding-left: 10px;
+    padding-right: 0;
+    overflow: hidden;    /* 裁掉所有溢出的装饰元素 */
+  }
+
+  /* ── Hero：锁高度，标题缩放，裁掉花环溢出 ── */
+  .hero {
+    overflow: hidden;
+    padding: 2rem 0 3.2rem;
+  }
+  /* 花环1：缩小 */
+  .hero::before {
+    width: min(260px, 80vw);
+    height: min(260px, 80vw);
+  }
+  /* 副标语：直接隐藏，手机屏太窄放不下 */
+  .hero::after {
+    display: none;
+  }
+
+  /* ── 主标题 ── */
+  #hero-title {
+    font-size: clamp(1.8rem, 10vw, 3rem);
+    letter-spacing: 2px;
+    margin: 1rem 0;
+  }
 
   /* ── Section ── */
-  .site-section { margin: 2.4rem 0; }
+  .site-section {
+    margin: 2rem 0;
+    padding-left: 12px;   /* 给左侧竖条留位 */
+    overflow: visible;    /* 内容块 overflow:hidden 自己处理 */
+  }
+  .site-section::before {
+    left: 0;
+    width: 4px;
+  }
+  /* 右侧竖条：手机端彻底隐藏 */
+  .site-section::after {
+    display: none;
+  }
 
+  /* ── 区块标题 ── */
   h1.section-heading {
-    font-size: 1.4rem;
-    margin-bottom: 1.2rem;
+    font-size: 1.25rem;
+    padding-left: 1.2rem;
+    margin-bottom: 1rem;
+    /* 防止长英文标题溢出 */
+    word-break: break-word;
+  }
+  h2.section-subheading {
+    font-size: 1rem;
+    /* 前置符号 ✦ 会增宽，保持正常流 */
   }
 
-  /* ── 卡片 ── */
+  /* ── 内容卡片 ── */
   .content-block {
-    padding: 1.1rem 1.2rem;
-    /* 扫光伪元素在移动端关掉，它是 left:-80% 跑出去的主因 */
+    padding: 1rem 1rem;
+    border-radius: 14px;
+    margin: .8rem 0;
+    overflow: hidden;          /* 裁掉扫光等溢出装饰 */
+    /* 手机端关掉 card-rock 3D晃动：太费性能也会产生图层宽度问题 */
+    animation: border-dance 3s linear infinite !important;
+    will-change: auto;
   }
-  .content-block::after { display: none; }
+  .content-block:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0  4px 16px color-mix(in oklch, var(--hot-pink) 28%, transparent),
+      0 10px 32px color-mix(in oklch, var(--lavender)  18%, transparent);
+    animation: border-dance 1.5s linear infinite !important;
+  }
+  /* 扫光伪元素：关掉（left:-80% 会触发横向滚动） */
+  .content-block::after {
+    display: none;
+  }
 
-  /* ── NET section → 强制单列，彻底禁网格 ── */
+  /* ── NET section：单列 ── */
   #section-net {
-    display: block;        /* 直接退出 grid，最稳 */
-    column-gap: 0;
+    display: block;
   }
-  #section-net > .content-block { margin: 0 0 1rem; }
+  #section-net > .content-block {
+    margin: 0 0 .8rem;
+  }
 
   /* ── 引用块 ── */
   .site-quote {
-    padding: 1.3rem 1.2rem 1.1rem 1.6rem;
-    margin: 1.6rem 0 1.2rem;
+    padding: 1.2rem 1rem 1rem 1.4rem;
+    margin: 1.4rem 0 1rem;
+    border-radius: 14px;
+    overflow: hidden;
   }
-  /* 大引号水印缩小，防止撑出 */
   .site-quote::after {
-    font-size: 5rem;
-    right: .6rem;
-    opacity: .08;
+    display: none;    /* 大引号水印在手机端隐藏，防溢出 */
+  }
+
+  /* ── 分割线 ── */
+  .section-divider {
+    margin: 0;
+    overflow: hidden;
+  }
+  /* 分割线中央爱心 */
+  .section-divider::before {
+    font-size: 1rem;
   }
 
   /* ── sys-list ── */
   .sys-list {
     padding: .6rem .8rem;
-    font-size: .78rem;
-    word-break: break-all;  /* 长路径自动折行 */
+    font-size: .76rem;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    overflow: hidden;
   }
 
-  /* ── 左右两侧 section 彩虹竖条收缩，不超出 body ── */
-  .site-section::before { left: -8px; }
-  .site-section::after  { display: none; }   /* 右侧竖条在窄屏直接隐藏 */
+  /* ── 链接列表 ── */
+  .content-block ul {
+    padding-left: 1rem;
+  }
+  .content-block li {
+    line-height: 1.9;
+    word-break: break-word;
+  }
+
+  /* ── widget ── */
+  .widget-link {
+    max-width: 100%;
+  }
+  .widget-frame {
+    max-width: 100%;
+  }
 
   /* ── footer ── */
-  footer { padding: 2rem 0 1.6rem; margin-top: 3.5rem; overflow: hidden; }
+  footer {
+    padding: 1.6rem 0 1.2rem;
+    margin-top: 3rem;
+    overflow: hidden;
+    font-size: .76rem;
+  }
+  .footer-inner p {
+    font-size: .76rem;
+    line-height: 1.7;
+    word-break: break-word;
+  }
 
-  /* ── iframe 防溢出 ── */
-  .irc-embed-item { overflow: hidden; }
-  .irc-embed-frame { max-width: 100% !important; width: 100% !important; }
+  /* ── IRC iframe ── */
+  .irc-embed-item {
+    overflow: hidden;
+    max-width: 100%;
+  }
+  .irc-embed-frame {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: 220px !important;
+  }
+
+  /* ── 顶部导航 ── */
+  .top-nav {
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin-bottom: .4rem;
+  }
+  .theme-btn {
+    font-size: .7rem;
+    padding: 2px 9px;
+  }
+  .lang-btn {
+    font-size: .78rem;
+    padding: 2px 9px;
+  }
 }
