@@ -152,56 +152,5 @@ function incrementCounter() {
     counter++;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
 
-    // 创建遮罩层（全局唯一）
-    const overlay = document.createElement('div');
-    overlay.className = 'iframe-overlay';
-    overlay.innerHTML = `
-        <div class="iframe-expanded-box">
-            <span class="iframe-close-hint">[ ESC / 点击空白处关闭 ]</span>
-            <iframe id="iframe-expanded-content" src="" title="Expanded View" allowfullscreen></iframe>
-        </div>
-    `;
-    document.body.appendChild(overlay);
-
-    const expandedIframe = overlay.querySelector('#iframe-expanded-content');
-    const expandedBox    = overlay.querySelector('.iframe-expanded-box');
-
-    // 收集所有需要放大功能的包裹层
-    function bindIframes() {
-        document.querySelectorAll('.iframe-zoom-wrap').forEach(wrap => {
-            if (wrap.dataset.zoomBound) return;   // 避免重复绑定
-            wrap.dataset.zoomBound = '1';
-
-            wrap.addEventListener('click', (e) => {
-                e.stopPropagation();
-                expandedIframe.src = wrap.dataset.iframeSrc;
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
-        });
-    }
-
-    bindIframes();
-
-    // 点击遮罩空白处（不是 iframe 容器）关闭
-    overlay.addEventListener('click', (e) => {
-        if (!expandedBox.contains(e.target)) {
-            closeOverlay();
-        }
-    });
-
-    // ESC 键关闭
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeOverlay();
-    });
-
-    function closeOverlay() {
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
-        // 延迟清空 src，避免关闭动画时内容闪烁
-        setTimeout(() => { expandedIframe.src = ''; }, 250);
-    }
-});
 

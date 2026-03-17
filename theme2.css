@@ -1738,24 +1738,3 @@ a:hover {
   .irc-embed-item { overflow: hidden; }
   .irc-embed-frame { max-width: 100% !important; width: 100% !important; }
 }
-
-/* ============================================================
-   iframe 点击放大 — 包裹层和点击遮罩
-   ============================================================ */
-
-.iframe-zoom-wrap {
-  position: relative;
-  display: inline-block;
-}
-
-.iframe-click-cap {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  cursor: zoom-in;
-  transition: background 0.25s ease;
-  border-radius: inherit;
-}
-.iframe-click-cap:hover {
-  background: color-mix(in oklch, var(--pink, #ff80c8) 08%, transparent);
-}
