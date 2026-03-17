@@ -1582,7 +1582,7 @@ footer a:hover::before {
   .content-block { padding: .85rem .9rem }
 }
 
-/* 无障碍：减少动画 */
+  /* 无障碍：减少动画 */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .01ms !important;
@@ -1591,4 +1591,123 @@ footer a:hover::before {
   }
 }
 
+}
+
+/* ============================================================
+   iframe 点击放大 — 遮罩层
+   ============================================================ */
+
+.iframe-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(0, 4, 1, 0.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  align-items: center;
+  justify-content: center;
+}
+.iframe-overlay.active {
+  display: flex;
+  animation: _if-overlay-in 0.22s ease both;
+}
+@keyframes _if-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.iframe-expanded-box {
+  position: relative;
+  width: 90vw;
+  height: 82vh;
+  max-width: 1200px;
+  border: 1px solid rgba(0, 255, 65, 0.4);
+  border-radius: 8px;
+  box-shadow:
+    0 0 18px rgba(0, 255, 65, 0.2),
+    0 0 50px rgba(0, 255, 255, 0.12),
+    inset 0 0 30px rgba(0, 255, 65, 0.04);
+  background: #00030a;
+  overflow: hidden;
+  animation: _if-box-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes _if-box-in {
+  from { transform: scale(0.82); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.iframe-expanded-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, #00FF41, #00FFFF, transparent);
+  z-index: 1;
+  animation: _if-scan 2.5s linear infinite;
+}
+@keyframes _if-scan {
+  0%   { opacity: 0.6; transform: scaleX(0.3) translateX(-200%); }
+  50%  { opacity: 1;   transform: scaleX(1)   translateX(0); }
+  100% { opacity: 0.6; transform: scaleX(0.3) translateX(200%); }
+}
+
+.iframe-expanded-box iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.iframe-close-hint {
+  position: absolute;
+  top: 10px; right: 14px;
+  font-family: var(--font-hud, monospace);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: rgba(0, 255, 65, 0.45);
+  pointer-events: none;
+  z-index: 2;
+  user-select: none;
+}
+
+.irc-embed-frame,
+.widget-frame {
+  cursor: zoom-in;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.irc-embed-frame:hover {
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.4);
+  border-color: rgba(0, 255, 65, 0.6) !important;
+}
+.widget-frame:hover {
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.4);
+  outline: 1px solid rgba(0, 255, 65, 0.45);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .iframe-expanded-box {
+    width: 96vw;
+    height: 88vh;
+    border-radius: 6px;
+  }
+  .iframe-close-hint {
+    font-size: 0.55rem;
+    top: 6px; right: 8px;
+    letter-spacing: 1px;
+  }
+  @media (hover: none) {
+    .irc-embed-frame:hover,
+    .widget-frame:hover {
+      box-shadow: none;
+      border-color: inherit !important;
+      outline: none;
+    }
+    .irc-embed-frame:active,
+    .widget-frame:active {
+      box-shadow: 0 0 16px rgba(0, 255, 65, 0.5);
+      border-color: rgba(0, 255, 65, 0.7) !important;
+    }
+  }
 }

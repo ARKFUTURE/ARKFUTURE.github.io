@@ -1850,3 +1850,128 @@ a:hover {
     padding: 2px 9px;
   }
 }
+
+/* ============================================================
+   iframe 点击放大 — 遮罩层
+   ============================================================ */
+
+.iframe-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(30, 10, 40, 0.88);
+  backdrop-filter: blur(10px) saturate(1.4);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  align-items: center;
+  justify-content: center;
+}
+.iframe-overlay.active {
+  display: flex;
+  animation: _if-overlay-in 0.22s ease both;
+}
+@keyframes _if-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.iframe-expanded-box {
+  position: relative;
+  width: 90vw;
+  height: 82vh;
+  max-width: 1200px;
+  border: 2px solid color-mix(in oklch, var(--pink, #ff80c8) 50%, white);
+  border-radius: 20px;
+  box-shadow:
+    0 0 20px color-mix(in oklch, var(--pink, #ff80c8) 30%, transparent),
+    0 0 55px color-mix(in oklch, var(--lavender, #c0a0ff) 20%, transparent),
+    inset 0 0 30px color-mix(in oklch, var(--pink, #ff80c8) 05%, transparent);
+  background: color-mix(in oklch, var(--bg2, #ffe8f5) 80%, white);
+  overflow: hidden;
+  animation: _if-box-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes _if-box-in {
+  from { transform: scale(0.82); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.iframe-expanded-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg,
+    var(--pink, #ff80c8), var(--peach, #ffb08a),
+    var(--lemon, #ffe88a), var(--mint, #a0ffcc),
+    var(--lavender, #c0a0ff), var(--pink, #ff80c8)
+  );
+  background-size: 300% 100%;
+  z-index: 1;
+  animation: _if-scan 2s linear infinite;
+  border-radius: 20px 20px 0 0;
+}
+@keyframes _if-scan {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 100% 0%; }
+}
+
+.iframe-expanded-box iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.iframe-close-hint {
+  position: absolute;
+  top: 10px; right: 16px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  color: color-mix(in oklch, var(--purple, #9060d0) 60%, transparent);
+  pointer-events: none;
+  z-index: 2;
+  user-select: none;
+}
+
+.irc-embed-frame,
+.widget-frame {
+  cursor: zoom-in;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.irc-embed-frame:hover {
+  box-shadow: 0 0 14px color-mix(in oklch, var(--pink, #ff80c8) 50%, transparent);
+  border-color: color-mix(in oklch, var(--pink, #ff80c8) 70%, transparent) !important;
+}
+.widget-frame:hover {
+  box-shadow: 0 0 14px color-mix(in oklch, var(--pink, #ff80c8) 50%, transparent);
+  outline: 2px solid color-mix(in oklch, var(--pink, #ff80c8) 55%, transparent);
+  border-radius: 4px;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .iframe-expanded-box {
+    width: 96vw;
+    height: 88vh;
+    border-radius: 14px;
+  }
+  .iframe-close-hint {
+    font-size: 0.55rem;
+    top: 6px; right: 10px;
+    letter-spacing: 1px;
+  }
+  @media (hover: none) {
+    .irc-embed-frame:hover,
+    .widget-frame:hover {
+      box-shadow: none;
+      border-color: inherit !important;
+      outline: none;
+    }
+    .irc-embed-frame:active,
+    .widget-frame:active {
+      box-shadow: 0 0 16px color-mix(in oklch, var(--pink, #ff80c8) 60%, transparent);
+      border-color: color-mix(in oklch, var(--pink, #ff80c8) 80%, transparent) !important;
+    }
+  }
+}
