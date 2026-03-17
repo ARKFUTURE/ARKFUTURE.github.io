@@ -807,6 +807,10 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
+	/* Hide topic bar when empty (e.g. Status tab) */
+	.channelcontent > nav > h3.no-topic {
+		display: none;
+	}
 	.channelcontent > nav > h3::before {
 		content: '#';
 		color: var(--c-cyan);
@@ -1821,7 +1825,7 @@
 		if (settingsOverlay) settingsOverlay.classList.remove('open');
 		if (settingsBtn)   settingsBtn.classList.remove('active');
 
-		statusChannel = new Tab_Create("Status", "Status Window", false);
+		statusChannel = new Tab_Create("Status", "", false);
 		writeToLog(`[SYSTEM] Status tab created — calling WebSocket_Connect`);
 		WebSocket_Connect(wsUrl);
 	}
@@ -2253,7 +2257,8 @@
 
 			const navWrapper = document.createElement("nav");
 			this.topic = document.createElement("h3");
-			this.topic.textContent = topic || "No topic set";
+			this.topic.textContent = topic || "";
+			if (!topic) this.topic.classList.add('no-topic');
 			navWrapper.appendChild(this.topic);
 
 			this.content = document.createElement("nav");
