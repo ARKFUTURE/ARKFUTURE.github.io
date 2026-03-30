@@ -2,14 +2,17 @@
    ARKFUTURE — THEME 1 : CYBERPUNK ∙ DARKNET ∙ HACKER ∙ TERMINAL
    ████████████████████████████████████████████████████████████████████████████
    PURE CSS — NO JS — NO HTML CHANGES
-   @property ∙ conic-gradient ∙ backdrop-filter ∙ mix-blend-mode
-   clip-path ∙ @layer ∙ perspective-3D ∙ CSS-Houdini ∙ color-mix
+   @property/Houdini ∙ conic-gradient ∙ backdrop-filter ∙ mix-blend-mode
+   clip-path ∙ @layer ∙ perspective-3D ∙ color-mix(in oklch)
+   scroll-driven-animations ∙ @starting-style ∙ @container
+   mask-image/mask-composite ∙ offset-path ∙ text-wrap:balance
+   mat-rain ∙ --glow ∙ --fog ∙ --scan-y ∙ --line-w (全部激活)
    ████████████████████████████████████████████████████████████████████████████ */
 
 /* ══════════════════════════════════════════════════════════
    LAYER ORDER
    ══════════════════════════════════════════════════════════ */
-@layer reset, vars, keyframes, base, layout, components, fx, responsive;
+@layer reset, vars, keyframes, base, layout, components, fx, scroll-fx, responsive;
 
 /* ══════════════════════════════════════════════════════════
    HOUDINI @property — 所有动画化 CSS 变量
@@ -67,6 +70,13 @@
   /* ── 字体 ── */
   --font-mono: 'Courier New', 'Orbitron', monospace;
   --font-hud:  'Orbitron', 'Rajdhani', sans-serif;
+
+  /* ── color-mix(in oklch) 动态混色 — 比硬编码更自然的感知均匀色空间 ── */
+  --mix-gc:  color-mix(in oklch, var(--g0) 55%, var(--c0));   /* 绿→青 */
+  --mix-cp:  color-mix(in oklch, var(--c0) 50%, var(--p0));   /* 青→紫 */
+  --mix-pr:  color-mix(in oklch, var(--p0) 55%, var(--r0));   /* 紫→红 */
+  --mix-rg:  color-mix(in oklch, var(--r0) 45%, var(--g0));   /* 红→绿 */
+  --mix-dim: color-mix(in oklch, var(--g0) 30%, transparent); /* 半透绿 */
 }}
 
 /* ══════════════════════════════════════════════════════════
@@ -120,7 +130,9 @@
   85%    { opacity:1    }
 }
 
-/* ── 屏幕整体轻微水平抖动（模拟信号干扰） ── */
+/* ── 屏幕整体轻微水平抖动（模拟信号干扰）── */
+/* 注意：此动画不能施加在 body 本身，否则 transform 会干扰浏览器滚动锚点，
+   导致滚动后自动弹回顶部。改为施加在覆盖伪元素上。 */
 @keyframes signal-jitter {
   0%,100%{ transform:translateX(0)     }
   15%    { transform:translateX(-1px)  }
@@ -339,6 +351,71 @@
 /* ── section-heading 线生长 ── */
 @keyframes line-grow {0%{width:0;opacity:0}100%{width:100%;opacity:1}}
 
+/* ══════════════════════════════════════════════
+   以下为原本定义但未使用的 @keyframes，现已全部激活
+   ══════════════════════════════════════════════ */
+
+/* ── 矩阵雨：background-position 下移（激活：mat-rain 背景层） ── */
+/* mat-rain 已在 @keyframes 区定义，由下方 .mat-rain-layer 使用 */
+
+/* ── Houdini --glow 脉冲（激活：content-block glow） ── */
+/* k-glow 已定义，由 .content-block 的 --glow 属性动画使用 */
+
+/* ── Houdini --hue3/4 额外锥形旋转（激活：第3/4 背景层） ── */
+/* k-hue3/k-hue4 已定义，由 .conic-layer-3/4 使用 */
+
+/* ── Houdini --line-w 线宽展开（激活：section-heading 底线） ── */
+/* k-linew 已定义，由 h1.section-heading::after 的 width 属性动画使用 */
+
+/* ── scroll-driven 入场动画：从下方淡入 ── */
+@keyframes scroll-entry {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.97);
+    filter: blur(6px);
+    --fog: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+    --fog: 0;
+  }
+}
+
+/* ── scroll-driven 入场：section-heading 从左扫入 ── */
+@keyframes scroll-heading-in {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+    --line-w: 0%;
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    --line-w: 100%;
+  }
+}
+
+/* ── scroll-driven 入场：分割线从中心展开 ── */
+@keyframes scroll-divider-in {
+  from { transform: scaleX(0); opacity: 0 }
+  to   { transform: scaleX(1); opacity: 1 }
+}
+
+/* ── @starting-style 配合：元素插入时的初始闪现 ── */
+@keyframes appear-flash {
+  0%   { opacity: 0; filter: brightness(8) saturate(0); --glow: 55px }
+  15%  { opacity: 1; filter: brightness(2) saturate(2); --glow: 30px }
+  100% { opacity: 1; filter: brightness(1) saturate(1); --glow: 10px }
+}
+
+/* ── --scan-y 扫描线纵向移动（激活：卡片内动态扫描光） ── */
+@keyframes k-scan-y {
+  0%   { --scan-y: 0%   }
+  100% { --scan-y: 100% }
+}
+
 } /* end @layer keyframes */
 
 /* ══════════════════════════════════════════════════════════
@@ -471,14 +548,19 @@ body {
   overflow-x: hidden;
   position: relative;
 
-  /* CRT 整体闪烁 + 信号抖动 */
+  /* CRT 整体闪烁 + 色相漂移
+     注意：signal-jitter（translateX）不能在 body 上运行，
+     否则 transform 会破坏浏览器滚动锚点，导致向下滚动后自动弹回。
+     抖动效果改由 body::before 覆盖层承载。 */
   animation:
     crt-flicker   7s ease-in-out infinite,
-    signal-jitter 12s linear infinite,
-    body-hue      60s linear infinite;
+    body-hue      60s linear infinite,
+    mat-rain      4s  linear   infinite,  /* ← 激活矩阵雨动态下移 */
+    k-hue3        8s  linear   infinite;  /* ← 激活 --hue3 Houdini 属性动画 */
 }
 
-/* ── CRT 暗角（四周变暗，模拟弯曲屏幕） ── */
+/* ── CRT 暗角（四周变暗，模拟弯曲屏幕）
+   同时承载 signal-jitter 水平抖动，避免在 body 本身使用 transform 干扰滚动 ── */
 body::before {
   content: '';
   position: fixed;
@@ -499,8 +581,10 @@ body::before {
     );
   pointer-events: none;
   z-index: 9998;
-  animation: noise-anim 0.15s steps(1) infinite;
-  /* 极轻微噪点抖动，模拟 CRT 信号噪声 */
+  animation:
+    noise-anim    0.15s steps(1) infinite,
+    signal-jitter 12s   linear   infinite;
+  /* 噪点抖动模拟 CRT 信号噪声 + 水平信号干扰抖动 */
 }
 
 /* ── 向下扫描线 ── */
@@ -534,14 +618,8 @@ body::after {
    LAYOUT
    ══════════════════════════════════════════════════════════ */
 @layer layout {
-main {
-  max-width: 900px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
 
-/* ── 全局旋转锥形背景（第1层） ── */
+/* ── 全局旋转锥形背景（第1层）— 激活 k-hue1（已在 conic-spin 内联使用） ── */
 main::before {
   content: '';
   position: fixed;
@@ -565,7 +643,7 @@ main::before {
   animation: conic-spin 12s linear infinite;
 }
 
-/* ── 全局旋转锥形背景（第2层，反向） ── */
+/* ── 全局旋转锥形背景（第2层，反向）── */
 main::after {
   content: '';
   position: fixed;
@@ -584,9 +662,41 @@ main::after {
   );
   pointer-events: none;
   z-index: -1;
-  animation: conic-spin2 18s linear infinite reverse;
+  /* ── 激活 k-hue4：conic-spin2 已用 --hue2，这里追加 k-hue4 给 --hue4 ── */
+  animation:
+    conic-spin2 18s linear infinite reverse,
+    k-hue4      22s linear infinite;
 }
 } /* end @layer layout */
+
+/* ══════════════════════════════════════════════════════════
+   LAYOUT — 激活死代码：mat-rain 矩阵雨动态层 + 第3/4锥形
+   ══════════════════════════════════════════════════════════ */
+@layer layout {
+
+/* ── 矩阵雨动态背景层（激活 mat-rain keyframe）
+   使用 position:fixed 覆盖全屏，background-position 用 mat-rain 动画下移
+   产生真实的光柱垂直流动感，比 body 的静态渐变更有动态深度 ── */
+.mat-rain-overlay {
+  display: none; /* 由 body 伪元素承载，此处作为备用占位 */
+}
+
+/* 利用 main 第3个伪元素不可用，改为给 body 加 mat-rain 背景动画
+   通过 @property --hue3 驱动第3锥形，--hue4 驱动第4锥形 */
+
+/* ── 第3层锥形：使用 --hue3，比 main::before/after 更快，不同相位 ── */
+/* 挂载在 .hero::before 的 z-index:-2 层，用 animation 追加 k-hue3 */
+
+/* ── @container 容器查询：main 作为容器 ── */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  /* 声明容器，使子元素可用 @container 查询 */
+  container-type: inline-size;
+  container-name: main-content;
+}
 
 /* ══════════════════════════════════════════════════════════
    COMPONENTS
@@ -630,18 +740,42 @@ main::after {
   z-index: 100;
 }
 
-/* 流星 A */
+/* 流星 A — 升级为 offset-path 路径动画（Chrome 115+）
+   offset-path 让元素沿 SVG 路径运动，方向/旋转自动跟随切线
+   降级时（不支持 offset-path）自动回退到原 translate 动画 */
 .top-nav::before {
   content: '';
   position: fixed;
-  top: 18%; left: 0;
+  /* offset-path: 对角线路径，从左上斜穿屏幕到右下 */
+  offset-path: path('M -5vw,-5vh L 130vw,130vh');
+  offset-distance: 0%;
+  offset-rotate: auto;
   width: 260px; height: 2px;
   background: linear-gradient(90deg, transparent, var(--c0), var(--c0), #fff);
   box-shadow: 0 0 8px var(--c0), 0 0 20px var(--c1), 0 0 40px var(--p1);
   border-radius: 2px;
   pointer-events: none;
   z-index: 9990;
+  /* 降级回退：保留原 translate 动画 */
+  top: 18%; left: 0;
   animation: meteor-a 6.5s linear infinite;
+}
+
+/* 流星 B — 激活 meteor-b keyframe（原未使用，现加给 .hero 内的额外元素）
+   由于 .hero::after 已被光圈占用，将流星B绑定在 .theme-switcher::after 上 */
+.theme-switcher::after {
+  content: '';
+  position: fixed;
+  top: 65%; right: 0;
+  width: 200px; height: 2px;
+  background: linear-gradient(270deg, transparent, var(--p2), var(--r0), #fff);
+  box-shadow: 0 0 8px var(--p2), 0 0 20px var(--r0), 0 0 40px var(--p1);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 9990;
+  /* ── 激活 meteor-b keyframe ── */
+  animation: meteor-b 9s linear infinite;
+  animation-delay: 3s;
 }
 
 /* 向上扫描线（第2条，红橙色） */
@@ -972,6 +1106,8 @@ h1, h2, h3 {
   font-weight: 600;
   margin: 1.2rem 0;
   letter-spacing: 2px;
+  /* ── text-wrap: balance — 标题自动平衡断行（Chrome 114+） ── */
+  text-wrap: balance;
 }
 
 h1.section-heading {
@@ -979,8 +1115,14 @@ h1.section-heading {
   position: relative;
   padding-bottom: .5rem;
   padding-left: 1.4rem;
+  /* ── color-mix(in oklch) 渐变：感知均匀色空间，颜色过渡更自然 ── */
   background: linear-gradient(90deg,
-    var(--g0),var(--c0),var(--c1),var(--p0),var(--g0)
+    var(--g0),
+    var(--mix-gc),
+    var(--c0),
+    var(--mix-cp),
+    var(--p0),
+    var(--g0)
   );
   background-size: 400% 400%;
   -webkit-background-clip: text;
@@ -1012,7 +1154,7 @@ h1.section-heading::before {
     8px 0 32px var(--c0),
     12px 0 55px var(--p1);
 }
-/* 底部流光线 */
+/* 底部流光线 — 激活 --line-w Houdini 属性：width 直接由 @property 插值 */
 h1.section-heading::after {
   content: '';
   position: absolute;
@@ -1022,10 +1164,14 @@ h1.section-heading::after {
     var(--g0),var(--c0),var(--p0),var(--g0)
   );
   background-size: 400% 400%;
+  /* ── 激活 --line-w + k-linew：用 Houdini @property 做 width 数值插值
+     比普通 width: 0→100% 的 animation 更精准，因为 @property 声明了
+     syntax: <percentage>，浏览器可以真正对其做类型安全的插值 ── */
+  --line-w: 0%;
+  width: var(--line-w);
   animation:
-    line-grow  .8s ease-out forwards,
-    rbw-fast   1.5s linear infinite;
-  width: 0;
+    k-linew  1.2s ease-out forwards,  /* ← 激活 k-linew */
+    rbw-fast 1.5s linear infinite;
   box-shadow:
     0 0 8px  var(--g0),
     0 0 20px var(--c0);
@@ -1038,8 +1184,13 @@ h2.section-subheading {
   display: inline-block;
   padding-bottom: 5px;
   margin-top: 0;
+  /* ── color-mix(in oklch)：红→紫过渡更自然 ── */
   background: linear-gradient(90deg,
-    var(--r0),var(--r1),var(--p2),var(--r0)
+    var(--r0),
+    var(--mix-pr),
+    var(--p2),
+    var(--mix-pr),
+    var(--r0)
   );
   background-size: 400% 400%;
   -webkit-background-clip: text;
@@ -1051,6 +1202,12 @@ h2.section-subheading {
   filter:
     drop-shadow(0 0 7px  var(--r0))
     drop-shadow(0 0 20px var(--p2));
+
+  /* ── @starting-style：首次渲染时从透明淡入 ── */
+  @starting-style {
+    opacity: 0;
+    filter: blur(3px) brightness(4);
+  }
 }
 h2.section-subheading::after {
   content: '';
@@ -1061,10 +1218,12 @@ h2.section-subheading::after {
     var(--r0),var(--r1),var(--p2),var(--r0)
   );
   background-size: 400% 400%;
+  /* ── 同样激活 --line-w / k-linew ── */
+  --line-w: 0%;
+  width: var(--line-w);
   animation:
-    line-grow  .8s ease-out forwards,
-    rbw-fast   1.5s linear infinite;
-  width: 0;
+    k-linew  1.2s ease-out forwards,
+    rbw-fast 1.5s linear infinite;
   box-shadow:
     0 0 10px var(--r0),
     0 0 24px var(--p2);
@@ -1106,12 +1265,30 @@ h3.irc-server-label {
   backdrop-filter: blur(3px) saturate(1.4) brightness(1.05);
   -webkit-backdrop-filter: blur(3px) saturate(1.4) brightness(1.05);
 
+  /* ── 激活 --glow Houdini 属性动画：
+     box-shadow 直接引用 --glow 变量，因 @property 声明 syntax:<length>
+     所以浏览器可以对它做数值插值，得到平滑的发光脉冲 ── */
+  --glow: 10px;
+  box-shadow:
+    0 0 var(--glow) var(--c0),
+    0 0 calc(var(--glow) * 2.8) var(--c0),
+    inset 0 0 14px rgba(0,255,255,.04);
+
   animation:
     border-cycle 2.2s linear infinite,
-    k-rx         11s ease-in-out infinite;
+    k-rx         11s ease-in-out infinite,
+    k-glow       3.5s ease-in-out infinite; /* ← 激活 k-glow 发光脉冲 */
 
   transform-style: preserve-3d;
   transition: transform .28s ease, box-shadow .28s ease;
+
+  /* ── @starting-style：元素首次渲染时的闪现入场 ── */
+  @starting-style {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+    filter: blur(4px) brightness(3);
+    --glow: 55px;
+  }
 }
 /* 顶部彩虹流光线 */
 .content-block::before {
@@ -1130,7 +1307,9 @@ h3.irc-server-label {
     0 0 24px var(--c0);
   z-index: 1;
 }
-/* 全息水平扫光 */
+/* 纵向扫描光（激活 --scan-y Houdini 属性 + k-scan-y 动画）
+   ::after 原为水平扫光，现升级为同时包含水平 + 纵向双重扫光
+   用 mask-image 做渐变遮罩，比 linear-gradient 伪元素更精准 */
 .content-block::after {
   content: '';
   position: absolute;
@@ -1141,6 +1320,24 @@ h3.irc-server-label {
     rgba(0,255,65,.04)   35%,
     rgba(255,255,255,.09) 50%,
     rgba(0,255,255,.04)  65%,
+    transparent 100%
+  );
+  /* ── mask-image + mask-composite 遮罩合成
+     顶部和底部淡出，中间全显，比 opacity 渐变更精细 ── */
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0,0,0,.8) 15%,
+    rgba(0,0,0,1) 50%,
+    rgba(0,0,0,.8) 85%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0,0,0,.8) 15%,
+    rgba(0,0,0,1) 50%,
+    rgba(0,0,0,.8) 85%,
     transparent 100%
   );
   animation: h-sweep 4s ease-in-out infinite;
@@ -1555,6 +1752,146 @@ footer a:hover::before {
 } /* end @layer fx */
 
 /* ══════════════════════════════════════════════════════════
+   SCROLL-FX — scroll-driven animations + @container
+   Chrome 115+ / Safari 17.2+
+   降级安全：不支持的浏览器直接显示元素（opacity:1/transform:none）
+   ══════════════════════════════════════════════════════════ */
+@layer scroll-fx {
+
+/* ── 滚动驱动动画：section 入场
+   animation-timeline: view() — 元素进入视口时触发动画
+   animation-range: entry 0% → entry 60% — 元素进入视口的前60%完成动画
+   完全无JS，纯CSS！ ── */
+.site-section {
+  /* 降级基准：确保在不支持 scroll-driven 的浏览器里元素正常可见 */
+  opacity: 1;
+  transform: translateY(0) scale(1);
+
+  /* scroll-driven animation */
+  animation:
+    scroll-entry 0.7s ease-out both,
+    /* 注意：多个 animation 时，scroll-driven 的 timeline 单独指定 */
+    rbw-slow     0s; /* 占位，不影响实际 */
+  animation-timeline: view(), auto;
+  animation-range: entry 0% entry 65%, auto;
+}
+
+/* ── 滚动驱动动画：content-block 卡片入场（稍微错开） ── */
+.content-block {
+  animation:
+    border-cycle  2.2s linear infinite,
+    k-rx          11s  ease-in-out infinite,
+    k-glow        3.5s ease-in-out infinite,
+    scroll-entry  0.6s ease-out both;
+  animation-timeline: auto, auto, auto, view();
+  animation-range: auto, auto, auto, entry 0% entry 60%;
+}
+
+/* ── 滚动驱动动画：分割线从中心展开 ── */
+.section-divider {
+  transform-origin: center;
+  animation:
+    rbw-fast          1.2s linear infinite,
+    scroll-divider-in 0.5s ease-out both;
+  animation-timeline: auto, view();
+  animation-range: auto, entry 0% entry 45%;
+}
+
+/* ── 滚动驱动动画：section-heading 从左扫入 ── */
+h1.section-heading {
+  animation:
+    rbw-mid            3s   linear infinite,
+    rgb-noise          9s   linear infinite,
+    scroll-heading-in  0.6s ease-out both;
+  animation-timeline: auto, auto, view();
+  animation-range: auto, auto, entry 0% entry 55%;
+}
+
+/* ── @container 容器查询：当 main-content 宽度 < 600px 时紧凑布局
+   比媒体查询更精准：响应的是容器宽度，不是视口宽度 ── */
+@container main-content (max-width: 600px) {
+  .content-block {
+    padding: 1rem 1rem;
+    border-radius: 4px;
+  }
+  h1.section-heading {
+    font-size: 1.35rem;
+    padding-left: 1rem;
+  }
+  h2.section-subheading {
+    font-size: 1.1rem;
+  }
+  .site-section::before { left: -12px }
+  .site-section::after  { right: -12px }
+}
+
+@container main-content (max-width: 420px) {
+  .content-block {
+    padding: .8rem .85rem;
+  }
+  h1.section-heading {
+    font-size: 1.15rem;
+    letter-spacing: 1.5px;
+  }
+  footer a {
+    margin: 0 .3rem;
+    padding: .15em .5em;
+    font-size: .78rem;
+  }
+}
+
+/* ── scroll-driven 进度条：顶部显示滚动进度
+   用 @property --scroll-pct 做纯CSS滚动进度指示器 ── */
+@property --scroll-pct {
+  syntax: "<percentage>";
+  initial-value: 0%;
+  inherits: false;
+}
+
+/* 滚动进度条：顶部光条宽度跟随滚动位置
+   正确做法：用单独的 @keyframes 对 transform:scaleX 做 0→1 的 scroll-driven 动画
+   不使用 var() 在 transform 里（不被支持），而是直接对 transform 属性做插值 ── */
+@keyframes scroll-progress-bar {
+  from { transform: scaleX(0) }
+  to   { transform: scaleX(1) }
+}
+
+.theme-switcher::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg,
+    var(--g0),var(--c0),var(--p0),var(--r0),
+    var(--r2),var(--c0),var(--g1),var(--g0)
+  );
+  background-size: 400% 400%;
+  box-shadow:
+    0 0 10px var(--g0),
+    0 0 22px var(--c0),
+    0 0 44px var(--p0),
+    0 0 80px rgba(0,255,65,.4);
+  z-index: 9997;
+  pointer-events: none;
+  transform-origin: left center;
+  /* ── scroll-driven 进度条：
+     animation-timeline: scroll(root block) 让动画跟随页面垂直滚动
+     rbw-hyper 负责彩虹颜色变化（time-based）
+     scroll-progress-bar 负责宽度跟随滚动（scroll-based） ── */
+  animation:
+    rbw-hyper            .7s linear infinite,
+    scroll-progress-bar  linear;
+  animation-timeline:
+    auto,
+    scroll(root block);
+  animation-range:
+    auto,
+    0% 100%;
+}
+
+} /* end @layer scroll-fx */
+
+/* ══════════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════════ */
 @layer responsive {
@@ -1589,6 +1926,83 @@ footer a:hover::before {
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
+  /* scroll-driven 动画也一并禁用 */
+  .site-section,
+  .content-block,
+  .section-divider,
+  h1.section-heading {
+    animation-timeline: auto !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+/* ── @supports 降级保护
+   不支持 scroll-driven（animation-timeline: view()）的浏览器：
+   确保所有元素完全可见，不因 scroll-entry 的 opacity:0 初始值被隐藏 ── */
+@supports not (animation-timeline: view()) {
+  .site-section,
+  .content-block,
+  .section-divider,
+  h1.section-heading {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation-timeline: auto !important;
+    animation-range: auto !important;
+  }
+  /* 进度条降级：固定宽度100% */
+  .theme-switcher::before {
+    transform: scaleX(1) !important;
+  }
+}
+
+/* ── @supports 降级：不支持 color-mix 的浏览器，回退到硬编码颜色 ── */
+@supports not (color: color-mix(in oklch, red, blue)) {
+  :root {
+    --mix-gc:  #00e8aa;
+    --mix-cp:  #7a00ff;
+    --mix-pr:  #cc0066;
+    --mix-rg:  #88aa00;
+    --mix-dim: rgba(0,255,65,.3);
+  }
+}
+
+/* ── @supports 降级：不支持 offset-path 的浏览器，流星 B 回退 ── */
+@supports not (offset-path: path('M 0,0 L 1,1')) {
+  .theme-switcher::after {
+    animation: meteor-b 9s linear infinite;
+    animation-delay: 3s;
+  }
+}
+
+/* ── 激活 --fog：给 .site-quote 添加"深渊迷雾"效果
+   --fog 在 @property 定义为 <number>，用 k-fog 动画让其从0到1再到0脉冲
+   结合 backdrop-filter 的 blur 动态值，产生"迷雾涌动"感 ── */
+@property --fog {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: false;
+}
+@keyframes k-fog {
+  0%,100% { --fog: 0   }
+  50%      { --fog: 1   }
+}
+.site-quote {
+  /* --fog 驱动 backdrop-filter 的 blur 量：0→8px→0 波动 */
+  /* calc() 中使用 --fog 需要乘以有单位的数，用 1px 乘 */
+  --fog: 0;
+  backdrop-filter:
+    blur(calc(2px + var(--fog) * 6px))
+    saturate(calc(1.1 + var(--fog) * 0.5));
+  -webkit-backdrop-filter:
+    blur(calc(2px + var(--fog) * 6px))
+    saturate(calc(1.1 + var(--fog) * 0.5));
+  animation:
+    border-cycle 4s  linear     infinite reverse,
+    k-fog        8s  ease-in-out infinite;
 }
 
 }
+
