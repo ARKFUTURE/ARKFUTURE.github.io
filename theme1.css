@@ -4,7 +4,7 @@
    PURE CSS — NO JS — NO HTML CHANGES
    @property/Houdini ∙ conic-gradient ∙ backdrop-filter ∙ mix-blend-mode
    clip-path ∙ @layer ∙ perspective-3D ∙ color-mix(in oklch)
-   scroll-driven-animations ∙ @starting-style ∙ @container
+   scroll-driven-animations (已移除/导致滚动弹回) ∙ @starting-style ∙ @container
    mask-image/mask-composite ∙ offset-path ∙ text-wrap:balance
    mat-rain ∙ --glow ∙ --fog ∙ --scan-y ∙ --line-w (全部激活)
    ████████████████████████████████████████████████████████████████████████████ */
@@ -1752,62 +1752,13 @@ footer a:hover::before {
 } /* end @layer fx */
 
 /* ══════════════════════════════════════════════════════════
-   SCROLL-FX — scroll-driven animations + @container
-   Chrome 115+ / Safari 17.2+
-   降级安全：不支持的浏览器直接显示元素（opacity:1/transform:none）
+   SCROLL-FX — @container 容器查询（安全，无滚动副作用）
+   scroll-driven animations 已移除：animation-timeline: view() 会导致
+   浏览器滚动锚点异常（页面往下滑后自动弹回），因此不在生产环境使用。
    ══════════════════════════════════════════════════════════ */
 @layer scroll-fx {
 
-/* ── 滚动驱动动画：section 入场
-   animation-timeline: view() — 元素进入视口时触发动画
-   animation-range: entry 0% → entry 60% — 元素进入视口的前60%完成动画
-   完全无JS，纯CSS！ ── */
-.site-section {
-  /* 降级基准：确保在不支持 scroll-driven 的浏览器里元素正常可见 */
-  opacity: 1;
-  transform: translateY(0) scale(1);
-
-  /* scroll-driven animation */
-  animation:
-    scroll-entry 0.7s ease-out both,
-    /* 注意：多个 animation 时，scroll-driven 的 timeline 单独指定 */
-    rbw-slow     0s; /* 占位，不影响实际 */
-  animation-timeline: view(), auto;
-  animation-range: entry 0% entry 65%, auto;
-}
-
-/* ── 滚动驱动动画：content-block 卡片入场（稍微错开） ── */
-.content-block {
-  animation:
-    border-cycle  2.2s linear infinite,
-    k-rx          11s  ease-in-out infinite,
-    k-glow        3.5s ease-in-out infinite,
-    scroll-entry  0.6s ease-out both;
-  animation-timeline: auto, auto, auto, view();
-  animation-range: auto, auto, auto, entry 0% entry 60%;
-}
-
-/* ── 滚动驱动动画：分割线从中心展开 ── */
-.section-divider {
-  transform-origin: center;
-  animation:
-    rbw-fast          1.2s linear infinite,
-    scroll-divider-in 0.5s ease-out both;
-  animation-timeline: auto, view();
-  animation-range: auto, entry 0% entry 45%;
-}
-
-/* ── 滚动驱动动画：section-heading 从左扫入 ── */
-h1.section-heading {
-  animation:
-    rbw-mid            3s   linear infinite,
-    rgb-noise          9s   linear infinite,
-    scroll-heading-in  0.6s ease-out both;
-  animation-timeline: auto, auto, view();
-  animation-range: auto, auto, entry 0% entry 55%;
-}
-
-/* ── @container 容器查询：当 main-content 宽度 < 600px 时紧凑布局
+/* ── @container 容器查询：当 main-content 容器宽度 < 600px 时紧凑布局
    比媒体查询更精准：响应的是容器宽度，不是视口宽度 ── */
 @container main-content (max-width: 600px) {
   .content-block {
@@ -1838,55 +1789,6 @@ h1.section-heading {
     padding: .15em .5em;
     font-size: .78rem;
   }
-}
-
-/* ── scroll-driven 进度条：顶部显示滚动进度
-   用 @property --scroll-pct 做纯CSS滚动进度指示器 ── */
-@property --scroll-pct {
-  syntax: "<percentage>";
-  initial-value: 0%;
-  inherits: false;
-}
-
-/* 滚动进度条：顶部光条宽度跟随滚动位置
-   正确做法：用单独的 @keyframes 对 transform:scaleX 做 0→1 的 scroll-driven 动画
-   不使用 var() 在 transform 里（不被支持），而是直接对 transform 属性做插值 ── */
-@keyframes scroll-progress-bar {
-  from { transform: scaleX(0) }
-  to   { transform: scaleX(1) }
-}
-
-.theme-switcher::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 3px;
-  background: linear-gradient(90deg,
-    var(--g0),var(--c0),var(--p0),var(--r0),
-    var(--r2),var(--c0),var(--g1),var(--g0)
-  );
-  background-size: 400% 400%;
-  box-shadow:
-    0 0 10px var(--g0),
-    0 0 22px var(--c0),
-    0 0 44px var(--p0),
-    0 0 80px rgba(0,255,65,.4);
-  z-index: 9997;
-  pointer-events: none;
-  transform-origin: left center;
-  /* ── scroll-driven 进度条：
-     animation-timeline: scroll(root block) 让动画跟随页面垂直滚动
-     rbw-hyper 负责彩虹颜色变化（time-based）
-     scroll-progress-bar 负责宽度跟随滚动（scroll-based） ── */
-  animation:
-    rbw-hyper            .7s linear infinite,
-    scroll-progress-bar  linear;
-  animation-timeline:
-    auto,
-    scroll(root block);
-  animation-range:
-    auto,
-    0% 100%;
 }
 
 } /* end @layer scroll-fx */
@@ -1926,36 +1828,11 @@ h1.section-heading {
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
-  /* scroll-driven 动画也一并禁用 */
-  .site-section,
-  .content-block,
-  .section-divider,
-  h1.section-heading {
-    animation-timeline: auto !important;
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-  }
 }
 
-/* ── @supports 降级保护
-   不支持 scroll-driven（animation-timeline: view()）的浏览器：
-   确保所有元素完全可见，不因 scroll-entry 的 opacity:0 初始值被隐藏 ── */
+/* ── @supports 降级保护：scroll-driven 已移除，此块保留用于未来安全扩展 ── */
 @supports not (animation-timeline: view()) {
-  .site-section,
-  .content-block,
-  .section-divider,
-  h1.section-heading {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-    animation-timeline: auto !important;
-    animation-range: auto !important;
-  }
-  /* 进度条降级：固定宽度100% */
-  .theme-switcher::before {
-    transform: scaleX(1) !important;
-  }
+  /* 所有元素默认可见，scroll-driven 在不支持的浏览器里自动不生效 */
 }
 
 /* ── @supports 降级：不支持 color-mix 的浏览器，回退到硬编码颜色 ── */
