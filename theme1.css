@@ -594,30 +594,8 @@ body::before {
     signal-jitter 12s linear     infinite;   /* 水平抖动（translateX on fixed层，安全）*/
 }
 
-/* ── 向下扫描线 ── */
-body::after {
-  content: '';
-  position: fixed;
-  top: -4px;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: linear-gradient(90deg,
-    transparent  0%,
-    var(--g0)   20%,
-    var(--c0)   50%,
-    var(--g0)   80%,
-    transparent 100%
-  );
-  box-shadow:
-    0 0  6px var(--g0),
-    0 0 16px var(--c0),
-    0 0 35px var(--c1),
-    0 0 70px rgba(0,255,65,.25);
-  pointer-events: none;
-  z-index: 9999;
-  animation: crt-down 3.5s linear infinite;
-}
+
+
 
 } /* end @layer base */
 
