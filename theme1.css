@@ -3,16 +3,21 @@
    ████████████████████████████████████████████████████████████████████████████
    PURE CSS — NO JS — NO HTML CHANGES
    @property/Houdini ∙ conic-gradient ∙ backdrop-filter ∙ mix-blend-mode
-   clip-path ∙ @layer ∙ perspective-3D ∙ color-mix(in oklch)
-   scroll-driven-animations (已移除/导致滚动弹回) ∙ @starting-style ∙ @container
+   clip-path ∙ @layer ∙ perspective-3D ∙ color-mix(in oklch) ∙ oklch()
+   @starting-style ∙ @container ∙ @scope ∙ CSS Nesting(&)
    mask-image/mask-composite ∙ offset-path ∙ text-wrap:balance
+   :has() ∙ :is() ∙ :where() ∙ :nth-child(n of cls)
+   content-visibility:auto ∙ contain ∙ will-change ∙ overscroll-behavior
+   scroll-snap(proximity) ∙ accent-color ∙ caret-color ∙ light-dark()
+   animation-composition:add ∙ linear()缓动 ∙ field-sizing:content
+   dvh/svh/lh/cqi 现代单位 ∙ :focus-within ∙ :has()无JS交互联动
    mat-rain ∙ --glow ∙ --fog ∙ --scan-y ∙ --line-w (全部激活)
    ████████████████████████████████████████████████████████████████████████████ */
 
 /* ══════════════════════════════════════════════════════════
    LAYER ORDER
    ══════════════════════════════════════════════════════════ */
-@layer reset, vars, keyframes, base, layout, components, fx, scroll-fx, responsive;
+@layer reset, vars, keyframes, base, layout, components, fx, scroll-fx, modern, responsive;
 
 /* ══════════════════════════════════════════════════════════
    HOUDINI @property — 所有动画化 CSS 变量
@@ -451,10 +456,50 @@ html {
 body {
   font-family: 'Rajdhani', 'Orbitron', 'Courier New', monospace, sans-serif;
 
+  /* body 只保留纯色底色，不挂任何背景图、动画、filter
+     原因：body 是滚动容器，任何 animation/filter/transform 都会触发
+     浏览器滚动锚点重算，导致滚动后自动弹回顶部。
+     所有视觉效果全部迁移到 body::before（position:fixed，不属于滚动流） */
+  background-color: var(--bg);
+
+  color: var(--txt);
+  line-height: 1.75;
+  font-size: 1rem;
+  margin: 0;
+  padding: 20px;
+  overflow-x: hidden;
+  position: relative;
+  /* ！！！ body 上零动画、零 filter、零 transform ！！！ */
+}
+
+/* ── 全屏背景层：承载所有原来在 body 上的背景图 + 动画
+   position:fixed 脱离文档流，完全不参与滚动锚点计算 ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;          /* 在内容下方 */
+  pointer-events: none;
+
   background-color: var(--bg);
   background-image:
 
-    /* ── 矩阵字符雨模拟：用超细重复渐变列，配合动画下移，产生"光柱下落"感 ── */
+    /* ── CRT 暗角（四周变暗，模拟弯曲屏幕） ── */
+    radial-gradient(ellipse at center,
+      transparent 55%,
+      rgba(0,0,0,.7) 100%
+    ),
+
+    /* ── CRT 水平扫描线（整页条纹） ── */
+    repeating-linear-gradient(
+      0deg,
+      transparent         0px,
+      transparent         3px,
+      rgba(0,0,0,.08)     3px,
+      rgba(0,0,0,.08)     4px
+    ),
+
+    /* ── 矩阵字符雨模拟 ── */
     repeating-linear-gradient(180deg,
       transparent           0px,
       transparent           12px,
@@ -468,7 +513,7 @@ body {
       transparent           44px
     ),
 
-    /* ── 竖向随机光柱（不同透明度，模拟字符列密度差异） ── */
+    /* ── 竖向光柱 ── */
     repeating-linear-gradient(90deg,
       transparent              0px,
       transparent              10px,
@@ -498,7 +543,7 @@ body {
       transparent          var(--grid)
     ),
 
-    /* ── 斜线1（45°赛博感） ── */
+    /* ── 斜线1（45°） ── */
     repeating-linear-gradient(45deg,
       rgba(0,255,65,.010) 0,
       rgba(0,255,65,.010) 1px,
@@ -514,14 +559,12 @@ body {
       transparent          64px
     ),
 
-    /* ── 中心绿色辉光 ── */
+    /* ── 辉光 ── */
     radial-gradient(ellipse 65% 45% at 50% 50%,
       rgba(0,255,65,.10) 0%, transparent 60%
     ),
-
-    /* ── 角落辉光 ── */
-    radial-gradient(ellipse at 4%  8%,  rgba(0,255,255,.09) 0%, transparent 32%),
-    radial-gradient(ellipse at 96%  7%, rgba(136,0,255,.11) 0%, transparent 30%),
+    radial-gradient(ellipse at 8%  12%, rgba(0,255,255,.12) 0%, transparent 35%),
+    radial-gradient(ellipse at 92% 8%,  rgba(136,0,255,.14) 0%, transparent 35%),
     radial-gradient(ellipse at 3%  93%, rgba(255,0,60,.07)  0%, transparent 26%),
     radial-gradient(ellipse at 97% 92%, rgba(255,0,255,.09) 0%, transparent 28%),
 
@@ -530,6 +573,8 @@ body {
 
   background-attachment: fixed;
   background-size:
+    100% 100%,
+    100% 4px,
     100% 44px,
     44px 100%,
     100% var(--grid),
@@ -540,51 +585,13 @@ body {
     100% 100%, 100% 100%, 100% 100%, 100% 100%,
     100% 100%;
 
-  color: var(--txt);
-  line-height: 1.75;
-  font-size: 1rem;
-  margin: 0;
-  padding: 20px;
-  overflow-x: hidden;
-  position: relative;
-
-  /* CRT 整体闪烁 + 色相漂移
-     注意：signal-jitter（translateX）不能在 body 上运行，
-     否则 transform 会破坏浏览器滚动锚点，导致向下滚动后自动弹回。
-     抖动效果改由 body::before 覆盖层承载。 */
+  /* ── 全部动画都挂在这里，不在 body 上 ── */
   animation:
-    crt-flicker   7s ease-in-out infinite,
-    body-hue      60s linear infinite,
-    mat-rain      4s  linear   infinite,  /* ← 激活矩阵雨动态下移 */
-    k-hue3        8s  linear   infinite;  /* ← 激活 --hue3 Houdini 属性动画 */
-}
-
-/* ── CRT 暗角（四周变暗，模拟弯曲屏幕）
-   同时承载 signal-jitter 水平抖动，避免在 body 本身使用 transform 干扰滚动 ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    /* 四角暗角 */
-    radial-gradient(ellipse at center,
-      transparent 55%,
-      rgba(0,0,0,.7) 100%
-    ),
-    /* 水平扫描线叠加（整页 CRT 条纹） */
-    repeating-linear-gradient(
-      0deg,
-      transparent             0px,
-      transparent             3px,
-      rgba(0,0,0,.08)         3px,
-      rgba(0,0,0,.08)         4px
-    );
-  pointer-events: none;
-  z-index: 9998;
-  animation:
-    noise-anim    0.15s steps(1) infinite,
-    signal-jitter 12s   linear   infinite;
-  /* 噪点抖动模拟 CRT 信号噪声 + 水平信号干扰抖动 */
+    crt-flicker   7s  ease-in-out infinite,  /* 屏幕闪烁（透明度）*/
+    body-hue      60s linear     infinite,   /* 色相漂移（filter）*/
+    mat-rain      4s  linear     infinite,   /* 矩阵雨下移 */
+    noise-anim    0.15s steps(1) infinite,   /* 噪点 */
+    signal-jitter 12s linear     infinite;   /* 水平抖动（translateX on fixed层，安全）*/
 }
 
 /* ── 向下扫描线 ── */
@@ -1881,5 +1888,487 @@ footer a:hover::before {
     k-fog        8s  ease-in-out infinite;
 }
 
+} /* end @layer responsive */
+
+/* ████████████████████████████████████████████████████████████████████████████
+   @layer modern — 2024-2025 顶级 CSS 精华大全
+   全部特性均不触发滚动弹回（无 body/html 上的 animation/filter/transform）
+
+   ① CSS Nesting（原生 &）              Chrome 120+
+   ② :has() 父选择器                    Chrome 105+
+   ③ :is() / :where()                  Chrome 88+
+   ④ :nth-child(n of .cls)             Chrome 111+
+   ⑤ oklch() / oklab() 宽色域颜色       Chrome 111+
+   ⑥ light-dark() 系统深浅模式自适应    Chrome 123+
+   ⑦ content-visibility: auto          Chrome 85+（性能爆炸）
+   ⑧ contain: layout style             Chrome 52+
+   ⑨ will-change（GPU 合成层提升）      Chrome 36+
+   ⑩ overscroll-behavior               Chrome 63+
+   ⑪ scroll-snap proximity 软吸附      Chrome 69+
+   ⑫ accent-color + caret-color       Chrome 93+/57+
+   ⑬ @scope 作用域 CSS                 Chrome 118+
+   ⑭ animation-composition: add        Chrome 112+
+   ⑮ linear() 弹簧缓动函数             Chrome 113+
+   ⑯ field-sizing: content            Chrome 123+
+   ⑰ :has() 超级组合技（无JS交互联动）
+   ⑱ dvh/svh/lh/cqi 现代 CSS 单位
+   ████████████████████████████████████████████████████████████████████████████ */
+@layer modern {
+
+/* ══════════════════════════════════════════════
+   ① 原生 CSS Nesting（& 选择器）
+   Chrome 120+ — 无需预处理器的嵌套写法
+   ══════════════════════════════════════════════ */
+
+.hero {
+  & .hero-sub {
+    color: var(--txt2);
+    font-size: clamp(.9rem, 2vw, 1.15rem);
+    letter-spacing: 2px;
+    text-wrap: balance;
+    opacity: .88;
+
+    @starting-style {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    transition: opacity .5s ease, transform .5s ease;
+  }
+
+  &:has(.hero-sub) {
+    padding-bottom: 3rem;
+  }
 }
+
+/* ══════════════════════════════════════════════
+   ② :has() 父选择器
+   Chrome 105+ — 根据子元素/后代状态选择父元素
+   ══════════════════════════════════════════════ */
+
+/* content-block 含 h2 时，顶部光线变为红/紫 */
+.content-block:has(h2.section-subheading) {
+  border-top: 2px solid var(--r0);
+
+  &::before {
+    background: linear-gradient(90deg,
+      var(--r0), var(--p2), var(--c0),
+      var(--r0), var(--p0), var(--r0)
+    );
+    background-size: 600% 600%;
+    animation: rbw-hyper .9s linear infinite;
+    box-shadow:
+      0 0 14px var(--r0),
+      0 0 30px var(--p2);
+  }
+}
+
+/* h2 在卡片首位时，左侧加紫色竖轨 */
+.content-block:has(> h2.section-subheading:first-child) {
+  border-left: 2px solid var(--p0);
+  box-shadow:
+    0 0 20px var(--p1),
+    0 0 40px rgba(136,0,255,.18),
+    inset 0 0 20px rgba(136,0,255,.05);
+}
+
+/* li 内链接被 hover 时，整个 li 发光 */
+li:has(> a:hover) {
+  color: var(--g0);
+  text-shadow: 0 0 10px var(--g0);
+  filter: brightness(1.3);
+  transition: all .2s ease;
+}
+
+/* ══════════════════════════════════════════════
+   ③ :is() / :where() 高效分组选择器
+   ══════════════════════════════════════════════ */
+
+:is(h1, h2, h3):not(.section-heading):not(.section-subheading):not(.irc-server-label) {
+  text-shadow:
+    0 0 12px rgba(0,255,65,.4),
+    0 0 28px rgba(0,255,255,.2);
+}
+
+:where(ul, ol) {
+  list-style: none;
+}
+
+:where(section, article, aside) {
+  position: relative;
+}
+
+/* ══════════════════════════════════════════════
+   ④ :nth-child(n of .selector)
+   Chrome 111+ — 按类名过滤的第n个，比 nth-child 更精准
+   ══════════════════════════════════════════════ */
+
+/* 奇数 .content-block：边框偏青 */
+.content-block:nth-child(odd of .content-block) {
+  border-color: rgba(0,255,255,.35);
+}
+
+/* section 内第2个 .content-block：追加紫色扫描线纹理 */
+.site-section .content-block:nth-child(2 of .content-block) {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(136,0,255,.006) 0px,
+      rgba(136,0,255,.006) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    var(--bg-card);
+}
+
+/* ══════════════════════════════════════════════
+   ⑤ oklch() 宽色域颜色
+   Chrome 111+ — 感知均匀色空间，同亮度更一致
+   ══════════════════════════════════════════════ */
+
+@supports (color: oklch(50% .3 180)) {
+  :root {
+    --ok-green:  oklch(73%  .23  142);  /* 矩阵绿 */
+    --ok-cyan:   oklch(88%  .19  193);  /* 赛博青 */
+    --ok-purple: oklch(55%  .27  295);  /* 暗网紫 */
+    --ok-red:    oklch(60%  .28  27);   /* 危险红 */
+    --ok-gold:   oklch(84%  .19  85);   /* 警告金 */
+    --ok-gc:     oklch(81%  .22  167);  /* 绿→青中间色 */
+    --ok-pr:     oklch(57%  .28  310);  /* 紫→红中间色 */
+  }
+
+  /* 文字选中高亮用 oklch（感知更鲜艳） */
+  ::selection {
+    background: oklch(73% .23 142 / .32);
+    color: oklch(98% .02 142);
+    text-shadow: 0 0 12px oklch(73% .23 142);
+  }
+
+  /* 滚动条 thumb 用 oklch 渐变 */
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg,
+      var(--ok-green),
+      var(--ok-cyan),
+      var(--ok-purple)
+    );
+  }
+
+  /* 链接色用 oklch 绿（更鲜艳，感知亮度更均匀） */
+  a {
+    color: var(--ok-green);
+    text-shadow: 0 0 7px oklch(73% .23 142 / .45);
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ⑥ light-dark() + color-scheme
+   Chrome 123+ — 明确声明 dark 模式，跨平台一致
+   ══════════════════════════════════════════════ */
+
+@supports (color: light-dark(white, black)) {
+  :root {
+    color-scheme: dark;
+    --ld-bg:     light-dark(#f0fff4, #000a02);
+    --ld-txt:    light-dark(#003d10, #b8ffca);
+    --ld-card:   light-dark(rgba(0,180,60,.08), rgba(0,12,4,.93));
+    --ld-border: light-dark(rgba(0,100,30,.3),  rgba(0,143,17,.4));
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ⑦ content-visibility: auto（离屏跳过渲染）
+   Chrome 85+ — 滚动时屏幕外的 section 跳过渲染，性能爆炸
+   ══════════════════════════════════════════════ */
+
+@supports (content-visibility: auto) {
+  .site-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 400px;  /* 防止跳动的预留高度 */
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ⑧ contain（渲染隔离，防止重排蔓延）
+   卡片内部变化不影响外部布局，减少重排范围
+   ══════════════════════════════════════════════ */
+
+.content-block {
+  contain: layout style;
+}
+
+.section-divider {
+  contain: layout;
+}
+
+/* ══════════════════════════════════════════════
+   ⑨ will-change（提前 GPU 合成层准备）
+   只对确实有动画的元素使用，不滥用
+   ══════════════════════════════════════════════ */
+
+.hero             { will-change: transform; }
+#hero-title       { will-change: transform, filter; }
+.content-block    { will-change: transform, box-shadow; }
+.section-divider::before { will-change: transform; }
+
+/* ══════════════════════════════════════════════
+   ⑩ overscroll-behavior（禁止弹性滚动 & 浏览器手势）
+   Chrome 63+ — 防止 iOS 弹性/Android 下拉刷新/前进后退手势
+   ══════════════════════════════════════════════ */
+
+html {
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
+}
+
+/* ══════════════════════════════════════════════
+   ⑪ scroll-snap proximity 软吸附
+   Chrome 69+ — section 滚到接近时轻微吸附，不强制锁定
+   ══════════════════════════════════════════════ */
+
+main {
+  scroll-snap-type: y proximity;
+}
+
+.site-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+}
+
+/* ══════════════════════════════════════════════
+   ⑫ accent-color + caret-color
+   Chrome 93+ / 57+ — 一行接管所有原生控件颜色
+   ══════════════════════════════════════════════ */
+
+:root {
+  accent-color: var(--g0);
+  caret-color:  var(--g0);
+}
+
+input, textarea, [contenteditable] {
+  caret-color: var(--g0);
+  color: var(--txt);
+  background: rgba(0,12,4,.9);
+  border: 1px solid var(--g2);
+  border-radius: 3px;
+  padding: .4em .7em;
+  font-family: var(--font-mono);
+  font-size: .9rem;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+
+  /* ← CSS Nesting！不需要 .class input:focus 这种写法了 */
+  &:focus {
+    border-color: var(--g0);
+    box-shadow:
+      0 0 12px var(--g0),
+      0 0 28px rgba(0,255,65,.25),
+      inset 0 0 8px rgba(0,255,65,.06);
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ⑬ @scope 作用域 CSS（Chrome 118+）
+   将样式限定在特定 DOM 子树内，不污染全局
+   ══════════════════════════════════════════════ */
+
+@supports (selector(:scope)) {
+
+  /* 卡片内 p 和 a 单独一套配色，不影响全局 */
+  @scope (.content-block) {
+    p {
+      line-height: 1.82;
+    }
+
+    :scope > p:first-of-type {
+      margin-top: 0;
+    }
+
+    a {
+      color: var(--c0);
+      text-shadow: 0 0 7px rgba(0,255,255,.4);
+
+      &:hover {
+        color: var(--p0);
+        text-shadow:
+          0 0 8px var(--p0),
+          0 0 20px rgba(136,0,255,.4);
+      }
+    }
+  }
+
+  /* 英雄区 p 单独配色 */
+  @scope (.hero) {
+    p {
+      color: rgba(180,255,210,.78);
+      font-family: var(--font-hud);
+      letter-spacing: 1px;
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ⑭ animation-composition: add（动画叠加合成）
+   Chrome 112+ — 多个动画叠加而非互相覆盖
+   ══════════════════════════════════════════════ */
+
+@supports (animation-composition: add) {
+  /* hero title 的 4 个动画：rbw 叠加合成，glitch/flicker/persp 各自替换 */
+  #hero-title {
+    animation-composition: add, replace, replace, replace;
+  }
+
+  /* content-block 的 3 个动画：border 替换，k-rx/k-glow 叠加 */
+  .content-block {
+    animation-composition: replace, add, add;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ⑮ linear() 弹簧/弹跳缓动函数（Chrome 113+）
+   可以描述任意曲线——弹跳、弹性、阻尼，全搞定
+   ══════════════════════════════════════════════ */
+
+@supports (transition-timing-function: linear(0, 1)) {
+
+  /* 按钮：弹跳 bounce */
+  .theme-btn {
+    transition-timing-function: linear(
+      0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%,
+      0.938 16.7%, 1.017, 1.077, 1.111, 1.121, 1.115, 1.096,
+      1.063, 1.017, 0.991 28.2%, 0.977, 0.975 31.2%, 0.997 33.9%,
+      1.001, 0.998, 0.999, 1 38.5%
+    );
+  }
+
+  /* 卡片：弹性 spring */
+  .content-block {
+    transition-timing-function: linear(
+      0, 0.006, 0.025 2.8%, 0.101 5.9%, 0.539 15%, 0.721 19.2%,
+      0.849 23.2%, 0.938 27.7%, 0.968, 1.013, 1.045 37.5%,
+      1.069, 1.083, 1.088, 1.084, 1.072, 1.051, 1.021, 0.995,
+      0.974 50.6%, 0.965 53.7%, 0.964 57.5%, 0.978 63.1%,
+      1.004 68.4%, 1.015 71.5%, 1.017, 1.012, 1 77.7%
+    );
+  }
+
+  /* 链接：快速弹入 */
+  a {
+    transition-timing-function: linear(
+      0, 0.232 5.3%, 0.786 14%, 1.011 18.7%,
+      1.043 21.4%, 1.061, 1.071, 1.072, 1.065, 1.05,
+      1.018, 0.986, 0.97 39.2%, 0.965 42.1%, 0.975 46%,
+      1.003 53.5%, 1.012 57.7%, 1.001 68.6%, 1
+    );
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ⑯ field-sizing: content（输入框跟随内容自动伸缩）
+   Chrome 123+ — 告别手动 resize，告别 JS 计算高度
+   ══════════════════════════════════════════════ */
+
+@supports (field-sizing: content) {
+  textarea {
+    field-sizing: content;
+    min-height: 3lh;
+    max-height: 20lh;
+    resize: none;
+  }
+
+  input[type="text"],
+  input[type="search"],
+  input[type="url"] {
+    field-sizing: content;
+    min-width: 12ch;
+    max-width: 40ch;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ⑰ :has() 超级组合技 — 无 JS 的交互联动
+   ══════════════════════════════════════════════ */
+
+/* 当 main 内任意 content-block 被 hover 时，其他卡片微暗 */
+main:has(.content-block:hover) .content-block:not(:hover) {
+  opacity: .82;
+  filter: brightness(.88);
+  transition: opacity .3s ease, filter .3s ease;
+}
+
+/* footer 任意链接被 hover 时，顶部彩虹光条加速 */
+footer:has(a:hover)::before {
+  animation: rbw-hyper .35s linear infinite;
+  box-shadow:
+    0 0 20px var(--g0),
+    0 0 45px var(--c0),
+    0 0 90px rgba(0,255,65,.5);
+}
+
+/* section 内有卡片被 hover 时，左侧竖轨加强 */
+.site-section:has(.content-block:hover)::before {
+  animation: rbw-fast .6s linear infinite, bar-pulse 1s ease-in-out infinite;
+  opacity: 1;
+  box-shadow:
+    4px 0 20px var(--g0),
+    8px 0 45px var(--c0),
+    14px 0 80px var(--p1);
+}
+
+/* ══════════════════════════════════════════════
+   ⑱ 现代 CSS 单位 dvh/svh/lh/cqi
+   ══════════════════════════════════════════════ */
+
+/* dvh = dynamic viewport height（移动端工具栏展收后的真实高度）*/
+@supports (height: 1dvh) {
+  .hero {
+    min-height: 40dvh;
+  }
+
+  footer {
+    /* 刘海屏/全面屏底部安全区 */
+    margin-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* lh = line-height 单位，排版更语义化 */
+@supports (margin-top: 1lh) {
+  h1.section-heading {
+    margin-bottom: .75lh;
+  }
+
+  p + p {
+    margin-top: .5lh;
+  }
+}
+
+/* cqi = 容器查询内联尺寸单位（相对于容器宽度）*/
+@supports (font-size: 1cqi) {
+  h1.section-heading {
+    font-size: clamp(1.2rem, 4cqi, 1.65rem);
+  }
+
+  h2.section-subheading {
+    font-size: clamp(1rem, 3.2cqi, 1.25rem);
+  }
+}
+
+/* ══════════════════════════════════════════════
+   BONUS — :focus-within（CSS 原生表单状态联动）
+   ══════════════════════════════════════════════ */
+
+/* 含有 focused 输入框的卡片整体高亮 */
+.content-block:focus-within {
+  border-color: var(--g0) !important;
+  box-shadow:
+    0 0 25px var(--g0),
+    0 0 55px rgba(0,255,65,.3),
+    inset 0 0 20px rgba(0,255,65,.06) !important;
+
+  &::before {
+    animation: rbw-hyper .5s linear infinite;
+  }
+}
+
+} /* end @layer modern */
+
 
