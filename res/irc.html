@@ -1582,25 +1582,6 @@
 	let labelCounter = 0;
 	let pendingLabels = new Map();
 
-	// ========== 新增功能变量 ==========
-	// 屏蔽列表
-	let ignoreList = [];
-	// 高亮关键词列表
-	let highlightKeywords = [];
-	// 通知设置
-	let notificationEnabled = false;
-	let notificationPermission = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
-	// 声音提示设置
-	let soundEnabled = false;
-	// 右键菜单上下文
-	let contextMenuTarget = null;
-	let contextMenuTargetType = null; // 'user' | 'message'
-	// 搜索相关
-	let searchHighlightIndex = -1;
-	let searchResults = [];
-	// Ban 列表缓存
-	let banListCache = new Map(); // channelName -> [{nick, host, by, time}]
-
 	function findChannel(channelName) {
 		if (!channelName) return null;
 		const lowerName = channelName.toLowerCase();
@@ -1624,7 +1605,7 @@
 		input = document.getElementById("input");
 
 		loadSettings();
-		loadAdvancedSettings(); // 加载高级设置
+		loadAdvancedSettings();
 
 		let url = new URL(document.location);
 		if (url.hash) {
@@ -1641,10 +1622,7 @@
 			input.addEventListener('blur', handleInputBlur);
 		}
 
-		// 新增：全局右键点击关闭菜单
 		document.addEventListener('click', hideAllMenus);
-
-		// 新增：检查通知权限
 		checkNotificationPermission();
 	}
 	
@@ -1694,7 +1672,6 @@
 		}
 	}
 
-	// ========== 新增：高级设置加载/保存 ==========
 	function loadAdvancedSettings() {
 		try {
 			const adv = JSON.parse(localStorage.getItem('ircAdvancedSettings') || '{}');
@@ -1720,8 +1697,6 @@
 			writeToLog(`[WARN] Failed to save advanced settings: ${e.message}`);
 		}
 	}
-
-	// ========== 新增：通知功能 ==========
 	function checkNotificationPermission() {
 		if (!('Notification' in window)) return;
 		if (Notification.permission === 'default' && !localStorage.getItem('notificationHintDismissed')) {
@@ -1768,13 +1743,11 @@
 		}
 	}
 
-	// ========== 新增：声音提示 ==========
 	let notificationSound = null;
 	function playNotificationSound() {
 		if (!soundEnabled) return;
 		try {
 			if (!notificationSound) {
-				// 使用 Web Audio API 生成提示音
 				const ctx = new (window.AudioContext || window.webkitAudioContext)();
 				const oscillator = ctx.createOscillator();
 				const gainNode = ctx.createGain();
@@ -1800,7 +1773,7 @@
 		writeToScreen("var(--clr-info)", soundEnabled ? "已启用声音提示" : "已关闭声音提示", statusChannel, "*");
 	}
 
-	// ========== 新增：右键菜单 ==========
+	function showUserContextMenu(e, nick, type) {
 	function showUserContextMenu(e, nick, type) {
 		e.preventDefault();
 		e.stopPropagation();
@@ -1867,7 +1840,7 @@
 		}
 	}
 
-	// ========== 新增：屏蔽功能 ==========
+
 	function addIgnore(nick) {
 		if (!nick || ignoreList.includes(nick)) return;
 		ignoreList.push(nick);
@@ -1917,7 +1890,7 @@
 		showIgnorePanel();
 	}
 
-	// ========== 新增：高亮关键词 ==========
+
 	function checkHighlight(text) {
 		if (!highlightKeywords.length || !text) return false;
 		const lowerText = text.toLowerCase();
@@ -1935,7 +1908,7 @@
 		saveAdvancedSettings();
 	}
 
-	// ========== 新增：搜索功能（嵌入菜单） ==========
+
 	function toggleSearchInMenu(e) {
 		if (e) e.stopPropagation();
 		const menuSearch = document.getElementById('menuSearch');
@@ -1953,7 +1926,6 @@
 	}
 
 	function openSearchPanel() {
-		// 确保菜单打开并展开搜索区域
 		const dropdown = document.getElementById('headerMenuDropdown');
 		if (dropdown && !dropdown.classList.contains('visible')) {
 			toggleHeaderMenu();
@@ -2071,7 +2043,7 @@
 		});
 	}
 
-	// ========== 新增：Ban 列表 ==========
+
 	let currentBanChannel = '';
 
 	function showBanPanel(channelName) {
@@ -2127,7 +2099,6 @@
 		if (currentBanChannel) {
 			doSend("MODE " + currentBanChannel + " -b " + host + "\r\n");
 			writeToScreen("var(--clr-info)", `正在解除封禁 ${host}…`, activeChannel, "*");
-			// 从缓存中移除
 			const bans = banListCache.get(currentBanChannel) || [];
 			const idx = bans.findIndex(b => b.host === host);
 			if (idx !== -1) { bans.splice(idx, 1); renderBanList(); }
@@ -2137,15 +2108,13 @@
 
 
 
-	// ========== 新增：全局快捷键 ==========
+
 	function handleGlobalKeydown(e) {
-		// Ctrl+F 或 Ctrl+Shift+F 打开搜索
 		if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
 			e.preventDefault();
 			openSearchPanel();
 			return;
 		}
-		// Escape 关闭面板
 		if (e.key === 'Escape') {
 			closeSearchPanel();
 			closeIgnorePanel();
@@ -2165,12 +2134,10 @@
 			if (active && active !== input && active !== document.body) {
 				return;
 			}
-			// If the settings panel is open, do not steal focus (allow normal settings interaction)
 			const settingsPanel = document.getElementById('settingsPanel');
 			if (settingsPanel && settingsPanel.classList.contains('open')) {
 				return;
 			}
-			// If the menu dropdown is open, do not steal focus
 			const menuDropdown = document.getElementById('headerMenuDropdown');
 			if (menuDropdown && menuDropdown.classList.contains('visible')) {
 				return;
@@ -2213,7 +2180,6 @@
 			menu.classList.add('menu-attached');
 			setTimeout(() => { document.addEventListener('click', headerMenuClickListener); }, 0);
 		} else {
-			// 菜单关闭时也收起搜索
 			closeSearchPanel();
 		}
 	}
@@ -2242,7 +2208,6 @@
 
 	function updateAutoReconnectMenuItem() {
 		const autoReconnectCheckbox = document.getElementById('autoReconnect');
-		// Match the menu item that calls toggleAutoReconnect() by selector instead of hardcoded index
 		const menuItem = document.querySelector('.header-menu-item[onclick="toggleAutoReconnect()"]');
 		if (menuItem && autoReconnectCheckbox) {
 			if (autoReconnectCheckbox.checked) {
@@ -2308,7 +2273,6 @@
 		}
 	}
 
-	// All keys are uppercase, consistent with tag.toUpperCase() in writeToLog
 	const LOG_COLORS = {
 		'ERROR':          '#ff0040',
 		'WARN':           '#ffff00',
@@ -2599,7 +2563,6 @@
 		const joinChannelBtn = document.getElementById('joinChannelBtn');
 		if (joinChannelBtn) joinChannelBtn.disabled = true;
 
-		// Hide input box and clear channel tabs on disconnect
 		const inputContainer = document.getElementById('inputContainer');
 		if (inputContainer) inputContainer.style.display = 'none';
 		if (channels) channels.innerHTML = '';
@@ -2644,7 +2607,6 @@
 		writeToScreen("var(--clr-font)", disconnectMessage, statusChannel, "");
 		writeToLog(logMessage);
 
-		// Skip auto-reconnect for user-initiated disconnects
 		if (wasUserDisconnect) {
 			isDisconnecting = false;
 			return;
@@ -2975,7 +2937,6 @@
 		if (!PrefixChars || !PrefixChars[1]) return 0;
 		let aIndex = PrefixChars[1].indexOf(user_a[0][0]);
 		let bIndex = PrefixChars[1].indexOf(user_b[0][0]);
-		// indexOf returns -1 for users without a prefix (regular users), they should sort after all prefixed users
 		if (aIndex === -1) aIndex = Infinity;
 		if (bIndex === -1) bIndex = Infinity;
 		return aIndex - bIndex;
@@ -3115,7 +3076,6 @@
 			e.stopPropagation();
 			openPrivateChat(nick);
 		});
-		// 新增：用户列表右键菜单
 		tmp.addEventListener("contextmenu", function (e) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -3260,10 +3220,9 @@ const Channel_AppendUser = channelAppendUser;
 			displayTime = now.toISOString().substr(11, 8);
 		}
 
-		// 新增：检查是否被屏蔽
 		if (username && username !== "" && username !== "*" && username !== "-" && username !== nickname) {
 			if (isIgnored(username)) {
-				return; // 忽略该用户的消息
+				return;
 			}
 		}
 
@@ -3275,7 +3234,6 @@ const Channel_AppendUser = channelAppendUser;
 			nickSpan.addEventListener("click", function () {
 				openPrivateChat(username);
 			});
-			// 新增：右键菜单
 			nickSpan.addEventListener("contextmenu", function (e) {
 				showUserContextMenu(e, username, 'user');
 			});
@@ -3292,7 +3250,6 @@ const Channel_AppendUser = channelAppendUser;
 			pre.appendChild(sep);
 			pre.appendChild(msgSpan);
 		} else {
-			// System / info message — dim timestamp
 			const tsSpan = document.createElement("span");
 			tsSpan.textContent = "[" + displayTime + "] ";
 			tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;";
@@ -3313,7 +3270,6 @@ const Channel_AppendUser = channelAppendUser;
 			});
 		}
 
-		// 新增：通知和声音
 		if (username && username !== nickname && username !== "*" && username !== "-") {
 			const isHighlight = checkHighlight(message) || (message && message.toLowerCase().includes(nickname.toLowerCase()));
 			const isActiveChannel = activeChannel && channel && channel.name === activeChannel.name;
@@ -4141,38 +4097,32 @@ const Channel_AppendUser = channelAppendUser;
 		return { tags, rest };
 	}
 
-	// Tracks the set of IRCv3 capabilities acknowledged (ACK) by the server
 	let ircv3ActiveCaps = new Set();
-	// Buffer for CAP LS 302 multi-part replies (server uses * to indicate more segments follow)
 	let capLsBuffer = "";
 
-	// Feature flags, automatically enabled after CAP ACK
-	let ircv3ServerTime    = false;  // server-time: use server-provided message timestamps
-	let ircv3EchoMessage   = false;  // echo-message: server echoes back our own sent messages
-	let ircv3MessageTags   = false;  // message-tags: general message tag support (typing, reactions, etc.)
-	let ircv3AccountTag    = false;  // account-tag: messages carry the sender's account name
-	let ircv3AwayNotify    = false;  // away-notify: real-time away status change notifications
-	let ircv3AccountNotify = false;  // account-notify: account change notifications
-	let ircv3ExtendedJoin  = false;  // extended-join: JOIN messages include account and real name
-	let ircv3ChgHost       = false;  // chghost: host/username change notifications
-	let ircv3MultiPrefix   = false;  // multi-prefix: support for multiple status prefixes per user
-	let ircv3UserhostInNames = false; // userhost-in-names: NAMES replies include full user@host
-	let ircv3Batch         = false;  // batch: support for batched message delivery
-	let ircv3LabeledResponse = false; // labeled-response: correlate requests with server responses via labels
-	let ircv3ChatHistory   = false;  // chathistory: retrieve historical channel messages
-	let ircv3InviteNotify  = false;  // invite-notify: receive notifications when other users are invited
-	let ircv3Multiline     = false;  // draft/multiline: multi-line message support
-	let ircv3Whox          = false;  // whox: extended WHO queries with field selection
+	let ircv3ServerTime    = false;
+	let ircv3EchoMessage   = false;
+	let ircv3MessageTags   = false;
+	let ircv3AccountTag    = false;
+	let ircv3AwayNotify    = false;
+	let ircv3AccountNotify = false;
+	let ircv3ExtendedJoin  = false;
+	let ircv3ChgHost       = false;
+	let ircv3MultiPrefix   = false;
+	let ircv3UserhostInNames = false;
+	let ircv3Batch         = false;
+	let ircv3LabeledResponse = false;
+	let ircv3ChatHistory   = false;
+	let ircv3InviteNotify  = false;
+	let ircv3Multiline     = false;
+	let ircv3Whox          = false;
 
-	// SASL authentication state variables
 	let saslEnabled = false;
 	let saslAccount = "";
 	let saslPassword = "";
 	let saslPending = false;
 
 	var Commands = new Map();
-
-	// 处理 367 RPL_BANLIST 响应
 	Commands.set("367", function (nick, data) {
 		if (!data || data.length < 5) return;
 		const channel = data[2];
@@ -4181,7 +4131,6 @@ const Channel_AppendUser = channelAppendUser;
 		addBanEntry(host, by, null);
 	});
 
-	// 处理 368 RPL_ENDOFBANLIST 响应
 	Commands.set("368", function (nick, data) {
 		if (!data || data.length < 3) return;
 		if (data[2] === currentBanChannel) {
@@ -4189,7 +4138,6 @@ const Channel_AppendUser = channelAppendUser;
 		}
 	});
 
-	// 311 RPL_WHOISUSER
 	Commands.set("311", function (nick, data) {
 		if (!data || data.length < 6) return;
 		const target = data[3];
@@ -4198,7 +4146,6 @@ const Channel_AppendUser = channelAppendUser;
 		const realname = data.slice(7).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-info)", `[WHOIS] ${target} (${user}@${host}) — 真名: ${realname}`, statusChannel, "*");
 	});
-	// 312 RPL_WHOISSERVER
 	Commands.set("312", function (nick, data) {
 		if (!data || data.length < 5) return;
 		const target = data[3];
@@ -4206,13 +4153,11 @@ const Channel_AppendUser = channelAppendUser;
 		const serverInfo = data.slice(5).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-info)", `[WHOIS] ${target} 连接自服务器: ${server} (${serverInfo})`, statusChannel, "*");
 	});
-	// 313 RPL_WHOISOPERATOR
 	Commands.set("313", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const target = data[3];
 		writeToScreen("var(--clr-gold)", `[WHOIS] ${target} 是 IRC 管理员`, statusChannel, "*");
 	});
-	// 317 RPL_WHOISIDLE
 	Commands.set("317", function (nick, data) {
 		if (!data || data.length < 5) return;
 		const target = data[3];
@@ -4221,53 +4166,45 @@ const Channel_AppendUser = channelAppendUser;
 		const idleSecs = idleSec % 60;
 		writeToScreen("var(--clr-info)", `[WHOIS] ${target} 已闲置: ${idleMin}分${idleSecs}秒`, statusChannel, "*");
 	});
-	// 318 RPL_ENDOFWHOIS
 	Commands.set("318", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const target = data[3];
 		writeToScreen("var(--clr-text-dim)", `[WHOIS] ${target} 的信息结束`, statusChannel, "*");
 		writeToLog(`[IRC] RPL_ENDOFWHOIS: ${target}`);
 	});
-	// 319 RPL_WHOISCHANNELS
 	Commands.set("319", function (nick, data) {
 		if (!data || data.length < 5) return;
 		const target = data[3];
 		const chans = data.slice(4).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-info)", `[WHOIS] ${target} 在频道: ${chans}`, statusChannel, "*");
 	});
-	// 320 WHOISSPECIAL (extended info)
 	Commands.set("320", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const msg = data.slice(3).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-info)", `[WHOIS] ${msg}`, statusChannel, "*");
 	});
-	// 330 RPL_WHOISACCOUNT
 	Commands.set("330", function (nick, data) {
 		if (!data || data.length < 5) return;
 		const target = data[3];
 		const account = data[4];
 		writeToScreen("var(--clr-green)", `[WHOIS] ${target} 已登录账号: ${account}`, statusChannel, "*");
 	});
-	// 338 RPL_WHOISACTUALLY (actual IP)
 	Commands.set("338", function (nick, data) {
 		if (!data || data.length < 5) return;
 		const target = data[3];
 		const actualHost = data.slice(4).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-info)", `[WHOIS] ${target} 实际地址: ${actualHost}`, statusChannel, "*");
 	});
-	// 671 RPL_WHOISSECURE (using SSL)
 	Commands.set("671", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const target = data[3];
 		writeToScreen("var(--clr-green)", `[WHOIS] ${target} 使用 SSL/TLS 加密连接`, statusChannel, "*");
 	});
 
-	// 321 RPL_LISTSTART
 	Commands.set("321", function (nick, data) {
 		writeToScreen("var(--clr-info)", `频道列表:`, statusChannel, "*");
 		writeToLog(`[IRC] RPL_LISTSTART (321)`);
 	});
-	// 322 RPL_LIST: individual channel entry
 	Commands.set("322", function (nick, data) {
 		if (!data || data.length < 6) return;
 		const chanName   = data[3];
@@ -4275,40 +4212,31 @@ const Channel_AppendUser = channelAppendUser;
 		const topic      = data.slice(5).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-font)", `  ${chanName} [${userCount}人] ${topic}`, statusChannel, "*");
 	});
-	// 323 RPL_LISTEND
 	Commands.set("323", function (nick, data) {
 		writeToScreen("var(--clr-text-dim)", `频道列表结束`, statusChannel, "*");
 		writeToLog(`[IRC] RPL_LISTEND (323)`);
 	});
 
-	// IRCv3 spec: https://ircv3.net/specs/extensions/monitor
-	// MONITOR + nick — add to monitor list; MONITOR - nick — remove; MONITOR l — list monitored nicks
-
-	// 730 RPL_MONONLINE: a monitored user came online
 	Commands.set("730", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const targets = data.slice(3).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-green)", `[MONITOR] 上线: ${targets}`, statusChannel, "*");
 		writeToLog(`[MONITOR] RPL_MONONLINE: ${targets}`);
 	});
-	// 731 RPL_MONOFFLINE: a monitored user went offline
 	Commands.set("731", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const targets = data.slice(3).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-text-dim)", `[MONITOR] 下线: ${targets}`, statusChannel, "*");
 		writeToLog(`[MONITOR] RPL_MONOFFLINE: ${targets}`);
 	});
-	// 732 RPL_MONLIST
 	Commands.set("732", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const targets = data.slice(3).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-info)", `[MONITOR] 监控列表: ${targets}`, statusChannel, "*");
 	});
-	// 733 RPL_ENDOFMONLIST
 	Commands.set("733", function (nick, data) {
 		writeToScreen("var(--clr-text-dim)", `[MONITOR] 监控列表结束`, statusChannel, "*");
 	});
-	// 734 ERR_MONLISTFULL
 	Commands.set("734", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const msg = data.slice(3).join(' ').replace(/^:/, '');
@@ -4321,12 +4249,6 @@ const Channel_AppendUser = channelAppendUser;
 		const target = data[2];
 		const subCommand = data[3].toUpperCase();
 
-		// CAP LS 302 supports multi-part replies (server marks continuation with *)
-		// Format: CAP * LS * :cap1 cap2...  (* indicates more segments follow)
-		//        CAP * LS :cap1 cap2...    (no * means this is the final segment)
-		// If * immediately follows the subcommand, it is a continuation marker, not a capability
-
-		// Check for multi-part marker: data[4] === "*" means more segments follow
 		let isMultiline = false;
 		let capsStartIdx = 4;
 		if (subCommand === "LS" && data[4] === "*") {
@@ -4350,45 +4272,41 @@ const Channel_AppendUser = channelAppendUser;
 		writeToLog(`[CAP] Received: target=${target}, subcommand=${subCommand}${isMultiline ? ' (multiline)' : ''}, caps="${caps}"`);
 
 		if (subCommand === "LS") {
-			// Accumulate capabilities list (supports CAP LS 302 multi-part replies)
 			if (caps) {
 				capLsBuffer = capLsBuffer ? capLsBuffer + ' ' + caps : caps;
 			}
 
-			if (isMultiline) {
-				// More segments expected — waiting for continuation
-				writeToLog(`[CAP] LS multiline chunk received — waiting for more...`);
-				return;
-			}
+		if (isMultiline) {
+			writeToLog(`[CAP] LS multiline chunk received — waiting for more...`);
+			return;
+		}
 
-			// Final segment (or single-part reply) — process the complete capability list
 			const allCaps = capLsBuffer;
-			capLsBuffer = ""; // Reset the capability buffer
+			capLsBuffer = "";
 			writeToScreen("var(--clr-info)", `服务器支持的能力: ${allCaps}`, statusChannel, "*");
 
 			const availableCaps = allCaps.split(' ').map(c => c.trim().split('=')[0].toLowerCase()).filter(c => c);
 
-		// Capability priority order: request core capabilities first, then optional features
 		const wantedCaps = [
-			"message-tags",        // Core dependency: message tag support (must be requested first)
-			"server-time",         // Feature: server-provided message timestamps
-			"sasl",                // Feature: SASL authentication
-			"away-notify",         // Feature: real-time away status notifications
-			"chghost",             // Feature: host/username change notifications
-			"account-tag",         // Feature: messages carry sender account name
-			"account-notify",      // Feature: account change notifications
-			"extended-join",       // Feature: JOIN messages include account info
-			"echo-message",        // Feature: server echoes back own messages
-			"multi-prefix",        // Multiple status prefix support
-			"userhost-in-names",   // NAMES replies include full user@host
-			"cap-notify",          // Capability add/remove notifications (cap-notify)
-			"setname",             // Real name change support (SETNAME)
-			"batch",               // Batched message delivery (required by chathistory)
-			"labeled-response",    // Request/response correlation via labels
-			"chathistory",         // Channel message history
-			"invite-notify",       // Invite notifications
-			"draft/multiline",     // Multi-line message support
-			"whox",                // Extended WHO queries
+			"message-tags",
+			"server-time",
+			"sasl",
+			"away-notify",
+			"chghost",
+			"account-tag",
+			"account-notify",
+			"extended-join",
+			"echo-message",
+			"multi-prefix",
+			"userhost-in-names",
+			"cap-notify",
+			"setname",
+			"batch",
+			"labeled-response",
+			"chathistory",
+			"invite-notify",
+			"draft/multiline",
+			"whox",
 		];
 
 			const requestedCaps = wantedCaps
@@ -4413,7 +4331,6 @@ const Channel_AppendUser = channelAppendUser;
 			for (const cap of ackedList) {
 				ircv3ActiveCaps.add(cap);
 			}
-		// Enable the corresponding feature flag for each acknowledged capability
 		if (ircv3ActiveCaps.has('server-time'))        ircv3ServerTime      = true;
 		if (ircv3ActiveCaps.has('echo-message'))        ircv3EchoMessage     = true;
 		if (ircv3ActiveCaps.has('message-tags'))        ircv3MessageTags     = true;
@@ -4433,12 +4350,10 @@ const Channel_AppendUser = channelAppendUser;
 
 			writeToLog(`[CAP] Active caps: ${[...ircv3ActiveCaps].join(', ')}`);
 
-			// If SASL is enabled and credentials are set, perform SASL authentication before sending CAP END
 			if (ircv3ActiveCaps.has('sasl') && saslEnabled && saslAccount && saslPassword) {
 				writeToLog(`[SASL] Starting SASL PLAIN authentication for: ${saslAccount}`);
 				saslPending = true;
 				doSend("AUTHENTICATE PLAIN");
-				// Do not send CAP END yet — wait for SASL authentication to complete
 			} else {
 				doSend("CAP END");
 				sendRegistration();
@@ -4450,7 +4365,6 @@ const Channel_AppendUser = channelAppendUser;
 			const rejectedCaps = caps || "(none)";
 			writeToScreen("var(--clr-warning)", `能力被拒绝: ${rejectedCaps}`, statusChannel, "*");
 			writeToLog(`[CAP] Capabilities rejected (NAK): ${rejectedCaps}`);
-			// NAK means the server rejected all requested capabilities; end negotiation and proceed with registration
 			doSend("CAP END");
 			sendRegistration();
 
@@ -4463,7 +4377,6 @@ const Channel_AppendUser = channelAppendUser;
 		} else if (subCommand === "DEL") {
 			writeToScreen("var(--clr-warning)", `服务器移除能力: ${caps}`, statusChannel, "*");
 			writeToLog(`[CAP] cap-notify DEL: ${caps}`);
-			// Update the local active capabilities state
 			const delList = caps.split(' ').map(c => c.trim().toLowerCase()).filter(c => c);
 			for (const cap of delList) {
 				ircv3ActiveCaps.delete(cap);
@@ -4471,34 +4384,21 @@ const Channel_AppendUser = channelAppendUser;
 		}
 	});
 
-	// IRCv3 spec: https://ircv3.net/specs/extensions/sasl-3.1
-	// Flow: CAP REQ sasl → CAP ACK sasl → AUTHENTICATE PLAIN →
-	//        Server: AUTHENTICATE + → client sends Base64(authzid\0user\0pass) →
-	//        Server: 900 (RPL_LOGGEDIN) + 903 (RPL_SASLSUCCESS) → CAP END → registration
-
 	Commands.set("AUTHENTICATE", function (nick, data) {
 		if (!data || data.length < 2) return;
-		// Server may send AUTHENTICATE with a prefix (:server AUTHENTICATE +)
-		// In that case: data[0]=":server", data[1]="AUTHENTICATE", data[2]="+"
-		// Or without prefix (AUTHENTICATE +): data[0]="AUTHENTICATE", data[1]="+"
-		// Normalise both forms: locate the payload parameter (the non-command argument)
 		let payload = "";
 		if (data[0].toUpperCase() === "AUTHENTICATE") {
-			// No-prefix form: data[0]=AUTHENTICATE, data[1]=payload
 			payload = (data[1] || "").replace(/^:/, '');
 		} else {
-			// With-prefix form: data[0]=:server, data[1]=AUTHENTICATE, data[2]=payload
 			payload = (data[2] || "").replace(/^:/, '');
 		}
 
 		if (payload === '+') {
-			// Server sent an empty challenge — client begins sending authentication data
 			if (!saslPending || !saslAccount || !saslPassword) {
 				writeToLog('[SASL] AUTHENTICATE + received but no pending SASL auth — aborting');
 				doSend("AUTHENTICATE *");
 				return;
 			}
-			// PLAIN format: authzid\0authcid\0passwd (empty authzid defaults to authcid)
 			const authStr = `\x00${saslAccount}\x00${saslPassword}`;
 			const encoded = btoa(unescape(encodeURIComponent(authStr)));
 			writeToLog(`[SASL] Sending PLAIN credentials for: ${saslAccount}`);
@@ -4508,27 +4408,21 @@ const Channel_AppendUser = channelAppendUser;
 		}
 	});
 
-	// 900 RPL_LOGGEDIN: SASL login successful
 	Commands.set("900", function (nick, data) {
 		if (!data || data.length < 4) return;
-		// Format: :server 900 nick nick!user@host accountname :message
-		// data[3]=nick!user@host, data[4]=accountname (the actual account name)
 		const accountName = data.length >= 5 ? data[4].replace(/^:/, '') : (data[3] || '');
 		writeToScreen("var(--clr-green)", `已登录账号: ${accountName}`, statusChannel, "*");
 		writeToLog(`[SASL] RPL_LOGGEDIN (900): logged in as ${accountName}`);
-		// Update local account info (use the real account name, not nick!user@host)
 		if (accountName && accountName !== '*') {
 			saslAccount = accountName;
 		}
 	});
 
-	// 901 RPL_LOGGEDOUT: logged out of account
 	Commands.set("901", function (nick, data) {
 		writeToScreen("var(--clr-warning)", `账号已登出`, statusChannel, "*");
 		writeToLog(`[SASL] RPL_LOGGEDOUT (901)`);
 	});
 
-	// 902 ERR_NICKLOCKED: nickname is locked
 	Commands.set("902", function (nick, data) {
 		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'Nick locked';
 		writeToScreen("var(--clr-red)", `SASL 错误: 昵称已锁定 — ${msg}`, statusChannel, "*");
@@ -4538,7 +4432,6 @@ const Channel_AppendUser = channelAppendUser;
 		sendRegistration();
 	});
 
-	// 903 RPL_SASLSUCCESS: SASL authentication succeeded
 	Commands.set("903", function (nick, data) {
 		writeToScreen("var(--clr-green)", `SASL 认证成功!`, statusChannel, "*");
 		writeToLog(`[SASL] RPL_SASLSUCCESS (903)`);
@@ -4547,18 +4440,15 @@ const Channel_AppendUser = channelAppendUser;
 		sendRegistration();
 	});
 
-	// 904 ERR_SASLFAIL: SASL authentication failed
 	Commands.set("904", function (nick, data) {
 		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'Authentication failed';
 		writeToScreen("var(--clr-red)", `SASL 认证失败: ${msg}`, statusChannel, "*");
 		writeToLog(`[SASL] ERR_SASLFAIL (904): ${msg}`);
 		saslPending = false;
-		// Continue connecting after authentication failure (without an account)
 		doSend("CAP END");
 		sendRegistration();
 	});
 
-	// 905 ERR_SASLTOLONG: SASL response data too long
 	Commands.set("905", function (nick, data) {
 		writeToScreen("var(--clr-red)", `SASL 数据过长`, statusChannel, "*");
 		writeToLog(`[SASL] ERR_SASLTOLONG (905)`);
@@ -4567,29 +4457,22 @@ const Channel_AppendUser = channelAppendUser;
 		sendRegistration();
 	});
 
-	// 906 ERR_SASLABORTED: SASL exchange aborted
 	Commands.set("906", function (nick, data) {
 		writeToScreen("var(--clr-warning)", `SASL 认证已中止`, statusChannel, "*");
 		writeToLog(`[SASL] ERR_SASLABORTED (906)`);
 		saslPending = false;
 	});
 
-	// 907 ERR_SASLALREADY: already authenticated
 	Commands.set("907", function (nick, data) {
 		writeToScreen("var(--clr-warning)", `已经完成 SASL 认证`, statusChannel, "*");
 		writeToLog(`[SASL] ERR_SASLALREADY (907)`);
 	});
 
-	// 908 RPL_SASLMECHS: list of supported SASL mechanisms
 	Commands.set("908", function (nick, data) {
 		const mechs = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '';
 		writeToScreen("var(--clr-info)", `支持的 SASL 机制: ${mechs}`, statusChannel, "*");
 		writeToLog(`[SASL] RPL_SASLMECHS (908): ${mechs}`);
 	});
-
-	// IRCv3 spec: https://ircv3.net/specs/extensions/chghost
-	// Server pushes a CHGHOST notification when a user's ident or hostname changes
-	// Format: :nick!oldident@oldhost CHGHOST newident newhost
 
 	Commands.set("CHGHOST", function (nick, data) {
 		if (!data || data.length < 4) return;
@@ -4600,7 +4483,6 @@ const Channel_AppendUser = channelAppendUser;
 		if (isSelf) {
 			writeToScreen("var(--clr-info)", `你的主机信息已更新: ${newIdent}@${newHost}`, statusChannel, "*");
 		} else {
-			// Announce the change in all channels the user is present in
 			channelMap.forEach(function (channel) {
 				if (!channel.users) return;
 				const hasUser = channel.users.some(u => u[1] === nick);
@@ -4612,24 +4494,12 @@ const Channel_AppendUser = channelAppendUser;
 		writeToLog(`[CHGHOST] ${nick}: new ident=${newIdent} host=${newHost}`);
 	});
 
-	// ── IRCv3 Feature 6: account-notify + account-tag + extended-join ──────────
-	// IRCv3 specs:
-	//   https://ircv3.net/specs/extensions/account-notify
-	//   https://ircv3.net/specs/extensions/account-tag
-	//   https://ircv3.net/specs/extensions/extended-join
-	//
-	// ACCOUNT: notify when a user logs into or out of an account
-	// Format: :nick!user@host ACCOUNT accountname  (*=logged out)
-	// extended-join: JOIN message includes account name and real name
-	// Format: :nick!user@host JOIN #chan accountname :realname
-
 	Commands.set("ACCOUNT", function (nick, data) {
 		if (!data || data.length < 3) return;
 		const accountName = data[2].replace(/^:/, '');
 		const isSelf = (nick === nickname);
 
 		if (accountName === '*') {
-			// User logged out of their account
 			if (isSelf) {
 				writeToScreen("var(--clr-warning)", `你已退出账号登录`, statusChannel, "*");
 			} else {
@@ -4642,7 +4512,6 @@ const Channel_AppendUser = channelAppendUser;
 			}
 			writeToLog(`[ACCOUNT] ${nick}: logged out`);
 		} else {
-			// User logged into an account
 			if (isSelf) {
 				writeToScreen("var(--clr-green)", `你已登录账号: ${accountName}`, statusChannel, "*");
 			} else {
@@ -4657,8 +4526,6 @@ const Channel_AppendUser = channelAppendUser;
 		}
 	});
 
-	// SETNAME: user updates their real name (IRCv3 setname extension)
-	// Format: :nick!user@host SETNAME :new real name
 	Commands.set("SETNAME", function (nick, data) {
 		if (!data || data.length < 3) return;
 		const newRealname = data.slice(2).join(' ').replace(/^:/, '');
@@ -4675,14 +4542,10 @@ const Channel_AppendUser = channelAppendUser;
 		}
 		writeToLog(`[ACCOUNT] SETNAME: ${nick} → "${newRealname}"`);
 	});
-	// IRCv3 spec: https://ircv3.net/specs/extensions/away-notify
-	// Server broadcasts an AWAY message to all users sharing a channel when a user sets or clears their away status
-	// Format: :nick!user@host AWAY [:reason]  (with reason = away set; without = away cleared)
 
 	Commands.set("AWAY", function (nick, data) {
 		const isSelf = (nick === nickname);
 
-		// Extract the away reason (if present)
 		let reason = "";
 		if (data && data.length >= 3) {
 			reason = data.slice(2).join(' ');
@@ -4700,7 +4563,6 @@ const Channel_AppendUser = channelAppendUser;
 		} else {
 			channelMap.forEach(function (channel) {
 				if (!channel.userlist || !channel.users) return;
-				// Check whether this user is present in this channel
 				const userEntry = channel.users.find(u => u[1] === nick);
 				if (!userEntry) return;
 
@@ -4709,16 +4571,12 @@ const Channel_AppendUser = channelAppendUser;
 				} else {
 					writeToScreen("var(--clr-info)", `${nick} 回来了`, channel, "*");
 				}
-				// Mark the away status on the user list entry
 				updateUserAwayStatus(nick, channel, isSettingAway);
 			});
 		}
 		writeToLog(`[AWAY] ${nick}: ${isSettingAway ? `away (${reason})` : 'back'}`);
 	});
 
-	/**
-	 * 在用户列表中标记/取消用户的离开状态（显示为灰色斜体）
-	 */
 	function updateUserAwayStatus(nick, channel, isAway) {
 		if (!channel || !channel.userlist) return;
 		for (const li of channel.userlist.children) {
@@ -4736,7 +4594,6 @@ const Channel_AppendUser = channelAppendUser;
 		}
 	}
 
-	// 301 RPL_AWAY: away message returned by WHOIS
 	Commands.set("301", function (nick, data) {
 		if (!data || data.length < 5) return;
 		const targetNick = data[3];
@@ -4745,14 +4602,12 @@ const Channel_AppendUser = channelAppendUser;
 		writeToLog(`[AWAY] RPL_AWAY (301): ${targetNick} is away: ${awayMsg}`);
 	});
 
-	// 305 RPL_UNAWAY: server confirms away status cleared
 	Commands.set("305", function (nick, data) {
 		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '你不再处于离开状态';
 		writeToScreen("var(--clr-info)", `✓ ${msg}`, activeChannel || statusChannel, "*");
 		writeToLog(`[AWAY] RPL_UNAWAY (305): you are no longer away`);
 	});
 
-	// 306 RPL_NOWAWAY: server confirms away status set
 	Commands.set("306", function (nick, data) {
 		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '你已标记为离开状态';
 		writeToScreen("var(--clr-warning)", `✓ ${msg}`, activeChannel || statusChannel, "*");
@@ -4771,12 +4626,9 @@ const Channel_AppendUser = channelAppendUser;
 		if (!data) return;
 		for (let i = 2; i < data.length; i++) {
 			if (data[i].indexOf("PREFIX=") == 0) {
-				// PREFIX=(qaohv)~&@%+  format: characters inside parentheses are mode chars, outside are the corresponding prefix symbols
-				// Strip the PREFIX=( prefix, then split on )
-				let tmp = data[i].substring(8);  // Strip "PREFIX=("
+				let tmp = data[i].substring(8);
 				if (tmp) {
 					PrefixChars = tmp.split(")");
-					// Trim any trailing whitespace that may result from the split, to prevent incorrect indexOf lookups
 					if (PrefixChars[1]) PrefixChars[1] = PrefixChars[1].trimEnd();
 					writeToScreen("var(--clr-brown)", "PREFIX CHARS: " + PrefixChars[0] + " " + PrefixChars[1], statusChannel, "");
 					writeToLog(`[IRC] Server PREFIX support: modes="${PrefixChars[0]}" chars="${PrefixChars[1]}"`);
@@ -4788,7 +4640,6 @@ const Channel_AppendUser = channelAppendUser;
 		if (!data || data.length < 4) return;
 		let channel = findChannel(data[3]);
 		if (!channel || !channel.topic) return;
-		// data[4] may be absent when no topic is set; handle gracefully
 		let text = data.length >= 5 ? data.slice(4).join(' ').replace(/^:/, '') : '';
 		channel.topic.textContent = text || "No topic set";
 		writeToLog(`[IRC] RPL_TOPIC (332): channel=${data[3]} topic="${text}"`);
@@ -4805,22 +4656,16 @@ const Channel_AppendUser = channelAppendUser;
 		for (let i = 5; i < data.length; i++) {
 			let prefix = "";
 			let entry = data[i];
-
-			// If userhost-in-names is active, nicks in NAMES replies have the format nick!user@host
-			// Or with a prefix: @nick!user@host — strip the !user@host part and store only the display nick
 			let displayNick = entry;
 			if (ircv3UserhostInNames && entry.includes('!')) {
-				displayNick = entry.split('!')[0]; // Keep only the nick portion (including any prefix character)
+				displayNick = entry.split('!')[0];
 			}
-
-			// multi-prefix support: extract all consecutive prefix characters (e.g. @+nick has two prefixes)
 			let ii = 0;
 			while (PrefixChars && PrefixChars[1] && ii < displayNick.length && PrefixChars[1].indexOf(displayNick[ii]) >= 0) {
 				prefix += displayNick[ii];
 				ii++;
 			}
 			if (prefix == "") prefix = " ";
-			// Store the full prefix string (may contain multiple chars when multi-prefix is active, e.g. "@+")
 			channel.users.push([prefix, displayNick.substring(ii)]);
 		}
 		writeToLog(`[IRC] RPL_NAMREPLY (353): channel=${data[4]} users so far=${channel.users.length}`);
@@ -4830,7 +4675,6 @@ const Channel_AppendUser = channelAppendUser;
 		let channel = findChannel(data[3]);
 		if (!channel || !channel.userlist) return;
 		channel.users.sort(sortUserList);
-		// Use a DocumentFragment to build all user nodes in bulk and insert them into the DOM in a single operation, avoiding per-appendChild reflows
 		const frag = document.createDocumentFragment();
 		for (let i = 0; i < channel.users.length; i++) {
 			const prefix = channel.users[i][0];
@@ -4860,12 +4704,9 @@ const Channel_AppendUser = channelAppendUser;
 		channel.names_end = true;
 		writeToLog(`[IRC] RPL_ENDOFNAMES (366): channel=${data[3]} total users=${channel.users.length}`);
 	});
-	// Inline nick input prompt (replaces synchronous prompt() to avoid freezing the UI)
 	function showNickPrompt(errorMsg, onConfirm) {
 		writeToScreen("var(--clr-warning)", errorMsg + " — 请在输入框输入新昵称后按回车 (或输入 /nick 新昵称)", statusChannel, "*");
 		writeToLog(`[IRC] ${errorMsg} — showing inline nick prompt`);
-		// Listen for the user's next /nick command or plain input (treated as the new nick)
-		// Instruct the user to use the /nick command; no additional interception is required
 	}
 	Commands.set("432", function (nick, data) {
 		writeToScreen("var(--clr-warning)", "❌ 昵称包含非法字符，请用 /nick 新昵称 重新设置", statusChannel, "*");
@@ -4912,9 +4753,6 @@ const Channel_AppendUser = channelAppendUser;
 
 		const isSelfJoin = data[0].startsWith(":" + nickname + "!") ||
 						   data[0].toLowerCase().startsWith(":" + nickname.toLowerCase() + "!");
-
-		// extended-join Format: :nick!user@host JOIN #chan accountname :realname
-		// 4th parameter = account name (* = not logged in), 5th parameter = real name
 		let joinAccount = null;
 		let joinRealname = null;
 		if (ircv3ExtendedJoin && data.length >= 4) {
@@ -4930,8 +4768,6 @@ const Channel_AppendUser = channelAppendUser;
 			const channel = findChannel(serverChannelName);
 			if (!channel) return;
 
-			// In IRC protocol, a JOIN event carries no privilege prefix — new users always join as regular members
-			// Privileges are updated by subsequent MODE events from the server (e.g. :server MODE #chan +o nick)
 			channelInsertUser(nick, channel, " ");
 			if (joinAccount) {
 				writeToScreen("var(--clr-green)", `${nick} 加入频道 (账号: ${joinAccount})`, channel, "*");
@@ -4958,7 +4794,6 @@ const Channel_AppendUser = channelAppendUser;
 			channelName = serverChannelName;
 			writeToScreen("var(--clr-green)", `你已加入频道 ${serverChannelName}`, channel, "*");
 			writeToLog(`[IRC] Self joined channel: ${serverChannelName}`);
-			// Automatically fetch channel history (chathistory) and WHO info (away status) after joining
 			setTimeout(() => {
 				requestChatHistory(serverChannelName, 50);
 				requestWho(serverChannelName);
@@ -4998,9 +4833,6 @@ const Channel_AppendUser = channelAppendUser;
 		writeToScreen("var(--clr-blue)", `${nick} 设置模式: ${text}`, channel, "*");
 
 		if (!PrefixChars || !PrefixChars[0] || data[3].length < 1) return;
-
-		// Iterate through the mode string, matching each character with its corresponding parameter
-		// Prefix-related modes (o/v/h/a, etc.) consume one parameter (the target nick)
 		const modeString = data[3];
 		let paramIndex = 4;
 		let adding = true;
@@ -5010,15 +4842,12 @@ const Channel_AppendUser = channelAppendUser;
 			if (ch === '+') { adding = true; continue; }
 			if (ch === '-') { adding = false; continue; }
 
-			// Check whether this mode character is a prefix mode (requires a parameter)
 			const posInModes = PrefixChars[0].indexOf(ch);
 			if (posInModes >= 0 && paramIndex < data.length) {
 				let targetNick = data[paramIndex].replace(/^:/, '');
 				paramIndex++;
 				Channel_UpdateUserPrefix(targetNick, channel, adding, ch);
 			} else if (posInModes < 0 && paramIndex < data.length) {
-				// Other parameter-consuming modes (e.g. +k key, +l limit) — skip the parameter
-				// +b/+e/+I (ban/except/invite) also consume a parameter but do not affect the user list
 				if (adding && (ch === 'k' || ch === 'l' || ch === 'b' || ch === 'e' || ch === 'I')) {
 					paramIndex++;
 				} else if (!adding && (ch === 'k' || ch === 'b' || ch === 'e' || ch === 'I')) {
@@ -5030,7 +4859,6 @@ const Channel_AppendUser = channelAppendUser;
 	});
 	Commands.set("NICK", function (nick, data) {
 		if (!data || data.length < 3) return;
-		// In IRC protocol, the new nick parameter in a NICK message may or may not carry a : prefix — strip it uniformly with replace
 		let newnick = data[2].replace(/^:/, '');
 		const isSelf = (nick == nickname);
 		if (isSelf) nickname = newnick;
@@ -5058,7 +4886,6 @@ const Channel_AppendUser = channelAppendUser;
 			return;
 		}
 
-		// Extract the part reason (optional; format: PART #chan :reason or PART #chan reason)
 		let partReason = "";
 		if (data.length >= 4) {
 			partReason = data.slice(3).join(' ').replace(/^:/, '').trim();
@@ -5091,7 +4918,6 @@ const Channel_AppendUser = channelAppendUser;
 		writeToLog(`[IRC] TOPIC changed: channel=${data[2]} new-topic="${text}" by ${nick}`);
 	});
 	Commands.set("QUIT", function (nick, data) {
-		// Extract the quit reason (format: :nick!u@h QUIT :reason)
 		let quitReason = "";
 		if (data && data.length >= 3) {
 			quitReason = data.slice(2).join(' ').replace(/^:/, '').trim();
@@ -5112,7 +4938,6 @@ const Channel_AppendUser = channelAppendUser;
 		}
 		nick = data[0].substring(1).split("!")[0];
 
-		// 新增：忽略检查
 		if (isIgnored(nick)) {
 			writeToLog(`[IGNORE] Blocked message from ${nick}`);
 			return;
@@ -5141,10 +4966,6 @@ const Channel_AppendUser = channelAppendUser;
 			if (!channel) channel = statusChannel;
 		}
 
-		// If this is the server echoing our own sent message and echo-message is enabled, render it normally
-		// (send() no longer renders locally, so this is the only display opportunity)
-		// Note: when ircv3EchoMessage=true, our own messages are rendered here like any other message
-
 	if (text[0] == "\x01") {
 		if (text.indexOf("\x01ACTION ") == 0) {
 			let actionText = text.substring(8);
@@ -5158,7 +4979,6 @@ const Channel_AppendUser = channelAppendUser;
 		}
 	} else {
 		let displayNick = nick;
-		// If a +reply tag is present, prepend a "↩ reply" indicator to the message
 		let displayText = text;
 		if (replyTo) {
 			displayText = `↩ ${text}`;
@@ -5201,15 +5021,12 @@ const Channel_AppendUser = channelAppendUser;
 		if (!rawLine) return;
 
 		const { tags: msgTags, rest: lineAfterTags } = extractMsgTags(rawLine);
-		// msgTags now contains all @key=value tags
-		// lineAfterTags is the message body with the tag section stripped
 
-		// Batch support: if the message carries a batch= tag and the referenced batch is still open, buffer it
 		if (msgTags.has('batch')) {
 			const batchRef = msgTags.get('batch');
 			if (batchBuffer && batchBuffer.has(batchRef)) {
 				batchBuffer.get(batchRef).messages.push(rawLine);
-				return; // Buffered — will be processed when the corresponding BATCH -ref arrives
+				return;
 			}
 		}
 
@@ -5231,16 +5048,10 @@ const Channel_AppendUser = channelAppendUser;
 		return;
 	}
 
-	// Some server messages in IRC protocol lack a ":server" prefix — data[0] is the command directly
-	// Such messages: data[0] does not start with ":" and is not the already-handled PING/ERROR
 	if (!data[0].startsWith(':')) {
 		const bareCommand = data[0].toUpperCase();
 		const bareFn = Commands.get(bareCommand);
 		if (bareFn) {
-			// Reshape data so that handler functions can access parameters at the expected indices:
-			// data[0] = "" (empty prefix), data[1] = command, data[2...] = parameters
-			// However, the existing AUTHENTICATE handler expects data[1] as the payload — align accordingly
-			// Shift the original data array one position to the right and insert "" at data[0] as a virtual prefix
 			bareFn("", data, msgTags);
 			return;
 		}
@@ -5270,51 +5081,32 @@ const Channel_AppendUser = channelAppendUser;
 		}
 	}
 
-	// IRCv3 spec: https://ircv3.net/specs/client-tags/typing
-	// Requires the message-tags capability
-	// Outgoing: TAGMSG <target> :  (with +typing=active/paused/done tag)
-	// Incoming: TAGMSG from remote users — parse the +typing tag
-	//
-	// Throttle rule: consecutive 'active' notifications must be at least 3 seconds apart
-	// Timeout rule: 'active' expires after 6 s without renewal; 'paused' expires after 30 s
 
-	let typingLastSent = 0;          // Timestamp of the last 'typing active' notification sent
-	const TYPING_THROTTLE_MS = 3000; // Throttle interval: 3 seconds
-	let typingInputTimer = null;     // Timer for detecting typing pause
-	const TYPING_PAUSE_DELAY = 4000; // Send 'paused' status after 4 seconds of inactivity
+	let typingLastSent = 0;
+	const TYPING_THROTTLE_MS = 3000;
+	let typingInputTimer = null;
+	const TYPING_PAUSE_DELAY = 4000;
 
-	// Remote user typing state tracker: Map<target, Map<nick, {status, timer}>>
 	let remoteTypingState = new Map();
 
-	/**
-	 * Send typing status notification (TAGMSG + +typing tag)
-	 * @param {'active'|'paused'|'done'} status  typing state
-	 * @param {string} target  target channel or nick
-	 */
 	function sendTypingStatus(status, target) {
 		if (!ircv3MessageTags || !isConnected || !target || target === 'Status') return;
 		doSend(`@+typing=${status} TAGMSG ${target}\r\n`);
 		writeToLog(`[TYPING] Sent: target=${target} status=${status}`);
 	}
 
-	/**
-	 * Called when the user types in the input box; handles sending typing active/paused state
-	 */
 	function handleTypingInput() {
 		if (!ircv3MessageTags || !activeChannel || activeChannel.name === 'Status') return;
 		const target = activeChannel.name;
 		const now = Date.now();
 
-		// Throttle: only re-send 'active' status if more than 3 seconds have elapsed since the last send
 		if (now - typingLastSent >= TYPING_THROTTLE_MS) {
 			sendTypingStatus('active', target);
 			typingLastSent = now;
 		}
 
-		// Reset the pause-detection timer
 		if (typingInputTimer) clearTimeout(typingInputTimer);
 		typingInputTimer = setTimeout(() => {
-			// User stopped typing but input is not empty → send 'paused' status
 			if (input && input.value.trim().length > 0) {
 				sendTypingStatus('paused', target);
 			}
@@ -5322,9 +5114,6 @@ const Channel_AppendUser = channelAppendUser;
 		}, TYPING_PAUSE_DELAY);
 	}
 
-	/**
-	 * Called after the user sends a message; sends done state and resets the timer
-	 */
 	function sendTypingDone(target) {
 		if (!ircv3MessageTags || !target || target === 'Status') return;
 		if (typingInputTimer) { clearTimeout(typingInputTimer); typingInputTimer = null; }
@@ -5332,10 +5121,6 @@ const Channel_AppendUser = channelAppendUser;
 		sendTypingStatus('done', target);
 	}
 
-	/**
-	 * Update the typing indicator UI
-	 * @param {string} target  currently active channel or session name
-	 */
 	function updateTypingIndicatorUI(target) {
 		const el = document.getElementById('typingIndicator');
 		if (!el) return;
@@ -5361,16 +5146,12 @@ const Channel_AppendUser = channelAppendUser;
 		}
 	}
 
-	/**
-	 * Set remote user typing state and start timeout cleanup
-	 */
 	function setRemoteTypingState(nick, target, status) {
 		if (!remoteTypingState.has(target)) {
 			remoteTypingState.set(target, new Map());
 		}
 		const channelTyping = remoteTypingState.get(target);
 
-		// Clear the existing timeout timer if present
 		if (channelTyping.has(nick)) {
 			const prev = channelTyping.get(nick);
 			if (prev.timer) clearTimeout(prev.timer);
@@ -5387,13 +5168,11 @@ const Channel_AppendUser = channelAppendUser;
 			channelTyping.set(nick, { status, timer });
 		}
 
-		// Only update the typing indicator UI for the currently active channel
 		if (activeChannel && activeChannel.name === target) {
 			updateTypingIndicatorUI(target);
 		}
 	}
 
-	// TAGMSG handler: receives typing notifications from remote users
 	Commands.set("TAGMSG", function (nick, data, msgTags) {
 		if (!data || data.length < 3) return;
 		nick = data[0].substring(1).split("!")[0];
@@ -5401,17 +5180,14 @@ const Channel_AppendUser = channelAppendUser;
 
 		if (msgTags && msgTags.has('+typing')) {
 			const typingStatus = msgTags.get('+typing');
-			// If TAGMSG target is a channel, display there; if targeted at ourselves, display in the PM tab for that user
 			let displayTarget = target;
 			if (!target.startsWith('#') && target.toLowerCase() === nickname.toLowerCase()) {
-				// This TAGMSG is addressed to us (PM scenario) — display in the sender's PM tab
 				displayTarget = nick;
 			}
 			writeToLog(`[TYPING] Received: ${nick} → ${displayTarget} = ${typingStatus}`);
 			setRemoteTypingState(nick, displayTarget, typingStatus);
 		}
 
-		// +react client-tag: message emoji reaction
 		if (msgTags && msgTags.has('+react')) {
 			const reaction = msgTags.get('+react');
 			const replyTo  = msgTags.get('+reply') || '';
@@ -5426,12 +5202,6 @@ const Channel_AppendUser = channelAppendUser;
 			writeToLog(`[REACT] ${nick} → ${displayTarget}: ${reaction}`);
 		}
 	});
-
-	// ── IRCv3: BATCH — Batched Message Delivery ─────────────────────────────────
-	// spec: https://ircv3.net/specs/extensions/batch
-	// BATCH +ref type [params...]  begin batch
-	// BATCH -ref                   end batch
-	// Messages within the batch carry a batch=ref tag
 
 	Commands.set("BATCH", function (nick, data) {
 		if (!data || data.length < 2) return;
@@ -5448,7 +5218,6 @@ const Channel_AppendUser = channelAppendUser;
 			if (!batch) return;
 			batchBuffer.delete(ref);
 			writeToLog(`[BATCH] End: ref=${ref} type=${batch.type} msgs=${batch.messages.length}`);
-			// Process all buffered messages from the completed batch
 			processBatch(ref, batch);
 		}
 	});
@@ -5456,7 +5225,6 @@ const Channel_AppendUser = channelAppendUser;
 	function processBatch(ref, batch) {
 		const type = batch.type;
 		if (type === 'CHATHISTORY' || type === 'chathistory') {
-			// Chat history batch: display messages in chronological order
 			const channelName = batch.params[0] || '';
 			const ch = findChannel(channelName);
 			if (ch) {
@@ -5466,21 +5234,15 @@ const Channel_AppendUser = channelAppendUser;
 				processLine(msg);
 			}
 		} else if (type === 'LABELED-RESPONSE' || type === 'labeled-response') {
-			// labeled-response batch: process messages in order
 			for (const msg of batch.messages) {
 				processLine(msg);
 			}
 		} else {
-			// Generic batch: process messages in order
 			for (const msg of batch.messages) {
 				processLine(msg);
 			}
 		}
 	}
-
-	// ── IRCv3: labeled-response ──────────────────────────────────────────
-	// spec: https://ircv3.net/specs/extensions/labeled-response
-	// Attach a label tag to outgoing commands; the server includes the same label in its reply, enabling request/response correlation
 
 	function doSendLabeled(message, description) {
 		if (!ircv3LabeledResponse) {
@@ -5489,11 +5251,9 @@ const Channel_AppendUser = channelAppendUser;
 		}
 		const label = 'lbl' + (++labelCounter);
 		pendingLabels.set(label, { description: description || message.trim(), ts: Date.now() });
-		// Send the message with the label tag prepended
 		const tagged = `@label=${label} ${message}`;
 		doSend(tagged.endsWith('\r\n') ? tagged : tagged + '\r\n');
 		writeToLog(`[LABELED] Sent label=${label}: ${message.trim()}`);
-		// Clean up after 30-second timeout
 		setTimeout(() => {
 			if (pendingLabels.has(label)) {
 				pendingLabels.delete(label);
@@ -5503,19 +5263,13 @@ const Channel_AppendUser = channelAppendUser;
 		return label;
 	}
 
-	// ── IRCv3: chathistory ──────────────────────────────────────────────
-	// spec: https://ircv3.net/specs/extensions/chathistory
-	// Request recent channel message history upon joining
-
 	function requestChatHistory(channelName, limit) {
 		if (!ircv3ChatHistory) return;
 		limit = limit || 50;
-		// CHATHISTORY LATEST #chan * count
 		doSend(`CHATHISTORY LATEST ${channelName} * ${limit}\r\n`);
 		writeToLog(`[CHATHISTORY] Requesting last ${limit} messages for ${channelName}`);
 	}
 
-	// Handle CHATHISTORY error responses (FAIL command)
 	Commands.set("FAIL", function (nick, data) {
 		if (!data || data.length < 3) return;
 		const command = data[2] || '';
@@ -5525,11 +5279,6 @@ const Channel_AppendUser = channelAppendUser;
 		writeToLog(`[FAIL] command=${command} code=${code}: ${msg}`);
 	});
 
-	// ── IRCv3: invite-notify + INVITE Command Handler ───────────────────────
-	// spec: https://ircv3.net/specs/extensions/invite-notify
-	// Server-pushed INVITE notification: :op!u@h INVITE targetNick #channel
-	// With invite-notify: we receive notifications when other users are invited
-
 	Commands.set("INVITE", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const invitedNick  = data[2];
@@ -5537,24 +5286,20 @@ const Channel_AppendUser = channelAppendUser;
 		const isSelf = invitedNick.toLowerCase() === nickname.toLowerCase();
 
 		if (isSelf) {
-			// We were invited to join a channel
 			const targetCh = findChannel(inviteChannel);
 			const displayCh = targetCh || statusChannel;
 			writeToScreen("var(--clr-green)", `🔔 ${nick} 邀请你加入 ${inviteChannel}，输入 /join ${inviteChannel} 加入`, displayCh, "*");
-			// Also display the invite notification in the Status tab
 			if (displayCh !== statusChannel) {
 				writeToScreen("var(--clr-green)", `🔔 ${nick} 邀请你加入 ${inviteChannel}`, statusChannel, "*");
 			}
 			writeToLog(`[INVITE] You were invited to ${inviteChannel} by ${nick}`);
 		} else {
-			// invite-notify: another user was invited — display in the relevant channel
 			const ch = findChannel(inviteChannel) || statusChannel;
 			writeToScreen("var(--clr-text-dim)", `${nick} 邀请 ${invitedNick} 加入 ${inviteChannel}`, ch, "*");
 			writeToLog(`[INVITE] ${nick} invited ${invitedNick} to ${inviteChannel}`);
 		}
 	});
 
-	// 341 RPL_INVITING: server confirms the invitation was sent
 	Commands.set("341", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const invitedNick  = data[3];
@@ -5563,31 +5308,10 @@ const Channel_AppendUser = channelAppendUser;
 		writeToLog(`[INVITE] RPL_INVITING (341): invited ${invitedNick} to ${inviteChannel}`);
 	});
 
-	// /invite command: /invite nick [#channel]
-	// This command is registered in the help output inside send(); its logic is also handled there
-
-	// ── IRCv3: draft/multiline ──────────────────────────────────────────
-	// spec: https://ircv3.net/specs/extensions/multiline
-	// Server delivers multi-line messages using the draft/multiline batch type
-	// Client-side sending of multi-line messages is not yet implemented (requires additional UI changes)
-
-	// Receiving multi-line messages is handled inside processBatch;
-	// Multi-line message batch type is "draft/multiline" or "multiline"
-	// Message lines are stored in batch.messages and joined for display
-
-	// ── IRCv3: WHOX Extended WHO queries ──────────────────────────────────────
-	// spec: https://ircv3.net/specs/extensions/whox
-	// Use WHO #chan %tunhfa,1 to bulk-fetch user info including account name and away status
-	// Fixed field return order: t(token) u(user) h(host) n(nick) f(flags) a(account)
-	// 352 RPL_WHOREPLY (standard), 354 RPL_WHOSPCRPL (WHOX extension)
-
-	// Request WHO info (including account name and away status) after joining a channel
 	function requestWho(channelName) {
 		if (!isConnected) return;
 		if (ircv3Whox) {
-		// WHOX: request querytype, user, host, nick, flags, account, realname fields
-		// Note: the i(ip) field is omitted to avoid field-offset instability across server implementations
-		doSend(`WHO ${channelName} %tunhfa,1\r\n`);
+			doSend(`WHO ${channelName} %tunhfa,1\r\n`);
 			writeToLog(`[WHOX] Requesting WHO for ${channelName}`);
 		} else {
 			doSend(`WHO ${channelName}\r\n`);
@@ -5595,14 +5319,12 @@ const Channel_AppendUser = channelAppendUser;
 		}
 	}
 
-	// 352 RPL_WHOREPLY: standard WHO reply
-	// :server 352 me #chan user host server nick H/G [0 realname]
 	Commands.set("352", function (nick, data) {
 		if (!data || data.length < 8) return;
 		const channel    = data[3];
 		const whoNick    = data[7];
 		const flags      = data[8] || '';
-		const isAway     = flags.startsWith('G'); // G=Gone(away), H=Here
+		const isAway     = flags.startsWith('G');
 		const ch = findChannel(channel);
 		if (ch && ch.userlist) {
 			updateUserAwayStatus(whoNick, ch, isAway);
@@ -5610,20 +5332,12 @@ const Channel_AppendUser = channelAppendUser;
 		writeToLog(`[IRC] RPL_WHOREPLY (352): ${whoNick} in ${channel} flags=${flags}`);
 	});
 
-	// 354 RPL_WHOSPCRPL: WHOX extended reply (includes account info)
-	// Field flags we requested: %tunhfa,1
-	// WHOX reply fields in fixed order: t(token) u(user) h(host) n(nick) f(flags) a(account)
-	// :server 354 me 1(t) user(u) host(h) nick(n) flags(f) account(a)
-	// data:   [0]  [1][2] [3]     [4]     [5]     [6]      [7]       [8]
-	// Note: WHOX reply fields follow the fixed order defined in ircv3.net/specs/extensions/whox; only requested fields are returned
 	Commands.set("354", function (nick, data) {
 		if (!data || data.length < 8) return;
-		// data[3]=token(1), data[4]=user, data[5]=host, data[6]=nick, data[7]=flags, data[8]=account
 		const whoNick  = data[6] || '';
 		const flags    = data[7] || '';
 		const account  = data[8] ? data[8].replace(/^:/, '') : '';
-		const isAway   = flags.startsWith('G'); // G=Gone(away), H=Here
-		// Update the away status for this user in all channels they are present in
+		const isAway   = flags.startsWith('G');
 		channelMap.forEach(function (ch) {
 			if (!ch.users) return;
 			if (ch.users.some(u => u[1] === whoNick)) {
@@ -5633,33 +5347,21 @@ const Channel_AppendUser = channelAppendUser;
 		writeToLog(`[WHOX] RPL_WHOSPCRPL (354): ${whoNick} flags=${flags} account=${account}`);
 	});
 
-	// 315 RPL_ENDOFWHO
 	Commands.set("315", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const target = data[3];
 		writeToLog(`[IRC] RPL_ENDOFWHO (315): ${target}`);
 	});
 
-	// ── +reply client-tag: Quoted Message Reply ─────────────────────────────
-	// spec: https://ircv3.net/specs/client-tags/reply
-	// Send a PRIVMSG/NOTICE with a +reply=<msgid> client tag attached
-	// The client detects and renders the quoted message when processing incoming PRIVMSG
-
-	// Display of reply context is already supported via msgTags in the PRIVMSG handler;
-	// Sending replies is supported via the sendWithReply() function
-
 	function sendWithReply(replyToMsgid, targetChannel, text) {
 		if (!replyToMsgid || !ircv3MessageTags) {
-			// If +reply is not supported, fall back to sending a plain message
 			const msgs = splitIRCMessage('privmsg ' + targetChannel + ' :' + text);
 			msgs.forEach(m => doSend(m));
 			return;
 		}
-		// Send messages with the +reply client tag
 		const msgs = splitIRCMessage('privmsg ' + targetChannel + ' :' + text);
 		msgs.forEach((m, idx) => {
 			if (idx === 0) {
-				// Attach the +reply tag to the first message segment only
 				const tagged = `@+reply=${replyToMsgid} ${m.trim()}\r\n`;
 				doSend(tagged);
 			} else {
