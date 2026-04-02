@@ -3281,7 +3281,7 @@ const Channel_AppendUser = channelAppendUser;
 			});
 
 			const tsSpan = document.createElement("span");
-			tsSpan.textContent = displayTime + " ";
+			tsSpan.textContent = "[" + displayTime + "] ";
 			tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;margin-right:2px;";
 
 			const sep = document.createTextNode(" ");
@@ -3294,7 +3294,7 @@ const Channel_AppendUser = channelAppendUser;
 		} else {
 			// System / info message — dim timestamp
 			const tsSpan = document.createElement("span");
-			tsSpan.textContent = displayTime + " ";
+			tsSpan.textContent = "[" + displayTime + "] ";
 			tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;";
 			const msgSpan = document.createElement("span");
 			msgSpan.innerHTML = renderedMessage;
