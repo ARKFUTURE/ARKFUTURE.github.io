@@ -291,6 +291,36 @@
 	}
 	.irc-menu__dropdown.visible { display: block; }
 
+	/* 菜单内嵌搜索 */
+	.menu-search {
+		padding: var(--sp-2) var(--sp-1);
+		border-top: 1px solid var(--bd-subtle);
+		margin-top: var(--sp-1);
+	}
+	.menu-search__input {
+		width: 100%;
+		box-sizing: border-box;
+		padding: 7px 10px;
+		background: var(--bg-base);
+		color: var(--tx-primary);
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-sm);
+		font-size: var(--font-size-sm);
+		font-family: var(--font-mono);
+		transition: var(--transition);
+	}
+	.menu-search__input:focus {
+		outline: none;
+		border-color: rgba(0,229,255,.5);
+		box-shadow: 0 0 0 2px rgba(0,229,255,.12);
+	}
+	.menu-search__input::placeholder { color: var(--tx-muted); }
+	.menu-search__results {
+		max-height: 300px;
+		overflow-y: auto;
+		margin-top: var(--sp-2);
+	}
+
 	.header-menu-item {
 		cursor: pointer;
 		font-size: var(--font-size-sm);
@@ -957,6 +987,385 @@
 		.connection-status span:last-child { display: none; }
 		.channel { font-size: var(--font-size-xs); padding: 0 8px; }
 	}
+
+	/* =====================
+	   右键菜单样式
+	   ===================== */
+	.context-menu {
+		position: fixed;
+		min-width: 180px;
+		background: var(--bg-overlay);
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-md);
+		box-shadow: 0 8px 32px rgba(0,0,0,.6), 0 0 0 1px rgba(0,229,255,.06);
+		z-index: 99999;
+		padding: 6px;
+		animation: fadeIn .12s ease;
+		display: none;
+	}
+	.context-menu.visible { display: block; }
+	.context-menu__item {
+		cursor: pointer;
+		font-size: var(--font-size-sm);
+		font-family: var(--font-mono);
+		letter-spacing: .3px;
+		padding: 7px 12px;
+		color: var(--tx-secondary);
+		border-radius: var(--radius-sm);
+		transition: var(--transition);
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		user-select: none;
+	}
+	.context-menu__item:hover { background: var(--bg-hover); color: var(--tx-primary); }
+	.context-menu__item.danger:hover { background: rgba(255,23,68,.15); color: var(--c-red); }
+	.context-menu__item.disabled { opacity: 0.4; pointer-events: none; }
+	.context-menu__separator {
+		height: 1px;
+		background: var(--bd-subtle);
+		margin: 4px 8px;
+	}
+	.context-menu__submenu {
+		position: relative;
+	}
+	.context-menu__submenu::after {
+		content: '▶';
+		font-size: 8px;
+		margin-left: auto;
+		color: var(--tx-muted);
+	}
+	.context-menu__submenu:hover::after { color: var(--tx-secondary); }
+
+	/* =====================
+	   搜索面板样式
+	   ===================== */
+
+
+	.search-result {
+		padding: var(--sp-2) var(--sp-3);
+		border-radius: var(--radius-sm);
+		cursor: pointer;
+		transition: var(--transition);
+		font-size: var(--font-size-sm);
+	}
+	.search-result:hover, .search-result.highlighted {
+		background: var(--bg-hover);
+	}
+	.search-result.highlighted {
+		background: rgba(0,229,255,.1);
+		border-left: 2px solid var(--c-cyan);
+	}
+	.search-result__meta {
+		font-size: var(--font-size-xs);
+		color: var(--tx-muted);
+		margin-bottom: 2px;
+	}
+	.search-result__text {
+		color: var(--tx-primary);
+		line-height: 1.4;
+	}
+	.search-result__text mark {
+		background: rgba(0,229,255,.25);
+		color: var(--c-cyan);
+		padding: 0 2px;
+		border-radius: 2px;
+	}
+	.search-result__empty {
+		text-align: center;
+		padding: var(--sp-6);
+		color: var(--tx-muted);
+		font-size: var(--font-size-sm);
+	}
+
+	/* =====================
+	   通知权限提示
+	   ===================== */
+	.notification-hint {
+		position: fixed;
+		bottom: 80px;
+		left: 50%;
+		transform: translateX(-50%);
+		background: var(--bg-overlay);
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-md);
+		padding: var(--sp-3) var(--sp-4);
+		display: none;
+		align-items: center;
+		gap: var(--sp-3);
+		z-index: 9000;
+		box-shadow: 0 4px 16px rgba(0,0,0,.5);
+		animation: fadeIn .2s ease;
+	}
+	.notification-hint.visible { display: flex; }
+	.notification-hint__text {
+		font-size: var(--font-size-sm);
+		color: var(--tx-secondary);
+	}
+	.notification-hint__btn {
+		background: var(--bg-hover);
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-sm);
+		color: var(--c-cyan);
+		cursor: pointer;
+		padding: 5px 12px;
+		font-size: var(--font-size-sm);
+		font-family: var(--font-mono);
+		transition: var(--transition);
+	}
+	.notification-hint__btn:hover {
+		background: rgba(0,229,255,.1);
+		border-color: rgba(0,229,255,.4);
+	}
+	.notification-hint__close {
+		background: none;
+		border: none;
+		color: var(--tx-muted);
+		cursor: pointer;
+		padding: 4px;
+		font-size: 14px;
+		transition: var(--transition);
+	}
+	.notification-hint__close:hover { color: var(--tx-secondary); }
+
+	/* =====================
+	   设置面板新增项
+	   ===================== */
+	.settings-toggle-btn.notify-btn.active {
+		color: var(--c-green);
+		border-color: rgba(105,255,71,.4);
+	}
+	.settings-toggle-btn.sound-btn.active {
+		color: var(--c-yellow);
+		border-color: rgba(255,215,64,.4);
+	}
+	.settings-group--notification label,
+	.settings-group--sound label { color: rgba(105,255,71,.7); }
+	.settings-group--highlight label { color: rgba(255,215,64,.7); }
+
+	/* =====================
+	   高亮关键词样式
+	   ===================== */
+	.highlight-badge {
+		display: inline-flex;
+		align-items: center;
+		padding: 2px 6px;
+		background: rgba(255,215,64,.15);
+		border: 1px solid rgba(255,215,64,.3);
+		border-radius: 99px;
+		font-size: 10px;
+		color: var(--c-yellow);
+		cursor: pointer;
+		transition: var(--transition);
+	}
+	.highlight-badge:hover {
+		background: rgba(255,215,64,.25);
+		border-color: rgba(255,215,64,.5);
+	}
+
+	/* =====================
+	   忽略列表面板
+	   ===================== */
+	.ignore-panel {
+		display: none;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 90%;
+		max-width: 450px;
+		background: var(--bg-overlay);
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-lg);
+		box-shadow: 0 12px 48px rgba(0,0,0,.7);
+		z-index: 9992;
+		animation: fadeIn .15s ease;
+	}
+	.ignore-panel.visible { display: block; }
+	.ignore-panel__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: var(--sp-3) var(--sp-4);
+		background: var(--bg-raised);
+		border-bottom: 1px solid var(--bd-subtle);
+	}
+	.ignore-panel__title {
+		font-size: var(--font-size-md);
+		font-weight: 600;
+		color: var(--tx-primary);
+	}
+	.ignore-panel__close {
+		background: none;
+		border: none;
+		color: var(--tx-muted);
+		cursor: pointer;
+		font-size: 18px;
+		padding: 4px;
+		line-height: 1;
+		transition: var(--transition);
+	}
+	.ignore-panel__close:hover { color: var(--tx-secondary); }
+	.ignore-panel__content {
+		max-height: 300px;
+		overflow-y: auto;
+		padding: var(--sp-2);
+	}
+	.ignore-item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: var(--sp-2) var(--sp-3);
+		border-radius: var(--radius-sm);
+		transition: var(--transition);
+	}
+	.ignore-item:hover { background: var(--bg-hover); }
+	.ignore-item__nick {
+		color: var(--tx-primary);
+		font-size: var(--font-size-sm);
+	}
+	.ignore-item__remove {
+		background: none;
+		border: none;
+		color: var(--tx-muted);
+		cursor: pointer;
+		padding: 4px 8px;
+		font-size: 12px;
+		transition: var(--transition);
+		opacity: 0;
+	}
+	.ignore-item:hover .ignore-item__remove { opacity: 1; }
+	.ignore-item__remove:hover { color: var(--c-red); }
+	.ignore-panel__empty {
+		text-align: center;
+		padding: var(--sp-6);
+		color: var(--tx-muted);
+		font-size: var(--font-size-sm);
+	}
+
+	/* =====================
+	   Ban 列表面板
+	   ===================== */
+	.ban-panel {
+		display: none;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 90%;
+		max-width: 500px;
+		background: var(--bg-overlay);
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-lg);
+		box-shadow: 0 12px 48px rgba(0,0,0,.7);
+		z-index: 9992;
+		animation: fadeIn .15s ease;
+	}
+	.ban-panel.visible { display: block; }
+	.ban-panel__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: var(--sp-3) var(--sp-4);
+		background: var(--bg-raised);
+		border-bottom: 1px solid var(--bd-subtle);
+	}
+	.ban-panel__title {
+		font-size: var(--font-size-md);
+		font-weight: 600;
+		color: var(--tx-primary);
+	}
+	.ban-panel__actions {
+		display: flex;
+		gap: var(--sp-2);
+	}
+	.ban-panel__btn {
+		background: var(--bg-overlay);
+		border: 1px solid var(--bd-default);
+		border-radius: var(--radius-sm);
+		color: var(--tx-secondary);
+		cursor: pointer;
+		padding: 5px 12px;
+		font-size: var(--font-size-xs);
+		font-family: var(--font-mono);
+		transition: var(--transition);
+	}
+	.ban-panel__btn:hover {
+		background: var(--bg-hover);
+		color: var(--tx-primary);
+	}
+	.ban-panel__btn--refresh:hover { color: var(--c-cyan); border-color: rgba(0,229,255,.4); }
+	.ban-panel__btn--close:hover { color: var(--c-red); border-color: rgba(255,23,68,.4); }
+	.ban-panel__content {
+		max-height: 350px;
+		overflow-y: auto;
+	}
+	.ban-item {
+		display: flex;
+		align-items: center;
+		padding: var(--sp-2) var(--sp-4);
+		border-bottom: 1px solid var(--bd-subtle);
+		font-size: var(--font-size-sm);
+		transition: var(--transition);
+	}
+	.ban-item:hover { background: var(--bg-hover); }
+	.ban-item:last-child { border-bottom: none; }
+	.ban-item__nick {
+		flex: 1;
+		color: var(--tx-primary);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.ban-item__host {
+		flex: 2;
+		color: var(--tx-muted);
+		font-size: var(--font-size-xs);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		margin: 0 var(--sp-3);
+	}
+	.ban-item__by {
+		flex: 1;
+		color: var(--tx-muted);
+		font-size: var(--font-size-xs);
+		text-align: right;
+	}
+	.ban-item__actions {
+		display: flex;
+		gap: var(--sp-1);
+		margin-left: var(--sp-2);
+	}
+	.ban-item__btn {
+		background: none;
+		border: 1px solid var(--bd-subtle);
+		border-radius: var(--radius-sm);
+		color: var(--tx-muted);
+		cursor: pointer;
+		padding: 3px 8px;
+		font-size: 10px;
+		font-family: var(--font-mono);
+		transition: var(--transition);
+		opacity: 0;
+	}
+	.ban-item:hover .ban-item__btn { opacity: 1; }
+	.ban-item__btn--unban:hover {
+		color: var(--c-green);
+		border-color: rgba(105,255,71,.4);
+	}
+	.ban-panel__empty {
+		text-align: center;
+		padding: var(--sp-6);
+		color: var(--tx-muted);
+		font-size: var(--font-size-sm);
+	}
+	.ban-panel__loading {
+		text-align: center;
+		padding: var(--sp-4);
+		color: var(--tx-muted);
+		font-size: var(--font-size-sm);
+	}
 	</style>
 </head>
 
@@ -983,8 +1392,22 @@
 				<div class="irc-menu__dropdown" id="headerMenuDropdown">
 					<div class="header-menu-item" onclick="toggleLog()">📋 调试日志</div>
 					<div class="header-menu-item" onclick="showPrivateChatList()">💬 私聊列表</div>
-					<div class="header-menu-item" onclick="showSSLWarning()">🔒 SSL 帮助</div>
+					<div class="header-menu-item" onclick="showIgnorePanel()">🚫 屏蔽列表</div>
+					<div class="header-menu-item" onclick="toggleSearchInMenu(event)">🔍 搜索消息 <span style="color:var(--tx-muted);font-size:10px;">Ctrl+F</span></div>
+					<div class="header-menu__separator" style="height:1px;background:var(--bd-subtle);margin:6px 0;"></div>
+					<div class="menu-search" id="menuSearch" style="display:none;">
+						<input type="text" class="menu-search__input" id="searchInput"
+							placeholder="搜索消息…" onkeydown="handleSearchKeydown(event)" oninput="handleSearchInput(event)">
+						<div class="menu-search__results" id="searchResults">
+							<div class="search-result__empty">输入关键词搜索消息</div>
+						</div>
+					</div>
+					<div class="header-menu-item" id="soundToggleBtn" onclick="toggleSound()" style="display:flex;justify-content:space-between;align-items:center;">
+						<span>🔔 声音提示</span>
+					</div>
 					<div class="header-menu-item" onclick="toggleAutoReconnect()">🔄 自动重连</div>
+					<div class="header-menu__separator" style="height:1px;background:var(--bd-subtle);margin:6px 0;"></div>
+					<div class="header-menu-item" onclick="showSSLWarning()">🔒 SSL 帮助</div>
 				</div>
 			</div>
 		</div>
@@ -1074,6 +1497,54 @@
 			</div>
 		</div>
 
+		<!-- 右键菜单 -->
+		<div class="context-menu" id="userContextMenu">
+			<div class="context-menu__item" data-action="pm" onclick="contextMenuAction('pm')">💬 私聊</div>
+			<div class="context-menu__item" data-action="whois" onclick="contextMenuAction('whois')">🔍 查看信息</div>
+			<div class="context-menu__separator"></div>
+			<div class="context-menu__item" data-action="ignore" onclick="contextMenuAction('ignore')">🚫 屏蔽用户</div>
+			<div class="context-menu__item" data-action="unignore" onclick="contextMenuAction('unignore')">✅ 取消屏蔽</div>
+			<div class="context-menu__separator"></div>
+			<div class="context-menu__item" data-action="kick" onclick="contextMenuAction('kick')">👢 踢出</div>
+			<div class="context-menu__item" data-action="ban" onclick="contextMenuAction('ban')">🔨 封禁</div>
+			<div class="context-menu__item" data-action="banlist" onclick="contextMenuAction('banlist')">📋 封禁列表</div>
+		</div>
+
+
+
+
+		<!-- 通知权限提示 -->
+		<div class="notification-hint" id="notificationHint">
+			<span class="notification-hint__text">允许浏览器通知以接收新消息提醒</span>
+			<button class="notification-hint__btn" onclick="requestNotificationPermission()">允许通知</button>
+			<button class="notification-hint__close" onclick="dismissNotificationHint()">×</button>
+		</div>
+
+		<!-- 忽略列表面板 -->
+		<div class="ignore-panel" id="ignorePanel">
+			<div class="ignore-panel__header">
+				<span class="ignore-panel__title">🚫 已屏蔽用户</span>
+				<button class="ignore-panel__close" onclick="closeIgnorePanel()">×</button>
+			</div>
+			<div class="ignore-panel__content" id="ignoreList">
+				<div class="ignore-panel__empty">暂无屏蔽用户</div>
+			</div>
+		</div>
+
+		<!-- Ban 列表面板 -->
+		<div class="ban-panel" id="banPanel">
+			<div class="ban-panel__header">
+				<span class="ban-panel__title">🔨 频道封禁列表</span>
+				<div class="ban-panel__actions">
+					<button class="ban-panel__btn ban-panel__btn--refresh" onclick="refreshBanList()">🔄 刷新</button>
+					<button class="ban-panel__btn ban-panel__btn--close" onclick="closeBanPanel()">×</button>
+				</div>
+			</div>
+			<div class="ban-panel__content" id="banList">
+				<div class="ban-panel__empty">在频道窗口中使用 /banlist 查看</div>
+			</div>
+		</div>
+
 	</div>
 	</div>
 </body>
@@ -1111,6 +1582,25 @@
 	let labelCounter = 0;
 	let pendingLabels = new Map();
 
+	// ========== 新增功能变量 ==========
+	// 屏蔽列表
+	let ignoreList = [];
+	// 高亮关键词列表
+	let highlightKeywords = [];
+	// 通知设置
+	let notificationEnabled = false;
+	let notificationPermission = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
+	// 声音提示设置
+	let soundEnabled = false;
+	// 右键菜单上下文
+	let contextMenuTarget = null;
+	let contextMenuTargetType = null; // 'user' | 'message'
+	// 搜索相关
+	let searchHighlightIndex = -1;
+	let searchResults = [];
+	// Ban 列表缓存
+	let banListCache = new Map(); // channelName -> [{nick, host, by, time}]
+
 	function findChannel(channelName) {
 		if (!channelName) return null;
 		const lowerName = channelName.toLowerCase();
@@ -1134,6 +1624,7 @@
 		input = document.getElementById("input");
 
 		loadSettings();
+		loadAdvancedSettings(); // 加载高级设置
 
 		let url = new URL(document.location);
 		if (url.hash) {
@@ -1149,6 +1640,12 @@
 		if (input) {
 			input.addEventListener('blur', handleInputBlur);
 		}
+
+		// 新增：全局右键点击关闭菜单
+		document.addEventListener('click', hideAllMenus);
+
+		// 新增：检查通知权限
+		checkNotificationPermission();
 	}
 	
 	function cleanupEventListeners() {
@@ -1196,6 +1693,466 @@
 			writeToLog(`[WARN] Failed to load settings: ${e.message}`);
 		}
 	}
+
+	// ========== 新增：高级设置加载/保存 ==========
+	function loadAdvancedSettings() {
+		try {
+			const adv = JSON.parse(localStorage.getItem('ircAdvancedSettings') || '{}');
+			notificationEnabled = adv.notificationEnabled || false;
+			soundEnabled = adv.soundEnabled || false;
+			highlightKeywords = adv.highlightKeywords || [];
+			ignoreList = adv.ignoreList || [];
+		} catch (e) {
+			writeToLog(`[WARN] Failed to load advanced settings: ${e.message}`);
+		}
+	}
+
+	function saveAdvancedSettings() {
+		try {
+			const adv = {
+				notificationEnabled,
+				soundEnabled,
+				highlightKeywords,
+				ignoreList
+			};
+			localStorage.setItem('ircAdvancedSettings', JSON.stringify(adv));
+		} catch (e) {
+			writeToLog(`[WARN] Failed to save advanced settings: ${e.message}`);
+		}
+	}
+
+	// ========== 新增：通知功能 ==========
+	function checkNotificationPermission() {
+		if (!('Notification' in window)) return;
+		if (Notification.permission === 'default' && !localStorage.getItem('notificationHintDismissed')) {
+			const hint = document.getElementById('notificationHint');
+			if (hint) hint.classList.add('visible');
+		}
+	}
+
+	function requestNotificationPermission() {
+		if (!('Notification' in window)) {
+			writeToScreen("var(--clr-warning)", "您的浏览器不支持通知功能", statusChannel, "*");
+			return;
+		}
+		Notification.requestPermission().then(permission => {
+			notificationPermission = permission;
+			if (permission === 'granted') {
+				notificationEnabled = true;
+				saveAdvancedSettings();
+				writeToScreen("var(--clr-success)", "已启用桌面通知", statusChannel, "*");
+			} else {
+				writeToScreen("var(--clr-warning)", "通知权限被拒绝", statusChannel, "*");
+			}
+			dismissNotificationHint();
+		});
+	}
+
+	function dismissNotificationHint() {
+		const hint = document.getElementById('notificationHint');
+		if (hint) {
+			hint.classList.remove('visible');
+			localStorage.setItem('notificationHintDismissed', '1');
+		}
+	}
+
+	function showNotification(title, body, icon) {
+		if (!notificationEnabled || notificationPermission !== 'granted') return;
+		if (document.hasFocus() && activeChannel && activeChannel.name !== 'Status') return;
+		try {
+			const n = new Notification(title, { body, icon: icon || '💬', tag: 'irc-notify', requireInteraction: false });
+			n.onclick = () => { window.focus(); n.close(); };
+			setTimeout(() => n.close(), 8000);
+		} catch (e) {
+			writeToLog(`[WARN] Notification failed: ${e.message}`);
+		}
+	}
+
+	// ========== 新增：声音提示 ==========
+	let notificationSound = null;
+	function playNotificationSound() {
+		if (!soundEnabled) return;
+		try {
+			if (!notificationSound) {
+				// 使用 Web Audio API 生成提示音
+				const ctx = new (window.AudioContext || window.webkitAudioContext)();
+				const oscillator = ctx.createOscillator();
+				const gainNode = ctx.createGain();
+				oscillator.connect(gainNode);
+				gainNode.connect(ctx.destination);
+				oscillator.frequency.value = 800;
+				oscillator.type = 'sine';
+				gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
+				gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+				oscillator.start(ctx.currentTime);
+				oscillator.stop(ctx.currentTime + 0.3);
+			}
+		} catch (e) {
+			writeToLog(`[WARN] Sound failed: ${e.message}`);
+		}
+	}
+
+	function toggleSound() {
+		soundEnabled = !soundEnabled;
+		saveAdvancedSettings();
+		const btn = document.getElementById('soundToggleBtn');
+		if (btn) btn.classList.toggle('active', soundEnabled);
+		writeToScreen("var(--clr-info)", soundEnabled ? "已启用声音提示" : "已关闭声音提示", statusChannel, "*");
+	}
+
+	// ========== 新增：右键菜单 ==========
+	function showUserContextMenu(e, nick, type) {
+		e.preventDefault();
+		e.stopPropagation();
+		contextMenuTarget = nick;
+		contextMenuTargetType = type;
+		const menu = document.getElementById('userContextMenu');
+		if (!menu) return;
+		let x = e.clientX, y = e.clientY;
+		const rect = menu.getBoundingClientRect();
+		if (x + rect.width > window.innerWidth) x = window.innerWidth - rect.width - 8;
+		if (y + rect.height > window.innerHeight) y = window.innerHeight - rect.height - 8;
+		menu.style.left = x + 'px';
+		menu.style.top = y + 'px';
+		menu.classList.add('visible');
+	}
+
+	function hideAllMenus(e) {
+		const menu = document.getElementById('userContextMenu');
+		if (menu && (!e || !menu.contains(e.target))) {
+			menu.classList.remove('visible');
+		}
+	}
+
+	function contextMenuAction(action) {
+		if (!contextMenuTarget) return;
+		const nick = contextMenuTarget;
+		hideAllMenus();
+		switch (action) {
+			case 'pm':
+				openPrivateChat(nick);
+				break;
+			case 'whois':
+				doSend("WHOIS " + nick + "\r\n");
+				writeToScreen("var(--clr-info)", `正在查询 ${nick} 的信息…`, activeChannel || statusChannel, "*");
+				break;
+			case 'ignore':
+				addIgnore(nick);
+				break;
+			case 'unignore':
+				removeIgnore(nick);
+				break;
+			case 'kick':
+				if (activeChannel && activeChannel.name.startsWith('#')) {
+					doSend("KICK " + activeChannel.name + " " + nick + " :\r\n");
+				} else {
+					writeToScreen("var(--clr-warning)", "请在频道窗口中使用踢出功能", activeChannel || statusChannel, "*");
+				}
+				break;
+			case 'ban':
+				if (activeChannel && activeChannel.name.startsWith('#')) {
+					doSend("MODE " + activeChannel.name + " +b " + nick + "*!*@*\r\n");
+					writeToScreen("var(--clr-info)", `正在封禁 ${nick}…`, activeChannel, "*");
+				} else {
+					writeToScreen("var(--clr-warning)", "请在频道窗口中使用封禁功能", activeChannel || statusChannel, "*");
+				}
+				break;
+			case 'banlist':
+				if (activeChannel && activeChannel.name.startsWith('#')) {
+					showBanPanel(activeChannel.name);
+				} else {
+					writeToScreen("var(--clr-warning)", "请在频道窗口中查看封禁列表", activeChannel || statusChannel, "*");
+				}
+				break;
+		}
+	}
+
+	// ========== 新增：屏蔽功能 ==========
+	function addIgnore(nick) {
+		if (!nick || ignoreList.includes(nick)) return;
+		ignoreList.push(nick);
+		saveAdvancedSettings();
+		writeToScreen("var(--clr-info)", `已屏蔽 ${nick} 的消息`, statusChannel, "*");
+		writeToLog(`[IGNORE] Added: ${nick}`);
+	}
+
+	function removeIgnore(nick) {
+		const idx = ignoreList.indexOf(nick);
+		if (idx !== -1) {
+			ignoreList.splice(idx, 1);
+			saveAdvancedSettings();
+			writeToScreen("var(--clr-info)", `已取消屏蔽 ${nick}`, statusChannel, "*");
+			writeToLog(`[IGNORE] Removed: ${nick}`);
+		}
+	}
+
+	function isIgnored(nick) {
+		return ignoreList.includes(nick);
+	}
+
+	function showIgnorePanel() {
+		const panel = document.getElementById('ignorePanel');
+		const list = document.getElementById('ignoreList');
+		if (!panel || !list) return;
+		if (ignoreList.length === 0) {
+			list.innerHTML = '<div class="ignore-panel__empty">暂无屏蔽用户</div>';
+		} else {
+			list.innerHTML = ignoreList.map(nick => `
+				<div class="ignore-item">
+					<span class="ignore-item__nick">${htmlEscape(nick)}</span>
+					<button class="ignore-item__remove" onclick="removeIgnoreFromPanel('${htmlEscape(nick)}')">移除</button>
+				</div>
+			`).join('');
+		}
+		panel.classList.add('visible');
+	}
+
+	function closeIgnorePanel() {
+		const panel = document.getElementById('ignorePanel');
+		if (panel) panel.classList.remove('visible');
+	}
+
+	function removeIgnoreFromPanel(nick) {
+		removeIgnore(nick);
+		showIgnorePanel();
+	}
+
+	// ========== 新增：高亮关键词 ==========
+	function checkHighlight(text) {
+		if (!highlightKeywords.length || !text) return false;
+		const lowerText = text.toLowerCase();
+		return highlightKeywords.some(kw => kw && lowerText.includes(kw.toLowerCase()));
+	}
+
+	function toggleHighlightKeyword(keyword) {
+		if (!keyword) return;
+		const idx = highlightKeywords.indexOf(keyword);
+		if (idx !== -1) {
+			highlightKeywords.splice(idx, 1);
+		} else {
+			highlightKeywords.push(keyword);
+		}
+		saveAdvancedSettings();
+	}
+
+	// ========== 新增：搜索功能（嵌入菜单） ==========
+	function toggleSearchInMenu(e) {
+		if (e) e.stopPropagation();
+		const menuSearch = document.getElementById('menuSearch');
+		const input = document.getElementById('searchInput');
+		if (!menuSearch) return;
+		const isHidden = menuSearch.style.display === 'none';
+		menuSearch.style.display = isHidden ? 'block' : 'none';
+		if (isHidden) {
+			searchResults = [];
+			searchHighlightIndex = -1;
+			const resultsEl = document.getElementById('searchResults');
+			if (resultsEl) resultsEl.innerHTML = '<div class="search-result__empty">输入关键词搜索消息</div>';
+			if (input) { input.value = ''; input.focus(); }
+		}
+	}
+
+	function openSearchPanel() {
+		// 确保菜单打开并展开搜索区域
+		const dropdown = document.getElementById('headerMenuDropdown');
+		if (dropdown && !dropdown.classList.contains('visible')) {
+			toggleHeaderMenu();
+		}
+		const menuSearch = document.getElementById('menuSearch');
+		if (menuSearch && menuSearch.style.display === 'none') {
+			menuSearch.style.display = 'block';
+			searchResults = [];
+			searchHighlightIndex = -1;
+			const resultsEl = document.getElementById('searchResults');
+			if (resultsEl) resultsEl.innerHTML = '<div class="search-result__empty">输入关键词搜索消息</div>';
+			const input = document.getElementById('searchInput');
+			if (input) { input.value = ''; setTimeout(() => input.focus(), 50); }
+		} else if (menuSearch) {
+			const input = document.getElementById('searchInput');
+			if (input) input.focus();
+		}
+	}
+
+	function closeSearchPanel() {
+		const menuSearch = document.getElementById('menuSearch');
+		if (menuSearch) menuSearch.style.display = 'none';
+		searchResults = [];
+		searchHighlightIndex = -1;
+	}
+
+	function handleSearchInput(e) {
+		const query = e.target.value;
+		if (query && query.trim()) {
+			performSearch(query);
+		} else {
+			const resultsEl = document.getElementById('searchResults');
+			if (resultsEl) resultsEl.innerHTML = '<div class="search-result__empty">输入关键词搜索消息</div>';
+			searchResults = [];
+			searchHighlightIndex = -1;
+		}
+	}
+
+	function performSearch(query) {
+		if (!query || !query.trim()) {
+			const resultsEl = document.getElementById('searchResults');
+			if (resultsEl) resultsEl.innerHTML = '<div class="search-result__empty">输入关键词搜索消息</div>';
+			return;
+		}
+		const q = query.toLowerCase();
+		searchResults = [];
+		channelMap.forEach((channel, name) => {
+			if (!channel.content) return;
+			const msgs = channel.content.querySelectorAll('p');
+			msgs.forEach((msg, idx) => {
+				const text = msg.textContent || '';
+				if (text.toLowerCase().includes(q)) {
+					searchResults.push({ channelName: name, element: msg, text: text });
+				}
+			});
+		});
+		renderSearchResults(query);
+	}
+
+	function renderSearchResults(query) {
+		const resultsEl = document.getElementById('searchResults');
+		if (!resultsEl) return;
+		if (searchResults.length === 0) {
+			resultsEl.innerHTML = '<div class="search-result__empty">未找到匹配的消息</div>';
+			return;
+		}
+		const q = query.toLowerCase();
+		const escaped = htmlEscape(query);
+		resultsEl.innerHTML = searchResults.slice(0, 100).map((r, i) => {
+			const highlighted = r.text.replace(new RegExp(escaped.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), m => '<mark>' + htmlEscape(m) + '</mark>');
+			return `<div class="search-result${i === 0 ? ' highlighted' : ''}" data-index="${i}" onclick="jumpToSearchResult(${i})">
+				<div class="search-result__meta">${htmlEscape(r.channelName)}</div>
+				<div class="search-result__text">${highlighted}</div>
+			</div>`;
+		}).join('');
+		searchHighlightIndex = 0;
+	}
+
+	function jumpToSearchResult(index) {
+		if (index < 0 || index >= searchResults.length) return;
+		const result = searchResults[index];
+		const ch = findChannel(result.channelName);
+		if (ch) {
+			tabShow(result.channelName);
+			setTimeout(() => {
+				result.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				result.element.style.background = 'rgba(0,229,255,.2)';
+				setTimeout(() => { result.element.style.background = ''; }, 2000);
+			}, 100);
+		}
+	}
+
+	function handleSearchKeydown(e) {
+		if (e.key === 'Enter') {
+			const query = e.target.value;
+			if (query) performSearch(query);
+		} else if (e.key === 'Escape') {
+			toggleHeaderMenu();
+		} else if (e.key === 'ArrowDown') {
+			e.preventDefault();
+			searchHighlightIndex = Math.min(searchHighlightIndex + 1, searchResults.length - 1);
+			updateSearchHighlight();
+		} else if (e.key === 'ArrowUp') {
+			e.preventDefault();
+			searchHighlightIndex = Math.max(searchHighlightIndex - 1, 0);
+			updateSearchHighlight();
+		}
+	}
+
+	function updateSearchHighlight() {
+		const resultsEl = document.getElementById('searchResults');
+		if (!resultsEl) return;
+		resultsEl.querySelectorAll('.search-result').forEach((el, i) => {
+			el.classList.toggle('highlighted', i === searchHighlightIndex);
+		});
+	}
+
+	// ========== 新增：Ban 列表 ==========
+	let currentBanChannel = '';
+
+	function showBanPanel(channelName) {
+		currentBanChannel = channelName;
+		const panel = document.getElementById('banPanel');
+		const list = document.getElementById('banList');
+		if (!panel) return;
+		panel.classList.add('visible');
+		if (list) list.innerHTML = '<div class="ban-panel__loading">正在加载封禁列表…</div>';
+		doSend("MODE " + channelName + " +b\r\n");
+	}
+
+	function closeBanPanel() {
+		const panel = document.getElementById('banPanel');
+		if (panel) panel.classList.remove('visible');
+	}
+
+	function refreshBanList() {
+		if (currentBanChannel) {
+			showBanPanel(currentBanChannel);
+		}
+	}
+
+	function addBanEntry(host, by, time) {
+		if (!currentBanChannel) return;
+		if (!banListCache.has(currentBanChannel)) banListCache.set(currentBanChannel, []);
+		banListCache.get(currentBanChannel).push({ host, by, time });
+	}
+
+	function renderBanList() {
+		const list = document.getElementById('banList');
+		if (!list) return;
+		const bans = banListCache.get(currentBanChannel) || [];
+		if (bans.length === 0) {
+			list.innerHTML = '<div class="ban-panel__empty">暂无封禁记录</div>';
+			return;
+		}
+		list.innerHTML = bans.map(b => {
+			const nickMatch = b.host.match(/^([^!]+)/);
+			const nick = nickMatch ? nickMatch[1] : b.host;
+			return `<div class="ban-item">
+				<span class="ban-item__nick">${htmlEscape(nick)}</span>
+				<span class="ban-item__host" title="${htmlEscape(b.host)}">${htmlEscape(b.host)}</span>
+				<span class="ban-item__by">${b.by ? 'by ' + htmlEscape(b.by) : ''}</span>
+				<div class="ban-item__actions">
+					<button class="ban-item__btn ban-item__btn--unban" onclick="unbanEntry('${htmlEscape(b.host.replace(/'/g, "\\'"))}')">解除</button>
+				</div>
+			</div>`;
+		}).join('');
+	}
+
+	function unbanEntry(host) {
+		if (currentBanChannel) {
+			doSend("MODE " + currentBanChannel + " -b " + host + "\r\n");
+			writeToScreen("var(--clr-info)", `正在解除封禁 ${host}…`, activeChannel, "*");
+			// 从缓存中移除
+			const bans = banListCache.get(currentBanChannel) || [];
+			const idx = bans.findIndex(b => b.host === host);
+			if (idx !== -1) { bans.splice(idx, 1); renderBanList(); }
+		}
+	}
+
+
+
+
+	// ========== 新增：全局快捷键 ==========
+	function handleGlobalKeydown(e) {
+		// Ctrl+F 或 Ctrl+Shift+F 打开搜索
+		if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+			e.preventDefault();
+			openSearchPanel();
+			return;
+		}
+		// Escape 关闭面板
+		if (e.key === 'Escape') {
+			closeSearchPanel();
+			closeIgnorePanel();
+			closeBanPanel();
+		}
+	}
+	document.addEventListener('keydown', handleGlobalKeydown);
 
 	const FOCUS_WHITELIST = '#channelInput, #wsUrl, #nickInput, #joinChannelBtn, .btn, button, a, input, textarea, select';
 
@@ -1255,6 +2212,9 @@
 			headerMenuClickListener = closeHeaderMenuOnClickOutside;
 			menu.classList.add('menu-attached');
 			setTimeout(() => { document.addEventListener('click', headerMenuClickListener); }, 0);
+		} else {
+			// 菜单关闭时也收起搜索
+			closeSearchPanel();
 		}
 	}
 
@@ -2149,11 +3109,17 @@
 
 		tmp = document.createElement("p");
 		tmp.textContent = nick;
-		tmp.title = "点击与 " + nick + " 私聊";
+		tmp.title = "右键: 菜单 | 左键: 私聊";
 		tmp.style.cursor = "pointer";
 		tmp.addEventListener("click", function (e) {
 			e.stopPropagation();
 			openPrivateChat(nick);
+		});
+		// 新增：用户列表右键菜单
+		tmp.addEventListener("contextmenu", function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			showUserContextMenu(e, nick, 'user');
 		});
 		user.appendChild(tmp);
 
@@ -2294,13 +3260,24 @@ const Channel_AppendUser = channelAppendUser;
 			displayTime = now.toISOString().substr(11, 8);
 		}
 
+		// 新增：检查是否被屏蔽
+		if (username && username !== "" && username !== "*" && username !== "-" && username !== nickname) {
+			if (isIgnored(username)) {
+				return; // 忽略该用户的消息
+			}
+		}
+
 		if (username && username !== "" && username !== "*" && username !== "-") {
 			const nickSpan = document.createElement("span");
 			nickSpan.className = "clickable-username";
-			nickSpan.title = "点击与 " + username + " 私聊";
+			nickSpan.title = "右键菜单 | 点击与 " + username + " 私聊";
 			nickSpan.textContent = username;
 			nickSpan.addEventListener("click", function () {
 				openPrivateChat(username);
+			});
+			// 新增：右键菜单
+			nickSpan.addEventListener("contextmenu", function (e) {
+				showUserContextMenu(e, username, 'user');
 			});
 
 			const tsSpan = document.createElement("span");
@@ -2334,6 +3311,22 @@ const Channel_AppendUser = channelAppendUser;
 			requestAnimationFrame(() => {
 				output.scrollTop = output.scrollHeight;
 			});
+		}
+
+		// 新增：通知和声音
+		if (username && username !== nickname && username !== "*" && username !== "-") {
+			const isHighlight = checkHighlight(message) || (message && message.toLowerCase().includes(nickname.toLowerCase()));
+			const isActiveChannel = activeChannel && channel && channel.name === activeChannel.name;
+			if (!isActiveChannel || !document.hasFocus()) {
+				if (isHighlight || channel.isPrivate) {
+					showNotification(
+						channel.name + ' - ' + username,
+						message.substring(0, 100),
+						'💬'
+					);
+					playNotificationSound();
+				}
+			}
 		}
 	}
 
@@ -2660,12 +3653,87 @@ const Channel_AppendUser = channelAppendUser;
 				"/monitor + nick   — 监控用户上下线",
 				"/monitor - nick   — 取消监控",
 				"/monitor l        — 查看监控列表",
-				"/chathistory [#频道] [数量] — 拉取Channel message history",
+				"/chathistory [#频道] [数量] — 拉取历史消息",
 				"/caps             — 查看已启用的 IRCv3 能力",
+				"== 新增功能 ==",
+				"/ignore <nick>    — 屏蔽指定用户的消息",
+				"/unignore <nick>  — 取消屏蔽用户",
+				"/highlight <关键词> — 添加/移除高亮关键词",
+				"/highlight list   — 查看高亮关键词列表",
+				"/ban <nick>       — 在当前频道封禁用户 (需频道权限)",
+				"/unban <host>     — 解除封禁",
+				"/banlist          — 查看当前频道封禁列表",
+				"Ctrl+F            — 打开消息搜索面板",
 				"/quit [消息]       — 退出 IRC",
 			].join('<br>');
 			writeToScreen("var(--clr-info)", helpMsg, activeChannel, "*");
+		} else if (text.indexOf("/ignore ") === 0) {
+			const ignoreNick = text.substring(8).trim();
+			if (ignoreNick) {
+				addIgnore(ignoreNick);
 			} else {
+				writeToScreen("var(--clr-warning)", "用法: /ignore <昵称>", activeChannel, "*");
+			}
+			pushHistory(text);
+		} else if (text.indexOf("/unignore ") === 0) {
+			const unignoreNick = text.substring(10).trim();
+			if (unignoreNick) {
+				removeIgnore(unignoreNick);
+			} else {
+				writeToScreen("var(--clr-warning)", "用法: /unignore <昵称>", activeChannel, "*");
+			}
+			pushHistory(text);
+		} else if (text === "/banlist") {
+			if (activeChannel && activeChannel.name.startsWith('#')) {
+				showBanPanel(activeChannel.name);
+			} else {
+				writeToScreen("var(--clr-warning)", "请在频道窗口中使用 /banlist", activeChannel, "*");
+			}
+			pushHistory(text);
+		} else if (text.indexOf("/ban ") === 0) {
+			const banNick = text.substring(5).trim();
+			if (activeChannel && activeChannel.name.startsWith('#')) {
+				if (banNick) {
+					doSend("MODE " + activeChannel.name + " +b " + banNick + "*!*@*\r\n");
+					writeToScreen("var(--clr-info)", `正在封禁 ${banNick}…`, activeChannel, "*");
+				} else {
+					writeToScreen("var(--clr-warning)", "用法: /ban <昵称>", activeChannel, "*");
+				}
+			} else {
+				writeToScreen("var(--clr-warning)", "请在频道窗口中使用 /ban", activeChannel, "*");
+			}
+			pushHistory(text);
+		} else if (text.indexOf("/unban ") === 0) {
+			const unbanHost = text.substring(7).trim();
+			if (activeChannel && activeChannel.name.startsWith('#')) {
+				if (unbanHost) {
+					doSend("MODE " + activeChannel.name + " -b " + unbanHost + "\r\n");
+					writeToScreen("var(--clr-info)", `正在解除封禁 ${unbanHost}…`, activeChannel, "*");
+				} else {
+					writeToScreen("var(--clr-warning)", "用法: /unban <host>", activeChannel, "*");
+				}
+			} else {
+				writeToScreen("var(--clr-warning)", "请在频道窗口中使用 /unban", activeChannel, "*");
+			}
+			pushHistory(text);
+		} else if (text.indexOf("/highlight ") === 0) {
+			const keyword = text.substring(10).trim();
+			if (keyword) {
+				toggleHighlightKeyword(keyword);
+				const isAdded = highlightKeywords.includes(keyword);
+				writeToScreen("var(--clr-info)", isAdded ? `已添加高亮关键词: ${keyword}` : `已移除高亮关键词: ${keyword}`, activeChannel, "*");
+			} else {
+				writeToScreen("var(--clr-warning)", "用法: /highlight <关键词>", activeChannel, "*");
+			}
+			pushHistory(text);
+		} else if (text === "/highlight list") {
+			if (highlightKeywords.length === 0) {
+				writeToScreen("var(--clr-info)", "暂无高亮关键词", activeChannel, "*");
+			} else {
+				writeToScreen("var(--clr-info)", `高亮关键词: ${highlightKeywords.join(', ')}`, activeChannel, "*");
+			}
+			pushHistory(text);
+		} else {
 			writeToScreen("var(--clr-font)", text, activeChannel, "");
 			const messages = splitIRCMessage(text.substring(1));
 			messages.forEach(msg => doSend(msg));
@@ -3103,6 +4171,24 @@ const Channel_AppendUser = channelAppendUser;
 	let saslPending = false;
 
 	var Commands = new Map();
+
+	// 处理 367 RPL_BANLIST 响应
+	Commands.set("367", function (nick, data) {
+		if (!data || data.length < 5) return;
+		const channel = data[2];
+		const host = data[3].replace(/^:/, '');
+		const by = data[4] || '';
+		addBanEntry(host, by, null);
+	});
+
+	// 处理 368 RPL_ENDOFBANLIST 响应
+	Commands.set("368", function (nick, data) {
+		if (!data || data.length < 3) return;
+		if (data[2] === currentBanChannel) {
+			renderBanList();
+		}
+	});
+
 	// 311 RPL_WHOISUSER
 	Commands.set("311", function (nick, data) {
 		if (!data || data.length < 6) return;
@@ -4026,6 +5112,12 @@ const Channel_AppendUser = channelAppendUser;
 		}
 		nick = data[0].substring(1).split("!")[0];
 
+		// 新增：忽略检查
+		if (isIgnored(nick)) {
+			writeToLog(`[IGNORE] Blocked message from ${nick}`);
+			return;
+		}
+
 		const serverTime = msgTags && msgTags.get('time') || null;
 		const accountName = msgTags && msgTags.get('account') || null;
 		const msgId = msgTags && msgTags.get('msgid') || null;
@@ -4630,6 +5722,23 @@ const Channel_AppendUser = channelAppendUser;
 	window.doSendLabeled         = doSendLabeled;
 	window.requestChatHistory    = requestChatHistory;
 	window.requestWho            = requestWho;
+	window.showIgnorePanel       = showIgnorePanel;
+	window.closeIgnorePanel      = closeIgnorePanel;
+	window.removeIgnoreFromPanel = removeIgnoreFromPanel;
+	window.openSearchPanel       = openSearchPanel;
+	window.closeSearchPanel      = closeSearchPanel;
+	window.handleSearchKeydown   = handleSearchKeydown;
+	window.handleSearchInput     = handleSearchInput;
+	window.toggleSearchInMenu    = toggleSearchInMenu;
+	window.jumpToSearchResult    = jumpToSearchResult;
+	window.toggleSound           = toggleSound;
+	window.contextMenuAction     = contextMenuAction;
+	window.requestNotificationPermission = requestNotificationPermission;
+	window.dismissNotificationHint = dismissNotificationHint;
+	window.refreshBanList        = refreshBanList;
+	window.closeBanPanel         = closeBanPanel;
+	window.unbanEntry            = unbanEntry;
+	window.toggleHighlightKeyword = toggleHighlightKeyword;
 
 }());
 </script>
