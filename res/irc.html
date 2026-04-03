@@ -2368,9 +2368,10 @@
 	 * 便捷日志函数 - 根据当前上下文自动添加方向前缀
 	 * @param {string} module - 模块名
 	 * @param {string} message - 日志消息（不含模块标签）
+	 * @param {string} [direction] - 方向（可选，默认从上下文获取）
 	 */
-	function logInfo(module, message) {
-		writeToLog(`[${module}] ${message}`);
+	function logInfo(module, message, direction) {
+		writeToLog(`[${module}] ${message}`, direction);
 	}
 
 	/**
@@ -2477,8 +2478,9 @@
 		}
 
 		if (isConnected && websocket && websocket.readyState === WebSocket.OPEN) {
-			logInfo('IRC', `Sending JOIN → ${targetChannel}`);
-			doSend("JOIN " + targetChannel);
+			const msg = `JOIN ${targetChannel}`;
+			logInfo('IRC', msg, LOG_DIR.CLIENT_TO_SERVER);
+			doSend(msg);
 		} else {
 			logInfo('WARN', `JOIN requested but not connected — target: ${targetChannel}`);
 			writeToScreen("var(--clr-warning)", "未连接, 无法加入频道", statusChannel, "*");
@@ -4073,12 +4075,13 @@
 				connectBtn.classList.add('disconnect');
 			}
 
-			const joinChannelBtn = document.getElementById('joinChannelBtn');
-			if (joinChannelBtn) joinChannelBtn.disabled = false;
+		const joinChannelBtn = document.getElementById('joinChannelBtn');
+		if (joinChannelBtn) joinChannelBtn.disabled = false;
 
-			doSend("CAP LS 302");
+		logInfo('CAP', 'CAP LS 302', LOG_DIR.CLIENT_TO_SERVER);
+		doSend("CAP LS 302");
 
-			startKeepAlive();
+		startKeepAlive();
 		} else {
 			logInfo('ERROR', `onOpen called but WebSocket state is abnormal: ${websocket ? websocket.readyState : 'null'}`);
 		}
@@ -4162,8 +4165,6 @@
 		try {
 			websocket.send(message);
 			if (!message.trim().toUpperCase().startsWith('PING')) sentCount++;
-			// 原始消息直接显示（带 [CLIENT→SERVER] 前缀）
-			writeToLog(`[CLIENT→SERVER] ${message.trim()}`);
 		} catch (e) {
 			writeToLog(`[ERROR] Failed to send message: ${e.message}`);
 			writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel, "");
@@ -4360,7 +4361,7 @@
 
 	Commands.set("321", function (nick, data) {
 		writeToScreen("var(--clr-info)", `频道列表:`, statusChannel, "*");
-		writeToLog(`[IRC] RPL_LISTSTART (321)`);
+		writeToLog(`[SERVER→CLIENT] [IRC] RPL_LISTSTART (321)`);
 	});
 	Commands.set("322", function (nick, data) {
 		if (!data || data.length < 6) return;
@@ -4371,7 +4372,7 @@
 	});
 	Commands.set("323", function (nick, data) {
 		writeToScreen("var(--clr-text-dim)", `频道列表结束`, statusChannel, "*");
-		writeToLog(`[IRC] RPL_LISTEND (323)`);
+		writeToLog(`[SERVER→CLIENT] [IRC] RPL_LISTEND (323)`);
 	});
 
 
@@ -4478,10 +4479,12 @@
 				.join(' ');
 
 			if (requestedCaps) {
-				logInfo('CAP', `Requesting capabilities: ${requestedCaps}`);
-				doSend("CAP REQ :" + requestedCaps);
+				const capReqMsg = `CAP REQ :${requestedCaps}`;
+				logInfo('CAP', capReqMsg, LOG_DIR.CLIENT_TO_SERVER);
+				doSend(capReqMsg);
 			} else {
 				logInfo('CAP', 'No matching capabilities — ending CAP negotiation');
+				logInfo('CAP', 'CAP END', LOG_DIR.CLIENT_TO_SERVER);
 				doSend("CAP END");
 				sendRegistration();
 			}
@@ -4520,20 +4523,23 @@
 			if (ircv3ActiveCaps.has('sasl') && saslEnabled && saslAccount && saslPassword) {
 				logInfo('SASL', `Starting SASL PLAIN authentication for: ${saslAccount}`);
 				saslPending = true;
+				logInfo('SASL', 'AUTHENTICATE PLAIN', LOG_DIR.CLIENT_TO_SERVER);
 				doSend("AUTHENTICATE PLAIN");
 			} else {
+				logInfo('CAP', 'CAP END', LOG_DIR.CLIENT_TO_SERVER);
 				doSend("CAP END");
 				sendRegistration();
 			}
 
 
 
-		} else if (subCommand === "NAK") {
-			const rejectedCaps = caps || "(none)";
-			writeToScreen("var(--clr-warning)", `能力被拒绝: ${rejectedCaps}`, statusChannel, "*");
-			logInfo('CAP', `Capabilities rejected (NAK): ${rejectedCaps}`);
-			doSend("CAP END");
-			sendRegistration();
+			} else if (subCommand === "NAK") {
+				const rejectedCaps = caps || "(none)";
+				writeToScreen("var(--clr-warning)", `能力被拒绝: ${rejectedCaps}`, statusChannel, "*");
+				logInfo('CAP', `Capabilities rejected (NAK): ${rejectedCaps}`);
+				logInfo('CAP', 'CAP END', LOG_DIR.CLIENT_TO_SERVER);
+				doSend("CAP END");
+				sendRegistration();
 
 		} else if (subCommand === "LIST") {
 			const activeCaps = caps || "(none)";
@@ -4577,12 +4583,13 @@
 		if (payload === '+') {
 			if (!saslPending || !saslAccount || !saslPassword) {
 				logInfo('SASL', 'AUTHENTICATE + received but no pending SASL auth — aborting');
+				logInfo('SASL', 'AUTHENTICATE *', LOG_DIR.CLIENT_TO_SERVER);
 				doSend("AUTHENTICATE *");
 				return;
 			}
 			const authStr = `\x00${saslAccount}\x00${saslPassword}`;
 			const encoded = btoa(unescape(encodeURIComponent(authStr)));
-			logInfo('SASL', `Sending PLAIN credentials for: ${saslAccount}`);
+			logInfo('SASL', 'AUTHENTICATE PLAIN', LOG_DIR.CLIENT_TO_SERVER);
 			doSend("AUTHENTICATE " + encoded);
 		} else {
 			logInfo('SASL', `Unexpected AUTHENTICATE payload: ${payload}`);
@@ -4593,7 +4600,7 @@
 		if (!data || data.length < 4) return;
 		const accountName = data.length >= 5 ? data[4].replace(/^:/, '') : (data[3] || '');
 		writeToScreen("var(--clr-green)", `已登录账号: ${accountName}`, statusChannel, "*");
-		logInfo('SASL', `RPL_LOGGEDIN (900): logged in as ${accountName}`);
+		logInfo('SASL', `RPL_LOGGEDIN (900): logged in as ${accountName}`, LOG_DIR.SERVER_TO_CLIENT);
 		if (accountName && accountName !== '*') {
 			saslAccount = accountName;
 		}
@@ -4601,22 +4608,24 @@
 
 	Commands.set("901", function (nick, data) {
 		writeToScreen("var(--clr-warning)", `账号已登出`, statusChannel, "*");
-		logInfo('SASL', 'RPL_LOGGEDOUT (901)');
+		logInfo('SASL', 'RPL_LOGGEDOUT (901)', LOG_DIR.SERVER_TO_CLIENT);
 	});
 
 	Commands.set("902", function (nick, data) {
 		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'Nick locked';
 		writeToScreen("var(--clr-red)", `SASL 错误: 昵称已锁定 — ${msg}`, statusChannel, "*");
-		logInfo('SASL', `ERR_NICKLOCKED (902): ${msg}`);
+		logInfo('SASL', `ERR_NICKLOCKED (902): ${msg}`, LOG_DIR.SERVER_TO_CLIENT);
 		saslPending = false;
+		logInfo('CAP', 'CAP END', LOG_DIR.CLIENT_TO_SERVER);
 		doSend("CAP END");
 		sendRegistration();
 	});
 
 	Commands.set("903", function (nick, data) {
 		writeToScreen("var(--clr-green)", `SASL 认证成功!`, statusChannel, "*");
-		logInfo('SASL', 'RPL_SASLSUCCESS (903)');
+		logInfo('SASL', 'RPL_SASLSUCCESS (903)', LOG_DIR.SERVER_TO_CLIENT);
 		saslPending = false;
+		logInfo('CAP', 'CAP END', LOG_DIR.CLIENT_TO_SERVER);
 		doSend("CAP END");
 		sendRegistration();
 	});
@@ -4624,35 +4633,37 @@
 	Commands.set("904", function (nick, data) {
 		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'Authentication failed';
 		writeToScreen("var(--clr-red)", `SASL 认证失败: ${msg}`, statusChannel, "*");
-		logInfo('SASL', `ERR_SASLFAIL (904): ${msg}`);
+		logInfo('SASL', `ERR_SASLFAIL (904): ${msg}`, LOG_DIR.SERVER_TO_CLIENT);
 		saslPending = false;
+		logInfo('CAP', 'CAP END', LOG_DIR.CLIENT_TO_SERVER);
 		doSend("CAP END");
 		sendRegistration();
 	});
 
 	Commands.set("905", function (nick, data) {
 		writeToScreen("var(--clr-red)", `SASL 数据过长`, statusChannel, "*");
-		logInfo('SASL', 'ERR_SASLTOLONG (905)');
+		logInfo('SASL', 'ERR_SASLTOLONG (905)', LOG_DIR.SERVER_TO_CLIENT);
 		saslPending = false;
+		logInfo('CAP', 'CAP END', LOG_DIR.CLIENT_TO_SERVER);
 		doSend("CAP END");
 		sendRegistration();
 	});
 
 	Commands.set("906", function (nick, data) {
 		writeToScreen("var(--clr-warning)", `SASL 认证已中止`, statusChannel, "*");
-		logInfo('SASL', 'ERR_SASLABORTED (906)');
+		logInfo('SASL', 'ERR_SASLABORTED (906)', LOG_DIR.SERVER_TO_CLIENT);
 		saslPending = false;
 	});
 
 	Commands.set("907", function (nick, data) {
 		writeToScreen("var(--clr-warning)", `已经完成 SASL 认证`, statusChannel, "*");
-		logInfo('SASL', 'ERR_SASLALREADY (907)');
+		logInfo('SASL', 'ERR_SASLALREADY (907)', LOG_DIR.SERVER_TO_CLIENT);
 	});
 
 	Commands.set("908", function (nick, data) {
 		const mechs = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '';
 		writeToScreen("var(--clr-info)", `支持的 SASL 机制: ${mechs}`, statusChannel, "*");
-		logInfo('SASL', `RPL_SASLMECHS (908): ${mechs}`);
+		logInfo('SASL', `RPL_SASLMECHS (908): ${mechs}`, LOG_DIR.SERVER_TO_CLIENT);
 	});
 
 	Commands.set("CHGHOST", function (nick, data) {
@@ -4672,7 +4683,7 @@
 				}
 			});
 		}
-		writeToLog(`[CHGHOST] ${nick}: new ident=${newIdent} host=${newHost}`);
+		writeToLog(`[SERVER→CLIENT] [CHGHOST] ${nick}: new ident=${newIdent} host=${newHost}`);
 	});
 
 	Commands.set("ACCOUNT", function (nick, data) {
@@ -4691,7 +4702,7 @@
 					}
 				});
 			}
-			writeToLog(`[ACCOUNT] ${nick}: logged out`);
+			writeToLog(`[SERVER→CLIENT] [ACCOUNT] ${nick}: logged out`);
 		} else {
 			if (isSelf) {
 				writeToScreen("var(--clr-green)", `你已登录账号: ${accountName}`, statusChannel, "*");
@@ -4703,7 +4714,7 @@
 					}
 				});
 			}
-			writeToLog(`[ACCOUNT] ${nick}: logged in as ${accountName}`);
+			writeToLog(`[SERVER→CLIENT] [ACCOUNT] ${nick}: logged in as ${accountName}`);
 		}
 	});
 
@@ -4721,7 +4732,7 @@
 				}
 			});
 		}
-		writeToLog(`[ACCOUNT] SETNAME: ${nick} → "${newRealname}"`);
+		writeToLog(`[SERVER→CLIENT] [ACCOUNT] SETNAME: ${nick} → "${newRealname}"`);
 	});
 
 	Commands.set("AWAY", function (nick, data) {
@@ -4755,7 +4766,7 @@
 				updateUserAwayStatus(nick, channel, isSettingAway);
 			});
 		}
-		writeToLog(`[AWAY] ${nick}: ${isSettingAway ? `away (${reason})` : 'back'}`);
+		writeToLog(`[SERVER→CLIENT] [AWAY] ${nick}: ${isSettingAway ? `away (${reason})` : 'back'}`);
 	});
 
 	function updateUserAwayStatus(nick, channel, isAway) {
@@ -4780,27 +4791,28 @@
 		const targetNick = data[3];
 		const awayMsg = data.slice(4).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-text-dim)", `${targetNick} 正在离开: ${awayMsg}`, statusChannel, "*");
-		writeToLog(`[AWAY] RPL_AWAY (301): ${targetNick} is away: ${awayMsg}`);
+		writeToLog(`[SERVER→CLIENT] [AWAY] RPL_AWAY (301): ${targetNick} is away: ${awayMsg}`);
 	});
 
 	Commands.set("305", function (nick, data) {
 		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '你不再处于离开状态';
 		writeToScreen("var(--clr-info)", `✓ ${msg}`, activeChannel || statusChannel, "*");
-		writeToLog(`[AWAY] RPL_UNAWAY (305): you are no longer away`);
+		writeToLog(`[SERVER→CLIENT] [AWAY] RPL_UNAWAY (305): you are no longer away`);
 	});
 
 	Commands.set("306", function (nick, data) {
 		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '你已标记为离开状态';
 		writeToScreen("var(--clr-warning)", `✓ ${msg}`, activeChannel || statusChannel, "*");
-		writeToLog(`[AWAY] RPL_NOWAWAY (306): you are now marked as away`);
+		writeToLog(`[SERVER→CLIENT] [AWAY] RPL_NOWAWAY (306): you are now marked as away`);
 	});
 
 	Commands.set("001", function (nick, data) {
 		if (channelName) {
-			writeToLog(`[IRC] RPL_WELCOME (001) received — auto-joining: ${channelName}`);
+			writeToLog(`[SERVER→CLIENT] [IRC] RPL_WELCOME (001) received — auto-joining: ${channelName}`);
+			logInfo('IRC', `JOIN ${channelName}`, LOG_DIR.CLIENT_TO_SERVER);
 			doSend("JOIN " + channelName);
 		} else {
-			writeToLog(`[IRC] RPL_WELCOME (001) received — no auto-join channel configured`);
+			writeToLog(`[SERVER→CLIENT] [IRC] RPL_WELCOME (001) received — no auto-join channel configured`);
 		}
 	});
 	Commands.set("005", function (nick, data) {
@@ -4812,7 +4824,7 @@
 					PrefixChars = tmp.split(")");
 					if (PrefixChars[1]) PrefixChars[1] = PrefixChars[1].trimEnd();
 					writeToScreen("var(--clr-brown)", "PREFIX CHARS: " + PrefixChars[0] + " " + PrefixChars[1], statusChannel, "");
-					writeToLog(`[IRC] Server PREFIX support: modes="${PrefixChars[0]}" chars="${PrefixChars[1]}"`);
+					writeToLog(`[SERVER→CLIENT] [IRC] Server PREFIX support: modes="${PrefixChars[0]}" chars="${PrefixChars[1]}"`);
 				}
 			}
 		}
@@ -4823,7 +4835,7 @@
 		if (!channel || !channel.topic) return;
 		let text = data.length >= 5 ? data.slice(4).join(' ').replace(/^:/, '') : '';
 		channel.topic.textContent = text || "No topic set";
-		writeToLog(`[IRC] RPL_TOPIC (332): channel=${data[3]} topic="${text}"`);
+		writeToLog(`[SERVER→CLIENT] [IRC] RPL_TOPIC (332): channel=${data[3]} topic="${text}"`);
 	});
 	Commands.set("353", function (nick, data) {
 		if (!data || data.length < 6) return;
@@ -4849,7 +4861,7 @@
 			if (prefix == "") prefix = " ";
 			channel.users.push([prefix, displayNick.substring(ii)]);
 		}
-		writeToLog(`[IRC] RPL_NAMREPLY (353): channel=${data[4]} users so far=${channel.users.length}`);
+		writeToLog(`[SERVER→CLIENT] [IRC] RPL_NAMREPLY (353): channel=${data[4]} users so far=${channel.users.length}`);
 	});
 	Commands.set("366", function (nick, data) {
 		if (!data || data.length < 4) return;
@@ -4883,26 +4895,26 @@
 		channel.userlist.innerHTML = "";
 		channel.userlist.appendChild(frag);
 		channel.names_end = true;
-		writeToLog(`[IRC] RPL_ENDOFNAMES (366): channel=${data[3]} total users=${channel.users.length}`);
+		writeToLog(`[SERVER→CLIENT] [IRC] RPL_ENDOFNAMES (366): channel=${data[3]} total users=${channel.users.length}`);
 	});
 	function showNickPrompt(errorMsg, onConfirm) {
 		writeToScreen("var(--clr-warning)", errorMsg + " — 请在输入框输入新昵称后按回车 (或输入 /nick 新昵称)", statusChannel, "*");
-		writeToLog(`[IRC] ${errorMsg} — showing inline nick prompt`);
+		writeToLog(`[SERVER→CLIENT] [IRC] ${errorMsg} — showing inline nick prompt`);
 	}
 	Commands.set("432", function (nick, data) {
 		writeToScreen("var(--clr-warning)", "❌ 昵称包含非法字符, 请用 /nick 新昵称 重新设置", statusChannel, "*");
-		writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — prompting user to use /nick`);
+		writeToLog(`[SERVER→CLIENT] [IRC] ERR_ERRONEUSNICKNAME (432) — prompting user to use /nick`);
 	});
 	Commands.set("433", function (nick, data) {
 		writeToScreen("var(--clr-warning)", "❌ 昵称已被占用, 请用 /nick 新昵称 重新设置", statusChannel, "*");
-		writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — prompting user to use /nick`);
+		writeToLog(`[SERVER→CLIENT] [IRC] ERR_NICKNAMEINUSE (433) — prompting user to use /nick`);
 	});
 	Commands.set("477", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const targetNick = data[2];
 		const errorMsg = data[3].substring(1);
 		writeToScreen("var(--clr-red)", `错误: ${errorMsg}`, statusChannel, "*");
-		writeToLog(`[ERROR] ERR_NOCHANMODES (477): target=${targetNick} — ${errorMsg}`);
+		writeToLog(`[SERVER→CLIENT] [ERROR] ERR_NOCHANMODES (477): target=${targetNick} — ${errorMsg}`);
 	});
 	Commands.set("375", function (nick, data) {
 		if (!data || data.length < 3) return;
@@ -4910,21 +4922,21 @@
 			? (data[3].startsWith(':') ? data.slice(3).join(' ').substring(1) : data.slice(3).join(' '))
 			: "";
 		writeMotdLine(text);
-		writeToLog(`[MOTD] START: ${text}`);
+		writeToLog(`[SERVER→CLIENT] [MOTD] START: ${text}`);
 	});
 	Commands.set("372", function (nick, data) {
 		if (!data || data.length < 3) return;
 		let text = data.length >= 4 ? data.slice(3).join(' ') : "";
 		if (text.startsWith(':')) text = text.substring(1);
 		writeMotdLine(text);
-		writeToLog(`[MOTD] ${text}`);
+		writeToLog(`[SERVER→CLIENT] [MOTD] ${text}`);
 	});
 	Commands.set("376", function (nick, data) {
 		if (!data || data.length < 3) return;
 		let text = data.length >= 4 ? data.slice(3).join(' ') : "";
 		if (text.startsWith(':')) text = text.substring(1);
 		writeMotdLine(text);
-		writeToLog(`[MOTD] END: ${text}`);
+		writeToLog(`[SERVER→CLIENT] [MOTD] END: ${text}`);
 	});
 	Commands.set("JOIN", function (nick, data) {
 		if (!data || data.length < 3) return;
@@ -4943,7 +4955,7 @@
 			}
 		}
 
-		writeToLog(`[IRC] JOIN event: nick=${nick}, channel=${serverChannelName}, isSelf=${isSelfJoin}${joinAccount ? ', account='+joinAccount : ''}`);
+		writeToLog(`[SERVER→CLIENT] [IRC] JOIN event: nick=${nick}, channel=${serverChannelName}, isSelf=${isSelfJoin}${joinAccount ? ', account='+joinAccount : ''}`);
 
 		if (!isSelfJoin) {
 			const channel = findChannel(serverChannelName);
@@ -4955,7 +4967,7 @@
 			} else {
 				writeToScreen("var(--clr-green)", `${nick} 加入频道`, channel, "*");
 			}
-			writeToLog(`[IRC] User joined: ${nick} → ${serverChannelName}`);
+			writeToLog(`[SERVER→CLIENT] [IRC] User joined: ${nick} → ${serverChannelName}`);
 		} else {
 			let channel = findChannel(serverChannelName);
 
@@ -4974,7 +4986,7 @@
 
 		channelName = serverChannelName;
 		writeToScreen("var(--clr-green)", `你已加入频道 ${serverChannelName}`, channel, "*");
-		writeToLog(`[IRC] Self joined channel: ${serverChannelName}`);
+		writeToLog(`[SERVER→CLIENT] [IRC] Self joined channel: ${serverChannelName}`);
 		setTimeout(() => {
 			requestChatHistory(serverChannelName, 50);
 			requestWho(serverChannelName);
@@ -5006,7 +5018,7 @@
 			Channel_Destroy(data[2]);
 			writeToScreen("var(--clr-red)", `你被 ${nick} 踢出 ${data[2]} (原因: ${text || '无'})`, statusChannel, "");
 		}
-		writeToLog(`[IRC] KICK: channel=${data[2]}, kicked=${data[3]}, by=${nick}, reason="${text}"`);
+		writeToLog(`[SERVER→CLIENT] [IRC] KICK: channel=${data[2]}, kicked=${data[3]}, by=${nick}, reason="${text}"`);
 	});
 	Commands.set("MODE", function (nick, data) {
 		if (!data || data.length < 4) return;
@@ -5042,7 +5054,7 @@
 				}
 			}
 		}
-		writeToLog(`[IRC] MODE: channel=${data[2]} mode="${text}" by ${nick}`);
+		writeToLog(`[SERVER→CLIENT] [IRC] MODE: channel=${data[2]} mode="${text}" by ${nick}`);
 	});
 	Commands.set("NICK", function (nick, data) {
 		if (!data || data.length < 3) return;
@@ -5058,7 +5070,7 @@
 				}
 			}
 		});
-		writeToLog(`[IRC] NICK change: ${nick} → ${newnick}${isSelf ? ' (self)' : ''}`);
+		writeToLog(`[SERVER→CLIENT] [IRC] NICK change: ${nick} → ${newnick}${isSelf ? ' (self)' : ''}`);
 	});
 	Commands.set("PART", function (nick, data) {
 		if (!data || data.length < 3) return;
@@ -5069,7 +5081,7 @@
 		let channel = findChannel(partChannel);
 
 		if (!channel) {
-			writeToLog(`[WARN] PART received for unknown channel: "${partChannel}"`);
+			writeToLog(`[SERVER→CLIENT] [WARN] PART received for unknown channel: "${partChannel}"`);
 			return;
 		}
 
@@ -5084,12 +5096,12 @@
 		if (isSelf) {
 			Channel_Destroy(channel.name);
 			writeToScreen("var(--clr-green)", `你已离开频道 ${channel.name}${partReason ? ' (' + partReason + ')' : ''}`, statusChannel, "");
-			writeToLog(`[IRC] Self parted channel: ${partChannel}${partReason ? ' reason: ' + partReason : ''}`);
+			writeToLog(`[SERVER→CLIENT] [IRC] Self parted channel: ${partChannel}${partReason ? ' reason: ' + partReason : ''}`);
 		} else {
 			if (Channel_RemoveUser(nick, channel)) {
 				writeToScreen("var(--clr-green)", `${nick} 离开频道${partReason ? ' (' + partReason + ')' : ''}`, channel, "*");
 			}
-			writeToLog(`[IRC] User parted: ${nick} ← ${partChannel}${partReason ? ' reason: ' + partReason : ''}`);
+			writeToLog(`[SERVER→CLIENT] [IRC] User parted: ${nick} ← ${partChannel}${partReason ? ' reason: ' + partReason : ''}`);
 		}
 	});
 	Commands.set("TOPIC", function (nick, data) {
@@ -5102,7 +5114,7 @@
 		}
 		channel.topic.textContent = text || "No topic set";
 		writeToScreen("var(--clr-blue)", `${nick} 设置主题为: ${text}`, channel, "*");
-		writeToLog(`[IRC] TOPIC changed: channel=${data[2]} new-topic="${text}" by ${nick}`);
+		writeToLog(`[SERVER→CLIENT] [IRC] TOPIC changed: channel=${data[2]} new-topic="${text}" by ${nick}`);
 	});
 	Commands.set("QUIT", function (nick, data) {
 		let quitReason = "";
@@ -5114,7 +5126,7 @@
 				writeToScreen("var(--clr-purple)", `${nick} 退出IRC${quitReason ? ' (' + quitReason + ')' : ''}`, channel, "*");
 			}
 		});
-		writeToLog(`[IRC] User quit: ${nick}${quitReason ? ' reason: ' + quitReason : ''}`);
+		writeToLog(`[SERVER→CLIENT] [IRC] User quit: ${nick}${quitReason ? ' reason: ' + quitReason : ''}`);
 	});
 	Commands.set("PRIVMSG", function (nick, data, msgTags) {
 		if (!data || data.length < 4) return;
@@ -5126,7 +5138,7 @@
 		nick = data[0].substring(1).split("!")[0];
 
 		if (isIgnored(nick)) {
-			writeToLog(`[IGNORE] Blocked message from ${nick}`);
+			writeToLog(`[SERVER→CLIENT] [IGNORE] Blocked message from ${nick}`);
 			return;
 		}
 
@@ -5253,8 +5265,8 @@
 	if (data[0] === "PING") {
 		const pingToken = data[1] ? data[1].replace(/^:/, '') : 'pong';
 		const pongResponse = "PONG :" + pingToken.trim();
+		logInfo('PING/PONG', pongResponse, LOG_DIR.CLIENT_TO_SERVER);
 		doSend(pongResponse);
-		writeToLog(`[PING/PONG] ${pongResponse}`);
 		return;
 	}
 	if (data[0] === "ERROR") {
@@ -5621,11 +5633,13 @@
 	function requestWho(channelName) {
 		if (!isConnected) return;
 		if (ircv3Whox) {
-			doSend(`WHO ${channelName} %tunhfa,1\r\n`);
-			logInfo('WHOX', `Requesting WHO for ${channelName}`);
+			const msg = `WHO ${channelName} %tunhfa,1`;
+			logInfo('WHOX', msg, LOG_DIR.CLIENT_TO_SERVER);
+			doSend(msg + '\r\n');
 		} else {
-			doSend(`WHO ${channelName}\r\n`);
-			logInfo('IRC', `Requesting WHO for ${channelName}`);
+			const msg = `WHO ${channelName}`;
+			logInfo('IRC', msg, LOG_DIR.CLIENT_TO_SERVER);
+			doSend(msg + '\r\n');
 		}
 	}
 
@@ -5639,7 +5653,7 @@
 		if (ch && ch.userlist) {
 			updateUserAwayStatus(whoNick, ch, isAway);
 		}
-		writeToLog(`[IRC] RPL_WHOREPLY (352): ${whoNick} in ${channel} flags=${flags}`);
+		writeToLog(`[SERVER→CLIENT] [IRC] RPL_WHOREPLY (352): ${whoNick} in ${channel} flags=${flags}`);
 	});
 
 	Commands.set("354", function (nick, data) {
@@ -5654,13 +5668,13 @@
 				updateUserAwayStatus(whoNick, ch, isAway);
 			}
 		});
-		logInfo('WHOX', `RPL_WHOSPCRPL (354): ${whoNick} flags=${flags} account=${account}`);
+		logInfo('WHOX', `RPL_WHOSPCRPL (354): ${whoNick} flags=${flags} account=${account}`, LOG_DIR.SERVER_TO_CLIENT);
 	});
 
 	Commands.set("315", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const target = data[3];
-		logInfo('IRC', `RPL_ENDOFWHO (315): ${target}`);
+		logInfo('IRC', `RPL_ENDOFWHO (315): ${target}`, LOG_DIR.SERVER_TO_CLIENT);
 	});
 
 	function sendWithReply(replyToMsgid, targetChannel, text) {
@@ -5881,9 +5895,10 @@
 	}
 
 	function sendRegistration() {
+		logInfo('IRC', `NICK ${nickname}`, LOG_DIR.CLIENT_TO_SERVER);
 		doSend("NICK " + nickname);
+		logInfo('IRC', 'USER websocket * * :WebSocket User', LOG_DIR.CLIENT_TO_SERVER);
 		doSend("USER websocket * * :WebSocket User");
-		writeToLog(`[IRC] Sending registration: NICK=${nickname}, USER=websocket`);
 	}
 
 	window.toggleConnection      = toggleConnection;
