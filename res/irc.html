@@ -1661,7 +1661,7 @@
 			};
 			localStorage.setItem('ircSettings', JSON.stringify(settings));
 		} catch (e) {
-			writeToLog(`[WARN] Failed to save settings: ${e.message}`);
+			logInfo('WARN', `Failed to save settings: ${e.message}`);
 		}
 	}
 
@@ -1676,7 +1676,7 @@
 				document.getElementById('saslAccountInput').value = settings.saslAccount;
 			}
 		} catch (e) {
-			writeToLog(`[WARN] Failed to load settings: ${e.message}`);
+			logInfo('WARN', `Failed to load settings: ${e.message}`);
 		}
 	}
 
@@ -1685,11 +1685,11 @@
 			const adv = JSON.parse(localStorage.getItem('ircAdvancedSettings') || '{}');
 			notificationEnabled = adv.notificationEnabled || false;
 			soundEnabled = adv.soundEnabled || false;
-			highlightKeywords = adv.highlightKeywords || [];
-			ignoreList = adv.ignoreList || [];
-		} catch (e) {
-			writeToLog(`[WARN] Failed to load advanced settings: ${e.message}`);
-		}
+		highlightKeywords = adv.highlightKeywords || [];
+		ignoreList = adv.ignoreList || [];
+	} catch (e) {
+		logInfo('WARN', `Failed to load advanced settings: ${e.message}`);
+	}
 	}
 
 	function saveAdvancedSettings() {
@@ -1702,7 +1702,7 @@
 			};
 			localStorage.setItem('ircAdvancedSettings', JSON.stringify(adv));
 		} catch (e) {
-			writeToLog(`[WARN] Failed to save advanced settings: ${e.message}`);
+			logInfo('WARN', `Failed to save advanced settings: ${e.message}`);
 		}
 	}
 	function checkNotificationPermission() {
@@ -1747,7 +1747,7 @@
 			n.onclick = () => { window.focus(); n.close(); };
 			setTimeout(() => n.close(), 8000);
 		} catch (e) {
-			writeToLog(`[WARN] Notification failed: ${e.message}`);
+			logInfo('WARN', `Notification failed: ${e.message}`);
 		}
 	}
 
@@ -1769,7 +1769,7 @@
 				oscillator.stop(ctx.currentTime + 0.3);
 			}
 		} catch (e) {
-			writeToLog(`[WARN] Sound failed: ${e.message}`);
+			logInfo('WARN', `Sound failed: ${e.message}`);
 		}
 	}
 
@@ -1857,7 +1857,7 @@
 		ignoreList.push(nick);
 		saveAdvancedSettings();
 		writeToScreen("var(--clr-info)", `已屏蔽 ${nick} 的消息`, statusChannel, "*");
-		writeToLog(`[IGNORE] Added: ${nick}`);
+		logInfo('IGNORE', `Added: ${nick}`);
 	}
 
 	function removeIgnore(nick) {
@@ -1866,7 +1866,7 @@
 			ignoreList.splice(idx, 1);
 			saveAdvancedSettings();
 			writeToScreen("var(--clr-info)", `已取消屏蔽 ${nick}`, statusChannel, "*");
-			writeToLog(`[IGNORE] Removed: ${nick}`);
+			logInfo('IGNORE', `Removed: ${nick}`);
 		}
 	}
 
@@ -2212,7 +2212,7 @@
 			checkbox.checked = !checkbox.checked;
 			autoReconnect = checkbox.checked;
 			updateAutoReconnectMenuItem();
-			writeToLog(`[SETTINGS] Auto-reconnect: ${autoReconnect ? 'ENABLED' : 'DISABLED'}`);
+			logInfo('SETTINGS', `Auto-reconnect: ${autoReconnect ? 'ENABLED' : 'DISABLED'}`);
 			saveSettings();
 		}
 	}
@@ -2242,7 +2242,7 @@
 		} else {
 			writeToScreen("var(--clr-info)", `私聊会话列表 (${privateChats.length}): ${privateChats.join(', ')}`, statusChannel, "*");
 		}
-		writeToLog(`[PM] Private chat list: ${privateChats.join(', ') || 'none'}`);
+		logInfo('PM', `Private chat list: ${privateChats.join(', ') || 'none'}`);
 	}
 
 	function updateConnectionStatus(status) {
@@ -2333,18 +2333,102 @@
 		return _logOutputEl;
 	}
 
-	function writeToLog(message) {
+	// ========== 日志方向定义 ==========
+	const LOG_DIR = {
+		SYSTEM:            'SYSTEM',
+		SERVER_TO_CLIENT:  'SERVER→CLIENT',
+		CLIENT_TO_SERVER: 'CLIENT→SERVER'
+	};
+
+	// 当前日志上下文（用于便捷日志函数自动推断方向）
+	let _logCtx = {
+		direction: LOG_DIR.SYSTEM,
+		module: null
+	};
+
+	/**
+	 * 设置日志上下文（通常在处理消息前调用）
+	 * @param {string} direction - LOG_DIR 中的方向
+	 * @param {string} module - 模块名，如 'CAP', 'MSGTAG', 'BATCH' 等
+	 */
+	function setLogContext(direction, module) {
+		_logCtx.direction = direction;
+		_logCtx.module = module;
+	}
+
+	/**
+	 * 重置日志上下文为系统模式
+	 */
+	function resetLogContext() {
+		_logCtx.direction = LOG_DIR.SYSTEM;
+		_logCtx.module = null;
+	}
+
+	/**
+	 * 便捷日志函数 - 根据当前上下文自动添加方向前缀
+	 * @param {string} module - 模块名
+	 * @param {string} message - 日志消息（不含模块标签）
+	 */
+	function logInfo(module, message) {
+		writeToLog(`[${module}] ${message}`);
+	}
+
+	/**
+	 * 核心日志函数
+	 * @param {string} message - 日志消息（不含时间戳）
+	 * @param {string} [direction] - 方向（可选，默认从上下文获取）
+	 * @param {string} [module] - 模块名（可选，默认从上下文获取）
+	 */
+	function writeToLog(message, direction, module) {
 		const logOutput = getLogOutput();
 		const now = new Date();
 		const ts = now.toISOString().replace('T', ' ').substring(0, 23);
-		const fullMessage = `[${ts}] ${message}`;
+
+		// 获取方向和模块（优先使用参数，其次使用上下文）
+		const effectiveDir = direction || _logCtx.direction;
+		const effectiveMod = module || _logCtx.module;
+
+		// 检查消息是否已包含方向前缀
+		const hasDirPrefix = /^\[(?:SERVER→CLIENT|CLIENT→SERVER|SYSTEM)\]/.test(message);
+
+		// 检查消息是否已包含模块标签
+		const moduleMatch = message.match(/^\[([A-Z][A-Z0-9_\-\/]+)\]/);
+		const hasModuleTag = moduleMatch && !hasDirPrefix;
+
+		// 构建最终消息
+		let fullMessage;
+		if (effectiveDir !== LOG_DIR.SYSTEM) {
+			if (hasDirPrefix) {
+				// 消息已有方向前缀，直接添加时间戳
+				fullMessage = `[${ts}] ${message}`;
+			} else if (hasModuleTag) {
+				// 消息已包含模块标签，添加 [方向] + 保留原模块
+				fullMessage = `[${ts}] [${effectiveDir}] ${message}`;
+			} else if (effectiveMod) {
+				// 需要添加模块
+				fullMessage = `[${ts}] [${effectiveDir}] [${effectiveMod}] ${message}`;
+			} else {
+				// 无模块，无方向前缀
+				fullMessage = `[${ts}] [${effectiveDir}] ${message}`;
+			}
+		} else {
+			// SYSTEM 方向不需要方向前缀
+			if (hasModuleTag) {
+				fullMessage = `[${ts}] ${message}`;
+			} else if (effectiveMod) {
+				fullMessage = `[${ts}] [${effectiveMod}] ${message}`;
+			} else {
+				fullMessage = `[${ts}] ${message}`;
+			}
+		}
 
 		if (logOutput) {
-			const tagMatch = message.match(/^\[([^\]]+)\]/);
+			// 提取标签用于着色
+			const tagMatch = fullMessage.match(/^\[[^\]]+\]\s*\[([A-Z][A-Z0-9_\-→←/]*(?:→CLIENT|CLIENT→|SERVER→|←)?)\]/);
 			const line = document.createElement('span');
-		if (tagMatch) {
-			const tag = tagMatch[1].toUpperCase();
-			const firstSeg = tag.split(/[\s\/]/)[0];
+			if (tagMatch) {
+				const tag = tagMatch[1].toUpperCase();
+				const firstSeg = tag.split(/[\s\/→←]/)[0];
 				line.style.color = LOG_COLORS[tag] || LOG_COLORS[firstSeg] || '#e0e0e0';
 			} else {
 				line.style.color = '#e0e0e0';
@@ -2393,26 +2477,26 @@
 		}
 
 		if (isConnected && websocket && websocket.readyState === WebSocket.OPEN) {
-			writeToLog(`[IRC] Sending JOIN → ${targetChannel}`);
+			logInfo('IRC', `Sending JOIN → ${targetChannel}`);
 			doSend("JOIN " + targetChannel);
 		} else {
-			writeToLog(`[WARN] JOIN requested but not connected — target: ${targetChannel}`);
+			logInfo('WARN', `JOIN requested but not connected — target: ${targetChannel}`);
 			writeToScreen("var(--clr-warning)", "未连接, 无法加入频道", statusChannel, "*");
 		}
 	}
 	
 	function toggleConnection() {
 		if (isConnected) {
-			writeToLog('[SYSTEM] User requested disconnect — disabling auto-reconnect');
+			logInfo('SYSTEM', 'User requested disconnect — disabling auto-reconnect');
 			autoReconnect = false;
 			updateAutoReconnectMenuItem();
 			isDisconnecting = true;
 			if (websocket && websocket.readyState === WebSocket.OPEN) {
 				try {
 					websocket.send(`QUIT :User disconnected\r\n`);
-					writeToLog('[SYSTEM] Sent IRC QUIT to server');
+					logInfo('SYSTEM', 'Sent IRC QUIT to server');
 				} catch (e) {
-					writeToLog(`[WARN] Could not send QUIT: ${e.message}`);
+					logInfo('WARN', `Could not send QUIT: ${e.message}`);
 				}
 			}
 			if (websocket) {
@@ -2421,10 +2505,10 @@
 						clearTimeout(connectTimeout);
 						connectTimeout = null;
 					}
-					writeToLog('[SYSTEM] Closing WebSocket (code 1000 — user disconnected)');
+					logInfo('SYSTEM', 'Closing WebSocket (code 1000 — user disconnected)');
 					websocket.close(1000, "User disconnected");
 				} catch (e) {
-					writeToLog(`[ERROR] Exception while closing WebSocket: ${e.message}`);
+					logInfo('ERROR', `Exception while closing WebSocket: ${e.message}`);
 				}
 			}
 		} else {
@@ -2451,7 +2535,7 @@
 
 		if (!wsUrlInput || !nickInput || !channelInput || !connectBtn) {
 			alert("界面元素加载错误, 请刷新页面重试");
-			writeToLog('[ERROR] doConnect: critical UI elements missing — aborting');
+			logInfo('ERROR', 'doConnect: critical UI elements missing — aborting');
 			return;
 		}
 
@@ -2467,7 +2551,7 @@
 		saslEnabled  = !!(saslAccount && saslPassword);
 		saslPending  = false;
 		if (saslEnabled) {
-			writeToLog(`[SASL] SASL PLAIN enabled for account: ${saslAccount}`);
+			logInfo('SASL', `SASL PLAIN enabled for account: ${saslAccount}`);
 		}
 	ircv3ActiveCaps.clear();
 	capLsBuffer        = "";
@@ -2492,7 +2576,7 @@
 	multilineOutBuffer = null;
 
 		if (!validateWsUrl(wsUrl)) {
-			writeToLog(`[ERROR] Invalid WebSocket URL: "${wsUrl}" — must start with ws:// or wss://`);
+			logInfo('ERROR', `Invalid WebSocket URL: "${wsUrl}" — must start with ws:// or wss://`);
 			alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
 			return;
 		}
@@ -2500,11 +2584,11 @@
 		if (!nickname) {
 			nickname = "Guest_" + Math.floor(Math.random() * 9000 + 1000);
 			nickInput.value = nickname;
-			writeToLog(`[SYSTEM] Nickname was empty — auto-generated: ${nickname}`);
+			logInfo('SYSTEM', `Nickname was empty — auto-generated: ${nickname}`);
 		}
 
 	if (!validateNickname(nickname)) {
-		writeToLog(`[ERROR] Invalid nickname: "${nickname}" — must start with a letter or [_\`[]{}^|]`);
+		logInfo('ERROR', `Invalid nickname: "${nickname}" — must start with a letter or [_\`[]{}^|]`);
 			nickInput.classList.add('input-error');
 			nickInput.focus();
 			nickInput.select();
@@ -2517,7 +2601,7 @@
 		}
 	if (channelName && !channelName.startsWith('#')) {
 		channelName = '#' + channelName;
-		writeToLog(`[DEBUG] Channel name auto-prefixed with '#': ${channelName}`);
+		logInfo('DEBUG', `Channel name auto-prefixed with '#': ${channelName}`);
 	}
 
 	if (!isAutoReconnect) {
@@ -2533,11 +2617,11 @@
 		saveSettings();
 		updateConnectionStatus('connecting');
 
-		writeToLog(`[SYSTEM] ── Initiating connection ─────────────────`);
-		writeToLog(`[SYSTEM] Server  : ${wsUrl}`);
-		writeToLog(`[SYSTEM] Nick    : ${nickname}`);
-		writeToLog(`[SYSTEM] Channel : ${channelName || '(none)'}`);
-		writeToLog(`[SYSTEM] Auto-reconnect: ${autoReconnect} | Attempt: ${reconnectAttempts + 1}`);
+		logInfo('SYSTEM', `── Initiating connection ─────────────────`);
+		logInfo('SYSTEM', `Server  : ${wsUrl}`);
+		logInfo('SYSTEM', `Nick    : ${nickname}`);
+		logInfo('SYSTEM', `Channel : ${channelName || '(none)'}`);
+		logInfo('SYSTEM', `Auto-reconnect: ${autoReconnect} | Attempt: ${reconnectAttempts + 1}`);
 
 		statusChannel = null;
 		activeChannel = null;
@@ -2555,7 +2639,7 @@
 		if (settingsBtn)   settingsBtn.classList.remove('active');
 
 		statusChannel = new Tab_Create("Status", "", false);
-		writeToLog(`[SYSTEM] Status tab created — calling WebSocket_Connect`);
+		logInfo('SYSTEM', 'Status tab created — calling WebSocket_Connect');
 		WebSocket_Connect(wsUrl);
 	}
 
@@ -2596,10 +2680,10 @@
 		}
 
 		stopKeepAlive();
-		writeToLog(`[SYSTEM] ── Disconnect handler ────────────────────`);
-		writeToLog(`[SYSTEM] Reason: "${reason || 'normal'}" | was-connected: ${wasConnected}`);
+		logInfo('SYSTEM', `── Disconnect handler ────────────────────`);
+		logInfo('SYSTEM', `Reason: "${reason || 'normal'}" | was-connected: ${wasConnected}`);
 		if (sessionStartTime) {
-			writeToLog(`[SYSTEM] Session ended — duration: ${formatSessionDuration(sessionStartTime)} | sent: ${sentCount} | recv: ${recvCount}`);
+			logInfo('SYSTEM', `Session ended — duration: ${formatSessionDuration(sessionStartTime)} | sent: ${sentCount} | recv: ${recvCount}`);
 			sessionStartTime = null;
 		}
 
@@ -2608,18 +2692,18 @@
 		}
 
 		let disconnectMessage = "DISCONNECTED";
-		let logMessage = "[SYSTEM] Connection closed";
+		let logMessage = "Connection closed";
 
 		if (reason === "user" || wasUserDisconnect) {
 			disconnectMessage = "用户主动断开连接";
-			logMessage = "[SYSTEM] User-initiated disconnect";
+			logMessage = "User-initiated disconnect";
 		} else if (reason === "error") {
 			disconnectMessage = "连接异常断开";
-			logMessage = "[SYSTEM] Connection dropped abnormally";
+			logMessage = "Connection dropped abnormally";
 		}
 
 		writeToScreen("var(--clr-font)", disconnectMessage, statusChannel, "");
-		writeToLog(logMessage);
+		logInfo('SYSTEM', logMessage);
 
 		if (wasUserDisconnect) {
 			isDisconnecting = false;
@@ -2629,17 +2713,17 @@
 		if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
 			reconnectAttempts++;
 			const delay = reconnectDelay * reconnectAttempts;
-			writeToLog(`[RECONNECT] Attempt ${reconnectAttempts}/${maxReconnectAttempts} scheduled in ${Math.floor(delay / 1000)}s — server: ${wsUrl}`);
+			logInfo('RECONNECT', `Attempt ${reconnectAttempts}/${maxReconnectAttempts} scheduled in ${Math.floor(delay / 1000)}s — server: ${wsUrl}`);
 			setTimeout(() => {
 				if (!isConnected && autoReconnect) {
-					writeToLog(`[RECONNECT] Attempt ${reconnectAttempts}/${maxReconnectAttempts} starting now...`);
+					logInfo('RECONNECT', `Attempt ${reconnectAttempts}/${maxReconnectAttempts} starting now...`);
 					doConnect(true); 
 				} else {
-					writeToLog(`[RECONNECT] Skipped — already connected or auto-reconnect cancelled`);
+					logInfo('RECONNECT', 'Skipped — already connected or auto-reconnect cancelled');
 				}
 			}, delay);
 		} else if (autoReconnect && reconnectAttempts >= maxReconnectAttempts) {
-			writeToLog(`[RECONNECT] Max attempts reached (${maxReconnectAttempts}/${maxReconnectAttempts}) — giving up`);
+			logInfo('RECONNECT', `Max attempts reached (${maxReconnectAttempts}/${maxReconnectAttempts}) — giving up`);
 			autoReconnect = false;
 			updateAutoReconnectMenuItem();
 			alert('自动重连失败, 请检查网络或服务器设置');
@@ -2806,7 +2890,7 @@
 			if (pmChannel.button) {
 				pmChannel.button.classList.add('private');
 			}
-			writeToLog(`[PM] Opening private chat with: ${targetNick}`);
+			logInfo('PM', `Opening private chat with: ${targetNick}`);
 			writeToScreen("var(--clr-green)", `私聊会话已建立: ${targetNick}`, statusChannel, "*");
 		}
 		Tab_Show(targetNick);
@@ -2964,7 +3048,7 @@
 		constructor(name, topic, createlist) {
 			if (!name || !channels || !channelContents) {
 				console.error("Tab_Create: missing required elements");
-				writeToLog(`[ERROR] Tab_Create failed — name: "${name}", channels: ${!!channels}, contents: ${!!channelContents}`);
+				logInfo('ERROR', `Tab_Create failed — name: "${name}", channels: ${!!channels}, contents: ${!!channelContents}`);
 				return;
 			}
 			Tabs_Hide();
@@ -3010,7 +3094,7 @@
 			channelMap.set(name, this);
 			activeChannel = this;
 			Tab_Show(name);
-			writeToLog(`[TAB] Tab created: "${name}" | has-userlist: ${!!createlist} | total tabs: ${channelMap.size}`);
+			logInfo('TAB', `Tab created: "${name}" | has-userlist: ${!!createlist} | total tabs: ${channelMap.size}`);
 		}
 	}
 
@@ -3021,22 +3105,22 @@
 
 		if (channelName === "Status") {
 			writeToScreen("var(--clr-warning)", "Status频道是系统状态窗口, 不能关闭", statusChannel, "*");
-			writeToLog("[WARN] Attempted to close the Status tab — blocked (system window)");
+			logInfo('WARN', 'Attempted to close the Status tab — blocked (system window)');
 			return;
 		}
 
 		const channel = findChannel(channelName);
 		if (channel && channel.isPrivate) {
-			writeToLog(`[PM] Closing private chat session: "${channelName}"`);
+			logInfo('PM', `Closing private chat session: "${channelName}"`);
 			channelDestroy(channelName);
 			return;
 		}
 
 		if (isConnected && websocket && websocket.readyState === WebSocket.OPEN) {
-			writeToLog(`[PART] Sending PART → ${channelName}`);
+			logInfo('PART', `Sending PART → ${channelName}`);
 			doSend("PART " + channelName);
 		} else {
-			writeToLog(`[TAB] Not connected — destroying tab locally: "${channelName}"`);
+			logInfo('TAB', `Not connected — destroying tab locally: "${channelName}"`);
 			channelDestroy(channelName);
 		}
 	}
@@ -3046,7 +3130,7 @@
 		if (!name) return;
 		const channel = findChannel(name);
 		if (!channel) {
-			writeToLog(`[WARN] channelDestroy: tab "${name}" not found`);
+			logInfo('WARN', `channelDestroy: tab "${name}" not found`);
 			return;
 		}
 		const wasActive = (activeChannel === channel);
@@ -3057,7 +3141,7 @@
 			activeChannel = statusChannel;
 		}
 		channelMap.delete(actualKey);
-		writeToLog(`[TAB] Tab destroyed: "${actualKey}" | was-active: ${wasActive} | remaining tabs: ${channelMap.size}`);
+		logInfo('TAB', `Tab destroyed: "${actualKey}" | was-active: ${wasActive} | remaining tabs: ${channelMap.size}`);
 		if (activeChannel) {
 			tabShow(activeChannel.name);
 		}
@@ -3488,11 +3572,11 @@ const Channel_AppendUser = channelAppendUser;
 					messages.forEach((msg, index) => {
 						doSend(msg);
 						if (!ircv3EchoMessage && index === 0) {
-							writeToScreen("var(--clr-font)", msgText, pmChannel, nickname);
-						}
-					});
-					writeToLog(`[PM] You → ${targetNick}: ${msgText}`);
-					pushHistory(text);
+						writeToScreen("var(--clr-font)", msgText, pmChannel, nickname);
+					}
+				});
+				logInfo('PM', `You → ${targetNick}: ${msgText}`);
+				pushHistory(text);
 				} else {
 					writeToScreen("var(--clr-warning)", "用法: /msg <昵称> <消息>", activeChannel, "*");
 				}
@@ -3797,7 +3881,7 @@ const Channel_AppendUser = channelAppendUser;
 			});
 		}
 		if (activeChannel.isPrivate) {
-			writeToLog(`[PM] You → ${target}: ${text}`);
+			logInfo('PM', `You → ${target}: ${text}`);
 		}
 		pushHistory(text);
 		}
@@ -3852,7 +3936,7 @@ const Channel_AppendUser = channelAppendUser;
 
 	function WebSocket_Connect(wsUri) {
 		if (!wsUri) {
-			writeToLog("[ERROR] WebSocket URL is empty — aborting connection");
+			logInfo('ERROR', 'WebSocket URL is empty — aborting connection');
 			return;
 		}
 		try {
@@ -3863,15 +3947,15 @@ const Channel_AppendUser = channelAppendUser;
 					websocket.onopen = null;
 					websocket.onmessage = null;
 					if (websocket.readyState !== WebSocket.CLOSED) {
-						writeToLog(`[WebSocket] Cleaning up previous connection (state: ${websocket.readyState})`);
+						logInfo('WEBSOCKET', `Cleaning up previous connection (state: ${websocket.readyState})`);
 						websocket.close(1000, "Reconnecting");
 					}
 				} catch (e) {
-					writeToLog(`[WARN] Error cleaning up previous connection: ${e.message}`);
+					logInfo('WARN', `Error cleaning up previous connection: ${e.message}`);
 				}
 				websocket = null;
 			}
-			writeToLog(`[WebSocket] Creating new WebSocket → ${wsUri}`);
+			logInfo('WEBSOCKET', `Creating new WebSocket → ${wsUri}`);
 			websocket = new WebSocket(wsUri);
 			websocket.binaryType = 'blob';
 
@@ -3880,11 +3964,11 @@ const Channel_AppendUser = channelAppendUser;
 			}
 			connectTimeout = setTimeout(() => {
 				if (websocket && websocket.readyState === WebSocket.CONNECTING) {
-					writeToLog(`[ERROR] Connection timeout (30s) — forcing close → ${wsUri}`);
+					logInfo('ERROR', `Connection timeout (30s) — forcing close → ${wsUri}`);
 					try {
 						websocket.close(1006, "Connection timeout");
 					} catch (e) {
-						writeToLog(`[ERROR] Failed to close timed-out WebSocket: ${e.message}`);
+						logInfo('ERROR', `Failed to close timed-out WebSocket: ${e.message}`);
 					}
 				}
 			}, 30000);
@@ -3910,7 +3994,7 @@ const Channel_AppendUser = channelAppendUser;
 				onMessage(evt);
 			};
 		} catch (e) {
-			writeToLog(`[ERROR] WebSocket creation failed: ${e.message}`);
+			logInfo('ERROR', `WebSocket creation failed: ${e.message}`);
 			onDisconnect();
 			if (wsUrl && wsUrl.startsWith('wss://')) {
 				showSSLWarning(wsUrl);
@@ -3966,7 +4050,7 @@ const Channel_AppendUser = channelAppendUser;
 			reason = "Normal closure";
 		}
 
-		let logMsg = `[CLOSE] Code: ${code}`;
+		let logMsg = `Code: ${code}`;
 
 		switch (code) {
 			case 1000: logMsg += isUserDisconnect ? ' (user-initiated)' : ' (normal closure)'; break;
@@ -3981,7 +4065,7 @@ const Channel_AppendUser = channelAppendUser;
 		}
 		logMsg += ` — reason: "${reason}"`;
 
-		writeToLog(logMsg);
+		logInfo('CLOSE', logMsg);
 
 		let disconnectReason = "";
 		if (isUserDisconnect) {
@@ -4002,7 +4086,7 @@ const Channel_AppendUser = channelAppendUser;
 			}
 		}
 		writeToScreen("var(--clr-red)", `ERROR: ${errorType}`, statusChannel, "");
-		writeToLog(`[ERROR] ${errorType}: ${evt.data || 'unknown error'}`);
+		logInfo('ERROR', `${errorType}: ${evt.data || 'unknown error'}`);
 		if (wsUrl && wsUrl.startsWith('wss://')) {
 			showSSLWarning(wsUrl);
 		}
@@ -4016,8 +4100,8 @@ const Channel_AppendUser = channelAppendUser;
 			sentCount = 0;
 			recvCount = 0;
 			writeToScreen("var(--clr-font)", "CONNECTED", statusChannel, "");
-			writeToLog(`[OPEN] WebSocket connected: ${wsUrl}`);
-			writeToLog(`[SYSTEM] Session started at ${sessionStartTime.toISOString()}`);
+			logInfo('OPEN', `WebSocket connected: ${wsUrl}`);
+			logInfo('SYSTEM', `Session started at ${sessionStartTime.toISOString()}`);
 			updateConnectionStatus('connected');
 
 			const connectBtn = document.getElementById('connectBtn');
@@ -4034,7 +4118,7 @@ const Channel_AppendUser = channelAppendUser;
 
 			startKeepAlive();
 		} else {
-			writeToLog(`[ERROR] onOpen called but WebSocket state is abnormal: ${websocket ? websocket.readyState : 'null'}`);
+			logInfo('ERROR', `onOpen called but WebSocket state is abnormal: ${websocket ? websocket.readyState : 'null'}`);
 		}
 	}
 
@@ -4046,7 +4130,7 @@ const Channel_AppendUser = channelAppendUser;
 				isConnected = false;
 				updateConnectionStatus('disconnected');
 			}
-			writeToLog(`[WARNING] Message received but WebSocket is not connected — ignored`);
+			logInfo('WARNING', 'Message received but WebSocket is not connected — ignored');
 			return;
 		}
 		
@@ -4058,6 +4142,10 @@ const Channel_AppendUser = channelAppendUser;
 		const rawData = evt.data;
 		recvCount++;
 		writeToLog(`[SERVER→CLIENT] ${typeof rawData === 'string' ? rawData.trim() : '[binary data]'}`);
+		
+		// 设置服务端消息上下文
+		setLogContext(LOG_DIR.SERVER_TO_CLIENT, null);
+		
 		if (rawData instanceof Blob) {
 			let fileReader = new FileReader();
 			fileReader.onloadend = function handleLoadEnd(event) {
@@ -4066,16 +4154,21 @@ const Channel_AppendUser = channelAppendUser;
 				const raw = reader.result;
 				writeToLog(`[SERVER→CLIENT] (Blob→Text): ${raw.trim()}`);
 				process(raw);
+				resetLogContext();
 				reader.onloadend = null;
 			};
 			fileReader.readAsText(rawData);
 		} else {
 			process(rawData);
+			resetLogContext();
 		}
 	}
 
 	function doSend(message) {
 		if (!message) return;
+
+		// 设置客户端消息上下文
+		setLogContext(LOG_DIR.CLIENT_TO_SERVER, null);
 
 		if (websocket) {
 			if (websocket.readyState === WebSocket.OPEN) {
@@ -4088,7 +4181,8 @@ const Channel_AppendUser = channelAppendUser;
 					isConnected = false;
 					updateConnectionStatus('disconnected');
 				}
-				writeToLog(`[ERROR] WebSocket not connected — cannot send: ${message.trim()}`);
+				resetLogContext();
+				logInfo('ERROR', `WebSocket not connected — cannot send: ${message.trim()}`);
 				writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
 				return;
 			}
@@ -4097,7 +4191,8 @@ const Channel_AppendUser = channelAppendUser;
 				isConnected = false;
 				updateConnectionStatus('disconnected');
 			}
-			writeToLog(`[ERROR] WebSocket is null — cannot send: ${message.trim()}`);
+			resetLogContext();
+			logInfo('ERROR', `WebSocket is null — cannot send: ${message.trim()}`);
 			writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
 			return;
 		}
@@ -4105,6 +4200,7 @@ const Channel_AppendUser = channelAppendUser;
 		try {
 			websocket.send(message);
 			if (!message.trim().toUpperCase().startsWith('PING')) sentCount++;
+			// 原始消息直接显示（带 [CLIENT→SERVER] 前缀）
 			writeToLog(`[CLIENT→SERVER] ${message.trim()}`);
 		} catch (e) {
 			writeToLog(`[ERROR] Failed to send message: ${e.message}`);
@@ -4114,6 +4210,7 @@ const Channel_AppendUser = channelAppendUser;
 				updateConnectionStatus('disconnected');
 			}
 		}
+		resetLogContext();
 	}
 
 	const DefaultPrefixMap = {
@@ -4178,7 +4275,7 @@ const Channel_AppendUser = channelAppendUser;
 		const tagStr = rawLine.substring(1, spaceIdx);
 		const rest = rawLine.substring(spaceIdx + 1);
 		const tags = parseMsgTags(tagStr);
-		writeToLog(`[MSGTAG] Parsed ${tags.size} tag(s): ${tagStr.substring(0, 80)}`);
+		logInfo('MSGTAG', `Parsed ${tags.size} tag(s): ${tagStr.substring(0, 80)}`);
 		return { tags, rest };
 	}
 
@@ -4234,6 +4331,7 @@ const Channel_AppendUser = channelAppendUser;
 		const host = data[5];
 		const realname = data.slice(7).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-info)", `[WHOIS] ${target} (${user}@${host}) — 真名: ${realname}`, statusChannel, "*");
+		logInfo('WHOIS', `RPL_WHOISUSER: ${target}!${user}@${host} realname="${realname}"`);
 	});
 	Commands.set("312", function (nick, data) {
 		if (!data || data.length < 5) return;
@@ -4241,11 +4339,13 @@ const Channel_AppendUser = channelAppendUser;
 		const server = data[4];
 		const serverInfo = data.slice(5).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-info)", `[WHOIS] ${target} 连接自服务器: ${server} (${serverInfo})`, statusChannel, "*");
+		logInfo('WHOIS', `RPL_WHOISSERVER: ${target} via ${server} (${serverInfo})`);
 	});
 	Commands.set("313", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const target = data[3];
 		writeToScreen("var(--clr-gold)", `[WHOIS] ${target} 是 IRC 管理员`, statusChannel, "*");
+		logInfo('WHOIS', `RPL_WHOISOPER: ${target} is an IRC operator`);
 	});
 	Commands.set("317", function (nick, data) {
 		if (!data || data.length < 5) return;
@@ -4254,40 +4354,46 @@ const Channel_AppendUser = channelAppendUser;
 		const idleMin = Math.floor(idleSec / 60);
 		const idleSecs = idleSec % 60;
 		writeToScreen("var(--clr-info)", `[WHOIS] ${target} 已闲置: ${idleMin}分${idleSecs}秒`, statusChannel, "*");
+		logInfo('WHOIS', `RPL_WHOISIDLE: ${target} idle=${idleSec}s`);
 	});
 	Commands.set("318", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const target = data[3];
 		writeToScreen("var(--clr-text-dim)", `[WHOIS] ${target} 的信息结束`, statusChannel, "*");
-		writeToLog(`[IRC] RPL_ENDOFWHOIS: ${target}`);
+		logInfo('WHOIS', `RPL_ENDOFWHOIS: ${target}`);
 	});
 	Commands.set("319", function (nick, data) {
 		if (!data || data.length < 5) return;
 		const target = data[3];
 		const chans = data.slice(4).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-info)", `[WHOIS] ${target} 在频道: ${chans}`, statusChannel, "*");
+		logInfo('WHOIS', `RPL_WHOISCHANNELS: ${target} channels="${chans}"`);
 	});
 	Commands.set("320", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const msg = data.slice(3).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-info)", `[WHOIS] ${msg}`, statusChannel, "*");
+		logInfo('WHOIS', `RPL_WHOISEXTRA: ${msg}`);
 	});
 	Commands.set("330", function (nick, data) {
 		if (!data || data.length < 5) return;
 		const target = data[3];
 		const account = data[4];
 		writeToScreen("var(--clr-green)", `[WHOIS] ${target} 已登录账号: ${account}`, statusChannel, "*");
+		logInfo('WHOIS', `RPL_WHOISACCOUNT: ${target} account="${account}"`);
 	});
 	Commands.set("338", function (nick, data) {
 		if (!data || data.length < 5) return;
 		const target = data[3];
 		const actualHost = data.slice(4).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-info)", `[WHOIS] ${target} 实际地址: ${actualHost}`, statusChannel, "*");
+		logInfo('WHOIS', `RPL_WHOISACTUALLY: ${target} actualhost="${actualHost}"`);
 	});
 	Commands.set("671", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const target = data[3];
 		writeToScreen("var(--clr-green)", `[WHOIS] ${target} 使用 SSL/TLS 加密连接`, statusChannel, "*");
+		logInfo('WHOIS', `RPL_WHOISSECURE: ${target} is using a secure connection`);
 	});
 
 	Commands.set("321", function (nick, data) {
@@ -4306,30 +4412,34 @@ const Channel_AppendUser = channelAppendUser;
 		writeToLog(`[IRC] RPL_LISTEND (323)`);
 	});
 
+
 	Commands.set("730", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const targets = data.slice(3).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-green)", `[MONITOR] 上线: ${targets}`, statusChannel, "*");
-		writeToLog(`[MONITOR] RPL_MONONLINE: ${targets}`);
+		logInfo('MONITOR', `RPL_MONONLINE: ${targets}`);
 	});
 	Commands.set("731", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const targets = data.slice(3).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-text-dim)", `[MONITOR] 下线: ${targets}`, statusChannel, "*");
-		writeToLog(`[MONITOR] RPL_MONOFFLINE: ${targets}`);
+		logInfo('MONITOR', `RPL_MONOFFLINE: ${targets}`);
 	});
 	Commands.set("732", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const targets = data.slice(3).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-info)", `[MONITOR] 监控列表: ${targets}`, statusChannel, "*");
+		logInfo('MONITOR', `RPL_MONLIST: ${targets}`);
 	});
 	Commands.set("733", function (nick, data) {
 		writeToScreen("var(--clr-text-dim)", `[MONITOR] 监控列表结束`, statusChannel, "*");
+		logInfo('MONITOR', 'RPL_MONLISTEND: monitor list complete');
 	});
 	Commands.set("734", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const msg = data.slice(3).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-red)", `[MONITOR] 监控列表已满: ${msg}`, statusChannel, "*");
+		logInfo('MONITOR', `ERR_MONLISTFULL: ${msg}`);
 	});
 
 	Commands.set("CAP", function (nick, data) {
@@ -4358,7 +4468,7 @@ const Channel_AppendUser = channelAppendUser;
 			}
 		}
 
-		writeToLog(`[CAP] Received: target=${target}, subcommand=${subCommand}${isMultiline ? ' (multiline)' : ''}, caps="${caps}"`);
+		logInfo('CAP', `Received: target=${target}, subcommand=${subCommand}${isMultiline ? ' (multiline)' : ''}, caps="${caps}"`);
 
 		if (subCommand === "LS") {
 			if (caps) {
@@ -4366,7 +4476,7 @@ const Channel_AppendUser = channelAppendUser;
 			}
 
 		if (isMultiline) {
-			writeToLog(`[CAP] LS multiline chunk received — waiting for more...`);
+			logInfo('CAP', 'LS multiline chunk received — waiting for more...');
 			return;
 		}
 
@@ -4406,10 +4516,10 @@ const Channel_AppendUser = channelAppendUser;
 				.join(' ');
 
 			if (requestedCaps) {
-				writeToLog(`[CAP] Requesting capabilities: ${requestedCaps}`);
+				logInfo('CAP', `Requesting capabilities: ${requestedCaps}`);
 				doSend("CAP REQ :" + requestedCaps);
 			} else {
-				writeToLog(`[CAP] No matching capabilities — ending CAP negotiation`);
+				logInfo('CAP', 'No matching capabilities — ending CAP negotiation');
 				doSend("CAP END");
 				sendRegistration();
 			}
@@ -4417,7 +4527,7 @@ const Channel_AppendUser = channelAppendUser;
 		} else if (subCommand === "ACK") {
 			const ackedCaps = caps || "(none)";
 			writeToScreen("var(--clr-green)", `已启用能力: ${ackedCaps}`, statusChannel, "*");
-			writeToLog(`[CAP] Capabilities acknowledged (ACK): ${ackedCaps}`);
+			logInfo('CAP', `Capabilities acknowledged (ACK): ${ackedCaps}`);
 
 			const ackedList = ackedCaps.split(' ').map(c => c.trim().toLowerCase()).filter(c => c);
 			for (const cap of ackedList) {
@@ -4443,10 +4553,10 @@ const Channel_AppendUser = channelAppendUser;
 		if (ircv3ActiveCaps.has('draft/read-marker'))   ircv3ReadMarker      = true;
 		if (ircv3ActiveCaps.has('draft/chathistory'))   ircv3ChatHistory     = true;
 
-			writeToLog(`[CAP] Active caps: ${[...ircv3ActiveCaps].join(', ')}`);
+			logInfo('CAP', `Active caps: ${[...ircv3ActiveCaps].join(', ')}`);
 
 			if (ircv3ActiveCaps.has('sasl') && saslEnabled && saslAccount && saslPassword) {
-				writeToLog(`[SASL] Starting SASL PLAIN authentication for: ${saslAccount}`);
+				logInfo('SASL', `Starting SASL PLAIN authentication for: ${saslAccount}`);
 				saslPending = true;
 				doSend("AUTHENTICATE PLAIN");
 			} else {
@@ -4459,7 +4569,7 @@ const Channel_AppendUser = channelAppendUser;
 		} else if (subCommand === "NAK") {
 			const rejectedCaps = caps || "(none)";
 			writeToScreen("var(--clr-warning)", `能力被拒绝: ${rejectedCaps}`, statusChannel, "*");
-			writeToLog(`[CAP] Capabilities rejected (NAK): ${rejectedCaps}`);
+			logInfo('CAP', `Capabilities rejected (NAK): ${rejectedCaps}`);
 			doSend("CAP END");
 			sendRegistration();
 
@@ -4468,7 +4578,7 @@ const Channel_AppendUser = channelAppendUser;
 			writeToScreen("var(--clr-info)", `当前启用的能力: ${activeCaps}`, statusChannel, "*");
 	} else if (subCommand === "NEW") {
 		writeToScreen("var(--clr-info)", `服务器新增能力: ${caps}`, statusChannel, "*");
-		writeToLog(`[CAP] cap-notify NEW: ${caps}`);
+		logInfo('CAP', `cap-notify NEW: ${caps}`);
 		// 自动请求我们想要但尚未拥有的新 CAP
 		const newList = caps.split(' ').map(c => c.trim().split('=')[0].toLowerCase()).filter(Boolean);
 		const autoWanted = [
@@ -4480,12 +4590,12 @@ const Channel_AppendUser = channelAppendUser;
 		];
 		const toRequest = newList.filter(c => autoWanted.includes(c) && !ircv3ActiveCaps.has(c));
 		if (toRequest.length > 0) {
-			writeToLog(`[CAP] Auto-requesting new caps: ${toRequest.join(' ')}`);
+			logInfo('CAP', `Auto-requesting new caps: ${toRequest.join(' ')}`);
 			doSend("CAP REQ :" + toRequest.join(' '));
 		}
 		} else if (subCommand === "DEL") {
 			writeToScreen("var(--clr-warning)", `服务器移除能力: ${caps}`, statusChannel, "*");
-			writeToLog(`[CAP] cap-notify DEL: ${caps}`);
+			logInfo('CAP', `cap-notify DEL: ${caps}`);
 			const delList = caps.split(' ').map(c => c.trim().toLowerCase()).filter(c => c);
 			for (const cap of delList) {
 				ircv3ActiveCaps.delete(cap);
@@ -4504,16 +4614,16 @@ const Channel_AppendUser = channelAppendUser;
 
 		if (payload === '+') {
 			if (!saslPending || !saslAccount || !saslPassword) {
-				writeToLog('[SASL] AUTHENTICATE + received but no pending SASL auth — aborting');
+				logInfo('SASL', 'AUTHENTICATE + received but no pending SASL auth — aborting');
 				doSend("AUTHENTICATE *");
 				return;
 			}
 			const authStr = `\x00${saslAccount}\x00${saslPassword}`;
 			const encoded = btoa(unescape(encodeURIComponent(authStr)));
-			writeToLog(`[SASL] Sending PLAIN credentials for: ${saslAccount}`);
+			logInfo('SASL', `Sending PLAIN credentials for: ${saslAccount}`);
 			doSend("AUTHENTICATE " + encoded);
 		} else {
-			writeToLog(`[SASL] Unexpected AUTHENTICATE payload: ${payload}`);
+			logInfo('SASL', `Unexpected AUTHENTICATE payload: ${payload}`);
 		}
 	});
 
@@ -4521,7 +4631,7 @@ const Channel_AppendUser = channelAppendUser;
 		if (!data || data.length < 4) return;
 		const accountName = data.length >= 5 ? data[4].replace(/^:/, '') : (data[3] || '');
 		writeToScreen("var(--clr-green)", `已登录账号: ${accountName}`, statusChannel, "*");
-		writeToLog(`[SASL] RPL_LOGGEDIN (900): logged in as ${accountName}`);
+		logInfo('SASL', `RPL_LOGGEDIN (900): logged in as ${accountName}`);
 		if (accountName && accountName !== '*') {
 			saslAccount = accountName;
 		}
@@ -4529,13 +4639,13 @@ const Channel_AppendUser = channelAppendUser;
 
 	Commands.set("901", function (nick, data) {
 		writeToScreen("var(--clr-warning)", `账号已登出`, statusChannel, "*");
-		writeToLog(`[SASL] RPL_LOGGEDOUT (901)`);
+		logInfo('SASL', 'RPL_LOGGEDOUT (901)');
 	});
 
 	Commands.set("902", function (nick, data) {
 		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'Nick locked';
 		writeToScreen("var(--clr-red)", `SASL 错误: 昵称已锁定 — ${msg}`, statusChannel, "*");
-		writeToLog(`[SASL] ERR_NICKLOCKED (902): ${msg}`);
+		logInfo('SASL', `ERR_NICKLOCKED (902): ${msg}`);
 		saslPending = false;
 		doSend("CAP END");
 		sendRegistration();
@@ -4543,7 +4653,7 @@ const Channel_AppendUser = channelAppendUser;
 
 	Commands.set("903", function (nick, data) {
 		writeToScreen("var(--clr-green)", `SASL 认证成功!`, statusChannel, "*");
-		writeToLog(`[SASL] RPL_SASLSUCCESS (903)`);
+		logInfo('SASL', 'RPL_SASLSUCCESS (903)');
 		saslPending = false;
 		doSend("CAP END");
 		sendRegistration();
@@ -4552,7 +4662,7 @@ const Channel_AppendUser = channelAppendUser;
 	Commands.set("904", function (nick, data) {
 		const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'Authentication failed';
 		writeToScreen("var(--clr-red)", `SASL 认证失败: ${msg}`, statusChannel, "*");
-		writeToLog(`[SASL] ERR_SASLFAIL (904): ${msg}`);
+		logInfo('SASL', `ERR_SASLFAIL (904): ${msg}`);
 		saslPending = false;
 		doSend("CAP END");
 		sendRegistration();
@@ -4560,7 +4670,7 @@ const Channel_AppendUser = channelAppendUser;
 
 	Commands.set("905", function (nick, data) {
 		writeToScreen("var(--clr-red)", `SASL 数据过长`, statusChannel, "*");
-		writeToLog(`[SASL] ERR_SASLTOLONG (905)`);
+		logInfo('SASL', 'ERR_SASLTOLONG (905)');
 		saslPending = false;
 		doSend("CAP END");
 		sendRegistration();
@@ -4568,19 +4678,19 @@ const Channel_AppendUser = channelAppendUser;
 
 	Commands.set("906", function (nick, data) {
 		writeToScreen("var(--clr-warning)", `SASL 认证已中止`, statusChannel, "*");
-		writeToLog(`[SASL] ERR_SASLABORTED (906)`);
+		logInfo('SASL', 'ERR_SASLABORTED (906)');
 		saslPending = false;
 	});
 
 	Commands.set("907", function (nick, data) {
 		writeToScreen("var(--clr-warning)", `已经完成 SASL 认证`, statusChannel, "*");
-		writeToLog(`[SASL] ERR_SASLALREADY (907)`);
+		logInfo('SASL', 'ERR_SASLALREADY (907)');
 	});
 
 	Commands.set("908", function (nick, data) {
 		const mechs = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '';
 		writeToScreen("var(--clr-info)", `支持的 SASL 机制: ${mechs}`, statusChannel, "*");
-		writeToLog(`[SASL] RPL_SASLMECHS (908): ${mechs}`);
+		logInfo('SASL', `RPL_SASLMECHS (908): ${mechs}`);
 	});
 
 	Commands.set("CHGHOST", function (nick, data) {
@@ -5074,7 +5184,7 @@ const Channel_AppendUser = channelAppendUser;
 				if (channel.button) {
 					channel.button.classList.add('private');
 				}
-				writeToLog(`[PM] Incoming PM from ${nick} — auto-creating PM tab`);
+				logInfo('PM', `Incoming PM from ${nick} — auto-creating PM tab`);
 			}
 		} else {
 			channel = findChannel(target);
@@ -5119,7 +5229,7 @@ const Channel_AppendUser = channelAppendUser;
 	}
 
 		if (isPrivateMessage) {
-			writeToLog(`[PM] ${nick} → you: ${text}`);
+			logInfo('PM', `${nick} → you: ${text}`);
 		}
 		// 已读标记: 更新本地已读时间
 		if (ircv3ReadMarker && serverTime && channel && channel !== statusChannel) {
@@ -5350,21 +5460,21 @@ const Channel_AppendUser = channelAppendUser;
 		if (!data || data.length < 2) return;
 		const refStr = data[1] || '';
 		if (refStr.startsWith('+')) {
-			const ref  = refStr.substring(1);
-			const type = data[2] ? data[2] : '';
-			const params = data.slice(3).map(p => p.replace(/^:/, ''));
-			const label  = msgTags && msgTags.has('label') ? msgTags.get('label') : null;
-			const batchTarget = params[0] || '';
-			batchBuffer.set(ref, { type, params, messages: [], label, batchTarget });
-			writeToLog(`[BATCH] Start: ref=${ref} type=${type} params=${params.join(',')}${label ? ' label='+label : ''}`);
-		} else if (refStr.startsWith('-')) {
-			const ref = refStr.substring(1);
-			const batch = batchBuffer.get(ref);
-			if (!batch) return;
-			batchBuffer.delete(ref);
-			writeToLog(`[BATCH] End: ref=${ref} type=${batch.type} msgs=${batch.messages.length}`);
-			processBatch(ref, batch);
-		}
+		const ref  = refStr.substring(1);
+		const type = data[2] ? data[2] : '';
+		const params = data.slice(3).map(p => p.replace(/^:/, ''));
+		const label  = msgTags && msgTags.has('label') ? msgTags.get('label') : null;
+		const batchTarget = params[0] || '';
+		batchBuffer.set(ref, { type, params, messages: [], label, batchTarget });
+		logInfo('BATCH', `Start: ref=${ref} type=${type} params=${params.join(',')}${label ? ' label='+label : ''}`);
+	} else if (refStr.startsWith('-')) {
+		const ref = refStr.substring(1);
+		const batch = batchBuffer.get(ref);
+		if (!batch) return;
+		batchBuffer.delete(ref);
+		logInfo('BATCH', `End: ref=${ref} type=${batch.type} msgs=${batch.messages.length}`);
+		processBatch(ref, batch);
+	}
 	});
 
 	function processBatch(ref, batch) {
@@ -5500,11 +5610,12 @@ const Channel_AppendUser = channelAppendUser;
 		return label;
 	}
 
+
 	function requestChatHistory(channelName, limit) {
 		if (!ircv3ChatHistory) return;
 		limit = limit || 50;
 		doSendLabeled(`CHATHISTORY LATEST ${channelName} * ${limit}\r\n`, `CHATHISTORY ${channelName}`);
-		writeToLog(`[CHATHISTORY] Requesting last ${limit} messages for ${channelName}`);
+		logInfo('CHATHISTORY', `Requesting last ${limit} messages for ${channelName}`);
 	}
 
 	Commands.set("FAIL", function (nick, data) {
@@ -5513,7 +5624,7 @@ const Channel_AppendUser = channelAppendUser;
 		const code    = data[3] || '';
 		const msg     = data.slice(4).join(' ').replace(/^:/, '');
 		writeToScreen("var(--clr-warning)", `[${command}] 失败 (${code}): ${msg}`, statusChannel, "*");
-		writeToLog(`[FAIL] command=${command} code=${code}: ${msg}`);
+		logInfo('FAIL', `command=${command} code=${code}: ${msg}`);
 	});
 
 	Commands.set("INVITE", function (nick, data) {
@@ -5549,10 +5660,10 @@ const Channel_AppendUser = channelAppendUser;
 		if (!isConnected) return;
 		if (ircv3Whox) {
 			doSend(`WHO ${channelName} %tunhfa,1\r\n`);
-			writeToLog(`[WHOX] Requesting WHO for ${channelName}`);
+			logInfo('WHOX', `Requesting WHO for ${channelName}`);
 		} else {
 			doSend(`WHO ${channelName}\r\n`);
-			writeToLog(`[IRC] Requesting WHO for ${channelName}`);
+			logInfo('IRC', `Requesting WHO for ${channelName}`);
 		}
 	}
 
@@ -5581,13 +5692,13 @@ const Channel_AppendUser = channelAppendUser;
 				updateUserAwayStatus(whoNick, ch, isAway);
 			}
 		});
-		writeToLog(`[WHOX] RPL_WHOSPCRPL (354): ${whoNick} flags=${flags} account=${account}`);
+		logInfo('WHOX', `RPL_WHOSPCRPL (354): ${whoNick} flags=${flags} account=${account}`);
 	});
 
 	Commands.set("315", function (nick, data) {
 		if (!data || data.length < 4) return;
 		const target = data[3];
-		writeToLog(`[IRC] RPL_ENDOFWHO (315): ${target}`);
+		logInfo('IRC', `RPL_ENDOFWHO (315): ${target}`);
 	});
 
 	function sendWithReply(replyToMsgid, targetChannel, text) {
@@ -5761,7 +5872,7 @@ const Channel_AppendUser = channelAppendUser;
 		if (chatHistoryLoading[channelName]) return;
 		chatHistoryLoading[channelName] = true;
 		doSend(`CHATHISTORY BEFORE ${channelName} msgid=${beforeMsgid} 50\r\n`);
-		writeToLog(`[CHATHISTORY] Requesting 50 messages BEFORE msgid=${beforeMsgid} for ${channelName}`);
+		logInfo('CHATHISTORY', `Requesting 50 messages BEFORE msgid=${beforeMsgid} for ${channelName}`);
 		setTimeout(() => { chatHistoryLoading[channelName] = false; }, 3000);
 	}
 
