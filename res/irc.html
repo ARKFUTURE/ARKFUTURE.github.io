@@ -1448,7 +1448,7 @@
 
 	<div class="ssl-warning" id="sslWarning">
 		<strong>⚠ 浏览器无法忽略 SSL 证书错误</strong><br>
-		请使用以下方案：<br>
+		请使用以下方案: <br>
 		1. 改用 <code>ws://</code> 非加密连接<br>
 		2. 在浏览器中访问 <a id="sslLink" target="_blank">服务器地址</a> 并手动信任证书
 	</div>
@@ -1489,7 +1489,7 @@
 			<div class="input-container__row">
 				<span class="input-prefix" id="inputPrefix">&gt;</span>
 				<input type="text" name="input" id="input"
-					placeholder="输入消息，/ 开头为命令，/help 查看帮助…"
+					placeholder="输入消息, / 开头为命令, /help 查看帮助…"
 					onkeydown="onKeyDown(event)"
 					oninput="updateCharCount(); handleTypingInput();">
 				<button class="btn send-btn" id="sendBtn" onclick="send()">发送</button>
@@ -1508,6 +1508,14 @@
 			<div class="context-menu__item" data-action="kick" onclick="contextMenuAction('kick')">👢 踢出</div>
 			<div class="context-menu__item" data-action="ban" onclick="contextMenuAction('ban')">🔨 封禁</div>
 			<div class="context-menu__item" data-action="banlist" onclick="contextMenuAction('banlist')">📋 封禁列表</div>
+		</div>
+
+		<!-- 消息右键菜单(IRCv3: 回复/react/撤回) -->
+		<div class="context-menu" id="msgContextMenu">
+			<div class="context-menu__item" data-action="reply" onclick="msgContextAction('reply')">↩ 回复此消息</div>
+			<div class="context-menu__item" data-action="react" onclick="msgContextAction('react')">😀 发送 Reaction</div>
+			<div class="context-menu__separator"></div>
+			<div class="context-menu__item" data-action="redact" onclick="msgContextAction('redact')" style="color:var(--clr-red)">🗑 撤回消息</div>
 		</div>
 
 
@@ -1793,6 +1801,10 @@
 		const menu = document.getElementById('userContextMenu');
 		if (menu && (!e || !menu.contains(e.target))) {
 			menu.classList.remove('visible');
+		}
+		const msgMenu = document.getElementById('msgContextMenu');
+		if (msgMenu && (!e || !msgMenu.contains(e.target))) {
+			msgMenu.classList.remove('visible');
 		}
 	}
 
@@ -2324,7 +2336,7 @@
 	function writeToLog(message) {
 		const logOutput = getLogOutput();
 		const now = new Date();
-		const ts = now.toISOString().replace('T', ' ').substring(0, 23) + 'Z';
+		const ts = now.toISOString().replace('T', ' ').substring(0, 23);
 		const fullMessage = `[${ts}] ${message}`;
 
 		if (logOutput) {
@@ -2475,6 +2487,9 @@
 	ircv3InviteNotify  = false;
 	ircv3Multiline     = false;
 	ircv3Whox          = false;
+	ircv3MessageRedact = false;
+	ircv3ReadMarker    = false;
+	multilineOutBuffer = null;
 
 		if (!validateWsUrl(wsUrl)) {
 			writeToLog(`[ERROR] Invalid WebSocket URL: "${wsUrl}" — must start with ws:// or wss://`);
@@ -2655,6 +2670,10 @@
 	function onKeyDown(e) {
 		if (e && e.key === 'Enter') {
 			send();
+		} else if (e.key === 'Escape') {
+			if (replyingToMsgid) {
+				cancelReply();
+			}
 		} else if (e.key === 'Tab') {
 			e.preventDefault();
 			handleTabCompletion();
@@ -3200,11 +3219,13 @@ const Channel_AppendUser = channelAppendUser;
 	}
 	const Channel_UpdateUserPrefix = channelUpdateUserPrefix;
 
-	function writeToScreen(color, message, channel, username, serverTime) {
+	function writeToScreen(color, message, channel, username, serverTime, msgId, accountName) {
 		if (!channel || !channel.content) return;
 		const renderedMessage = mircAndLinkify(message || "");
 		let pre = document.createElement("p");
 		pre.style.color = color;
+		if (msgId) pre.dataset.msgid = msgId;
+		if (accountName) pre.dataset.account = accountName;
 		let displayTime;
 		if (serverTime) {
 			try {
@@ -3283,6 +3304,7 @@ const Channel_AppendUser = channelAppendUser;
 				}
 			}
 		}
+		return pre;
 	}
 
 	function sanitizeUrl(url) {
@@ -3430,14 +3452,14 @@ const Channel_AppendUser = channelAppendUser;
 		if (!text || !activeChannel) return;
 
 		if (!isConnected) {
-			writeToScreen("var(--clr-warning)", "未连接，无法发送消息", activeChannel || statusChannel, "*");
+			writeToScreen("var(--clr-warning)", "未连接, 无法发送消息", activeChannel || statusChannel, "*");
 			return;
 		}
 
 		if (text[0] === "/") {
 			if (text.indexOf("/me ") === 0) {
 				if (activeChannel.name === "Status") {
-					writeToScreen("var(--clr-warning)", "Status 是系统状态窗口，无法发送消息。", activeChannel, "*");
+					writeToScreen("var(--clr-warning)", "Status 是系统状态窗口, 无法发送消息.", activeChannel, "*");
 					if (input) { input.value = ""; updateCharCount(); }
 					return;
 				}
@@ -3610,7 +3632,11 @@ const Channel_AppendUser = channelAppendUser;
 				"/monitor l        — 查看监控列表",
 				"/chathistory [#频道] [数量] — 拉取历史消息",
 				"/caps             — 查看已启用的 IRCv3 能力",
-				"== 新增功能 ==",
+				"== IRCv3 扩展命令 ==",
+				"/redact <msgid> [原因]    — 撤回消息 (draft/message-redaction)",
+				"/react <msgid> <emoji>    — 对消息发送 emoji 反应 (+react)",
+				"/markread [#频道] [时间]  — 标记已读 (draft/read-marker)",
+				"== 其他功能 ==",
 				"/ignore <nick>    — 屏蔽指定用户的消息",
 				"/unignore <nick>  — 取消屏蔽用户",
 				"/highlight <关键词> — 添加/移除高亮关键词",
@@ -3619,6 +3645,7 @@ const Channel_AppendUser = channelAppendUser;
 				"/unban <host>     — 解除封禁",
 				"/banlist          — 查看当前频道封禁列表",
 				"Ctrl+F            — 打开消息搜索面板",
+				"右键消息           — 回复/react/撤回",
 				"/quit [消息]       — 退出 IRC",
 			].join('<br>');
 			writeToScreen("var(--clr-info)", helpMsg, activeChannel, "*");
@@ -3688,6 +3715,41 @@ const Channel_AppendUser = channelAppendUser;
 				writeToScreen("var(--clr-info)", `高亮关键词: ${highlightKeywords.join(', ')}`, activeChannel, "*");
 			}
 			pushHistory(text);
+		} else if (text.indexOf("/redact ") === 0) {
+			const redactArgs = text.substring(8).trim().split(' ');
+			const redactMsgId = redactArgs[0];
+			const redactReason = redactArgs.slice(1).join(' ') || '';
+			const redactTarget = activeChannel && activeChannel.name !== 'Status' ? activeChannel.name : null;
+			if (redactTarget && redactMsgId) {
+				sendRedact(redactTarget, redactMsgId, redactReason);
+				writeToScreen("var(--clr-info)", `正在撤回消息 (msgid=${redactMsgId})...`, activeChannel, "*");
+			} else {
+				writeToScreen("var(--clr-warning)", "用法: /redact <msgid> [原因]", activeChannel, "*");
+			}
+			pushHistory(text);
+		} else if (text.indexOf("/react ") === 0) {
+			const reactArgs = text.substring(7).trim().split(' ');
+			const reactMsgId = reactArgs[0];
+			const reactEmoji = reactArgs.slice(1).join(' ');
+			const reactTarget = activeChannel && activeChannel.name !== 'Status' ? activeChannel.name : null;
+			if (reactTarget && reactMsgId && reactEmoji) {
+				sendReaction(reactMsgId, reactTarget, reactEmoji);
+				writeToScreen("var(--clr-info)", `已发送反应 ${reactEmoji}`, activeChannel, "*");
+			} else {
+				writeToScreen("var(--clr-warning)", "用法: /react <msgid> <emoji>", activeChannel, "*");
+			}
+			pushHistory(text);
+		} else if (text.indexOf("/markread") === 0) {
+			const mrArgs = text.substring(9).trim().split(' ');
+			const mrTarget = mrArgs[0] || (activeChannel && activeChannel.name !== 'Status' ? activeChannel.name : null);
+			const mrTime = mrArgs[1] || new Date().toISOString();
+			if (mrTarget) {
+				sendMarkRead(mrTarget, mrTime);
+				writeToScreen("var(--clr-info)", `已标记 ${mrTarget} 为已读`, activeChannel, "*");
+			} else {
+				writeToScreen("var(--clr-warning)", "用法: /markread [#频道] [时间戳]", activeChannel, "*");
+			}
+			pushHistory(text);
 		} else {
 			writeToScreen("var(--clr-font)", text, activeChannel, "");
 			const messages = splitIRCMessage(text.substring(1));
@@ -3698,11 +3760,34 @@ const Channel_AppendUser = channelAppendUser;
 		const target = activeChannel.name;
 
 		if (target === "Status") {
-				writeToScreen("var(--clr-warning)", "Status 是系统状态窗口，无法发送消息。请使用 /join #频道 加入频道，或使用 /msg 昵称 内容 与用户私聊。", activeChannel, "*");
+				writeToScreen("var(--clr-warning)", "Status 是系统状态窗口, 无法发送消息.请使用 /join #频道 加入频道, 或使用 /msg 昵称 内容 与用户私聊.", activeChannel, "*");
 				if (input) { input.value = ""; updateCharCount(); }
 				return;
 			}
 
+		// 多行消息(含 \n)且服务器支持 draft/multiline
+		if (ircv3Multiline && text.includes('\n')) {
+			const mlCap = [...ircv3ActiveCaps].find(c => c.startsWith('draft/multiline'));
+			let maxBytes = 4000, maxLines = 50;
+			if (mlCap && mlCap.includes('=')) {
+				const params = mlCap.split('=')[1];
+				params.split(',').forEach(p => {
+					if (p.startsWith('max-bytes=')) maxBytes = parseInt(p.split('=')[1]) || maxBytes;
+					if (p.startsWith('max-lines=')) maxLines = parseInt(p.split('=')[1]) || maxLines;
+				});
+			}
+			sendMultilineMessage(target, text, maxBytes, maxLines);
+			if (!ircv3EchoMessage) {
+				writeToScreen("var(--clr-font)", text, activeChannel, nickname);
+			}
+		} else if (replyingToMsgid) {
+			// 带 reply 标签发送
+			sendWithReply(replyingToMsgid, target, text);
+			cancelReply();
+			if (!ircv3EchoMessage) {
+				writeToScreen("var(--clr-font)", `↩ ${text}`, activeChannel, nickname);
+			}
+		} else {
 			const messages = splitIRCMessage("privmsg " + target + " :" + text);
 			messages.forEach((msg, index) => {
 				doSend(msg);
@@ -3710,10 +3795,11 @@ const Channel_AppendUser = channelAppendUser;
 					writeToScreen("var(--clr-font)", text, activeChannel, nickname);
 				}
 			});
-			if (activeChannel.isPrivate) {
-				writeToLog(`[PM] You → ${target}: ${text}`);
-			}
-			pushHistory(text);
+		}
+		if (activeChannel.isPrivate) {
+			writeToLog(`[PM] You → ${target}: ${text}`);
+		}
+		pushHistory(text);
 		}
 		if (input) {
 			if (activeChannel && activeChannel.name !== 'Status') {
@@ -4055,9 +4141,9 @@ const Channel_AppendUser = channelAppendUser;
 	}
 
 	/**
-	 * 解析 IRCv3 消息标签字符串（@号后面的部分，分号分隔）
-	 * @param {string} tagStr 标签字符串，如 "time=2024-01-01T00:00:00Z;account=Alice"
-	 * @returns {Map<string, string|boolean>} 标签 Map，无值标签的 value 为 true
+	 * 解析 IRCv3 消息标签字符串(@号后面的部分, 分号分隔)
+	 * @param {string} tagStr 标签字符串, 如 "time=2024-01-01T00:00:00Z;account=Alice"
+	 * @returns {Map<string, string|boolean>} 标签 Map, 无值标签的 value 为 true
 	 */
 	function parseMsgTags(tagStr) {
 		const tags = new Map();
@@ -4113,8 +4199,12 @@ const Channel_AppendUser = channelAppendUser;
 	let ircv3LabeledResponse = false;
 	let ircv3ChatHistory   = false;
 	let ircv3InviteNotify  = false;
-	let ircv3Multiline     = false;
-	let ircv3Whox          = false;
+	let ircv3Multiline       = false;
+	let ircv3Whox            = false;
+	let ircv3MessageRedact   = false;
+	let ircv3ReadMarker      = false;
+	/* multiline 发送缓冲区: { target, lines:[], concatNext } */
+	let multilineOutBuffer   = null;
 
 	let saslEnabled = false;
 	let saslAccount = "";
@@ -4303,9 +4393,12 @@ const Channel_AppendUser = channelAppendUser;
 			"batch",
 			"labeled-response",
 			"chathistory",
+			"draft/chathistory",
 			"invite-notify",
 			"draft/multiline",
 			"whox",
+			"draft/message-redaction",
+			"draft/read-marker",
 		];
 
 			const requestedCaps = wantedCaps
@@ -4346,6 +4439,9 @@ const Channel_AppendUser = channelAppendUser;
 		if (ircv3ActiveCaps.has('invite-notify'))       ircv3InviteNotify    = true;
 		if (ircv3ActiveCaps.has('draft/multiline'))     ircv3Multiline       = true;
 		if (ircv3ActiveCaps.has('whox'))                ircv3Whox            = true;
+		if (ircv3ActiveCaps.has('draft/message-redaction')) ircv3MessageRedact = true;
+		if (ircv3ActiveCaps.has('draft/read-marker'))   ircv3ReadMarker      = true;
+		if (ircv3ActiveCaps.has('draft/chathistory'))   ircv3ChatHistory     = true;
 
 			writeToLog(`[CAP] Active caps: ${[...ircv3ActiveCaps].join(', ')}`);
 
@@ -4370,9 +4466,23 @@ const Channel_AppendUser = channelAppendUser;
 		} else if (subCommand === "LIST") {
 			const activeCaps = caps || "(none)";
 			writeToScreen("var(--clr-info)", `当前启用的能力: ${activeCaps}`, statusChannel, "*");
-		} else if (subCommand === "NEW") {
-			writeToScreen("var(--clr-info)", `服务器新增能力: ${caps}`, statusChannel, "*");
-			writeToLog(`[CAP] cap-notify NEW: ${caps}`);
+	} else if (subCommand === "NEW") {
+		writeToScreen("var(--clr-info)", `服务器新增能力: ${caps}`, statusChannel, "*");
+		writeToLog(`[CAP] cap-notify NEW: ${caps}`);
+		// 自动请求我们想要但尚未拥有的新 CAP
+		const newList = caps.split(' ').map(c => c.trim().split('=')[0].toLowerCase()).filter(Boolean);
+		const autoWanted = [
+			"message-tags","server-time","away-notify","chghost","account-tag",
+			"account-notify","extended-join","echo-message","multi-prefix",
+			"userhost-in-names","cap-notify","setname","batch","labeled-response",
+			"chathistory","draft/chathistory","invite-notify","draft/multiline",
+			"whox","draft/message-redaction","draft/read-marker"
+		];
+		const toRequest = newList.filter(c => autoWanted.includes(c) && !ircv3ActiveCaps.has(c));
+		if (toRequest.length > 0) {
+			writeToLog(`[CAP] Auto-requesting new caps: ${toRequest.join(' ')}`);
+			doSend("CAP REQ :" + toRequest.join(' '));
+		}
 		} else if (subCommand === "DEL") {
 			writeToScreen("var(--clr-warning)", `服务器移除能力: ${caps}`, statusChannel, "*");
 			writeToLog(`[CAP] cap-notify DEL: ${caps}`);
@@ -4708,11 +4818,11 @@ const Channel_AppendUser = channelAppendUser;
 		writeToLog(`[IRC] ${errorMsg} — showing inline nick prompt`);
 	}
 	Commands.set("432", function (nick, data) {
-		writeToScreen("var(--clr-warning)", "❌ 昵称包含非法字符，请用 /nick 新昵称 重新设置", statusChannel, "*");
+		writeToScreen("var(--clr-warning)", "❌ 昵称包含非法字符, 请用 /nick 新昵称 重新设置", statusChannel, "*");
 		writeToLog(`[IRC] ERR_ERRONEUSNICKNAME (432) — prompting user to use /nick`);
 	});
 	Commands.set("433", function (nick, data) {
-		writeToScreen("var(--clr-warning)", "❌ 昵称已被占用，请用 /nick 新昵称 重新设置", statusChannel, "*");
+		writeToScreen("var(--clr-warning)", "❌ 昵称已被占用, 请用 /nick 新昵称 重新设置", statusChannel, "*");
 		writeToLog(`[IRC] ERR_NICKNAMEINUSE (433) — prompting user to use /nick`);
 	});
 	Commands.set("477", function (nick, data) {
@@ -4790,13 +4900,19 @@ const Channel_AppendUser = channelAppendUser;
 				channel = new Tab_Create(serverChannelName, "", true);
 			}
 
-			channelName = serverChannelName;
-			writeToScreen("var(--clr-green)", `你已加入频道 ${serverChannelName}`, channel, "*");
-			writeToLog(`[IRC] Self joined channel: ${serverChannelName}`);
-			setTimeout(() => {
-				requestChatHistory(serverChannelName, 50);
-				requestWho(serverChannelName);
-			}, 300);
+		channelName = serverChannelName;
+		writeToScreen("var(--clr-green)", `你已加入频道 ${serverChannelName}`, channel, "*");
+		writeToLog(`[IRC] Self joined channel: ${serverChannelName}`);
+		setTimeout(() => {
+			requestChatHistory(serverChannelName, 50);
+			requestWho(serverChannelName);
+			// 附加向上滚动加载历史
+			attachChatHistoryScrollListener(channel);
+			// 请求 read-marker(私聊需主动 MARKREAD get)
+			if (ircv3ReadMarker) {
+				doSend(`MARKREAD ${serverChannelName}\r\n`);
+			}
+		}, 300);
 		}
 	});
 	Commands.set("KICK", function (nick, data) {
@@ -4942,10 +5058,10 @@ const Channel_AppendUser = channelAppendUser;
 			return;
 		}
 
-		const serverTime = msgTags && msgTags.get('time') || null;
+		const serverTime  = msgTags && msgTags.get('time')    || null;
 		const accountName = msgTags && msgTags.get('account') || null;
-		const msgId = msgTags && msgTags.get('msgid') || null;
-		const replyTo = msgTags && msgTags.get('+reply') || null;
+		const msgId       = msgTags && msgTags.get('msgid')   || null;
+		const replyTo     = msgTags && msgTags.get('+reply')  || null;
 
 		const isPrivateMessage = !/^[#&+!]/.test(target) && target.toLowerCase() === nickname.toLowerCase();
 
@@ -4969,9 +5085,9 @@ const Channel_AppendUser = channelAppendUser;
 		if (text.indexOf("\x01ACTION ") == 0) {
 			let actionText = text.substring(8);
 			if (actionText.endsWith("\x01")) actionText = actionText.slice(0, -1);
-			writeToScreen("var(--clr-red)", `${nick} ${actionText}`, channel, "*", serverTime);
+			writeToScreen("var(--clr-red)", `${nick} ${actionText}`, channel, "*", serverTime, msgId, accountName);
 		} else {
-			writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*", serverTime);
+			writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*", serverTime, msgId, accountName);
 		}
 		if (channel && channel !== activeChannel && channel !== statusChannel) {
 			addUnreadBadge(channel);
@@ -4982,7 +5098,21 @@ const Channel_AppendUser = channelAppendUser;
 		if (replyTo) {
 			displayText = `↩ ${text}`;
 		}
-		writeToScreen("var(--clr-font)", displayText, channel, displayNick, serverTime);
+		// 显示 account-tag(如果有)
+		if (accountName && ircv3AccountTag) {
+			displayNick = nick;
+		}
+		const msgEl = writeToScreen("var(--clr-font)", displayText, channel, displayNick, serverTime, msgId, accountName);
+		// 为消息元素绑定右键回复菜单
+		if (msgEl && msgId) {
+			msgEl.addEventListener('contextmenu', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				showMessageContextMenu(e, msgId, nick, target.startsWith('#') ? target : nick);
+			});
+			msgEl.title = `右键回复 | msgid: ${msgId}`;
+			msgEl.style.cursor = 'default';
+		}
 		if (channel && channel !== activeChannel && channel !== statusChannel) {
 			addUnreadBadge(channel);
 		}
@@ -4990,6 +5120,10 @@ const Channel_AppendUser = channelAppendUser;
 
 		if (isPrivateMessage) {
 			writeToLog(`[PM] ${nick} → you: ${text}`);
+		}
+		// 已读标记: 更新本地已读时间
+		if (ircv3ReadMarker && serverTime && channel && channel !== statusChannel) {
+			sendMarkRead(channel.name, serverTime);
 		}
 	});
 	Commands.set("NOTICE", function (nick, data, msgTags) {
@@ -5002,7 +5136,8 @@ const Channel_AppendUser = channelAppendUser;
 		}
 		nick = data[0].substring(1).split("!")[0];
 		const serverTime = msgTags && msgTags.get('time') || null;
-		writeToScreen("var(--clr-blue)", `通知 ${nick}: ${text}`, channel, "-", serverTime);
+		const msgId = msgTags && msgTags.get('msgid') || null;
+		writeToScreen("var(--clr-blue)", `通知 ${nick}: ${text}`, channel, "-", serverTime, msgId);
 		writeToLog(`[NOTICE] ${nick}: ${text}`);
 	});
 
@@ -5020,6 +5155,15 @@ const Channel_AppendUser = channelAppendUser;
 		if (!rawLine) return;
 
 		const { tags: msgTags, rest: lineAfterTags } = extractMsgTags(rawLine);
+
+		// 收到 labeled-response 的单条 ACK(无 batch 时)
+		if (msgTags.has('label')) {
+			const lbl = msgTags.get('label');
+			if (pendingLabels.has(lbl)) {
+				writeToLog(`[LABELED] Response received for label=${lbl}`);
+				pendingLabels.delete(lbl);
+			}
+		}
 
 		if (msgTags.has('batch')) {
 			const batchRef = msgTags.get('batch');
@@ -5202,15 +5346,17 @@ const Channel_AppendUser = channelAppendUser;
 		}
 	});
 
-	Commands.set("BATCH", function (nick, data) {
+	Commands.set("BATCH", function (nick, data, msgTags) {
 		if (!data || data.length < 2) return;
 		const refStr = data[1] || '';
 		if (refStr.startsWith('+')) {
 			const ref  = refStr.substring(1);
-			const type = data[2] ? data[2].toUpperCase() : '';
+			const type = data[2] ? data[2] : '';
 			const params = data.slice(3).map(p => p.replace(/^:/, ''));
-			batchBuffer.set(ref, { type, params, messages: [] });
-			writeToLog(`[BATCH] Start: ref=${ref} type=${type} params=${params.join(',')}`);
+			const label  = msgTags && msgTags.has('label') ? msgTags.get('label') : null;
+			const batchTarget = params[0] || '';
+			batchBuffer.set(ref, { type, params, messages: [], label, batchTarget });
+			writeToLog(`[BATCH] Start: ref=${ref} type=${type} params=${params.join(',')}${label ? ' label='+label : ''}`);
 		} else if (refStr.startsWith('-')) {
 			const ref = refStr.substring(1);
 			const batch = batchBuffer.get(ref);
@@ -5223,24 +5369,116 @@ const Channel_AppendUser = channelAppendUser;
 
 	function processBatch(ref, batch) {
 		const type = batch.type;
-		if (type === 'CHATHISTORY' || type === 'chathistory') {
+		// labeled-response batch: 先匹配 label, 再处理消息
+		if (type === 'LABELED-RESPONSE' || type === 'labeled-response') {
+			if (batch.label && pendingLabels.has(batch.label)) {
+				writeToLog(`[LABELED] Batch response for label=${batch.label}`);
+				pendingLabels.delete(batch.label);
+			}
+			for (const msg of batch.messages) {
+				processLine(msg);
+			}
+		} else if (type === 'CHATHISTORY' || type === 'chathistory') {
 			const channelName = batch.params[0] || '';
 			const ch = findChannel(channelName);
 			if (ch) {
-				writeToScreen("var(--clr-text-dim)", `── Channel message history (${batch.messages.length}条) ──`, ch, "*");
+				if (!batch.isBefore) {
+					writeToScreen("var(--clr-text-dim)", `── 频道历史消息 (${batch.messages.length}条) ──`, ch, "*");
+				} else {
+					writeToScreen("var(--clr-text-dim)", `── 更早的历史消息 ──`, ch, "*");
+				}
 			}
 			for (const msg of batch.messages) {
 				processLine(msg);
 			}
-		} else if (type === 'LABELED-RESPONSE' || type === 'labeled-response') {
-			for (const msg of batch.messages) {
-				processLine(msg);
-			}
+		} else if (type === 'DRAFT/MULTILINE' || type === 'draft/multiline') {
+			// 多行消息批次: 按 concat 标签拼合
+			const target = batch.params[0] || '';
+			processMultilineBatch(batch, target);
 		} else {
 			for (const msg of batch.messages) {
 				processLine(msg);
 			}
 		}
+	}
+
+	/** 处理 draft/multiline 批次接收: 按 concat 标签拼合行 */
+	function processMultilineBatch(batch, target) {
+		const lines = [];
+		for (const rawMsg of batch.messages) {
+			const { tags: t, rest } = extractMsgTags(rawMsg);
+			const parts = rest.split(' ');
+			// 提取消息文本(PRIVMSG target :text)
+			let text = parts.slice(3).join(' ').replace(/^:/, '');
+			const isConcat = t.has('draft/multiline-concat');
+			if (isConcat && lines.length > 0) {
+				lines[lines.length - 1] += text;
+			} else {
+				lines.push(text);
+			}
+		}
+		const combined = lines.join('\n');
+		// 找到 serverTime(取第一条消息的 time 标签)
+		let serverTime = null;
+		if (batch.messages.length > 0) {
+			const { tags: t0 } = extractMsgTags(batch.messages[0]);
+			serverTime = t0.get('time') || null;
+		}
+		// 找到发送者 nick
+		let senderNick = '';
+		if (batch.messages.length > 0) {
+			const { rest } = extractMsgTags(batch.messages[0]);
+			const parts = rest.split(' ');
+			senderNick = parts[0] ? parts[0].replace(/^:/, '').split('!')[0] : '';
+		}
+		const ch = findChannel(target) || statusChannel;
+		if (ch) {
+			writeToScreen("var(--clr-font)", combined, ch, senderNick, serverTime);
+		}
+	}
+
+	/**
+	 * 发送多行消息(draft/multiline)
+	 * @param {string} target 目标频道/用户
+	 * @param {string} text 含换行符的文本
+	 * @param {number} maxBytes 服务器告知的最大字节数(默认 4000)
+	 * @param {number} maxLines 服务器告知的最大行数(默认 50)
+	 */
+	function sendMultilineMessage(target, text, maxBytes, maxLines) {
+		maxBytes = maxBytes || 4000;
+		maxLines = maxLines || 50;
+		const ref = 'ml' + Date.now();
+		const rawLines = text.split('\n');
+		// 每行如超过 512 字节, 需拆分并加 concat 标签
+		const outLines = []; // { text, concat }
+		for (const line of rawLines) {
+			const encoder = new TextEncoder();
+			const bytes = encoder.encode(line);
+			if (bytes.length <= 450) {
+				outLines.push({ text: line, concat: false });
+			} else {
+				let offset = 0;
+				let first = true;
+				while (offset < bytes.length) {
+					let end = Math.min(offset + 450, bytes.length);
+					while (end > offset && (bytes[end] & 0xC0) === 0x80) end--;
+					outLines.push({ text: new TextDecoder().decode(bytes.slice(offset, end)), concat: !first });
+					first = false;
+					offset = end;
+				}
+			}
+		}
+		if (outLines.length > maxLines) {
+			writeToScreen("var(--clr-warning)", `[MULTILINE] 超过最大行数限制 (${maxLines}), 消息被截断`, activeChannel || statusChannel, "*");
+			outLines.splice(maxLines);
+		}
+		doSend(`BATCH +${ref} draft/multiline ${target}\r\n`);
+		for (const ol of outLines) {
+			const prefix = ol.concat ? `@batch=${ref};draft/multiline-concat ` : `@batch=${ref} `;
+			doSend(`${prefix}PRIVMSG ${target} :${ol.text}\r\n`);
+		}
+		doSend(`BATCH -${ref}\r\n`);
+		writeToLog(`[MULTILINE] Sent ${outLines.length} lines to ${target}`);
 	}
 
 	function doSendLabeled(message, description) {
@@ -5265,7 +5503,7 @@ const Channel_AppendUser = channelAppendUser;
 	function requestChatHistory(channelName, limit) {
 		if (!ircv3ChatHistory) return;
 		limit = limit || 50;
-		doSend(`CHATHISTORY LATEST ${channelName} * ${limit}\r\n`);
+		doSendLabeled(`CHATHISTORY LATEST ${channelName} * ${limit}\r\n`, `CHATHISTORY ${channelName}`);
 		writeToLog(`[CHATHISTORY] Requesting last ${limit} messages for ${channelName}`);
 	}
 
@@ -5287,7 +5525,7 @@ const Channel_AppendUser = channelAppendUser;
 		if (isSelf) {
 			const targetCh = findChannel(inviteChannel);
 			const displayCh = targetCh || statusChannel;
-			writeToScreen("var(--clr-green)", `🔔 ${nick} 邀请你加入 ${inviteChannel}，输入 /join ${inviteChannel} 加入`, displayCh, "*");
+			writeToScreen("var(--clr-green)", `🔔 ${nick} 邀请你加入 ${inviteChannel}, 输入 /join ${inviteChannel} 加入`, displayCh, "*");
 			if (displayCh !== statusChannel) {
 				writeToScreen("var(--clr-green)", `🔔 ${nick} 邀请你加入 ${inviteChannel}`, statusChannel, "*");
 			}
@@ -5370,6 +5608,176 @@ const Channel_AppendUser = channelAppendUser;
 		writeToLog(`[REPLY] Sent reply to msgid=${replyToMsgid}`);
 	}
 
+	/* ── 消息右键菜单 ────────────────────────────────────── */
+	let msgCtxTarget = null; // { msgId, nick, target }
+
+	function showMessageContextMenu(e, msgId, fromNick, target) {
+		msgCtxTarget = { msgId, fromNick, target };
+		const menu = document.getElementById('msgContextMenu');
+		if (!menu) return;
+		// 只有拥有 msgid 才能回复/react/撤回
+		const canRedact = ircv3MessageRedact && msgId &&
+			(fromNick.toLowerCase() === nickname.toLowerCase());
+		const redactItem = menu.querySelector('[data-action="redact"]');
+		if (redactItem) redactItem.style.display = canRedact ? '' : 'none';
+
+		let x = e.clientX, y = e.clientY;
+		if (x + 180 > window.innerWidth) x = window.innerWidth - 185;
+		if (y + 150 > window.innerHeight) y = window.innerHeight - 155;
+		menu.style.left = x + 'px';
+		menu.style.top  = y + 'px';
+		menu.classList.add('visible');
+	}
+
+	function hideMsgContextMenu() {
+		const menu = document.getElementById('msgContextMenu');
+		if (menu) menu.classList.remove('visible');
+		msgCtxTarget = null;
+	}
+
+	function msgContextAction(action) {
+		if (!msgCtxTarget) return;
+		const { msgId, fromNick, target } = msgCtxTarget;
+		hideMsgContextMenu();
+		switch (action) {
+			case 'reply':
+				if (msgId) {
+					// 把 /reply msgid 填入输入框
+					if (input) {
+						replyingToMsgid = msgId;
+						replyingToNick  = fromNick;
+						input.placeholder = `↩ 回复 ${fromNick}  (按 Esc 取消)`;
+						input.focus();
+					}
+					writeToLog(`[REPLY] Preparing reply to msgid=${msgId} from ${fromNick}`);
+				}
+				break;
+			case 'react': {
+				const emoji = prompt('输入 emoji 反应:');
+				if (emoji && emoji.trim()) {
+					sendReaction(msgId, target, emoji.trim());
+				}
+				break;
+			}
+			case 'redact':
+				if (msgId && ircv3MessageRedact) {
+					const reason = prompt('撤回原因(可选, 按取消放弃):');
+					if (reason === null) break; // 用户取消
+					sendRedact(target, msgId, reason);
+				}
+				break;
+		}
+	}
+
+	/* 当前回复状态 */
+	let replyingToMsgid = null;
+	let replyingToNick  = null;
+
+	function cancelReply() {
+		replyingToMsgid = null;
+		replyingToNick  = null;
+		if (input) input.placeholder = '输入消息…';
+	}
+
+	/* ── +react 发送 ─────────────────────────────────────── */
+	function sendReaction(replyMsgid, target, emoji) {
+		if (!ircv3MessageTags || !isConnected) return;
+		const tags = replyMsgid ? `@+react=${emoji};+reply=${replyMsgid}` : `@+react=${emoji}`;
+		doSend(`${tags} TAGMSG ${target}\r\n`);
+		writeToLog(`[REACT] Sent reaction ${emoji} to msgid=${replyMsgid} target=${target}`);
+	}
+
+	/* ── draft/message-redaction ────────────────────────── */
+	function sendRedact(target, msgId, reason) {
+		if (!ircv3MessageRedact || !isConnected) return;
+		const reasonPart = reason ? ` :${reason}` : '';
+		doSend(`REDACT ${target} ${msgId}${reasonPart}\r\n`);
+		writeToLog(`[REDACT] Sent REDACT target=${target} msgid=${msgId}`);
+	}
+
+	Commands.set("REDACT", function (nick, data) {
+		if (!data || data.length < 4) return;
+		nick = data[0].substring(1).split("!")[0];
+		const target = data[2];
+		const msgId  = data[3];
+		const reason = data.slice(4).join(' ').replace(/^:/, '') || '消息已撤回';
+		// 找到对应消息元素并更新显示
+		const ch = findChannel(target) || statusChannel;
+		if (ch && ch.content) {
+			const el = ch.content.querySelector(`[data-msgid="${CSS.escape(msgId)}"]`);
+			if (el) {
+				el.style.opacity = '0.45';
+				el.style.textDecoration = 'line-through';
+				el.title = `已撤回: ${reason}`;
+				const badge = document.createElement('span');
+				badge.textContent = ` [已撤回: ${reason}]`;
+				badge.style.cssText = 'font-size:10px;color:var(--tx-muted);margin-left:4px;';
+				el.appendChild(badge);
+			}
+		}
+		writeToScreen("var(--clr-text-dim)", `${nick} 撤回了一条消息${reason ? ': ' + reason : ''}`, ch, "*");
+		writeToLog(`[REDACT] ${nick} redacted msgid=${msgId}`);
+	});
+
+	/* ── draft/read-marker ───────────────────────────────── */
+	/* 防抖: 避免每条消息都发 MARKREAD */
+	let markReadTimer = null;
+	let markReadPending = {};
+
+	function sendMarkRead(target, timestamp) {
+		if (!ircv3ReadMarker || !isConnected) return;
+		markReadPending[target] = timestamp;
+		if (markReadTimer) return;
+		markReadTimer = setTimeout(() => {
+			markReadTimer = null;
+			for (const [tgt, ts] of Object.entries(markReadPending)) {
+				doSend(`MARKREAD ${tgt} timestamp=${ts}\r\n`);
+				writeToLog(`[MARKREAD] ${tgt} timestamp=${ts}`);
+			}
+			markReadPending = {};
+		}, 2000);
+	}
+
+	Commands.set("MARKREAD", function (nick, data) {
+		if (!data || data.length < 4) return;
+		// :server MARKREAD #channel timestamp=...
+		const target    = data[2];
+		const tsParam   = data[3] || '';
+		const timestamp = tsParam.replace(/^timestamp=/, '');
+		writeToLog(`[MARKREAD] Server: target=${target} timestamp=${timestamp}`);
+		// 更新 tab 上的已读状态(清除未读角标)
+		const ch = findChannel(target);
+		if (ch && ch.button) {
+			const badge = ch.button.querySelector('.unread-badge');
+			if (badge) badge.remove();
+		}
+	});
+
+	/* ── chathistory 翻页(向上滚动加载更早历史) ─────────── */
+	let chatHistoryLoading = {};
+
+	function requestChatHistoryBefore(channelName, beforeMsgid) {
+		if (!ircv3ChatHistory || !isConnected) return;
+		if (chatHistoryLoading[channelName]) return;
+		chatHistoryLoading[channelName] = true;
+		doSend(`CHATHISTORY BEFORE ${channelName} msgid=${beforeMsgid} 50\r\n`);
+		writeToLog(`[CHATHISTORY] Requesting 50 messages BEFORE msgid=${beforeMsgid} for ${channelName}`);
+		setTimeout(() => { chatHistoryLoading[channelName] = false; }, 3000);
+	}
+
+	function attachChatHistoryScrollListener(ch) {
+		if (!ch || !ch.content) return;
+		ch.content.addEventListener('scroll', function onScrollHistory() {
+			if (ch.content.scrollTop < 80 && ircv3ChatHistory && !chatHistoryLoading[ch.name]) {
+				// 找最早一条消息的 msgid
+				const first = ch.content.querySelector('[data-msgid]');
+				if (first && first.dataset.msgid) {
+					requestChatHistoryBefore(ch.name, first.dataset.msgid);
+				}
+			}
+		});
+	}
+
 
 	function startKeepAlive() {
 		stopKeepAlive();
@@ -5440,6 +5848,15 @@ const Channel_AppendUser = channelAppendUser;
 	window.closeBanPanel         = closeBanPanel;
 	window.unbanEntry            = unbanEntry;
 	window.toggleHighlightKeyword = toggleHighlightKeyword;
+	// IRCv3 新增功能
+	window.msgContextAction       = msgContextAction;
+	window.hideMsgContextMenu     = hideMsgContextMenu;
+	window.sendReaction           = sendReaction;
+	window.sendRedact             = sendRedact;
+	window.sendMarkRead           = sendMarkRead;
+	window.cancelReply            = cancelReply;
+	window.sendMultilineMessage   = sendMultilineMessage;
+	window.requestChatHistoryBefore = requestChatHistoryBefore;
 
 }());
 </script>
