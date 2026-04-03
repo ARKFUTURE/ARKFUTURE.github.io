@@ -3197,44 +3197,6 @@
 	}
 	const Channel_InsertUser = channelInsertUser;
 
-	function channelAppendUser(nick, channel, prefix) {
-		if (!nick || !channel || !channel.userlist) return;
-		const user = document.createElement("li");
-
-		const initial = nick.replace(/^[^a-zA-Z0-9]/, '')[0] || nick[0] || '?';
-		user.setAttribute('data-initial', initial.toUpperCase());
-
-		let tmp = document.createElement("p");
-
-		if (prefix && prefix !== " ") {
-			const prefixChar = prefix[0];
-			const prefixInfo = DefaultPrefixMap[prefixChar];
-			user.setAttribute('data-prefix', prefixChar);
-			if (prefixInfo) {
-				tmp.textContent = prefixInfo.symbol;
-				tmp.title = prefixInfo.name;
-			} else {
-				tmp.textContent = prefixChar;
-			}
-		}
-		user.appendChild(tmp);
-
-		tmp = document.createElement("p");
-		tmp.textContent = nick;
-		tmp.title = "点击与 " + nick + " 私聊";
-		tmp.style.cursor = "pointer";
-		tmp.addEventListener("click", function (e) {
-			e.stopPropagation();
-			openPrivateChat(nick);
-		});
-	user.appendChild(tmp);
-	channel.userlist.appendChild(user);
-	if (channel.users) {
-		channel.users.push([prefix || " ", nick]);
-	}
-}
-const Channel_AppendUser = channelAppendUser;
-
 	function channelRemoveUser(nick, channel) {
 		if (!nick || !channel || !channel.userlist) return false;
 
