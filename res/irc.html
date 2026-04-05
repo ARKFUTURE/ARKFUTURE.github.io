@@ -2374,90 +2374,6 @@ const Channel_AppendUser = channelAppendUser;
 		});
 	}
 
-	function linkify(text) {
-		const mediaMaxWidth = '300px';
-
-		return HTML_escape(text).replace(/https?:\/\/[^\s<>{}|\\^`[\]]+/g, function (escapedUrl) {
-			const rawUrl = escapedUrl
-				.replace(/&amp;/g, '&')
-				.replace(/&lt;/g, '<')
-				.replace(/&gt;/g, '>')
-				.replace(/&quot;/g, '"')
-				.replace(/&#039;/g, "'");
-			const safeUrl = sanitizeUrl(rawUrl);
-			if (!safeUrl) return escapedUrl;
-
-		const lowerUrl = safeUrl.toLowerCase();
-		const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|ico|tiff|tif|avif|heic|heif|jfif|pjpeg|pjp|apng)(\?.*)?$/i.test(lowerUrl);
-		const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac|opus|weba|wma|aiff|au|mid|midi|ra|ram|mka)(\?.*)?$/i.test(lowerUrl);
-		const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8|wmv|rmvb|rm|ts|mts|m2ts|3gp|3g2|divx|xvid|asf|vob|mpg|mpeg|mp2|mpe|mpv|m2v|svi|mxf|roq|nsv|f4v|f4p|f4a|f4b)(\?.*)?$/i.test(lowerUrl);
-		const safeAttr = HTML_escape(safeUrl);
-
-		if (isImage) {
-			return `<img src="${safeAttr}" alt="Image" referrerpolicy="no-referrer" crossorigin="anonymous" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.1);">`;
-		} else if (isAudio) {
-			return `<audio controls src="${safeAttr}" referrerpolicy="no-referrer" style="max-width:${mediaMaxWidth};"></audio>`;
-		} else if (isVideo) {
-			return `<video controls src="${safeAttr}" referrerpolicy="no-referrer" style="max-width:${mediaMaxWidth};height:auto;border-radius:4px;"></video>`;
-		} else {
-			return `<a href="${safeAttr}" target="_blank" rel="noopener noreferrer" style="color:var(--clr-accent);text-decoration:underline;word-break:break-all;">${safeAttr}</a>`;
-		}
-		});
-	}
-
-	function linkifyToDom(text) {
-		const frag = document.createDocumentFragment();
-		const urlRegex = /(https?:\/\/[^\s<>{}|\\^`[\]]+)/g;
-		let lastIndex = 0;
-		let match;
-		while ((match = urlRegex.exec(text)) !== null) {
-			if (match.index > lastIndex) {
-				frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
-			}
-			const safeUrl = sanitizeUrl(match[1]);
-			if (!safeUrl) {
-				frag.appendChild(document.createTextNode(match[1]));
-			} else {
-			const lowerUrl = safeUrl.toLowerCase();
-			const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|ico|tiff|tif|avif|heic|heif|jfif|pjpeg|pjp|apng)(\?.*)?$/i.test(lowerUrl);
-			const isAudio = /\.(mp3|wav|ogg|aac|m4a|flac|opus|weba|wma|aiff|au|mid|midi|ra|ram|mka)(\?.*)?$/i.test(lowerUrl);
-			const isVideo = /\.(mp4|webm|ogv|mov|avi|mkv|flv|m4v|m3u8|wmv|rmvb|rm|ts|mts|m2ts|3gp|3g2|divx|xvid|asf|vob|mpg|mpeg|mp2|mpe|mpv|m2v|svi|mxf|roq|nsv|f4v|f4p|f4a|f4b)(\?.*)?$/i.test(lowerUrl);
-			if (isImage) {
-				const img = document.createElement('img');
-				img.src = safeUrl; img.alt = 'Image';
-				img.referrerPolicy = 'no-referrer';
-				img.crossOrigin = 'anonymous';
-				img.style.cssText = 'max-width:300px;height:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.1);';
-				frag.appendChild(img);
-			} else if (isAudio) {
-				const audio = document.createElement('audio');
-				audio.controls = true; audio.src = safeUrl;
-				audio.referrerPolicy = 'no-referrer';
-				audio.style.maxWidth = '300px';
-				frag.appendChild(audio);
-			} else if (isVideo) {
-				const video = document.createElement('video');
-				video.controls = true; video.src = safeUrl;
-				video.referrerPolicy = 'no-referrer';
-				video.style.cssText = 'max-width:300px;height:auto;border-radius:4px;';
-				frag.appendChild(video);
-			} else {
-					const a = document.createElement('a');
-					a.href = safeUrl; a.target = '_blank';
-					a.rel = 'noopener noreferrer';
-					a.style.cssText = 'color:var(--clr-accent);text-decoration:underline;word-break:break-all;';
-					a.textContent = safeUrl;
-					frag.appendChild(a);
-				}
-			}
-			lastIndex = urlRegex.lastIndex;
-		}
-		if (lastIndex < text.length) {
-			frag.appendChild(document.createTextNode(text.slice(lastIndex)));
-		}
-		return frag;
-	}
-
 	function writeMotdLine(rawText) {
 		if (!statusChannel || !statusChannel.content) return;
 		const now = new Date();
@@ -2494,7 +2410,7 @@ const Channel_AppendUser = channelAppendUser;
 					return;
 				}
 				const actionText = text.substring(4);
-				const messages = splitIRCMessage("privmsg " + activeChannel.name + " :\x01ACTION " + actionText + "\x01");
+				const messages = splitIRCMessage("PRIVMSG " + activeChannel.name + " :\x01ACTION " + actionText + "\x01");
 				messages.forEach(msg => doSend(msg));
 				if (!ircv3EchoMessage) {
 					writeToScreen("var(--clr-red)", `${nickname} ${actionText}`, activeChannel, "*");
@@ -2514,7 +2430,7 @@ const Channel_AppendUser = channelAppendUser;
 						}
 					}
 					Tab_Show(targetNick);
-					const messages = splitIRCMessage("privmsg " + targetNick + " :" + msgText);
+					const messages = splitIRCMessage("PRIVMSG " + targetNick + " :" + msgText);
 					messages.forEach((msg, index) => {
 						doSend(msg);
 						if (!ircv3EchoMessage && index === 0) {
@@ -2680,7 +2596,7 @@ const Channel_AppendUser = channelAppendUser;
 				return;
 			}
 
-			const messages = splitIRCMessage("privmsg " + target + " :" + text);
+			const messages = splitIRCMessage("PRIVMSG " + target + " :" + text);
 			messages.forEach((msg, index) => {
 				doSend(msg);
 				if (!ircv3EchoMessage && index === 0) {
@@ -2707,7 +2623,7 @@ const Channel_AppendUser = channelAppendUser;
 	function splitIRCMessage(message) {
 		const MAX_BYTES = 512;
 
-		const isPrivmsg = message.startsWith("privmsg ");
+		const isPrivmsg = message.toLowerCase().startsWith("privmsg ");
 		const fullMessage = message + "\r\n";
 		if (!isPrivmsg || byteLength(fullMessage) <= MAX_BYTES) {
 			return [fullMessage];
@@ -4559,12 +4475,12 @@ const Channel_AppendUser = channelAppendUser;
 	function sendWithReply(replyToMsgid, targetChannel, text) {
 		if (!replyToMsgid || !ircv3MessageTags) {
 			// If +reply is not supported, fall back to sending a plain message
-			const msgs = splitIRCMessage('privmsg ' + targetChannel + ' :' + text);
+			const msgs = splitIRCMessage('PRIVMSG ' + targetChannel + ' :' + text);
 			msgs.forEach(m => doSend(m));
 			return;
 		}
 		// Send messages with the +reply client tag
-		const msgs = splitIRCMessage('privmsg ' + targetChannel + ' :' + text);
+		const msgs = splitIRCMessage('PRIVMSG ' + targetChannel + ' :' + text);
 		msgs.forEach((m, idx) => {
 			if (idx === 0) {
 				// Attach the +reply tag to the first message segment only
