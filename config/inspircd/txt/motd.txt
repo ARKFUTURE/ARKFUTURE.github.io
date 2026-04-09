@@ -1,42 +1,42 @@
-\c{black,pink}→----------欢迎\c
-- \c07\bWelcome to \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E 
-- \b此服务为 \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E \c12N\c13E\c14T\c \b的重要组成部分\c
-- 
-\c{black,pink}→----------说明\c
+\c{cyan,black}→----------欢迎\c
+- \c{light cyan}\bWelcome to \c{red}A\c{orange}R\c{yellow}K\c{green}F\c{cyan}U\c{blue}T\c{magenta}U\c{red}R\c{orange}E 
+- \b此服务为 \c{red}A\c{orange}R\c{yellow}K\c{green}F\c{cyan}U\c{blue}T\c{magenta}U\c{red}R\c{orange}E \c{light cyan}N\c{cyan}E\c{blue}T\c \b的重要组成部分\c
+
+\c{cyan,black}→----------说明\c
 -\b 我们注重匿名性,不强制注册,添加好友请谨慎鉴别,我们的匿名方法及匿名建议:
-- \c02* 使用"\c04代理,TOR,I2P\c02"连接,以增强您的匿名性
-- \c02* 使用"\c04OTR\c02"技术,以对您的会话进行点对点加密
-- \c02* 管理运维人员不会\c04阅读,抓取,收集\c02您的任何消息,\c04频道内容不受审核\c02
-- \c02* 管理运维人员不会干预\c04非官方频道\c02中发生的频道事务,\c04除非它违反了公约中的管理内容
-- \c02* 管理运维人员不会获取服务器的任何内容跟\c04执法者\c02合作,请阅读[\c04金丝雀安全说明\c02]
-- 
-\c{black,pink}→----------频道规则·相关命令\c
+- \c{light green}* 使用"\c{yellow}代理,TOR,I2P\c{light green}"连接,以增强您的匿名性
+- \c{light green}* 使用"\c{yellow}OTR\c{light green}"技术,以对您的会话进行点对点加密
+- \c{light green}* 管理运维人员不会\c{yellow}阅读,抓取,收集\c{light green}您的任何消息,\c{yellow}频道内容不受审核\c{light green}
+- \c{light green}* 管理运维人员不会干预\c{yellow}非官方频道\c{light green}中发生的频道事务,\c{yellow}除非它违反了公约中的管理内容
+- \c{light green}* 管理运维人员不会获取服务器的任何内容跟\c{yellow}执法者\c{light green}合作,请阅读[\c{yellow}金丝雀安全说明\c{light green}]
+
+\c{cyan,black}→----------频道规则·相关命令\c
 - \b !您可以创建自己的频道并推广!
-- \c07* 输入\c04/RULES\c07获取IRC规则\c{red}[请获取规则,重要!]\c
-- \c07* 输入\c04/HELPOP\c07获取IRC帮助信息 
-- \c07* 输入\c04/ADMIN\c07获取IRC管理员信息 并可联系管理员
--
-\c{black,pink}→----------官方频道\c
-- \c{green}#lobby\c - \c06公共聊天频道 
-- \c{green}#help\c - \c06帮助频道
--
-\c{black,pink}→----------注册\c
-- \c03关于Service是否启用,以实际应用为准
--
-- \c03当您看到服务器\c04提示您未注册\c03,说明我们使用了Service
-- \c03您可以\c04选择注册\c03一个账户来固定Nickname;也可以不注册使用:
-- \c03注册命令:\c04/NickServ REGISTER 您的密码 您的邮箱
-- \c03登录命令:\c04/NickServ IDENTIFY 您的用户名 您的密码
-- \c03管理员登录命令:\c04/oper 管理员用户名 密码
-- \c03注册(仅需要注册一次,不强制要求邮箱)>登录(即为注册用户)
-- \c03注意:1部分频道可能根据频道管理员的规则,需要您注册后才能聊天; 
-- \c03注意:2昵称注册过期前的时长为100天(day),若要保留,请在过期前登录一次
--
-- \c03如果服务器\c04没有提示您未注册\c03,说明我们没用使用Service
-- \c03这时您可以随意使用服务器 不需要任何的注册行为
--
-\c{black,pink}→----------其他说明\c
-- \c03DCC传输时, 发送用户必须在您的DCCALLOW白名单中
-- \c03请仔细阅读上面的MOTD及RULES以保证您了解和使用我们的IRC
-- \c03也请审阅我们的配置文件,给我们提一些安全匿名的建议,采纳您的建议时我们会给予一些奖励
-- \c03命令大全 引用网址:https://www.geekshed.net/commands/
+- \c{light cyan}* 输入\c{yellow}/RULES\c{light cyan}获取IRC规则\c{red}[请获取规则,重要!]\c
+- \c{light cyan}* 输入\c{yellow}/HELPOP\c{light cyan}获取IRC帮助信息 
+- \c{light cyan}* 输入\c{yellow}/ADMIN\c{light cyan}获取IRC管理员信息 并可联系管理员
+
+\c{cyan,black}→----------官方频道\c
+- \c{green}#lobby\c - \c{orange}公共聊天频道 
+- \c{green}#help\c - \c{orange}帮助频道
+
+\c{cyan,black}→----------注册\c
+- \c{light green}关于Service是否启用,以实际应用为准
+
+- \c{light green}当您看到服务器\c{yellow}提示您未注册\c{light green},说明我们使用了Service
+- \c{light green}您可以\c{yellow}选择注册\c{light green}一个账户来固定Nickname;也可以不注册使用:
+- \c{light green}注册命令:\c{yellow}/NickServ REGISTER 您的密码 您的邮箱
+- \c{light green}登录命令:\c{yellow}/NickServ IDENTIFY 您的用户名 您的密码
+- \c{light green}管理员登录命令:\c{yellow}/oper 管理员用户名 密码
+- \c{light green}注册(仅需要注册一次,不强制要求邮箱)>登录(即为注册用户)
+- \c{light green}注意:1部分频道可能根据频道管理员的规则,需要您注册后才能聊天; 
+- \c{light green}注意:2昵称注册过期前的时长为100天(day),若要保留,请在过期前登录一次
+
+- \c{light green}如果服务器\c{yellow}没有提示您未注册\c{light green},说明我们没用使用Service
+- \c{light green}这时您可以随意使用服务器 不需要任何的注册行为
+
+\c{cyan,black}→----------其他说明\c
+- \c{light green}DCC传输时, 发送用户必须在您的DCCALLOW白名单中
+- \c{light green}请仔细阅读上面的MOTD及RULES以保证您了解和使用我们的IRC
+- \c{light green}也请审阅我们的配置文件,给我们提一些安全匿名的建议,采纳您的建议时我们会给予一些奖励
+- \c{light green}命令大全 引用网址:\c{yellow}https://www.geekshed.net/commands/
