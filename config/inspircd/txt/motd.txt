@@ -35,8 +35,7 @@
 - \c{light blue}如果服务器\c{yellow}没有提示您未注册\c{light blue},说明我们没用使用Service
 - \c{light blue}这时您可以随意使用服务器 不需要任何的注册行为
 
-\c{purple,black}→----------其他说明\c
-- \c{light magenta}DCC传输时, 发送用户必须在您的DCCALLOW白名单中
-- \c{light magenta}请仔细阅读上面的MOTD及RULES以保证您了解和使用我们的IRC
-- \c{light magenta}也请审阅我们的配置文件,给我们提一些安全匿名的建议,采纳您的建议时我们会给予一些奖励
-- \c{light magenta}命令大全 引用网址:\c{yellow}https://www.geekshed.net/commands/
+\c{magenta,black}→----------其他说明\c
+- \c{pink}请仔细阅读上面的MOTD及RULES以保证您了解和使用我们的IRC
+- \c{pink}也请审阅我们的配置文件,给我们提一些安全匿名的建议,采纳您的建议时我们会给予一些奖励
+- \c{pink}命令大全 引用网址:\c{yellow}https://www.geekshed.net/commands/
