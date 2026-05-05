@@ -41,26 +41,5 @@ find /etc/inspircd -type d -exec chmod 755 {} \;
 find /etc/inspircd -type f -exec chmod 640 {} \;
 cd ~
 echo "inspircd配置下载完成,请修改相关配置以便使用"
-###### ANOPE配置
-cd /etc/anope
-rm -rf *
-curl -L -O --anyauth https://ARKFUTURE.github.io/config/anope/services.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/config/anope/services.motd
-curl -L -O --anyauth https://ARKFUTURE.github.io/config/anope/modules.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/config/anope/nickserv.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/config/anope/chanserv.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/config/anope/operserv.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/config/anope/botserv.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/config/anope/global.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/config/anope/memoserv.conf
-curl -L -O --anyauth https://ARKFUTURE.github.io/config/anope/hostserv.conf
-cd /etc/anope
-chown root:root /etc/anope
-chmod 755 /etc/anope
-find /etc/anope -type f -exec chown root:irc {} \;
-find /etc/anope -type f -exec chmod 640 {} \;
-cd ~
-echo "anope配置文件下载完成,请修改相关配置以便使用"
 ###### 检测配置
 head -n 1 /etc/inspircd/inspircd.conf
-head -n 1 /etc/anope/services.conf
