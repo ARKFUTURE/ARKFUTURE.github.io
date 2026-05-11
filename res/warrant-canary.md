@@ -1,6 +1,3 @@
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
-
 # 权证金丝雀(金丝雀安全说明) | Warrant Canary 
 ## 14/02/2026
 * * [UTF-8] 
@@ -8,9 +5,9 @@ Hash: SHA512
 ```
 第1号签名警告信: 截至签署日, 无事件或传票
 
-尊敬的成员们, 我们(ARKFUTURE), 在此郑重声明, 截至[2026年2月14日], 我们尚未接收到任何来自政府机构, 法律机构或其他第三方实体的法律命令或要求, 以获取, 披露或分享我们团队成员的个人信息, 通信记录或任何形式的任何数据.
+尊敬的成员们, 我们(ARKFUTURE), 在此郑重声明, 截至当前签署日, 我们尚未接收到任何来自政府机构, 法律机构或其他第三方实体的法律命令或要求, 以获取, 披露或分享我们团队成员的个人信息, 通信记录或任何形式的任何数据.
 
-此页面旨在通知成员,  ARKFUTURE 的服务器(包括公约中相关的团队或其他直接相关合作伙伴), 及直接拥有的服务(社区门户, Git平台, 电子邮件服务, 在线协作平台服务, 云平台, CDN节点, IRC 等)未被政府秘密传票传唤.
+此说明旨在通知成员,  ARKFUTURE 的服务器(包括公约中相关的团队或其他直接相关合作伙伴), 及直接拥有的服务(社区门户, Git平台, 电子邮件服务, 在线协作平台服务, 云平台, CDN节点, IRC 等)未被政府秘密传票传唤.
 
 ARKFUTURE始终将成员的隐私和数据安全视为最高优先级.我们坚信, 保护每一位成员的隐私权益是我们不可推卸的责任.因此, 我们承诺将持续遵守最严格的隐私保护政策以及相关的匿名政策, 并确保所有成员的个人信息得到妥善保管和加密处理.
 
@@ -34,11 +31,3 @@ GPG KEY: https://keyserver.ubuntu.com/pks/lookup?search=3a977d066d631cefb935166c
 GPG KEY MIRROR: https://keys.openpgp.org/search?q=3A977D066D631CEFB935166C6681FE95965FAA63
 gpg --keyserver hkps://keys.openpgp.org --recv-keys 3A977D066D631CEFB935166C6681FE95965FAA63
 ```
------BEGIN PGP SIGNATURE-----
-
-iJEEARYKADkWIQQ6l30GbWMc77k1Fmxmgf6Vll+qYwUCaZB+SxsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDEACgkQZoH+lZZfqmM59AEAhubFOHxc4kCCoAESH1sC
-cRuJ6WEcoLnD3xIPZKo5eH4BALpTHjDSCdqJAuh2zM6hYsl+7q0MUm5zCYaY6u80
-nkgF
-=WvNT
------END PGP SIGNATURE-----

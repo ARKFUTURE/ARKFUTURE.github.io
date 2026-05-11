@@ -3,16 +3,17 @@
 \b此服务为 \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E \c12N\c13E\c14T\c \b的重要组成部分\c
 
 \c{cyan,black}→---------- 匿名承诺 ----------\c
-\b 我们注重匿名性,不强制注册,添加好友请谨慎鉴别,我们的匿名方法及匿名建议:
+\b 我们注重匿名性,添加好友请谨慎鉴别,我们的匿名方法及匿名建议:
 \c{light cyan}* 请使用"\c{yellow}代理,TOR,I2P\c{light cyan}"连接,以增强您的匿名性
 \c{light cyan}* 请使用"\c{yellow}OTR\c{light cyan}"技术,以对您的会话进行点对点加密
 \c{light cyan}* 管理运维人员不会\c{yellow}阅读,抓取,收集\c{light cyan}您的任何消息
 \c{light cyan}* 管理运维人员不会干预\c{yellow}非官方频道\c{light cyan}中发生的频道事务
 \c{light cyan}* 管理运维人员不会跟\c{yellow}执法者\c{light cyan}合作,永远不会
 \c{light cyan}* 请阅读[\c{yellow}金丝雀安全说明\c{light cyan}]了解我们的隐私政策
+\c{light cyan}* 可以使用\c{yellow}匿名邮箱注册\c{light cyan}之后可以通过管理员修改邮箱
 
 \c{green,black}→---------- 快速开始 ----------\c
-\c{light green}* 获取规则: \c{yellow}/RULES\c
+\c{light green}* 获取规则及金丝雀安全说明: \c{yellow}/RULES\c
 \c{light green}* 获取帮助: \c{yellow}/HELPOP\c
 \c{light green}* 管理信息: \c{yellow}/ADMIN\c
 
@@ -21,11 +22,10 @@
 \c{light green}#help\c   - \c{light cyan}技术支持与问题反馈\c
 
 \c{blue,black}→---------- 关于注册 ----------\c
-\c{light blue}* 本网络 \c{yellow}可选注册\c{light blue}, 未注册用户可自由聊天
-\c{light blue}* 部分频道可能要求注册并使用SSL连接, 由频道管理员自行设定
+\c{light blue}* 当前 \c{yellow}未开启邮件验证\c{light blue}
 \c{light blue}* 注册: \c{yellow}/msg NickServ REGISTER <密码> <邮箱>\c
 \c{light blue}* 登录: \c{yellow}/msg NickServ IDENTIFY <昵称> <密码>\c
-\c{light blue}* 昵称保留期: \c{yellow}100 天\c{light blue}, 到期前登录即可续期
+\c{light blue}* 昵称保留期: \c{yellow} 100 天\c{light blue}, 到期前登录即可续期
 
 \c{magenta,black}→---------- 其他说明 ----------\c
 \c{pink}* 请仔细阅读 /RULES, 使用本网络即表示同意相关条款\c
