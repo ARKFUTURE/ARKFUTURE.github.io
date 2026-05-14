@@ -1,0 +1,29 @@
+# 全局配置
+global:
+  scrape_interval: 15s 
+  evaluation_interval: 15s 
+
+# 规则文件配置
+rule_files:
+
+# 抓取配置文件列表
+scrape_config_files:
+
+# 抓取配置列表
+scrape_configs:
+
+# 告警配置
+alerting:
+
+# 远程写入配置
+remote_write:
+
+# OpenTelemetry 接收器配置
+# 详见 https://prometheus.io/docs/guides/opentelemetry/
+#otlp:
+
+# 远程读取配置
+remote_read:
+
+# 存储配置
+storage:
