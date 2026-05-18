@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "此脚本仅用于inspircd/anope及arkfuture配置的安装"
-if [ "$(id -u)" -ne 0 ]; then
-    echo "错误: 请使用 sudo 或 root 权限执行本脚本"
+if [ "$EUID" -ne 0 ]; then
+    echo "请使用 root 或 sudo 运行"
     exit 1
 fi
 echo "现在是root用户权限"
@@ -11,15 +11,8 @@ rm -rf *
 mkdir conf
 mkdir txt
 curl -L -O https://arkfuture.github.io/config/inspircd/inspircd.conf
-touch cert.pem
-touch key.pem
-read -rp "是否要生成自签名证书？ [y/N] " ans
-if [[ ${ans,,} == @(y|yes) ]]; then
-    openssl req -x509 -newkey rsa:4096 -sha256 -days 360 -nodes -keyout key.pem -out cert.pem -subj "/CN=irc.arkfuture.test" -addext "extendedKeyUsage = serverAuth"
-    echo "成功生成自签名证书,证书仅用于测试环境"
-else
-    echo "未生成任何证书,请稍自行获取证书并修改/usr/share/inspircd/deploy-ssl.sh后执行此移动证书脚本"
-fi
+echo "自动生成证书,如需要使用自己的证书,请替换key.pem和cert.pem中的内容为自己的证书"
+openssl req -x509 -newkey rsa:4096 -sha256 -days 360 -nodes -keyout key.pem -out cert.pem -subj "/CN=irc.arkfuture.irc" -addext "extendedKeyUsage = serverAuth"
 cd /etc/inspircd/conf
 curl -L -O https://arkfuture.github.io/config/inspircd/conf/modules.conf
 curl -L -O https://arkfuture.github.io/config/inspircd/conf/helpop.conf

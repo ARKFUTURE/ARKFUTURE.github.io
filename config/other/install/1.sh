@@ -2,8 +2,8 @@
 echo "更新配置文件"
 echo "! 此操作会覆盖掉配置文件 !"
 echo "此脚本仅适用最新的ARKFUTURE nossl配置 以及 更新ARKFUTURE的默认配置"
-if [ "$(id -u)" -ne 0 ]; then
-    echo "错误：请使用 sudo 或 root 权限执行本脚本"
+if [ "$EUID" -ne 0 ]; then
+    echo "请使用 root 或 sudo 运行"
     exit 1
 fi
 echo "现在是root用户权限"

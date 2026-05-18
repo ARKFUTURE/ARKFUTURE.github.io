@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "inspircd 编译安装脚本 需要root权限 Debian"
 echo "此脚本当前为[测试版],加载内容为[额外的模块,第三方模块,许可证不兼容的模块,可能为自己开发的第三方模块,也可能为每夜版本的ircd]"
-if [ "$(id -u)" -ne 0 ]; then
-    echo "错误：请使用 sudo 或 root 权限执行本脚本"
+if [ "$EUID" -ne 0 ]; then
+    echo "请使用 root 或 sudo 运行"
     exit 1
 fi
 echo "现在是root用户权限"
