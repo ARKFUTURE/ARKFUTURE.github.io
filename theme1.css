@@ -1214,7 +1214,7 @@ h2.section-subheading::after {
     0 0 24px var(--p2);
 }
 
-h3.irc-server-label {
+h3.section-tertiary {
   font-size: 1rem;
   color: var(--g0);
   letter-spacing: 1.5px;

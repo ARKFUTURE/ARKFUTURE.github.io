@@ -935,7 +935,7 @@ h2.section-subheading::after {
   box-shadow: 0 0 8px var(--hot-pink);
 }
 
-h3.irc-server-label {
+h3.section-tertiary {
   font-size: 1rem;
   color: var(--purple);
   text-shadow:
@@ -1579,13 +1579,13 @@ h2.section-subheading {
    10. IRC — 在线绿点
    ============================================================ */
 
-h3.irc-server-label {
+h3.section-tertiary {
   display: inline-flex;
   align-items: center;
   gap: .5rem;
 }
 
-h3.irc-server-label::before {
+h3.section-tertiary::before {
   content: '';
   display: inline-block;
   flex-shrink: 0;

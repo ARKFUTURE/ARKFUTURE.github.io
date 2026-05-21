@@ -237,7 +237,7 @@ h2.section-subheading {
   margin-top: 0;
 }
 
-h3.irc-server-label {
+h3.section-tertiary {
   font-size: 1rem;
   color: var(--neon-blue);
   letter-spacing: 1px;
