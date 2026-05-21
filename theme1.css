@@ -1,2352 +1,733 @@
-/* ████████████████████████████████████████████████████████████████████████████
-   ARKFUTURE — THEME 1 : CYBERPUNK ∙ DARKNET ∙ HACKER ∙ TERMINAL
-   ████████████████████████████████████████████████████████████████████████████
-   PURE CSS — NO JS — NO HTML CHANGES
-   @property/Houdini ∙ conic-gradient ∙ backdrop-filter ∙ mix-blend-mode
-   clip-path ∙ @layer ∙ perspective-3D ∙ color-mix(in oklch) ∙ oklch()
-   @starting-style ∙ @container ∙ @scope ∙ CSS Nesting(&)
-   mask-image/mask-composite ∙ offset-path ∙ text-wrap:balance
-   :has() ∙ :is() ∙ :where() ∙ :nth-child(n of cls)
-   content-visibility:auto ∙ contain ∙ will-change ∙ overscroll-behavior
-   scroll-snap(proximity) ∙ accent-color ∙ caret-color ∙ light-dark()
-   animation-composition:add ∙ linear()缓动 ∙ field-sizing:content
-   dvh/svh/lh/cqi 现代单位 ∙ :focus-within ∙ :has()无JS交互联动
-   mat-rain ∙ --glow ∙ --fog ∙ --scan-y ∙ --line-w (全部激活)
-   ████████████████████████████████████████████████████████████████████████████ */
+﻿/* ============================================================
+   Theme 1 — Premium Dark · 大厂级精致暗色主题
+   ——————————————————————————————————————————
+   配色: 深黑底 + 蓝紫双色系 + 青绿点缀
+   字体: Inter / Rajdhani / 系统回退
+   特效: 毛玻璃 · 流光边框 · 渐变光晕 · 微动画
+   ============================================================ */
 
-/* ══════════════════════════════════════════════════════════
-   LAYER ORDER
-   ══════════════════════════════════════════════════════════ */
-@layer reset, vars, keyframes, base, layout, components, fx, scroll-fx, modern, responsive;
-
-/* ══════════════════════════════════════════════════════════
-   HOUDINI @property — 所有动画化 CSS 变量
-   ══════════════════════════════════════════════════════════ */
-@property --hue        { syntax:"<angle>";      initial-value:0deg;   inherits:false }
-@property --hue2       { syntax:"<angle>";      initial-value:60deg;  inherits:false }
-@property --hue3       { syntax:"<angle>";      initial-value:120deg; inherits:false }
-@property --hue4       { syntax:"<angle>";      initial-value:240deg; inherits:false }
-@property --glow       { syntax:"<length>";     initial-value:10px;   inherits:false }
-@property --scan-y     { syntax:"<percentage>"; initial-value:0%;     inherits:false }
-@property --rx         { syntax:"<angle>";      initial-value:0deg;   inherits:false }
-@property --ry         { syntax:"<angle>";      initial-value:0deg;   inherits:false }
-@property --line-w     { syntax:"<percentage>"; initial-value:0%;     inherits:false }
-@property --fog        { syntax:"<number>";     initial-value:0;      inherits:false }
-
-/* ══════════════════════════════════════════════════════════
-   VARIABLES
-   ══════════════════════════════════════════════════════════ */
-@layer vars {
+/* ============================================================
+   CSS 变量
+   ============================================================ */
 :root {
-  /* ── 背景 ── */
-  --bg:          #000a02;
-  --bg-card:     rgba(0,12,4,0.93);
-  --bg-quote:    rgba(8,0,3,0.91);
+  /* ── 色彩系统 ── */
+  --bg0: #09090b;
+  --bg1: #0f0f12;
+  --bg2: #18181b;
+  --bg-card: rgba(16,16,22,.88);
 
-  /* ── 矩阵绿（黑客终端主色） ── */
-  --g0: #00ff41;   /* 亮绿 */
-  --g1: #00cc33;   /* 中绿 */
-  --g2: #008f11;   /* 暗绿 */
-  --g3: #003d07;   /* 极暗绿 */
+  --c0: #3b82f6;
+  --c1: #60a5fa;
+  --c2: #93c5fd;
 
-  /* ── 赛博青（数据流） ── */
-  --c0: #00ffff;
-  --c1: #00ccff;
-  --c2: #0088ff;
+  --p0: #8b5cf6;
+  --p1: #a78bfa;
+  --p2: #c4b5fd;
 
-  /* ── 暗网紫（深渊） ── */
-  --p0: #cc00ff;
-  --p1: #8800ff;
-  --p2: #ff00ff;
+  --g0: transparent;
+  --g1: #f0f0f5;
+  --g2: #a1a1aa;
 
-  /* ── 危险红/橙 ── */
-  --r0: #ff003c;
-  --r1: #ff6600;
-  --r2: #ffe000;
+  /* ── 语义色 ── */
+  --txt:  #e4e4e7;
+  --txt2: #a1a1aa;
+  --link: #60a5fa;
+  --link2:#a78bfa;
 
-  /* ── 文字 ── */
-  --txt:  #b8ffca;
-  --txt2: #7de09a;
-  --dim:  rgba(150,255,180,0.5);
+  /* ── 圆角 / 动效 ── */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --ease-out: cubic-bezier(.16,1,.3,1);
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
 
-  /* ── 网格尺寸 ── */
-  --grid: 44px;
-
-  /* ── 字体 ── */
-  --font-mono: 'Courier New', 'Orbitron', monospace;
-  --font-hud:  'Orbitron', 'Rajdhani', sans-serif;
-
-  /* ── color-mix(in oklch) 动态混色 — 比硬编码更自然的感知均匀色空间 ── */
-  --mix-gc:  color-mix(in oklch, var(--g0) 55%, var(--c0));   /* 绿→青 */
-  --mix-cp:  color-mix(in oklch, var(--c0) 50%, var(--p0));   /* 青→紫 */
-  --mix-pr:  color-mix(in oklch, var(--p0) 55%, var(--r0));   /* 紫→红 */
-  --mix-rg:  color-mix(in oklch, var(--r0) 45%, var(--g0));   /* 红→绿 */
-  --mix-dim: color-mix(in oklch, var(--g0) 30%, transparent); /* 半透绿 */
-}}
-
-/* ══════════════════════════════════════════════════════════
-   KEYFRAMES
-   ══════════════════════════════════════════════════════════ */
-@layer keyframes {
-
-/* Houdini 属性动画 */
-@keyframes k-hue1  { to { --hue:  360deg } }
-@keyframes k-hue2  { to { --hue2: 420deg } }
-@keyframes k-hue3  { to { --hue3: 480deg } }
-@keyframes k-hue4  { to { --hue4: 600deg } }
-@keyframes k-glow  { 0%,100%{--glow:8px} 50%{--glow:55px} }
-@keyframes k-rx    { 0%,100%{--rx:0deg;--ry:0deg} 25%{--rx:1.8deg;--ry:-1.2deg}
-                     50%{--rx:-1.2deg;--ry:1.8deg} 75%{--rx:1deg;--ry:1deg} }
-@keyframes k-linew { 0%{--line-w:0%} 100%{--line-w:100%} }
-
-/* ── 彩虹背景位移 ── */
-@keyframes rbw-slow   { to { background-position: 1200% 50% } }
-@keyframes rbw-mid    { to { background-position: 600%  50% } }
-@keyframes rbw-fast   { to { background-position: 300%  50% } }
-@keyframes rbw-hyper  { to { background-position: 150%  50% } }
-
-/* ── 矩阵雨列 (用伪元素 background 模拟) ── */
-@keyframes mat-rain {
-  0%   { background-position: 0 -100vh }
-  100% { background-position: 0  200vh }
+  /* ── 兼容 theme0 变量 ── */
+  --neon-blue: #3b82f6;
+  --neon-purple: #8b5cf6;
+  --neon-green: #34d399;
+  --neon-orange: #f59e0b;
+  --dark-bg: #09090b;
+  --grid-line: rgba(59,130,246,.08);
+  --text-main: #e4e4e7;
+  --text-dim: rgba(161,161,170,.6);
 }
 
-/* ── CRT 扫描线下扫 ── */
-@keyframes crt-down {
-  0%   { transform: translateY(-8px);  opacity:.9 }
-  100% { transform: translateY(100vh); opacity:.3 }
-}
-/* ── CRT 扫描线上扫 ── */
-@keyframes crt-up {
-  0%   { transform: translateY(100vh); opacity:.6 }
-  100% { transform: translateY(-8px);  opacity:0  }
-}
-
-/* ── CRT 屏幕整体闪烁 ── */
-@keyframes crt-flicker {
-  0%,100%{ opacity:1    }
-  6%     { opacity:.94  }
-  12%    { opacity:1    }
-  20%    { opacity:.87  }
-  24%    { opacity:1    }
-  62%    { opacity:.96  }
-  68%    { opacity:1    }
-  79%    { opacity:.91  }
-  85%    { opacity:1    }
-}
-
-/* ── 屏幕整体轻微水平抖动（模拟信号干扰）── */
-/* 注意：此动画不能施加在 body 本身，否则 transform 会干扰浏览器滚动锚点，
-   导致滚动后自动弹回顶部。改为施加在覆盖伪元素上。 */
-@keyframes signal-jitter {
-  0%,100%{ transform:translateX(0)     }
-  15%    { transform:translateX(-1px)  }
-  30%    { transform:translateX(0)     }
-  45%    { transform:translateX(1.5px) }
-  55%    { transform:translateX(0)     }
-  70%    { transform:translateX(-1px)  }
-  85%    { transform:translateX(.5px)  }
-}
-
-/* ── 霓虹随机闪烁 ── */
-@keyframes neon-flicker {
-  0%,100%{opacity:1}
-  2%{opacity:.12} 3%{opacity:1}
-  7%{opacity:.55} 8%{opacity:1}
-  47%{opacity:1}  48%{opacity:.07} 49%{opacity:1}
-  70%{opacity:.9} 71%{opacity:.25} 72%{opacity:.9} 73%{opacity:1}
-  91%{opacity:1}  92%{opacity:.3}  93%{opacity:.85} 94%{opacity:.18} 95%{opacity:1}
-}
-
-/* ── 超级 Glitch ── */
-@keyframes glitch-body {
-  0%,100%{ transform:translate(0,0) skewX(0); filter:none; clip-path:none }
-  3%  { transform:translate(-5px,0) skewX(-3deg); filter:hue-rotate(90deg) saturate(4);
-        clip-path:polygon(0 10%,100% 10%,100% 30%,0 30%) }
-  5%  { transform:translate(5px,0)  skewX(3deg);  filter:hue-rotate(180deg) saturate(3);
-        clip-path:polygon(0 55%,100% 55%,100% 75%,0 75%) }
-  7%  { transform:translate(-2px,1px); filter:none; clip-path:none }
-  8%  { transform:translate(0,0) }
-  51% { transform:translate(0,0) skewX(0); clip-path:none }
-  52% { transform:translate(8px,-2px) skewX(5deg);
-        filter:hue-rotate(270deg) saturate(5) brightness(2);
-        clip-path:polygon(0 4%,100% 4%,100% 20%,0 20%) }
-  54% { transform:translate(-6px,2px);
-        clip-path:polygon(0 68%,100% 68%,100% 83%,0 83%);
-        filter:hue-rotate(0) }
-  56% { transform:translate(0,0); clip-path:none; filter:none }
-  80% { transform:translate(0,0) }
-  81% { transform:translate(-11px,0) skewX(-8deg);
-        filter:saturate(6) brightness(2.5);
-        clip-path:polygon(0 29%,100% 29%,100% 47%,0 47%) }
-  82% { transform:translate(11px,0) }
-  83% { transform:translate(0,0); clip-path:none; filter:none }
-}
-@keyframes glitch-l1 {
-  0%,100%{transform:translate(0,0);opacity:.6}
-  4%{transform:translate(-9px,3px);opacity:1;filter:hue-rotate(120deg) saturate(6)}
-  6%{transform:translate(7px,-2px);opacity:.7}
-  8%{transform:translate(0,0);opacity:.6}
-  52%{transform:translate(-10px,0);opacity:.9;filter:hue-rotate(240deg) saturate(5)}
-  54%{transform:translate(8px,0);opacity:.6}
-  56%{transform:translate(0,0)}
-  81%{transform:translate(-13px,4px);opacity:1;filter:hue-rotate(60deg) saturate(7)}
-  83%{transform:translate(0,0);opacity:.6}
-}
-@keyframes glitch-l2 {
-  0%,100%{transform:translate(0,0);opacity:.5}
-  4%{transform:translate(8px,-4px);opacity:.8;filter:hue-rotate(300deg) saturate(6)}
-  6%{transform:translate(-5px,2px);opacity:.4}
-  8%{transform:translate(0,0)}
-  52%{transform:translate(10px,2px);opacity:.7;filter:hue-rotate(60deg) saturate(5)}
-  54%{transform:translate(-8px,0);opacity:.3}
-  56%{transform:translate(0,0)}
-  81%{transform:translate(15px,-3px);opacity:.9;filter:hue-rotate(180deg) saturate(7)}
-  83%{transform:translate(0,0);opacity:.5}
-}
-
-/* ── RGB 色差噪声文字 ── */
-@keyframes rgb-noise {
-  0%,100%{text-shadow:none}
-  8% {text-shadow:-4px 0 var(--r0),4px 0 var(--c0)}
-  18%{text-shadow: 4px 0 var(--p2),-4px 0 var(--r2)}
-  28%{text-shadow:-5px 0 var(--g0), 5px 0 var(--p1)}
-  38%{text-shadow:none}
-  68%{text-shadow:-6px 0 var(--r1), 6px 0 var(--c1)}
-  78%{text-shadow: 5px 0 var(--c0),-5px 0 var(--p2)}
-  88%{text-shadow:none}
-}
-
-/* ── 旋转光圈 ── */
-@keyframes ring-cw  { from{transform:translate(-50%,-50%) rotate(0deg)}
-                      to  {transform:translate(-50%,-50%) rotate(360deg)} }
-@keyframes ring-ccw { from{transform:translate(-50%,-50%) rotate(0deg)   scale(1.35)}
-                      to  {transform:translate(-50%,-50%) rotate(-360deg) scale(1.35)} }
-@keyframes ring-ell { from{transform:translate(-50%,-50%) rotate(0deg)   scaleX(1.9) scaleY(.45)}
-                      to  {transform:translate(-50%,-50%) rotate(360deg)  scaleX(1.9) scaleY(.45)} }
-
-/* ── 流星 ── */
-@keyframes meteor-a {
-  0%  {transform:translate(-5vw,-5vh)   rotate(35deg)  scaleX(0);opacity:0}
-  3%  {opacity:1}
-  100%{transform:translate(130vw,130vh) rotate(35deg)  scaleX(1);opacity:0}
-}
-@keyframes meteor-b {
-  0%  {transform:translate(110vw,-8vh)  rotate(145deg) scaleX(0);opacity:0}
-  4%  {opacity:.85}
-  100%{transform:translate(-30vw,130vh) rotate(145deg) scaleX(1);opacity:0}
-}
-
-/* ── 卡片边框循环 ── */
-@keyframes border-cycle {
-  0%  {border-color:var(--c0);box-shadow:0 0 12px var(--c0),0 0 28px var(--c0),inset 0 0 14px rgba(0,255,255,.04)}
-  16% {border-color:var(--p1);box-shadow:0 0 14px var(--p1),0 0 32px var(--p1),inset 0 0 16px rgba(136,0,255,.05)}
-  33% {border-color:var(--p2);box-shadow:0 0 16px var(--p2),0 0 36px var(--p2),inset 0 0 18px rgba(255,0,255,.05)}
-  49% {border-color:var(--r0);box-shadow:0 0 14px var(--r0),0 0 32px var(--r0),inset 0 0 16px rgba(255,0,60,.05)}
-  66% {border-color:var(--g0);box-shadow:0 0 16px var(--g0),0 0 36px var(--g0),inset 0 0 18px rgba(0,255,65,.05)}
-  82% {border-color:var(--r2);box-shadow:0 0 14px var(--r2),0 0 32px var(--r2),inset 0 0 16px rgba(255,224,0,.05)}
-  100%{border-color:var(--c0);box-shadow:0 0 12px var(--c0),0 0 28px var(--c0),inset 0 0 14px rgba(0,255,255,.04)}
-}
-
-/* ── 水平扫光 ── */
-@keyframes h-sweep  {0%{left:-80%;opacity:0}10%{opacity:.9}90%{opacity:.9}100%{left:180%;opacity:0}}
-@keyframes h-sweep2 {0%{left:-80%;opacity:0}10%{opacity:.6}90%{opacity:.6}100%{left:180%;opacity:0}}
-
-/* ── 左竖轨脉冲 ── */
-@keyframes bar-pulse {
-  0%,100%{opacity:1;box-shadow:4px 0 16px var(--g0),8px 0 32px var(--c0)}
-  50%    {opacity:.3;box-shadow:4px 0 5px var(--p2),8px 0 10px var(--r0)}
-}
-
-/* ── 分割线钻石 ── */
-@keyframes diamond {
-  0%  {transform:translateX(-50%) translateY(-50%) rotate(0deg)   scale(1)}
-  50% {transform:translateX(-50%) translateY(-50%) rotate(180deg) scale(2.4)}
-  100%{transform:translateX(-50%) translateY(-50%) rotate(360deg) scale(1)}
-}
-
-/* ── 电弧闪光 ── */
-@keyframes arc-flash {
-  0%,84%,100%{opacity:0}
-  87%{opacity:1;transform:scaleX(1.5) scaleY(.3)}
-  92%{opacity:.4}
-  96%{opacity:.8}
-  99%{opacity:0}
-}
-
-/* ── 英雄区透视摆动 ── */
-@keyframes hero-persp {
-  0%,100%{transform:perspective(900px) rotateX(0deg)    rotateY(0deg)}
-  25%    {transform:perspective(900px) rotateX(2.5deg)  rotateY(-1.5deg)}
-  50%    {transform:perspective(900px) rotateX(0deg)    rotateY(2.5deg)}
-  75%    {transform:perspective(900px) rotateX(-2.5deg) rotateY(1.5deg)}
-}
-
-/* ── 浮动 ── */
-@keyframes float-bob {0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)}}
-
-/* ── 链接抖动 ── */
-@keyframes shake {
-  0%,100%{transform:translateX(0) skewX(0)}
-  20%{transform:translateX(-5px) skewX(-5deg)}
-  40%{transform:translateX(5px)  skewX(5deg)}
-  60%{transform:translateX(-3px)}
-  80%{transform:translateX(4px)}
-}
-
-/* ── 终端光标 ── */
-@keyframes cursor-blink {0%,49%{opacity:1}50%,100%{opacity:0}}
-
-/* ── footer 扫光 ── */
-@keyframes footer-scan {0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
-
-/* ── footer 链接：数据流扫光 ── */
-@keyframes link-scan {
-  0%   { left: -110%; opacity: 0 }
-  10%  { opacity: 1 }
-  60%  { left: 120%; opacity: .9 }
-  61%,100% { left: 120%; opacity: 0 }
-}
-
-/* ── footer 链接：渐变光谱流动 ── */
-@keyframes link-shimmer {
-  0%   { background-position: 200% center }
-  100% { background-position: -200% center }
-}
-
-/* ── footer 链接：故障红色闪烁 ── */
-@keyframes link-glitch {
-  0%,85%           { opacity: 0; transform: translate(0,0) }
-  86%              { opacity: .7; transform: translate(-3px, 0);  clip-path: inset(10% 0 75% 0) }
-  87%              { opacity: .5; transform: translate(3px,  0);  clip-path: inset(55% 0 25% 0) }
-  88%              { opacity: .8; transform: translate(-2px, 1px); clip-path: inset(30% 0 50% 0) }
-  89%              { opacity: 0;  transform: translate(0,0) }
-  95%              { opacity: .4; transform: translate(2px, -1px); clip-path: inset(65% 0 10% 0) }
-  96%              { opacity: 0 }
-  100%             { opacity: 0 }
-}
-
-/* ── 锥形背景旋转 ── */
-@keyframes conic-spin  {from{--hue:0deg}  to{--hue:360deg}}
-@keyframes conic-spin2 {from{--hue2:60deg}to{--hue2:420deg}}
-
-/* ── 噪点闪烁 ── */
-@keyframes noise-anim {
-  0%  {background-position:0 0}
-  10% {background-position:-5% -10%}
-  20% {background-position:-15% 5%}
-  30% {background-position:7% -25%}
-  40% {background-position:20% 25%}
-  50% {background-position:-25% 10%}
-  60% {background-position:15% 5%}
-  70% {background-position:0 15%}
-  80% {background-position:25% 35%}
-  90% {background-position:-10% 10%}
-  100%{background-position:0 0}
-}
-
-/* ── 全局色相漂移（极轻微，不破坏配色） ── */
-@keyframes body-hue {
-  0%  {filter:hue-rotate(0deg)  saturate(1.1) brightness(1)}
-  40% {filter:hue-rotate(8deg)  saturate(1.25)brightness(1.02)}
-  70% {filter:hue-rotate(-5deg) saturate(1.15)brightness(.99)}
-  100%{filter:hue-rotate(0deg)  saturate(1.1) brightness(1)}
-}
-
-/* ── section-heading 线生长 ── */
-@keyframes line-grow {0%{width:0;opacity:0}100%{width:100%;opacity:1}}
-
-/* ══════════════════════════════════════════════
-   以下为原本定义但未使用的 @keyframes，现已全部激活
-   ══════════════════════════════════════════════ */
-
-/* ── 矩阵雨：background-position 下移（激活：mat-rain 背景层） ── */
-/* mat-rain 已在 @keyframes 区定义，由下方 .mat-rain-layer 使用 */
-
-/* ── Houdini --glow 脉冲（激活：content-block glow） ── */
-/* k-glow 已定义，由 [class~="__body"] 的 --glow 属性动画使用 */
-
-/* ── Houdini --hue3/4 额外锥形旋转（激活：第3/4 背景层） ── */
-/* k-hue3/k-hue4 已定义，由 .conic-layer-3/4 使用 */
-
-/* ── Houdini --line-w 线宽展开（激活：section-heading 底线） ── */
-/* k-linew 已定义，由 [class~="__heading"]::after 的 width 属性动画使用 */
-
-/* ── scroll-driven 入场动画：从下方淡入 ── */
-@keyframes scroll-entry {
-  from {
-    opacity: 0;
-    transform: translateY(40px) scale(0.97);
-    filter: blur(6px);
-    --fog: 1;
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-    --fog: 0;
-  }
-}
-
-/* ── scroll-driven 入场：section-heading 从左扫入 ── */
-@keyframes scroll-heading-in {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-    --line-w: 0%;
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-    --line-w: 100%;
-  }
-}
-
-/* ── scroll-driven 入场：分割线从中心展开 ── */
-@keyframes scroll-divider-in {
-  from { transform: scaleX(0); opacity: 0 }
-  to   { transform: scaleX(1); opacity: 1 }
-}
-
-/* ── @starting-style 配合：元素插入时的初始闪现 ── */
-@keyframes appear-flash {
-  0%   { opacity: 0; filter: brightness(8) saturate(0); --glow: 55px }
-  15%  { opacity: 1; filter: brightness(2) saturate(2); --glow: 30px }
-  100% { opacity: 1; filter: brightness(1) saturate(1); --glow: 10px }
-}
-
-/* ── --scan-y 扫描线纵向移动（激活：卡片内动态扫描光） ── */
-@keyframes k-scan-y {
-  0%   { --scan-y: 0%   }
-  100% { --scan-y: 100% }
-}
-
-} /* end @layer keyframes */
-
-/* ══════════════════════════════════════════════════════════
-   RESET
-   ══════════════════════════════════════════════════════════ */
-@layer reset {
+/* ============================================================
+   全局 / body
+   ============================================================ */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* 彻底锁死横向溢出，防止绝对定位元素撑宽页面 */
-  overflow-x: hidden;
-  width: 100%;
-}
-}
-
-/* ══════════════════════════════════════════════════════════
-   BODY — 暗网终端宇宙
-   背景层叠：
-   [0] 底色深黑
-   [1] 径向辉光（绿/青/紫）
-   [2] 精细网格（模拟终端像素矩阵）
-   [3] 斜线栅格（赛博感）
-   [4] 矩阵字符雨（用 repeating-linear-gradient 列模拟）
-   ══════════════════════════════════════════════════════════ */
-@layer base {
 
 body {
-  font-family: 'Rajdhani', 'Orbitron', 'Courier New', monospace, sans-serif;
-
-  /* body 只保留纯色底色，不挂任何背景图、动画、filter
-     原因：body 是滚动容器，任何 animation/filter/transform 都会触发
-     浏览器滚动锚点重算，导致滚动后自动弹回顶部。
-     所有视觉效果全部迁移到 body::before（position:fixed，不属于滚动流） */
-  background-color: var(--bg);
-
+  font-family: 'Inter', 'Rajdhani', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(59,130,246,.04) 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 70%, rgba(139,92,246,.04) 0%, transparent 40%),
+    linear-gradient(to bottom, #09090b, #0c0c10);
+  background-attachment: fixed;
   color: var(--txt);
   line-height: 1.75;
   font-size: 1rem;
-  margin: 0;
-  padding: 20px;
+  padding: 0 1.5rem;
   overflow-x: hidden;
-  position: relative;
-  /* ！！！ body 上零动画、零 filter、零 transform ！！！ */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── 全屏背景层：承载所有原来在 body 上的背景图 + 动画
-   position:fixed 脱离文档流，完全不参与滚动锚点计算 ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;          /* 在内容下方 */
-  pointer-events: none;
-
-  background-color: var(--bg);
-  background-image:
-
-    /* ── CRT 暗角（四周变暗，模拟弯曲屏幕） ── */
-    radial-gradient(ellipse at center,
-      transparent 55%,
-      rgba(0,0,0,.7) 100%
-    ),
-
-    /* ── CRT 水平扫描线（整页条纹） ── */
-    repeating-linear-gradient(
-      0deg,
-      transparent         0px,
-      transparent         3px,
-      rgba(0,0,0,.08)     3px,
-      rgba(0,0,0,.08)     4px
-    ),
-
-    /* ── 矩阵字符雨模拟 ── */
-    repeating-linear-gradient(180deg,
-      transparent           0px,
-      transparent           12px,
-      rgba(0,255,65,.028)   12px,
-      rgba(0,255,65,.028)   13px,
-      transparent           13px,
-      transparent           26px,
-      rgba(0,200,50,.015)   26px,
-      rgba(0,200,50,.015)   27px,
-      transparent           27px,
-      transparent           44px
-    ),
-
-    /* ── 竖向光柱 ── */
-    repeating-linear-gradient(90deg,
-      transparent              0px,
-      transparent              10px,
-      rgba(0,255,65,.018)      10px,
-      rgba(0,255,65,.018)      11px,
-      transparent              11px,
-      transparent              22px,
-      rgba(0,180,40,.010)      22px,
-      rgba(0,180,40,.010)      23px,
-      transparent              23px,
-      transparent              44px
-    ),
-
-    /* ── 精细水平网格线 ── */
-    repeating-linear-gradient(0deg,
-      rgba(0,255,65,.022) 0,
-      rgba(0,255,65,.022) 1px,
-      transparent         1px,
-      transparent         var(--grid)
-    ),
-
-    /* ── 精细垂直网格线 ── */
-    repeating-linear-gradient(90deg,
-      rgba(0,180,255,.016) 0,
-      rgba(0,180,255,.016) 1px,
-      transparent          1px,
-      transparent          var(--grid)
-    ),
-
-    /* ── 斜线1（45°） ── */
-    repeating-linear-gradient(45deg,
-      rgba(0,255,65,.010) 0,
-      rgba(0,255,65,.010) 1px,
-      transparent         1px,
-      transparent         64px
-    ),
-
-    /* ── 斜线2（135°） ── */
-    repeating-linear-gradient(135deg,
-      rgba(136,0,255,.008) 0,
-      rgba(136,0,255,.008) 1px,
-      transparent          1px,
-      transparent          64px
-    ),
-
-    /* ── 辉光 ── */
-    radial-gradient(ellipse 65% 45% at 50% 50%,
-      rgba(0,255,65,.10) 0%, transparent 60%
-    ),
-    radial-gradient(ellipse at 8%  12%, rgba(0,255,255,.12) 0%, transparent 35%),
-    radial-gradient(ellipse at 92% 8%,  rgba(136,0,255,.14) 0%, transparent 35%),
-    radial-gradient(ellipse at 3%  93%, rgba(255,0,60,.07)  0%, transparent 26%),
-    radial-gradient(ellipse at 97% 92%, rgba(255,0,255,.09) 0%, transparent 28%),
-
-    /* ── 底部深色渐变 ── */
-    linear-gradient(180deg, #000a02 0%, #000208 50%, #000510 100%);
-
-  background-attachment: fixed;
-  background-size:
-    100% 100%,
-    100% 4px,
-    100% 44px,
-    44px 100%,
-    100% var(--grid),
-    var(--grid) 100%,
-    64px 64px,
-    64px 64px,
-    100% 100%,
-    100% 100%, 100% 100%, 100% 100%, 100% 100%,
-    100% 100%;
-
-  /* ── 全部动画都挂在这里，不在 body 上 ── */
-  animation:
-    crt-flicker   7s  ease-in-out infinite,  /* 屏幕闪烁（透明度）*/
-    body-hue      60s linear     infinite,   /* 色相漂移（filter）*/
-    mat-rain      4s  linear     infinite,   /* 矩阵雨下移 */
-    noise-anim    0.15s steps(1) infinite,   /* 噪点 */
-    signal-jitter 12s linear     infinite;   /* 水平抖动（translateX on fixed层，安全）*/
+html {
+  scroll-behavior: smooth;
 }
 
-
-
-
-} /* end @layer base */
-
-/* ══════════════════════════════════════════════════════════
-   LAYOUT
-   ══════════════════════════════════════════════════════════ */
-@layer layout {
-
-/* ── 全局旋转锥形背景（第1层）— 激活 k-hue1（已在 conic-spin 内联使用） ── */
-main::before {
-  content: '';
-  position: fixed;
-  top: 50%; left: 50%;
-  width: 100vmax; height: 100vmax;
-  transform: translate(-50%,-50%);
-  background: conic-gradient(
-    from var(--hue),
-    rgba(255,0,60,.022)   0deg,
-    rgba(255,102,0,.016)  45deg,
-    rgba(255,224,0,.016)  90deg,
-    rgba(0,255,65,.024)   135deg,
-    rgba(0,255,255,.022)  180deg,
-    rgba(0,136,255,.016)  225deg,
-    rgba(136,0,255,.022)  270deg,
-    rgba(255,0,255,.016)  315deg,
-    rgba(255,0,60,.022)   360deg
-  );
-  pointer-events: none;
-  z-index: -1;
-  animation: conic-spin 12s linear infinite;
-}
-
-/* ── 全局旋转锥形背景（第2层，反向）── */
-main::after {
-  content: '';
-  position: fixed;
-  top: 50%; left: 50%;
-  width: 100vmax; height: 100vmax;
-  transform: translate(-50%,-50%);
-  background: conic-gradient(
-    from var(--hue2),
-    rgba(255,0,255,.018) 0deg,
-    rgba(0,255,255,.015) 60deg,
-    rgba(255,0,60,.015)  120deg,
-    rgba(0,255,65,.020)  180deg,
-    rgba(255,224,0,.015) 240deg,
-    rgba(136,0,255,.020) 300deg,
-    rgba(255,0,255,.018) 360deg
-  );
-  pointer-events: none;
-  z-index: -1;
-  /* ── 激活 k-hue4：conic-spin2 已用 --hue2，这里追加 k-hue4 给 --hue4 ── */
-  animation:
-    conic-spin2 18s linear infinite reverse,
-    k-hue4      22s linear infinite;
-}
-} /* end @layer layout */
-
-/* ══════════════════════════════════════════════════════════
-   LAYOUT — 激活死代码：mat-rain 矩阵雨动态层 + 第3/4锥形
-   ══════════════════════════════════════════════════════════ */
-@layer layout {
-
-/* ── 矩阵雨动态背景层（激活 mat-rain keyframe）
-   使用 position:fixed 覆盖全屏，background-position 用 mat-rain 动画下移
-   产生真实的光柱垂直流动感，比 body 的静态渐变更有动态深度 ── */
-.mat-rain-overlay {
-  display: none; /* 由 body 伪元素承载，此处作为备用占位 */
-}
-
-/* 利用 main 第3个伪元素不可用，改为给 body 加 mat-rain 背景动画
-   通过 @property --hue3 驱动第3锥形，--hue4 驱动第4锥形 */
-
-/* ── 第3层锥形：使用 --hue3，比 main::before/after 更快，不同相位 ── */
-/* 挂载在 .hero::before 的 z-index:-2 层，用 animation 追加 k-hue3 */
-
-/* ── @container 容器查询：main 作为容器 ── */
-main {
-  max-width: 900px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-  /* 声明容器，使子元素可用 @container 查询 */
-  container-type: inline-size;
-  container-name: main-content;
-}
-
-/* ══════════════════════════════════════════════════════════
-   COMPONENTS
-   ══════════════════════════════════════════════════════════ */
-@layer components {
-
-/* ────────────────────────────────────────
-   顶部彩虹光条（theme-switcher::before）
-   + 向上扫描线（top-nav::after）
-   + 流星 A（top-nav::before）
-   ──────────────────────────────────────── */
-.site-header__theme-switcher { display:flex; gap:.4rem; flex-wrap:wrap; position:relative }
-
-.site-header__theme-switcher::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 3px;
-  background: linear-gradient(90deg,
-    var(--g0),var(--c0),var(--p0),var(--r0),
-    var(--r2),var(--c0),var(--g1),var(--g0)
-  );
-  background-size: 400% 400%;
-  animation: rbw-hyper .7s linear infinite;
-  box-shadow:
-    0 0 10px var(--g0),
-    0 0 22px var(--c0),
-    0 0 44px var(--p0),
-    0 0 80px rgba(0,255,65,.4);
-  z-index: 9997;
-  pointer-events: none;
-}
-
+/* ============================================================
+   site-header
+   ============================================================ */
 .site-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: .5rem;
-  gap: .5rem;
-  position: relative;
-  z-index: 100;
+  align-items: center;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--grid-line);
+  margin-bottom: 1rem;
 }
 
-/* 流星 A — 升级为 offset-path 路径动画（Chrome 115+）
-   offset-path 让元素沿 SVG 路径运动，方向/旋转自动跟随切线
-   降级时（不支持 offset-path）自动回退到原 translate 动画 */
-.site-header::before {
-  content: '';
-  position: fixed;
-  /* offset-path: 对角线路径，从左上斜穿屏幕到右下 */
-  offset-path: path('M -5vw,-5vh L 130vw,130vh');
-  offset-distance: 0%;
-  offset-rotate: auto;
-  width: 260px; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--c0), var(--c0), #fff);
-  box-shadow: 0 0 8px var(--c0), 0 0 20px var(--c1), 0 0 40px var(--p1);
-  border-radius: 2px;
-  pointer-events: none;
-  z-index: 9990;
-  /* 降级回退：保留原 translate 动画 */
-  top: 18%; left: 0;
-  animation: meteor-a 6.5s linear infinite;
+.site-header__theme-switcher {
+  display: flex;
+  gap: 6px;
 }
 
-/* 流星 B — 激活 meteor-b keyframe（原未使用，现加给 .hero 内的额外元素）
-   由于 .hero::after 已被光圈占用，将流星B绑定在 .site-header__theme-switcher::after 上 */
-.site-header__theme-switcher::after {
-  content: '';
-  position: fixed;
-  top: 65%; right: 0;
-  width: 200px; height: 2px;
-  background: linear-gradient(270deg, transparent, var(--p2), var(--r0), #fff);
-  box-shadow: 0 0 8px var(--p2), 0 0 20px var(--r0), 0 0 40px var(--p1);
-  border-radius: 2px;
-  pointer-events: none;
-  z-index: 9990;
-  /* ── 激活 meteor-b keyframe ── */
-  animation: meteor-b 9s linear infinite;
-  animation-delay: 3s;
-}
-
-/* 向上扫描线（第2条，红橙色） */
-.site-header::after {
-  content: '';
-  position: fixed;
-  bottom: -4px; left: 0;
-  width: 100%; height: 3px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    var(--r0)  25%,
-    var(--r1)  50%,
-    var(--p2)  75%,
-    transparent 100%
-  );
-  box-shadow: 0 0 8px var(--r0), 0 0 18px var(--p2);
-  pointer-events: none;
-  z-index: 9999;
-  animation: crt-up 5s linear infinite;
-  animation-delay: 1.8s;
-}
-
-/* ────────────────────────────────────────
-   主题切换按钮 — 黑客终端风
-   ──────────────────────────────────────── */
 .site-header__theme-btn {
-  font-family: var(--font-hud);
-  font-size: .72rem;
-  letter-spacing: 2px;
-  color: var(--g0);
-  background: rgba(0,18,4,.9);
-  border: 1px solid var(--g2);
-  padding: 3px 12px;
-  border-radius: 3px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--txt2);
+  background: transparent;
+  border: 1px solid rgba(161,161,170,.3);
+  padding: 4px 14px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  transition: all 0.25s var(--ease-out);
   outline: none;
   -webkit-appearance: none;
   appearance: none;
-  transition: transform .15s, background .2s;
-  text-shadow: 0 0 8px var(--g0);
-  position: relative;
-  overflow: hidden;
-  animation: border-cycle 2.5s linear infinite;
 }
-/* 按钮内部扫光 */
-.site-header__theme-btn::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 60%; height: 100%;
-  background: linear-gradient(90deg,
-    transparent, rgba(0,255,65,.18), transparent
-  );
-  animation: h-sweep 2.5s ease-in-out infinite;
-  pointer-events: none;
-}
+
 .site-header__theme-btn:hover {
-  transform: scale(1.22) rotate(-1.5deg);
-  color: #fff;
-  background: rgba(0,255,65,.15);
-  animation: none;
-  box-shadow:
-    0 0 18px var(--g0),
-    0 0 38px var(--g1),
-    0 0 70px rgba(0,255,65,.3),
-    inset 0 0 14px rgba(0,255,65,.12);
-  text-shadow:
-    0 0 8px var(--g0),
-    0 0 20px var(--g0);
+  color: var(--c1);
+  border-color: var(--c1);
+  text-shadow: 0 0 6px rgba(59,130,246,.4);
 }
+
 .site-header__theme-btn--active {
-  color: #fff;
-  background: rgba(0,255,65,.18);
-  box-shadow: 0 0 16px var(--g0);
-  text-shadow: 0 0 10px var(--g0);
+  color: var(--c1);
+  border-color: var(--c1);
+  background: rgba(59,130,246,.08);
+  text-shadow: 0 0 6px rgba(59,130,246,.4);
+  box-shadow: 0 0 12px rgba(59,130,246,.15);
 }
 
 .site-header__lang-btn {
-  font-family: var(--font-hud);
-  font-size: .82rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.85rem;
   letter-spacing: 2px;
-  color: var(--dim);
-  border: 1px solid rgba(0,255,65,.28);
-  padding: 3px 12px;
-  border-radius: 3px;
-  transition: all .25s;
+  color: var(--txt2);
+  border: 1px solid rgba(161,161,170,.3);
+  padding: 2px 10px;
+  border-radius: var(--radius-sm);
+  transition: all 0.3s var(--ease-out);
   white-space: nowrap;
-  text-decoration: none;
-  display: inline-block;
 }
-.site-header__lang-btn:hover {
-  color: var(--r2);
-  border-color: var(--r2);
-  box-shadow: 0 0 16px var(--r2), 0 0 36px rgba(255,224,0,.3);
-  transform: scale(1.12);
-  text-shadow: 0 0 10px var(--r2);
-}
-.site-header__lang-btn::after { display:none }
 
-/* ────────────────────────────────────────
-   HERO — 视觉核弹头
-   流星 B 用 .hero::after
-   ──────────────────────────────────────── */
+.site-header__lang-btn:hover {
+  color: var(--c1);
+  border-color: var(--c1);
+  text-shadow: 0 0 6px rgba(59,130,246,.4);
+}
+
+.site-header__lang-btn::after { display: none; }
+
+/* ============================================================
+   Hero
+   ============================================================ */
 .hero {
   text-align: center;
-  padding: 3.5rem 0 2.5rem;
-  position: relative;
-  overflow: visible;
-  animation: float-bob 5s ease-in-out infinite;
+  padding: 2.5rem 0 1.5rem;
 }
 
-/* 旋转光圈 1（绿/青） */
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: min(520px, 90vw); height: min(520px, 90vw);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 2px  rgba(0,255,65,.22),
-    0 0 0 5px  rgba(0,255,255,.10),
-    0 0 0 9px  rgba(136,0,255,.07),
-    0 0 80px   rgba(0,255,65,.09),
-    0 0 160px  rgba(0,255,255,.07),
-    0 0 260px  rgba(136,0,255,.05),
-    inset 0 0 100px rgba(0,255,65,.03);
-  animation: ring-cw 6s linear infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* 流星 B + 旋转椭圆光圈（红/紫） */
-.hero::after {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: min(600px, 95vw); height: min(230px, 36vw);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 2px  rgba(255,0,60,.28),
-    0 0 0 5px  rgba(255,0,255,.12),
-    0 0 60px   rgba(255,0,60,.13),
-    0 0 130px  rgba(255,0,255,.08);
-  animation: ring-ccw 10s linear infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ────────────────────────────────────────
-   HERO TITLE — 终极 Glitch 标题
-   三层色差叠加（主体 + ::before 青层 + ::after 红层）
-   ──────────────────────────────────────── */
 .hero__title {
-  font-family: var(--font-hud);
-  font-size: clamp(2rem, 9vw, 5.2rem);
-  font-weight: 900;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 700;
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: 6px;
   text-transform: uppercase;
-  letter-spacing: clamp(4px, 1.5vw, 14px);
+  color: var(--g1);
   position: relative;
-  display: inline-block;
   margin: 1.5rem 0;
-  z-index: 2;
-
-  /* 主体：矩阵绿→青→紫→红→黄 彩虹渐变 */
-  background: linear-gradient(90deg,
-    var(--g0),var(--c0),var(--p0),
-    var(--r0),var(--r2),var(--c0),
-    var(--g1),var(--g0)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  animation:
-    rbw-fast      2s   linear     infinite,
-    glitch-body   7s   linear     infinite,
-    neon-flicker  6s   ease-in-out infinite,
-    hero-persp    10s  ease-in-out infinite;
-
-  filter:
-    drop-shadow(0 0  6px var(--g0))
-    drop-shadow(0 0 18px var(--c0))
-    drop-shadow(0 0 45px var(--p1))
-    drop-shadow(0 0 100px var(--p0));
+  z-index: 1;
+  text-shadow:
+    0 0 4px var(--c1),
+    0 0 15px rgba(59,130,246,.3),
+    0 0 30px rgba(139,92,246,.15);
+  animation: hero-glow 4s ease-in-out infinite alternate;
 }
 
-/* 色差层1 — 青/紫（向左偏移） */
-.hero__title::before {
-  content: 'ARKFUTURE';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg,
-    var(--c0),var(--c1),var(--p1),var(--p2),var(--c0)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  mix-blend-mode: screen;
-  filter: drop-shadow(0 0 15px var(--c0)) blur(.5px);
-  animation:
-    rbw-mid    2.2s linear infinite,
-    glitch-l1  7s   linear infinite;
-  pointer-events: none;
-  z-index: -1;
+@keyframes hero-glow {
+  0%, 100% {
+    text-shadow:
+      0 0 4px var(--c1),
+      0 0 15px rgba(59,130,246,.3),
+      0 0 30px rgba(139,92,246,.15);
+  }
+  50% {
+    text-shadow:
+      0 0 8px var(--c1),
+      0 0 25px rgba(59,130,246,.4),
+      0 0 50px rgba(139,92,246,.2);
+  }
 }
 
-/* 色差层2 — 红/橙（向右偏移） */
-.hero__title::after {
-  content: 'ARKFUTURE';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg,
-    var(--r0),var(--r1),var(--r2),var(--p2),var(--r0)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  mix-blend-mode: screen;
-  filter: drop-shadow(0 0 15px var(--r0)) blur(.5px);
-  animation:
-    rbw-fast   2s   linear infinite reverse,
-    glitch-l2  7s   linear infinite;
-  pointer-events: none;
-  z-index: -2;
+/* ============================================================
+   main
+   ============================================================ */
+main {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-/* ────────────────────────────────────────
-   SITE-SECTION — 左右彩虹竖轨
-   ──────────────────────────────────────── */
-section {
-  margin: 2.5rem 0;
+/* ============================================================
+   区块通用样式
+   ============================================================ */
+
+/* 区块间距 */
+.about,
+.net,
+.licenses,
+.ending {
+  margin: 2rem 0;
+}
+
+/* 分隔线 */
+.divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c0), var(--p0), transparent);
+  opacity: .3;
+  margin: 2rem 0;
+}
+
+/* ——— 主标题 h1 ——— */
+.about__heading,
+.net__heading,
+.licenses__heading,
+.ending__heading {
+  font-size: 1.65rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin: 1.2rem 0;
+  color: var(--c1);
   position: relative;
-  perspective: 1400px;
+  padding-bottom: .5rem;
+  padding-left: 1.2rem;
 }
-section::before {
+
+.about__heading::before,
+.net__heading::before,
+.licenses__heading::before,
+.ending__heading::before {
   content: '';
   position: absolute;
-  left: -20px; top: 0;
-  width: 3px; height: 100%;
-  background: linear-gradient(180deg,
-    var(--g0),var(--c0),var(--p1),
-    var(--r0),var(--g1),var(--c0),var(--g0)
-  );
-  background-size: 100% 500%;
-  animation: rbw-slow 2s linear infinite, bar-pulse 3.5s ease-in-out infinite;
+  left: 0; top: .15em;
+  width: 4px;
+  height: calc(1em + 4px);
+  background: linear-gradient(180deg, var(--c0), var(--p0));
   border-radius: 2px;
+  box-shadow: 0 0 8px rgba(59,130,246,.4), 0 0 16px rgba(139,92,246,.15);
 }
-section::after {
+
+.about__heading::after,
+.net__heading::after,
+.licenses__heading::after,
+.ending__heading::after {
   content: '';
   position: absolute;
-  right: -20px; top: 0;
-  width: 2px; height: 100%;
-  background: linear-gradient(180deg,
-    var(--p1),var(--c0),var(--g0),
-    var(--r0),var(--p0),var(--c1),var(--p1)
-  );
-  background-size: 100% 500%;
-  animation: rbw-slow 3s linear infinite reverse;
-  border-radius: 2px;
+  bottom: 0; left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--c0), var(--p0), transparent);
   opacity: .4;
 }
 
-/* ────────────────────────────────────────
-   SECTION DIVIDER — 彩虹分割线 + 旋转钻石 + 电弧
-   ──────────────────────────────────────── */
-.divider {
-  border: none;
-  height: 3px;
-  margin: 2.5rem 0;
-  background: linear-gradient(90deg,
-    var(--g0),var(--c0),var(--p0),var(--r0),
-    var(--r2),var(--c0),var(--g1),var(--g0)
-  );
-  background-size: 500% 500%;
-  animation: rbw-fast 1.2s linear infinite;
-  box-shadow:
-    0 0  8px var(--g0),
-    0 0 18px var(--c0),
-    0 0 36px var(--p1),
-    0 0 65px rgba(0,255,65,.18),
-    0 -3px 20px var(--c0),
-    0  3px 20px var(--g0);
-  border-radius: 2px;
-  position: relative;
-  overflow: visible;
-}
-.divider::before {
-  content: '◆';
-  position: absolute;
-  left: 50%; top: 50%;
-  font-size: 1.3rem;
-  background: linear-gradient(90deg,
-    var(--g0),var(--c0),var(--p1),var(--r0),var(--g0)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation:
-    diamond  2.2s linear infinite,
-    rbw-fast 1.2s linear infinite;
-  filter:
-    drop-shadow(0 0 8px  var(--c0))
-    drop-shadow(0 0 22px var(--p1));
-  z-index: 2;
-  pointer-events: none;
-}
-.divider::after {
-  content: '';
-  position: absolute;
-  top: -4px; left: 0;
-  width: 100%; height: 12px;
-  background: linear-gradient(90deg,
-    transparent 0%, rgba(255,255,255,.55) 50%, transparent 100%
-  );
-  animation: arc-flash 3.8s linear infinite;
-  pointer-events: none;
-}
-
-/* ────────────────────────────────────────
-   H1 / H2 / H3
-   ──────────────────────────────────────── */
-h1, h2, h3 {
-  font-family: var(--font-hud);
-  font-weight: 600;
-  margin: 1.2rem 0;
-  letter-spacing: 2px;
-  /* ── text-wrap: balance — 标题自动平衡断行（Chrome 114+） ── */
-  text-wrap: balance;
-}
-
-[class~="__heading"] {
-  font-size: 1.65rem;
-  position: relative;
-  padding-bottom: .5rem;
-  padding-left: 1.4rem;
-  /* ── color-mix(in oklch) 渐变：感知均匀色空间，颜色过渡更自然 ── */
-  background: linear-gradient(90deg,
-    var(--g0),
-    var(--mix-gc),
-    var(--c0),
-    var(--mix-cp),
-    var(--p0),
-    var(--g0)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation:
-    rbw-mid  3s linear infinite,
-    rgb-noise 9s linear infinite;
-  filter:
-    drop-shadow(0 0 10px var(--g0))
-    drop-shadow(0 0 25px var(--c0));
-}
-/* 左侧闪烁竖条 */
-[class~="__heading"]::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0;
-  width: 5px; height: 100%;
-  background: linear-gradient(180deg,
-    var(--g0),var(--c0),var(--p1),var(--r0),var(--g0)
-  );
-  background-size: 100% 400%;
-  animation:
-    rbw-mid    1.5s linear infinite,
-    bar-pulse  2.5s ease-in-out infinite;
-  border-radius: 3px;
-  box-shadow:
-    4px 0 16px var(--g0),
-    8px 0 32px var(--c0),
-    12px 0 55px var(--p1);
-}
-/* 底部流光线 — 激活 --line-w Houdini 属性：width 直接由 @property 插值 */
-[class~="__heading"]::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  height: 2px;
-  background: linear-gradient(90deg,
-    var(--g0),var(--c0),var(--p0),var(--g0)
-  );
-  background-size: 400% 400%;
-  /* ── 激活 --line-w + k-linew：用 Houdini @property 做 width 数值插值
-     比普通 width: 0→100% 的 animation 更精准，因为 @property 声明了
-     syntax: <percentage>，浏览器可以真正对其做类型安全的插值 ── */
-  --line-w: 0%;
-  width: var(--line-w);
-  animation:
-    k-linew  1.2s ease-out forwards,  /* ← 激活 k-linew */
-    rbw-fast 1.5s linear infinite;
-  box-shadow:
-    0 0 8px  var(--g0),
-    0 0 20px var(--c0);
-  opacity: .85;
-}
-
-[class~="__subheading"] {
+/* ——— 二级标题 h2 ——— */
+.about__subheading,
+.net__subheading,
+.licenses__subheading,
+.ending__subheading {
   font-size: 1.25rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: .5px;
+  margin: 1.2rem 0;
+  color: var(--p1);
   position: relative;
   display: inline-block;
   padding-bottom: 5px;
-  margin-top: 0;
-  /* ── color-mix(in oklch)：红→紫过渡更自然 ── */
-  background: linear-gradient(90deg,
-    var(--r0),
-    var(--mix-pr),
-    var(--p2),
-    var(--mix-pr),
-    var(--r0)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation:
-    rbw-mid  2.5s linear infinite,
-    rgb-noise 11s linear infinite;
-  filter:
-    drop-shadow(0 0 7px  var(--r0))
-    drop-shadow(0 0 20px var(--p2));
-
-  /* ── @starting-style：首次渲染时从透明淡入 ── */
-  @starting-style {
-    opacity: 0;
-    filter: blur(3px) brightness(4);
-  }
 }
-[class~="__subheading"]::after {
+
+.about__subheading::after,
+.net__subheading::after,
+.licenses__subheading::after,
+.ending__subheading::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0;
+  width: 100%;
   height: 2px;
-  background: linear-gradient(90deg,
-    var(--r0),var(--r1),var(--p2),var(--r0)
-  );
-  background-size: 400% 400%;
-  /* ── 同样激活 --line-w / k-linew ── */
-  --line-w: 0%;
-  width: var(--line-w);
-  animation:
-    k-linew  1.2s ease-out forwards,
-    rbw-fast 1.5s linear infinite;
-  box-shadow:
-    0 0 10px var(--r0),
-    0 0 24px var(--p2);
+  background: linear-gradient(90deg, var(--p0), transparent 80%);
+  border-radius: 1px;
+  box-shadow: 0 0 6px rgba(139,92,246,.2);
+  opacity: .6;
 }
 
-h3.section-tertiary {
+/* ——— 三级标签 h3 ——— */
+.net__label {
   font-size: 1rem;
-  color: var(--g0);
-  letter-spacing: 1.5px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  color: var(--g1);
+  letter-spacing: 1px;
   margin: .8rem 0 .3rem;
-  text-shadow:
-    0 0  8px var(--g0),
-    0 0 20px var(--g1);
 }
 
-/* ────────────────────────────────────────
-   CONTENT-BLOCK — 暗网终端卡片（真 backdrop-filter）
-   ──────────────────────────────────────── */
-[class~="__body"] {
-  /* 卡片背景：CRT 扫描线纹理 + 深色底 */
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgba(0,255,65,.007) 0px,
-      rgba(0,255,65,.007) 1px,
-      transparent 1px,
-      transparent 4px
-    ),
-    var(--bg-card);
+/* ============================================================
+   内容面板 — 大厂级精致发光卡片（重点：好看的框框！）
+   ============================================================ */
 
+/* ── 通用 body 卡片基础 ── */
+.about__body,
+.net__body,
+.licenses__body,
+.ending__body {
+  background: var(--bg-card);
   padding: 1.5rem 1.8rem;
   margin: 1.2rem 0;
-  border-radius: 6px;
-  border: 1px solid var(--g2);
+  border-radius: var(--radius-md);
+  border: 1.5px solid rgba(59,130,246,.35);
   position: relative;
   overflow: hidden;
 
-  /* backdrop 毛玻璃 + 提升饱和度 */
-  backdrop-filter: blur(3px) saturate(1.4) brightness(1.05);
-  -webkit-backdrop-filter: blur(3px) saturate(1.4) brightness(1.05);
+  /* 毛玻璃 */
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
 
-  /* ── 激活 --glow Houdini 属性动画：
-     box-shadow 直接引用 --glow 变量，因 @property 声明 syntax:<length>
-     所以浏览器可以对它做数值插值，得到平滑的发光脉冲 ── */
-  --glow: 10px;
+  /* 多层发光边框阴影 — 让框框明显可见 */
   box-shadow:
-    0 0 var(--glow) var(--c0),
-    0 0 calc(var(--glow) * 2.8) var(--c0),
-    inset 0 0 14px rgba(0,255,255,.04);
+    0 0 0 1px rgba(59,130,246,.12),
+    0 0 1px 1px rgba(59,130,246,.18),
+    0 0 24px rgba(59,130,246,.12),
+    0 0 48px rgba(139,92,246,.06),
+    0 2px 8px rgba(0,0,0,.4),
+    0 8px 32px rgba(0,0,0,.2),
+    inset 0 1px 0 rgba(255,255,255,.04);
 
-  animation:
-    border-cycle 2.2s linear infinite,
-    k-rx         11s ease-in-out infinite,
-    k-glow       3.5s ease-in-out infinite; /* ← 激活 k-glow 发光脉冲 */
+  animation: card-appear .6s var(--ease-out) both;
 
-  transform-style: preserve-3d;
-  transition: transform .28s ease, box-shadow .28s ease;
-
-  /* ── @starting-style：元素首次渲染时的闪现入场 ── */
-  @starting-style {
-    opacity: 0;
-    transform: translateY(18px) scale(0.98);
-    filter: blur(4px) brightness(3);
-    --glow: 55px;
-  }
+  transition:
+    border-color .3s var(--ease-out),
+    box-shadow .4s var(--ease-out),
+    transform .3s var(--ease-out),
+    background .3s var(--ease-out);
 }
-/* 顶部彩虹流光线 */
-[class~="__body"]::before {
+
+/* ── 卡片顶部流光边 ── */
+.about__body::before,
+.net__body::before,
+.licenses__body::before,
+.ending__body::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg,
+    var(--g0),
+    var(--c0) 33%,
+    var(--p0) 66%,
+    var(--g0)
+  );
+  background-size: 300% 100%;
+  animation: line-shimmer 4s linear infinite;
+  opacity: .85;
+  box-shadow: 0 0 8px rgba(59,130,246,.4), 0 0 16px rgba(139,92,246,.15);
+}
+
+/* ── 卡片左侧发光竖条 ── */
+.about__body::after,
+.net__body::after,
+.licenses__body::after,
+.ending__body::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: linear-gradient(180deg,
+    var(--g0),
+    var(--c0) 50%,
+    var(--p0)
+  );
+  opacity: .6;
+  box-shadow: 0 0 10px rgba(59,130,246,.4), 0 0 20px rgba(59,130,246,.15);
+}
+
+/* ── Hover 效果：边框发光增强 + 轻浮 ── */
+.about__body:hover,
+.net__body:hover,
+.licenses__body:hover,
+.ending__body:hover {
+  border-color: rgba(99,102,241,.5);
+  background: rgba(16, 16, 22, .95);
+  box-shadow:
+    0 0 0 1px rgba(99,102,241,.15),
+    0 0 1px 2px rgba(99,102,241,.25),
+    0 0 30px rgba(59,130,246,.15),
+    0 0 60px rgba(139,92,246,.08),
+    0 4px 16px rgba(0,0,0,.4),
+    0 12px 40px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  transform: translateY(-2px);
+}
+
+.about__body:hover::before,
+.net__body:hover::before,
+.licenses__body:hover::before,
+.ending__body:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(59,130,246,.5), 0 0 24px rgba(139,92,246,.2);
+}
+
+.about__body:hover::after,
+.net__body:hover::after,
+.licenses__body:hover::after,
+.ending__body:hover::after {
+  opacity: .8;
+  box-shadow: 0 0 12px rgba(59,130,246,.5), 0 0 24px rgba(139,92,246,.2);
+}
+
+/* ── 每个区块卡片的专属色调 ── */
+.about__body {
+  border-color: rgba(59,130,246,.35);
+  box-shadow:
+    0 0 0 1px rgba(59,130,246,.12),
+    0 0 1px 1px rgba(59,130,246,.18),
+    0 0 24px rgba(59,130,246,.12),
+    0 0 48px rgba(139,92,246,.06),
+    0 2px 8px rgba(0,0,0,.4),
+    0 8px 32px rgba(0,0,0,.2),
+    inset 0 1px 0 rgba(255,255,255,.04);
+}
+.about__body::before {
+  background: linear-gradient(90deg, var(--g0), var(--c0) 40%, var(--p0) 70%, var(--g0));
+}
+.about__body::after {
+  background: linear-gradient(180deg, var(--g0), var(--c0) 50%, var(--p0));
+}
+.about__body:hover {
+  border-color: rgba(59,130,246,.55);
+}
+
+.net__body {
+  border-color: rgba(139,92,246,.35);
+  box-shadow:
+    0 0 0 1px rgba(139,92,246,.12),
+    0 0 1px 1px rgba(139,92,246,.18),
+    0 0 24px rgba(139,92,246,.1),
+    0 0 48px rgba(59,130,246,.06),
+    0 2px 8px rgba(0,0,0,.4),
+    0 8px 32px rgba(0,0,0,.2),
+    inset 0 1px 0 rgba(255,255,255,.04);
+}
+.net__body::before {
+  background: linear-gradient(90deg, var(--g0), var(--p0) 40%, var(--c0) 70%, var(--g0));
+}
+.net__body::after {
+  background: linear-gradient(180deg, var(--g0), var(--p0) 50%, var(--c0));
+}
+.net__body:hover {
+  border-color: rgba(139,92,246,.55);
+}
+
+.licenses__body {
+  border-color: rgba(52,211,153,.3);
+  box-shadow:
+    0 0 0 1px rgba(52,211,153,.1),
+    0 0 1px 1px rgba(52,211,153,.15),
+    0 0 24px rgba(52,211,153,.08),
+    0 0 48px rgba(59,130,246,.04),
+    0 2px 8px rgba(0,0,0,.4),
+    0 8px 32px rgba(0,0,0,.2),
+    inset 0 1px 0 rgba(255,255,255,.04);
+}
+.licenses__body::before {
+  background: linear-gradient(90deg, var(--g0), #34d399 40%, var(--c0) 70%, var(--g0));
+}
+.licenses__body::after {
+  background: linear-gradient(180deg, var(--g0), #34d399 50%, var(--c0));
+}
+.licenses__body:hover {
+  border-color: rgba(52,211,153,.5);
+}
+
+.ending__body {
+  border-color: rgba(245,158,11,.3);
+  box-shadow:
+    0 0 0 1px rgba(245,158,11,.1),
+    0 0 1px 1px rgba(245,158,11,.15),
+    0 0 24px rgba(245,158,11,.08),
+    0 0 48px rgba(139,92,246,.04),
+    0 2px 8px rgba(0,0,0,.4),
+    0 8px 32px rgba(0,0,0,.2),
+    inset 0 1px 0 rgba(255,255,255,.04);
+}
+.ending__body::before {
+  background: linear-gradient(90deg, var(--g0), #f59e0b 40%, var(--p0) 70%, var(--g0));
+}
+.ending__body::after {
+  background: linear-gradient(180deg, var(--g0), #f59e0b 50%, var(--p0));
+}
+.ending__body:hover {
+  border-color: rgba(245,158,11,.5);
+}
+
+/* ============================================================
+   net 区块 — 小组件
+   ============================================================ */
+.net__widget {
+  display: block;
+  border: none;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin: 8px 0;
+}
+
+/* ============================================================
+   ending 区块
+   ============================================================ */
+
+/* 引用块 */
+.ending__quote {
+  margin: 1.2rem 0;
+  padding: .8rem 1.2rem .8rem 1.4rem;
+  background: rgba(139,92,246,.04);
+  border-left: 3px solid rgba(139,92,246,.4);
+  color: rgba(224,224,231,.8);
+  font-style: italic;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  box-shadow: inset 2px 0 8px rgba(139,92,246,.05);
+}
+
+.ending__quote cite {
+  display: block;
+  margin-top: .6rem;
+  font-size: .85rem;
+  color: var(--p1);
+  font-style: normal;
+  opacity: .7;
+}
+
+/* 系统列表 */
+.ending__systems {
+  font-size: .9rem;
+  color: var(--txt2);
+  line-height: 2;
+}
+
+/* ============================================================
+   链接
+   ============================================================ */
+a {
+  color: var(--link);
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+  transition: color .3s var(--ease-out);
+}
+
+a:hover {
+  color: var(--link2);
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -2px; left: 0;
+  background: linear-gradient(90deg, var(--c0), var(--p0));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .4s cubic-bezier(.65,0,.35,1);
+  border-radius: 1px;
+}
+
+a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ============================================================
+   footer
+   ============================================================ */
+.site-footer {
+  margin-top: 3rem;
+  padding: 2rem 0;
+  position: relative;
+  background: rgba(9,9,11,.7);
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(90deg,
+    transparent,
+    var(--c0),
+    var(--p0),
+    transparent) 1;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: .9rem;
+  color: var(--txt2);
+}
+
+.site-footer::before {
   content: '';
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 2px;
   background: linear-gradient(90deg,
-    var(--g0),var(--c0),var(--p0),
-    var(--r0),var(--g1),var(--g0)
-  );
-  background-size: 500% 500%;
-  animation: rbw-fast 1.5s linear infinite;
-  box-shadow:
-    0 0 10px var(--g0),
-    0 0 24px var(--c0);
-  z-index: 1;
-}
-/* 纵向扫描光（激活 --scan-y Houdini 属性 + k-scan-y 动画）
-   ::after 原为水平扫光，现升级为同时包含水平 + 纵向双重扫光
-   用 mask-image 做渐变遮罩，比 linear-gradient 伪元素更精准 */
-[class~="__body"]::after {
-  content: '';
-  position: absolute;
-  top: 0; left: -80%;
-  width: 55%; height: 100%;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(0,255,65,.04)   35%,
-    rgba(255,255,255,.09) 50%,
-    rgba(0,255,255,.04)  65%,
-    transparent 100%
-  );
-  /* ── mask-image + mask-composite 遮罩合成
-     顶部和底部淡出，中间全显，比 opacity 渐变更精细 ── */
-  -webkit-mask-image: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(0,0,0,.8) 15%,
-    rgba(0,0,0,1) 50%,
-    rgba(0,0,0,.8) 85%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(0,0,0,.8) 15%,
-    rgba(0,0,0,1) 50%,
-    rgba(0,0,0,.8) 85%,
-    transparent 100%
-  );
-  animation: h-sweep 4s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 2;
-}
-[class~="__body"]:hover {
-  transform:
-    perspective(1400px)
-    rotateX(-2.5deg) rotateY(2.5deg)
-    translateY(-12px)
-    scale(1.025);
-  animation: border-cycle 1.5s linear infinite;
-  box-shadow:
-    0 0  30px var(--g0),
-    0 0  65px var(--c0),
-    0 0 110px var(--p1),
-    0 0 170px rgba(0,255,65,.11),
-    inset 0 0 45px rgba(0,255,65,.04);
-}
-
-/* ────────────────────────────────────────
-   QUOTE — 黑客格言引用
-   ──────────────────────────────────────── */
-.ending__quote {
-  margin: 1.5rem 0;
-  padding: 1.2rem 1.6rem 1.2rem 2.2rem;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgba(255,0,60,.008) 0px,
-      rgba(255,0,60,.008) 1px,
-      transparent 1px,
-      transparent 4px
-    ),
-    var(--bg-quote);
-  border-left: 3px solid var(--r0);
-  border-radius: 0 6px 6px 0;
-  color: rgba(200,255,212,.92);
-  font-style: italic;
-  position: relative;
-  overflow: hidden;
-  animation: border-cycle 4s linear infinite reverse;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-.ending__quote::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -80%;
-  width: 50%; height: 100%;
-  background: linear-gradient(90deg,
-    transparent, rgba(255,60,0,.07) 50%, transparent
-  );
-  animation: h-sweep2 5.5s ease-in-out infinite;
-  animation-delay: 2.2s;
-  pointer-events: none;
-}
-.ending__quote::after {
-  content: '';
-  position: absolute;
-  left: 0; top: 0;
-  width: 3px; height: 100%;
-  background: linear-gradient(180deg,
-    var(--r0),var(--r1),var(--r2),var(--r0)
-  );
-  background-size: 100% 400%;
-  animation:
-    rbw-mid    2s linear infinite,
-    arc-flash  5.5s linear infinite;
-}
-
-.ending__quote cite {
-  display: block;
-  margin-top: .8rem;
-  font-size: .85rem;
-  font-style: normal;
-  background: linear-gradient(90deg,
-    var(--r1),var(--r0),var(--p2)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: rbw-mid 3.5s linear infinite;
-  filter: drop-shadow(0 0 5px var(--r1));
-}
-
-/* ────────────────────────────────────────
-   SYS LIST — 终端字体 + 打字机光标
-   ──────────────────────────────────────── */
-.ending__systems {
-  font-family: var(--font-mono);
-  font-size: .84rem;
-  color: var(--g1);
-  line-height: 2.1;
-  text-shadow: 0 0 7px var(--g2);
-}
-/* 打字机光标（纯 CSS） */
-.ending__systems::after {
-  content: '█';
-  display: inline-block;
-  animation: cursor-blink .85s step-end infinite;
-  color: var(--g0);
-  text-shadow:
-    0 0 8px  var(--g0),
-    0 0 20px var(--g0);
-  margin-left: 2px;
-  font-size: .9em;
-}
-
-/* ────────────────────────────────────────
-   WIDGET
-   ──────────────────────────────────────── */
-.widget-link {
-  display: block;
-  margin: 8px 0;
-  padding: 7px 13px;
-  border: 1px solid rgba(0,255,65,.2);
-  border-radius: 4px;
-  max-width: 440px;
-  animation: border-cycle 3s linear infinite;
-  transition: all .25s;
-  text-decoration: none;
-}
-.widget-link:hover {
-  transform: translateX(10px) scale(1.04);
-  box-shadow:
-    0 0 20px var(--g0),
-    0 0 44px var(--c0);
-}
-
-.widget-frame {
-  display: block;
-  border: none;
-  width: 100%;
-  max-width: 440px;
-  height: auto;
-  margin: 8px 0;
-}
-
-/* ────────────────────────────────────────
-   LINKS — 数据流下划线
-   ──────────────────────────────────────── */
-a {
-  color: var(--g0);
-  text-decoration: none;
-  font-weight: 600;
-  position: relative;
-  transition: all .2s ease;
-  display: inline;
-  text-shadow: 0 0 6px rgba(0,255,65,.35);
-}
-a::after {
-  content: '';
-  position: absolute;
-  left: 0; bottom: -2px;
-  width: 100%; height: 1.5px;
-  background: linear-gradient(90deg,
-    var(--g0),var(--c0),var(--p0),
-    var(--r0),var(--g1),var(--g0)
-  );
-  background-size: 400% 400%;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform .3s cubic-bezier(.65,0,.35,1);
-  box-shadow:
-    0 0 8px  var(--g0),
-    0 0 18px var(--c0);
-  animation: rbw-fast 1.5s linear infinite;
-}
-a:hover {
-  color: #fff;
-  text-shadow:
-    0 0  6px var(--g0),
-    0 0 14px var(--c0),
-    0 0 30px var(--p1),
-    0 0 60px rgba(0,255,65,.45);
-  animation: shake .3s linear;
-  filter: brightness(1.6);
-}
-a:hover::after {
-  transform: scaleX(1) scaleY(3.5);
-  transform-origin: left;
-  filter: brightness(3.5) blur(.5px);
-}
-
-/* ────────────────────────────────────────
-   P / LI
-   ──────────────────────────────────────── */
-p, li { color: var(--txt2) }
-ul    { padding-left: 1.4rem }
-li    { margin-bottom: .35rem }
-li::marker { color: var(--g0); content: '▶ ' }
-
-/* ────────────────────────────────────────
-   FOOTER — 暗网深处基地
-   ──────────────────────────────────────── */
-footer {
-  margin-top: 4.5rem;
-  padding: 2.5rem 0 2rem;
-  position: relative;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgba(0,255,65,.009) 0px,
-      rgba(0,255,65,.009) 1px,
-      transparent 1px,
-      transparent 3px
-    ),
-    rgba(0,4,1,.97);
-  font-family: var(--font-hud);
-  font-size: .86rem;
-  overflow: hidden;
-  border-top: 1px solid rgba(0,255,65,.1);
-}
-footer::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 3px;
-  background: linear-gradient(90deg,
-    var(--g0),var(--c0),var(--p0),var(--r0),
-    var(--r2),var(--c0),var(--g1),var(--g0)
-  );
-  background-size: 400% 400%;
-  animation: rbw-fast 1.2s linear infinite;
-  box-shadow:
-    0 0 12px var(--g0),
-    0 0 26px var(--c0),
-    0 0 52px rgba(0,255,65,.28);
-}
-footer::after {
-  content: '';
-  position: absolute;
-  bottom: -80px; left: 50%;
-  transform: translateX(-50%);
-  width: 850px; height: 130px;
-  background: radial-gradient(ellipse,
-    rgba(0,255,65,.12)  0%,
-    rgba(0,255,255,.07) 40%,
-    transparent         70%
-  );
-  pointer-events: none;
+    transparent,
+    var(--c1),
+    transparent);
+  animation: scan 3s linear infinite;
 }
 
 .site-footer__inner {
   text-align: center;
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
 }
-.site-footer__inner::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 40%; height: 100%;
-  background: linear-gradient(90deg,
-    transparent, rgba(0,255,65,.05) 50%, transparent
-  );
-  animation: footer-scan 4.5s linear infinite;
-  pointer-events: none;
+
+.site-footer a {
+  color: var(--p1);
+  margin: 0 .5rem;
 }
-.site-footer__inner p {
-  background: linear-gradient(90deg,
-    var(--g0),var(--c0),var(--p0),var(--g1)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: rbw-mid 4.5s linear infinite;
-  filter: drop-shadow(0 0 5px var(--g0));
-  margin: .38rem 0;
+
+.site-footer a:hover {
+  color: var(--c1);
+  text-shadow: 0 0 8px rgba(59,130,246,.3);
 }
-footer a {
-  /* ── 炸裂版：霓虹边框 + 数据流扫光 + 故障闪烁 ── */
-  position: relative;
+
+.site-footer__contact {
   display: inline-block;
-  margin: 0 .6rem;
-  padding: .18em .7em;
-  color: var(--g0);
-  font-family: var(--font-hud);
-  font-weight: 700;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  -webkit-text-fill-color: transparent;
-  background: linear-gradient(90deg,
-    var(--g0) 0%, var(--c0) 40%, var(--p0) 70%, var(--g0) 100%
-  );
-  background-size: 300% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: link-shimmer 2.8s linear infinite;
-
-  /* 霓虹立体边框 */
-  border: 1px solid transparent;
-  border-image: linear-gradient(
-    135deg,
-    var(--g0), var(--c0), var(--p0), var(--r0), var(--g0)
-  ) 1;
-  box-shadow:
-    0 0 6px  rgba(0,255,65,.4),
-    0 0 14px rgba(0,255,255,.25),
-    inset 0 0 8px rgba(0,255,65,.08);
-
-  /* 数据流扫光（::before）*/
-  overflow: hidden;
-}
-footer a::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -110%;
-  width: 60%; height: 100%;
-  background: linear-gradient(
-    105deg,
-    transparent 20%,
-    rgba(0,255,255,.55) 50%,
-    transparent 80%
-  );
-  animation: link-scan 2.2s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 1;
-}
-/* 故障闪烁条（::after）*/
-footer a::after {
-  content: attr(href);
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  padding: .18em .7em;
-  color: var(--r0);
-  -webkit-text-fill-color: var(--r0);
-  background: none;
-  -webkit-background-clip: unset;
-  background-clip: unset;
-  opacity: 0;
-  clip-path: inset(30% 0 40% 0);
-  animation: link-glitch 3.6s steps(1) infinite;
-  pointer-events: none;
-  z-index: 2;
-  box-sizing: border-box;
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  letter-spacing: inherit;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: .8rem;
+  letter-spacing: 1px;
+  color: var(--txt2);
+  border: 1px solid rgba(161,161,170,.3);
+  padding: 2px 10px;
+  border-radius: var(--radius-sm);
+  margin-top: .8rem;
+  transition: all .3s var(--ease-out);
 }
 
-footer a:hover {
-  color: #fff;
-  -webkit-text-fill-color: transparent;
-  background: linear-gradient(90deg,
-    #fff 0%, var(--g0) 25%, var(--c0) 50%, var(--p0) 75%, #fff 100%
-  );
-  background-size: 300% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: link-shimmer .6s linear infinite;
-  border-image: linear-gradient(135deg,
-    var(--g0),var(--c0),var(--p0),var(--r0),var(--c0),var(--g0)
-  ) 1;
-  box-shadow:
-    0 0 12px  var(--g0),
-    0 0 28px  var(--c0),
-    0 0 52px  rgba(204,0,255,.4),
-    inset 0 0 16px rgba(0,255,65,.15);
-  transform: translateY(-2px) scale(1.07);
-  transition: transform .12s ease, box-shadow .12s ease;
-}
-footer a:hover::before {
-  animation: link-scan .7s ease-in-out infinite;
+.site-footer__contact:hover {
+  color: var(--c1);
+  border-color: var(--c1);
+  text-shadow: 0 0 6px rgba(59,130,246,.4);
+  box-shadow: 0 0 12px rgba(59,130,246,.15);
 }
 
-} /* end @layer components */
-
-/* ══════════════════════════════════════════════════════════
-   FX — 纯CSS额外特效层
-   ══════════════════════════════════════════════════════════ */
-@layer fx {
-
-/* ── 全站 selection 高亮 ── */
-::selection {
-  background: rgba(0,255,65,.3);
-  color: #fff;
-  text-shadow: 0 0 10px var(--g0);
-}
-
-/* ── scrollbar 美化（Webkit） ── */
-::-webkit-scrollbar { width: 6px; height: 6px }
-::-webkit-scrollbar-track {
-  background: #000a02;
-  border-left: 1px solid rgba(0,255,65,.1);
-}
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--g0), var(--c0), var(--p1));
-  border-radius: 3px;
-  box-shadow: 0 0 8px var(--g0);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--c0), var(--p0), var(--r0));
-  box-shadow: 0 0 14px var(--c0);
-}
-
-/* ── focus 高亮 ── */
-:focus-visible {
-  outline: 2px solid var(--g0);
-  outline-offset: 3px;
-  box-shadow: 0 0 14px var(--g0), 0 0 30px rgba(0,255,65,.3);
-}
-
-} /* end @layer fx */
-
-/* ══════════════════════════════════════════════════════════
-   SCROLL-FX — @container 容器查询（安全，无滚动副作用）
-   scroll-driven animations 已移除：animation-timeline: view() 会导致
-   浏览器滚动锚点异常（页面往下滑后自动弹回），因此不在生产环境使用。
-   ══════════════════════════════════════════════════════════ */
-@layer scroll-fx {
-
-/* ── @container 容器查询：当 main-content 容器宽度 < 600px 时紧凑布局
-   比媒体查询更精准：响应的是容器宽度，不是视口宽度 ── */
-@container main-content (max-width: 600px) {
-  [class~="__body"] {
-    padding: 1rem 1rem;
-    border-radius: 4px;
+/* ============================================================
+   动画
+   ============================================================ */
+@keyframes card-appear {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
   }
-  [class~="__heading"] {
-    font-size: 1.35rem;
-    padding-left: 1rem;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  [class~="__subheading"] {
+}
+
+@keyframes line-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+@keyframes scan {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: .95; }
+  50%      { opacity: 1; }
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width: 768px) {
+  body {
+    padding: 12px;
+    font-size: .95rem;
+  }
+
+  .hero__title {
+    font-size: 2rem;
+    letter-spacing: 3px;
+  }
+
+  .about__heading,
+  .net__heading,
+  .licenses__heading,
+  .ending__heading {
+    font-size: 1.3rem;
+  }
+
+  .about__subheading,
+  .net__subheading,
+  .licenses__subheading,
+  .ending__subheading {
     font-size: 1.1rem;
   }
-  section::before { left: -12px }
-  section::after  { right: -12px }
-}
 
-@container main-content (max-width: 420px) {
-  [class~="__body"] {
-    padding: .8rem .85rem;
+  .site-footer { font-size: .8rem; }
+
+  .about__body,
+  .net__body,
+  .licenses__body,
+  .ending__body {
+    padding: 1rem 1.1rem;
   }
-  [class~="__heading"] {
-    font-size: 1.15rem;
-    letter-spacing: 1.5px;
+
+  .net__widget {
+    max-width: 100% !important;
+    width: 100% !important;
   }
-  footer a {
-    margin: 0 .3rem;
-    padding: .15em .5em;
-    font-size: .78rem;
-  }
-}
-
-} /* end @layer scroll-fx */
-
-/* ══════════════════════════════════════════════════════════
-   RESPONSIVE
-   ══════════════════════════════════════════════════════════ */
-@layer responsive {
-
-@media (max-width: 768px) {
-  body { padding: 12px; font-size: .93rem }
-  .hero__title { font-size: clamp(1.6rem, 10vw, 3rem); letter-spacing: 3px }
-  .hero::before { width: min(300px, 85vw); height: min(300px, 85vw) }
-  .hero::after  { width: min(360px, 92vw); height: min(140px, 22vw) }
-  [class~="__heading"]  { font-size: 1.3rem }
-  [class~="__subheading"] { font-size: 1.1rem }
-  footer { font-size: .76rem }
-  [class~="__body"] { padding: 1rem 1.1rem }
-  section::before { left: -10px }
-  section::after  { right: -10px }
-  /* 手机端 IRC iframe 防溢出 */
-  .irc-embed-item { overflow: hidden; }
-  .irc-embed-frame { max-width: 100% !important; width: 100% !important; }
 }
 
 @media (max-width: 480px) {
-  body { padding: 8px }
-  .hero__title { font-size: clamp(1.2rem, 12vw, 2rem); letter-spacing: 2px }
-  .hero { padding: 2rem 0 1.5rem }
-  [class~="__body"] { padding: .85rem .9rem }
-}
-
-/* 无障碍：减少动画 */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important;
-  }
-}
-
-/* ── @supports 降级保护：scroll-driven 已移除，此块保留用于未来安全扩展 ── */
-@supports not (animation-timeline: view()) {
-  /* 所有元素默认可见，scroll-driven 在不支持的浏览器里自动不生效 */
-}
-
-/* ── @supports 降级：不支持 color-mix 的浏览器，回退到硬编码颜色 ── */
-@supports not (color: color-mix(in oklch, red, blue)) {
-  :root {
-    --mix-gc:  #00e8aa;
-    --mix-cp:  #7a00ff;
-    --mix-pr:  #cc0066;
-    --mix-rg:  #88aa00;
-    --mix-dim: rgba(0,255,65,.3);
-  }
-}
-
-/* ── @supports 降级：不支持 offset-path 的浏览器，流星 B 回退 ── */
-@supports not (offset-path: path('M 0,0 L 1,1')) {
-  .site-header__theme-switcher::after {
-    animation: meteor-b 9s linear infinite;
-    animation-delay: 3s;
-  }
-}
-
-/* ── 激活 --fog：给 .ending__quote 添加"深渊迷雾"效果
-   --fog 在 @property 定义为 <number>，用 k-fog 动画让其从0到1再到0脉冲
-   结合 backdrop-filter 的 blur 动态值，产生"迷雾涌动"感 ── */
-@property --fog {
-  syntax: "<number>";
-  initial-value: 0;
-  inherits: false;
-}
-@keyframes k-fog {
-  0%,100% { --fog: 0   }
-  50%      { --fog: 1   }
-}
-.ending__quote {
-  /* --fog 驱动 backdrop-filter 的 blur 量：0→8px→0 波动 */
-  /* calc() 中使用 --fog 需要乘以有单位的数，用 1px 乘 */
-  --fog: 0;
-  backdrop-filter:
-    blur(calc(2px + var(--fog) * 6px))
-    saturate(calc(1.1 + var(--fog) * 0.5));
-  -webkit-backdrop-filter:
-    blur(calc(2px + var(--fog) * 6px))
-    saturate(calc(1.1 + var(--fog) * 0.5));
-  animation:
-    border-cycle 4s  linear     infinite reverse,
-    k-fog        8s  ease-in-out infinite;
-}
-
-} /* end @layer responsive */
-
-/* ████████████████████████████████████████████████████████████████████████████
-   @layer modern — 2024-2025 顶级 CSS 精华大全
-   全部特性均不触发滚动弹回（无 body/html 上的 animation/filter/transform）
-
-   ① CSS Nesting（原生 &）              Chrome 120+
-   ② :has() 父选择器                    Chrome 105+
-   ③ :is() / :where()                  Chrome 88+
-   ④ :nth-child(n of .cls)             Chrome 111+
-   ⑤ oklch() / oklab() 宽色域颜色       Chrome 111+
-   ⑥ light-dark() 系统深浅模式自适应    Chrome 123+
-   ⑦ content-visibility: auto          Chrome 85+（性能爆炸）
-   ⑧ contain: layout style             Chrome 52+
-   ⑨ will-change（GPU 合成层提升）      Chrome 36+
-   ⑩ overscroll-behavior               Chrome 63+
-   ⑪ scroll-snap proximity 软吸附      Chrome 69+
-   ⑫ accent-color + caret-color       Chrome 93+/57+
-   ⑬ @scope 作用域 CSS                 Chrome 118+
-   ⑭ animation-composition: add        Chrome 112+
-   ⑮ linear() 弹簧缓动函数             Chrome 113+
-   ⑯ field-sizing: content            Chrome 123+
-   ⑰ :has() 超级组合技（无JS交互联动）
-   ⑱ dvh/svh/lh/cqi 现代 CSS 单位
-   ████████████████████████████████████████████████████████████████████████████ */
-@layer modern {
-
-/* ══════════════════════════════════════════════
-   ① 原生 CSS Nesting（& 选择器）
-   Chrome 120+ — 无需预处理器的嵌套写法
-   ══════════════════════════════════════════════ */
-
-.hero {
-  & .hero-sub {
-    color: var(--txt2);
-    font-size: clamp(.9rem, 2vw, 1.15rem);
-    letter-spacing: 2px;
-    text-wrap: balance;
-    opacity: .88;
-
-    @starting-style {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-
-    transition: opacity .5s ease, transform .5s ease;
+  .about__heading,
+  .net__heading,
+  .licenses__heading,
+  .ending__heading {
+    font-size: 1.15rem;
+    padding-left: .8rem;
   }
 
-  &:has(.hero-sub) {
-    padding-bottom: 3rem;
+  .about__body,
+  .net__body,
+  .licenses__body,
+  .ending__body {
+    padding: .85rem .9rem;
+    border-radius: var(--radius-sm);
   }
 }
-
-/* ══════════════════════════════════════════════
-   ② :has() 父选择器
-   Chrome 105+ — 根据子元素/后代状态选择父元素
-   ══════════════════════════════════════════════ */
-
-/* content-block 含 h2 时，顶部光线变为红/紫 */
-[class~="__body"]:has([class~="__subheading"]) {
-  border-top: 2px solid var(--r0);
-
-  &::before {
-    background: linear-gradient(90deg,
-      var(--r0), var(--p2), var(--c0),
-      var(--r0), var(--p0), var(--r0)
-    );
-    background-size: 600% 600%;
-    animation: rbw-hyper .9s linear infinite;
-    box-shadow:
-      0 0 14px var(--r0),
-      0 0 30px var(--p2);
-  }
-}
-
-/* h2 在卡片首位时，左侧加紫色竖轨 */
-[class~="__body"]:has(> [class~="__subheading"]:first-child) {
-  border-left: 2px solid var(--p0);
-  box-shadow:
-    0 0 20px var(--p1),
-    0 0 40px rgba(136,0,255,.18),
-    inset 0 0 20px rgba(136,0,255,.05);
-}
-
-/* li 内链接被 hover 时，整个 li 发光 */
-li:has(> a:hover) {
-  color: var(--g0);
-  text-shadow: 0 0 10px var(--g0);
-  filter: brightness(1.3);
-  transition: all .2s ease;
-}
-
-/* ══════════════════════════════════════════════
-   ③ :is() / :where() 高效分组选择器
-   ══════════════════════════════════════════════ */
-
-:is(h1, h2, h3):not([class~="__heading"]):not([class~="__subheading"]):not(.net__label) {
-  text-shadow:
-    0 0 12px rgba(0,255,65,.4),
-    0 0 28px rgba(0,255,255,.2);
-}
-
-:where(ul, ol) {
-  list-style: none;
-}
-
-:where(section, article, aside) {
-  position: relative;
-}
-
-/* ══════════════════════════════════════════════
-   ④ :nth-child(n of .selector)
-   Chrome 111+ — 按类名过滤的第n个，比 nth-child 更精准
-   ══════════════════════════════════════════════ */
-
-/* 奇数 [class~="__body"]：边框偏青 */
-[class~="__body"]:nth-child(odd of [class~="__body"]) {
-  border-color: rgba(0,255,255,.35);
-}
-
-/* section 内第2个 [class~="__body"]：追加紫色扫描线纹理 */
-section [class~="__body"]:nth-child(2 of [class~="__body"]) {
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      rgba(136,0,255,.006) 0px,
-      rgba(136,0,255,.006) 1px,
-      transparent 1px,
-      transparent 4px
-    ),
-    var(--bg-card);
-}
-
-/* ══════════════════════════════════════════════
-   ⑤ oklch() 宽色域颜色
-   Chrome 111+ — 感知均匀色空间，同亮度更一致
-   ══════════════════════════════════════════════ */
-
-@supports (color: oklch(50% .3 180)) {
-  :root {
-    --ok-green:  oklch(73%  .23  142);  /* 矩阵绿 */
-    --ok-cyan:   oklch(88%  .19  193);  /* 赛博青 */
-    --ok-purple: oklch(55%  .27  295);  /* 暗网紫 */
-    --ok-red:    oklch(60%  .28  27);   /* 危险红 */
-    --ok-gold:   oklch(84%  .19  85);   /* 警告金 */
-    --ok-gc:     oklch(81%  .22  167);  /* 绿→青中间色 */
-    --ok-pr:     oklch(57%  .28  310);  /* 紫→红中间色 */
-  }
-
-  /* 文字选中高亮用 oklch（感知更鲜艳） */
-  ::selection {
-    background: oklch(73% .23 142 / .32);
-    color: oklch(98% .02 142);
-    text-shadow: 0 0 12px oklch(73% .23 142);
-  }
-
-  /* 滚动条 thumb 用 oklch 渐变 */
-  ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg,
-      var(--ok-green),
-      var(--ok-cyan),
-      var(--ok-purple)
-    );
-  }
-
-  /* 链接色用 oklch 绿（更鲜艳，感知亮度更均匀） */
-  a {
-    color: var(--ok-green);
-    text-shadow: 0 0 7px oklch(73% .23 142 / .45);
-  }
-}
-
-/* ══════════════════════════════════════════════
-   ⑥ light-dark() + color-scheme
-   Chrome 123+ — 明确声明 dark 模式，跨平台一致
-   ══════════════════════════════════════════════ */
-
-@supports (color: light-dark(white, black)) {
-  :root {
-    color-scheme: dark;
-    --ld-bg:     light-dark(#f0fff4, #000a02);
-    --ld-txt:    light-dark(#003d10, #b8ffca);
-    --ld-card:   light-dark(rgba(0,180,60,.08), rgba(0,12,4,.93));
-    --ld-border: light-dark(rgba(0,100,30,.3),  rgba(0,143,17,.4));
-  }
-}
-
-/* ══════════════════════════════════════════════
-   ⑦ content-visibility: auto（离屏跳过渲染）
-   Chrome 85+ — 滚动时屏幕外的 section 跳过渲染，性能爆炸
-   ══════════════════════════════════════════════ */
-
-@supports (content-visibility: auto) {
-  section {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 400px;  /* 防止跳动的预留高度 */
-  }
-}
-
-/* ══════════════════════════════════════════════
-   ⑧ contain（渲染隔离，防止重排蔓延）
-   卡片内部变化不影响外部布局，减少重排范围
-   ══════════════════════════════════════════════ */
-
-[class~="__body"] {
-  contain: layout style;
-}
-
-.divider {
-  contain: layout;
-}
-
-/* ══════════════════════════════════════════════
-   ⑨ will-change（提前 GPU 合成层准备）
-   只对确实有动画的元素使用，不滥用
-   ══════════════════════════════════════════════ */
-
-.hero             { will-change: transform; }
-.hero__title       { will-change: transform, filter; }
-[class~="__body"]    { will-change: transform, box-shadow; }
-.divider::before { will-change: transform; }
-
-/* ══════════════════════════════════════════════
-   ⑩ overscroll-behavior（禁止弹性滚动 & 浏览器手势）
-   Chrome 63+ — 防止 iOS 弹性/Android 下拉刷新/前进后退手势
-   ══════════════════════════════════════════════ */
-
-html {
-  overscroll-behavior-y: none;
-  overscroll-behavior-x: none;
-}
-
-/* ══════════════════════════════════════════════
-   ⑪ scroll-snap proximity 软吸附
-   Chrome 69+ — section 滚到接近时轻微吸附，不强制锁定
-   ══════════════════════════════════════════════ */
-
-main {
-  scroll-snap-type: y proximity;
-}
-
-section {
-  scroll-snap-align: start;
-  scroll-snap-stop: normal;
-}
-
-/* ══════════════════════════════════════════════
-   ⑫ accent-color + caret-color
-   Chrome 93+ / 57+ — 一行接管所有原生控件颜色
-   ══════════════════════════════════════════════ */
-
-:root {
-  accent-color: var(--g0);
-  caret-color:  var(--g0);
-}
-
-input, textarea, [contenteditable] {
-  caret-color: var(--g0);
-  color: var(--txt);
-  background: rgba(0,12,4,.9);
-  border: 1px solid var(--g2);
-  border-radius: 3px;
-  padding: .4em .7em;
-  font-family: var(--font-mono);
-  font-size: .9rem;
-  outline: none;
-  transition: border-color .2s, box-shadow .2s;
-
-  /* ← CSS Nesting！不需要 .class input:focus 这种写法了 */
-  &:focus {
-    border-color: var(--g0);
-    box-shadow:
-      0 0 12px var(--g0),
-      0 0 28px rgba(0,255,65,.25),
-      inset 0 0 8px rgba(0,255,65,.06);
-  }
-}
-
-/* ══════════════════════════════════════════════
-   ⑬ @scope 作用域 CSS（Chrome 118+）
-   将样式限定在特定 DOM 子树内，不污染全局
-   ══════════════════════════════════════════════ */
-
-@supports (selector(:scope)) {
-
-  /* 卡片内 p 和 a 单独一套配色，不影响全局 */
-  @scope ([class~="__body"]) {
-    p {
-      line-height: 1.82;
-    }
-
-    :scope > p:first-of-type {
-      margin-top: 0;
-    }
-
-    a {
-      color: var(--c0);
-      text-shadow: 0 0 7px rgba(0,255,255,.4);
-
-      &:hover {
-        color: var(--p0);
-        text-shadow:
-          0 0 8px var(--p0),
-          0 0 20px rgba(136,0,255,.4);
-      }
-    }
-  }
-
-  /* 英雄区 p 单独配色 */
-  @scope (.hero) {
-    p {
-      color: rgba(180,255,210,.78);
-      font-family: var(--font-hud);
-      letter-spacing: 1px;
-    }
-  }
-}
-
-/* ══════════════════════════════════════════════
-   ⑭ animation-composition: add（动画叠加合成）
-   Chrome 112+ — 多个动画叠加而非互相覆盖
-   ══════════════════════════════════════════════ */
-
-@supports (animation-composition: add) {
-  /* hero title 的 4 个动画：rbw 叠加合成，glitch/flicker/persp 各自替换 */
-  .hero__title {
-    animation-composition: add, replace, replace, replace;
-  }
-
-  /* content-block 的 3 个动画：border 替换，k-rx/k-glow 叠加 */
-  [class~="__body"] {
-    animation-composition: replace, add, add;
-  }
-}
-
-/* ══════════════════════════════════════════════
-   ⑮ linear() 弹簧/弹跳缓动函数（Chrome 113+）
-   可以描述任意曲线——弹跳、弹性、阻尼，全搞定
-   ══════════════════════════════════════════════ */
-
-@supports (transition-timing-function: linear(0, 1)) {
-
-  /* 按钮：弹跳 bounce */
-  .site-header__theme-btn {
-    transition-timing-function: linear(
-      0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%,
-      0.938 16.7%, 1.017, 1.077, 1.111, 1.121, 1.115, 1.096,
-      1.063, 1.017, 0.991 28.2%, 0.977, 0.975 31.2%, 0.997 33.9%,
-      1.001, 0.998, 0.999, 1 38.5%
-    );
-  }
-
-  /* 卡片：弹性 spring */
-  [class~="__body"] {
-    transition-timing-function: linear(
-      0, 0.006, 0.025 2.8%, 0.101 5.9%, 0.539 15%, 0.721 19.2%,
-      0.849 23.2%, 0.938 27.7%, 0.968, 1.013, 1.045 37.5%,
-      1.069, 1.083, 1.088, 1.084, 1.072, 1.051, 1.021, 0.995,
-      0.974 50.6%, 0.965 53.7%, 0.964 57.5%, 0.978 63.1%,
-      1.004 68.4%, 1.015 71.5%, 1.017, 1.012, 1 77.7%
-    );
-  }
-
-  /* 链接：快速弹入 */
-  a {
-    transition-timing-function: linear(
-      0, 0.232 5.3%, 0.786 14%, 1.011 18.7%,
-      1.043 21.4%, 1.061, 1.071, 1.072, 1.065, 1.05,
-      1.018, 0.986, 0.97 39.2%, 0.965 42.1%, 0.975 46%,
-      1.003 53.5%, 1.012 57.7%, 1.001 68.6%, 1
-    );
-  }
-}
-
-/* ══════════════════════════════════════════════
-   ⑯ field-sizing: content（输入框跟随内容自动伸缩）
-   Chrome 123+ — 告别手动 resize，告别 JS 计算高度
-   ══════════════════════════════════════════════ */
-
-@supports (field-sizing: content) {
-  textarea {
-    field-sizing: content;
-    min-height: 3lh;
-    max-height: 20lh;
-    resize: none;
-  }
-
-  input[type="text"],
-  input[type="search"],
-  input[type="url"] {
-    field-sizing: content;
-    min-width: 12ch;
-    max-width: 40ch;
-  }
-}
-
-/* ══════════════════════════════════════════════
-   ⑰ :has() 超级组合技 — 无 JS 的交互联动
-   ══════════════════════════════════════════════ */
-
-/* 当 main 内任意 content-block 被 hover 时，其他卡片微暗 */
-main:has([class~="__body"]:hover) [class~="__body"]:not(:hover) {
-  opacity: .82;
-  filter: brightness(.88);
-  transition: opacity .3s ease, filter .3s ease;
-}
-
-/* footer 任意链接被 hover 时，顶部彩虹光条加速 */
-footer:has(a:hover)::before {
-  animation: rbw-hyper .35s linear infinite;
-  box-shadow:
-    0 0 20px var(--g0),
-    0 0 45px var(--c0),
-    0 0 90px rgba(0,255,65,.5);
-}
-
-/* section 内有卡片被 hover 时，左侧竖轨加强 */
-section:has([class~="__body"]:hover)::before {
-  animation: rbw-fast .6s linear infinite, bar-pulse 1s ease-in-out infinite;
-  opacity: 1;
-  box-shadow:
-    4px 0 20px var(--g0),
-    8px 0 45px var(--c0),
-    14px 0 80px var(--p1);
-}
-
-/* ══════════════════════════════════════════════
-   ⑱ 现代 CSS 单位 dvh/svh/lh/cqi
-   ══════════════════════════════════════════════ */
-
-/* dvh = dynamic viewport height（移动端工具栏展收后的真实高度）*/
-@supports (height: 1dvh) {
-  .hero {
-    min-height: 40dvh;
-  }
-
-  footer {
-    /* 刘海屏/全面屏底部安全区 */
-    margin-bottom: env(safe-area-inset-bottom, 0px);
-  }
-}
-
-/* lh = line-height 单位，排版更语义化 */
-@supports (margin-top: 1lh) {
-  [class~="__heading"] {
-    margin-bottom: .75lh;
-  }
-
-  p + p {
-    margin-top: .5lh;
-  }
-}
-
-/* cqi = 容器查询内联尺寸单位（相对于容器宽度）*/
-@supports (font-size: 1cqi) {
-  [class~="__heading"] {
-    font-size: clamp(1.2rem, 4cqi, 1.65rem);
-  }
-
-  [class~="__subheading"] {
-    font-size: clamp(1rem, 3.2cqi, 1.25rem);
-  }
-}
-
-/* ══════════════════════════════════════════════
-   BONUS — :focus-within（CSS 原生表单状态联动）
-   ══════════════════════════════════════════════ */
-
-/* 含有 focused 输入框的卡片整体高亮 */
-[class~="__body"]:focus-within {
-  border-color: var(--g0) !important;
-  box-shadow:
-    0 0 25px var(--g0),
-    0 0 55px rgba(0,255,65,.3),
-    inset 0 0 20px rgba(0,255,65,.06) !important;
-
-  &::before {
-    animation: rbw-hyper .5s linear infinite;
-  }
-}
-
-} /* end @layer modern */
-
-

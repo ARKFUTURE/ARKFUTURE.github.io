@@ -745,7 +745,10 @@ section {
 }
 
 /* hover 时整个 section 提升，不被后续 section 压住 */
-section:has([class~="__body"]:hover) {
+section:has(.about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body:hover) {
   z-index: 10;
 }
 
@@ -846,7 +849,10 @@ h1, h2, h3 {
   letter-spacing: 1.5px;
 }
 
-[class~="__heading"] {
+.about__heading,\
+.net__heading,\
+.licenses__heading,\
+.ending__heading {
   font-size: 1.65rem;
   position: relative;
   padding: .4rem 0 .5rem 1.4rem;
@@ -867,7 +873,10 @@ h1, h2, h3 {
 }
 
 /* 左侧彩虹竖条 */
-[class~="__heading"]::before {
+.about__heading,\
+.net__heading,\
+.licenses__heading,\
+.ending__heading::before {
   content: '';
   position: absolute;
   left: 0; top: 0;
@@ -884,7 +893,10 @@ h1, h2, h3 {
 }
 
 /* 底部虚线 */
-[class~="__heading"]::after {
+.about__heading,\
+.net__heading,\
+.licenses__heading,\
+.ending__heading::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0;
@@ -900,7 +912,10 @@ h1, h2, h3 {
 }
 
 /* ─── H2 ─── */
-[class~="__subheading"] {
+.about__subheading,\
+.net__subheading,\
+.licenses__subheading,\
+.ending__subheading {
   font-size: 1.3rem;
   display: inline-block;
   position: relative;
@@ -919,12 +934,18 @@ h1, h2, h3 {
   filter: drop-shadow(0 0 8px color-mix(in oklch, var(--coral) 60%, transparent));
 }
 
-[class~="__subheading"]::before {
+.about__subheading,\
+.net__subheading,\
+.licenses__subheading,\
+.ending__subheading::before {
   content: '✦ ';
   -webkit-text-fill-color: var(--pink);
   animation: star-twinkle 1.5s ease-in-out infinite;
 }
-[class~="__subheading"]::after {
+.about__subheading,\
+.net__subheading,\
+.licenses__subheading,\
+.ending__subheading::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0;
@@ -945,7 +966,10 @@ h3.section-tertiary {
 }
 
 /* ─── CONTENT BLOCK ─── */
-[class~="__body"] {
+.about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body {
   background: var(--card-bg);
   backdrop-filter: blur(16px) saturate(1.6) brightness(1.05);
   -webkit-backdrop-filter: blur(16px) saturate(1.6) brightness(1.05);
@@ -967,10 +991,16 @@ h3.section-tertiary {
     inset 0 0 30px color-mix(in oklch, var(--pink)   06%, transparent);
 }
 
-/* [class~="__body"]::before 无伪元素 */
+/* .about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body::before 无伪元素 */
 
 /* 卡片扫光 */
-[class~="__body"]::after {
+.about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body::after {
   content: '';
   position: absolute;
   top: 0; left: -80%;
@@ -988,7 +1018,10 @@ h3.section-tertiary {
   z-index: 2;
 }
 
-[class~="__body"]:hover {
+.about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body:hover {
   transform: perspective(900px) rotateX(-3deg) rotateY(3deg) translateY(-8px) scale(1.02);
   z-index: 10;               /* hover 时跳到最上层 */
   box-shadow:
@@ -1240,10 +1273,19 @@ footer a:hover {
   .hero__title { font-size: 200%; letter-spacing: 3px; }
   .hero::before { width: min(300px, 85vw); height: min(300px, 85vw); }
   .hero::after  { width: min(360px, 92vw); height: min(140px, 22vw); }
-  [class~="__heading"] { font-size: 1.3rem; }
-  [class~="__subheading"] { font-size: 1.1rem; }
+  .about__heading,\
+.net__heading,\
+.licenses__heading,\
+.ending__heading { font-size: 1.3rem; }
+  .about__subheading,\
+.net__subheading,\
+.licenses__subheading,\
+.ending__subheading { font-size: 1.1rem; }
   footer { font-size: .78rem; }
-  [class~="__body"] { padding: 1rem; }
+  .about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body { padding: 1rem; }
   section::before { left: -10px; }
   section::after  { right: -10px; }
   /* 手机端 IRC iframe 防溢出 */
@@ -1325,13 +1367,19 @@ section {
    ============================================================ */
 
 /* 还原左竖条（精确复原原版逻辑，只加大） */
-[class~="__heading"] {
+.about__heading,\
+.net__heading,\
+.licenses__heading,\
+.ending__heading {
   font-size: 1.85rem;
   padding: .5rem 0 .6rem 1.6rem;
   margin-bottom: 1.6rem;        /* 标题和第一张卡片之间留足间距 */
 }
 
-[class~="__heading"]::before {
+.about__heading,\
+.net__heading,\
+.licenses__heading,\
+.ending__heading::before {
   content: '';
   position: absolute;
   left: 0; top: 0;
@@ -1347,7 +1395,10 @@ section {
     8px 0 28px color-mix(in oklch, var(--lavender)  45%, transparent);
 }
 
-[class~="__heading"]::after {
+.about__heading,\
+.net__heading,\
+.licenses__heading,\
+.ending__heading::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0;
@@ -1383,7 +1434,10 @@ section {
   align-items: start;
 }
 
-#net > [class~="__heading"] { grid-area: heading; }
+#net > .about__heading,\
+.net__heading,\
+.licenses__heading,\
+.ending__heading { grid-area: heading; }
 #repo                      { grid-area: repo; }
 #radio                     { grid-area: radio; }
 #rss                       { grid-area: rss; }
@@ -1391,14 +1445,23 @@ section {
 #irc                       { grid-area: irc; }
 
 /* 网格内卡片底部间距用 margin 控制 */
-#net > [class~="__body"] {
+#net > .about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body {
   margin: 0 0 1.4rem;
   height: auto;
 }
 
 /* 小卡片（Repo / Radio）内容精简，字号稍小 */
-#repo [class~="__subheading"],
-#radio [class~="__subheading"] {
+#repo .about__subheading,\
+.net__subheading,\
+.licenses__subheading,\
+.ending__subheading,
+#radio .about__subheading,\
+.net__subheading,\
+.licenses__subheading,\
+.ending__subheading {
   font-size: 1.1rem;
   margin-bottom: .6rem;
 }
@@ -1407,7 +1470,10 @@ section {
    6. CONTENT-BLOCK — 精细阴影 + 克制 hover
    ============================================================ */
 
-[class~="__body"] {
+.about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body {
   /* 增大内边距，内容不要贴边 */
   padding: 1.6rem 2rem;
   /* 精细多层阴影：近阴影清晰 + 远阴影柔和 */
@@ -1425,7 +1491,10 @@ section {
 }
 
 /* hover：向上提升 + 阴影扩散，不做 3D 旋转（太眩晕） */
-[class~="__body"]:hover {
+.about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body:hover {
   transform: translateY(-8px) scale(1.012);
   z-index: 10;
   box-shadow:
@@ -1442,7 +1511,10 @@ section {
    7. H2 section-subheading — 加大间距，和下方内容拉开
    ============================================================ */
 
-[class~="__subheading"] {
+.about__subheading,\
+.net__subheading,\
+.licenses__subheading,\
+.ending__subheading {
   margin-bottom: 1rem;
   margin-top: .2rem;
 }
@@ -1451,11 +1523,17 @@ section {
    8. LIST — 行距放大，更易读
    ============================================================ */
 
-[class~="__body"] ul {
+.about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body ul {
   padding-left: 1.2rem;
 }
 
-[class~="__body"] li {
+.about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body li {
   line-height: 2.0;
   margin-bottom: .2rem;
 }
@@ -1695,7 +1773,10 @@ a:hover {
   section::before { left: -6px; }
   section::after  { display: none; }
 
-  [class~="__heading"] {
+  .about__heading,\
+.net__heading,\
+.licenses__heading,\
+.ending__heading {
     font-size: 1.4rem;
     margin-bottom: 1.2rem;
   }
@@ -1705,7 +1786,10 @@ a:hover {
        - 简化阴影：移动端只保留 2 层，减少突兀感
        - 关掉扫光伪元素（left:-80% 会撑宽）
   ── */
-  [class~="__body"] {
+  .about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body {
     padding: 1.1rem 1.2rem;
     overflow: visible;
     box-shadow:
@@ -1713,10 +1797,16 @@ a:hover {
       0  6px 20px color-mix(in oklch, var(--lavender)  10%, transparent),
       inset 0 1px 0 rgba(255,255,255,.7);
   }
-  [class~="__body"]::after { display: none; }
+  .about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body::after { display: none; }
 
   /* hover 阴影也同步简化 */
-  [class~="__body"]:hover {
+  .about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body:hover {
     box-shadow:
       0  4px 14px color-mix(in oklch, var(--hot-pink)  22%, transparent),
       0 12px 36px color-mix(in oklch, var(--lavender)  16%, transparent),
@@ -1728,7 +1818,10 @@ a:hover {
     display: block;
     column-gap: 0;
   }
-  #net > [class~="__body"] { margin: 0 0 1rem; }
+  #net > .about__body,\
+.net__body,\
+.licenses__body,\
+.ending__body { margin: 0 0 1rem; }
 
   /* ── 引用块 ── */
   .ending__quote {
