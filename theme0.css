@@ -1,4 +1,4 @@
-/* 高级赛博朋克科技风格 */
+﻿/* 高级赛博朋克科技风格 */
 /* 字体已在 HTML <head> 中通过 <link> 加载，避免 @import 串行延迟 */
 
 /* ============================================================
@@ -14,6 +14,24 @@
   --text-main:   #E0E0FF;
   --text-dim:    rgba(224, 224, 255, 0.6);
 }
+
+/* ============================================================
+   命名规范
+   ——————————————————————————————————————————
+   本项目采用 BEM 命名，结构为：
+
+     项目前缀-块名__元素名--修饰符
+     ──────── ──── ────── ──────
+           Block__Element--Modifier
+
+   - 项目前缀      ARKFUTURE 缩写，防止与第三方 CSS 冲突
+   - 块名      多词用连字符  site-header / about-section / net-section
+   - 元素      双下划线连接  __title / __heading / __body
+   - 修饰符    双连字符连接  --active / --theme-xmas
+
+   通用样式：同类元素（所有区块的 heading / subheading / body 等）
+   用显式多选择器合并声明，不用属性选择器（避免误匹配第三方组件）。
+   ============================================================ */
 
 /* ============================================================
    全局 / body
@@ -47,16 +65,16 @@ body::before {
   width: 100%; height: 100%;
   background:
     radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.02) 0%, transparent 50%),
-    repeating-linear-gradient(0deg, transparent 0px, transparent 39px, rgba(0, 240, 255, 0.03) 39px, rgba(0, 240, 255, 0.03) 40px);
+    repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0, 240, 255, 0.02) 2px, rgba(0, 240, 255, 0.02) 4px);
+  background-size: 4px 4px;
   pointer-events: none;
-  z-index: -1;
-  animation: pulse-bg 12s ease-in-out infinite alternate;
+  z-index: 0;
 }
 
 /* ============================================================
-   顶部导航栏
+   顶部导航栏 — site-header
    ============================================================ */
-.top-nav {
+.site-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -65,13 +83,13 @@ body::before {
 }
 
 /* 主题切换按钮组 */
-.theme-switcher {
+.site-header__theme-switcher {
   display: flex;
   gap: 0.4rem;
   flex-wrap: wrap;
 }
 
-.theme-btn {
+.site-header__theme-btn {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.75rem;
   letter-spacing: 2px;
@@ -87,14 +105,14 @@ body::before {
   appearance: none;
 }
 
-.theme-btn:hover {
+.site-header__theme-btn:hover {
   color: var(--neon-blue);
   border-color: var(--neon-blue);
   text-shadow: 0 0 6px var(--neon-blue);
 }
 
 /* 当前激活的主题按钮 */
-.theme-btn.active {
+.site-header__theme-btn--active {
   color: var(--neon-blue);
   border-color: var(--neon-blue);
   background: rgba(0, 240, 255, 0.08);
@@ -102,7 +120,7 @@ body::before {
 }
 
 /* 语言切换按钮 */
-.lang-btn {
+.site-header__lang-btn {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.85rem;
   letter-spacing: 2px;
@@ -114,23 +132,23 @@ body::before {
   white-space: nowrap;
 }
 
-.lang-btn:hover {
+.site-header__lang-btn:hover {
   color: var(--neon-blue);
   border-color: var(--neon-blue);
   text-shadow: 0 0 6px var(--neon-blue);
 }
 
-.lang-btn::after { display: none; }
+.site-header__lang-btn::after { display: none; }
 
 /* ============================================================
-   Hero 主标题区
+   Hero 主标题区 — hero
    ============================================================ */
 .hero {
   text-align: center;
   padding: 1.5rem 0 1rem;
 }
 
-#hero-title {
+.hero__title {
   font-size: 300%;
   font-weight: 700;
   font-family: 'Orbitron', sans-serif;
@@ -169,7 +187,7 @@ body::before {
 }
 
 /* glitch 错位层：偶尔出现，强调动感 */
-#hero-title::before {
+.hero__title::before {
   content: "ARKFUTURE";
   position: absolute;
   top: 0; left: 0;
@@ -181,7 +199,7 @@ body::before {
   animation: glitch-before 4s infinite alternate;
 }
 
-#hero-title::after {
+.hero__title::after {
   content: "ARKFUTURE";
   position: absolute;
   top: 2px; left: 2px;
@@ -195,59 +213,81 @@ body::before {
 }
 
 /* ============================================================
-   main / section
+   main
    ============================================================ */
 main {
   max-width: 900px;
   margin: 0 auto;
 }
 
-.site-section {
+/* ============================================================
+   区块通用样式
+   ——————————————————————————————————————————
+   每个区块（about / net / licenses / ending）是独立的 BEM Block。
+   同类元素用显式多选择器合并声明，保留按块定制的灵活性。
+   如需定制某区块，直接追加该块的专属规则即可。
+   ============================================================ */
+
+/* 区块间距 */
+.about,
+.net,
+.licenses,
+.ending {
   margin: 2rem 0;
 }
 
-.section-divider {
+/* 分隔线 */
+.divider {
   border: none;
   border-top: 1px solid var(--grid-line);
   margin: 2rem 0;
 }
 
-/* ============================================================
-   标题层级
-   ============================================================ */
-h1, h2, h3 {
+/* ——— 主标题 h1 ——— */
+.about__heading,
+.net__heading,
+.licenses__heading,
+.ending__heading {
+  font-size: 1.6rem;
   font-family: 'Orbitron', sans-serif;
   font-weight: 500;
-  margin: 1.2rem 0;
   letter-spacing: 1px;
-}
-
-h1.section-heading {
-  font-size: 1.6rem;
+  margin: 1.2rem 0;
   color: var(--neon-blue);
   text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
   border-bottom: 1px solid rgba(0, 240, 255, 0.2);
   padding-bottom: 0.4rem;
 }
 
-h2.section-subheading {
+/* ——— 二级标题 h2 ——— */
+.about__subheading,
+.net__subheading,
+.licenses__subheading,
+.ending__subheading {
   font-size: 1.3rem;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin: 1.2rem 0;
   color: var(--neon-purple);
   text-shadow: 0 0 6px rgba(176, 38, 255, 0.3);
-  margin-top: 0;
 }
 
-h3.section-tertiary {
+/* ——— 三级标签 h3 ——— */
+.net__label {
   font-size: 1rem;
-  color: var(--neon-blue);
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 500;
   letter-spacing: 1px;
   margin: 0.8rem 0 0.3rem;
+  color: var(--neon-blue);
 }
 
-/* ============================================================
-   内容区块
-   ============================================================ */
-.content-block {
+/* ——— 内容面板 ——— */
+.about__body,
+.net__body,
+.licenses__body,
+.ending__body {
   background: rgba(20, 20, 48, 0.75);
   padding: 1.2rem 1.5rem;
   margin: 1rem 0;
@@ -255,9 +295,29 @@ h3.section-tertiary {
 }
 
 /* ============================================================
-   引用块
+   about 区块
    ============================================================ */
-.site-quote {
+
+/* 无额外样式，继承通用规则 */
+
+/* ============================================================
+   net 区块 — 小组件
+   ============================================================ */
+.net__widget {
+  display: block;
+  border: none;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin: 8px 0;
+}
+
+/* ============================================================
+   ending 区块
+   ============================================================ */
+
+/* 引用块 */
+.ending__quote {
   margin: 1.2rem 0 1.2rem 0;
   padding: 0.8rem 1.2rem 0.8rem 1.4rem;
   background: rgba(0, 240, 255, 0.04);
@@ -267,7 +327,7 @@ h3.section-tertiary {
   border-radius: 0 6px 6px 0;
 }
 
-.site-quote cite {
+.ending__quote cite {
   display: block;
   margin-top: 0.6rem;
   font-size: 0.85rem;
@@ -276,40 +336,11 @@ h3.section-tertiary {
   opacity: 0.7;
 }
 
-/* ============================================================
-   系统列表
-   ============================================================ */
-.sys-list {
+/* 系统列表 */
+.ending__systems {
   font-size: 0.9rem;
   color: var(--text-dim);
   line-height: 2;
-}
-
-/* ============================================================
-   小组件
-   ============================================================ */
-.widget-link {
-  display: block;
-  margin: 8px 0;
-  padding: 6px 10px;
-  border: 1px solid rgba(0, 240, 255, 0.2);
-  border-radius: 8px;
-  transition: border-color 0.3s, background 0.3s;
-  max-width: 400px;
-}
-
-.widget-link:hover {
-  border-color: var(--neon-blue);
-  background: rgba(0, 240, 255, 0.05);
-}
-
-.widget-frame {
-  display: block;
-  border: none;
-  width: 100%;
-  max-width: 400px;
-  height: auto;
-  margin: 8px 0;
 }
 
 /* ============================================================
@@ -345,9 +376,9 @@ a:hover::after {
 }
 
 /* ============================================================
-   footer
+   footer — site-footer
    ============================================================ */
-footer {
+.site-footer {
   margin-top: 3rem;
   padding: 2rem 0;
   position: relative;
@@ -363,7 +394,7 @@ footer {
   color: var(--neon-blue);
 }
 
-footer::before {
+.site-footer::before {
   content: '';
   position: absolute;
   top: 0; left: 0;
@@ -375,18 +406,38 @@ footer::before {
   animation: scan 3s linear infinite;
 }
 
-.footer-inner {
+.site-footer__inner {
   text-align: center;
 }
 
-footer a {
+.site-footer a {
   color: var(--neon-purple);
   margin: 0 0.5rem;
 }
 
-footer a:hover {
+.site-footer a:hover {
   color: var(--neon-orange);
   text-shadow: 0 0 8px var(--neon-orange);
+}
+
+/* 联系按钮 */
+.site-footer__contact {
+  display: inline-block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  border: 1px solid var(--text-dim);
+  padding: 2px 10px;
+  border-radius: 8px;
+  margin-top: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.site-footer__contact:hover {
+  color: var(--neon-blue);
+  border-color: var(--neon-blue);
+  text-shadow: 0 0 6px var(--neon-blue);
 }
 
 /* ============================================================
@@ -399,7 +450,8 @@ footer a:hover {
 
 @keyframes pulse-bg {
   0%   { opacity: 0.8; }
-  100% { opacity: 1; }
+  50%  { opacity: 0.6; }
+  100% { opacity: 0.8; }
 }
 
 @keyframes glitch {
@@ -435,17 +487,31 @@ footer a:hover {
     padding: 12px;
     font-size: 0.95rem;
   }
-  #hero-title {
+  .hero__title {
     font-size: 200%;
     letter-spacing: 2px;
   }
-  h1.section-heading { font-size: 1.3rem; }
-  h2.section-subheading { font-size: 1.1rem; }
-  footer { font-size: 0.8rem; }
-  .content-block { padding: 1rem; }
+  .about__heading,
+  .net__heading,
+  .licenses__heading,
+  .ending__heading {
+    font-size: 1.3rem;
+  }
+  .about__subheading,
+  .net__subheading,
+  .licenses__subheading,
+  .ending__subheading {
+    font-size: 1.1rem;
+  }
+  .site-footer { font-size: 0.8rem; }
+  .about__body,
+  .net__body,
+  .licenses__body,
+  .ending__body {
+    padding: 1rem;
+  }
   /* 手机端 IRC iframe 防溢出 */
-  .irc-embed-item { overflow: hidden; }
-  .irc-embed-frame {
+  .net__widget {
     max-width: 100% !important;
     width: 100% !important;
   }

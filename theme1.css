@@ -364,13 +364,13 @@
 /* mat-rain 已在 @keyframes 区定义，由下方 .mat-rain-layer 使用 */
 
 /* ── Houdini --glow 脉冲（激活：content-block glow） ── */
-/* k-glow 已定义，由 .content-block 的 --glow 属性动画使用 */
+/* k-glow 已定义，由 [class~="__body"] 的 --glow 属性动画使用 */
 
 /* ── Houdini --hue3/4 额外锥形旋转（激活：第3/4 背景层） ── */
 /* k-hue3/k-hue4 已定义，由 .conic-layer-3/4 使用 */
 
 /* ── Houdini --line-w 线宽展开（激活：section-heading 底线） ── */
-/* k-linew 已定义，由 h1.section-heading::after 的 width 属性动画使用 */
+/* k-linew 已定义，由 [class~="__heading"]::after 的 width 属性动画使用 */
 
 /* ── scroll-driven 入场动画：从下方淡入 ── */
 @keyframes scroll-entry {
@@ -693,9 +693,9 @@ main {
    + 向上扫描线（top-nav::after）
    + 流星 A（top-nav::before）
    ──────────────────────────────────────── */
-.theme-switcher { display:flex; gap:.4rem; flex-wrap:wrap; position:relative }
+.site-header__theme-switcher { display:flex; gap:.4rem; flex-wrap:wrap; position:relative }
 
-.theme-switcher::before {
+.site-header__theme-switcher::before {
   content: '';
   position: fixed;
   top: 0; left: 0;
@@ -715,7 +715,7 @@ main {
   pointer-events: none;
 }
 
-.top-nav {
+.site-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -728,7 +728,7 @@ main {
 /* 流星 A — 升级为 offset-path 路径动画（Chrome 115+）
    offset-path 让元素沿 SVG 路径运动，方向/旋转自动跟随切线
    降级时（不支持 offset-path）自动回退到原 translate 动画 */
-.top-nav::before {
+.site-header::before {
   content: '';
   position: fixed;
   /* offset-path: 对角线路径，从左上斜穿屏幕到右下 */
@@ -747,8 +747,8 @@ main {
 }
 
 /* 流星 B — 激活 meteor-b keyframe（原未使用，现加给 .hero 内的额外元素）
-   由于 .hero::after 已被光圈占用，将流星B绑定在 .theme-switcher::after 上 */
-.theme-switcher::after {
+   由于 .hero::after 已被光圈占用，将流星B绑定在 .site-header__theme-switcher::after 上 */
+.site-header__theme-switcher::after {
   content: '';
   position: fixed;
   top: 65%; right: 0;
@@ -764,7 +764,7 @@ main {
 }
 
 /* 向上扫描线（第2条，红橙色） */
-.top-nav::after {
+.site-header::after {
   content: '';
   position: fixed;
   bottom: -4px; left: 0;
@@ -786,7 +786,7 @@ main {
 /* ────────────────────────────────────────
    主题切换按钮 — 黑客终端风
    ──────────────────────────────────────── */
-.theme-btn {
+.site-header__theme-btn {
   font-family: var(--font-hud);
   font-size: .72rem;
   letter-spacing: 2px;
@@ -806,7 +806,7 @@ main {
   animation: border-cycle 2.5s linear infinite;
 }
 /* 按钮内部扫光 */
-.theme-btn::before {
+.site-header__theme-btn::before {
   content: '';
   position: absolute;
   top: 0; left: -100%;
@@ -817,7 +817,7 @@ main {
   animation: h-sweep 2.5s ease-in-out infinite;
   pointer-events: none;
 }
-.theme-btn:hover {
+.site-header__theme-btn:hover {
   transform: scale(1.22) rotate(-1.5deg);
   color: #fff;
   background: rgba(0,255,65,.15);
@@ -831,14 +831,14 @@ main {
     0 0 8px var(--g0),
     0 0 20px var(--g0);
 }
-.theme-btn.active {
+.site-header__theme-btn--active {
   color: #fff;
   background: rgba(0,255,65,.18);
   box-shadow: 0 0 16px var(--g0);
   text-shadow: 0 0 10px var(--g0);
 }
 
-.lang-btn {
+.site-header__lang-btn {
   font-family: var(--font-hud);
   font-size: .82rem;
   letter-spacing: 2px;
@@ -851,14 +851,14 @@ main {
   text-decoration: none;
   display: inline-block;
 }
-.lang-btn:hover {
+.site-header__lang-btn:hover {
   color: var(--r2);
   border-color: var(--r2);
   box-shadow: 0 0 16px var(--r2), 0 0 36px rgba(255,224,0,.3);
   transform: scale(1.12);
   text-shadow: 0 0 10px var(--r2);
 }
-.lang-btn::after { display:none }
+.site-header__lang-btn::after { display:none }
 
 /* ────────────────────────────────────────
    HERO — 视觉核弹头
@@ -913,7 +913,7 @@ main {
    HERO TITLE — 终极 Glitch 标题
    三层色差叠加（主体 + ::before 青层 + ::after 红层）
    ──────────────────────────────────────── */
-#hero-title {
+.hero__title {
   font-family: var(--font-hud);
   font-size: clamp(2rem, 9vw, 5.2rem);
   font-weight: 900;
@@ -949,7 +949,7 @@ main {
 }
 
 /* 色差层1 — 青/紫（向左偏移） */
-#hero-title::before {
+.hero__title::before {
   content: 'ARKFUTURE';
   position: absolute;
   inset: 0;
@@ -970,7 +970,7 @@ main {
 }
 
 /* 色差层2 — 红/橙（向右偏移） */
-#hero-title::after {
+.hero__title::after {
   content: 'ARKFUTURE';
   position: absolute;
   inset: 0;
@@ -993,12 +993,12 @@ main {
 /* ────────────────────────────────────────
    SITE-SECTION — 左右彩虹竖轨
    ──────────────────────────────────────── */
-.site-section {
+section {
   margin: 2.5rem 0;
   position: relative;
   perspective: 1400px;
 }
-.site-section::before {
+section::before {
   content: '';
   position: absolute;
   left: -20px; top: 0;
@@ -1011,7 +1011,7 @@ main {
   animation: rbw-slow 2s linear infinite, bar-pulse 3.5s ease-in-out infinite;
   border-radius: 2px;
 }
-.site-section::after {
+section::after {
   content: '';
   position: absolute;
   right: -20px; top: 0;
@@ -1029,7 +1029,7 @@ main {
 /* ────────────────────────────────────────
    SECTION DIVIDER — 彩虹分割线 + 旋转钻石 + 电弧
    ──────────────────────────────────────── */
-.section-divider {
+.divider {
   border: none;
   height: 3px;
   margin: 2.5rem 0;
@@ -1050,7 +1050,7 @@ main {
   position: relative;
   overflow: visible;
 }
-.section-divider::before {
+.divider::before {
   content: '◆';
   position: absolute;
   left: 50%; top: 50%;
@@ -1071,7 +1071,7 @@ main {
   z-index: 2;
   pointer-events: none;
 }
-.section-divider::after {
+.divider::after {
   content: '';
   position: absolute;
   top: -4px; left: 0;
@@ -1095,7 +1095,7 @@ h1, h2, h3 {
   text-wrap: balance;
 }
 
-h1.section-heading {
+[class~="__heading"] {
   font-size: 1.65rem;
   position: relative;
   padding-bottom: .5rem;
@@ -1121,7 +1121,7 @@ h1.section-heading {
     drop-shadow(0 0 25px var(--c0));
 }
 /* 左侧闪烁竖条 */
-h1.section-heading::before {
+[class~="__heading"]::before {
   content: '';
   position: absolute;
   left: 0; top: 0;
@@ -1140,7 +1140,7 @@ h1.section-heading::before {
     12px 0 55px var(--p1);
 }
 /* 底部流光线 — 激活 --line-w Houdini 属性：width 直接由 @property 插值 */
-h1.section-heading::after {
+[class~="__heading"]::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0;
@@ -1163,7 +1163,7 @@ h1.section-heading::after {
   opacity: .85;
 }
 
-h2.section-subheading {
+[class~="__subheading"] {
   font-size: 1.25rem;
   position: relative;
   display: inline-block;
@@ -1194,7 +1194,7 @@ h2.section-subheading {
     filter: blur(3px) brightness(4);
   }
 }
-h2.section-subheading::after {
+[class~="__subheading"]::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0;
@@ -1227,7 +1227,7 @@ h3.section-tertiary {
 /* ────────────────────────────────────────
    CONTENT-BLOCK — 暗网终端卡片（真 backdrop-filter）
    ──────────────────────────────────────── */
-.content-block {
+[class~="__body"] {
   /* 卡片背景：CRT 扫描线纹理 + 深色底 */
   background:
     repeating-linear-gradient(
@@ -1276,7 +1276,7 @@ h3.section-tertiary {
   }
 }
 /* 顶部彩虹流光线 */
-.content-block::before {
+[class~="__body"]::before {
   content: '';
   position: absolute;
   top: 0; left: 0;
@@ -1295,7 +1295,7 @@ h3.section-tertiary {
 /* 纵向扫描光（激活 --scan-y Houdini 属性 + k-scan-y 动画）
    ::after 原为水平扫光，现升级为同时包含水平 + 纵向双重扫光
    用 mask-image 做渐变遮罩，比 linear-gradient 伪元素更精准 */
-.content-block::after {
+[class~="__body"]::after {
   content: '';
   position: absolute;
   top: 0; left: -80%;
@@ -1329,7 +1329,7 @@ h3.section-tertiary {
   pointer-events: none;
   z-index: 2;
 }
-.content-block:hover {
+[class~="__body"]:hover {
   transform:
     perspective(1400px)
     rotateX(-2.5deg) rotateY(2.5deg)
@@ -1347,7 +1347,7 @@ h3.section-tertiary {
 /* ────────────────────────────────────────
    QUOTE — 黑客格言引用
    ──────────────────────────────────────── */
-.site-quote {
+.ending__quote {
   margin: 1.5rem 0;
   padding: 1.2rem 1.6rem 1.2rem 2.2rem;
   background:
@@ -1369,7 +1369,7 @@ h3.section-tertiary {
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 }
-.site-quote::before {
+.ending__quote::before {
   content: '';
   position: absolute;
   top: 0; left: -80%;
@@ -1381,7 +1381,7 @@ h3.section-tertiary {
   animation-delay: 2.2s;
   pointer-events: none;
 }
-.site-quote::after {
+.ending__quote::after {
   content: '';
   position: absolute;
   left: 0; top: 0;
@@ -1395,7 +1395,7 @@ h3.section-tertiary {
     arc-flash  5.5s linear infinite;
 }
 
-.site-quote cite {
+.ending__quote cite {
   display: block;
   margin-top: .8rem;
   font-size: .85rem;
@@ -1414,7 +1414,7 @@ h3.section-tertiary {
 /* ────────────────────────────────────────
    SYS LIST — 终端字体 + 打字机光标
    ──────────────────────────────────────── */
-.sys-list {
+.ending__systems {
   font-family: var(--font-mono);
   font-size: .84rem;
   color: var(--g1);
@@ -1422,7 +1422,7 @@ h3.section-tertiary {
   text-shadow: 0 0 7px var(--g2);
 }
 /* 打字机光标（纯 CSS） */
-.sys-list::after {
+.ending__systems::after {
   content: '█';
   display: inline-block;
   animation: cursor-blink .85s step-end infinite;
@@ -1569,13 +1569,13 @@ footer::after {
   pointer-events: none;
 }
 
-.footer-inner {
+.site-footer__inner {
   text-align: center;
   position: relative;
   z-index: 1;
   overflow: hidden;
 }
-.footer-inner::before {
+.site-footer__inner::before {
   content: '';
   position: absolute;
   top: 0; left: -100%;
@@ -1586,7 +1586,7 @@ footer::after {
   animation: footer-scan 4.5s linear infinite;
   pointer-events: none;
 }
-.footer-inner p {
+.site-footer__inner p {
   background: linear-gradient(90deg,
     var(--g0),var(--c0),var(--p0),var(--g1)
   );
@@ -1746,26 +1746,26 @@ footer a:hover::before {
 /* ── @container 容器查询：当 main-content 容器宽度 < 600px 时紧凑布局
    比媒体查询更精准：响应的是容器宽度，不是视口宽度 ── */
 @container main-content (max-width: 600px) {
-  .content-block {
+  [class~="__body"] {
     padding: 1rem 1rem;
     border-radius: 4px;
   }
-  h1.section-heading {
+  [class~="__heading"] {
     font-size: 1.35rem;
     padding-left: 1rem;
   }
-  h2.section-subheading {
+  [class~="__subheading"] {
     font-size: 1.1rem;
   }
-  .site-section::before { left: -12px }
-  .site-section::after  { right: -12px }
+  section::before { left: -12px }
+  section::after  { right: -12px }
 }
 
 @container main-content (max-width: 420px) {
-  .content-block {
+  [class~="__body"] {
     padding: .8rem .85rem;
   }
-  h1.section-heading {
+  [class~="__heading"] {
     font-size: 1.15rem;
     letter-spacing: 1.5px;
   }
@@ -1785,15 +1785,15 @@ footer a:hover::before {
 
 @media (max-width: 768px) {
   body { padding: 12px; font-size: .93rem }
-  #hero-title { font-size: clamp(1.6rem, 10vw, 3rem); letter-spacing: 3px }
+  .hero__title { font-size: clamp(1.6rem, 10vw, 3rem); letter-spacing: 3px }
   .hero::before { width: min(300px, 85vw); height: min(300px, 85vw) }
   .hero::after  { width: min(360px, 92vw); height: min(140px, 22vw) }
-  h1.section-heading  { font-size: 1.3rem }
-  h2.section-subheading { font-size: 1.1rem }
+  [class~="__heading"]  { font-size: 1.3rem }
+  [class~="__subheading"] { font-size: 1.1rem }
   footer { font-size: .76rem }
-  .content-block { padding: 1rem 1.1rem }
-  .site-section::before { left: -10px }
-  .site-section::after  { right: -10px }
+  [class~="__body"] { padding: 1rem 1.1rem }
+  section::before { left: -10px }
+  section::after  { right: -10px }
   /* 手机端 IRC iframe 防溢出 */
   .irc-embed-item { overflow: hidden; }
   .irc-embed-frame { max-width: 100% !important; width: 100% !important; }
@@ -1801,9 +1801,9 @@ footer a:hover::before {
 
 @media (max-width: 480px) {
   body { padding: 8px }
-  #hero-title { font-size: clamp(1.2rem, 12vw, 2rem); letter-spacing: 2px }
+  .hero__title { font-size: clamp(1.2rem, 12vw, 2rem); letter-spacing: 2px }
   .hero { padding: 2rem 0 1.5rem }
-  .content-block { padding: .85rem .9rem }
+  [class~="__body"] { padding: .85rem .9rem }
 }
 
 /* 无障碍：减少动画 */
@@ -1833,13 +1833,13 @@ footer a:hover::before {
 
 /* ── @supports 降级：不支持 offset-path 的浏览器，流星 B 回退 ── */
 @supports not (offset-path: path('M 0,0 L 1,1')) {
-  .theme-switcher::after {
+  .site-header__theme-switcher::after {
     animation: meteor-b 9s linear infinite;
     animation-delay: 3s;
   }
 }
 
-/* ── 激活 --fog：给 .site-quote 添加"深渊迷雾"效果
+/* ── 激活 --fog：给 .ending__quote 添加"深渊迷雾"效果
    --fog 在 @property 定义为 <number>，用 k-fog 动画让其从0到1再到0脉冲
    结合 backdrop-filter 的 blur 动态值，产生"迷雾涌动"感 ── */
 @property --fog {
@@ -1851,7 +1851,7 @@ footer a:hover::before {
   0%,100% { --fog: 0   }
   50%      { --fog: 1   }
 }
-.site-quote {
+.ending__quote {
   /* --fog 驱动 backdrop-filter 的 blur 量：0→8px→0 波动 */
   /* calc() 中使用 --fog 需要乘以有单位的数，用 1px 乘 */
   --fog: 0;
@@ -1925,7 +1925,7 @@ footer a:hover::before {
    ══════════════════════════════════════════════ */
 
 /* content-block 含 h2 时，顶部光线变为红/紫 */
-.content-block:has(h2.section-subheading) {
+[class~="__body"]:has([class~="__subheading"]) {
   border-top: 2px solid var(--r0);
 
   &::before {
@@ -1942,7 +1942,7 @@ footer a:hover::before {
 }
 
 /* h2 在卡片首位时，左侧加紫色竖轨 */
-.content-block:has(> h2.section-subheading:first-child) {
+[class~="__body"]:has(> [class~="__subheading"]:first-child) {
   border-left: 2px solid var(--p0);
   box-shadow:
     0 0 20px var(--p1),
@@ -1962,7 +1962,7 @@ li:has(> a:hover) {
    ③ :is() / :where() 高效分组选择器
    ══════════════════════════════════════════════ */
 
-:is(h1, h2, h3):not(.section-heading):not(.section-subheading):not(.irc-server-label) {
+:is(h1, h2, h3):not([class~="__heading"]):not([class~="__subheading"]):not(.net__label) {
   text-shadow:
     0 0 12px rgba(0,255,65,.4),
     0 0 28px rgba(0,255,255,.2);
@@ -1981,13 +1981,13 @@ li:has(> a:hover) {
    Chrome 111+ — 按类名过滤的第n个，比 nth-child 更精准
    ══════════════════════════════════════════════ */
 
-/* 奇数 .content-block：边框偏青 */
-.content-block:nth-child(odd of .content-block) {
+/* 奇数 [class~="__body"]：边框偏青 */
+[class~="__body"]:nth-child(odd of [class~="__body"]) {
   border-color: rgba(0,255,255,.35);
 }
 
-/* section 内第2个 .content-block：追加紫色扫描线纹理 */
-.site-section .content-block:nth-child(2 of .content-block) {
+/* section 内第2个 [class~="__body"]：追加紫色扫描线纹理 */
+section [class~="__body"]:nth-child(2 of [class~="__body"]) {
   background-image:
     repeating-linear-gradient(
       0deg,
@@ -2059,7 +2059,7 @@ li:has(> a:hover) {
    ══════════════════════════════════════════════ */
 
 @supports (content-visibility: auto) {
-  .site-section {
+  section {
     content-visibility: auto;
     contain-intrinsic-size: auto 400px;  /* 防止跳动的预留高度 */
   }
@@ -2070,11 +2070,11 @@ li:has(> a:hover) {
    卡片内部变化不影响外部布局，减少重排范围
    ══════════════════════════════════════════════ */
 
-.content-block {
+[class~="__body"] {
   contain: layout style;
 }
 
-.section-divider {
+.divider {
   contain: layout;
 }
 
@@ -2084,9 +2084,9 @@ li:has(> a:hover) {
    ══════════════════════════════════════════════ */
 
 .hero             { will-change: transform; }
-#hero-title       { will-change: transform, filter; }
-.content-block    { will-change: transform, box-shadow; }
-.section-divider::before { will-change: transform; }
+.hero__title       { will-change: transform, filter; }
+[class~="__body"]    { will-change: transform, box-shadow; }
+.divider::before { will-change: transform; }
 
 /* ══════════════════════════════════════════════
    ⑩ overscroll-behavior（禁止弹性滚动 & 浏览器手势）
@@ -2107,7 +2107,7 @@ main {
   scroll-snap-type: y proximity;
 }
 
-.site-section {
+section {
   scroll-snap-align: start;
   scroll-snap-stop: normal;
 }
@@ -2152,7 +2152,7 @@ input, textarea, [contenteditable] {
 @supports (selector(:scope)) {
 
   /* 卡片内 p 和 a 单独一套配色，不影响全局 */
-  @scope (.content-block) {
+  @scope ([class~="__body"]) {
     p {
       line-height: 1.82;
     }
@@ -2191,12 +2191,12 @@ input, textarea, [contenteditable] {
 
 @supports (animation-composition: add) {
   /* hero title 的 4 个动画：rbw 叠加合成，glitch/flicker/persp 各自替换 */
-  #hero-title {
+  .hero__title {
     animation-composition: add, replace, replace, replace;
   }
 
   /* content-block 的 3 个动画：border 替换，k-rx/k-glow 叠加 */
-  .content-block {
+  [class~="__body"] {
     animation-composition: replace, add, add;
   }
 }
@@ -2209,7 +2209,7 @@ input, textarea, [contenteditable] {
 @supports (transition-timing-function: linear(0, 1)) {
 
   /* 按钮：弹跳 bounce */
-  .theme-btn {
+  .site-header__theme-btn {
     transition-timing-function: linear(
       0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%,
       0.938 16.7%, 1.017, 1.077, 1.111, 1.121, 1.115, 1.096,
@@ -2219,7 +2219,7 @@ input, textarea, [contenteditable] {
   }
 
   /* 卡片：弹性 spring */
-  .content-block {
+  [class~="__body"] {
     transition-timing-function: linear(
       0, 0.006, 0.025 2.8%, 0.101 5.9%, 0.539 15%, 0.721 19.2%,
       0.849 23.2%, 0.938 27.7%, 0.968, 1.013, 1.045 37.5%,
@@ -2267,7 +2267,7 @@ input, textarea, [contenteditable] {
    ══════════════════════════════════════════════ */
 
 /* 当 main 内任意 content-block 被 hover 时，其他卡片微暗 */
-main:has(.content-block:hover) .content-block:not(:hover) {
+main:has([class~="__body"]:hover) [class~="__body"]:not(:hover) {
   opacity: .82;
   filter: brightness(.88);
   transition: opacity .3s ease, filter .3s ease;
@@ -2283,7 +2283,7 @@ footer:has(a:hover)::before {
 }
 
 /* section 内有卡片被 hover 时，左侧竖轨加强 */
-.site-section:has(.content-block:hover)::before {
+section:has([class~="__body"]:hover)::before {
   animation: rbw-fast .6s linear infinite, bar-pulse 1s ease-in-out infinite;
   opacity: 1;
   box-shadow:
@@ -2310,7 +2310,7 @@ footer:has(a:hover)::before {
 
 /* lh = line-height 单位，排版更语义化 */
 @supports (margin-top: 1lh) {
-  h1.section-heading {
+  [class~="__heading"] {
     margin-bottom: .75lh;
   }
 
@@ -2321,11 +2321,11 @@ footer:has(a:hover)::before {
 
 /* cqi = 容器查询内联尺寸单位（相对于容器宽度）*/
 @supports (font-size: 1cqi) {
-  h1.section-heading {
+  [class~="__heading"] {
     font-size: clamp(1.2rem, 4cqi, 1.65rem);
   }
 
-  h2.section-subheading {
+  [class~="__subheading"] {
     font-size: clamp(1rem, 3.2cqi, 1.25rem);
   }
 }
@@ -2335,7 +2335,7 @@ footer:has(a:hover)::before {
    ══════════════════════════════════════════════ */
 
 /* 含有 focused 输入框的卡片整体高亮 */
-.content-block:focus-within {
+[class~="__body"]:focus-within {
   border-color: var(--g0) !important;
   box-shadow:
     0 0 25px var(--g0),

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!-- update 2026/03/15 -->
 <html lang="zh" xml:lang="zh">
 
@@ -21,54 +21,54 @@
 <body>
 
     <!-- 顶部导航栏 -->
-    <nav class="top-nav">
+    <nav class="site-header">
         <!-- 主题切换 -->
-        <div class="theme-switcher">
-            <button class="theme-btn" data-theme="theme0.css" title="T0">T0</button>
-            <button class="theme-btn" data-theme="theme1.css" title="T1">T1</button>
-            <button class="theme-btn" data-theme="theme2.css" title="T2">T2</button>
+        <div class="site-header__theme-switcher">
+            <button class="site-header__theme-btn" data-theme="theme0.css" title="T0">T0</button>
+            <button class="site-header__theme-btn" data-theme="theme1.css" title="T1">T1</button>
+            <button class="site-header__theme-btn" data-theme="theme2.css" title="T2">T2</button>
         </div>
         <!-- 语言切换 -->
-        <a href="index_en.html" class="lang-btn">En</a>
+        <a href="index_en.html" class="site-header__lang-btn">En</a>
     </nav>
 
     <!-- Hero 主标题区 -->
     <div class="hero">
-        <h1 id="hero-title">ARKFUTURE</h1>
+        <h1 class="hero__title">ARKFUTURE</h1>
     </div>
 
     <main>
 
         <!-- 关于区块 -->
-        <section class="site-section" id="section-about">
-            <h1 class="section-heading">关于 | About</h1>
-            <div class="content-block">
-                <h2 class="section-subheading">公约 | CONVENTION</h2>
+        <section class="about" id="about">
+            <h1 class="about__heading">关于 | About</h1>
+            <div class="about__body">
+                <h2 class="about__subheading">公约 | CONVENTION</h2>
                 <p>您需阅读我们的<a href="/res/arkfuture.md">公约</a>及<a href="/res/warrant-canary.md">Warrant Canary</a>以了解我们</p>
                 <p>这不是一堆法律术语,但它们是关于什么是允许的指导方针</p>
                 <p>也欢迎加入我们的聊天室进行交流讨论</p>
                 <ul>
                     <li><a href="//t.me/arkfuture_studio">Telegram: arkfuture_studio</a></li>
-                    <li><a href="#section-irc">IRC: #arkfuture_studio</a></li>
+                    <li><a href="#irc">IRC: #arkfuture_studio</a></li>
                 </ul>
             </div>
         </section>
 
-        <hr class="section-divider">
+        <hr class="divider">
 
         <!-- ARKFUTURE-NET 区块 -->
-        <section class="site-section" id="section-net">
-            <h1 class="section-heading">ARKFUTURE-NET</h1>
+        <section class="net" id="net">
+            <h1 class="net__heading">ARKFUTURE-NET</h1>
 
             <!-- 资源库 -->
-            <div class="content-block" id="section-repo">
-                <h2 class="section-subheading">资源库及知识库 | Repo</h2>
+            <div class="net__body" id="repo">
+                <h2 class="net__subheading">资源库及知识库 | Repo</h2>
                 <ul>
-                    <h3 class="section-tertiary">Knowledge Base</h3>
+                    <h3 class="net__label">Knowledge Base</h3>
                     <li><a href="//github.com/ARKFUTURE">Github</a></li>
                 </ul>
                 <ul>
-                    <h3 class="section-tertiary">Resource Library</h3>
+                    <h3 class="net__label">Resource Library</h3>
                     <li><a href="//github.com/ARKFUTURE">Github</a></li>
                     <li><a href="//gitea.com/ARKFUTURE">Gitea</a></li>
                     <li><a href="//gitlab.com/ARKFUTURE">Gitlab</a></li>
@@ -76,47 +76,47 @@
             </div>
 
             <!-- IRC -->
-            <div class="content-block" id="section-irc">
-                <h2 class="section-subheading">IRC聊天 | IRC</h2>
+            <div class="net__body" id="irc">
+                <h2 class="net__subheading">IRC聊天 | IRC</h2>
                 <ul>
                     <li>
-                        <h3 class="section-tertiary">ARKFUTURE irc</h3>
-                        <p>将客户端连接到: <a id="irc-ark" href="irc://IRC.ARKFUTURE.TOP">IRC.ARKFUTURE.TOP</a></p>
+                        <h3 class="net__label">ARKFUTURE irc</h3>
+                        <p>将客户端连接到: <a href="irc://IRC.ARKFUTURE.TOP">IRC.ARKFUTURE.TOP</a></p>
                         <p><a href="/res/irc.html">ARKFUTURE irc 网页客户端</a></p>
                     </li>
                     <li>
-                        <h3 class="section-tertiary">LiberaChat irc</h3>
-                        <p>将客户端连接到: <a id="irc-libera" href="irc://IRC.LIBERA.CHAT">IRC.LIBERA.CHAT</a></p>
+                        <h3 class="net__label">LiberaChat irc</h3>
+                        <p>将客户端连接到: <a href="irc://IRC.LIBERA.CHAT">IRC.LIBERA.CHAT</a></p>
                     </li>
                     <li>
                         <p>频道名: #arkfuture_studio</p>
                     </li>
                     <li>
-                        <h3 class="section-tertiary">Learning IRC</h3>
+                        <h3 class="net__label">Learning IRC</h3>
                         <p>关于IRC相关的知识 您可以了解: netsplit.de 和 geekshed.net</p>
                     </li>
                 </ul>
             </div>
 
             <!-- 电台 -->
-            <div class="content-block" id="section-radio">
-                <h2 class="section-subheading">电台 | RADIO</h2>
+            <div class="net__body" id="radio">
+                <h2 class="net__subheading">电台 | RADIO</h2>
                 <ul>
                     <li><a href="//radio.arkfuture.top:5080/1">RADIO.ARKFUTURE.TOP</a></li>
                 </ul>
             </div>
 
             <!-- 订阅源 -->
-            <div class="content-block" id="section-rss">
-                <h2 class="section-subheading">聚合信息源 | RSS/FEED/ATOM</h2>
+            <div class="net__body" id="rss">
+                <h2 class="net__subheading">聚合信息源 | RSS/FEED/ATOM</h2>
                 <ul>
                     <li>
-                        <h3 class="section-tertiary">RSS Aggregator</h3>
+                        <h3 class="net__label">RSS Aggregator</h3>
                         <p><a href="/">RSS聚合平台</a></p>
                     </li>
                 </ul>
                 <ul>
-                    <h3 class="section-tertiary">RSS Feed</h3>
+                    <h3 class="net__label">RSS Feed</h3>
                     <li><a href="/res/news.opml">新闻订阅源 [news.opml]</a></li>
                     <li><a href="/res/cs.opml">网络安全情报订阅源 [cs.opml]</a></li>
                     <li><a href="/res/dm.opml">动漫订阅源 [dm.opml]</a></li>
@@ -124,25 +124,25 @@
             </div>
 
             <!-- 小组件 -->
-            <div class="content-block" id="section-widgets">
-                <h2 class="section-subheading">快捷工具 | Quick Tools</h2>
+            <div class="net__body" id="widgets">
+                <h2 class="net__subheading">快捷工具 | Quick Tools</h2>
                 <ul>
                     <li><a href="/res/fl.html" title="快速链接">快速搜索/常用链接</a></li>
                     <li><a href="/res/conf.html" title="配置文件">配置文件</a></li>
                     <li>
-                        <iframe src="/res/zj.html" class="widget-frame" title="Embedded Widget"></iframe>
+                        <iframe src="/res/zj.html" class="net__widget" title="Embedded Widget"></iframe>
                     </li>
                 </ul>
             </div>
 
         </section>
 
-        <hr class="section-divider">
+        <hr class="divider">
 
         <!-- 许可证区块 -->
-        <section class="site-section" id="section-licenses">
-            <h1 class="section-heading">许可证 | Licenses</h1>
-            <div class="content-block">
+        <section class="licenses" id="licenses">
+            <h1 class="licenses__heading">许可证 | Licenses</h1>
+            <div class="licenses__body">
                 <ul>
                     <li><a href="//www.gnu.org/licenses/">GNU开源许可</a></li>
                     <li><a href="//mit-license.org/">MIT开源许可</a></li>
@@ -154,14 +154,14 @@
             </div>
         </section>
 
-        <hr class="section-divider">
+        <hr class="divider">
 
         <!-- 结束语区块 -->
-        <section class="site-section" id="section-end">
-            <h1 class="section-heading">结束语 | END</h1>
-            <div class="content-block">
+        <section class="ending" id="ending">
+            <h1 class="ending__heading">结束语 | END</h1>
+            <div class="ending__body">
                 <p>我们崇尚黑客精神</p>
-                <blockquote class="site-quote">
+                <blockquote class="ending__quote">
                     <p>黑客精神(Hacker)，这个词是用来形容那些热衷于解决问题、克服限制的人。</p>
                     <p>"任何职业都可以成为黑客。你可以是一个木匠黑客。不一定是高科技。只要与技能有关，并且倾心专注于你正在做的事情，你就可能成为黑客。"</p>
                     <cite>引自《黑客伦理与信息时代精神》</cite>
@@ -170,7 +170,7 @@
                 <p>我们倡导终身学习----不断积累可以让自己的人生变得丰富,不管工作与否</p>
                 <p>我们是一群追寻自己梦想的人</p>
                 <p>INGO(国际非政府组织)&amp;INPO(国际非营利组织)&amp;OS-GNU(开源共创及GNU精神)&amp;CL(持续学习)</p>
-                <p class="sys-list">团队所使用的系统:{
+                <p class="ending__systems">团队所使用的系统:{
                     <br>测试: Parrotsec, Kali;
                     <br>隐私: Tails, Qubes;
                     <br>OSINT&amp;取证&amp;软件分析: tsurugi, REMnux, tracelabs, sherlock, caine;
@@ -182,15 +182,15 @@
     </main>
 
     <!-- footer -->
-    <footer>
-        <div class="footer-inner">
+    <footer class="site-footer">
+        <div class="site-footer__inner">
             <p>方舟未来 | 方舟未来工作室/集团/团队 | 方舟实验室</p>
             <p>Copyright &copy; 2020-&infin; <a href="/index.html">ARKFUTURE</a> | <a href="arkfuturestudio.html">ARKFUTURE STUDIO/GROUP/TEAM</a> | <a href="arklab.html">ARK LAB</a>. All rights reserved.</p>
             <p>All trademarks and resources are the property of their respective owners.</p>
             <p>----ALL by ARKFUTURE Management and Operation Working Group</p>
         </div>
         <div>
-            <a href="mailto:arkfuture@foxmail.com?subject=Subscription request&body=" class="mailto-btn">
+            <a href="mailto:arkfuture@foxmail.com?subject=Subscription request&body=" class="site-footer__contact">
         </div>
     </footer>
 
@@ -214,6 +214,6 @@ All of our services and configuration files will be migrated to Debian 13 on Aug
 <!--
 Memo:
 C-HK ST-HongKong L-Kowloon O-ARKFUTURE OU-IT&SOC CN-ARKFUTURE
-http://user:password@www.example.com:80/path/index.html?arg=value#anchor
+http://user:password@www.example.com:80/path/index.html#anchor
 xspnn7m8
 -->

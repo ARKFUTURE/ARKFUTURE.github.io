@@ -1,4 +1,4 @@
-
+﻿
 /* ================================================================
    主题切换
    ================================================================ */
@@ -29,12 +29,12 @@ function loadCSS(href, id = 'theme-css') {
 loadCSS(localStorage.getItem('theme') || 'theme0.css');
 
 document.addEventListener('DOMContentLoaded', () => {
-    const themeBtns = document.querySelectorAll('.theme-btn');
+    const themeBtns = document.querySelectorAll('.site-header__theme-btn');
     const currentTheme = localStorage.getItem('theme') || 'theme0.css';
 
     function updateActiveBtn(href) {
         themeBtns.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.theme === href);
+            btn.classList.toggle('site-header__theme-btn--active', btn.dataset.theme === href);
         });
     }
 
@@ -151,6 +151,3 @@ function incrementCounter() {
     console.log(`计: ${counter}; 时: ${now.toString()}; UTC: ${now.toUTCString()}; 戳: ${now.getTime()};`);
     counter++;
 }
-
-
-

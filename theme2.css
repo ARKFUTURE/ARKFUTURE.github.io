@@ -462,7 +462,7 @@ main::after {
 @layer components {
 
 /* ─── 顶部导航 ─── */
-.top-nav {
+.site-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -473,7 +473,7 @@ main::after {
 }
 
 /* 顶部彩虹糖果条 */
-.top-nav::before {
+.site-header::before {
   content: '';
   position: fixed;
   top: 0; left: 0;
@@ -494,7 +494,7 @@ main::after {
 }
 
 /* 底部彩虹糖果条 */
-.top-nav::after {
+.site-header::after {
   content: '✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦';
   position: fixed;
   bottom: 0; left: 0;
@@ -518,14 +518,14 @@ main::after {
   pointer-events: none;
 }
 
-.theme-switcher {
+.site-header__theme-switcher {
   display: flex;
   gap: .5rem;
   flex-wrap: wrap;
 }
 
 /* 顶部星星雨（theme-switcher 伪元素） */
-.theme-switcher::before {
+.site-header__theme-switcher::before {
   content: '⭐';
   position: fixed;
   top: -40px; left: 30%;
@@ -536,7 +536,7 @@ main::after {
   animation-delay: 1s;
   filter: drop-shadow(0 0 5px var(--lemon));
 }
-.theme-switcher::after {
+.site-header__theme-switcher::after {
   content: '💫';
   position: fixed;
   top: -40px; left: 60%;
@@ -548,7 +548,7 @@ main::after {
 }
 
 /* 主题按钮 */
-.theme-btn {
+.site-header__theme-btn {
   font-family: 'Orbitron', 'Rajdhani', sans-serif;
   font-size: .75rem;
   letter-spacing: 1.5px;
@@ -576,7 +576,7 @@ main::after {
     0 0 0 3px  color-mix(in oklch, var(--lavender) 20%, transparent);
 }
 
-.theme-btn:hover {
+.site-header__theme-btn:hover {
   transform: scale(1.18) rotate(-3deg);
   box-shadow:
     0 4px 20px color-mix(in oklch, var(--hot-pink) 60%, transparent),
@@ -584,14 +584,14 @@ main::after {
   animation: wiggle .5s ease, border-dance 2s linear infinite;
 }
 
-.theme-btn.active {
+.site-header__theme-btn--active {
   background: linear-gradient(135deg, var(--pink), var(--lavender));
   color: white;
   text-shadow: 0 0 6px white;
 }
 
 /* 语言切换按钮 */
-.lang-btn {
+.site-header__lang-btn {
   font-family: 'Orbitron', sans-serif;
   font-size: .85rem;
   letter-spacing: 2px;
@@ -603,14 +603,14 @@ main::after {
   white-space: nowrap;
   background: color-mix(in oklch, var(--pink) 10%, transparent);
 }
-.lang-btn:hover {
+.site-header__lang-btn:hover {
   color: var(--purple);
   border-color: var(--purple);
   border-style: solid;
   transform: scale(1.1) rotate(2deg);
   box-shadow: 0 0 16px color-mix(in oklch, var(--lavender) 60%, transparent);
 }
-.lang-btn::after { display: none; }
+.site-header__lang-btn::after { display: none; }
 
 /* ─── HERO ─── */
 .hero {
@@ -658,7 +658,7 @@ main::after {
   z-index: 0;
 }
 
-#hero-title {
+.hero__title {
   font-family: 'Orbitron', sans-serif;
   font-size: 340%;
   font-weight: 700;
@@ -699,7 +699,7 @@ main::after {
 }
 
 /* 色差层1 — 粉 */
-#hero-title::before {
+.hero__title::before {
   content: 'ARKFUTURE';
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -718,7 +718,7 @@ main::after {
 }
 
 /* 色差层2 — 蓝紫 */
-#hero-title::after {
+.hero__title::after {
   content: 'ARKFUTURE';
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -737,7 +737,7 @@ main::after {
 }
 
 /* ─── SITE SECTION ─── */
-.site-section {
+section {
   margin: 2.5rem 0;
   position: relative;
   perspective: 1200px;
@@ -745,12 +745,12 @@ main::after {
 }
 
 /* hover 时整个 section 提升，不被后续 section 压住 */
-.site-section:has(.content-block:hover) {
+section:has([class~="__body"]:hover) {
   z-index: 10;
 }
 
 /* 左侧彩虹糖豆竖条 */
-.site-section::before {
+section::before {
   content: '';
   position: absolute;
   left: -18px; top: 0;
@@ -769,7 +769,7 @@ main::after {
 }
 
 /* 右侧气泡 */
-.site-section::after {
+section::after {
   content: '';
   position: absolute;
   right: -18px; top: 0;
@@ -785,7 +785,7 @@ main::after {
 }
 
 /* ─── DIVIDER ─── */
-.section-divider {
+.divider {
   border: none;
   height: 4px;
   margin: 2.5rem 0;
@@ -805,7 +805,7 @@ main::after {
 }
 
 /* 分割线中央爱心 */
-.section-divider::before {
+.divider::before {
   content: '♥';
   position: absolute;
   left: 50%; top: 50%;
@@ -825,7 +825,7 @@ main::after {
 }
 
 /* 分割线扫光 */
-.section-divider::after {
+.divider::after {
   content: '';
   position: absolute;
   top: -6px; left: -80%;
@@ -846,7 +846,7 @@ h1, h2, h3 {
   letter-spacing: 1.5px;
 }
 
-h1.section-heading {
+[class~="__heading"] {
   font-size: 1.65rem;
   position: relative;
   padding: .4rem 0 .5rem 1.4rem;
@@ -867,7 +867,7 @@ h1.section-heading {
 }
 
 /* 左侧彩虹竖条 */
-h1.section-heading::before {
+[class~="__heading"]::before {
   content: '';
   position: absolute;
   left: 0; top: 0;
@@ -884,7 +884,7 @@ h1.section-heading::before {
 }
 
 /* 底部虚线 */
-h1.section-heading::after {
+[class~="__heading"]::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0;
@@ -900,7 +900,7 @@ h1.section-heading::after {
 }
 
 /* ─── H2 ─── */
-h2.section-subheading {
+[class~="__subheading"] {
   font-size: 1.3rem;
   display: inline-block;
   position: relative;
@@ -919,12 +919,12 @@ h2.section-subheading {
   filter: drop-shadow(0 0 8px color-mix(in oklch, var(--coral) 60%, transparent));
 }
 
-h2.section-subheading::before {
+[class~="__subheading"]::before {
   content: '✦ ';
   -webkit-text-fill-color: var(--pink);
   animation: star-twinkle 1.5s ease-in-out infinite;
 }
-h2.section-subheading::after {
+[class~="__subheading"]::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0;
@@ -945,7 +945,7 @@ h3.section-tertiary {
 }
 
 /* ─── CONTENT BLOCK ─── */
-.content-block {
+[class~="__body"] {
   background: var(--card-bg);
   backdrop-filter: blur(16px) saturate(1.6) brightness(1.05);
   -webkit-backdrop-filter: blur(16px) saturate(1.6) brightness(1.05);
@@ -967,10 +967,10 @@ h3.section-tertiary {
     inset 0 0 30px color-mix(in oklch, var(--pink)   06%, transparent);
 }
 
-/* .content-block::before 无伪元素 */
+/* [class~="__body"]::before 无伪元素 */
 
 /* 卡片扫光 */
-.content-block::after {
+[class~="__body"]::after {
   content: '';
   position: absolute;
   top: 0; left: -80%;
@@ -988,7 +988,7 @@ h3.section-tertiary {
   z-index: 2;
 }
 
-.content-block:hover {
+[class~="__body"]:hover {
   transform: perspective(900px) rotateX(-3deg) rotateY(3deg) translateY(-8px) scale(1.02);
   z-index: 10;               /* hover 时跳到最上层 */
   box-shadow:
@@ -999,7 +999,7 @@ h3.section-tertiary {
 }
 
 /* ─── QUOTE ─── */
-.site-quote {
+.ending__quote {
   margin: 1.4rem 0;
   padding: 1.1rem 1.5rem 1.1rem 2rem;
   background: color-mix(in oklch, var(--lavender) 10%, white);
@@ -1017,7 +1017,7 @@ h3.section-tertiary {
     inset 0 0 20px color-mix(in oklch, var(--pink) 08%, transparent);
 }
 
-.site-quote::before {
+.ending__quote::before {
   content: '"';
   position: absolute;
   top: -10px; left: 10px;
@@ -1032,7 +1032,7 @@ h3.section-tertiary {
   pointer-events: none;
 }
 
-.site-quote::after {
+.ending__quote::after {
   content: '';
   position: absolute;
   top: 0; left: -80%;
@@ -1048,7 +1048,7 @@ h3.section-tertiary {
   pointer-events: none;
 }
 
-.site-quote cite {
+.ending__quote cite {
   display: block;
   margin-top: .7rem;
   font-size: .88rem;
@@ -1061,7 +1061,7 @@ h3.section-tertiary {
 }
 
 /* ─── SYS LIST ─── */
-.sys-list {
+.ending__systems {
   font-size: .88rem;
   color: var(--txt-dim);
   line-height: 2.2;
@@ -1196,13 +1196,13 @@ footer::after {
   animation: heartbeat 3s ease-in-out infinite;
 }
 
-.footer-inner {
+.site-footer__inner {
   text-align: center;
   position: relative;
   z-index: 1;
 }
 
-.footer-inner p {
+.site-footer__inner p {
   background: linear-gradient(90deg,
     var(--purple), var(--hot-pink), var(--lavender), var(--purple)
   );
@@ -1237,15 +1237,15 @@ footer a:hover {
 
 @media (max-width: 768px) {
   body { padding: 12px; font-size: .95rem; }
-  #hero-title { font-size: 200%; letter-spacing: 3px; }
+  .hero__title { font-size: 200%; letter-spacing: 3px; }
   .hero::before { width: min(300px, 85vw); height: min(300px, 85vw); }
   .hero::after  { width: min(360px, 92vw); height: min(140px, 22vw); }
-  h1.section-heading { font-size: 1.3rem; }
-  h2.section-subheading { font-size: 1.1rem; }
+  [class~="__heading"] { font-size: 1.3rem; }
+  [class~="__subheading"] { font-size: 1.1rem; }
   footer { font-size: .78rem; }
-  .content-block { padding: 1rem; }
-  .site-section::before { left: -10px; }
-  .site-section::after  { right: -10px; }
+  [class~="__body"] { padding: 1rem; }
+  section::before { left: -10px; }
+  section::after  { right: -10px; }
   /* 手机端 IRC iframe 防溢出 */
   .irc-embed-item { overflow: hidden; }
   .irc-embed-frame { max-width: 100% !important; width: 100% !important; }
@@ -1303,20 +1303,20 @@ footer a:hover {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.site-section {
+section {
   animation: section-enter .7s cubic-bezier(.16,1,.3,1) both;
 }
-.site-section:nth-child(1) { animation-delay: .06s; }
-.site-section:nth-child(2) { animation-delay: .14s; }
-.site-section:nth-child(3) { animation-delay: .22s; }
-.site-section:nth-child(4) { animation-delay: .30s; }
-.site-section:nth-child(5) { animation-delay: .38s; }
+section:nth-child(1) { animation-delay: .06s; }
+section:nth-child(2) { animation-delay: .14s; }
+section:nth-child(3) { animation-delay: .22s; }
+section:nth-child(4) { animation-delay: .30s; }
+section:nth-child(5) { animation-delay: .38s; }
 
 /* ============================================================
    3. SECTION — 上下间距放大，让每个区块独立呼吸
    ============================================================ */
 
-.site-section {
+section {
   margin: 3.5rem 0;
 }
 
@@ -1325,13 +1325,13 @@ footer a:hover {
    ============================================================ */
 
 /* 还原左竖条（精确复原原版逻辑，只加大） */
-h1.section-heading {
+[class~="__heading"] {
   font-size: 1.85rem;
   padding: .5rem 0 .6rem 1.6rem;
   margin-bottom: 1.6rem;        /* 标题和第一张卡片之间留足间距 */
 }
 
-h1.section-heading::before {
+[class~="__heading"]::before {
   content: '';
   position: absolute;
   left: 0; top: 0;
@@ -1347,7 +1347,7 @@ h1.section-heading::before {
     8px 0 28px color-mix(in oklch, var(--lavender)  45%, transparent);
 }
 
-h1.section-heading::after {
+[class~="__heading"]::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0;
@@ -1369,7 +1369,7 @@ h1.section-heading::after {
       IRC(大，全宽)
    ============================================================ */
 
-#section-net {
+#net {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
@@ -1383,22 +1383,22 @@ h1.section-heading::after {
   align-items: start;
 }
 
-#section-net > h1.section-heading { grid-area: heading; }
-#section-repo                      { grid-area: repo; }
-#section-radio                     { grid-area: radio; }
-#section-rss                       { grid-area: rss; }
-#section-widgets                   { grid-area: widgets; }
-#section-irc                       { grid-area: irc; }
+#net > [class~="__heading"] { grid-area: heading; }
+#repo                      { grid-area: repo; }
+#radio                     { grid-area: radio; }
+#rss                       { grid-area: rss; }
+#widgets                   { grid-area: widgets; }
+#irc                       { grid-area: irc; }
 
 /* 网格内卡片底部间距用 margin 控制 */
-#section-net > .content-block {
+#net > [class~="__body"] {
   margin: 0 0 1.4rem;
   height: auto;
 }
 
 /* 小卡片（Repo / Radio）内容精简，字号稍小 */
-#section-repo h2.section-subheading,
-#section-radio h2.section-subheading {
+#repo [class~="__subheading"],
+#radio [class~="__subheading"] {
   font-size: 1.1rem;
   margin-bottom: .6rem;
 }
@@ -1407,7 +1407,7 @@ h1.section-heading::after {
    6. CONTENT-BLOCK — 精细阴影 + 克制 hover
    ============================================================ */
 
-.content-block {
+[class~="__body"] {
   /* 增大内边距，内容不要贴边 */
   padding: 1.6rem 2rem;
   /* 精细多层阴影：近阴影清晰 + 远阴影柔和 */
@@ -1425,7 +1425,7 @@ h1.section-heading::after {
 }
 
 /* hover：向上提升 + 阴影扩散，不做 3D 旋转（太眩晕） */
-.content-block:hover {
+[class~="__body"]:hover {
   transform: translateY(-8px) scale(1.012);
   z-index: 10;
   box-shadow:
@@ -1442,7 +1442,7 @@ h1.section-heading::after {
    7. H2 section-subheading — 加大间距，和下方内容拉开
    ============================================================ */
 
-h2.section-subheading {
+[class~="__subheading"] {
   margin-bottom: 1rem;
   margin-top: .2rem;
 }
@@ -1451,11 +1451,11 @@ h2.section-subheading {
    8. LIST — 行距放大，更易读
    ============================================================ */
 
-.content-block ul {
+[class~="__body"] ul {
   padding-left: 1.2rem;
 }
 
-.content-block li {
+[class~="__body"] li {
   line-height: 2.0;
   margin-bottom: .2rem;
 }
@@ -1464,7 +1464,7 @@ h2.section-subheading {
    9. SITE-QUOTE — 独立全宽卡片，最强视觉层级
    ============================================================ */
 
-.site-quote {
+.ending__quote {
   /* 独立成一张大卡，脱离普通 content-block 风格 */
   margin: 2.4rem 0 1.6rem;
   padding: 2.2rem 2.6rem 1.8rem 3.2rem;
@@ -1490,7 +1490,7 @@ h2.section-subheading {
 }
 
 /* 左侧彩虹粗竖条（覆写原大引号 ::before） */
-.site-quote::before {
+.ending__quote::before {
   content: '';
   position: absolute;
   left: 0; top: 0; bottom: 0;
@@ -1511,7 +1511,7 @@ h2.section-subheading {
 }
 
 /* 右侧大引号水印（覆写原扫光 ::after） */
-.site-quote::after {
+.ending__quote::after {
   content: '\201C';
   position: absolute;
   right: 1.6rem; top: -.8rem;
@@ -1533,7 +1533,7 @@ h2.section-subheading {
 }
 
 /* 引用内文字 */
-.site-quote p {
+.ending__quote p {
   font-size: 1rem;
   line-height: 1.9;
   color: var(--txt);
@@ -1542,14 +1542,14 @@ h2.section-subheading {
 }
 
 /* 第一段（短语）加粗显示 */
-.site-quote p:first-of-type {
+.ending__quote p:first-of-type {
   font-weight: 600;
   font-size: 1.04rem;
   color: oklch(40% 0.1 330);
 }
 
 /* 来源标签 */
-.site-quote cite {
+.ending__quote cite {
   display: inline-flex;
   align-items: center;
   gap: .4rem;
@@ -1569,7 +1569,7 @@ h2.section-subheading {
   filter: none;
 }
 
-.site-quote cite::before {
+.ending__quote cite::before {
   content: '—';
   color: var(--hot-pink);
   font-style: normal;
@@ -1602,7 +1602,7 @@ h3.section-tertiary::before {
    11. SECTION-DIVIDER — 细而精准，不抢镜
    ============================================================ */
 
-.section-divider {
+.divider {
   height: 2px;
   margin: 0;
   opacity: .7;
@@ -1628,7 +1628,7 @@ footer::before {
     0 0 40px color-mix(in oklch, var(--hot-pink)  30%, transparent);
 }
 
-.footer-inner p {
+.site-footer__inner p {
   margin: .5rem 0;
   font-size: .84rem;
   line-height: 1.8;
@@ -1646,7 +1646,7 @@ a:hover {
    14. SYS-LIST — 等宽字体，代码感
    ============================================================ */
 
-.sys-list {
+.ending__systems {
   font-family: 'Courier New', 'Consolas', monospace;
   font-size: .82rem;
   line-height: 2;
@@ -1689,13 +1689,13 @@ a:hover {
   }
 
   /* ── Section：不加 overflow:hidden，左侧竖条需要负值 left ── */
-  .site-section { margin: 2.4rem 0; overflow: visible; }
+  section { margin: 2.4rem 0; overflow: visible; }
 
   /* 左侧竖条贴近正常边缘，右侧隐藏 */
-  .site-section::before { left: -6px; }
-  .site-section::after  { display: none; }
+  section::before { left: -6px; }
+  section::after  { display: none; }
 
-  h1.section-heading {
+  [class~="__heading"] {
     font-size: 1.4rem;
     margin-bottom: 1.2rem;
   }
@@ -1705,7 +1705,7 @@ a:hover {
        - 简化阴影：移动端只保留 2 层，减少突兀感
        - 关掉扫光伪元素（left:-80% 会撑宽）
   ── */
-  .content-block {
+  [class~="__body"] {
     padding: 1.1rem 1.2rem;
     overflow: visible;
     box-shadow:
@@ -1713,10 +1713,10 @@ a:hover {
       0  6px 20px color-mix(in oklch, var(--lavender)  10%, transparent),
       inset 0 1px 0 rgba(255,255,255,.7);
   }
-  .content-block::after { display: none; }
+  [class~="__body"]::after { display: none; }
 
   /* hover 阴影也同步简化 */
-  .content-block:hover {
+  [class~="__body"]:hover {
     box-shadow:
       0  4px 14px color-mix(in oklch, var(--hot-pink)  22%, transparent),
       0 12px 36px color-mix(in oklch, var(--lavender)  16%, transparent),
@@ -1724,26 +1724,26 @@ a:hover {
   }
 
   /* ── NET section → 强制单列 ── */
-  #section-net {
+  #net {
     display: block;
     column-gap: 0;
   }
-  #section-net > .content-block { margin: 0 0 1rem; }
+  #net > [class~="__body"] { margin: 0 0 1rem; }
 
   /* ── 引用块 ── */
-  .site-quote {
+  .ending__quote {
     padding: 1.3rem 1.2rem 1.1rem 1.6rem;
     margin: 1.6rem 0 1.2rem;
     overflow: hidden;   /* 引用块内大引号水印可以裁，不影响外框 */
   }
-  .site-quote::after {
+  .ending__quote::after {
     font-size: 5rem;
     right: .6rem;
     opacity: .08;
   }
 
   /* ── sys-list ── */
-  .sys-list {
+  .ending__systems {
     padding: .6rem .8rem;
     font-size: .78rem;
     word-break: break-all;
