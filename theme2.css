@@ -1,1855 +1,1010 @@
-/* ╔══════════════════════════════════════════════════════════════╗
-   ║  ARKFUTURE — THEME 2 : KAWAII NUCLEAR MELTDOWN              ║
-   ║  🌸 PURE CSS · ZERO JS · MAXIMUM CUTE DESTRUCTION 🌸        ║
-   ║  @property · conic-gradient · backdrop-filter · mask        ║
-   ║  oklch() · color-mix() · @layer · scroll-timeline           ║
-   ╚══════════════════════════════════════════════════════════════╝ */
+/* ═══════════════════════════════════════════════════════════════════════
+   🍓 ARKFUTURE — Theme 1 · 草莓甜心 · 嘎嘎甜 💕
+   甜甜恋爱 × 可可爱爱 × 大厂精致 × CSS 特效全开
+   ═══════════════════════════════════════════════════════════════════════ */
 
-/* ============================================================
-   @layer — CSS 级联层，精确控制优先级
-   ============================================================ */
-@layer reset, base, layout, components, animations, overrides;
+/* ── @layer 级联控制 ── */
+@layer reset, tokens, base, layout, components, effects, utilities, overrides;
 
-/* ============================================================
-   CSS HOUDINI @property — 可动画的自定义属性
-   ============================================================ */
-@property --hue {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: true;
-}
-@property --hue2 {
-  syntax: '<angle>';
-  initial-value: 120deg;
-  inherits: true;
-}
-@property --hue3 {
-  syntax: '<angle>';
-  initial-value: 240deg;
-  inherits: true;
-}
-@property --sparkle-r {
-  syntax: '<length>';
-  initial-value: 0px;
-  inherits: false;
-}
-@property --bloom {
-  syntax: '<length>';
-  initial-value: 0px;
-  inherits: false;
-}
-@property --petal-rot {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
-@property --star-scale {
-  syntax: '<number>';
-  initial-value: 0;
-  inherits: false;
-}
-@property --ribbon-pos {
-  syntax: '<percentage>';
-  initial-value: -30%;
-  inherits: false;
-}
-@property --glow-a {
-  syntax: '<number>';
-  initial-value: 0.3;
-  inherits: false;
-}
-
-/* ============================================================
-   CSS VARIABLES — oklch() 颜色空间，更鲜艳
-   ============================================================ */
-:root {
-  /* 主色系 — oklch(亮度 彩度 色相) */
-  --pink:       oklch(72% 0.28 0);
-  --hot-pink:   oklch(62% 0.32 350);
-  --rose:       oklch(78% 0.22 10);
-  --peach:      oklch(82% 0.20 40);
-  --lavender:   oklch(78% 0.18 290);
-  --purple:     oklch(65% 0.28 300);
-  --mint:       oklch(80% 0.18 165);
-  --sky:        oklch(78% 0.18 230);
-  --lemon:      oklch(88% 0.20 100);
-  --coral:      oklch(72% 0.24 25);
-  --lilac:      oklch(80% 0.16 305);
-  --cream:      oklch(97% 0.04 80);
-
-  /* color-mix() 混合色 */
-  --pink-lav:   color-mix(in oklch, var(--pink) 55%, var(--lavender));
-  --mint-sky:   color-mix(in oklch, var(--mint) 50%, var(--sky));
-  --peach-rose: color-mix(in oklch, var(--peach) 60%, var(--rose));
-
-  /* 背景 */
-  --bg:         #fff0f8;
-  --bg2:        #fce4f5;
-  --card-bg:    rgba(255, 245, 252, 0.82);
-
-  /* 文字 */
-  --txt:        oklch(35% 0.08 330);
-  --txt-dim:    oklch(55% 0.06 330);
-  --txt-light:  oklch(65% 0.05 300);
-}
-
-/* ============================================================
-   @layer reset
-   ============================================================ */
+/* ══════════════════════════════════════════
+   RESET
+   ══════════════════════════════════════════ */
 @layer reset {
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
   html {
     scroll-behavior: smooth;
-    /* 彻底锁死横向溢出，防止绝对定位元素撑宽页面 */
-    overflow-x: hidden;
-    width: 100%;
+    interpolate-size: allow-keywords;
+  }
+  ul { list-style: none; }
+  a  { text-decoration: none; color: inherit; }
+  button { font: inherit; cursor: pointer; border: none; background: none; }
+}
+
+/* ══════════════════════════════════════════
+   DESIGN TOKENS · 甜心色彩体系
+   ══════════════════════════════════════════ */
+@layer tokens {
+
+  /* @property 注册自定义属性 — 让渐变动画成为可能 */
+  @property --hue {
+    syntax: '<angle>';
+    inherits: true;
+    initial-value: 0deg;
+  }
+  @property --glow-size {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 0px;
+  }
+  @property --sparkle-opacity {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+  }
+  @property --card-lift {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+  }
+  @property --float-offset {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+  }
+
+  :root {
+    /* 🍓 草莓粉系 */
+    --strawberry-50:  #fff0f3;
+    --strawberry-100: #ffe0e6;
+    --strawberry-200: #ffc2d1;
+    --strawberry-300: #ff9eb5;
+    --strawberry-400: #ff7a9a;
+    --strawberry-500: #ff5080;
+    --strawberry-600: #e8306a;
+    --strawberry-700: #c41858;
+
+    /* 🫐 薰衣草奶 */
+    --cream-lavender-50:  #f8f0ff;
+    --cream-lavender-100: #f0e0ff;
+    --cream-lavender-200: #e0c8f8;
+    --cream-lavender-300: #cda8f0;
+    --cream-lavender-400: #b888e8;
+
+    /* 🍑 蜜桃奶 */
+    --peach-50:  #fff5f0;
+    --peach-100: #ffe8dd;
+    --peach-200: #ffd4b8;
+    --peach-300: #ffbc90;
+
+    /* 🍬 奶油白 */
+    --cream:       #fff8f5;
+    --cream-white: #fffbf9;
+
+    /* 文字 */
+    --text-dark:    #4a2040;
+    --text-body:    #6b3860;
+    --text-soft:    #a06898;
+    --text-faint:   #c8a0c0;
+
+    /* 边框 / 阴影 */
+    --border-candy:  rgba(255, 158, 181, 0.2);
+    --border-love:   rgba(255, 120, 160, 0.25);
+    --shadow-candy:  0 4px 24px rgba(255, 120, 160, 0.12);
+    --shadow-love:   0 8px 40px rgba(255, 120, 160, 0.18);
+    --shadow-dream:  0 16px 60px rgba(255, 100, 150, 0.2), 0 0 80px rgba(200, 130, 220, 0.1);
+
+    /* 圆角 */
+    --r-sm: 8px;
+    --r-md: 14px;
+    --r-lg: 20px;
+    --r-xl: 28px;
+    --r-pill: 9999px;
+
+    /* 间距 */
+    --s1: 0.25rem; --s2: 0.5rem; --s3: 0.75rem; --s4: 1rem;
+    --s5: 1.25rem; --s6: 1.5rem; --s8: 2rem; --s10: 2.5rem;
+    --s12: 3rem;   --s16: 4rem;  --s20: 5rem;
+
+    /* 字体 */
+    --font-sans:    'Quicksand', 'Nunito', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --font-display: 'Quicksand', 'Comfortaa', 'Nunito', sans-serif;
+    --font-mono:    'JetBrains Mono', 'Cascadia Code', monospace;
+
+    /* 过渡 */
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-silk:   cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-love:   cubic-bezier(0.68, -0.6, 0.32, 1.6);
+
+    scrollbar-color: var(--strawberry-200) var(--strawberry-50);
+    scrollbar-width: thin;
+    accent-color: var(--strawberry-400);
   }
 }
 
-/* ============================================================
-   KEYFRAMES MEGAPACK 🎀
-   ============================================================ */
-
-/* Houdini 动画 */
-@keyframes hue-cycle  { to { --hue:  360deg; } }
-@keyframes hue-cycle2 { to { --hue2: 480deg; } }
-@keyframes hue-cycle3 { to { --hue3: 600deg; } }
-@keyframes bloom-out  { 0%{--bloom:0px;} 50%{--bloom:30px;} 100%{--bloom:0px;} }
-@keyframes petal-spin { to { --petal-rot: 360deg; } }
-@keyframes ribbon-run { from{--ribbon-pos:-30%;} to{--ribbon-pos:130%;} }
-@keyframes glow-beat  { 0%,100%{--glow-a:0.2;} 50%{--glow-a:0.9;} }
-
-/* 彩虹流光 */
-@keyframes rainbow-drift {
-  0%   { background-position: 0% 50%; }
-  100% { background-position: 400% 50%; }
-}
-@keyframes rainbow-fast {
-  0%   { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-}
-
-/* 漂浮跳动 */
-@keyframes float-bob {
-  0%,100% { transform: translateY(0px) rotate(0deg); }
-  30%     { transform: translateY(-12px) rotate(1.5deg); }
-  60%     { transform: translateY(-6px)  rotate(-1deg); }
-}
-@keyframes float-bob2 {
-  0%,100% { transform: translateY(0px) rotate(0deg) scale(1); }
-  40%     { transform: translateY(-10px) rotate(-2deg) scale(1.03); }
-  70%     { transform: translateY(-4px)  rotate(1.5deg) scale(0.98); }
-}
-
-/* 心跳 */
-@keyframes heartbeat {
-  0%,100%{ transform: scale(1); }
-  14%    { transform: scale(1.15); }
-  28%    { transform: scale(1); }
-  42%    { transform: scale(1.08); }
-  56%    { transform: scale(1); }
-}
-
-/* 旋转 */
-@keyframes spin      { to { transform: rotate(360deg); } }
-@keyframes spin-slow { to { transform: rotate(360deg); } }
-@keyframes spin-rev  { to { transform: rotate(-360deg); } }
-
-/* 花瓣雨（body 伪元素层） */
-@keyframes petal-fall-1 {
-  0%   { transform: translateX(0) translateY(-60px) rotate(0deg) scale(1);    opacity:0; }
-  5%   { opacity: .85; }
-  90%  { opacity: .6; }
-  100% { transform: translateX(80px)  translateY(108vh) rotate(540deg) scale(.5); opacity:0; }
-}
-@keyframes petal-fall-2 {
-  0%   { transform: translateX(0) translateY(-60px) rotate(30deg) scale(.8);  opacity:0; }
-  5%   { opacity: .7; }
-  100% { transform: translateX(-60px) translateY(105vh) rotate(-400deg) scale(.3); opacity:0; }
-}
-@keyframes petal-fall-3 {
-  0%   { transform: translateX(0) translateY(-60px) rotate(-20deg) scale(1.1);opacity:0; }
-  5%   { opacity: .9; }
-  100% { transform: translateX(50px)  translateY(112vh) rotate(300deg) scale(.4); opacity:0; }
-}
-@keyframes petal-fall-4 {
-  0%   { transform: translateX(0) translateY(-60px) rotate(10deg) scale(.7);  opacity:0; }
-  5%   { opacity: .8; }
-  100% { transform: translateX(-90px) translateY(106vh) rotate(-600deg) scale(.2); opacity:0; }
-}
-@keyframes petal-fall-5 {
-  0%   { transform: translateX(0) translateY(-60px) rotate(-45deg) scale(.9); opacity:0; }
-  5%   { opacity: .75; }
-  100% { transform: translateX(110px) translateY(110vh) rotate(450deg) scale(.35); opacity:0; }
-}
-
-/* 星星闪烁 */
-@keyframes star-twinkle {
-  0%,100% { opacity: .1; transform: scale(.4) rotate(0deg); }
-  50%     { opacity: 1;  transform: scale(1.3) rotate(30deg); }
-}
-@keyframes star-pop {
-  0%  { transform: scale(0) rotate(-20deg); opacity: 0; }
-  60% { transform: scale(1.3) rotate(10deg); opacity: 1; }
-  100%{ transform: scale(1)  rotate(0deg);  opacity: .8; }
-}
-
-/* 文字彩虹 */
-@keyframes text-rainbow {
-  0%   { background-position: 0% 50%;   filter: hue-rotate(0deg); }
-  100% { background-position: 400% 50%; filter: hue-rotate(360deg); }
-}
-
-/* 扫光 */
-@keyframes shimmer {
-  0%   { left: -80%; opacity: 0; }
-  10%  { opacity: .8; }
-  90%  { opacity: .8; }
-  100% { left: 180%; opacity: 0; }
-}
-@keyframes shimmer2 {
-  0%   { left: -80%; opacity: 0; }
-  10%  { opacity: .5; }
-  100% { left: 180%; opacity: 0; }
-}
-
-/* 边框彩虹 */
-@keyframes border-dance {
-  0%  { border-color: var(--pink); }
-  16% { border-color: var(--peach); }
-  32% { border-color: var(--lemon); }
-  48% { border-color: var(--mint); }
-  64% { border-color: var(--sky); }
-  80% { border-color: var(--lavender); }
-  100%{ border-color: var(--pink); }
-}
-
-/* 波浪 */
-@keyframes wave-x {
-  0%,100% { transform: scaleX(1) scaleY(1); }
-  25%     { transform: scaleX(1.02) scaleY(.97); }
-  50%     { transform: scaleX(.98) scaleY(1.03); }
-  75%     { transform: scaleX(1.01) scaleY(.98); }
-}
-
-/* 弹簧 */
-@keyframes spring-in {
-  0%  { transform: scale(0) rotate(-15deg); opacity:0; }
-  60% { transform: scale(1.12) rotate(3deg); opacity:1; }
-  80% { transform: scale(.96) rotate(-1deg); }
-  100%{ transform: scale(1) rotate(0deg); opacity:1; }
-}
-
-/* 摇摆 */
-@keyframes wiggle {
-  0%,100%{ transform: rotate(0deg); }
-  20%    { transform: rotate(-8deg) scale(1.05); }
-  40%    { transform: rotate(8deg)  scale(1.05); }
-  60%    { transform: rotate(-5deg); }
-  80%    { transform: rotate(5deg); }
-}
-
-/* 底部彩虹条 */
-@keyframes bar-flow {
-  0%   { background-position: 0% 50%; }
-  100% { background-position: 600% 50%; }
-}
-
-/* conic 旋转 */
-@keyframes conic-turn  { to { --hue:  360deg; } }
-@keyframes conic-turn2 { to { --hue2: 480deg; } }
-
-/* 卡片 3D 微晃 */
-@keyframes card-rock {
-  0%,100%{ transform: perspective(900px) rotateX(0deg)   rotateY(0deg);   }
-  25%    { transform: perspective(900px) rotateX(1.5deg)  rotateY(-1.2deg); }
-  50%    { transform: perspective(900px) rotateX(-.8deg)  rotateY(1.5deg); }
-  75%    { transform: perspective(900px) rotateX(1deg)    rotateY(.8deg);  }
-}
-
-/* 链接下划线展开 */
-@keyframes underline-pop {
-  0%  { transform: scaleX(0) scaleY(1); transform-origin: right; }
-  60% { transform: scaleX(1) scaleY(2.5); transform-origin: left; }
-  100%{ transform: scaleX(1) scaleY(1); transform-origin: left; }
-}
-
-/* bubble float */
-@keyframes bubble-rise {
-  0%  { transform: translateY(0) scale(1); opacity:.6; }
-  100%{ transform: translateY(-90vh) scale(.3); opacity:0; }
-}
-
-/* 标题 clip-path wave */
-@keyframes clip-wave {
-  0%,100%{ clip-path: polygon(0 0,100% 0,100% 100%,0 100%); }
-  50%    { clip-path: polygon(0 5%,100% 0,100% 95%,0 100%); }
-}
-
-/* 打字光标 */
-@keyframes cursor-blink {
-  0%,49% { opacity:1; }
-  50%,100%{ opacity:0; }
-}
-
-/* mask 流动 */
-@keyframes mask-slide {
-  0%   { mask-position: -200% 0; }
-  100% { mask-position:  200% 0; }
-}
-
-/* outline 脉冲 */
-@keyframes outline-pulse {
-  0%,100%{ outline-width:2px; outline-offset:2px; }
-  50%    { outline-width:6px; outline-offset:6px; }
-}
-
-/* 伪元素气泡1~5连续涌出 */
-@keyframes bub1 { 0%{bottom:-20px;left:10%;opacity:.5;transform:scale(.5);} 100%{bottom:105%;left:15%;opacity:0;transform:scale(1.2);} }
-@keyframes bub2 { 0%{bottom:-20px;left:30%;opacity:.4;transform:scale(.4);} 100%{bottom:100%;left:25%;opacity:0;transform:scale(1.0);} }
-@keyframes bub3 { 0%{bottom:-20px;left:55%;opacity:.6;transform:scale(.6);} 100%{bottom:110%;left:60%;opacity:0;transform:scale(1.3);} }
-@keyframes bub4 { 0%{bottom:-20px;left:75%;opacity:.5;transform:scale(.5);} 100%{bottom:105%;left:80%;opacity:0;transform:scale(1.1);} }
-@keyframes bub5 { 0%{bottom:-20px;left:90%;opacity:.3;transform:scale(.3);} 100%{bottom:100%;left:85%;opacity:0;transform:scale(.9);} }
-
-/* ============================================================
-   @layer base — body 全局
-   ============================================================ */
+/* ══════════════════════════════════════════
+   BASE · 甜甜的基础
+   ══════════════════════════════════════════ */
 @layer base {
+  body {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--text-body);
+    line-height: 1.75;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
 
-body {
-  font-family: 'Rajdhani', 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
-  background-color: var(--bg);
+    /* 多层梦幻背景 */
+    background:
+      radial-gradient(ellipse at 15% 30%, rgba(255, 200, 220, 0.35) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 20%, rgba(220, 180, 255, 0.25) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 85%, rgba(255, 210, 180, 0.2) 0%, transparent 50%),
+      conic-gradient(from 200deg at 30% 70%, transparent, rgba(255, 180, 210, 0.1), transparent),
+      linear-gradient(160deg, #fff5f8 0%, #fef0f5 30%, #f8f0ff 65%, #fff0f5 100%);
+    background-attachment: fixed;
+  }
 
-  /* 12层背景叠加：花朵图案 + 网格 + 光晕 */
-  background-image:
-    /* 花型光晕群 */
-    radial-gradient(circle at 15%  20%,  color-mix(in oklch, var(--pink)    60%, transparent) 0%, transparent 25%),
-    radial-gradient(circle at 85%  15%,  color-mix(in oklch, var(--lavender) 55%, transparent) 0%, transparent 22%),
-    radial-gradient(circle at 50%  55%,  color-mix(in oklch, var(--mint)     40%, transparent) 0%, transparent 28%),
-    radial-gradient(circle at 80%  80%,  color-mix(in oklch, var(--peach)    50%, transparent) 0%, transparent 24%),
-    radial-gradient(circle at 10%  85%,  color-mix(in oklch, var(--sky)      45%, transparent) 0%, transparent 20%),
-    /* 爱心点阵图案 */
-    radial-gradient(circle at center, var(--pink) 28%, transparent 30%),
-    /* 斜线格纹 */
-    repeating-linear-gradient(
-      45deg,
-      transparent 0px,
-      transparent 18px,
-      color-mix(in oklch, var(--pink) 8%, transparent) 18px,
-      color-mix(in oklch, var(--pink) 8%, transparent) 20px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      transparent 0px,
-      transparent 18px,
-      color-mix(in oklch, var(--lavender) 6%, transparent) 18px,
-      color-mix(in oklch, var(--lavender) 6%, transparent) 20px
-    ),
-    /* 圆点阵列 */
-    radial-gradient(circle, color-mix(in oklch, var(--pink) 15%, transparent) 1px, transparent 1px),
-    /* 底部渐变 */
-    linear-gradient(180deg, #fff0f8 0%, #fce4f5 40%, #f0eaff 100%);
+  /* 自定义滚动条 */
+  body::-webkit-scrollbar { width: 7px; }
+  body::-webkit-scrollbar-track { background: var(--strawberry-50); }
+  body::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--strawberry-200), var(--cream-lavender-200));
+    border-radius: 10px;
+  }
 
-  background-size:
-    100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%,
-    0 0,
-    20px 20px, 20px 20px,
-    24px 24px,
-    100% 100%;
-  background-attachment: fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed;
+  ::selection {
+    background: var(--strawberry-200);
+    color: var(--strawberry-700);
+  }
 
-  color: var(--txt);
-  line-height: 1.75;
-  font-size: 1rem;
-  padding: 20px;
-  overflow-x: hidden;
-  position: relative;
-  /* Houdini 色相动画驱动全局 */
-  animation: hue-cycle 20s linear infinite;
+  a {
+    color: var(--strawberry-500);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 0.25s ease, text-shadow 0.25s ease;
+  }
+  a:hover {
+    color: var(--strawberry-600);
+    text-shadow: 0 0 8px rgba(255, 80, 128, 0.15);
+  }
 }
 
-/* 全屏花瓣层1 */
-body::before {
-  content: '🌸';
-  position: fixed;
-  top: -60px;
-  left: 8%;
-  font-size: 28px;
-  pointer-events: none;
-  z-index: 9990;
-  animation: petal-fall-1 7s ease-in infinite;
-  filter: drop-shadow(0 0 6px var(--pink));
-}
-
-/* 全屏花瓣层2 */
-body::after {
-  content: '🌷';
-  position: fixed;
-  top: -60px;
-  left: 72%;
-  font-size: 22px;
-  pointer-events: none;
-  z-index: 9990;
-  animation: petal-fall-3 9s ease-in infinite;
-  animation-delay: 3s;
-  filter: drop-shadow(0 0 6px var(--coral));
-}
-
-} /* end @layer base */
-
-/* ============================================================
-   @layer layout
-   ============================================================ */
+/* ══════════════════════════════════════════
+   LAYOUT · 布局
+   ══════════════════════════════════════════ */
 @layer layout {
 
-main {
-  max-width: 900px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
-/* 两层锥形彩虹旋转背景（Houdini驱动） */
-main::before {
-  content: '';
-  position: fixed;
-  top: 50%; left: 50%;
-  width: 140vmax; height: 140vmax;
-  transform: translate(-50%, -50%);
-  background: conic-gradient(
-    from var(--hue),
-    oklch(80% 0.20 0  / .04)   0deg,
-    oklch(82% 0.22 30 / .03)  45deg,
-    oklch(88% 0.18 90 / .03)  90deg,
-    oklch(80% 0.20 165/ .04) 135deg,
-    oklch(78% 0.18 230/ .04) 180deg,
-    oklch(78% 0.18 290/ .03) 225deg,
-    oklch(65% 0.28 300/ .03) 270deg,
-    oklch(72% 0.28 0  / .04) 315deg,
-    oklch(80% 0.20 0  / .04) 360deg
-  );
-  pointer-events: none;
-  z-index: -1;
-  animation: conic-turn 12s linear infinite;
-}
-
-main::after {
-  content: '';
-  position: fixed;
-  top: 50%; left: 50%;
-  width: 120vmax; height: 120vmax;
-  transform: translate(-50%, -50%);
-  background: conic-gradient(
-    from var(--hue2),
-    oklch(78% 0.18 290/ .035)   0deg,
-    oklch(80% 0.20 0  / .025)  60deg,
-    oklch(82% 0.22 40 / .025) 120deg,
-    oklch(80% 0.18 165/ .030) 180deg,
-    oklch(88% 0.20 90 / .025) 240deg,
-    oklch(78% 0.18 230/ .030) 300deg,
-    oklch(78% 0.18 290/ .035) 360deg
-  );
-  pointer-events: none;
-  z-index: -1;
-  animation: conic-turn2 18s linear infinite reverse;
-}
-
-} /* end @layer layout */
-
-/* ============================================================
-   @layer components
-   ============================================================ */
-@layer components {
-
-/* ─── 顶部导航 ─── */
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: .6rem;
-  gap: .5rem;
-  position: relative;
-  z-index: 100;
-}
-
-/* 顶部彩虹糖果条 */
-.site-header::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 5px;
-  background: linear-gradient(90deg,
-    var(--pink), var(--peach), var(--lemon), var(--mint),
-    var(--sky), var(--lavender), var(--purple), var(--hot-pink), var(--pink)
-  );
-  background-size: 400% 400%;
-  animation: rainbow-fast 2s linear infinite;
-  box-shadow:
-    0 2px 8px  color-mix(in oklch, var(--pink)    80%, transparent),
-    0 2px 18px color-mix(in oklch, var(--lavender) 70%, transparent),
-    0 2px 35px color-mix(in oklch, var(--hot-pink) 50%, transparent);
-  z-index: 9998;
-  pointer-events: none;
-  border-radius: 0 0 4px 4px;
-}
-
-/* 底部彩虹糖果条 */
-.site-header::after {
-  content: '✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦';
-  position: fixed;
-  bottom: 0; left: 0;
-  width: 100%;
-  text-align: center;
-  font-size: .7rem;
-  letter-spacing: 3px;
-  padding: 4px 0;
-  background: linear-gradient(90deg,
-    var(--pink), var(--lemon), var(--mint), var(--lavender), var(--pink)
-  );
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: bar-flow 3s linear infinite;
-  filter:
-    drop-shadow(0 0 4px var(--pink))
-    drop-shadow(0 0 8px var(--lavender));
-  z-index: 9998;
-  pointer-events: none;
-}
-
-.site-header__theme-switcher {
-  display: flex;
-  gap: .5rem;
-  flex-wrap: wrap;
-}
-
-/* 顶部星星雨（theme-switcher 伪元素） */
-.site-header__theme-switcher::before {
-  content: '⭐';
-  position: fixed;
-  top: -40px; left: 30%;
-  font-size: 20px;
-  pointer-events: none;
-  z-index: 9989;
-  animation: petal-fall-2 8s ease-in infinite;
-  animation-delay: 1s;
-  filter: drop-shadow(0 0 5px var(--lemon));
-}
-.site-header__theme-switcher::after {
-  content: '💫';
-  position: fixed;
-  top: -40px; left: 60%;
-  font-size: 18px;
-  pointer-events: none;
-  z-index: 9989;
-  animation: petal-fall-4 10s ease-in infinite;
-  animation-delay: 4.5s;
-}
-
-/* 主题按钮 */
-.site-header__theme-btn {
-  font-family: 'Orbitron', 'Rajdhani', sans-serif;
-  font-size: .75rem;
-  letter-spacing: 1.5px;
-  color: var(--purple);
-  background: linear-gradient(135deg,
-    color-mix(in oklch, var(--pink) 30%, white),
-    color-mix(in oklch, var(--lavender) 30%, white)
-  );
-  border: 2px solid var(--pink-lav);
-  padding: 3px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  -webkit-appearance: none;
-  appearance: none;
-  transition: transform .18s, box-shadow .18s;
-  animation:
-    border-dance 2s linear infinite,
-    outline-pulse 3s ease-in-out infinite;
-  will-change: transform, box-shadow;
-  text-shadow: 0 1px 3px rgba(200,100,200,.3);
-  box-shadow:
-    0 2px 10px color-mix(in oklch, var(--pink) 40%, transparent),
-    0 0 0 3px  color-mix(in oklch, var(--lavender) 20%, transparent);
-}
-
-.site-header__theme-btn:hover {
-  transform: scale(1.18) rotate(-3deg);
-  box-shadow:
-    0 4px 20px color-mix(in oklch, var(--hot-pink) 60%, transparent),
-    0 0 30px    color-mix(in oklch, var(--lavender) 50%, transparent);
-  animation: wiggle .5s ease, border-dance 2s linear infinite;
-}
-
-.site-header__theme-btn--active {
-  background: linear-gradient(135deg, var(--pink), var(--lavender));
-  color: white;
-  text-shadow: 0 0 6px white;
-}
-
-/* 语言切换按钮 */
-.site-header__lang-btn {
-  font-family: 'Orbitron', sans-serif;
-  font-size: .85rem;
-  letter-spacing: 2px;
-  color: var(--txt-dim);
-  border: 2px dashed var(--pink-lav);
-  padding: 3px 12px;
-  border-radius: 20px;
-  transition: all .25s;
-  white-space: nowrap;
-  background: color-mix(in oklch, var(--pink) 10%, transparent);
-}
-.site-header__lang-btn:hover {
-  color: var(--purple);
-  border-color: var(--purple);
-  border-style: solid;
-  transform: scale(1.1) rotate(2deg);
-  box-shadow: 0 0 16px color-mix(in oklch, var(--lavender) 60%, transparent);
-}
-.site-header__lang-btn::after { display: none; }
-
-/* ─── HERO ─── */
-.hero {
-  text-align: center;
-  padding: 3rem 0 2rem;
-  position: relative;
-  overflow: visible;
-  animation: float-bob 4s ease-in-out infinite;
-}
-
-/* 旋转花环1 */
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: min(500px, 90vw); height: min(500px, 90vw);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 3px   color-mix(in oklch, var(--pink)     60%, transparent),
-    0 0 0 8px   color-mix(in oklch, var(--lavender)  30%, transparent),
-    0 0 0 14px  color-mix(in oklch, var(--mint)      20%, transparent),
-    0 0 60px    color-mix(in oklch, var(--pink)      20%, transparent),
-    0 0 100px   color-mix(in oklch, var(--lavender)  15%, transparent),
-    inset 0 0 60px color-mix(in oklch, var(--pink)   10%, transparent);
-  background: transparent;
-  animation: spin-slow 8s linear infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* 旋转花环2（椭圆） */
-.hero::after {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: min(600px, 95vw); height: min(220px, 34vw);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 2px   color-mix(in oklch, var(--peach)     50%, transparent),
-    0 0 0 6px   color-mix(in oklch, var(--coral)      25%, transparent),
-    0 0 50px    color-mix(in oklch, var(--peach)      18%, transparent),
-    0 0 90px    color-mix(in oklch, var(--hot-pink)   12%, transparent);
-  animation: spin-rev 10s linear infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.hero__title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 340%;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 6px;
-  position: relative;
-  display: inline-block;
-  margin: 1.5rem 0;
-  z-index: 2;
-
-  /* 可爱彩虹渐变文字 */
-  background: linear-gradient(90deg,
-    var(--hot-pink), var(--peach), var(--lemon),
-    var(--mint),     var(--sky),   var(--lavender),
-    var(--purple),   var(--hot-pink)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  /* -webkit-text-stroke 描边 */
-  -webkit-text-stroke: 1.5px color-mix(in oklch, var(--pink) 40%, white);
-
-  /* 多层辉光 */
-  filter:
-    drop-shadow(0 0  6px color-mix(in oklch, var(--pink)     80%, transparent))
-    drop-shadow(0 0 16px color-mix(in oklch, var(--lavender)  70%, transparent))
-    drop-shadow(0 0 35px color-mix(in oklch, var(--hot-pink)  50%, transparent));
-
-  animation:
-    text-rainbow   3s linear infinite,
-    float-bob2     5s ease-in-out infinite,
-    heartbeat      2.8s ease-in-out infinite;
-
-  will-change: transform, filter;
-  isolation: isolate;
-}
-
-/* 色差层1 — 粉 */
-.hero__title::before {
-  content: 'ARKFUTURE';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  background: linear-gradient(90deg,
-    var(--pink), var(--hot-pink), var(--lavender), var(--pink)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  mix-blend-mode: multiply;
-  filter: blur(.8px) drop-shadow(0 0 8px var(--pink));
-  animation: text-rainbow 2.5s linear infinite;
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* 色差层2 — 蓝紫 */
-.hero__title::after {
-  content: 'ARKFUTURE';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  background: linear-gradient(90deg,
-    var(--sky), var(--lavender), var(--mint), var(--sky)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  mix-blend-mode: screen;
-  filter: blur(.5px) drop-shadow(0 0 8px var(--lavender));
-  animation: text-rainbow 3.5s linear infinite reverse;
-  pointer-events: none;
-  z-index: -2;
-}
-
-/* ─── SITE SECTION ─── */
-section {
-  margin: 2.5rem 0;
-  position: relative;
-  perspective: 1200px;
-  z-index: 1;
-}
-
-/* hover 时整个 section 提升，不被后续 section 压住 */
-section:has(.about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body:hover) {
-  z-index: 10;
-}
-
-/* 左侧彩虹糖豆竖条 */
-section::before {
-  content: '';
-  position: absolute;
-  left: -18px; top: 0;
-  width: 5px; height: 100%;
-  background: linear-gradient(180deg,
-    var(--pink), var(--peach), var(--lemon), var(--mint),
-    var(--sky), var(--lavender), var(--purple), var(--hot-pink), var(--pink)
-  );
-  background-size: 100% 400%;
-  animation: bar-flow 2s linear infinite;
-  border-radius: 10px;
-  box-shadow:
-    4px 0 12px color-mix(in oklch, var(--pink) 50%, transparent),
-    8px 0 24px color-mix(in oklch, var(--lavender) 40%, transparent);
-  opacity: .85;
-}
-
-/* 右侧气泡 */
-section::after {
-  content: '';
-  position: absolute;
-  right: -18px; top: 0;
-  width: 3px; height: 100%;
-  background: linear-gradient(180deg,
-    var(--lavender), var(--sky), var(--mint),
-    var(--peach), var(--pink), var(--lavender)
-  );
-  background-size: 100% 400%;
-  animation: bar-flow 3s linear infinite reverse;
-  border-radius: 10px;
-  opacity: .35;
-}
-
-/* ─── DIVIDER ─── */
-.divider {
-  border: none;
-  height: 4px;
-  margin: 2.5rem 0;
-  background: linear-gradient(90deg,
-    var(--pink), var(--peach), var(--lemon), var(--mint),
-    var(--sky), var(--lavender), var(--purple), var(--hot-pink), var(--pink)
-  );
-  background-size: 400% 400%;
-  animation: rainbow-fast 1.5s linear infinite;
-  border-radius: 99px;
-  box-shadow:
-    0 0  6px color-mix(in oklch, var(--pink)     70%, transparent),
-    0 0 14px color-mix(in oklch, var(--lavender)  60%, transparent),
-    0 0 28px color-mix(in oklch, var(--hot-pink)  40%, transparent);
-  position: relative;
-  overflow: visible;
-}
-
-/* 分割线中央爱心 */
-.divider::before {
-  content: '♥';
-  position: absolute;
-  left: 50%; top: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.4rem;
-  background: linear-gradient(135deg, var(--hot-pink), var(--lavender));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation:
-    heartbeat 1.4s ease-in-out infinite,
-    text-rainbow 2s linear infinite;
-  filter:
-    drop-shadow(0 0 6px var(--pink))
-    drop-shadow(0 0 14px var(--hot-pink));
-  z-index: 1;
-}
-
-/* 分割线扫光 */
-.divider::after {
-  content: '';
-  position: absolute;
-  top: -6px; left: -80%;
-  width: 60%; height: 16px;
-  background: linear-gradient(90deg,
-    transparent, rgba(255,255,255,.6) 50%, transparent
-  );
-  border-radius: 99px;
-  animation: shimmer 3s ease-in-out infinite;
-  pointer-events: none;
-}
-
-/* ─── H1 section-heading ─── */
-h1, h2, h3 {
-  font-family: 'Orbitron', 'Rajdhani', sans-serif;
-  font-weight: 600;
-  margin: 1.2rem 0;
-  letter-spacing: 1.5px;
-}
-
-.about__heading,\
-.net__heading,\
-.licenses__heading,\
-.ending__heading {
-  font-size: 1.65rem;
-  position: relative;
-  padding: .4rem 0 .5rem 1.4rem;
-
-  background: linear-gradient(90deg,
-    var(--purple), var(--hot-pink), var(--lavender), var(--purple)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: .5px color-mix(in oklch, var(--pink) 40%, transparent);
-
-  animation: text-rainbow 4s linear infinite;
-  filter:
-    drop-shadow(0 0 6px color-mix(in oklch, var(--pink) 60%, transparent))
-    drop-shadow(0 0 16px color-mix(in oklch, var(--lavender) 50%, transparent));
-}
-
-/* 左侧彩虹竖条 */
-.about__heading,\
-.net__heading,\
-.licenses__heading,\
-.ending__heading::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0;
-  width: 6px; height: 100%;
-  background: linear-gradient(180deg,
-    var(--pink), var(--lavender), var(--sky), var(--mint), var(--pink)
-  );
-  background-size: 100% 400%;
-  animation: bar-flow 1.8s linear infinite;
-  border-radius: 99px;
-  box-shadow:
-    4px 0 14px color-mix(in oklch, var(--pink)     55%, transparent),
-    8px 0 28px color-mix(in oklch, var(--lavender)  45%, transparent);
-}
-
-/* 底部虚线 */
-.about__heading,\
-.net__heading,\
-.licenses__heading,\
-.ending__heading::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 100%; height: 2px;
-  background: linear-gradient(90deg,
-    var(--pink), var(--lavender), var(--mint), var(--pink)
-  );
-  background-size: 400% 400%;
-  animation: rainbow-fast 2s linear infinite;
-  border-radius: 99px;
-  opacity: .6;
-  box-shadow: 0 0 8px color-mix(in oklch, var(--pink) 50%, transparent);
-}
-
-/* ─── H2 ─── */
-.about__subheading,\
-.net__subheading,\
-.licenses__subheading,\
-.ending__subheading {
-  font-size: 1.3rem;
-  display: inline-block;
-  position: relative;
-  padding-bottom: 4px;
-  margin-top: 0;
-
-  background: linear-gradient(90deg,
-    var(--coral), var(--hot-pink), var(--peach), var(--coral)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  animation: text-rainbow 3s linear infinite;
-  filter: drop-shadow(0 0 8px color-mix(in oklch, var(--coral) 60%, transparent));
-}
-
-.about__subheading,\
-.net__subheading,\
-.licenses__subheading,\
-.ending__subheading::before {
-  content: '✦ ';
-  -webkit-text-fill-color: var(--pink);
-  animation: star-twinkle 1.5s ease-in-out infinite;
-}
-.about__subheading,\
-.net__subheading,\
-.licenses__subheading,\
-.ending__subheading::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 0; height: 2px;
-  background: linear-gradient(90deg, var(--hot-pink), var(--lavender));
-  border-radius: 99px;
-  animation: underline-pop .6s ease-out .2s forwards;
-  box-shadow: 0 0 8px var(--hot-pink);
-}
-
-h3.section-tertiary {
-  font-size: 1rem;
-  color: var(--purple);
-  text-shadow:
-    0 0 6px color-mix(in oklch, var(--lavender) 70%, transparent),
-    0 0 14px color-mix(in oklch, var(--pink) 50%, transparent);
-  margin: .8rem 0 .3rem;
-}
-
-/* ─── CONTENT BLOCK ─── */
-.about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body {
-  background: var(--card-bg);
-  backdrop-filter: blur(16px) saturate(1.6) brightness(1.05);
-  -webkit-backdrop-filter: blur(16px) saturate(1.6) brightness(1.05);
-  padding: 1.4rem 1.7rem;
-  margin: 1.2rem 0;
-  border-radius: 20px;
-  border: 2px solid color-mix(in oklch, var(--pink) 35%, white);
-  position: relative;
-  overflow: visible;          /* 允许 hover 时阴影/变换突破边界 */
-  z-index: 1;
-  animation:
-    border-dance 2s linear infinite,
-    card-rock    10s ease-in-out infinite;
-  will-change: transform;
-  box-shadow:
-    0  4px 20px color-mix(in oklch, var(--pink)     25%, transparent),
-    0  8px 40px color-mix(in oklch, var(--lavender)  15%, transparent),
-    0  0  0 4px color-mix(in oklch, var(--pink)      08%, transparent),
-    inset 0 0 30px color-mix(in oklch, var(--pink)   06%, transparent);
-}
-
-/* .about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body::before 无伪元素 */
-
-/* 卡片扫光 */
-.about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body::after {
-  content: '';
-  position: absolute;
-  top: 0; left: -80%;
-  width: 55%; height: 100%;
-  background: linear-gradient(
-    105deg,
-    transparent 0%,
-    rgba(255,220,240,.25) 40%,
-    rgba(255,255,255,.35) 50%,
-    rgba(220,200,255,.20) 60%,
-    transparent 100%
-  );
-  animation: shimmer 4s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body:hover {
-  transform: perspective(900px) rotateX(-3deg) rotateY(3deg) translateY(-8px) scale(1.02);
-  z-index: 10;               /* hover 时跳到最上层 */
-  box-shadow:
-    0  8px 40px color-mix(in oklch, var(--hot-pink) 35%, transparent),
-    0 16px 80px color-mix(in oklch, var(--lavender)  25%, transparent),
-    inset 0 0 50px color-mix(in oklch, var(--pink)   10%, transparent);
-  animation: border-dance 2s linear infinite;
-}
-
-/* ─── QUOTE ─── */
-.ending__quote {
-  margin: 1.4rem 0;
-  padding: 1.1rem 1.5rem 1.1rem 2rem;
-  background: color-mix(in oklch, var(--lavender) 10%, white);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-left: 4px solid var(--lavender);
-  border-radius: 0 16px 16px 0;
-  color: var(--txt);
-  font-style: italic;
-  position: relative;
-  overflow: hidden;
-  animation: border-dance 3s linear infinite;
-  box-shadow:
-    0 2px 16px color-mix(in oklch, var(--lavender) 20%, transparent),
-    inset 0 0 20px color-mix(in oklch, var(--pink) 08%, transparent);
-}
-
-.ending__quote::before {
-  content: '"';
-  position: absolute;
-  top: -10px; left: 10px;
-  font-size: 5rem;
-  font-family: Georgia, serif;
-  line-height: 1;
-  background: linear-gradient(135deg, var(--pink), var(--lavender));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  opacity: .2;
-  pointer-events: none;
-}
-
-.ending__quote::after {
-  content: '';
-  position: absolute;
-  top: 0; left: -80%;
-  width: 50%; height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(230,200,255,.15) 50%,
-    transparent
-  );
-  animation: shimmer2 5s ease-in-out infinite;
-  animation-delay: 2s;
-  pointer-events: none;
-}
-
-.ending__quote cite {
-  display: block;
-  margin-top: .7rem;
-  font-size: .88rem;
-  font-style: normal;
-  background: linear-gradient(90deg, var(--purple), var(--hot-pink));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 4px color-mix(in oklch, var(--purple) 50%, transparent));
-}
-
-/* ─── SYS LIST ─── */
-.ending__systems {
-  font-size: .88rem;
-  color: var(--txt-dim);
-  line-height: 2.2;
-}
-
-/* ─── WIDGET ─── */
-.widget-link {
-  display: block;
-  margin: 8px 0;
-  padding: 6px 12px;
-  border: 2px dashed var(--pink-lav);
-  border-radius: 12px;
-  max-width: 400px;
-  animation: border-dance 2.5s linear infinite;
-  transition: all .25s;
-  background: color-mix(in oklch, var(--pink) 5%, transparent);
-}
-.widget-link:hover {
-  transform: translateX(8px) scale(1.04) rotate(1deg);
-  box-shadow: 0 0 20px color-mix(in oklch, var(--hot-pink) 40%, transparent);
-  border-style: solid;
-}
-
-.widget-frame {
-  display: block;
-  border: none;
-  width: 100%;
-  max-width: 400px;
-  height: auto;
-  margin: 8px 0;
-}
-
-/* ─── LINKS ─── */
-a {
-  color: var(--purple);
-  text-decoration: none;
-  font-weight: 600;
-  position: relative;
-  transition: all .2s ease;
-  display: inline;
-}
-
-a:hover {
-  color: var(--hot-pink);
-  text-shadow:
-    0 0 6px  color-mix(in oklch, var(--pink)     70%, transparent),
-    0 0 14px color-mix(in oklch, var(--lavender)  60%, transparent);
-  animation: wiggle .35s ease;
-}
-
-/* mask 遮罩彩虹下划线 */
-a::after {
-  content: '';
-  position: absolute;
-  left: 0; bottom: -2px;
-  width: 100%; height: 2px;
-  background: linear-gradient(90deg,
-    var(--pink), var(--peach), var(--lemon), var(--mint),
-    var(--sky), var(--lavender), var(--pink)
-  );
-  background-size: 400% 400%;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform .3s cubic-bezier(.65,0,.35,1);
-  border-radius: 99px;
-  animation: rainbow-fast 2s linear infinite;
-  box-shadow:
-    0 0 6px  color-mix(in oklch, var(--pink)     60%, transparent),
-    0 0 12px color-mix(in oklch, var(--lavender)  50%, transparent);
-}
-
-a:hover::after {
-  transform: scaleX(1) scaleY(2.5);
-  transform-origin: left;
-  filter: brightness(1.5) blur(.3px);
-}
-
-/* ─── P / LI ─── */
-p, li { color: var(--txt); }
-ul { padding-left: 1.5rem; }
-li { margin-bottom: .3rem; position: relative; }
-li::marker { color: var(--pink); }
-
-/* ─── FOOTER ─── */
-footer {
-  margin-top: 4rem;
-  padding: 2.5rem 0 2rem;
-  position: relative;
-  background: color-mix(in oklch, var(--bg2) 80%, white);
-  backdrop-filter: blur(12px) saturate(1.5);
-  -webkit-backdrop-filter: blur(12px) saturate(1.5);
-  font-family: 'Orbitron', sans-serif;
-  font-size: .88rem;
-  overflow: hidden;
-  border-radius: 20px 20px 0 0;
-}
-
-/* footer 顶部彩虹线 */
-footer::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 4px;
-  background: linear-gradient(90deg,
-    var(--pink), var(--peach), var(--lemon), var(--mint),
-    var(--sky), var(--lavender), var(--pink)
-  );
-  background-size: 400% 400%;
-  animation: rainbow-fast 2s linear infinite;
-  border-radius: 20px 20px 0 0;
-  box-shadow:
-    0 0 10px color-mix(in oklch, var(--pink) 60%, transparent),
-    0 0 24px color-mix(in oklch, var(--lavender) 50%, transparent);
-}
-
-/* footer 爱心光晕底部 */
-footer::after {
-  content: '♥';
-  position: absolute;
-  bottom: -30px; left: 50%;
-  transform: translateX(-50%);
-  font-size: 8rem;
-  background: radial-gradient(circle,
-    color-mix(in oklch, var(--pink) 30%, transparent),
-    transparent 70%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  opacity: .08;
-  pointer-events: none;
-  animation: heartbeat 3s ease-in-out infinite;
-}
-
-.site-footer__inner {
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.site-footer__inner p {
-  background: linear-gradient(90deg,
-    var(--purple), var(--hot-pink), var(--lavender), var(--purple)
-  );
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: text-rainbow 5s linear infinite;
-  filter: drop-shadow(0 0 5px color-mix(in oklch, var(--lavender) 50%, transparent));
-  margin: .35rem 0;
-}
-
-footer a { color: var(--purple); margin: 0 .5rem; }
-footer a:hover {
-  color: var(--hot-pink);
-  text-shadow: 0 0 10px var(--pink), 0 0 22px var(--lavender);
-}
-
-} /* end @layer components */
-
-/* ============================================================
-   @layer animations — 独立动画层，优先级最低
-   ============================================================ */
-@layer animations {
-
-} /* end @layer animations */
-
-/* ============================================================
-   @layer overrides — 响应式
-   ============================================================ */
-@layer overrides {
-
-@media (max-width: 768px) {
-  body { padding: 12px; font-size: .95rem; }
-  .hero__title { font-size: 200%; letter-spacing: 3px; }
-  .hero::before { width: min(300px, 85vw); height: min(300px, 85vw); }
-  .hero::after  { width: min(360px, 92vw); height: min(140px, 22vw); }
-  .about__heading,\
-.net__heading,\
-.licenses__heading,\
-.ending__heading { font-size: 1.3rem; }
-  .about__subheading,\
-.net__subheading,\
-.licenses__subheading,\
-.ending__subheading { font-size: 1.1rem; }
-  footer { font-size: .78rem; }
-  .about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body { padding: 1rem; }
-  section::before { left: -10px; }
-  section::after  { right: -10px; }
-  /* 手机端 IRC iframe 防溢出 */
-  .irc-embed-item { overflow: hidden; }
-  .irc-embed-frame { max-width: 100% !important; width: 100% !important; }
-}
-
-} /* end @layer overrides */
-
-/* ╔══════════════════════════════════════════════════════════════╗
-   ║  THEME 2 — TYPOGRAPHIC EDITION                              ║
-   ║  空间 · 比例 · 层次 · 节奏                                   ║
-   ╚══════════════════════════════════════════════════════════════╝ */
-
-/* ============================================================
-   1. HERO — 副标语 + 底部呼吸空间
-   ============================================================ */
-
-/* 把原椭圆花环换成副标语文字 */
-.hero::after {
-  width: auto; height: auto;
-  top: auto; left: 50%; bottom: 1.2rem;
-  transform: translateX(-50%);
-  border-radius: 99px;
-  content: 'HACK  ·  BUILD  ·  DREAM  ·  SHARE';
-  font-family: 'Orbitron', sans-serif;
-  font-size: clamp(.55rem, 1.4vw, .78rem);
-  font-weight: 500;
-  letter-spacing: 6px;
-  white-space: nowrap;
-  padding: .35rem 1.8rem;
-  background: linear-gradient(90deg,
-    var(--hot-pink), var(--peach), var(--lemon),
-    var(--mint), var(--sky), var(--lavender), var(--hot-pink)
-  );
-  background-size: 300% 100%;
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in oklch, var(--pink-lav) 35%, transparent),
-    0 2px 16px color-mix(in oklch, var(--pink) 15%, transparent);
-  background-color: color-mix(in oklch, var(--pink) 5%, white);
-  animation: text-rainbow 5s linear infinite, float-bob2 8s ease-in-out infinite;
-  filter: drop-shadow(0 0 5px color-mix(in oklch, var(--pink) 40%, transparent));
-  z-index: 3; pointer-events: none;
-}
-
-/* hero 底部留白，让副标语有呼吸空间 */
-.hero { padding-bottom: 4.5rem; }
-
-/* ============================================================
-   2. SECTION 入场动画 — 错开时序，有节奏感
-   ============================================================ */
-
-@keyframes section-enter {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-section {
-  animation: section-enter .7s cubic-bezier(.16,1,.3,1) both;
-}
-section:nth-child(1) { animation-delay: .06s; }
-section:nth-child(2) { animation-delay: .14s; }
-section:nth-child(3) { animation-delay: .22s; }
-section:nth-child(4) { animation-delay: .30s; }
-section:nth-child(5) { animation-delay: .38s; }
-
-/* ============================================================
-   3. SECTION — 上下间距放大，让每个区块独立呼吸
-   ============================================================ */
-
-section {
-  margin: 3.5rem 0;
-}
-
-/* ============================================================
-   4. SECTION HEADING — 恢复干净的竖条+底线，加大字号
-   ============================================================ */
-
-/* 还原左竖条（精确复原原版逻辑，只加大） */
-.about__heading,\
-.net__heading,\
-.licenses__heading,\
-.ending__heading {
-  font-size: 1.85rem;
-  padding: .5rem 0 .6rem 1.6rem;
-  margin-bottom: 1.6rem;        /* 标题和第一张卡片之间留足间距 */
-}
-
-.about__heading,\
-.net__heading,\
-.licenses__heading,\
-.ending__heading::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0;
-  width: 6px; height: 100%;
-  background: linear-gradient(180deg,
-    var(--pink), var(--lavender), var(--sky), var(--mint), var(--pink)
-  );
-  background-size: 100% 400%;
-  animation: bar-flow 1.8s linear infinite;
-  border-radius: 99px;
-  box-shadow:
-    4px 0 14px color-mix(in oklch, var(--pink)     55%, transparent),
-    8px 0 28px color-mix(in oklch, var(--lavender)  45%, transparent);
-}
-
-.about__heading,\
-.net__heading,\
-.licenses__heading,\
-.ending__heading::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 100%; height: 2px;
-  background: linear-gradient(90deg,
-    var(--pink), var(--lavender), var(--mint), transparent
-  );
-  background-size: 400% 400%;
-  animation: rainbow-fast 2.5s linear infinite;
-  border-radius: 99px;
-  opacity: .5;
-  box-shadow: 0 0 8px color-mix(in oklch, var(--pink) 40%, transparent);
-}
-
-/* ============================================================
-   5. BENTO GRID — NET section 卡片布局
-      Repo(小) + Radio(小) 一行
-      RSS(中)  + Widgets(中) 一行
-      IRC(大，全宽)
-   ============================================================ */
-
-#net {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto;
-  grid-template-areas:
-    "heading   heading"
-    "repo      radio"
-    "rss       widgets"
-    "irc       irc";
-  column-gap: 1.4rem;
-  row-gap: 0;
-  align-items: start;
-}
-
-#net > .about__heading,\
-.net__heading,\
-.licenses__heading,\
-.ending__heading { grid-area: heading; }
-#repo                      { grid-area: repo; }
-#radio                     { grid-area: radio; }
-#rss                       { grid-area: rss; }
-#widgets                   { grid-area: widgets; }
-#irc                       { grid-area: irc; }
-
-/* 网格内卡片底部间距用 margin 控制 */
-#net > .about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body {
-  margin: 0 0 1.4rem;
-  height: auto;
-}
-
-/* 小卡片（Repo / Radio）内容精简，字号稍小 */
-#repo .about__subheading,\
-.net__subheading,\
-.licenses__subheading,\
-.ending__subheading,
-#radio .about__subheading,\
-.net__subheading,\
-.licenses__subheading,\
-.ending__subheading {
-  font-size: 1.1rem;
-  margin-bottom: .6rem;
-}
-
-/* ============================================================
-   6. CONTENT-BLOCK — 精细阴影 + 克制 hover
-   ============================================================ */
-
-.about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body {
-  /* 增大内边距，内容不要贴边 */
-  padding: 1.6rem 2rem;
-  /* 精细多层阴影：近阴影清晰 + 远阴影柔和 */
-  box-shadow:
-    0  1px  3px color-mix(in oklch, var(--pink)     20%, transparent),
-    0  4px 12px color-mix(in oklch, var(--lavender)  16%, transparent),
-    0 12px 32px color-mix(in oklch, var(--hot-pink)   8%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.8),
-    inset 0 0  1px color-mix(in oklch, var(--pink) 20%, transparent);
-  transition:
-    transform .32s cubic-bezier(.34,1.56,.64,1),
-    box-shadow .32s ease;
-  /* 取消原版的持续晃动动画，改为静止+hover触发 */
-  animation: border-dance 3s linear infinite;
-}
-
-/* hover：向上提升 + 阴影扩散，不做 3D 旋转（太眩晕） */
-.about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body:hover {
-  transform: translateY(-8px) scale(1.012);
-  z-index: 10;
-  box-shadow:
-    0  2px  6px color-mix(in oklch, var(--pink)     22%, transparent),
-    0  8px 24px color-mix(in oklch, var(--hot-pink)  32%, transparent),
-    0 20px 56px color-mix(in oklch, var(--lavender)  22%, transparent),
-    0 32px 80px color-mix(in oklch, var(--pink)      10%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.9),
-    inset 0 0 40px color-mix(in oklch, var(--pink)    6%, transparent);
-  animation: border-dance 1.5s linear infinite;
-}
-
-/* ============================================================
-   7. H2 section-subheading — 加大间距，和下方内容拉开
-   ============================================================ */
-
-.about__subheading,\
-.net__subheading,\
-.licenses__subheading,\
-.ending__subheading {
-  margin-bottom: 1rem;
-  margin-top: .2rem;
-}
-
-/* ============================================================
-   8. LIST — 行距放大，更易读
-   ============================================================ */
-
-.about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body ul {
-  padding-left: 1.2rem;
-}
-
-.about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body li {
-  line-height: 2.0;
-  margin-bottom: .2rem;
-}
-
-/* ============================================================
-   9. SITE-QUOTE — 独立全宽卡片，最强视觉层级
-   ============================================================ */
-
-.ending__quote {
-  /* 独立成一张大卡，脱离普通 content-block 风格 */
-  margin: 2.4rem 0 1.6rem;
-  padding: 2.2rem 2.6rem 1.8rem 3.2rem;
-  border-left: none;
-  border-radius: 20px;
-  position: relative;
-  overflow: hidden;
-
-  /* 独特背景：比普通卡片更深的紫色调 */
-  background: linear-gradient(135deg,
-    color-mix(in oklch, var(--lavender) 16%, white) 0%,
-    color-mix(in oklch, var(--pink)     10%, white) 60%,
-    color-mix(in oklch, var(--sky)       8%, white) 100%
-  );
-  backdrop-filter: blur(20px) saturate(1.8);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  box-shadow:
-    0 0 0 1.5px color-mix(in oklch, var(--lavender) 35%, transparent),
-    0  4px 20px color-mix(in oklch, var(--lavender)  20%, transparent),
-    0 12px 48px color-mix(in oklch, var(--pink)      12%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.8);
-  animation: border-dance 5s linear infinite;
-}
-
-/* 左侧彩虹粗竖条（覆写原大引号 ::before） */
-.ending__quote::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 6px;
-  background: linear-gradient(180deg,
-    var(--hot-pink) 0%,
-    var(--lavender) 35%,
-    var(--sky)      65%,
-    var(--mint)     100%
-  );
-  background-size: 100% 300%;
-  animation: bar-flow 2.5s linear infinite;
-  border-radius: 20px 0 0 20px;
-  opacity: .9;
-  /* 覆写原版的字体大小和字体颜色 */
-  font-size: 0;
-  -webkit-text-fill-color: transparent;
-}
-
-/* 右侧大引号水印（覆写原扫光 ::after） */
-.ending__quote::after {
-  content: '\201C';
-  position: absolute;
-  right: 1.6rem; top: -.8rem;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 9rem;
-  line-height: 1;
-  background: linear-gradient(135deg,
-    var(--lavender), var(--hot-pink)
-  );
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-  opacity: .1;
-  pointer-events: none;
-  /* 覆写原版扫光的几何属性 */
-  left: auto; width: auto; height: auto;
-  background-color: transparent;
-  animation: heartbeat 8s ease-in-out infinite;
-  filter: none;
-}
-
-/* 引用内文字 */
-.ending__quote p {
-  font-size: 1rem;
-  line-height: 1.9;
-  color: var(--txt);
-  font-style: normal;
-  margin-bottom: .6rem;
-}
-
-/* 第一段（短语）加粗显示 */
-.ending__quote p:first-of-type {
-  font-weight: 600;
-  font-size: 1.04rem;
-  color: oklch(40% 0.1 330);
-}
-
-/* 来源标签 */
-.ending__quote cite {
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  margin-top: 1.1rem;
-  font-size: .8rem;
-  font-style: normal;
-  padding: .22rem 1rem;
-  border-radius: 99px;
-  background: color-mix(in oklch, var(--lavender) 12%, white);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in oklch, var(--lavender) 35%, transparent),
-    0 2px 8px color-mix(in oklch, var(--lavender) 15%, transparent);
-  background-clip: initial;
-  -webkit-background-clip: initial;
-  -webkit-text-fill-color: initial;
-  color: var(--purple);
-  filter: none;
-}
-
-.ending__quote cite::before {
-  content: '—';
-  color: var(--hot-pink);
-  font-style: normal;
-}
-
-/* ============================================================
-   10. IRC — 在线绿点
-   ============================================================ */
-
-h3.section-tertiary {
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-}
-
-h3.section-tertiary::before {
-  content: '';
-  display: inline-block;
-  flex-shrink: 0;
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--mint);
-  box-shadow:
-    0 0 6px var(--mint),
-    0 0 14px color-mix(in oklch, var(--mint) 55%, transparent);
-  animation: heartbeat 2.2s ease-in-out infinite;
-}
-
-/* ============================================================
-   11. SECTION-DIVIDER — 细而精准，不抢镜
-   ============================================================ */
-
-.divider {
-  height: 2px;
-  margin: 0;
-  opacity: .7;
-  box-shadow:
-    0 0  4px color-mix(in oklch, var(--pink)     70%, transparent),
-    0 0 12px color-mix(in oklch, var(--lavender)  60%, transparent),
-    0 0 28px color-mix(in oklch, var(--hot-pink)  40%, transparent);
-}
-
-/* ============================================================
-   12. FOOTER — 更多内边距，更轻盈
-   ============================================================ */
-
-footer {
-  margin-top: 5rem;
-  padding: 3rem 0 2.5rem;
-}
-
-footer::before {
-  box-shadow:
-    0 0 10px color-mix(in oklch, var(--pink)     60%, transparent),
-    0 0 22px color-mix(in oklch, var(--lavender)  50%, transparent),
-    0 0 40px color-mix(in oklch, var(--hot-pink)  30%, transparent);
-}
-
-.site-footer__inner p {
-  margin: .5rem 0;
-  font-size: .84rem;
-  line-height: 1.8;
-}
-
-/* ============================================================
-   13. 链接 — hover 辉光
-   ============================================================ */
-
-a:hover {
-  filter: drop-shadow(0 0 5px color-mix(in oklch, var(--pink) 75%, transparent));
-}
-
-/* ============================================================
-   14. SYS-LIST — 等宽字体，代码感
-   ============================================================ */
-
-.ending__systems {
-  font-family: 'Courier New', 'Consolas', monospace;
-  font-size: .82rem;
-  line-height: 2;
-  color: var(--txt-dim);
-  background: color-mix(in oklch, var(--lavender) 6%, white);
-  border-radius: 10px;
-  padding: .8rem 1.2rem;
-  margin-top: 1rem;
-  border-left: 3px solid color-mix(in oklch, var(--lavender) 40%, transparent);
-}
-
-/* ============================================================
-   15. RESPONSIVE
-   ============================================================ */
-
-@media (max-width: 768px) {
-
-  /* ── 全局：锁死横向溢出，但只在 html/body 上裁，不在子元素上裁 ── */
-  html, body { overflow-x: hidden; max-width: 100%; }
-
-  /* ── Hero：
-       - 不加 overflow:hidden，让圆环装饰自然溢出不被截断
-       - 副标语文字允许换行，不用 ellipsis 截断
-  ── */
-  .hero { padding-bottom: 3.5rem; overflow: visible; }
+  /* ── 导航栏 · 糖果毛玻璃 ── */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--s3) var(--s6);
+    background: rgba(255, 245, 248, 0.65);
+    backdrop-filter: blur(24px) saturate(1.8);
+    -webkit-backdrop-filter: blur(24px) saturate(1.8);
+    border-bottom: 1px solid var(--border-candy);
+
+    /* 入场动画 @starting-style 2023+ */
+    transition: box-shadow 0.3s ease;
+    @starting-style { opacity: 0; translate: 0 -100%; }
+  }
+
+  /* 底部彩虹流光线 */
+  .site-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+      transparent,
+      var(--strawberry-300),
+      var(--cream-lavender-300),
+      var(--peach-200),
+      var(--cream-lavender-300),
+      var(--strawberry-300),
+      transparent
+    );
+    background-size: 200% 100%;
+    animation: rainbowFlow 4s linear infinite;
+  }
+
+  @keyframes rainbowFlow {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .site-header__theme-switcher {
+    display: flex;
+    gap: var(--s2);
+    align-items: center;
+  }
+
+  /* ── 主题按钮 · 糖果药丸 ── */
+  .site-header__theme-btn {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    padding: var(--s2) var(--s4);
+    border-radius: var(--r-pill);
+    color: var(--text-soft);
+    border: 1.5px solid var(--border-candy);
+    background: rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+    transition:
+      all 0.3s var(--ease-bounce),
+      box-shadow 0.3s ease;
+  }
+
+  /* 按钮扫光 */
+  .site-header__theme-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+    transition: left 0.5s ease;
+  }
+  .site-header__theme-btn:hover::before { left: 100%; }
+
+  .site-header__theme-btn:hover {
+    background: linear-gradient(135deg, var(--strawberry-300), var(--peach-200));
+    color: #fff;
+    border-color: var(--strawberry-300);
+    translate: 0 -2px;
+    scale: 1.06;
+    box-shadow: 0 6px 20px rgba(255, 120, 160, 0.3);
+  }
+
+  .site-header__theme-btn:active {
+    translate: 0 0;
+    scale: 0.94;
+    transition-duration: 0.1s;
+  }
+
+  /* 激活态 · 呼吸发光 */
+  .site-header__theme-btn--active {
+    background: linear-gradient(135deg, var(--strawberry-300), var(--peach-200));
+    color: #fff;
+    border-color: var(--strawberry-300);
+    box-shadow: 0 4px 16px rgba(255, 120, 160, 0.3);
+    animation: breathGlow 2.5s ease-in-out infinite;
+  }
+
+  @keyframes breathGlow {
+    0%, 100% { box-shadow: 0 4px 16px rgba(255,120,160,0.3); }
+    50%      { box-shadow: 0 4px 24px rgba(255,120,160,0.5), 0 0 0 4px rgba(255,120,160,0.08); }
+  }
+
+  /* ── 语言按钮 ── */
+  .site-header__lang-btn {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    padding: var(--s2) var(--s5);
+    border-radius: var(--r-pill);
+    color: var(--text-soft);
+    border: 1.5px solid var(--border-candy);
+    background: rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s var(--ease-bounce), box-shadow 0.3s ease;
+  }
+
+  .site-header__lang-btn:hover {
+    background: linear-gradient(135deg, var(--cream-lavender-200), var(--cream-lavender-100));
+    color: #fff;
+    border-color: var(--cream-lavender-300);
+    translate: 0 -2px;
+    scale: 1.06;
+    box-shadow: 0 6px 20px rgba(200, 160, 240, 0.3);
+  }
+
+  /* ══════════════════════════════════════
+     HERO · 恋爱标题 💕
+     ══════════════════════════════════════ */
+  .hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    text-align: center;
+    padding: var(--s16) var(--s6);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 飘落爱心 — 使用 offset-path 运动路径动画 2023+ */
+  .hero::before {
+    content: '💕';
+    position: absolute;
+    font-size: 1.4rem;
+    top: 15%; left: 12%;
+    opacity: 0.25;
+    offset-path: path('M0,0 Q15,-40 30,-10 Q45,20 60,-5 Q75,-30 90,0');
+    offset-rotate: auto;
+    animation: heartFloat 7s ease-in-out infinite;
+  }
 
   .hero::after {
-    white-space: normal;          /* 允许换行，不撑宽 */
-    text-overflow: clip;
-    overflow: visible;
-    max-width: calc(100vw - 3rem);
-    font-size: .5rem;
-    letter-spacing: 2.5px;
-    padding: .3rem 1rem;
-    text-align: center;
-    width: max-content;
-    /* 保持居中定位 */
-    left: 50%;
-    transform: translateX(-50%);
+    content: '💖';
+    position: absolute;
+    font-size: 1.2rem;
+    top: 25%; right: 15%;
+    opacity: 0.2;
+    offset-path: path('M0,0 Q-20,-35 -40,-5 Q-60,25 -80,0');
+    offset-rotate: auto;
+    animation: heartFloat 9s ease-in-out infinite 2s;
   }
 
-  /* ── Section：不加 overflow:hidden，左侧竖条需要负值 left ── */
-  section { margin: 2.4rem 0; overflow: visible; }
-
-  /* 左侧竖条贴近正常边缘，右侧隐藏 */
-  section::before { left: -6px; }
-  section::after  { display: none; }
-
-  .about__heading,\
-.net__heading,\
-.licenses__heading,\
-.ending__heading {
-    font-size: 1.4rem;
-    margin-bottom: 1.2rem;
+  @keyframes heartFloat {
+    0%, 100% { offset-distance: 0%; opacity: 0.2; scale: 0.9; }
+    50%      { offset-distance: 100%; opacity: 0.35; scale: 1.15; }
   }
 
-  /* ── 卡片：
-       - 保留正常 overflow，不截断 border 和 box-shadow
-       - 简化阴影：移动端只保留 2 层，减少突兀感
-       - 关掉扫光伪元素（left:-80% 会撑宽）
-  ── */
-  .about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body {
-    padding: 1.1rem 1.2rem;
-    overflow: visible;
-    box-shadow:
-      0  2px  8px color-mix(in oklch, var(--pink)     14%, transparent),
-      0  6px 20px color-mix(in oklch, var(--lavender)  10%, transparent),
-      inset 0 1px 0 rgba(255,255,255,.7);
-  }
-  .about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body::after { display: none; }
+  .hero__title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(3rem, 10vw, 6rem);
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    position: relative;
+    z-index: 1;
+    text-wrap: balance;
 
-  /* hover 阴影也同步简化 */
-  .about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body:hover {
-    box-shadow:
-      0  4px 14px color-mix(in oklch, var(--hot-pink)  22%, transparent),
-      0 12px 36px color-mix(in oklch, var(--lavender)  16%, transparent),
-      inset 0 1px 0 rgba(255,255,255,.9);
+    /* 渐变流光文字 — @property 让 background-size 动画生效 */
+    background: linear-gradient(
+      135deg,
+      var(--strawberry-400),
+      var(--strawberry-500),
+      var(--cream-lavender-300),
+      var(--peach-200),
+      var(--strawberry-400)
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    /* 多动画叠加 animation-composition 2023+ */
+    animation:
+      gradientFlow 5s ease-in-out infinite,
+      heroBreath   4s ease-in-out infinite;
+    animation-composition: replace;
+
+    filter: drop-shadow(0 4px 24px rgba(255, 80, 128, 0.18));
   }
 
-  /* ── NET section → 强制单列 ── */
-  #net {
-    display: block;
-    column-gap: 0;
+  @keyframes gradientFlow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
-  #net > .about__body,\
-.net__body,\
-.licenses__body,\
-.ending__body { margin: 0 0 1rem; }
 
-  /* ── 引用块 ── */
+  @keyframes heroBreath {
+    0%, 100% { translate: 0 0; scale: 1; }
+    50%      { translate: 0 -6px; scale: 1.015; }
+  }
+
+  /* ── 主内容区 ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 var(--s6) var(--s20);
+  }
+
+  /* ── 分割线 · 梦幻渐变 ── */
+  .divider {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg,
+      transparent 5%,
+      var(--strawberry-200) 20%,
+      var(--cream-lavender-200) 40%,
+      var(--peach-200) 50%,
+      var(--cream-lavender-200) 60%,
+      var(--strawberry-200) 80%,
+      transparent 95%
+    );
+    background-size: 200% 100%;
+    margin: var(--s16) 0;
+    border-radius: 2px;
+    animation: rainbowFlow 6s linear infinite;
+    position: relative;
+  }
+
+  /* 分割线中间 🌸 */
+  .divider::before {
+    content: '🌸';
+    position: absolute;
+    top: 50%; left: 50%;
+    translate: -50% -50%;
+    font-size: 0.9rem;
+    background: var(--cream);
+    padding: 0 var(--s2);
+    animation: sparkle 3s ease-in-out infinite;
+  }
+
+  @keyframes sparkle {
+    0%, 100% { scale: 1; filter: brightness(1); }
+    50%      { scale: 1.2; filter: brightness(1.3) drop-shadow(0 0 8px rgba(255,120,160,0.4)); }
+  }
+}
+
+/* ══════════════════════════════════════════
+   COMPONENTS · 甜心组件
+   ══════════════════════════════════════════ */
+@layer components {
+
+  /* ── 区块标题 ── */
+  .about__heading,
+  .net__heading,
+  .licenses__heading,
+  .ending__heading {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    letter-spacing: 0.01em;
+    color: var(--text-dark);
+    margin: var(--s12) 0 var(--s4);
+    padding-bottom: var(--s2);
+    position: relative;
+    display: inline-block;
+    text-wrap: balance;
+  }
+
+  /* 标题下方彩虹线 */
+  .about__heading::after,
+  .net__heading::after,
+  .licenses__heading::after,
+  .ending__heading::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--strawberry-300), var(--cream-lavender-300), var(--peach-200));
+    background-size: 200% 100%;
+    animation: rainbowFlow 3s linear infinite;
+  }
+
+  /* 标题前的小爱心 */
+  .about__heading::before,
+  .net__heading::before,
+  .licenses__heading::before,
+  .ending__heading::before {
+    content: '💗';
+    margin-right: var(--s2);
+    font-size: 0.8em;
+    display: inline-block;
+    animation: heartBeat 1.5s ease-in-out infinite;
+  }
+
+  @keyframes heartBeat {
+    0%, 100% { scale: 1; }
+    15%      { scale: 1.25; }
+    30%      { scale: 1; }
+    45%      { scale: 1.15; }
+    60%      { scale: 1; }
+  }
+
+  .about__subheading,
+  .net__subheading {
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--text-dark);
+    margin: var(--s8) 0 var(--s3);
+    padding-left: var(--s4);
+    border-left: 3px solid;
+    border-image: linear-gradient(180deg, var(--strawberry-300), var(--cream-lavender-300)) 1;
+  }
+
+  .net__label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--cream-lavender-400);
+    margin: var(--s5) 0 var(--s2);
+    letter-spacing: 0.03em;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s1);
+    padding: 0.15rem 0.7rem;
+    border-radius: var(--r-pill);
+    background: rgba(205, 168, 240, 0.08);
+  }
+
+  .net__label::before {
+    content: '✨';
+    font-size: 0.7rem;
+  }
+
+  /* ══════════════════════════════════════
+     卡片 · 糖果毛玻璃 💎
+     ══════════════════════════════════════ */
+  .about__body,
+  .net__body,
+  .licenses__body,
+  .ending__body {
+    container-type: inline-size;
+    container-name: card;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border-radius: var(--r-xl);
+    padding: var(--s8) var(--s10);
+    margin-bottom: var(--s6);
+    border: 1.5px solid var(--border-candy);
+    box-shadow: var(--shadow-candy), inset 0 1px 0 rgba(255,255,255,0.8);
+    position: relative;
+    overflow: hidden;
+
+    /* individual transforms + @property 动画 */
+    transition:
+      translate 0.4s var(--ease-bounce),
+      scale 0.4s var(--ease-bounce),
+      rotate 0.4s var(--ease-bounce),
+      box-shadow 0.4s ease,
+      border-color 0.4s ease,
+      --card-lift 0.4s ease;
+
+    /* scroll-driven animation 2023+ */
+    animation: cardReveal 0.6s var(--ease-silk) backwards;
+    animation-timeline: view();
+    animation-range: entry 0% entry 80%;
+  }
+
+  @keyframes cardReveal {
+    from { opacity: 0; translate: 0 24px; scale: 0.98; }
+    to   { opacity: 1; translate: 0 0;    scale: 1; }
+  }
+
+  /* 每种卡片不同的顶部糖果色条 */
+  .about__body    { border-top: 3px solid var(--strawberry-300); }
+  .net__body      { border-top: 3px solid var(--cream-lavender-300); }
+  .licenses__body { border-top: 3px solid var(--peach-200); }
+  .ending__body   { border-top: 3px solid var(--cream-lavender-200); }
+
+  /* 卡片内角落小装饰 */
+  .about__body::after,
+  .net__body::after,
+  .licenses__body::after,
+  .ending__body::after {
+    position: absolute;
+    bottom: 8px; right: 14px;
+    font-size: 0.75rem;
+    opacity: 0.1;
+    pointer-events: none;
+    transition: opacity 0.3s ease, scale 0.3s var(--ease-bounce), rotate 0.3s ease;
+  }
+  .about__body::after    { content: '🍓'; }
+  .net__body::after      { content: '🫐'; }
+  .licenses__body::after { content: '🍑'; }
+  .ending__body::after   { content: '🌸'; }
+
+  /* 卡片悬浮 · 弹起来！ */
+  .about__body:hover,
+  .net__body:hover,
+  .licenses__body:hover,
+  .ending__body:hover {
+    translate: 0 -6px;
+    scale: 1.015;
+    rotate: 0.3deg;
+    border-color: var(--border-love);
+    box-shadow: var(--shadow-love), 0 0 0 3px rgba(255,120,160,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+  }
+
+  .about__body:hover::after,
+  .net__body:hover::after,
+  .licenses__body:hover::after,
+  .ending__body:hover::after {
+    opacity: 0.35;
+    scale: 1.3;
+    rotate: 15deg;
+  }
+
+  /* :has() — 卡片含引用时增强 */
+  .ending__body:has(.ending__quote) {
+    border-color: color-mix(in srgb, var(--strawberry-200) 30%, transparent);
+  }
+
+  /* ── 列表 ── */
+  .about__body ul,
+  .net__body ul,
+  .licenses__body ul,
+  .ending__body ul {
+    margin: var(--s3) 0;
+  }
+
+  .about__body li,
+  .net__body li,
+  .licenses__body li,
+  .ending__body li {
+    padding: var(--s1) 0 var(--s1) 1.4rem;
+    position: relative;
+    color: var(--text-body);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    transition: translate 0.2s var(--ease-bounce), color 0.2s ease;
+  }
+
+  .about__body li:hover,
+  .net__body li:hover,
+  .licenses__body li:hover,
+  .ending__body li:hover {
+    translate: 4px 0;
+    color: var(--text-dark);
+  }
+
+  /* 列表圆点 · 跳动的 🌸 */
+  .about__body li::before,
+  .net__body li::before,
+  .licenses__body li::before,
+  .ending__body li::before {
+    content: '🌸';
+    position: absolute;
+    left: 0;
+    top: 0.3rem;
+    font-size: 0.6rem;
+    animation: flowerDance 4s ease-in-out infinite;
+  }
+
+  .about__body li:nth-child(2n)::before,
+  .net__body li:nth-child(2n)::before,
+  .licenses__body li:nth-child(2n)::before,
+  .ending__body li:nth-child(2n)::before {
+    content: '💕';
+    animation-delay: -1s;
+  }
+
+  @keyframes flowerDance {
+    0%, 100% { rotate: 0deg; scale: 1; }
+    25%      { rotate: 15deg; scale: 1.1; }
+    75%      { rotate: -10deg; scale: 1.05; }
+  }
+
+  .about__body p,
+  .net__body p,
+  .licenses__body p,
+  .ending__body p {
+    color: var(--text-body);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    text-wrap: pretty;
+    margin: 0.4rem 0;
+  }
+
+  /* ── 引用块 · 粉色情书 ── */
   .ending__quote {
-    padding: 1.3rem 1.2rem 1.1rem 1.6rem;
-    margin: 1.6rem 0 1.2rem;
-    overflow: hidden;   /* 引用块内大引号水印可以裁，不影响外框 */
-  }
-  .ending__quote::after {
-    font-size: 5rem;
-    right: .6rem;
-    opacity: .08;
+    background: linear-gradient(135deg, rgba(255,224,230,0.3), rgba(240,224,255,0.2));
+    border-left: 3px solid;
+    border-image: linear-gradient(180deg, var(--strawberry-300), var(--cream-lavender-300)) 1;
+    border-radius: 0 var(--r-lg) var(--r-lg) 0;
+    padding: var(--s5) var(--s6);
+    margin: var(--s6) 0;
+    font-style: italic;
+    position: relative;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
   }
 
-  /* ── sys-list ── */
+  .ending__quote::before {
+    content: '💌';
+    position: absolute;
+    top: -8px; left: var(--s4);
+    font-size: 1rem;
+    animation: letterWiggle 3s ease-in-out infinite;
+  }
+
+  @keyframes letterWiggle {
+    0%, 100% { rotate: 0deg; }
+    25%      { rotate: 8deg; }
+    75%      { rotate: -5deg; }
+  }
+
+  .ending__quote:hover {
+    background: linear-gradient(135deg, rgba(255,224,230,0.4), rgba(240,224,255,0.3));
+    box-shadow: 0 4px 20px rgba(255,120,160,0.1);
+  }
+
+  .ending__quote p { margin: 0.3rem 0; }
+
+  .ending__quote cite {
+    display: block;
+    text-align: right;
+    font-style: normal;
+    font-weight: 600;
+    color: var(--text-soft);
+    font-size: 0.875rem;
+    margin-top: var(--s3);
+  }
+
+  /* ── 系统列表 ── */
   .ending__systems {
-    padding: .6rem .8rem;
-    font-size: .78rem;
-    word-break: break-all;
+    background: linear-gradient(135deg, rgba(255,224,230,0.12), rgba(240,224,255,0.08));
+    border-radius: var(--r-md);
+    padding: var(--s4) var(--s6);
+    padding-left: var(--s8);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 2;
+    white-space: pre-line;
+    color: var(--text-body);
+    border: 1px solid var(--border-candy);
+    position: relative;
   }
 
-  /* ── footer ── */
-  footer {
-    padding: 2rem 0 1.6rem;
-    margin-top: 3.5rem;
-    overflow: hidden;   /* footer 本身无竖条伪元素，可以裁 */
+  .ending__systems::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--strawberry-300), var(--cream-lavender-300), var(--peach-200));
+    border-radius: 3px 0 0 3px;
   }
 
-  /* ── iframe 防溢出 ── */
-  .irc-embed-item { overflow: hidden; }
-  .irc-embed-frame { max-width: 100% !important; width: 100% !important; }
+  /* ── iframe ── */
+  .net__widget {
+    border: 1.5px solid var(--border-candy);
+    border-radius: var(--r-md);
+    width: 100%;
+    min-height: 120px;
+    margin: var(--s3) 0;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .net__widget:hover {
+    border-color: var(--border-love);
+    box-shadow: 0 4px 16px rgba(255,120,160,0.08);
+  }
+
+  /* ══════════════════════════════════════
+     FOOTER · 甜心底部 🍰
+     ══════════════════════════════════════ */
+  .site-footer {
+    border-top: 1px solid var(--border-candy);
+    padding: var(--s12) var(--s6);
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,200,220,0.15) 0%, transparent 60%),
+      rgba(255,252,250,0.5);
+    position: relative;
+  }
+
+  .site-footer::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--strawberry-200), var(--cream-lavender-200), var(--strawberry-200), transparent);
+  }
+
+  .site-footer__inner p {
+    font-size: 0.875rem;
+    color: var(--text-faint);
+    margin: var(--s1) 0;
+  }
+
+  .site-footer__inner a {
+    color: var(--strawberry-400);
+    font-weight: 600;
+    position: relative;
+    transition: color 0.25s ease;
+  }
+
+  .site-footer__inner a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, var(--strawberry-300), var(--cream-lavender-300));
+    border-radius: 2px;
+    scale: 0 1;
+    transform-origin: left center;
+    transition: scale 0.3s var(--ease-silk);
+  }
+
+  .site-footer__inner a:hover {
+    color: var(--strawberry-500);
+  }
+  .site-footer__inner a:hover::after {
+    scale: 1 1;
+  }
+
+  /* 联系方式按钮 · 糖果渐变 */
+  .site-footer__contact {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s2);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    margin-top: var(--s6);
+    padding: var(--s3) var(--s8);
+    border-radius: var(--r-pill);
+    color: #fff;
+    background: linear-gradient(135deg, var(--strawberry-400), var(--cream-lavender-300));
+    box-shadow: 0 4px 16px rgba(255,120,160,0.25);
+    position: relative;
+    overflow: hidden;
+    transition:
+      all 0.3s var(--ease-bounce),
+      box-shadow 0.3s ease;
+  }
+
+  /* 按钮光泽 */
+  .site-footer__contact::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.6s ease;
+  }
+  .site-footer__contact:hover::before { left: 120%; }
+
+  .site-footer__contact span { position: relative; z-index: 1; }
+
+  .site-footer__contact:hover {
+    translate: 0 -3px;
+    scale: 1.04;
+    box-shadow: 0 8px 28px rgba(255,120,160,0.35), 0 0 0 3px rgba(255,120,160,0.08);
+  }
+
+  .site-footer__contact:active {
+    translate: 0 -1px;
+    scale: 0.97;
+    transition-duration: 0.1s;
+  }
+}
+
+/* ══════════════════════════════════════════
+   EFFECTS · 全局特效层 🎆
+   ══════════════════════════════════════════ */
+@layer effects {
+
+  /* ── 页面两侧飘浮装饰 ── */
+  body::before,
+  body::after {
+    position: fixed;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.05;
+    animation: decoFloat 10s ease-in-out infinite;
+    animation-composition: accumulate;
+  }
+
+  body::before {
+    content: '💖';
+    font-size: 2.5rem;
+    top: 18%; left: 3%;
+  }
+
+  body::after {
+    content: '🌸';
+    font-size: 2rem;
+    top: 60%; right: 4%;
+    animation-delay: -3s;
+  }
+
+  @keyframes decoFloat {
+    0%, 100% { translate: 0 0; rotate: 0deg; }
+    25%      { translate: 0 -18px; rotate: 8deg; }
+    50%      { translate: 0 8px; rotate: -4deg; }
+    75%      { translate: 0 -10px; rotate: 5deg; }
+  }
+
+  /* ── 散花 @keyframes — 纯 CSS 花瓣飘落关键帧 ── */
+  @keyframes petalFall1 {
+    0%   { translate: 0 -20px; rotate: 0deg;   opacity: 0; scale: 0.5; }
+    10%  { opacity: 0.3; scale: 1; }
+    90%  { opacity: 0.2; }
+    100% { translate: -40px 100vh; rotate: 360deg; opacity: 0; scale: 0.6; }
+  }
+  @keyframes petalFall2 {
+    0%   { translate: 0 -20px; rotate: 0deg;   opacity: 0; scale: 0.5; }
+    10%  { opacity: 0.25; scale: 1; }
+    90%  { opacity: 0.15; }
+    100% { translate: 30px 100vh; rotate: -300deg; opacity: 0; scale: 0.4; }
+  }
+  @keyframes petalFall3 {
+    0%   { translate: 0 -20px; rotate: 0deg;   opacity: 0; scale: 0.5; }
+    10%  { opacity: 0.2; scale: 0.9; }
+    90%  { opacity: 0.1; }
+    100% { translate: -20px 100vh; rotate: 240deg; opacity: 0; scale: 0.5; }
+  }
+  @keyframes petalFall4 {
+    0%   { translate: 0 -20px; rotate: 0deg;   opacity: 0; scale: 0.5; }
+    10%  { opacity: 0.28; scale: 1.1; }
+    90%  { opacity: 0.15; }
+    100% { translate: 50px 100vh; rotate: -280deg; opacity: 0; scale: 0.5; }
+  }
+  @keyframes petalFall5 {
+    0%   { translate: 0 -20px; rotate: 0deg;   opacity: 0; scale: 0.5; }
+    10%  { opacity: 0.22; scale: 0.95; }
+    90%  { opacity: 0.12; }
+    100% { translate: -60px 100vh; rotate: 320deg; opacity: 0; scale: 0.45; }
+  }
+
+  /* ── 星光闪烁 @keyframes ── */
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; scale: 0.8; filter: brightness(1); }
+    50%      { opacity: 0.6; scale: 1.2; filter: brightness(1.5) drop-shadow(0 0 4px rgba(255,180,210,0.5)); }
+  }
+
+  /* ── 涟漪扩散 ── */
+  @keyframes ripple {
+    0%   { scale: 0; opacity: 0.5; }
+    100% { scale: 4; opacity: 0; }
+  }
+}
+
+/* ══════════════════════════════════════════
+   UTILITIES · 工具类
+   ══════════════════════════════════════════ */
+@layer utilities {
+  .fade-in   { animation: fadeIn 0.8s var(--ease-silk) backwards; }
+  .slide-up  { animation: slideUp 0.6s var(--ease-silk) backwards; }
+
+  @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { opacity: 0; translate: 0 16px; } to { opacity: 1; translate: 0; } }
+}
+
+/* ══════════════════════════════════════════
+   OVERRIDES · 响应式 + 无障碍
+   ══════════════════════════════════════════ */
+@layer overrides {
+  @media (max-width: 640px) {
+    .site-header {
+      padding: var(--s2) var(--s4);
+      gap: var(--s1);
+      flex-wrap: wrap;
+    }
+    .site-header__theme-btn {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+    }
+    .site-header__lang-btn {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.7rem;
+    }
+    main { padding: 0 var(--s4) var(--s12); }
+    .about__body, .net__body, .licenses__body, .ending__body {
+      padding: var(--s5) var(--s5);
+      border-radius: var(--r-lg);
+    }
+    .hero { min-height: 35vh; padding: var(--s10) var(--s4); }
+    .hero__title {
+      font-size: clamp(2rem, 8vw, 3.5rem);
+      letter-spacing: 0;
+    }
+    .about__heading,
+    .net__heading,
+    .licenses__heading,
+    .ending__heading {
+      display: block;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .site-header,
+    .about__body, .net__body, .licenses__body, .ending__body {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: rgba(255, 255, 255, 0.92);
+    }
+  }
 }
