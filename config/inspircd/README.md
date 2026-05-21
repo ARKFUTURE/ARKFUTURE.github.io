@@ -3,9 +3,6 @@
 # # INSPircd配置
 * 官方deb包/本站全插件deb包+基本配置: https://arkfuture.github.io/arkfuture/config/other/install/install.sh
 * 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/arkfuture/config/inspircd
-# # HYBRIDircd配置
-* 基本配置: https://arkfuture.github.io/arkfuture/config/hybridircd/ircd.conf
-* 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/arkfuture/config/hybridircd
 # # ERGOircd配置
 * 基本配置: https://arkfuture.github.io/arkfuture/config/ergoircd/ircd.yaml
 * 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/arkfuture/config/ergoircd
@@ -18,8 +15,8 @@
 | 6697      | 客户端, TLS传输   |
 | 7000      | 服务器, 明文传输   |
 | 7001      | 服务器, TLS传输   |
-| 6680      | websocket,明文传输|
-| 6681      | websocket,TLS传输 |
+| 8067      | websocket,明文传输|
+| 6697      | websocket,TLS传输 |
 
 # 说明/问题及相关帮助
 * 1 systemctl 问题 [Debian尽量用systemdctl管理]
