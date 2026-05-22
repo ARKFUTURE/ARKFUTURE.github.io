@@ -272,7 +272,7 @@ nav.site-header {
 
 /* 副标题 + 闪烁光标 */
 .hero__title::after {
-  content: '[ SYSTEM ONLINE // NEON_GRID v2.0 ] █';
+  content: '[ ARKFUTURE OS - ONLINE // Cybersecurity v2.0 ] █';
   display: block;
   font-family: var(--font-mono);
   font-size: 13px;
