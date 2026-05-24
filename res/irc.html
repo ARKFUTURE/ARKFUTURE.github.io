@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" version="3.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src ')self'); script-src ')self'')unsafe-inline'); style-src ')self'')unsafe-inline'); connect-src ')self') ws: wss:; img-src ')self') data: https:; media-src ')self') https:; font-src ')self') data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' ws: wss:; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' data:;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="ARKFUTURE-NET IRC">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -17,7 +17,6 @@
             --c-yellow: #ffd740;
             --c-green: #00ff66;
             --c-red: #ff1744;
-            --c-deep: #c62828;
             --c-orange: #ff6d00;
 
             --bg-base: #06060e;
@@ -48,8 +47,8 @@
             --sp-6: 24px;
             --sp-8: 32px;
 
-            --font-ui: -apple-system, ')Segoe UI'), system-ui, sans-serif;
-            --font-mono: ')Cascadia Code'), ')Consolas'), ')JetBrains Mono'), ')Fira Code'), ')Courier New'), monospace;
+            --font-ui: -apple-system, 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'Cascadia Code', 'Consolas', 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
             --font-size-xs: 10px;
             --font-size-sm: 11px;
             --font-size-md: 13px;
@@ -164,7 +163,7 @@
 
 
         html::before {
-            content: '');
+            content: '';
             position: fixed;
             inset: 0;
             z-index: 0;
@@ -176,7 +175,7 @@
         }
 
         html::after {
-            content: '');
+            content: '';
             position: fixed;
             inset: 0;
             z-index: 0;
@@ -450,7 +449,7 @@
 
 
         .irc-app::after {
-            content: '');
+            content: '';
             position: absolute;
             inset: 0;
             z-index: 100;
@@ -488,7 +487,7 @@
         }
 
         .irc-header::after {
-            content: '');
+            content: '';
             position: absolute;
             bottom: -1px;
             left: 0;
@@ -523,7 +522,7 @@
         }
 
         .irc-header__title::after {
-            content: '');
+            content: '';
             position: absolute;
             bottom: -3px;
             left: 0;
@@ -717,7 +716,7 @@
         }
 
         .header-menu-item.active::before {
-            content: ')\221A');
+            content: '\221A';
             margin-right: 2px;
         }
 
@@ -772,7 +771,7 @@
         }
 
         .irc-settings::before {
-            content: '');
+            content: '';
             position: absolute;
             bottom: -1px;
             left: 0;
@@ -894,7 +893,7 @@
         }
 
         .btn::before {
-            content: '');
+            content: '';
             position: absolute;
             inset: 0;
             background: linear-gradient(135deg, rgba(0, 240, 255, .1), transparent 60%);
@@ -975,7 +974,7 @@
         }
 
         .send-btn::before {
-            content: '');
+            content: '';
             position: absolute;
             inset: 0;
             background: linear-gradient(135deg, rgba(0, 240, 255, .15), transparent 60%);
@@ -1175,7 +1174,7 @@
         }
 
         #logOutput:empty::before {
-            content: ')[ NO LOG DATA ]');
+            content: '[ NO LOG DATA ]';
             color: var(--tx-muted);
             font-size: 12px;
         }
@@ -1238,7 +1237,7 @@
         }
 
         .channel.active::after {
-            content: '');
+            content: '';
             position: absolute;
             bottom: 0;
             left: 12px;
@@ -1358,7 +1357,7 @@
         }
 
         .channelcontent>nav::after {
-            content: '');
+            content: '';
             position: absolute;
             inset: 0;
             pointer-events: none;
@@ -1395,7 +1394,7 @@
         }
 
         .channelcontent>nav>h3::before {
-            content: ')#');
+            content: '#';
             color: var(--c-cyan);
             margin-right: 6px;
             font-weight: 700;
@@ -1502,16 +1501,6 @@
 
         .channelcontent>ul>li>p:nth-child(2):hover {
             color: var(--c-cyan);
-        }
-
-        .channelcontent>ul>li[data-prefix="!"]>p:first-child {
-            color: var(--c-deep);
-        }
-
-        .channelcontent>ul>li[data-prefix="!"]::before {
-            background: rgba(198, 40, 40, .2);
-            color: var(--c-deep);
-            border-color: rgba(198, 40, 40, .3);
         }
 
         .channelcontent>ul>li[data-prefix="~"]>p:first-child {
@@ -1661,7 +1650,7 @@
         }
 
         .input-container::before {
-            content: '');
+            content: '';
             position: absolute;
             top: -1px;
             left: 0;
@@ -1693,7 +1682,7 @@
         }
 
         .typing-indicator::before {
-            content: '');
+            content: '';
             display: inline-block;
             width: 6px;
             height: 6px;
@@ -2193,7 +2182,7 @@
                 <div class="irc-settings__inner">
                     <div class="settings-group">
                         <label for="wsUrl">WebSocket Server</label>
-                        <input type="text" id="wsUrl" value="" placeholder="wss:
+                        <input type="text" id="wsUrl" value="" placeholder="wss://host:port">
                     </div>
                     <div class="settings-group">
                         <label for="nickInput">Nickname</label>
@@ -2213,7 +2202,7 @@
                     </div>
                     <div class="settings-group" id="saslPassGroup" title="SASL PLAIN password">
                         <label for="saslPasswordInput">SASL Password</label>
-                        <input type="password" id="saslPasswordInput" value="" placeholder="Password (optional)" autocomplete="off">
+                        <input type="password" id="saslPasswordInput" value="" placeholder="Password (optional)" autocomplete="current-password">
                     </div>
 
                     <div class="server-config-section" id="serverConfigSection">
@@ -2230,7 +2219,7 @@
                         <h4>收藏频道</h4>
                         <div class="fav-channel-list" id="favChannelList"></div>
                         <div class="fav-channel-input-row">
-                            <input type="text" id="favChannelInput" placeholder="#channel" onkeydown="if(event.key===')Enter'))addFavoriteChannel()">
+                            <input type="text" id="favChannelInput" placeholder="#channel" onkeydown="if(event.key==='Enter')addFavoriteChannel()">
                             <button class="server-btn-sm" onclick="addFavoriteChannel()">添加</button>
                         </div>
                     </div>
@@ -2245,7 +2234,7 @@
             <div class="ssl-warning" id="sslWarning">
                 <strong>⚠ Browser cannot ignore SSL cert errors</strong><br>
                 Solutions:<br>
-                1. Use <code>ws:
+                1. Use <code>ws://</code> (non-encrypted)<br>
                 2. Visit <a id="sslLink" target="_blank">server URL</a> and manually trust the certificate
             </div>
 
@@ -2261,7 +2250,7 @@
                     </div>
                     <div id="logOutput"></div>
                     <div class="log-search-bar" id="logSearchBar">
-                        <input type="text" id="logSearchInput" placeholder="搜索日志... (Ctrl+F)" oninput="searchLog()" onkeydown="if(event.key===')Escape'))clearLogSearch()">
+                        <input type="text" id="logSearchInput" placeholder="搜索日志... (Ctrl+F)" oninput="searchLog()" onkeydown="if(event.key==='Escape')clearLogSearch()">
                         <span class="search-count" id="searchCount"></span>
                         <button class="search-clear" onclick="clearLogSearch()">&times;</button>
                     </div>
@@ -2279,7 +2268,7 @@
                     <h3>ARKFUTURE IRC</h3>
                     <p>Secure, efficient instant messaging hub<span class="empty-state__cursor"></span></p>
                     <div class="empty-state__hint">
-                        <div><span>🔗 WebSocket</span><br>wss:
+                        <div><span>🔗 WebSocket</span><br>wss://host:port</div>
                         <div><span>👤 Nickname</span><br>Set your display name</div>
                         <div><span>📡 Channel</span><br>#channel to join</div>
                         <div><span>💡 /help</span><br>View all commands</div>
@@ -2305,7 +2294,7 @@
     </div>
 </body>
 <script>	(function () {
-        ')use strict');
+        'use strict';
         let nickname = "";
         let channelName = "";
         let wsUrl = "";
@@ -2313,13 +2302,12 @@
         let channelMap = new Map();
         let activeChannel = null;
         let statusChannel = null;
-        let PrefixChars = ["qaohv", "!~&@%+"];
+        let PrefixChars = ["", ""];
         let websocket = null;
         let isConnected = false;
         let autoReconnect = false;
         let reconnectAttempts = 0;
         let reconnectTimer = null;
-    let isReconnecting = false;
         const maxReconnectAttempts = 5;
         const reconnectDelay = 3000;
         let keepAliveTimer = null;
@@ -2338,8 +2326,6 @@
         let labelCounter = 0;
         let pendingLabels = new Map();
         let ircv3ActiveCaps = new Set();
-    let ircv3CaseMapping = 'rfc1459';
-    let ircv3ChanTypes = '#';
         let capLsBuffer = "";
         let ircv3ServerTime = false;
         let ircv3EchoMessage = false;
@@ -2360,13 +2346,13 @@
         let ircDB = null;
         function openIRCDB() {
             return new Promise((resolve, reject) => {
-                const request = indexedDB.open(')irc_logs'), 1);
+                const request = indexedDB.open('irc_logs', 1);
                 request.onupgradeneeded = function (e) {
                     const db = e.target.result;
-                    if (!db.objectStoreNames.contains(')messages'))) {
-                        const store = db.createObjectStore(')messages'), { keyPath: ')id'), autoIncrement: true });
-                        store.createIndex(')timestamp'), ')timestamp'), { unique: false });
-                        store.createIndex(')channel'), ')channel'), { unique: false });
+                    if (!db.objectStoreNames.contains('messages')) {
+                        const store = db.createObjectStore('messages', { keyPath: 'id', autoIncrement: true });
+                        store.createIndex('timestamp', 'timestamp', { unique: false });
+                        store.createIndex('channel', 'channel', { unique: false });
                     }
                 };
                 request.onsuccess = function (e) { ircDB = e.target.result; resolve(ircDB); };
@@ -2376,18 +2362,16 @@
         function storeLogMessage(entry) {
             if (!ircDB) return;
             try {
-                const tx = ircDB.transaction(')messages'), ')readwrite'));
-                const store = tx.objectStore(')messages'));
+                const tx = ircDB.transaction('messages', 'readwrite');
+                const store = tx.objectStore('messages');
                 store.add(entry);
                 const countReq = store.count();
                 countReq.onsuccess = function () {
                     if (countReq.result > 5500) {
-setTimeout(() => {
-                        const delTx = ircDB.transaction(')messages'), ')readwrite'));
-}, 0);
-                        const delStore = delTx.objectStore(')messages'));
-                        const index = delStore.index(')timestamp'));
-                        const cursorReq = index.openCursor(null, ')next'));
+                        const delTx = ircDB.transaction('messages', 'readwrite');
+                        const delStore = delTx.objectStore('messages');
+                        const index = delStore.index('timestamp');
+                        const cursorReq = index.openCursor(null, 'next');
                         let deleted = 0;
                         const targetDelete = countReq.result - 5000;
                         cursorReq.onsuccess = function (ev) {
@@ -2400,17 +2384,17 @@ setTimeout(() => {
                         };
                     }
                 };
-            } catch (e) { writeToLog("!SYS", "ERR", 'IndexedDB write failed:', e); }
+            } catch (e) { console.error('IndexedDB write failed:', e); }
         }
         function getRecentLogs(limit) {
             return new Promise((resolve) => {
                 if (!ircDB) { resolve([]); return; }
                 try {
-                    const tx = ircDB.transaction(')messages'), ')readonly'));
-                    const store = tx.objectStore(')messages'));
-                    const index = store.index(')timestamp'));
+                    const tx = ircDB.transaction('messages', 'readonly');
+                    const store = tx.objectStore('messages');
+                    const index = store.index('timestamp');
                     const results = [];
-                    const request = index.openCursor(null, ')prev'));
+                    const request = index.openCursor(null, 'prev');
                     request.onsuccess = function (ev) {
                         const cursor = ev.target.result;
                         if (cursor && results.length < limit) {
@@ -2432,28 +2416,27 @@ setTimeout(() => {
         const TYPING_PAUSE_DELAY = 4000;
         let remoteTypingState = new Map();
         const LOG_COLORS = {
-            ')ERROR'): ')#ff4472'), ')WARN'): ')#f5d742'), ')WARNING'): ')#f5d742'), ')INFO'): ')#00e5ff'),
-            ')DEBUG'): ')#7c8f9e'), ')OPEN'): ')#00e676'), ')CLOSE'): ')#ff9100'),
-            ')CLIENT→SERVER'): ')#00bcd4'), ')SERVER→CLIENT'): ')#ce93d8'), ')SERVER'): ')#ce93d8'),
-            ')IRC'): ')#69f0ae'), ')CAP'): ')#40c4ff'), ')NOTICE'): ')#ffd740'), ')PING'): ')#a5d6a7'),
-            ')PING/PONG'): ')#a5d6a7'), ')KEEP-ALIVE'): ')#81c784'), ')RECONNECT'): ')#ffab40'),
-            ')PM'): ')#ea80fc'), ')SETTINGS'): ')#8c9eff'), ')TAB'): ')#4dd0e1'), ')SYSTEM'): ')#b0bec5'),
-            ')PART'): ')#ff8a65'), ')WEBSOCKET'): ')#40c4ff'), ')MSGTAG'): ')#82b1ff'), ')SASL'): ')#ffab40'),
-            ')AWAY'): ')#90a4ae'), ')CHGHOST'): ')#b39ddb'), ')ACCOUNT'): ')#80cbc4'), ')ECHO'): ')#aed581'),
-            ')TYPING'): ')#ffcc80'), ')BATCH'): ')#64b5f6'), ')MONITOR'): ')#ffcc80'), ')CHATHISTORY'): ')#81d4fa'),
-            ')INVITE'): ')#f48fb1'), ')LABELED'): ')#90caf9'), ')WHOX'): ')#c5e1a5'), ')REACT'): ')#ffab91'),
-            ')REPLY'): ')#a5d6a7'), ')FAIL'): ')#ef5350'), ')MULTILINE'): ')#b39ddb'),
-            ')RAW'): ')#78909c'), ')SYS'): ')#b0bec5'), ')ERR'): ')#ff4472'), ')WS'): ')#40c4ff'),
-            ')RECON'): ')#ffab40'), ')TYPE'): ')#ffcc80'), ')CHATHIST'): ')#81d4fa'),
-            ')LABEL'): ')#90caf9'), ')MLINE'): ')#b39ddb')
+            'ERROR': '#ff4472', 'WARN': '#f5d742', 'WARNING': '#f5d742', 'INFO': '#00e5ff',
+            'DEBUG': '#7c8f9e', 'OPEN': '#00e676', 'CLOSE': '#ff9100',
+            'CLIENT→SERVER': '#00bcd4', 'SERVER→CLIENT': '#ce93d8', 'SERVER': '#ce93d8',
+            'IRC': '#69f0ae', 'CAP': '#40c4ff', 'NOTICE': '#ffd740', 'PING': '#a5d6a7',
+            'PING/PONG': '#a5d6a7', 'KEEP-ALIVE': '#81c784', 'RECONNECT': '#ffab40',
+            'PM': '#ea80fc', 'SETTINGS': '#8c9eff', 'TAB': '#4dd0e1', 'SYSTEM': '#b0bec5',
+            'PART': '#ff8a65', 'WEBSOCKET': '#40c4ff', 'MSGTAG': '#82b1ff', 'SASL': '#ffab40',
+            'AWAY': '#90a4ae', 'CHGHOST': '#b39ddb', 'ACCOUNT': '#80cbc4', 'ECHO': '#aed581',
+            'TYPING': '#ffcc80', 'BATCH': '#64b5f6', 'MONITOR': '#ffcc80', 'CHATHISTORY': '#81d4fa',
+            'INVITE': '#f48fb1', 'LABELED': '#90caf9', 'WHOX': '#c5e1a5', 'REACT': '#ffab91',
+            'REPLY': '#a5d6a7', 'FAIL': '#ef5350', 'MULTILINE': '#b39ddb',
+            'RAW': '#78909c', 'SYS': '#b0bec5', 'ERR': '#ff4472', 'WS': '#40c4ff',
+            'RECON': '#ffab40', 'TYPE': '#ffcc80', 'CHATHIST': '#81d4fa',
+            'LABEL': '#90caf9', 'MLINE': '#b39ddb'
         };
         const DefaultPrefixMap = {
-            ')!'): { symbol: ')!'), name: ')owner'), color: ')var(--c-deep)') },
-            ')~'): { symbol: ')~'), name: ')founder'), color: ')var(--c-magenta)') },
-            ')&'): { symbol: ')&'), name: ')admin'), color: ')var(--c-red)') },
-            ')@'): { symbol: ')@'), name: ')op'), color: ')var(--c-yellow)') },
-            ')%'): { symbol: ')%'), name: ')halfop'), color: ')var(--c-green)') },
-            ')+'): { symbol: ')+'), name: ')voice'), color: ')var(--c-cyan)') }
+            '~': { symbol: '~', name: 'founder', color: 'var(--clr-purple)' },
+            '&': { symbol: '&', name: 'admin', color: 'var(--clr-red)' },
+            '%': { symbol: '%', name: 'halfop', color: 'var(--clr-green)' },
+            '@': { symbol: '@', name: 'op', color: 'var(--clr-blue)' },
+            '+': { symbol: '+', name: 'voice', color: 'var(--clr-gold)' }
         };
         function findChannel(channelName) {
             if (!channelName) return null;
@@ -2467,16 +2450,16 @@ setTimeout(() => {
         }
         function htmlEscape(text) {
             if (!text) return "";
-            const map = { ')&'): ')&amp;'), ')<'): ')&lt;'), ')>'): ')&gt;'), ')"'): ')&quot;'), "')": ')&#039;') };
-            return text.replace(/[&<>"')]/g, m => map[m]);
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, m => map[m]);
         }
         function stripMircCodes(text) {
             if (!text) return "";
-            return text.replace(/\x03(\d{1,2}(,\d{1,2})?)?/g, '')).replace(/[\x02\x0F\x16\x1D\x1E\x1F\x11]/g, ''));
+            return text.replace(/\x03(\d{1,2}(,\d{1,2})?)?/g, '').replace(/[\x02\x0F\x16\x1D\x1E\x1F\x11]/g, '');
         }
         const MIRC_COLORS = [
-            ')#ffffff'), ')#000000'), ')#00007f'), ')#009300'), ')#ff0000'), ')#7f0000'), ')#9c009c'), ')#fc7f00'),
-            ')#ffff00'), ')#00fc00'), ')#009393'), ')#00ffff'), ')#0000fc'), ')#ff00ff'), ')#7f7f7f'), ')#d2d2d2')
+            '#ffffff', '#000000', '#00007f', '#009300', '#ff0000', '#7f0000', '#9c009c', '#fc7f00',
+            '#ffff00', '#00fc00', '#009393', '#00ffff', '#0000fc', '#ff00ff', '#7f7f7f', '#d2d2d2'
         ];
         function mircToHtml(text) {
             if (!text) return "";
@@ -2492,7 +2475,7 @@ setTimeout(() => {
                 if (underline && strike) styles.push("text-decoration:underline line-through");
                 else if (underline) styles.push("text-decoration:underline");
                 else if (strike) styles.push("text-decoration:line-through");
-                if (styles.length > 0) { result += `<span style="${styles.join(');'))}">`; spanOpen = true; }
+                if (styles.length > 0) { result += `<span style="${styles.join(';')}">`; spanOpen = true; }
             }
             function hasFormat() { return fg !== null || bg !== null || bold || italic || underline || strike; }
             function resetAll() { closeSpan(); fg = null; bg = null; bold = false; italic = false; underline = false; strike = false; }
@@ -2501,13 +2484,13 @@ setTimeout(() => {
             let i = 0;
             while (i < text.length) {
                 const ch = text[i];
-                if (ch === ')\x02')) { bold = !bold; applyFormat(); i++; continue; }
-                if (ch === ')\x1D')) { italic = !italic; applyFormat(); i++; continue; }
-                if (ch === ')\x1F')) { underline = !underline; applyFormat(); i++; continue; }
-                if (ch === ')\x1E')) { strike = !strike; applyFormat(); i++; continue; }
-                if (ch === ')\x0F')) { resetAll(); i++; continue; }
-                if (ch === ')\x16') || ch === ')\x11')) { i++; continue; }
-                if (ch === ')\x03')) {
+                if (ch === '\x02') { bold = !bold; applyFormat(); i++; continue; }
+                if (ch === '\x1D') { italic = !italic; applyFormat(); i++; continue; }
+                if (ch === '\x1F') { underline = !underline; applyFormat(); i++; continue; }
+                if (ch === '\x1E') { strike = !strike; applyFormat(); i++; continue; }
+                if (ch === '\x0F') { resetAll(); i++; continue; }
+                if (ch === '\x16' || ch === '\x11') { i++; continue; }
+                if (ch === '\x03') {
                     const sub = text.slice(i);
                     const m = colorRe.exec(sub);
                     if (m) {
@@ -2525,11 +2508,11 @@ setTimeout(() => {
                     if (hasFormat()) openSpan();
                     i++; continue;
                 }
-                if (ch === ')&')) { result += ')&amp;'); i++; continue; }
-                if (ch === ')<')) { result += ')&lt;'); i++; continue; }
-                if (ch === ')>')) { result += ')&gt;'); i++; continue; }
-                if (ch === ')"')) { result += ')&quot;'); i++; continue; }
-                if (ch === "')") { result += ')&#039;'); i++; continue; }
+                if (ch === '&') { result += '&amp;'; i++; continue; }
+                if (ch === '<') { result += '&lt;'; i++; continue; }
+                if (ch === '>') { result += '&gt;'; i++; continue; }
+                if (ch === '"') { result += '&quot;'; i++; continue; }
+                if (ch === "'") { result += '&#039;'; i++; continue; }
                 result += ch; i++;
             }
             closeSpan();
@@ -2537,91 +2520,30 @@ setTimeout(() => {
         }
         function sortUserList(user_a, user_b) {
             if (!user_a || !user_b || user_a.length < 2 || user_b.length < 2) return 0;
-            if (user_a[0][0] === user_b[0][0]) return user_a[1].localeCompare(user_b[1], undefined, { sensitivity: ')accent') });
+            if (user_a[0][0] === user_b[0][0]) return user_a[1].localeCompare(user_b[1], undefined, { sensitivity: 'accent' });
             if (!PrefixChars || !PrefixChars[1]) return 0;
-            let aPrefix = user_a[0].trim();
-            let bPrefix = user_b[0].trim();
-            if (aPrefix === "" && bPrefix === "") return 0;
-            let aIndex = Infinity, bIndex = Infinity;
-            for (let i = 0; i < aPrefix.length; i++) {
-                const idx = PrefixChars[1].indexOf(aPrefix[i]);
-                if (idx >= 0 && idx < aIndex) aIndex = idx;
-            }
-            for (let i = 0; i < bPrefix.length; i++) {
-                const idx = PrefixChars[1].indexOf(bPrefix[i]);
-                if (idx >= 0 && idx < bIndex) bIndex = idx;
-            }
+            let aIndex = PrefixChars[1].indexOf(user_a[0][0]);
+            let bIndex = PrefixChars[1].indexOf(user_b[0][0]);
+            if (aIndex === -1) aIndex = Infinity;
+            if (bIndex === -1) bIndex = Infinity;
             return aIndex - bIndex;
         }
         function sanitizeUrl(url) {
             try {
                 const parsed = new URL(url);
-                if (parsed.protocol !== ')http:') && parsed.protocol !== ')https:')) return null;
+                if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
                 return parsed.href;
             } catch (e) { return null; }
         }
-
-        function sanitizeHTML(html) {
-            var temp = document.createElement(')div'));
-            temp.innerHTML = html;
-            var allowedTags = [')span'), ')a'), ')img'), ')audio'), ')video'), ')b'), ')i'), ')u'), ')s'), ')br'), ')strong'), ')em')];
-            var allowedAttrs = {
-                ')span'): [')style')],
-                ')a'): [')href'), ')target'), ')rel'), ')style')],
-                ')img'): [')src'), ')alt'), ')referrerpolicy'), ')crossorigin'), ')style')],
-                ')audio'): [')controls'), ')src'), ')referrerpolicy'), ')style')],
-                ')video'): [')controls'), ')src'), ')referrerpolicy'), ')style')],
-                ')b'): [],
-                ')i'): [],
-                ')u'): [],
-                ')s'): [],
-                ')br'): [],
-                ')strong'): [],
-                ')em'): []
-            };
-            function sanitizeEl(el) {
-                var tag = el.tagName.toLowerCase();
-                if (allowedTags.indexOf(tag) === -1) {
-                    el.parentNode.replaceChild(document.createTextNode(el.textContent), el);
-                    return;
-                }
-                var allowed = allowedAttrs[tag] || [];
-                var attrs = Array.from(el.attributes);
-                for (var ai = 0; ai < attrs.length; ai++) {
-                    var aname = attrs[ai].name.toLowerCase();
-                    if (allowed.indexOf(aname) === -1 || aname.indexOf(')on')) === 0) {
-                        el.removeAttribute(attrs[ai].name);
-                    }
-                }
-                if (tag === ')a') && el.href) {
-                    try {
-                        var u = new URL(el.href);
-                        if (u.protocol !== ')http:') && u.protocol !== ')https:')) el.removeAttribute(')href'));
-                    } catch(e) { el.removeAttribute(')href')); }
-                }
-                if (tag === ')img') || tag === ')audio') || tag === ')video')) {
-                    try {
-                        var u2 = new URL(el.src);
-                        if (u2.protocol !== ')http:') && u2.protocol !== ')https:') && u2.protocol !== ')data:')) el.removeAttribute(')src'));
-                    } catch(e) { el.removeAttribute(')src')); }
-                }
-                var children = Array.from(el.children);
-                for (var ci = 0; ci < children.length; ci++) sanitizeEl(children[ci]);
-            }
-            var topChildren = Array.from(temp.children);
-            for (var tc = 0; tc < topChildren.length; tc++) sanitizeEl(topChildren[tc]);
-            return temp.innerHTML.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
-        }
-
         function mircAndLinkify(text) {
             if (!text) return "";
             const coloredHtml = mircToHtml(text);
-            const mediaMaxWidth = ')300px');
+            const mediaMaxWidth = '300px';
             return coloredHtml.replace(/(<[^>]*>)|([^<]+)/g, (match, tag, txt) => {
                 if (tag) return tag;
                 if (!txt) return "";
                 return txt.replace(/https?:\/\/[^\s<>{}|\\^`[\]]+/g, escapedUrl => {
-                    const rawUrl = escapedUrl.replace(/&amp;/g, ')&')).replace(/&lt;/g, ')<')).replace(/&gt;/g, ')>')).replace(/&quot;/g, ')"')).replace(/&#039;/g, "')");
+                    const rawUrl = escapedUrl.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#039;/g, "'");
                     const safeUrl = sanitizeUrl(rawUrl);
                     if (!safeUrl) return escapedUrl;
                     const lowerUrl = safeUrl.toLowerCase();
@@ -2643,7 +2565,7 @@ setTimeout(() => {
             const isPrivmsg = message.toLowerCase().startsWith("privmsg ");
             const fullMessage = message + "\r\n";
             if (!isPrivmsg || byteLength(fullMessage) <= MAX_BYTES) return [fullMessage];
-            const colonIndex = message.indexOf('):'));
+            const colonIndex = message.indexOf(':');
             if (colonIndex === -1) return [fullMessage];
             const baseCommand = message.substring(0, colonIndex + 1);
             const messageContent = message.substring(colonIndex + 1);
@@ -2665,23 +2587,23 @@ setTimeout(() => {
         }
         function unescapeTagValue(val) {
             if (!val) return "";
-            return val.replace(/\\\\/g, ')\x00')).replace(/\\:/g, ');')).replace(/\\s/g, '')).replace(/\\r/g, ')\r')).replace(/\\n/g, ')\n')).replace(/\x00/g, ')\\'));
+            return val.replace(/\\\\/g, '\x00').replace(/\\:/g, ';').replace(/\\s/g, ' ').replace(/\\r/g, '\r').replace(/\\n/g, '\n').replace(/\x00/g, '\\');
         }
         function parseMsgTags(tagStr) {
             const tags = new Map();
             if (!tagStr) return tags;
-            const parts = tagStr.split(');'));
+            const parts = tagStr.split(';');
             for (const part of parts) {
                 if (!part) continue;
-                const eqIdx = part.indexOf(')='));
+                const eqIdx = part.indexOf('=');
                 if (eqIdx === -1) tags.set(part, true);
                 else tags.set(part.substring(0, eqIdx), unescapeTagValue(part.substring(eqIdx + 1)));
             }
             return tags;
         }
         function extractMsgTags(rawLine) {
-            if (!rawLine || rawLine[0] !== ')@')) return { tags: new Map(), rest: rawLine };
-            const spaceIdx = rawLine.indexOf(''));
+            if (!rawLine || rawLine[0] !== '@') return { tags: new Map(), rest: rawLine };
+            const spaceIdx = rawLine.indexOf(' ');
             if (spaceIdx === -1) return { tags: parseMsgTags(rawLine.substring(1)), rest: "" };
             const tagStr = rawLine.substring(1, spaceIdx);
             const rest = rawLine.substring(spaceIdx + 1);
@@ -2690,176 +2612,176 @@ setTimeout(() => {
         }
         let _logOutputEl = null;
         function getLogOutput() {
-            if (!_logOutputEl) _logOutputEl = document.getElementById('logOutput';
+            if (!_logOutputEl) _logOutputEl = document.getElementById('logOutput');
             return _logOutputEl;
         }
         function writeToLog(direction, module, message) {
             const logOutput = getLogOutput();
             const now = new Date();
-            const ts = now.toISOString().replace(')T'), '')).substring(0, 23) + ')Z');
+            const ts = now.toISOString().replace('T', ' ').substring(0, 23) + 'Z';
             const fullMessage = `[${ts}] [${direction}][${module}] ${message}`;
             if (logOutput) {
-                const line = document.createElement(')span'));
-                line.className = ')log-line');
-                const timeSpan = document.createElement(')span'));
-                timeSpan.className = ')log-time');
+                const line = document.createElement('span');
+                line.className = 'log-line';
+                const timeSpan = document.createElement('span');
+                timeSpan.className = 'log-time';
                 timeSpan.textContent = `[${ts}]`;
                 line.appendChild(timeSpan);
-                const dirSpan = document.createElement(')span'));
-                if (direction === ')↑TX')) {
-                    dirSpan.className = ')log-dir dir-send');
-                } else if (direction === ')↓RX')) {
-                    dirSpan.className = ')log-dir dir-recv');
+                const dirSpan = document.createElement('span');
+                if (direction === '↑TX') {
+                    dirSpan.className = 'log-dir dir-send';
+                } else if (direction === '↓RX') {
+                    dirSpan.className = 'log-dir dir-recv';
                 } else {
-                    dirSpan.className = ')log-dir dir-sys');
+                    dirSpan.className = 'log-dir dir-sys';
                 }
                 dirSpan.textContent = `[${direction}]`;
                 line.appendChild(dirSpan);
-                const modSpan = document.createElement(')span'));
+                const modSpan = document.createElement('span');
                 const mod = module.toUpperCase();
-                modSpan.className = ')log-module');
+                modSpan.className = 'log-module';
                 modSpan.textContent = `[${module}]`;
-                modSpan.style.color = LOG_COLORS[mod] || ')#e0e0e0');
+                modSpan.style.color = LOG_COLORS[mod] || '#e0e0e0';
                 line.appendChild(modSpan);
-                const msgSpan = document.createElement(')span'));
-                msgSpan.className = ')log-msg');
+                const msgSpan = document.createElement('span');
+                msgSpan.className = 'log-msg';
                 msgSpan.textContent = message;
-                const modColor = LOG_COLORS[mod] || ')#e0e0e0');
+                const modColor = LOG_COLORS[mod] || '#e0e0e0';
                 msgSpan.style.color = modColor;
-                msgSpan.style.opacity = ')0.78');
+                msgSpan.style.opacity = '0.78';
                 line.appendChild(msgSpan);
                 logOutput.appendChild(line);
                 while (logOutput.children.length > 500) logOutput.removeChild(logOutput.firstChild);
                 requestAnimationFrame(() => logOutput.scrollTop = logOutput.scrollHeight);
             }
-            writeToLog("!SYS", "DBG", fullMessage);
-            storeLogMessage({ timestamp: Date.now(), channel: ''), direction: direction, module: module, message: message, rawData: fullMessage });
+            console.log(fullMessage);
+            storeLogMessage({ timestamp: Date.now(), channel: '', direction: direction, module: module, message: message, rawData: fullMessage });
         }
         function updateConnectionStatus(status) {
-            const statusEl = document.getElementById('connectionStatus';
-            const statusText = document.getElementById('statusText';
+            const statusEl = document.getElementById('connectionStatus');
+            const statusText = document.getElementById('statusText');
             if (!statusEl || !statusText) return;
-            statusEl.classList.remove(')connected'), ')connecting'), ')disconnected'));
-            if (status === ')connected')) {
-                statusEl.classList.add(')connected'));
+            statusEl.classList.remove('connected', 'connecting', 'disconnected');
+            if (status === 'connected') {
+                statusEl.classList.add('connected');
                 statusText.textContent = `已连接 (${nickname})`;
-            } else if (status === ')connecting')) {
-                statusEl.classList.add(')connecting'));
-                statusText.textContent = ')连接中...');
+            } else if (status === 'connecting') {
+                statusEl.classList.add('connecting');
+                statusText.textContent = '连接中...';
             } else {
-                statusEl.classList.add(')disconnected'));
-                statusText.textContent = ')未连接');
+                statusEl.classList.add('disconnected');
+                statusText.textContent = '未连接';
             }
         }
         function toggleSettings() {
-            const panel = document.getElementById('settingsPanel';
-            const btn = document.getElementById('settingsToggleBtn';
+            const panel = document.getElementById('settingsPanel');
+            const btn = document.getElementById('settingsToggleBtn');
             if (!panel) return;
-            const isOpen = panel.classList.toggle(')open'));
-            if (btn) btn.classList.toggle(')active'), isOpen);
+            const isOpen = panel.classList.toggle('open');
+            if (btn) btn.classList.toggle('active', isOpen);
         }
         function toggleHeaderMenu() {
-            const menu = document.getElementById('headerMenuDropdown';
+            const menu = document.getElementById('headerMenuDropdown');
             if (!menu) return;
-            menu.classList.toggle(')visible'));
+            menu.classList.toggle('visible');
             updateAutoReconnectMenuItem();
             if (headerMenuClickListener) {
-                document.removeEventListener(')click'), headerMenuClickListener);
+                document.removeEventListener('click', headerMenuClickListener);
                 headerMenuClickListener = null;
-                menu.classList.remove(')menu-attached'));
+                menu.classList.remove('menu-attached');
             }
-            if (menu.classList.contains(')visible'))) {
+            if (menu.classList.contains('visible')) {
                 headerMenuClickListener = closeHeaderMenuOnClickOutside;
-                menu.classList.add(')menu-attached'));
-                setTimeout(() => document.addEventListener('click'), headerMenuClickListener), 0);
+                menu.classList.add('menu-attached');
+                setTimeout(() => document.addEventListener('click', headerMenuClickListener), 0);
             }
         }
         function closeHeaderMenuOnClickOutside(event) {
-            const menu = document.getElementById('headerMenuDropdown';
-            const menuBtn = document.querySelector(').header-menu-btn'));
+            const menu = document.getElementById('headerMenuDropdown');
+            const menuBtn = document.querySelector('.header-menu-btn');
             if (menu && !menu.contains(event.target) && (!menuBtn || !menuBtn.contains(event.target))) {
-                menu.classList.remove(')visible'));
-                menu.classList.remove(')menu-attached'));
-                document.removeEventListener(')click'), closeHeaderMenuOnClickOutside);
+                menu.classList.remove('visible');
+                menu.classList.remove('menu-attached');
+                document.removeEventListener('click', closeHeaderMenuOnClickOutside);
                 headerMenuClickListener = null;
             }
         }
         function toggleAutoReconnect() {
-            const checkbox = document.getElementById('autoReconnect';
+            const checkbox = document.getElementById('autoReconnect');
             if (checkbox) {
                 checkbox.checked = !checkbox.checked;
                 autoReconnect = checkbox.checked;
                 updateAutoReconnectMenuItem();
-                writeToLog("!SYS", "SYS", `Auto-reconnect: ${autoReconnect ? ')ENABLED') : ')DISABLED')}`);
+                writeToLog("!SYS", "SYS", `Auto-reconnect: ${autoReconnect ? 'ENABLED' : 'DISABLED'}`);
                 saveSettings();
             }
         }
         function updateAutoReconnectMenuItem() {
-            const autoReconnectCheckbox = document.getElementById('autoReconnect';
-            const menuItem = document.querySelector(').header-menu-item[onclick="toggleAutoReconnect()"]'));
+            const autoReconnectCheckbox = document.getElementById('autoReconnect');
+            const menuItem = document.querySelector('.header-menu-item[onclick="toggleAutoReconnect()"]');
             if (menuItem && autoReconnectCheckbox) {
-                menuItem.classList.toggle(')active'), autoReconnectCheckbox.checked);
+                menuItem.classList.toggle('active', autoReconnectCheckbox.checked);
             }
         }
         function toggleLog() {
-            const logContainer = document.getElementById('logContainer';
+            const logContainer = document.getElementById('logContainer');
             if (logContainer) {
-                logContainer.classList.toggle(')visible'));
-                if (logContainer.classList.contains(')visible'))) {
+                logContainer.classList.toggle('visible');
+                if (logContainer.classList.contains('visible')) {
                     const logOutput = getLogOutput();
                     if (logOutput) requestAnimationFrame(() => logOutput.scrollTop = logOutput.scrollHeight);
                 }
             }
         }
         function clearLog() {
-            const logOutput = document.getElementById('logOutput';
-            if (logOutput) logOutput.innerHTML = '');
+            const logOutput = document.getElementById('logOutput');
+            if (logOutput) logOutput.innerHTML = '';
         }
         function searchLog() {
-            const input = document.getElementById('logSearchInput';
-            const countEl = document.getElementById('searchCount';
-            const logOutput = document.getElementById('logOutput';
+            const input = document.getElementById('logSearchInput');
+            const countEl = document.getElementById('searchCount');
+            const logOutput = document.getElementById('logOutput');
             if (!input || !logOutput) return;
             const keyword = input.value.trim().toLowerCase();
-            const lines = logOutput.querySelectorAll(').log-line'));
+            const lines = logOutput.querySelectorAll('.log-line');
             let matchCount = 0;
             lines.forEach(line => {
                 if (!keyword || line.textContent.toLowerCase().includes(keyword)) {
-                    line.style.display = '');
+                    line.style.display = '';
                     matchCount++;
                 } else {
-                    line.style.display = ')none');
+                    line.style.display = 'none';
                 }
             });
             if (countEl) {
-                countEl.textContent = keyword ? matchCount + ')/') + lines.length : '');
+                countEl.textContent = keyword ? matchCount + '/' + lines.length : '';
             }
         }
         function clearLogSearch() {
-            const input = document.getElementById('logSearchInput';
-            if (input) { input.value = ''); searchLog(); }
+            const input = document.getElementById('logSearchInput');
+            if (input) { input.value = ''; searchLog(); }
         }
         function showPrivateChatList() {
             const privateChats = [];
             channelMap.forEach((channel, name) => { if (channel.isPrivate) privateChats.push(name); });
             if (privateChats.length === 0) writeToScreen("var(--clr-info)", "当前没有私聊会话", statusChannel, "*");
-            else writeToScreen("var(--clr-info)", `私聊会话列表 (${privateChats.length}): ${privateChats.join('), '))}`, statusChannel, "*");
-            writeToLog("!SYS", "PM", `Private chat list: ${privateChats.join('), ')) || ')none')}`);
+            else writeToScreen("var(--clr-info)", `私聊会话列表 (${privateChats.length}): ${privateChats.join(', ')}`, statusChannel, "*");
+            writeToLog("!SYS", "PM", `Private chat list: ${privateChats.join(', ') || 'none'}`);
         }
         function showSSLWarning(url) {
-            const warning = document.getElementById('sslWarning';
-            const link = document.getElementById('sslLink';
+            const warning = document.getElementById('sslWarning');
+            const link = document.getElementById('sslLink');
             if (!warning || !link) return;
-            let displayUrl = url || document.getElementById('wsUrl'?.value.trim();
+            let displayUrl = url || document.getElementById('wsUrl')?.value.trim();
             if (displayUrl) {
-                link.href = displayUrl.replace(')wss:
+                link.href = displayUrl.replace('wss://', 'https://').replace('ws://', 'http://');
                 link.textContent = link.href;
             } else {
-                link.href = ')#');
-                link.textContent = ')请先在WebSocket地址栏输入服务器地址');
+                link.href = '#';
+                link.textContent = '请先在WebSocket地址栏输入服务器地址';
             }
-            warning.classList.add(')visible'));
-            setTimeout(() => { if (warning) warning.classList.remove(')visible')); }, 6000);
+            warning.classList.add('visible');
+            setTimeout(() => { if (warning) warning.classList.remove('visible'); }, 6000);
         }
         function saveSettings() {
             try {
@@ -2868,16 +2790,15 @@ setTimeout(() => {
                     nickname: document.getElementById('nickInput').value,
                     channel: document.getElementById('channelInput').value,
                     autoReconnect: document.getElementById('autoReconnect').checked,
-                    saslAccount: document.getElementById('saslAccountInput' ? document.getElementById('saslAccountInput').value : ''),
-                    saslPassword: document.getElementById('saslPasswordInput' ? document.getElementById('saslPasswordInput').value : '')
+                    saslAccount: document.getElementById('saslAccountInput') ? document.getElementById('saslAccountInput').value : '',
+                    saslPassword: document.getElementById('saslPasswordInput') ? document.getElementById('saslPasswordInput').value : ''
                 };
                 localStorage.setItem('ircSettings', JSON.stringify(settings));
             } catch (e) { writeToLog("!SYS", "ERR", `Failed to save settings: ${e.message}`); }
         }
         function loadSettings() {
             try {
-                const settings = JSON.parse(localStorage.getItem('ircSettings') || '){}'));
-            if (settings.saslPassword) try { settings.saslPassword = atob(settings.saslPassword); } catch(e) {}
+                const settings = JSON.parse(localStorage.getItem('ircSettings') || '{}');
                 if (settings.wsUrl) document.getElementById('wsUrl').value = settings.wsUrl;
                 if (settings.nickname) document.getElementById('nickInput').value = settings.nickname;
                 if (settings.channel) document.getElementById('channelInput').value = settings.channel;
@@ -2885,16 +2806,13 @@ setTimeout(() => {
                     document.getElementById('autoReconnect').checked = settings.autoReconnect;
                     autoReconnect = settings.autoReconnect;
                 }
-                if (settings.saslAccount && document.getElementById('saslAccountInput') document.getElementById('saslAccountInput').value = settings.saslAccount;
-                if (settings.saslPassword && document.getElementById('saslPasswordInput') document.getElementById('saslPasswordInput').value = settings.saslPassword;
+                if (settings.saslAccount && document.getElementById('saslAccountInput')) document.getElementById('saslAccountInput').value = settings.saslAccount;
+                if (settings.saslPassword && document.getElementById('saslPasswordInput')) document.getElementById('saslPasswordInput').value = settings.saslPassword;
             } catch (e) { writeToLog("!SYS", "ERR", `Failed to load settings: ${e.message}`); }
         }
         function getServerConfigs() {
-            let configs = [];
-            try { configs = JSON.parse(localStorage.getItem('ircServerConfigs') || '[]'); }
+            try { return JSON.parse(localStorage.getItem('ircServerConfigs') || '[]'); }
             catch (e) { return []; }
-            configs.forEach(c => { if (c.saslPassword) try { c.saslPassword = atob(c.saslPassword); } catch(e) {} });
-            return configs;
         }
         function saveServerConfigsList(configs) {
             localStorage.setItem('ircServerConfigs', JSON.stringify(configs));
@@ -2903,79 +2821,79 @@ setTimeout(() => {
             const select = document.getElementById('serverSelect');
             if (!select) return;
             const configs = getServerConfigs();
-            select.innerHTML = ')<option value="">-- 选择配置 --</option>');
+            select.innerHTML = '<option value="">-- 选择配置 --</option>';
             configs.forEach((cfg, idx) => {
-                const opt = document.createElement(')option'));
+                const opt = document.createElement('option');
                 opt.value = idx;
-                opt.textContent = cfg.name || (')配置 ') + (idx + 1));
+                opt.textContent = cfg.name || ('配置 ' + (idx + 1));
                 select.appendChild(opt);
             });
         }
         function saveServerConfig() {
-            const name = prompt(')请输入配置名称:'), ''));
+            const name = prompt('请输入配置名称:', '');
             if (!name || !name.trim()) return;
-            const url = document.getElementById('wsUrl' ? document.getElementById('wsUrl').value : '');
-            const nick = document.getElementById('nickInput' ? document.getElementById('nickInput').value : '');
-            const channel = document.getElementById('channelInput' ? document.getElementById('channelInput').value : '');
-            const saslAccount = document.getElementById('saslAccountInput' ? document.getElementById('saslAccountInput').value : '');
-            const saslPassword = document.getElementById('saslPasswordInput' ? document.getElementById('saslPasswordInput').value : '');
+            const url = document.getElementById('wsUrl') ? document.getElementById('wsUrl').value : '';
+            const nick = document.getElementById('nickInput') ? document.getElementById('nickInput').value : '';
+            const channel = document.getElementById('channelInput') ? document.getElementById('channelInput').value : '';
+            const saslAccount = document.getElementById('saslAccountInput') ? document.getElementById('saslAccountInput').value : '';
+            const saslPassword = document.getElementById('saslPasswordInput') ? document.getElementById('saslPasswordInput').value : '';
             const configs = getServerConfigs();
             const existingIdx = configs.findIndex(function (c) { return c.name === name.trim(); });
-            const autoReconnectVal = document.getElementById('autoReconnect' ? document.getElementById('autoReconnect').checked : false;
-            const newConfig = { name: name.trim(), url: url, nickname: nick, channel: channel, saslAccount: saslAccount, saslPassword: btoa(saslPassword), autoReconnect: autoReconnectVal };
+            const autoReconnectVal = document.getElementById('autoReconnect') ? document.getElementById('autoReconnect').checked : false;
+            const newConfig = { name: name.trim(), url: url, nickname: nick, channel: channel, saslAccount: saslAccount, saslPassword: saslPassword, autoReconnect: autoReconnectVal };
             if (existingIdx >= 0) configs[existingIdx] = newConfig;
             else configs.push(newConfig);
             saveServerConfigsList(configs);
             refreshServerSelect();
             saveSettings();
-            writeToLog("!SYS", "SYS", ')Server config "') + name.trim() + ')" saved'));
+            writeToLog("!SYS", "SYS", 'Server config "' + name.trim() + '" saved');
         }
         function loadServerConfig() {
             const select = document.getElementById('serverSelect');
-            if (!select || select.value === '')) return;
+            if (!select || select.value === '') return;
             const configs = getServerConfigs();
             const cfg = configs[parseInt(select.value)];
             if (!cfg) return;
             if (isConnected) {
-                writeToLog("!SYS", "SYS", ')Switching server config — auto-disconnecting...'));
+                writeToLog("!SYS", "SYS", 'Switching server config — auto-disconnecting...');
                 autoReconnect = false;
-                if (document.getElementById('autoReconnect') document.getElementById('autoReconnect').checked = false;
+                if (document.getElementById('autoReconnect')) document.getElementById('autoReconnect').checked = false;
                 updateAutoReconnectMenuItem();
                 isDisconnecting = true;
                 if (websocket) {
                     try {
-                        if (websocket.readyState === WebSocket.OPEN) websocket.send(')QUIT :Switching server config\r\n'));
+                        if (websocket.readyState === WebSocket.OPEN) websocket.send('QUIT :Switching server config\r\n');
                     } catch (e) { }
-                    try { websocket.close(1000, ')Switching config')); } catch (e) { }
+                    try { websocket.close(1000, 'Switching config'); } catch (e) { }
                 }
-                writeToLog("!SYS", "SYS", ')Config fields filled; disconnect in progress'));
+                writeToLog("!SYS", "SYS", 'Config fields filled; disconnect in progress');
             }
             if (cfg.url) document.getElementById('wsUrl').value = cfg.url;
             if (cfg.nickname) document.getElementById('nickInput').value = cfg.nickname;
             if (cfg.channel) document.getElementById('channelInput').value = cfg.channel;
-            if (cfg.saslAccount && document.getElementById('saslAccountInput') document.getElementById('saslAccountInput').value = cfg.saslAccount;
-            if (cfg.saslPassword && document.getElementById('saslPasswordInput') document.getElementById('saslPasswordInput').value = cfg.saslPassword;
+            if (cfg.saslAccount && document.getElementById('saslAccountInput')) document.getElementById('saslAccountInput').value = cfg.saslAccount;
+            if (cfg.saslPassword && document.getElementById('saslPasswordInput')) document.getElementById('saslPasswordInput').value = cfg.saslPassword;
             if (cfg.autoReconnect !== undefined) {
                 document.getElementById('autoReconnect').checked = cfg.autoReconnect;
                 autoReconnect = cfg.autoReconnect;
             }
-            writeToLog("!SYS", "SYS", ')Server config "') + cfg.name + ')" loaded'));
+            writeToLog("!SYS", "SYS", 'Server config "' + cfg.name + '" loaded');
             saveSettings();
         }
         function deleteServerConfig() {
             const select = document.getElementById('serverSelect');
-            if (!select || select.value === '')) return;
+            if (!select || select.value === '') return;
             const configs = getServerConfigs();
             const idx = parseInt(select.value);
-            const name = configs[idx] ? configs[idx].name : '');
-            if (!confirm(')确定删除配置 "') + name + ')" 吗？'))) return;
+            const name = configs[idx] ? configs[idx].name : '';
+            if (!confirm('确定删除配置 "' + name + '" 吗？')) return;
             configs.splice(idx, 1);
             saveServerConfigsList(configs);
             refreshServerSelect();
-            writeToLog("!SYS", "SYS", ')Server config "') + name + ')" deleted'));
+            writeToLog("!SYS", "SYS", 'Server config "' + name + '" deleted');
         }
         function getFavoriteChannels() {
-            try { return JSON.parse(localStorage.getItem('ircFavoriteChannels') || ')[]')); }
+            try { return JSON.parse(localStorage.getItem('ircFavoriteChannels') || '[]'); }
             catch (e) { return []; }
         }
         function saveFavoriteChannelsList(channels) {
@@ -2985,15 +2903,15 @@ setTimeout(() => {
             const listEl = document.getElementById('favChannelList');
             if (!listEl) return;
             const channels = getFavoriteChannels();
-            listEl.innerHTML = '');
+            listEl.innerHTML = '';
             channels.forEach(function (ch) {
-                const tag = document.createElement(')span'));
-                tag.className = ')fav-channel-tag');
+                const tag = document.createElement('span');
+                tag.className = 'fav-channel-tag';
                 tag.textContent = ch;
-                const removeBtn = document.createElement(')span'));
-                removeBtn.className = ')fav-remove');
-                removeBtn.textContent = ')\u00d7');
-                removeBtn.addEventListener('click'), function () { removeFavoriteChannel(ch); });
+                const removeBtn = document.createElement('span');
+                removeBtn.className = 'fav-remove';
+                removeBtn.textContent = '\u00d7';
+                removeBtn.addEventListener('click', function () { removeFavoriteChannel(ch); });
                 tag.appendChild(removeBtn);
                 listEl.appendChild(tag);
             });
@@ -3003,21 +2921,21 @@ setTimeout(() => {
             if (!input) return;
             let ch = input.value.trim();
             if (!ch) return;
-            if (!ch.startsWith('#')) ch = ')#') + ch;
+            if (!ch.startsWith('#')) ch = '#' + ch;
             const channels = getFavoriteChannels();
-            if (channels.indexOf(ch) >= 0) { input.value = ''); return; }
+            if (channels.indexOf(ch) >= 0) { input.value = ''; return; }
             channels.push(ch);
             saveFavoriteChannelsList(channels);
             refreshFavChannelList();
-            input.value = '');
-            writeToLog("!SYS", "SYS", ')Favorite channel added: ') + ch);
+            input.value = '';
+            writeToLog("!SYS", "SYS", 'Favorite channel added: ' + ch);
         }
         function removeFavoriteChannel(ch) {
             let channels = getFavoriteChannels();
             channels = channels.filter(function (c) { return c !== ch; });
             saveFavoriteChannelsList(channels);
             refreshFavChannelList();
-            writeToLog("!SYS", "SYS", ')Favorite channel removed: ') + ch);
+            writeToLog("!SYS", "SYS", 'Favorite channel removed: ' + ch);
         }
         function autoJoinFavoriteChannels() {
             if (!isConnected) return;
@@ -3030,8 +2948,8 @@ setTimeout(() => {
         }
         function tabsHide() {
             channelMap.forEach(ch => {
-                if (ch.channel) ch.channel.classList.remove(')active'));
-                if (ch.button) ch.button.classList.remove(')active'));
+                if (ch.channel) ch.channel.classList.remove('active');
+                if (ch.button) ch.button.classList.remove('active');
             });
         }
         function tabShow(name) {
@@ -3039,7 +2957,7 @@ setTimeout(() => {
             const channel = findChannel(name);
             tabsHide();
             if (channel && channel.channel) {
-                channel.channel.classList.add(')active'));
+                channel.channel.classList.add('active');
                 channel.button.classList.add("active");
                 activeChannel = channel;
                 clearUnreadBadge(channel);
@@ -3048,14 +2966,14 @@ setTimeout(() => {
                 const prefixEl = document.getElementById('inputPrefix');
                 if (prefixEl) {
                     if (channel.isPrivate) {
-                        prefixEl.textContent = ')→ ') + channel.name;
-                        prefixEl.style.color = ')var(--c-magenta)');
-                    } else if (channel.name === ')Status')) {
-                        prefixEl.textContent = ')»');
-                        prefixEl.style.color = ')var(--tx-muted)');
+                        prefixEl.textContent = '→ ' + channel.name;
+                        prefixEl.style.color = 'var(--c-magenta)';
+                    } else if (channel.name === 'Status') {
+                        prefixEl.textContent = '»';
+                        prefixEl.style.color = 'var(--tx-muted)';
                     } else {
                         prefixEl.textContent = channel.name;
-                        prefixEl.style.color = ')var(--c-cyan)');
+                        prefixEl.style.color = 'var(--c-cyan)';
                     }
                 }
             }
@@ -3069,10 +2987,10 @@ setTimeout(() => {
         const Tab_onClick = tabOnClick;
         function addUnreadBadge(channel) {
             if (!channel || !channel.button) return;
-            let badge = channel.button.querySelector(').unread-badge'));
+            let badge = channel.button.querySelector('.unread-badge');
             if (!badge) {
-                badge = document.createElement(')span'));
-                badge.className = ')unread-badge');
+                badge = document.createElement('span');
+                badge.className = 'unread-badge';
                 channel.button.appendChild(badge);
             }
             let count = parseInt(badge.textContent) || 0;
@@ -3080,7 +2998,7 @@ setTimeout(() => {
         }
         function clearUnreadBadge(channel) {
             if (!channel || !channel.button) return;
-            const badge = channel.button.querySelector(').unread-badge'));
+            const badge = channel.button.querySelector('.unread-badge');
             if (badge) badge.remove();
         }
         function openPrivateChat(targetNick) {
@@ -3092,7 +3010,7 @@ setTimeout(() => {
             if (!pmChannel) {
                 pmChannel = new Tab_Create(targetNick, `与 ${targetNick} 的私聊`, false);
                 pmChannel.isPrivate = true;
-                if (pmChannel.button) pmChannel.button.classList.add(')private'));
+                if (pmChannel.button) pmChannel.button.classList.add('private');
                 writeToLog("!SYS", "PM", `Opening private chat with: ${targetNick}`);
                 writeToScreen("var(--clr-green)", `私聊会话已建立: ${targetNick}`, statusChannel, "*");
             }
@@ -3101,7 +3019,7 @@ setTimeout(() => {
         class Tab_Create {
             constructor(name, topic, createlist) {
                 if (!name || !channels || !channelContents) {
-                    writeToLog("!SYS", "ERR", "Tab_Create: missing required elements");
+                    console.error("Tab_Create: missing required elements");
                     writeToLog("!SYS", "ERR", `Tab_Create failed — name: "${name}"`);
                     return;
                 }
@@ -3125,7 +3043,7 @@ setTimeout(() => {
                 const navWrapper = document.createElement("nav");
                 this.topic = document.createElement("h3");
                 this.topic.textContent = topic || "";
-                if (!topic) this.topic.classList.add(')no-topic'));
+                if (!topic) this.topic.classList.add('no-topic');
                 navWrapper.appendChild(this.topic);
                 this.content = document.createElement("nav");
                 navWrapper.appendChild(this.content);
@@ -3166,7 +3084,7 @@ setTimeout(() => {
                 channelDestroy(channelName);
             }
         }
-
+        const Tab_Close = tabClose;
         function channelDestroy(name) {
             if (!name) return;
             const channel = findChannel(name);
@@ -3187,13 +3105,13 @@ setTimeout(() => {
         function channelInsertUser(nick, channel, prefix) {
             if (!nick || !channel || !channel.userlist) return;
             const user = document.createElement("li");
-            const initial = nick.replace(/^[^a-zA-Z0-9]/, ''))[0] || nick[0] || ')?');
-            user.setAttribute(')data-initial'), initial.toUpperCase());
+            const initial = nick.replace(/^[^a-zA-Z0-9]/, '')[0] || nick[0] || '?';
+            user.setAttribute('data-initial', initial.toUpperCase());
             let tmp = document.createElement("p");
             if (prefix && prefix !== " ") {
                 const prefixChar = prefix[0];
                 const prefixInfo = DefaultPrefixMap[prefixChar];
-                user.setAttribute(')data-prefix'), prefixChar);
+                user.setAttribute('data-prefix', prefixChar);
                 if (prefixInfo) {
                     tmp.textContent = prefixInfo.symbol;
                     tmp.title = prefixInfo.name;
@@ -3214,7 +3132,7 @@ setTimeout(() => {
             channel.users.splice(i, 0, [prefix || " ", nick]);
             channel.userlist.insertBefore(user, channel.userlist.childNodes[i]);
         }
-
+        const Channel_InsertUser = channelInsertUser;
         function channelRemoveUser(nick, channel) {
             if (!nick || !channel || !channel.userlist) return false;
             for (let i = 0; i < channel.users.length; i++) {
@@ -3279,11 +3197,11 @@ setTimeout(() => {
                 const nickEl = li.children[1];
                 if (nickEl && nickEl.textContent === nick) {
                     if (isAway) {
-                        li.style.opacity = ')0.5');
+                        li.style.opacity = '0.5';
                         li.title = `${nick} (离开中)`;
                     } else {
-                        li.style.opacity = '');
-                        li.title = '');
+                        li.style.opacity = '';
+                        li.title = '';
                     }
                     break;
                 }
@@ -3316,7 +3234,7 @@ setTimeout(() => {
                 tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;margin-right:2px;";
                 const sep = document.createTextNode(" ");
                 const msgSpan = document.createElement("span");
-                msgSpan.innerHTML = sanitizeHTML(sanitizeHTML(renderedMessage));
+                msgSpan.innerHTML = renderedMessage;
                 pre.appendChild(tsSpan);
                 pre.appendChild(nickSpan);
                 pre.appendChild(sep);
@@ -3326,7 +3244,7 @@ setTimeout(() => {
                 tsSpan.textContent = displayTime + " ";
                 tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;";
                 const msgSpan = document.createElement("span");
-                msgSpan.innerHTML = sanitizeHTML(sanitizeHTML(renderedMessage));
+                msgSpan.innerHTML = renderedMessage;
                 pre.appendChild(tsSpan);
                 pre.appendChild(msgSpan);
             }
@@ -3356,22 +3274,22 @@ setTimeout(() => {
             const bytes = new TextEncoder().encode(text).length;
             const maxBytes = 512;
             charCount.textContent = `${bytes}`;
-            charCount.classList.remove(')warning'), ')danger'));
+            charCount.classList.remove('warning', 'danger');
             if (bytes > maxBytes) {
-                charCount.classList.add(')danger'));
+                charCount.classList.add('danger');
                 charCount.textContent = `${bytes}!`;
-            } else if (bytes > maxBytes * 0.8) charCount.classList.add(')warning'));
+            } else if (bytes > maxBytes * 0.8) charCount.classList.add('warning');
         }
         function onKeyDown(e) {
             if (!e) return;
-            if (e.key === ')Enter')) {
+            if (e.key === 'Enter') {
                 e.preventDefault();
                 send();
-            } else if (e.key === ')Tab')) {
+            } else if (e.key === 'Tab') {
                 e.preventDefault();
                 handleTabCompletion();
                 return false;
-            } else if (e.key === ')ArrowUp')) {
+            } else if (e.key === 'ArrowUp') {
                 e.preventDefault();
                 if (historyIndex > 0) {
                     historyIndex--;
@@ -3382,7 +3300,7 @@ setTimeout(() => {
                     updateCharCount();
                 }
                 return false;
-            } else if (e.key === ')ArrowDown')) {
+            } else if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 if (historyIndex < messageHistory.length - 1) {
                     historyIndex++;
@@ -3400,19 +3318,19 @@ setTimeout(() => {
             if (!input || !activeChannel || !activeChannel.users) return;
             const cursorPos = input.selectionStart;
             const text = input.value.substring(0, cursorPos);
-            const words = text.split(''));
+            const words = text.split(' ');
             const lastWord = words[words.length - 1];
             if (!lastWord) return;
             const matches = activeChannel.users
                 .filter(user => user[1].toLowerCase().startsWith(lastWord.toLowerCase()))
                 .sort((a, b) => a[1].localeCompare(b[1]));
             if (matches.length === 1) {
-                words[words.length - 1] = matches[0][1] + (words.length > 1 ? '') : '): '));
-                input.value = words.join('')) + input.value.substring(cursorPos);
-                const newCursorPos = words.join('')).length;
+                words[words.length - 1] = matches[0][1] + (words.length > 1 ? ' ' : ': ');
+                input.value = words.join(' ') + input.value.substring(cursorPos);
+                const newCursorPos = words.join(' ').length;
                 input.setSelectionRange(newCursorPos, newCursorPos);
             } else if (matches.length > 1) {
-                writeToScreen("var(--clr-info)", `匹配: ${matches.map(m => m[1]).join('), '))}`, activeChannel, "*");
+                writeToScreen("var(--clr-info)", `匹配: ${matches.map(m => m[1]).join(', ')}`, activeChannel, "*");
             }
         }
         function pushHistory(msg) {
@@ -3429,12 +3347,12 @@ setTimeout(() => {
             return /^wss?:\/\/.+/.test(url);
         }
         function joinChannel() {
-            const channelInput = document.getElementById('channelInput';
+            const channelInput = document.getElementById('channelInput');
             if (!channelInput) return;
             let targetChannel = channelInput.value.trim();
             if (!targetChannel) return;
             if (!targetChannel.startsWith('#')) {
-                targetChannel = ')#') + targetChannel;
+                targetChannel = '#' + targetChannel;
                 channelInput.value = targetChannel;
             }
             if (isConnected && websocket && websocket.readyState === WebSocket.OPEN) {
@@ -3447,20 +3365,20 @@ setTimeout(() => {
         }
         function toggleConnection() {
             if (isConnected) {
-                writeToLog("!SYS", "SYS", ')User requested disconnect — disabling auto-reconnect'));
+                writeToLog("!SYS", "SYS", 'User requested disconnect — disabling auto-reconnect');
                 autoReconnect = false;
                 updateAutoReconnectMenuItem();
                 isDisconnecting = true;
                 if (websocket && websocket.readyState === WebSocket.OPEN) {
                     try {
                         websocket.send(`QUIT :User disconnected\r\n`);
-                        writeToLog("!SYS", "SYS", ')Sent IRC QUIT to server'));
+                        writeToLog("!SYS", "SYS", 'Sent IRC QUIT to server');
                     } catch (e) { writeToLog("!SYS", "ERR", `Could not send QUIT: ${e.message}`); }
                 }
                 if (websocket) {
                     try {
                         if (connectTimeout) { clearTimeout(connectTimeout); connectTimeout = null; }
-                        writeToLog("!SYS", "SYS", ')Closing WebSocket (code 1000 — user disconnected)'));
+                        writeToLog("!SYS", "SYS", 'Closing WebSocket (code 1000 — user disconnected)');
                         websocket.close(1000, "User disconnected");
                     } catch (e) { writeToLog("!SYS", "ERR", `Exception while closing WebSocket: ${e.message}`); }
                 }
@@ -3468,22 +3386,22 @@ setTimeout(() => {
         }
         function doConnect(isAutoReconnect) {
             if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
-            const wsUrlInput = document.getElementById('wsUrl';
-            const nickInput = document.getElementById('nickInput';
-            const channelInput = document.getElementById('channelInput';
-            const reconnectCheckbox = document.getElementById('autoReconnect';
+            const wsUrlInput = document.getElementById('wsUrl');
+            const nickInput = document.getElementById('nickInput');
+            const channelInput = document.getElementById('channelInput');
+            const reconnectCheckbox = document.getElementById('autoReconnect');
             const connectBtn = document.getElementById('connectBtn');
             if (!wsUrlInput || !nickInput || !channelInput || !connectBtn) {
                 alert("界面元素加载错误, 请刷新页面重试");
-                writeToLog("!SYS", "ERR", ')doConnect: critical UI elements missing'));
+                writeToLog("!SYS", "ERR", 'doConnect: critical UI elements missing');
                 return;
             }
             wsUrl = wsUrlInput.value.trim();
             nickname = nickInput.value.trim();
             channelName = channelInput.value.trim();
             autoReconnect = reconnectCheckbox ? reconnectCheckbox.checked : false;
-            const saslAccountInput = document.getElementById('saslAccountInput';
-            const saslPasswordInput = document.getElementById('saslPasswordInput';
+            const saslAccountInput = document.getElementById('saslAccountInput');
+            const saslPasswordInput = document.getElementById('saslPasswordInput');
             saslAccount = saslAccountInput ? saslAccountInput.value.trim() : "";
             saslPassword = saslPasswordInput ? saslPasswordInput.value.trim() : "";
             saslEnabled = !!(saslAccount && saslPassword);
@@ -3507,7 +3425,7 @@ setTimeout(() => {
             batchCleanupTimers.clear();
             if (!validateWsUrl(wsUrl)) {
                 writeToLog("!SYS", "ERR", `Invalid WebSocket URL: "${wsUrl}"`);
-                alert("WebSocket地址格式错误!必须以 ws:
+                alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
                 return;
             }
             if (!nickname) {
@@ -3517,90 +3435,83 @@ setTimeout(() => {
             }
             if (!validateNickname(nickname)) {
                 writeToLog("!SYS", "ERR", `Invalid nickname: "${nickname}"`);
-                nickInput.classList.add(')input-error'));
+                nickInput.classList.add('input-error');
                 nickInput.focus();
                 nickInput.select();
-                setTimeout(() => nickInput.classList.remove(')input-error')), 1200);
-                connectBtn.textContent = ')连接');
+                setTimeout(() => nickInput.classList.remove('input-error'), 1200);
+                connectBtn.textContent = '连接';
                 connectBtn.disabled = false;
                 wsUrlInput.disabled = false;
                 nickInput.disabled = false;
                 return;
             }
             if (channelName && !channelName.startsWith('#')) {
-                channelName = ')#') + channelName;
+                channelName = '#' + channelName;
                 writeToLog("!SYS", "ERR", `Channel name auto-prefixed: ${channelName}`);
             }
             if (!isAutoReconnect) reconnectAttempts = 0;
             wsUrlInput.disabled = true;
             nickInput.disabled = true;
-            connectBtn.textContent = ')连接中...');
+            connectBtn.textContent = '连接中...';
             connectBtn.disabled = true;
             isDisconnecting = false;
             saveSettings();
-            updateConnectionStatus(')connecting'));
+            updateConnectionStatus('connecting');
             writeToLog("!SYS", "SYS", "── Initiating connection ─────────────────");
             writeToLog("!SYS", "SYS", `Server  : ${wsUrl}`);
             writeToLog("!SYS", "SYS", `Nick    : ${nickname}`);
-            writeToLog("!SYS", "SYS", `Channel : ${channelName || ')(none)')}`);
+            writeToLog("!SYS", "SYS", `Channel : ${channelName || '(none)'}`);
             writeToLog("!SYS", "SYS", `Auto-reconnect: ${autoReconnect} | Attempt: ${reconnectAttempts + 1}`);
             statusChannel = null;
             activeChannel = null;
-            channels.innerHTML = '');
-            channelContents.innerHTML = '');
+            channels.innerHTML = '';
+            channelContents.innerHTML = '';
             channelMap.clear();
-            contentsWrapper.classList.remove(')hidden'));
-            contentsWrapper.classList.add(')visible'));
-            if (emptyState) emptyState.style.display = ')none');
-            if (input) document.getElementById('inputContainer').style.display = ')flex');
-            const settingsPanel = document.getElementById('settingsPanel';
-            const settingsBtn = document.getElementById('settingsToggleBtn';
-            if (settingsPanel) settingsPanel.classList.remove(')open'));
-            if (settingsBtn) settingsBtn.classList.remove(')active'));
+            contentsWrapper.classList.remove('hidden');
+            contentsWrapper.classList.add('visible');
+            if (emptyState) emptyState.style.display = 'none';
+            if (input) document.getElementById('inputContainer').style.display = 'flex';
+            const settingsPanel = document.getElementById('settingsPanel');
+            const settingsBtn = document.getElementById('settingsToggleBtn');
+            if (settingsPanel) settingsPanel.classList.remove('open');
+            if (settingsBtn) settingsBtn.classList.remove('active');
             statusChannel = new Tab_Create("Status", "", false);
             writeToLog("!SYS", "SYS", "Status tab created — calling WebSocket_Connect");
             WebSocket_Connect(wsUrl);
         }
         function onDisconnect(reason = "", wasConnected = false) {
-    if (isReconnecting) {
-        writeToLog("!SYS", "WARN", "Reconnect already in progress, skipping");
-        return;
-    }
-    isReconnecting = true;
-
             isConnected = false;
             if (connectTimeout) { clearTimeout(connectTimeout); connectTimeout = null; }
             if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
-isReconnecting = false;
             batchCleanupTimers.forEach(timer => clearTimeout(timer));
             batchCleanupTimers.clear();
-            const wsUrlInput = document.getElementById('wsUrl';
-            const nickInput = document.getElementById('nickInput';
+            const wsUrlInput = document.getElementById('wsUrl');
+            const nickInput = document.getElementById('nickInput');
             const connectBtn = document.getElementById('connectBtn');
             if (wsUrlInput) wsUrlInput.disabled = false;
             if (nickInput) nickInput.disabled = false;
             if (connectBtn) {
-                connectBtn.textContent = ')连接');
+                connectBtn.textContent = '连接';
                 connectBtn.disabled = false;
-                connectBtn.classList.remove(')disconnect'));
+                connectBtn.classList.remove('disconnect');
             }
             const joinChannelBtn = document.getElementById('joinChannelBtn');
             if (joinChannelBtn) joinChannelBtn.disabled = true;
             const inputContainer = document.getElementById('inputContainer');
-            if (inputContainer) inputContainer.style.display = ')none');
-            if (channels) channels.innerHTML = '');
-            updateConnectionStatus(')disconnected'));
+            if (inputContainer) inputContainer.style.display = 'none';
+            if (channels) channels.innerHTML = '';
+            updateConnectionStatus('disconnected');
             if (typingInputTimer) { clearTimeout(typingInputTimer); typingInputTimer = null; }
             typingLastSent = 0;
             remoteTypingState.clear();
             const typingEl = document.getElementById('typingIndicator');
-            if (typingEl) typingEl.textContent = '');
+            if (typingEl) typingEl.textContent = '';
             saslPending = false;
             const wasUserDisconnect = isDisconnecting;
             if (isDisconnecting) isDisconnecting = false;
             stopKeepAlive();
             writeToLog("!SYS", "SYS", "── Disconnect handler ────────────────────");
-            writeToLog("!SYS", "SYS", `Reason: "${reason || ')normal')}" | was-connected: ${wasConnected}`);
+            writeToLog("!SYS", "SYS", `Reason: "${reason || 'normal'}" | was-connected: ${wasConnected}`);
             if (sessionStartTime) {
                 writeToLog("!SYS", "SYS", `Session ended — duration: ${formatSessionDuration(sessionStartTime)} | sent: ${sentCount} | recv: ${recvCount}`);
                 sessionStartTime = null;
@@ -3618,7 +3529,7 @@ isReconnecting = false;
             writeToScreen("var(--clr-font)", disconnectMessage, statusChannel, "");
             writeToLog("!SYS", "SYS", logMessage);
             if (wasUserDisconnect) {
-                if (channelContents) channelContents.innerHTML = '');
+                if (channelContents) channelContents.innerHTML = '';
                 channelMap.clear();
                 activeChannel = null;
                 statusChannel = new Tab_Create("Status", "System Status", false);
@@ -3641,10 +3552,10 @@ isReconnecting = false;
                 writeToLog("!SYS", "RECON", "Max attempts reached — giving up");
                 autoReconnect = false;
                 updateAutoReconnectMenuItem();
-                alert(')自动重连失败, 请检查网络或服务器设置'));
+                alert('自动重连失败, 请检查网络或服务器设置');
             }
             isDisconnecting = false;
-            if (channelContents) channelContents.innerHTML = '');
+            if (channelContents) channelContents.innerHTML = '';
             channelMap.clear();
             activeChannel = null;
             statusChannel = new Tab_Create("Status", "System Status", false);
@@ -3670,7 +3581,7 @@ isReconnecting = false;
                 }
                 writeToLog("!SYS", "WS", `Creating new WebSocket → ${wsUri}`);
                 websocket = new WebSocket(wsUri);
-                websocket.binaryType = ')blob');
+                websocket.binaryType = 'blob';
                 if (connectTimeout) clearTimeout(connectTimeout);
                 connectTimeout = setTimeout(() => {
                     if (websocket && websocket.readyState === WebSocket.CONNECTING) {
@@ -3694,7 +3605,7 @@ isReconnecting = false;
             } catch (e) {
                 writeToLog("!SYS", "ERR", `WebSocket creation failed: ${e.message}`);
                 onDisconnect();
-                if (wsUrl && wsUrl.startsWith(')wss:
+                if (wsUrl && wsUrl.startsWith('wss://')) showSSLWarning(wsUrl);
                 alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
             }
         }
@@ -3708,7 +3619,7 @@ isReconnecting = false;
             }
             const wasConnected = isConnected;
             isConnected = false;
-            let reason = evt.reason || ')Connection closed');
+            let reason = evt.reason || 'Connection closed';
             let code = evt.code;
             let isUserDisconnect = false;
             if (isDisconnecting) isUserDisconnect = true;
@@ -3718,15 +3629,15 @@ isReconnecting = false;
             } else if (code === 1000) reason = "Normal closure";
             let logMsg = `[CLOSE] Code: ${code}`;
             switch (code) {
-                case 1000: logMsg += isUserDisconnect ? ') (user-initiated)') : ') (normal)'); break;
-                case 1001: logMsg += ') (endpoint going away)'); break;
-                case 1002: logMsg += ') (protocol error)'); break;
-                case 1003: logMsg += ') (unsupported data)'); break;
-                case 1005: logMsg += ') (no status code)'); break;
-                case 1006: logMsg += ') (abnormal closure)'); break;
-                case 1011: logMsg += ') (server error)'); break;
-                case 1015: logMsg += ') (TLS handshake failed)'); break;
-                default: if (code >= 4000 && code <= 4999) logMsg += ') (application error)');
+                case 1000: logMsg += isUserDisconnect ? ' (user-initiated)' : ' (normal)'; break;
+                case 1001: logMsg += ' (endpoint going away)'; break;
+                case 1002: logMsg += ' (protocol error)'; break;
+                case 1003: logMsg += ' (unsupported data)'; break;
+                case 1005: logMsg += ' (no status code)'; break;
+                case 1006: logMsg += ' (abnormal closure)'; break;
+                case 1011: logMsg += ' (server error)'; break;
+                case 1015: logMsg += ' (TLS handshake failed)'; break;
+                default: if (code >= 4000 && code <= 4999) logMsg += ' (application error)';
             }
             logMsg += ` — reason: "${reason}"`;
             writeToLog("!SYS", "WS", logMsg);
@@ -3736,21 +3647,20 @@ isReconnecting = false;
             onDisconnect(disconnectReason, wasConnected);
         }
         function onError(evt) {
-            let errorType = ')WebSocket error');
-            let errorDetail = ')unknown error');
+            let errorType = 'WebSocket error';
+            let errorDetail = 'unknown error';
             if (evt && evt.target) {
-                if (evt.target.readyState === WebSocket.CONNECTING) errorType = ')Connection failed');
-                else if (evt.target.readyState === WebSocket.OPEN) errorType = ')Message error');
+                if (evt.target.readyState === WebSocket.CONNECTING) errorType = 'Connection failed';
+                else if (evt.target.readyState === WebSocket.OPEN) errorType = 'Message error';
             }
-            try { errorDetail = (evt && evt.data) ? String(evt.data) : ')unknown error'); } catch (_) { }
+            try { errorDetail = (evt && evt.data) ? String(evt.data) : 'unknown error'; } catch (_) { }
             writeToScreen("var(--clr-red)", `ERROR: ${errorType}`, statusChannel, "");
             writeToLog("!SYS", "ERR", `${errorType}: ${errorDetail}`);
-            if (wsUrl && wsUrl.startsWith(')wss:
+            if (wsUrl && wsUrl.startsWith('wss://')) showSSLWarning(wsUrl);
         }
         function onOpen(evt) {
             if (websocket && websocket.readyState === WebSocket.OPEN) {
                 isConnected = true;
-isReconnecting = false;
                 reconnectAttempts = 0;
                 sessionStartTime = new Date();
                 sentCount = 0;
@@ -3758,42 +3668,36 @@ isReconnecting = false;
                 writeToScreen("var(--clr-font)", "CONNECTED", statusChannel, "");
                 writeToLog("!SYS", "WS", `WebSocket connected: ${wsUrl}`);
                 writeToLog("!SYS", "SYS", `Session started at ${sessionStartTime.toISOString()}`);
-                updateConnectionStatus(')connected'));
+                updateConnectionStatus('connected');
                 const connectBtn = document.getElementById('connectBtn');
                 if (connectBtn) {
-                    connectBtn.textContent = ')断开');
+                    connectBtn.textContent = '断开';
                     connectBtn.disabled = false;
-                    connectBtn.classList.add(')disconnect'));
+                    connectBtn.classList.add('disconnect');
                 }
                 const joinChannelBtn = document.getElementById('joinChannelBtn');
                 if (joinChannelBtn) joinChannelBtn.disabled = false;
                 doSend("CAP LS 302");
                 startKeepAlive();
-            } else writeToLog("!SYS", "ERR", `onOpen called but WebSocket state abnormal: ${websocket ? websocket.readyState : ')null')}`);
+            } else writeToLog("!SYS", "ERR", `onOpen called but WebSocket state abnormal: ${websocket ? websocket.readyState : 'null'}`);
         }
         function onMessage(evt) {
-    var msgLen = event.data && event.data.length;
-    if (msgLen > 8192) {
-        writeToLog("WebSocket message too large, skipped: " + msgLen + " bytes");
-        return;
-    }
-
             if (!evt) return;
             if (!websocket || websocket.readyState !== WebSocket.OPEN) {
                 if (isConnected) {
                     isConnected = false;
-                    updateConnectionStatus(')disconnected'));
+                    updateConnectionStatus('disconnected');
                 }
                 writeToLog("!SYS", "ERR", "Message received but WebSocket not connected");
                 return;
             }
             if (!isConnected) {
                 isConnected = true;
-                updateConnectionStatus(')connected'));
+                updateConnectionStatus('connected');
             }
             const rawData = evt.data;
             recvCount++;
-            writeToLog("↓RX", "RAW", `${typeof rawData === ')string') ? rawData.trim() : ')[binary data]')}`);
+            writeToLog("↓RX", "RAW", `${typeof rawData === 'string' ? rawData.trim() : '[binary data]'}`);
             if (rawData instanceof Blob) {
                 let fileReader = new FileReader();
                 fileReader.onloadend = event => {
@@ -3815,12 +3719,12 @@ isReconnecting = false;
                 if (websocket.readyState === WebSocket.OPEN) {
                     if (!isConnected) {
                         isConnected = true;
-                        updateConnectionStatus(')connected'));
+                        updateConnectionStatus('connected');
                     }
                 } else if (websocket.readyState === WebSocket.CLOSED || websocket.readyState === WebSocket.CLOSING) {
                     if (isConnected) {
                         isConnected = false;
-                        updateConnectionStatus(')disconnected'));
+                        updateConnectionStatus('disconnected');
                     }
                     writeToLog("!SYS", "ERR", `WebSocket not connected — cannot send: ${message.trim()}`);
                     writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
@@ -3829,45 +3733,40 @@ isReconnecting = false;
             } else {
                 if (isConnected) {
                     isConnected = false;
-                    updateConnectionStatus(')disconnected'));
+                    updateConnectionStatus('disconnected');
                 }
                 writeToLog("!SYS", "ERR", `WebSocket is null — cannot send: ${message.trim()}`);
                 writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
                 return;
             }
-            if (!message.endsWith(')\r\n'))) message += ')\r\n');
+            if (!message.endsWith('\r\n')) message += '\r\n';
             try {
                 websocket.send(message);
-                if (!message.trim().toUpperCase().startsWith(')PING'))) sentCount++;
+                if (!message.trim().toUpperCase().startsWith('PING')) sentCount++;
                 writeToLog("↑TX", "RAW", `${message.trim()}`);
             } catch (e) {
                 writeToLog("!SYS", "ERR", `Failed to send message: ${e.message}`);
                 writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel, "");
                 if (isConnected) {
                     isConnected = false;
-                    updateConnectionStatus(')disconnected'));
+                    updateConnectionStatus('disconnected');
                 }
                 stopKeepAlive(); onDisconnect("error", true);
             }
         }
         function process(rawData) {
             if (!rawData) return;
-            const lines = rawData.split(')\n'));
+            const lines = rawData.split('\n');
             for (const line of lines) {
-                const trimmedLine = line.replace(/\r$/, ''));
+                const trimmedLine = line.replace(/\r$/, '');
                 if (trimmedLine) processLine(trimmedLine);
             }
         }
         function processLine(rawLine) {
-        if (line.length > 8192) {
-            writeToLog("Message too large, discarded: " + line.length + " bytes");
-            return;
-        }
-
             if (!rawLine) return;
             try {
                 const { tags: msgTags, rest: lineAfterTags } = extractMsgTags(rawLine);
-                if (msgTags.has(')batch'))) {
+                if (msgTags.has('batch')) {
                     const batchRef = msgTags.get('batch');
                     if (batchBuffer.has(batchRef)) {
                         batchBuffer.get(batchRef).messages.push(rawLine);
@@ -3887,7 +3786,7 @@ isReconnecting = false;
                 let data = lineAfterTags.split(" ");
                 if (!data || data.length < 2) return;
                 if (data[0] === "PING") {
-                    const pingToken = data[1] ? data[1].replace(/^:/, '')) : ')pong');
+                    const pingToken = data[1] ? data[1].replace(/^:/, '') : 'pong';
                     doSend("PONG :" + pingToken.trim());
                     writeToLog("!SYS", "PING", `PONG ${pingToken}`);
                     return;
@@ -3897,7 +3796,7 @@ isReconnecting = false;
                     writeToLog("!SYS", "ERR", `${lineAfterTags}`);
                     return;
                 }
-                if (!data[0].startsWith('):'))) {
+                if (!data[0].startsWith(':')) {
                     const bareCommand = data[0].toUpperCase();
                     const bareFn = Commands.get(bareCommand);
                     if (bareFn) {
@@ -3916,26 +3815,26 @@ isReconnecting = false;
                     let text = "";
                     if (data.length > 3) {
                         let first = data[3];
-                        if (first.startsWith('):'))) first = first.substring(1);
+                        if (first.startsWith(':')) first = first.substring(1);
                         text = first;
                         for (let i = 4; i < data.length; i++) text += " " + data[i];
                     }
                     writeToScreen("var(--clr-font)", text || data[1], statusChannel, "");
                     writeToLog("↓RX", "RAW", `${data[1]}: ${text}`);
                 }
-            } catch (e) {writeToScreen("error", "消息处理异常: " + (e.message || "Unknown error"), statusChannel, "SYS"); writeToLog("!SYS", "ERR", `processLine error: ${e.message}`); }
+            } catch (e) { writeToLog("!SYS", "ERR", `processLine error: ${e.message}`); }
         }
         const Commands = new Map();
         Commands.set("311", (nick, data) => {
             if (!data || data.length < 6) return;
             const target = data[3], user = data[4], host = data[5];
-            const realname = data.slice(7).join('')).replace(/^:/, ''));
+            const realname = data.slice(7).join(' ').replace(/^:/, '');
             writeToScreen("var(--clr-info)", `[WHOIS] ${target} (${user}@${host}) — 真名: ${realname}`, statusChannel, "*");
         });
         Commands.set("312", (nick, data) => {
             if (!data || data.length < 5) return;
             const target = data[3], server = data[4];
-            const serverInfo = data.slice(5).join('')).replace(/^:/, ''));
+            const serverInfo = data.slice(5).join(' ').replace(/^:/, '');
             writeToScreen("var(--clr-info)", `[WHOIS] ${target} 服务器: ${server} (${serverInfo})`, statusChannel, "*");
         });
         Commands.set("313", (nick, data) => {
@@ -3955,7 +3854,7 @@ isReconnecting = false;
         });
         Commands.set("319", (nick, data) => {
             if (!data || data.length < 5) return;
-            const target = data[3], chans = data.slice(4).join('')).replace(/^:/, ''));
+            const target = data[3], chans = data.slice(4).join(' ').replace(/^:/, '');
             writeToScreen("var(--clr-info)", `[WHOIS] ${target} 在频道: ${chans}`, statusChannel, "*");
         });
         Commands.set("330", (nick, data) => {
@@ -3967,7 +3866,7 @@ isReconnecting = false;
         });
         Commands.set("322", (nick, data) => {
             if (!data || data.length < 6) return;
-            const chanName = data[3], userCount = data[4], topic = data.slice(5).join('')).replace(/^:/, ''));
+            const chanName = data[3], userCount = data[4], topic = data.slice(5).join(' ').replace(/^:/, '');
             writeToScreen("var(--clr-font)", `  ${chanName} [${userCount}人] ${topic}`, statusChannel, "*");
         });
         Commands.set("323", (nick, data) => {
@@ -3975,22 +3874,22 @@ isReconnecting = false;
         });
         Commands.set("730", (nick, data) => {
             if (!data || data.length < 4) return;
-            const targets = data.slice(3).join('')).replace(/^:/, ''));
+            const targets = data.slice(3).join(' ').replace(/^:/, '');
             writeToScreen("var(--clr-green)", `[MONITOR] 上线: ${targets}`, statusChannel, "*");
         });
         Commands.set("731", (nick, data) => {
             if (!data || data.length < 4) return;
-            const targets = data.slice(3).join('')).replace(/^:/, ''));
+            const targets = data.slice(3).join(' ').replace(/^:/, '');
             writeToScreen("var(--clr-text-dim)", `[MONITOR] 下线: ${targets}`, statusChannel, "*");
         });
         Commands.set("732", (nick, data) => {
             if (!data || data.length < 4) return;
-            writeToScreen("var(--clr-info)", `[MONITOR] 监控列表: ${data.slice(3).join('')).replace(/^:/, ''))}`, statusChannel, "*");
+            writeToScreen("var(--clr-info)", `[MONITOR] 监控列表: ${data.slice(3).join(' ').replace(/^:/, '')}`, statusChannel, "*");
         });
         Commands.set("733", (nick, data) => writeToScreen("var(--clr-text-dim)", `[MONITOR] 监控列表结束`, statusChannel, "*"));
         Commands.set("734", (nick, data) => {
             if (!data || data.length < 4) return;
-            writeToScreen("var(--clr-red)", `[MONITOR] 监控列表已满: ${data.slice(3).join('')).replace(/^:/, ''))}`, statusChannel, "*");
+            writeToScreen("var(--clr-red)", `[MONITOR] 监控列表已满: ${data.slice(3).join(' ').replace(/^:/, '')}`, statusChannel, "*");
         });
         Commands.set("CAP", (nick, data) => {
             if (!data || data.length < 4) return;
@@ -3999,15 +3898,15 @@ isReconnecting = false;
             if (subCommand === "LS" && data[4] === "*") { isMultiline = true; capsStartIdx = 5; }
             let caps = "";
             for (let i = capsStartIdx; i < data.length; i++) {
-                if (data[i].startsWith('):'))) {
+                if (data[i].startsWith(':')) {
                     caps = data[i].substring(1);
-                    for (let j = i + 1; j < data.length; j++) caps += '') + data[j];
+                    for (let j = i + 1; j < data.length; j++) caps += ' ' + data[j];
                     break;
-                } else caps += (caps ? '') : '')) + data[i];
+                } else caps += (caps ? ' ' : '') + data[i];
             }
-            writeToLog("↓RX", "CAP", `${subCommand}${isMultiline ? ') (multiline)') : '')}: "${caps}"`);
+            writeToLog("↓RX", "CAP", `${subCommand}${isMultiline ? ' (multiline)' : ''}: "${caps}"`);
             if (subCommand === "LS") {
-                if (caps) capLsBuffer = capLsBuffer ? capLsBuffer + '') + caps : caps;
+                if (caps) capLsBuffer = capLsBuffer ? capLsBuffer + ' ' + caps : caps;
                 if (isMultiline) {
                     writeToLog("↓RX", "CAP", "LS multiline chunk — waiting for more...");
                     return;
@@ -4015,9 +3914,9 @@ isReconnecting = false;
                 const allCaps = capLsBuffer;
                 capLsBuffer = "";
                 writeToScreen("var(--clr-info)", `服务器支持的能力: ${allCaps}`, statusChannel, "*");
-                const availableCaps = allCaps.split('')).map(c => c.trim().split(')='))[0].toLowerCase()).filter(c => c);
+                const availableCaps = allCaps.split(' ').map(c => c.trim().split('=')[0].toLowerCase()).filter(c => c);
                 const wantedCaps = ["message-tags", "server-time", "sasl", "away-notify", "chghost", "account-tag", "account-notify", "extended-join", "echo-message", "multi-prefix", "userhost-in-names", "cap-notify", "setname", "batch", "labeled-response", "chathistory", "invite-notify", "draft/multiline", "whox"];
-                const requestedCaps = wantedCaps.filter(cap => availableCaps.includes(cap.toLowerCase())).join(''));
+                const requestedCaps = wantedCaps.filter(cap => availableCaps.includes(cap.toLowerCase())).join(' ');
                 if (requestedCaps) {
                     writeToLog("↑TX", "CAP", `Requesting: ${requestedCaps}`);
                     doSend("CAP REQ :" + requestedCaps);
@@ -4027,26 +3926,26 @@ isReconnecting = false;
                     sendRegistration();
                 }
             } else if (subCommand === "ACK") {
-                const ackedList = (caps || "").split('')).map(c => c.trim().toLowerCase()).filter(c => c);
+                const ackedList = (caps || "").split(' ').map(c => c.trim().toLowerCase()).filter(c => c);
                 ackedList.forEach(cap => ircv3ActiveCaps.add(cap));
-                ircv3ServerTime = ircv3ActiveCaps.has(')server-time'));
-                ircv3EchoMessage = ircv3ActiveCaps.has(')echo-message'));
-                if (ircv3ActiveCaps.has(')message-tags'))) ircv3MessageTags = true;
-                if (ircv3ActiveCaps.has(')account-tag'))) ircv3AccountTag = true;
-                if (ircv3ActiveCaps.has(')away-notify'))) ircv3AwayNotify = true;
-                if (ircv3ActiveCaps.has(')account-notify'))) ircv3AccountNotify = true;
-                if (ircv3ActiveCaps.has(')extended-join'))) ircv3ExtendedJoin = true;
-                if (ircv3ActiveCaps.has(')chghost'))) ircv3ChgHost = true;
-                if (ircv3ActiveCaps.has(')multi-prefix'))) ircv3MultiPrefix = true;
-                if (ircv3ActiveCaps.has(')userhost-in-names'))) ircv3UserhostInNames = true;
-                if (ircv3ActiveCaps.has(')batch'))) ircv3Batch = true;
-                if (ircv3ActiveCaps.has(')labeled-response'))) ircv3LabeledResponse = true;
-                if (ircv3ActiveCaps.has(')chathistory'))) ircv3ChatHistory = true;
-                if (ircv3ActiveCaps.has(')invite-notify'))) ircv3InviteNotify = true;
-                if (ircv3ActiveCaps.has(')draft/multiline'))) ircv3Multiline = true;
-                if (ircv3ActiveCaps.has(')whox'))) ircv3Whox = true;
-                writeToScreen("var(--clr-green)", `已启用能力: ${ackedList.join('), ')) || ')(无)')}`, statusChannel, "*");
-                if (ircv3ActiveCaps.has(')sasl')) && saslEnabled && saslAccount && saslPassword) {
+                ircv3ServerTime = ircv3ActiveCaps.has('server-time');
+                ircv3EchoMessage = ircv3ActiveCaps.has('echo-message');
+                if (ircv3ActiveCaps.has('message-tags')) ircv3MessageTags = true;
+                if (ircv3ActiveCaps.has('account-tag')) ircv3AccountTag = true;
+                if (ircv3ActiveCaps.has('away-notify')) ircv3AwayNotify = true;
+                if (ircv3ActiveCaps.has('account-notify')) ircv3AccountNotify = true;
+                if (ircv3ActiveCaps.has('extended-join')) ircv3ExtendedJoin = true;
+                if (ircv3ActiveCaps.has('chghost')) ircv3ChgHost = true;
+                if (ircv3ActiveCaps.has('multi-prefix')) ircv3MultiPrefix = true;
+                if (ircv3ActiveCaps.has('userhost-in-names')) ircv3UserhostInNames = true;
+                if (ircv3ActiveCaps.has('batch')) ircv3Batch = true;
+                if (ircv3ActiveCaps.has('labeled-response')) ircv3LabeledResponse = true;
+                if (ircv3ActiveCaps.has('chathistory')) ircv3ChatHistory = true;
+                if (ircv3ActiveCaps.has('invite-notify')) ircv3InviteNotify = true;
+                if (ircv3ActiveCaps.has('draft/multiline')) ircv3Multiline = true;
+                if (ircv3ActiveCaps.has('whox')) ircv3Whox = true;
+                writeToScreen("var(--clr-green)", `已启用能力: ${ackedList.join(', ') || '(无)'}`, statusChannel, "*");
+                if (ircv3ActiveCaps.has('sasl') && saslEnabled && saslAccount && saslPassword) {
                     writeToLog("!SYS", "SASL", `Starting PLAIN auth for: ${saslAccount}`);
                     saslPending = true;
                     doSend("AUTHENTICATE PLAIN");
@@ -4055,26 +3954,26 @@ isReconnecting = false;
                     sendRegistration();
                 }
             } else if (subCommand === "NAK") {
-                writeToScreen("var(--clr-warning)", `能力被拒绝: ${caps || ')(无)')}`, statusChannel, "*");
+                writeToScreen("var(--clr-warning)", `能力被拒绝: ${caps || '(无)'}`, statusChannel, "*");
                 doSend("CAP END");
                 sendRegistration();
             } else if (subCommand === "LIST") {
-                writeToScreen("var(--clr-info)", `当前启用的能力: ${caps || ')(无)')}`, statusChannel, "*");
+                writeToScreen("var(--clr-info)", `当前启用的能力: ${caps || '(无)'}`, statusChannel, "*");
             } else if (subCommand === "NEW") {
                 writeToScreen("var(--clr-info)", `服务器新增能力: ${caps}`, statusChannel, "*");
             } else if (subCommand === "DEL") {
                 writeToScreen("var(--clr-warning)", `服务器移除能力: ${caps}`, statusChannel, "*");
-                caps.split('')).map(c => c.trim().toLowerCase()).filter(c => c).forEach(cap => ircv3ActiveCaps.delete(cap));
+                caps.split(' ').map(c => c.trim().toLowerCase()).filter(c => c).forEach(cap => ircv3ActiveCaps.delete(cap));
             }
         });
         Commands.set("AUTHENTICATE", (nick, data) => {
             if (!data || data.length < 2) return;
             let payload = "";
-            if (data[0].toUpperCase() === "AUTHENTICATE") payload = (data[1] || "").replace(/^:/, ''));
-            else payload = (data[2] || "").replace(/^:/, ''));
-            if (payload === ')+')) {
+            if (data[0].toUpperCase() === "AUTHENTICATE") payload = (data[1] || "").replace(/^:/, '');
+            else payload = (data[2] || "").replace(/^:/, '');
+            if (payload === '+') {
                 if (!saslPending || !saslAccount || !saslPassword) {
-                    writeToLog("↓RX", "SASL", ')AUTHENTICATE + received but no pending auth'));
+                    writeToLog("↓RX", "SASL", 'AUTHENTICATE + received but no pending auth');
                     doSend("AUTHENTICATE *");
                     return;
                 }
@@ -4086,13 +3985,13 @@ isReconnecting = false;
         });
         Commands.set("900", (nick, data) => {
             if (!data || data.length < 4) return;
-            const accountName = data.length >= 5 ? data[4].replace(/^:/, '')) : (data[3] || ''));
+            const accountName = data.length >= 5 ? data[4].replace(/^:/, '') : (data[3] || '');
             writeToScreen("var(--clr-green)", `已登录账号: ${accountName}`, statusChannel, "*");
-            if (accountName && accountName !== ')*')) saslAccount = accountName;
+            if (accountName && accountName !== '*') saslAccount = accountName;
         });
         Commands.set("901", (nick, data) => writeToScreen("var(--clr-warning)", `账号已登出`, statusChannel, "*"));
         Commands.set("902", (nick, data) => {
-            const msg = data && data.length >= 4 ? data.slice(3).join('')).replace(/^:/, '')) : ')Nick locked');
+            const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'Nick locked';
             writeToScreen("var(--clr-red)", `SASL 错误: 昵称已锁定 — ${msg}`, statusChannel, "*");
             saslPending = false;
             doSend("CAP END");
@@ -4105,7 +4004,7 @@ isReconnecting = false;
             sendRegistration();
         });
         Commands.set("904", (nick, data) => {
-            const msg = data && data.length >= 4 ? data.slice(3).join('')).replace(/^:/, '')) : ')Authentication failed');
+            const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'Authentication failed';
             writeToScreen("var(--clr-red)", `SASL 认证失败: ${msg}`, statusChannel, "*");
             saslPending = false;
             doSend("CAP END");
@@ -4125,12 +4024,12 @@ isReconnecting = false;
         });
         Commands.set("907", (nick, data) => writeToScreen("var(--clr-warning)", `已经完成 SASL 认证`, statusChannel, "*"));
         Commands.set("908", (nick, data) => {
-            const mechs = data && data.length >= 4 ? data.slice(3).join('')).replace(/^:/, '')) : '');
+            const mechs = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '';
             writeToScreen("var(--clr-info)", `支持的 SASL 机制: ${mechs}`, statusChannel, "*");
         });
         Commands.set("CHGHOST", (nick, data) => {
             if (!data || data.length < 4) return;
-            const newIdent = data[2], newHost = data[3].replace(/^:/, ''));
+            const newIdent = data[2], newHost = data[3].replace(/^:/, '');
             const isSelf = (nick === nickname);
             if (isSelf) writeToScreen("var(--clr-info)", `你的主机信息已更新: ${newIdent}@${newHost}`, statusChannel, "*");
             else {
@@ -4145,8 +4044,8 @@ isReconnecting = false;
         });
         Commands.set("ACCOUNT", (nick, data) => {
             if (!data || data.length < 3) return;
-            const accountName = data[2].replace(/^:/, '')), isSelf = (nick === nickname);
-            if (accountName === ')*')) {
+            const accountName = data[2].replace(/^:/, ''), isSelf = (nick === nickname);
+            if (accountName === '*') {
                 if (isSelf) writeToScreen("var(--clr-warning)", `你已退出账号登录`, statusChannel, "*");
                 else {
                     channelMap.forEach(channel => {
@@ -4168,7 +4067,7 @@ isReconnecting = false;
         });
         Commands.set("SETNAME", (nick, data) => {
             if (!data || data.length < 3) return;
-            const newRealname = data.slice(2).join('')).replace(/^:/, '')), isSelf = (nick === nickname);
+            const newRealname = data.slice(2).join(' ').replace(/^:/, ''), isSelf = (nick === nickname);
             if (isSelf) writeToScreen("var(--clr-info)", `你的真名已更新为: ${newRealname}`, statusChannel, "*");
             else {
                 channelMap.forEach(channel => {
@@ -4182,8 +4081,8 @@ isReconnecting = false;
             const isSelf = (nick === nickname);
             let reason = "";
             if (data && data.length >= 3) {
-                reason = data.slice(2).join(''));
-                if (reason.startsWith('):'))) reason = reason.substring(1);
+                reason = data.slice(2).join(' ');
+                if (reason.startsWith(':')) reason = reason.substring(1);
             }
             const isSettingAway = reason.length > 0;
             if (isSelf) {
@@ -4193,20 +4092,20 @@ isReconnecting = false;
                 channelMap.forEach(channel => {
                     if (!channel.userlist || !channel.users) return;
                     if (channel.users.some(u => u[1] === nick)) {
-                        if (isSettingAway) writeToScreen("var(--clr-text-dim)", `${nick} 离开 (${reason || ')忙碌')})`, channel, "*");
+                        if (isSettingAway) writeToScreen("var(--clr-text-dim)", `${nick} 离开 (${reason || '忙碌'})`, channel, "*");
                         else writeToScreen("var(--clr-info)", `${nick} 回来了`, channel, "*");
                         updateUserAwayStatus(nick, channel, isSettingAway);
                     }
                 });
             }
-            writeToLog("↓RX", "IRC", `${nick}: ${isSettingAway ? ')away (') + reason + '))') : ')back')}`);
+            writeToLog("↓RX", "IRC", `${nick}: ${isSettingAway ? 'away (' + reason + ')' : 'back'}`);
         });
         Commands.set("301", (nick, data) => {
             if (!data || data.length < 5) return;
-            writeToScreen("var(--clr-text-dim)", `${data[3]} 正在离开: ${data.slice(4).join('')).replace(/^:/, ''))}`, statusChannel, "*");
+            writeToScreen("var(--clr-text-dim)", `${data[3]} 正在离开: ${data.slice(4).join(' ').replace(/^:/, '')}`, statusChannel, "*");
         });
-        Commands.set("305", (nick, data) => writeToScreen("var(--clr-info)", `✓ ${data && data.length >= 4 ? data.slice(3).join('')).replace(/^:/, '')) : ')你不再处于离开状态')}`, activeChannel || statusChannel, "*"));
-        Commands.set("306", (nick, data) => writeToScreen("var(--clr-warning)", `✓ ${data && data.length >= 4 ? data.slice(3).join('')).replace(/^:/, '')) : ')你已标记为离开状态')}`, activeChannel || statusChannel, "*"));
+        Commands.set("305", (nick, data) => writeToScreen("var(--clr-info)", `✓ ${data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '你不再处于离开状态'}`, activeChannel || statusChannel, "*"));
+        Commands.set("306", (nick, data) => writeToScreen("var(--clr-warning)", `✓ ${data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '你已标记为离开状态'}`, activeChannel || statusChannel, "*"));
         Commands.set("001", (nick, data) => {
             if (channelName) {
                 writeToLog("↓RX", "IRC", `RPL_WELCOME — auto-joining: ${channelName}`);
@@ -4238,14 +4137,6 @@ isReconnecting = false;
                         PrefixChars = tmp.split(")");
                         if (PrefixChars[0] && PrefixChars[0].startsWith("(")) PrefixChars[0] = PrefixChars[0].substring(1);
                         if (PrefixChars[1]) PrefixChars[1] = PrefixChars[1].trimEnd();
-                    tokens.forEach(token => {
-                        const eqIdx = token.indexOf("=");
-                        if (eqIdx === -1) return;
-                        const key = token.substring(0, eqIdx);
-                        const value = token.substring(eqIdx + 1);
-                        if (key === "CASEMAPPING") ircv3CaseMapping = value;
-                        if (key === "CHANTYPES") ircv3ChanTypes = value;
-                    });
                         writeToScreen("var(--clr-brown)", "PREFIX CHARS: " + PrefixChars[0] + " " + PrefixChars[1], statusChannel, "");
                         writeToLog("↓RX", "IRC", `PREFIX support: modes="${PrefixChars[0]}" chars="${PrefixChars[1]}"`);
                     }
@@ -4256,7 +4147,7 @@ isReconnecting = false;
             if (!data || data.length < 4) return;
             let channel = findChannel(data[3]);
             if (!channel || !channel.topic) return;
-            let text = data.length >= 5 ? data.slice(4).join('')).replace(/^:/, '')) : '');
+            let text = data.length >= 5 ? data.slice(4).join(' ').replace(/^:/, '') : '';
             channel.topic.textContent = text || "No topic set";
             writeToLog("↓RX", "IRC", `RPL_TOPIC: ${data[3]} topic="${text}"`);
         });
@@ -4269,7 +4160,7 @@ isReconnecting = false;
             for (let i = 5; i < data.length; i++) {
                 let prefix = "", entry = data[i];
                 let displayNick = entry;
-                if (ircv3UserhostInNames && entry.includes(')!'))) displayNick = entry.split(')!'))[0];
+                if (ircv3UserhostInNames && entry.includes('!')) displayNick = entry.split('!')[0];
                 let ii = 0;
                 while (PrefixChars && PrefixChars[1] && ii < displayNick.length && PrefixChars[1].indexOf(displayNick[ii]) >= 0) {
                     prefix += displayNick[ii];
@@ -4290,12 +4181,12 @@ isReconnecting = false;
             for (let i = 0; i < channel.users.length; i++) {
                 const prefix = channel.users[i][0], nickName = channel.users[i][1];
                 const userEl = document.createElement("li");
-                const initial = nickName.replace(/^[^a-zA-Z0-9]/, ''))[0] || nickName[0] || ')?');
-                userEl.setAttribute(')data-initial'), initial.toUpperCase());
+                const initial = nickName.replace(/^[^a-zA-Z0-9]/, '')[0] || nickName[0] || '?';
+                userEl.setAttribute('data-initial', initial.toUpperCase());
                 const prefixP = document.createElement("p");
                 if (prefix && prefix !== " ") {
                     const prefixChar = prefix[0], prefixInfo = DefaultPrefixMap[prefixChar];
-                    userEl.setAttribute(')data-prefix'), prefixChar);
+                    userEl.setAttribute('data-prefix', prefixChar);
                     prefixP.textContent = prefixInfo ? prefixInfo.symbol : prefixChar;
                     if (prefixInfo) prefixP.title = prefixInfo.name;
                 }
@@ -4325,21 +4216,21 @@ isReconnecting = false;
         });
         Commands.set("375", (nick, data) => {
             if (!data || data.length < 3) return;
-            let text = data.length >= 4 ? (data[3].startsWith('):')) ? data.slice(3).join('')).substring(1) : data.slice(3).join(''))) : "";
+            let text = data.length >= 4 ? (data[3].startsWith(':') ? data.slice(3).join(' ').substring(1) : data.slice(3).join(' ')) : "";
             writeMotdLine(text);
             writeToLog("↓RX", "IRC", `START: ${text}`);
         });
         Commands.set("372", (nick, data) => {
             if (!data || data.length < 3) return;
-            let text = data.length >= 4 ? data.slice(3).join('')) : "";
-            if (text.startsWith('):'))) text = text.substring(1);
+            let text = data.length >= 4 ? data.slice(3).join(' ') : "";
+            if (text.startsWith(':')) text = text.substring(1);
             writeMotdLine(text);
             writeToLog("↓RX", "IRC", `${text}`);
         });
         Commands.set("376", (nick, data) => {
             if (!data || data.length < 3) return;
-            let text = data.length >= 4 ? data.slice(3).join('')) : "";
-            if (text.startsWith('):'))) text = text.substring(1);
+            let text = data.length >= 4 ? data.slice(3).join(' ') : "";
+            if (text.startsWith(':')) text = text.substring(1);
             writeMotdLine(text);
             writeToLog("↓RX", "IRC", `END: ${text}`);
         });
@@ -4349,8 +4240,8 @@ isReconnecting = false;
             if (serverChannelName[0] === ":") serverChannelName = serverChannelName.substring(1);
             const isSelf = data[0].startsWith(":" + nickname + "!") || data[0].toLowerCase().startsWith(":" + nickname.toLowerCase() + "!");
             let joinAccount = null;
-            if (ircv3ExtendedJoin && data.length >= 4) joinAccount = data[3] !== ')*') ? data[3] : null;
-            writeToLog("↓RX", "IRC", `JOIN: nick=${nick}, channel=${serverChannelName}, self=${isSelf}${joinAccount ? '), account=') + joinAccount : '')}`);
+            if (ircv3ExtendedJoin && data.length >= 4) joinAccount = data[3] !== '*' ? data[3] : null;
+            writeToLog("↓RX", "IRC", `JOIN: nick=${nick}, channel=${serverChannelName}, self=${isSelf}${joinAccount ? ', account=' + joinAccount : ''}`);
             if (!isSelf) {
                 const channel = findChannel(serverChannelName);
                 if (!channel) return;
@@ -4365,7 +4256,7 @@ isReconnecting = false;
                         channel.name = serverChannelName;
                         channel.button.textContent = serverChannelName;
                         channel.button.value = serverChannelName;
-                        channel.button.querySelector(').x')).value = serverChannelName;
+                        channel.button.querySelector('.x').value = serverChannelName;
                         channelMap.set(serverChannelName, channel);
                     }
                 } else channel = new Tab_Create(serverChannelName, "", true);
@@ -4383,14 +4274,14 @@ isReconnecting = false;
             if (!channel) return;
             let text = "";
             if (data.length >= 5) {
-                text = data[4].startsWith('):')) ? data[4].substring(1) : data[4];
+                text = data[4].startsWith(':') ? data[4].substring(1) : data[4];
                 for (let i = 5; i < data.length; i++) text += " " + data[i];
             }
             if (data[3] !== nickname) {
-                if (Channel_RemoveUser(data[3], channel)) writeToScreen("var(--clr-red)", `${data[3]} 被 ${nick} 踢出 (原因: ${text || ')无')})`, channel, "*");
+                if (Channel_RemoveUser(data[3], channel)) writeToScreen("var(--clr-red)", `${data[3]} 被 ${nick} 踢出 (原因: ${text || '无'})`, channel, "*");
             } else {
                 Channel_Destroy(data[2]);
-                writeToScreen("var(--clr-red)", `你被 ${nick} 踢出 ${data[2]} (原因: ${text || ')无')})`, statusChannel, "");
+                writeToScreen("var(--clr-red)", `你被 ${nick} 踢出 ${data[2]} (原因: ${text || '无'})`, statusChannel, "");
             }
             writeToLog("↓RX", "IRC", `KICK: ${data[2]} kicked=${data[3]} by=${nick}`);
         });
@@ -4406,15 +4297,15 @@ isReconnecting = false;
             let paramIndex = 4, adding = true;
             for (let i = 0; i < modeString.length; i++) {
                 const ch = modeString[i];
-                if (ch === ')+')) { adding = true; continue; }
-                if (ch === ')-')) { adding = false; continue; }
+                if (ch === '+') { adding = true; continue; }
+                if (ch === '-') { adding = false; continue; }
                 const posInModes = PrefixChars[0].indexOf(ch);
                 if (posInModes >= 0 && paramIndex < data.length) {
-                    let targetNick = data[paramIndex].replace(/^:/, ''));
+                    let targetNick = data[paramIndex].replace(/^:/, '');
                     paramIndex++;
                     Channel_UpdateUserPrefix(targetNick, channel, adding, ch);
                 } else if (posInModes < 0 && paramIndex < data.length) {
-                    if ((adding && (ch === ')k') || ch === ')l') || ch === ')b') || ch === ')e') || ch === ')I'))) || (!adding && (ch === ')k') || ch === ')b') || ch === ')e') || ch === ')I')))) {
+                    if ((adding && (ch === 'k' || ch === 'l' || ch === 'b' || ch === 'e' || ch === 'I')) || (!adding && (ch === 'k' || ch === 'b' || ch === 'e' || ch === 'I'))) {
                         paramIndex++;
                     }
                 }
@@ -4423,7 +4314,7 @@ isReconnecting = false;
         });
         Commands.set("NICK", (nick, data) => {
             if (!data || data.length < 3) return;
-            let newnick = data[2].replace(/^:/, ''));
+            let newnick = data[2].replace(/^:/, '');
             const isSelf = (nick === nickname);
             if (isSelf) nickname = newnick;
             channelMap.forEach((channel, name) => {
@@ -4432,7 +4323,7 @@ isReconnecting = false;
                     else writeToScreen("var(--clr-green)", `${nick} 更名为 ${newnick}`, channel, "*");
                 }
             });
-            writeToLog("↓RX", "IRC", `NICK: ${nick} → ${newnick}${isSelf ? ') (self)') : '')}`);
+            writeToLog("↓RX", "IRC", `NICK: ${nick} → ${newnick}${isSelf ? ' (self)' : ''}`);
         });
         Commands.set("PART", (nick, data) => {
             if (!data || data.length < 3) return;
@@ -4444,15 +4335,15 @@ isReconnecting = false;
                 return;
             }
             let partReason = "";
-            if (data.length >= 4) partReason = data.slice(3).join('')).replace(/^:/, '')).trim();
+            if (data.length >= 4) partReason = data.slice(3).join(' ').replace(/^:/, '').trim();
             const isSelf = data[0].startsWith(":" + nickname + "!") || data[0].toLowerCase().startsWith(":" + nickname.toLowerCase() + "!");
             if (isSelf) {
                 Channel_Destroy(channel.name);
-                writeToScreen("var(--clr-green)", `你已离开频道 ${channel.name}${partReason ? ') (') + partReason + '))') : '')}`, statusChannel, "");
-                writeToLog("↓RX", "IRC", `Self parted: ${partChannel}${partReason ? ') reason: ') + partReason : '')}`);
+                writeToScreen("var(--clr-green)", `你已离开频道 ${channel.name}${partReason ? ' (' + partReason + ')' : ''}`, statusChannel, "");
+                writeToLog("↓RX", "IRC", `Self parted: ${partChannel}${partReason ? ' reason: ' + partReason : ''}`);
             } else {
-                if (Channel_RemoveUser(nick, channel)) writeToScreen("var(--clr-green)", `${nick} 离开频道${partReason ? ') (') + partReason + '))') : '')}`, channel, "*");
-                writeToLog("↓RX", "IRC", `User parted: ${nick} ← ${partChannel}${partReason ? ') reason: ') + partReason : '')}`);
+                if (Channel_RemoveUser(nick, channel)) writeToScreen("var(--clr-green)", `${nick} 离开频道${partReason ? ' (' + partReason + ')' : ''}`, channel, "*");
+                writeToLog("↓RX", "IRC", `User parted: ${nick} ← ${partChannel}${partReason ? ' reason: ' + partReason : ''}`);
             }
         });
         Commands.set("TOPIC", (nick, data) => {
@@ -4467,33 +4358,33 @@ isReconnecting = false;
         });
         Commands.set("QUIT", (nick, data) => {
             let quitReason = "";
-            if (data && data.length >= 3) quitReason = data.slice(2).join('')).replace(/^:/, '')).trim();
+            if (data && data.length >= 3) quitReason = data.slice(2).join(' ').replace(/^:/, '').trim();
             channelMap.forEach((channel, name) => {
-                if (Channel_RemoveUser(nick, channel)) writeToScreen("var(--clr-purple)", `${nick} 退出IRC${quitReason ? ') (') + quitReason + '))') : '')}`, channel, "*");
+                if (Channel_RemoveUser(nick, channel)) writeToScreen("var(--clr-purple)", `${nick} 退出IRC${quitReason ? ' (' + quitReason + ')' : ''}`, channel, "*");
             });
-            writeToLog("↓RX", "IRC", `QUIT: ${nick}${quitReason ? ') reason: ') + quitReason : '')}`);
+            writeToLog("↓RX", "IRC", `QUIT: ${nick}${quitReason ? ' reason: ' + quitReason : ''}`);
         });
         Commands.set("PRIVMSG", (nick, data, msgTags) => {
             if (!data || data.length < 4) return;
             let target = data[2], text = data[3].substring(1);
             for (let i = 4; i < data.length; i++) text += " " + data[i];
             let channel;
-            if (nick !== nickname && text.toLowerCase().includes(nickname.toLowerCase()) && document.hidden && ')Notification') in window && Notification.permission === ')granted')) {
+            if (nick !== nickname && text.toLowerCase().includes(nickname.toLowerCase()) && document.hidden && 'Notification' in window && Notification.permission === 'granted') {
                 try {
-                    const notif = new Notification(')IRC: 你被提到了'), { body: nick + '): ') + text.substring(0, 120), icon: ')data:image/svg+xml,<svg xmlns="http:
+                    const notif = new Notification('IRC: 你被提到了', { body: nick + ': ' + text.substring(0, 120), icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="%2300f0ff"/></svg>' });
                     notif.onclick = function () { window.focus(); if (channel) Tab_Show(channel.name); };
                 } catch (e) { }
             }
             nick = data[0].substring(1).split("!")[0];
             const serverTime = msgTags && msgTags.get('time') || null;
-            const replyTo = msgTags && msgTags.get(')+reply')) || null;
+            const replyTo = msgTags && msgTags.get('+reply') || null;
             const isPrivateMessage = !/^[#&+!]/.test(target) && target.toLowerCase() === nickname.toLowerCase();
             if (isPrivateMessage) {
                 channel = findChannel(nick);
                 if (!channel) {
                     channel = new Tab_Create(nick, `与 ${nick} 的私聊`, false);
                     channel.isPrivate = true;
-                    if (channel.button) channel.button.classList.add(')private'));
+                    if (channel.button) channel.button.classList.add('private');
                     writeToLog("↓RX", "PM", `Incoming PM from ${nick}`);
                 }
             } else {
@@ -4504,14 +4395,7 @@ isReconnecting = false;
                 if (text.indexOf("\x01ACTION ") === 0) {
                     let actionText = text.substring(8);
                     if (actionText.endsWith("\x01")) actionText = actionText.slice(0, -1);
-                    writeToScreen("var(--clr-red)", `${nick
-                        } else if (ctcpCmd === "VERSION") {
-                            doSend("NOTICE " + senderNick + " :\x01VERSION irc-client v1.0\x01");
-                        } else if (ctcpCmd === "PING") {
-                            doSend("NOTICE " + senderNick + " :\x01PING " + ctcpBody + "\x01");
-                        } else if (ctcpCmd === "TIME") {
-                            doSend("NOTICE " + senderNick + " :\x01TIME " + new Date().toLocaleString() + "\x01");
-} ${actionText}`, channel, "*", serverTime);
+                    writeToScreen("var(--clr-red)", `${nick} ${actionText}`, channel, "*", serverTime);
                 } else writeToScreen("var(--clr-red)", `${nick} ${text}`, channel, "*", serverTime);
                 if (channel && channel !== activeChannel && channel !== statusChannel) addUnreadBadge(channel);
             } else {
@@ -4539,24 +4423,24 @@ isReconnecting = false;
             const target = data[2];
             let displayTarget = target;
             if (!target.startsWith('#') && target.toLowerCase() === nickname.toLowerCase()) displayTarget = nick;
-            if (msgTags && msgTags.has(')+typing'))) {
-                const typingStatus = msgTags.get(')+typing'));
+            if (msgTags && msgTags.has('+typing')) {
+                const typingStatus = msgTags.get('+typing');
                 writeToLog("↓RX", "TYPE", `${nick} → ${displayTarget} = ${typingStatus}`);
                 setRemoteTypingState(nick, displayTarget, typingStatus);
             }
-            if (msgTags && msgTags.has(')+react'))) {
-                const reaction = msgTags.get(')+react')), replyTo = msgTags.get(')+reply')) || '');
+            if (msgTags && msgTags.has('+react')) {
+                const reaction = msgTags.get('+react'), replyTo = msgTags.get('+reply') || '';
                 const channel = findChannel(displayTarget) || statusChannel;
-                if (channel) writeToScreen("var(--clr-text-dim)", `${nick} 回应了 ${reaction}${replyTo ? ') (msgid:') + replyTo + '))') : '')}`, channel, "*");
+                if (channel) writeToScreen("var(--clr-text-dim)", `${nick} 回应了 ${reaction}${replyTo ? ' (msgid:' + replyTo + ')' : ''}`, channel, "*");
                 writeToLog("↓RX", "REACT", `${nick} → ${displayTarget}: ${reaction}`);
             }
         });
         Commands.set("BATCH", (nick, data) => {
             if (!data || data.length < 2) return;
-            const refStr = data[1] || '');
-            if (refStr.startsWith(')+'))) {
-                const ref = refStr.substring(1), type = data[2] ? data[2].toUpperCase() : '');
-                const params = data.slice(3).map(p => p.replace(/^:/, '')));
+            const refStr = data[1] || '';
+            if (refStr.startsWith('+')) {
+                const ref = refStr.substring(1), type = data[2] ? data[2].toUpperCase() : '';
+                const params = data.slice(3).map(p => p.replace(/^:/, ''));
                 const timer = setTimeout(() => {
                     if (batchBuffer.has(ref)) {
                         writeToLog("!SYS", "BATCH", `Timeout cleanup for ref=${ref}`);
@@ -4567,7 +4451,7 @@ isReconnecting = false;
                 batchBuffer.set(ref, { type, params, messages: [] });
                 batchCleanupTimers.set(ref, timer);
                 writeToLog("!SYS", "BATCH", `Start: ref=${ref} type=${type}`);
-            } else if (refStr.startsWith(')-'))) {
+            } else if (refStr.startsWith('-')) {
                 const ref = refStr.substring(1), batch = batchBuffer.get(ref);
                 if (!batch) return;
                 if (batchCleanupTimers.has(ref)) {
@@ -4581,8 +4465,8 @@ isReconnecting = false;
         });
         function processBatch(ref, batch) {
             try {
-                if (batch.type === ')CHATHISTORY') || batch.type === ')chathistory')) {
-                    const channelName = batch.params[0] || ''), ch = findChannel(channelName);
+                if (batch.type === 'CHATHISTORY' || batch.type === 'chathistory') {
+                    const channelName = batch.params[0] || '', ch = findChannel(channelName);
                     if (ch) writeToScreen("var(--clr-text-dim)", `── 历史消息 (${batch.messages.length}条) ──`, ch, "*");
                     for (const msg of batch.messages) processLine(msg);
                 } else {
@@ -4592,13 +4476,13 @@ isReconnecting = false;
         }
         Commands.set("FAIL", (nick, data) => {
             if (!data || data.length < 3) return;
-            const command = data[2] || ''), code = data[3] || ''), msg = data.slice(4).join('')).replace(/^:/, ''));
+            const command = data[2] || '', code = data[3] || '', msg = data.slice(4).join(' ').replace(/^:/, '');
             writeToScreen("var(--clr-warning)", `[${command}] 失败 (${code}): ${msg}`, statusChannel, "*");
             writeToLog("↓RX", "IRC", `${command} ${code}: ${msg}`);
         });
         Commands.set("INVITE", (nick, data) => {
             if (!data || data.length < 4) return;
-            const invitedNick = data[2], inviteChannel = data[3].replace(/^:/, ''));
+            const invitedNick = data[2], inviteChannel = data[3].replace(/^:/, '');
             const isSelf = invitedNick.toLowerCase() === nickname.toLowerCase();
             if (isSelf) {
                 const targetCh = findChannel(inviteChannel) || statusChannel;
@@ -4613,18 +4497,18 @@ isReconnecting = false;
         });
         Commands.set("341", (nick, data) => {
             if (!data || data.length < 4) return;
-            writeToScreen("var(--clr-info)", `已向 ${data[3]} 发送邀请${data.length >= 5 ? ') 加入 ') + data[4].replace(/^:/, '')) : '')}`, statusChannel, "*");
+            writeToScreen("var(--clr-info)", `已向 ${data[3]} 发送邀请${data.length >= 5 ? ' 加入 ' + data[4].replace(/^:/, '') : ''}`, statusChannel, "*");
         });
         Commands.set("352", (nick, data) => {
             if (!data || data.length < 8) return;
-            const channel = data[3], whoNick = data[7], flags = data[8] || ''), isAway = flags.startsWith(')G'));
+            const channel = data[3], whoNick = data[7], flags = data[8] || '', isAway = flags.startsWith('G');
             const ch = findChannel(channel);
             if (ch && ch.userlist) updateUserAwayStatus(whoNick, ch, isAway);
             writeToLog("↓RX", "IRC", `RPL_WHOREPLY: ${whoNick} in ${channel} flags=${flags}`);
         });
         Commands.set("354", (nick, data) => {
             if (!data || data.length < 8) return;
-            const whoNick = data[6] || ''), flags = data[7] || ''), account = data[8] ? data[8].replace(/^:/, '')) : ''), isAway = flags.startsWith(')G'));
+            const whoNick = data[6] || '', flags = data[7] || '', account = data[8] ? data[8].replace(/^:/, '') : '', isAway = flags.startsWith('G');
             channelMap.forEach(ch => {
                 if (!ch.users) return;
                 if (ch.users.some(u => u[1] === whoNick)) updateUserAwayStatus(whoNick, ch, isAway);
@@ -4636,44 +4520,44 @@ isReconnecting = false;
             writeToLog("↓RX", "IRC", `RPL_ENDOFWHO: ${data[3]}`);
         });
         function sendTypingStatus(status, target) {
-            if (!ircv3MessageTags || !isConnected || !target || target === ')Status')) return;
+            if (!ircv3MessageTags || !isConnected || !target || target === 'Status') return;
             doSend(`@+typing=${status} TAGMSG ${target}\r\n`);
             writeToLog("↑TX", "TYPE", `Sent: ${target} = ${status}`);
         }
         function handleTypingInput() {
-            if (!ircv3MessageTags || !activeChannel || activeChannel.name === ')Status')) return;
+            if (!ircv3MessageTags || !activeChannel || activeChannel.name === 'Status') return;
             const target = activeChannel.name, now = Date.now();
             if (now - typingLastSent >= TYPING_THROTTLE_MS) {
-                sendTypingStatus(')active'), target);
+                sendTypingStatus('active', target);
                 typingLastSent = now;
             }
             if (typingInputTimer) clearTimeout(typingInputTimer);
             typingInputTimer = setTimeout(() => {
-                if (input && input.value.trim().length > 0) sendTypingStatus(')paused'), target);
+                if (input && input.value.trim().length > 0) sendTypingStatus('paused', target);
                 typingInputTimer = null;
             }, TYPING_PAUSE_DELAY);
         }
         function sendTypingDone(target) {
-            if (!ircv3MessageTags || !target || target === ')Status')) return;
+            if (!ircv3MessageTags || !target || target === 'Status') return;
             if (typingInputTimer) { clearTimeout(typingInputTimer); typingInputTimer = null; }
             typingLastSent = 0;
-            sendTypingStatus(')done'), target);
+            sendTypingStatus('done', target);
         }
         function updateTypingIndicatorUI(target) {
             const el = document.getElementById('typingIndicator');
             if (!el) return;
             const channelTyping = remoteTypingState.get(target);
             if (!channelTyping || channelTyping.size === 0) {
-                el.textContent = '');
+                el.textContent = '';
                 return;
             }
             const activeTypers = [];
             channelTyping.forEach((state, nick) => {
-                if (state.status === ')active') || state.status === ')paused')) activeTypers.push(nick);
+                if (state.status === 'active' || state.status === 'paused') activeTypers.push(nick);
             });
-            if (activeTypers.length === 0) el.textContent = '');
+            if (activeTypers.length === 0) el.textContent = '';
             else if (activeTypers.length === 1) el.textContent = `✎ ${activeTypers[0]} 正在输入...`;
-            else if (activeTypers.length <= 3) el.textContent = `✎ ${activeTypers.join(')、'))} 正在输入...`;
+            else if (activeTypers.length <= 3) el.textContent = `✎ ${activeTypers.join('、')} 正在输入...`;
             else el.textContent = `✎ ${activeTypers.length} 人正在输入...`;
         }
         function setRemoteTypingState(nick, target, status) {
@@ -4683,10 +4567,10 @@ isReconnecting = false;
                 const prev = channelTyping.get(nick);
                 if (prev.timer) clearTimeout(prev.timer);
             }
-            if (status === ')done')) {
+            if (status === 'done') {
                 channelTyping.delete(nick);
             } else {
-                const timeoutMs = status === ')active') ? 6000 : 30000;
+                const timeoutMs = status === 'active' ? 6000 : 30000;
                 const timer = setTimeout(() => {
                     const ct = remoteTypingState.get(target);
                     if (ct) { ct.delete(nick); updateTypingIndicatorUI(target); }
@@ -4700,10 +4584,10 @@ isReconnecting = false;
                 doSend(message);
                 return null;
             }
-            const label = ')lbl') + (++labelCounter);
+            const label = 'lbl' + (++labelCounter);
             pendingLabels.set(label, { description: description || message.trim(), ts: Date.now() });
             const tagged = `@label=${label} ${message}`;
-            doSend(tagged.endsWith(')\r\n')) ? tagged : tagged + ')\r\n'));
+            doSend(tagged.endsWith('\r\n') ? tagged : tagged + '\r\n');
             writeToLog("!SYS", "LABEL", `Sent label=${label}`);
             setTimeout(() => {
                 if (pendingLabels.has(label)) {
@@ -4731,11 +4615,11 @@ isReconnecting = false;
         }
         function sendWithReply(replyToMsgid, targetChannel, text) {
             if (!replyToMsgid || !ircv3MessageTags) {
-                const msgs = splitIRCMessage(')PRIVMSG ') + targetChannel + ') :') + text);
+                const msgs = splitIRCMessage('PRIVMSG ' + targetChannel + ' :' + text);
                 msgs.forEach(m => doSend(m));
                 return;
             }
-            const msgs = splitIRCMessage(')PRIVMSG ') + targetChannel + ') :') + text);
+            const msgs = splitIRCMessage('PRIVMSG ' + targetChannel + ' :' + text);
             msgs.forEach((m, idx) => {
                 if (idx === 0) doSend(`@+reply=${replyToMsgid} ${m.trim()}\r\n`);
                 else doSend(m);
@@ -4758,7 +4642,7 @@ isReconnecting = false;
             }
         }
         function formatSessionDuration(startTime) {
-            if (!startTime) return ')N/A');
+            if (!startTime) return 'N/A';
             const secs = Math.floor((Date.now() - startTime.getTime()) / 1000);
             const h = Math.floor(secs / 3600), m = Math.floor((secs % 3600) / 60), s = secs % 60;
             if (h > 0) return `${h}h ${m}m ${s}s`;
@@ -4775,27 +4659,27 @@ isReconnecting = false;
             inputBlurTimeoutId = setTimeout(() => {
                 const active = document.activeElement;
                 if (active && active !== input && active !== document.body) return;
-                const settingsPanel = document.getElementById('settingsPanel';
-                if (settingsPanel && settingsPanel.classList.contains(')open'))) return;
-                const menuDropdown = document.getElementById('headerMenuDropdown';
-                if (menuDropdown && menuDropdown.classList.contains(')visible'))) return;
+                const settingsPanel = document.getElementById('settingsPanel');
+                if (settingsPanel && settingsPanel.classList.contains('open')) return;
+                const menuDropdown = document.getElementById('headerMenuDropdown');
+                if (menuDropdown && menuDropdown.classList.contains('visible')) return;
                 if (isConnected && document.hasFocus()) input.focus();
             }, 300);
         }
         function removeInputBlurListener() {
-            if (input) input.removeEventListener(')blur'), handleInputBlur);
+            if (input) input.removeEventListener('blur', handleInputBlur);
         }
         function cleanupEventListeners() {
             removeInputBlurListener();
             if (headerMenuClickListener) {
-                document.removeEventListener(')click'), headerMenuClickListener);
+                document.removeEventListener('click', headerMenuClickListener);
                 headerMenuClickListener = null;
             }
-            const menu = document.getElementById('headerMenuDropdown';
-            if (menu && menu.classList.contains(')menu-attached'))) {
-                menu.classList.remove(')visible'));
-                menu.classList.remove(')menu-attached'));
-                document.removeEventListener(')click'), closeHeaderMenuOnClickOutside);
+            const menu = document.getElementById('headerMenuDropdown');
+            if (menu && menu.classList.contains('menu-attached')) {
+                menu.classList.remove('visible');
+                menu.classList.remove('menu-attached');
+                document.removeEventListener('click', closeHeaderMenuOnClickOutside);
             }
         }
         function send() {
@@ -4818,14 +4702,14 @@ isReconnecting = false;
                     if (!ircv3EchoMessage) writeToScreen("var(--clr-red)", `${nickname} ${actionText}`, activeChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/msg ") === 0) {
-                    const parts = text.substring(5).split(''));
+                    const parts = text.substring(5).split(' ');
                     if (parts.length >= 2) {
-                        const targetNick = parts[0], msgText = parts.slice(1).join(''));
+                        const targetNick = parts[0], msgText = parts.slice(1).join(' ');
                         let pmChannel = findChannel(targetNick);
                         if (!pmChannel) {
                             pmChannel = new Tab_Create(targetNick, `与 ${targetNick} 的私聊`, false);
                             pmChannel.isPrivate = true;
-                            if (pmChannel.button) pmChannel.button.classList.add(')private'));
+                            if (pmChannel.button) pmChannel.button.classList.add('private');
                         }
                         Tab_Show(targetNick);
                         const messages = splitIRCMessage("PRIVMSG " + targetNick + " :" + msgText);
@@ -4865,7 +4749,7 @@ isReconnecting = false;
                     pushHistory(text);
                 } else if (text.indexOf("/topic") === 0) {
                     const topicText = text.substring(6).trim();
-                    const topicTarget = activeChannel.name !== ')Status') ? activeChannel.name : null;
+                    const topicTarget = activeChannel.name !== 'Status' ? activeChannel.name : null;
                     if (!topicTarget) writeToScreen("var(--clr-warning)", "请在频道窗口中使用 /topic", activeChannel, "*");
                     else if (topicText) doSend(`TOPIC ${topicTarget} :${topicText}\r\n`);
                     else {
@@ -4874,8 +4758,8 @@ isReconnecting = false;
                     }
                     pushHistory(text);
                 } else if (text.indexOf("/kick ") === 0) {
-                    const kickParts = text.substring(6).split(''));
-                    const kickNick = kickParts[0], kickReason = kickParts.slice(1).join('')) || ')无原因');
+                    const kickParts = text.substring(6).split(' ');
+                    const kickNick = kickParts[0], kickReason = kickParts.slice(1).join(' ') || '无原因';
                     const kickChannel = activeChannel.name;
                     if (kickChannel.startsWith('#') && kickNick) doSend(`KICK ${kickChannel} ${kickNick} :${kickReason}\r\n`);
                     else writeToScreen("var(--clr-warning)", "用法: /kick <昵称> [原因]", activeChannel, "*");
@@ -4887,19 +4771,19 @@ isReconnecting = false;
                     pushHistory(text);
                 } else if (text.indexOf("/join ") === 0) {
                     let joinTarget = text.substring(6).trim();
-                    if (joinTarget && !joinTarget.startsWith('#')) joinTarget = ')#') + joinTarget;
+                    if (joinTarget && !joinTarget.startsWith('#')) joinTarget = '#' + joinTarget;
                     if (joinTarget) doSend("JOIN " + joinTarget + "\r\n");
                     else writeToScreen("var(--clr-warning)", "用法: /join <#频道名>", activeChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/part") === 0) {
                     const partArgs = text.substring(5).trim();
-                    const partTarget = partArgs.startsWith('#') ? partArgs.split(''))[0] : activeChannel.name;
+                    const partTarget = partArgs.startsWith('#') ? partArgs.split(' ')[0] : activeChannel.name;
                     const partMsg = partArgs.startsWith('#') ? partArgs.substring(partTarget.length).trim() : partArgs;
-                    if (partTarget && partTarget.startsWith('#')) doSend(`PART ${partTarget}${partMsg ? ') :') + partMsg : '')}\r\n`);
+                    if (partTarget && partTarget.startsWith('#')) doSend(`PART ${partTarget}${partMsg ? ' :' + partMsg : ''}\r\n`);
                     else writeToScreen("var(--clr-warning)", "请在频道窗口中使用 /part", activeChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/quit") === 0) {
-                    const quitMsg = text.substring(5).trim() || ')Bye!');
+                    const quitMsg = text.substring(5).trim() || 'Bye!';
                     doSend(`QUIT :${quitMsg}\r\n`);
                     pushHistory(text);
                 } else if (text.indexOf("/monitor ") === 0) {
@@ -4908,24 +4792,24 @@ isReconnecting = false;
                     writeToScreen("var(--clr-info)", `MONITOR: ${monArgs}`, activeChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/invite ") === 0) {
-                    const invArgs = text.substring(8).trim().split(''));
-                    const invNick = invArgs[0], invChannel = invArgs[1] || (activeChannel && activeChannel.name !== ')Status') ? activeChannel.name : ''));
+                    const invArgs = text.substring(8).trim().split(' ');
+                    const invNick = invArgs[0], invChannel = invArgs[1] || (activeChannel && activeChannel.name !== 'Status' ? activeChannel.name : '');
                     if (invNick && invChannel) {
                         doSend(`INVITE ${invNick} ${invChannel}\r\n`);
                         writeToScreen("var(--clr-info)", `向 ${invNick} 发送邀请加入 ${invChannel}...`, activeChannel, "*");
                     } else writeToScreen("var(--clr-warning)", "用法: /invite <昵称> [#频道]", activeChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/chathistory") === 0) {
-                    const chArgs = text.substring(12).trim().split(''));
+                    const chArgs = text.substring(12).trim().split(' ');
                     let chTarget = chArgs[0], chCount = parseInt(chArgs[1]) || 50;
-                    if (!chTarget && activeChannel && activeChannel.name !== ')Status')) chTarget = activeChannel.name;
+                    if (!chTarget && activeChannel && activeChannel.name !== 'Status') chTarget = activeChannel.name;
                     if (chTarget) {
                         requestChatHistory(chTarget, chCount);
                         writeToScreen("var(--clr-info)", `正在拉取 ${chTarget} 的历史消息 (${chCount}条)...`, activeChannel, "*");
                     } else writeToScreen("var(--clr-warning)", "用法: /chathistory [#频道] [数量]", activeChannel, "*");
                     pushHistory(text);
                 } else if (text === "/caps") {
-                    writeToScreen("var(--clr-info)", `已启用的 IRCv3 能力: ${[...ircv3ActiveCaps].join('), ')) || ')(无)')}`, activeChannel, "*");
+                    writeToScreen("var(--clr-info)", `已启用的 IRCv3 能力: ${[...ircv3ActiveCaps].join(', ') || '(无)'}`, activeChannel, "*");
                     pushHistory(text);
                 } else if (text === "/help") {
                     const helpMsg = [
@@ -4948,7 +4832,7 @@ isReconnecting = false;
                         "/chathistory [#频道] [数量] — 拉取历史消息",
                         "/caps — 查看已启用的 IRCv3 能力",
                         "/quit [消息] — 退出 IRC",
-                    ].join(')<br>'));
+                    ].join('<br>');
                     writeToScreen("var(--clr-info)", helpMsg, activeChannel, "*");
                 } else {
                     writeToScreen("var(--clr-font)", text, activeChannel, "");
@@ -4972,7 +4856,7 @@ isReconnecting = false;
                 pushHistory(text);
             }
             if (input) {
-                if (activeChannel && activeChannel.name !== ')Status')) sendTypingDone(activeChannel.name);
+                if (activeChannel && activeChannel.name !== 'Status') sendTypingDone(activeChannel.name);
                 input.value = "";
                 updateCharCount();
             }
@@ -4985,15 +4869,15 @@ isReconnecting = false;
             input = document.getElementById("input");
             loadSettings();
             openIRCDB().catch(function () { });
-            if (')Notification') in window && Notification.permission === ')default')) {
+            if ('Notification' in window && Notification.permission === 'default') {
                 Notification.requestPermission();
             }
-            document.addEventListener('keydown'), function (e) {
-                if ((e.ctrlKey || e.metaKey) && e.key === ')f')) {
-                    const logContainer = document.getElementById('logContainer';
-                    if (logContainer && logContainer.classList.contains(')visible'))) {
+            document.addEventListener('keydown', function (e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                    const logContainer = document.getElementById('logContainer');
+                    if (logContainer && logContainer.classList.contains('visible')) {
                         e.preventDefault();
-                        const searchInput = document.getElementById('logSearchInput';
+                        const searchInput = document.getElementById('logSearchInput');
                         if (searchInput) { searchInput.focus(); searchInput.select(); }
                     }
                 }
@@ -5009,26 +4893,21 @@ isReconnecting = false;
                     document.getElementById('wsUrl').value = urlParam;
                 }
                 if (nickParam && nickParam.trim() !== '') {
-                    var nVal = nickParam.trim();
-                    if (/^[a-zA-Z0-9_\[\]{}|\\]{1,30}$/.test(nVal)) {
-                        document.getElementById('nickInput').value = nVal;
-                    } else {
-                        writeToLog("!SYS", "WARN", "Invalid nickname in URL, using default");
-                    }
+                    document.getElementById('nickInput').value = nickParam.trim();
                 }
                 if (chanParam && chanParam.trim() !== '') {
-                    var cVal = chanParam.trim();
-                    if (!cVal.startsWith('#')) cVal = '#' + cVal;
-                    if (/^#[a-zA-Z0-9_\-]{3,50}$/.test(cVal)) {
-                        document.getElementById('channelInput').value = cVal;
-                    } else {
-                        writeToLog("!SYS", "WARN", "Invalid channel in URL, using default");
-                    }
+                    document.getElementById('channelInput').value = chanParam.trim();
                 }
+            })();
+            if (window.frameElement) {
+                const captionEl = document.getElementById("caption");
+                if (captionEl) captionEl.style.display = "none";
             }
+            updateConnectionStatus('disconnected');
+            if (input) input.addEventListener('blur', handleInputBlur);
+        }
         window.addEventListener("load", onLoad, false);
         window.addEventListener('beforeunload', () => {
-if (typeof db !== 'undefined' && db) { db.close(); }
             cleanupEventListeners();
             stopKeepAlive();
             if (inputBlurTimeoutId !== null) clearTimeout(inputBlurTimeoutId);
