@@ -2361,7 +2361,7 @@
 						};
 					}
 				};
-			} catch(e) {}
+			} catch(e) { console.error('IndexedDB write failed:', e); }
 		}
 		function getRecentLogs(limit) {
 			return new Promise((resolve) => {
@@ -2915,9 +2915,10 @@
 			writeToLog("!SYS", "SYS", 'Favorite channel removed: ' + ch);
 		}
 		function autoJoinFavoriteChannels() {
+			if (!isConnected) return;
 			const channels = getFavoriteChannels();
 			channels.forEach(function(ch) {
-				if (ch && ch.startsWith('#')) {
+				if (ch && ch.startsWith('#') && ch !== channelName) {
 					setTimeout(function() { doSend("JOIN " + ch); }, 300);
 				}
 			});
@@ -3038,8 +3039,8 @@
 			}
 		}
 		function tabClose(evt) {
-			evt.stopPropagation();
 			if (!evt || !evt.currentTarget) return;
+			evt.stopPropagation();
 			const channelName = evt.currentTarget.value;
 			if (channelName === "Status") {
 				writeToScreen("var(--clr-warning)", "Status频道是系统状态窗口, 不能关闭", statusChannel, "*");
@@ -3714,6 +3715,7 @@
 				writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
 				return;
 			}
+			if (!message.endsWith('\r\n')) message += '\r\n';
 			try {
 				websocket.send(message);
 				if (!message.trim().toUpperCase().startsWith('PING')) sentCount++;
@@ -3731,7 +3733,7 @@
 			if (!rawData) return;
 			const lines = rawData.split('\n');
 			for (const line of lines) {
-				const trimmedLine = line.replace(/\r$/, '').replace(/\r\n$/, '');
+				const trimmedLine = line.replace(/\r$/, '');
 				if (trimmedLine) processLine(trimmedLine);
 			}
 		}
@@ -4087,9 +4089,15 @@
 				const logs = await getRecentLogs(200);
 				if (logs.length > 0 && statusChannel) {
 					writeToScreen("var(--clr-text-dim)", "── Session restored ──", statusChannel, "*");
-					for (const entry of logs) {
-						writeToScreen("var(--clr-text-dim)", `[DB] ${entry.rawData || entry.message}`, statusChannel, "*");
+					let _i = 0;
+					function _insertBatch() {
+						const _end = Math.min(_i + 10, logs.length);
+						for (; _i < _end; _i++) {
+							writeToScreen("var(--clr-text-dim)", `[DB] ${logs[_i].rawData || logs[_i].message}`, statusChannel, "*");
+						}
+						if (_i < logs.length) requestAnimationFrame(_insertBatch);
 					}
+					requestAnimationFrame(_insertBatch);
 				}
 			}, 800);
 		});
@@ -4332,6 +4340,7 @@
 			if (!data || data.length < 4) return;
 			let target = data[2], text = data[3].substring(1);
 			for (let i = 4; i < data.length; i++) text += " " + data[i];
+			let channel;
 			if (nick !== nickname && text.toLowerCase().includes(nickname.toLowerCase()) && document.hidden && 'Notification' in window && Notification.permission === 'granted') {
 				try {
 					const notif = new Notification('IRC: 你被提到了', { body: nick + ': ' + text.substring(0, 120), icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="%2300f0ff"/></svg>' });
@@ -4342,7 +4351,6 @@
 			const serverTime = msgTags && msgTags.get('time') || null;
 			const replyTo = msgTags && msgTags.get('+reply') || null;
 			const isPrivateMessage = !/^[#&+!]/.test(target) && target.toLowerCase() === nickname.toLowerCase();
-			let channel;
 			if (isPrivateMessage) {
 				channel = findChannel(nick);
 				if (!channel) {
@@ -4849,7 +4857,7 @@
 			refreshServerSelect();
 			refreshFavChannelList();
 			(function applyUrlParams() {
-				var params = new URL(document.location).searchParams;
+				var params = new URL(document.location.href).searchParams;
 				var urlParam = params.get('url');
 				var nickParam = params.get('nickname');
 				var chanParam = params.get('channel');
@@ -4863,11 +4871,6 @@
 					document.getElementById('channelInput').value = chanParam.trim();
 				}
 			})();
-			let url = new URL(document.location);
-			if (url.hash) {
-				const safeHash = url.hash.replace(/[^\w#&\-]/g, '').substring(0, 64);
-				if (safeHash) document.getElementById('channelInput').value = safeHash;
-			}
 			if (window.frameElement) {
 				const captionEl = document.getElementById("caption");
 				if (captionEl) captionEl.style.display = "none";
