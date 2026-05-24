@@ -1503,54 +1503,64 @@
             color: var(--c-cyan);
         }
 
+        .channelcontent>ul>li[data-prefix="!"]>p:first-child {
+            color: #330000;
+        }
+
+        .channelcontent>ul>li[data-prefix="!"]::before {
+            background: rgba(51, 0, 0, .25);
+            color: #330000;
+            border-color: rgba(51, 0, 0, .35);
+        }
+
         .channelcontent>ul>li[data-prefix="~"]>p:first-child {
-            color: var(--c-magenta);
+            color: #4b0082;
         }
 
         .channelcontent>ul>li[data-prefix="~"]::before {
-            background: rgba(224, 64, 251, .15);
-            color: var(--c-magenta);
-            border-color: rgba(224, 64, 251, .2);
+            background: rgba(75, 0, 130, .2);
+            color: #4b0082;
+            border-color: rgba(75, 0, 130, .3);
         }
 
         .channelcontent>ul>li[data-prefix="&"]>p:first-child {
-            color: var(--c-red);
+            color: #8b0000;
         }
 
         .channelcontent>ul>li[data-prefix="&"]::before {
-            background: rgba(255, 23, 68, .15);
-            color: var(--c-red);
-            border-color: rgba(255, 23, 68, .2);
+            background: rgba(139, 0, 0, .2);
+            color: #8b0000;
+            border-color: rgba(139, 0, 0, .3);
         }
 
         .channelcontent>ul>li[data-prefix="@"]>p:first-child {
-            color: var(--c-yellow);
+            color: #b8860b;
         }
 
         .channelcontent>ul>li[data-prefix="@"]::before {
-            background: rgba(255, 215, 64, .15);
-            color: var(--c-yellow);
-            border-color: rgba(255, 215, 64, .2);
+            background: rgba(184, 134, 11, .18);
+            color: #b8860b;
+            border-color: rgba(184, 134, 11, .25);
         }
 
         .channelcontent>ul>li[data-prefix="%"]>p:first-child {
-            color: var(--c-green);
+            color: #2e8b57;
         }
 
         .channelcontent>ul>li[data-prefix="%"]::before {
-            background: rgba(0, 255, 102, .15);
-            color: var(--c-green);
-            border-color: rgba(0, 255, 102, .2);
+            background: rgba(46, 139, 87, .15);
+            color: #2e8b57;
+            border-color: rgba(46, 139, 87, .22);
         }
 
         .channelcontent>ul>li[data-prefix="+"]>p:first-child {
-            color: var(--c-cyan);
+            color: #4682b4;
         }
 
         .channelcontent>ul>li[data-prefix="+"]::before {
-            background: rgba(0, 240, 255, .1);
-            color: var(--c-cyan);
-            border-color: rgba(0, 240, 255, .15);
+            background: rgba(70, 130, 180, .12);
+            color: #4682b4;
+            border-color: rgba(70, 130, 180, .18);
         }
 
 
@@ -2432,11 +2442,12 @@
             'LABEL': '#90caf9', 'MLINE': '#b39ddb'
         };
         const DefaultPrefixMap = {
-            '~': { symbol: '~', name: 'founder', color: 'var(--clr-purple)' },
-            '&': { symbol: '&', name: 'admin', color: 'var(--clr-red)' },
-            '%': { symbol: '%', name: 'halfop', color: 'var(--clr-green)' },
-            '@': { symbol: '@', name: 'op', color: 'var(--clr-blue)' },
-            '+': { symbol: '+', name: 'voice', color: 'var(--clr-gold)' }
+            '!': { symbol: '!', name: 'owner', color: '#330000' },
+            '~': { symbol: '~', name: 'founder', color: '#4b0082' },
+            '&': { symbol: '&', name: 'admin', color: '#8b0000' },
+            '@': { symbol: '@', name: 'op', color: '#b8860b' },
+            '%': { symbol: '%', name: 'halfop', color: '#2e8b57' },
+            '+': { symbol: '+', name: 'voice', color: '#4682b4' }
         };
         function findChannel(channelName) {
             if (!channelName) return null;
