@@ -4120,7 +4120,7 @@
                     function _insertBatch() {
                         const _end = Math.min(_i + 10, logs.length);
                         for (; _i < _end; _i++) {
-                            writeToScreen("var(--clr-text-dim)", `[DB] ${logs[_i].rawData || logs[_i].message}`, statusChannel, "*");
+                            writeToLog(logs[_i].direction || "DB", logs[_i].module || "DB", logs[_i].rawData || logs[_i].message);
                         }
                         if (_i < logs.length) requestAnimationFrame(_insertBatch);
                     }
