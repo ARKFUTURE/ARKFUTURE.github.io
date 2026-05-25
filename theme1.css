@@ -739,10 +739,8 @@ p {
 iframe.net__widget {
   border: 1px solid var(--cyber-border);
   background: var(--cyber-bg-deep);
-  width: 100%;
-  max-width: 400px;
-  height: auto;
-  min-height: 120px;
+  width: 400px;
+  height: 200px;
 }
 
 /* ═══════════════════════════════════
@@ -831,7 +829,7 @@ a.site-footer__contact:hover {
   50%  { text-shadow: -6px -3px 0 rgba(0,240,255,.65), -12px -6px 12px rgba(0,240,255,.2); }
   75%  { text-shadow: 3px -5px 0 rgba(255,0,255,.6), 6px -10px 12px rgba(255,0,255,.18); }
   100% { text-shadow: 5px 5px 0 rgba(0,240,255,.7), 10px 10px 12px rgba(0,240,255,.2); }
-}{}
+}
 
 /* Breathing glow on section borders */
 section {

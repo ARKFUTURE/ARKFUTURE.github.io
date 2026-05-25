@@ -306,9 +306,8 @@ main {
 .net__widget {
   display: block;
   border: none;
-  width: 100%;
-  max-width: 400px;
-  height: auto;
+  width: 400px;
+  height: 200px;
   margin: 8px 0;
 }
 
