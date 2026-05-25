@@ -740,6 +740,8 @@ iframe.net__widget {
   border: 1px solid var(--cyber-border);
   background: var(--cyber-bg-deep);
   width: 100%;
+  max-width: 400px;
+  height: auto;
   min-height: 120px;
 }
 

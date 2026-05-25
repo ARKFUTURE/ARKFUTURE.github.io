@@ -753,6 +753,8 @@
     border: 1.5px solid var(--border-candy);
     border-radius: var(--r-md);
     width: 100%;
+    max-width: 400px;
+    height: auto;
     min-height: 120px;
     margin: var(--s3) 0;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
