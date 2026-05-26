@@ -872,6 +872,11 @@ section {
     padding: 12px 14px;
   }
 
+  .net__widget {
+    max-width: 100%;
+    width: 100%;
+  }
+
   .licenses__body ul {
     grid-template-columns: 1fr;
   }

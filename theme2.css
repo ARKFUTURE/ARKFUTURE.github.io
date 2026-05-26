@@ -989,6 +989,10 @@
     .ending__heading {
       display: block;
     }
+    .net__widget {
+      max-width: 100%;
+      width: 100%;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
