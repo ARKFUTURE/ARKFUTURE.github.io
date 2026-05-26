@@ -1,22 +1,26 @@
 * 您可以查看我们的配置文件, 可以为我们的配置文件提出**安全相关的建议和意见**, 我们会为了IRC的**匿名性/安全性积极采纳**
 # 安装 (此页面所有内容都基于 稳定的Debian 官方页面的最新版本)
 # # INSPircd配置
-* 官方deb包/本站全插件deb包+基本配置: https://arkfuture.github.io/arkfuture/config/other/install/install.sh
-* 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/arkfuture/config/inspircd
+* 基本配置: https://arkfuture.github.io/config/inspircd/inspircd.conf
+* 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/inspircd
+* 安装: https://arkfuture.github.io/config/other/ircinstall/install.sh
 # # ERGOircd配置
-* 基本配置: https://arkfuture.github.io/arkfuture/config/ergoircd/ircd.yaml
-* 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/arkfuture/config/ergoircd
+* 基本配置: https://arkfuture.github.io/config/hybridircd/ircd.conf
+* 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/hybridircds
+# # HYBRIDircd配置
+* 基本配置: https://arkfuture.github.io/config/ergoircd/ircd.yaml
+* 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/ergoircd
 
 # 端口
 
-| 端口      | 配置              |
-| --------- | ----------------- |
-| 6667-6669 | 客户端, 明文传输  |
-| 6697      | 客户端, TLS传输   |
+| 端口      | 配置               |
+| --------- | ------------------ |
+| 6667-6669 | 客户端, 明文传输   |
+| 6697      | 客户端, TLS传输    |
 | 7000      | 服务器, 明文传输   |
-| 7001      | 服务器, TLS传输   |
-| 8067      | websocket,明文传输|
-| 6697      | websocket,TLS传输 |
+| 7001      | 服务器, TLS传输    |
+| 8067      | websocket,明文传输 |
+| 6697      | websocket,TLS传输  |
 
 # 说明/问题及相关帮助
 * 1 systemctl 问题 [Debian尽量用systemdctl管理]
@@ -171,10 +175,10 @@ Paths:
 
 | Certbot 生成文件 | InspIRCd 配置参数 | 技术作用说明                      |
 | ---------------- | ----------------- | --------------------------------- |
-| `privkey.pem`    | `keyfile`          | 服务器私钥文件, 用于 TLS 握手加密 |
-| `cert.pem`       | `certfile`          | 域名主体证书, 包含公钥信息        |
-| `chain.pem`      | `cafile`            | 中间证书链                        |
-| `fullchain.pem`  | `certfile`          | 合并后的完整证书链                |
+| `privkey.pem`    | `keyfile`         | 服务器私钥文件, 用于 TLS 握手加密 |
+| `cert.pem`       | `certfile`        | 域名主体证书, 包含公钥信息        |
+| `chain.pem`      | `cafile`          | 中间证书链                        |
+| `fullchain.pem`  | `certfile`        | 合并后的完整证书链                |
  
 * 使用有效的 TLS 证书
 * * 在投入生产环境时,另一个主要障碍(但非常值得努力解决)是为您的域名获取有效的TLS证书(如果尚未完成):
