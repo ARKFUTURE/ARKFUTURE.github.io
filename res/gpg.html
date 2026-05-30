@@ -444,6 +444,22 @@
       text-shadow: 0 0 6px rgba(255, 183, 0, .5);
     }
 
+    .info-value.fingerprint {
+      text-decoration: none;
+      cursor: pointer;
+      transition: all .25s ease;
+    }
+
+    .info-value.fingerprint:hover {
+      text-shadow: 0 0 15px rgba(0, 255, 170, .8), 0 0 30px rgba(0, 255, 170, .4);
+      color: #5fffcf;
+    }
+
+    .admin-card .info-value.fingerprint:hover {
+      text-shadow: 0 0 15px rgba(255, 183, 0, .8), 0 0 30px rgba(255, 183, 0, .4);
+      color: #ffda5e;
+    }
+
     .info-value.keyid {
       color: #ff66cc;
       text-shadow: 0 0 5px rgba(255, 102, 204, .4);
@@ -765,6 +781,8 @@ GQ9Wx0fcjQk=
       }
     ];
 
+    const searchBaseUrl = 'https://keys.openpgp.org/search?q=';
+
     function formatFingerprint(fp) {
       return fp.toUpperCase().replace(/(.{4})/g, '$1 ').trim();
     }
@@ -843,6 +861,7 @@ GQ9Wx0fcjQk=
       return {
         keyId,
         fingerprint,
+        fingerprintRaw: fpHex,
         type: typeStr,
         created,
         expires,
@@ -868,7 +887,7 @@ GQ9Wx0fcjQk=
       <div class="card-info">
         <span class="info-label">Key ID:</span><span class="info-value keyid">${escapeHTML(parsed.keyId)}</span><br>
         <span class="info-label">Type:</span><span class="info-value">${escapeHTML(parsed.type)}</span><br>
-        <span class="info-label">Fingerprint:</span><span class="info-value fingerprint">${escapeHTML(parsed.fingerprint)}</span><br>
+        <span class="info-label">Fingerprint:</span><a class="info-value fingerprint" href="${searchBaseUrl}${escapeHTML(parsed.fingerprintRaw)}" target="_blank" rel="noopener noreferrer" title="在 keys.openpgp.org 查询此密钥">${escapeHTML(parsed.fingerprint)}</a><br>
         <span class="info-label">Created:</span><span class="info-value">${escapeHTML(parsed.created)}</span><br>
         <span class="info-label">Expires:</span><span class="info-value">${escapeHTML(parsed.expires)}</span><br>
         <span class="info-label">UID:</span><span class="info-value">${escapeHTML(parsed.uid)}</span>
