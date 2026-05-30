@@ -465,6 +465,30 @@
       text-shadow: 0 0 5px rgba(255, 102, 204, .4);
     }
 
+    .info-value.email {
+      color: #66ccff;
+      text-shadow: 0 0 5px rgba(102, 204, 255, .4);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all .25s ease;
+      word-break: break-all;
+    }
+
+    .info-value.email:hover {
+      text-shadow: 0 0 15px rgba(102, 204, 255, .8), 0 0 30px rgba(102, 204, 255, .4);
+      color: #99ddff;
+    }
+
+    .admin-card .info-value.email {
+      color: #ffaa44;
+      text-shadow: 0 0 6px rgba(255, 170, 68, .5);
+    }
+
+    .admin-card .info-value.email:hover {
+      text-shadow: 0 0 15px rgba(255, 170, 68, .8), 0 0 30px rgba(255, 170, 68, .4);
+      color: #ffcc88;
+    }
+
     .info-value.error-msg {
       color: #ff2255;
       text-shadow: 0 0 5px rgba(255, 34, 85, .5);
@@ -589,6 +613,33 @@
       background: rgba(255, 34, 85, .15);
       box-shadow: 0 0 20px rgba(255, 34, 85, .4);
       color: #ff6688;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      margin-top: 10px;
+      margin-left: 8px;
+      font-family: inherit;
+      font-size: .75em;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border: 1px solid #00ff41;
+      border-radius: 3px;
+      background: transparent;
+      color: #00ff41;
+      transition: all .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .download-btn:hover {
+      background: rgba(0, 255, 65, .12);
+      box-shadow: 0 0 20px rgba(0, 255, 65, .4);
+      color: #5fff80;
+      text-shadow: 0 0 8px rgba(0, 255, 65, .5);
     }
 
     .copy-btn.copied {
@@ -753,7 +804,6 @@
     const keyConfig = [
       {
         armor: `-----BEGIN PGP PUBLIC KEY BLOCK-----
-
 mDMEagLuVRYJKwYBBAHaRw8BAQdAeWM0/pHL0izCxlT9jMA+7+lgZFtcSziTr0xa
 BNAt0YO0GVQgPEFSS0ZVVFVSRUBGT1hNQUlMLkNPTT6ItQQTFgoAXRYhBERn1wN8
 Z8AgbJEhWqXCRAPZYiKRBQJqAu5VGxSAAAAAAAQADm1hbnUyLDIuNSsxLjEyLDIs
@@ -775,7 +825,22 @@ GQ9Wx0fcjQk=
       },
       {
         armor: `-----BEGIN PGP PUBLIC KEY BLOCK-----
-
+mDMEagLuVRYJKwYBBAHaRw8BAQdAeWM0/pHL0izCxlT9jMA+7+lgZFtcSziTr0xa
+BNAt0YO0GVQgPEFSS0ZVVFVSRUBGT1hNQUlMLkNPTT6ItQQTFgoAXRYhBERn1wN8
+Z8AgbJEhWqXCRAPZYiKRBQJqAu5VGxSAAAAAAAQADm1hbnUyLDIuNSsxLjEyLDIs
+MQIbAwUJBtkiawULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgAAKCRClwkQD2WIi
+kROkAP9l8u+JpHcrXgAXaldL/8lMpRVd7jYMQpHI4PUOw48RjwEAvTcFagueXV56
+q4kwBdy8apj4j0Pz6Ff1TrN0UUsCUAG4OARqAu5VEgorBgEEAZdVAQUBAQdAVjR+
+vUvVjhm1+Swc0HRTLpnSuORgHUyAKB0b21tYM1EDAQgHiJoEGBYKAEIWIQREZ9cD
+fGfAIGyRIVqlwkQD2WIikQUCagLuVRsUgAAAAAAEAA5tYW51MiwyLjUrMS4xMiwy
+LDECGwwFCQbZImsACgkQpcJEA9liIpGQygD/Q3aOGCLT7+V4ahmxcg9k5EVk69WC
+bSefZZ1m7v858fkBAL5dpy5UZt9EArH7aDIL98/TAd97aqS7e5MguY8Kt4kDuDME
+agLukRYJKwYBBAHaRw8BAQdAbx7tb5vuFQ7qEF/BDvBo9VFgFDS7nriExYIxcyyG
+K7SIlAQYFgoAPBsUgAAAAAAEAA5tYW51MiwyLjUrMS4xMiwyLDECGyAWIQREZ9cD
+fGfAIGyRIVqlwkQD2WIikQUCagLvEwAKCRClwkQD2WIikaFQAQDCA8xkdvEfU3DJ
+mn1WOQjamBszTgoU3O5FDlT0zU94OwD9GLJ2wxmaRsAZ7IyDMYvMQl9cF0PZQkeb
+GQ9Wx0fcjQk=
+=W0Jf
 -----END PGP PUBLIC KEY BLOCK-----`,
         role: "user"
       }
@@ -793,7 +858,7 @@ GQ9Wx0fcjQk=
     }
 
     function formatDate(dateObj) {
-      if (!dateObj) return 'No expiration';
+      if (!dateObj || typeof dateObj.getFullYear !== 'function') return 'No expiration';
       const yyyy = dateObj.getFullYear();
       const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
       const dd = String(dateObj.getDate()).padStart(2, '0');
@@ -858,10 +923,14 @@ GQ9Wx0fcjQk=
       const userIDs = publicKey.getUserIDs();
       const uid = userIDs.length > 0 ? userIDs[0] : '(no UID)';
 
+      const emailMatch = uid.match(/<([^>]+@[^>]+)>/) || uid.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+      const email = emailMatch ? emailMatch[1] : null;
+
       return {
         keyId,
         fingerprint,
         fingerprintRaw: fpHex,
+        email,
         type: typeStr,
         created,
         expires,
@@ -890,7 +959,10 @@ GQ9Wx0fcjQk=
         <span class="info-label">Fingerprint:</span><a class="info-value fingerprint" href="${searchBaseUrl}${escapeHTML(parsed.fingerprintRaw)}" target="_blank" rel="noopener noreferrer" title="在 keys.openpgp.org 查询此密钥">${escapeHTML(parsed.fingerprint)}</a><br>
         <span class="info-label">Created:</span><span class="info-value">${escapeHTML(parsed.created)}</span><br>
         <span class="info-label">Expires:</span><span class="info-value">${escapeHTML(parsed.expires)}</span><br>
-        <span class="info-label">UID:</span><span class="info-value">${escapeHTML(parsed.uid)}</span>
+        ${parsed.email
+          ? `<span class="info-label">UID:</span><a class="info-value email" href="${searchBaseUrl}${escapeHTML(parsed.email)}" target="_blank" rel="noopener noreferrer" title="在 keys.openpgp.org 查询此邮箱">${escapeHTML(parsed.uid)}</a>`
+          : `<span class="info-label">UID:</span><span class="info-value">${escapeHTML(parsed.uid)}</span>`
+        }
       </div>
       <div class="armor-block">
         <div class="armor-header">
@@ -904,6 +976,9 @@ GQ9Wx0fcjQk=
       </div>
       <button class="copy-btn" data-armor-index="${index}">
         <span class="copy-icon">📋</span> COPY ARMOR
+      </button>
+      <button class="download-btn" data-download-index="${index}">
+        <span class="dl-icon">💾</span> DOWNLOAD .ASC
       </button>
     </div>`;
     }
@@ -952,6 +1027,7 @@ GQ9Wx0fcjQk=
       const userGrid = document.getElementById('userGrid');
 
       const allArmorTexts = [];
+      const allKeyIds = [];
 
       let adminCount = 0;
       let userCount = 0;
@@ -979,10 +1055,12 @@ GQ9Wx0fcjQk=
           const html = buildCardHTML(r.parsed, r.cfg.role, r.globalIndex);
           targetGrid.insertAdjacentHTML('beforeend', html);
           allArmorTexts[r.globalIndex] = r.parsed.armor;
+          allKeyIds[r.globalIndex] = r.parsed.keyId;
         } else {
           const html = buildErrorCardHTML(r.cfg.armor, r.cfg.role, r.globalIndex, r.errorMsg);
           targetGrid.insertAdjacentHTML('beforeend', html);
           allArmorTexts[r.globalIndex] = r.cfg.armor.trim();
+          allKeyIds[r.globalIndex] = null;
         }
       }
 
@@ -1024,6 +1102,25 @@ GQ9Wx0fcjQk=
             }
             document.body.removeChild(textarea);
           });
+        });
+      });
+
+      document.querySelectorAll('.download-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const index = parseInt(this.getAttribute('data-download-index'));
+          const armorText = allArmorTexts[index];
+          const keyId = allKeyIds[index] || 'unknown';
+          const safeId = keyId.replace(/^0x/i, '').replace(/[^A-Fa-f0-9]/g, '') || 'key';
+          const filename = safeId + '-public-key.asc';
+          const blob = new Blob([armorText], { type: 'application/pgp-keys' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
         });
       });
 
