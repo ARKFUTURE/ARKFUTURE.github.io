@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" version="3.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' ws: wss:; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' ws: wss:; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' data:; require-trusted-types-for 'script';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="ARKFUTURE-NET IRC">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -2420,6 +2420,85 @@
         let saslAccount = "";
         let saslPassword = "";
         let saslPending = false;
+        let saslCryptoKey = null;
+        const SASL_KEY_STORAGE = 'irc_sasl_key';
+        async function getOrCreateCryptoKey() {
+            if (saslCryptoKey) return saslCryptoKey;
+            try {
+                const raw = await crypto.subtle.generateKey(
+                    { name: 'AES-GCM', length: 256 },
+                    true,
+                    ['encrypt', 'decrypt']
+                );
+                const exported = await crypto.subtle.exportKey('raw', raw);
+                const b64 = btoa(String.fromCharCode(...new Uint8Array(exported)));
+                sessionStorage.setItem(SASL_KEY_STORAGE, b64);
+                saslCryptoKey = raw;
+                return raw;
+            } catch (e) { return null; }
+        }
+        async function encryptSASLPassword(plaintext) {
+            if (!plaintext) return '';
+            try {
+                const key = await getOrCreateCryptoKey();
+                if (!key) return '';
+                const iv = crypto.getRandomValues(new Uint8Array(12));
+                const encoded = new TextEncoder().encode(plaintext);
+                const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encoded);
+                const combined = new Uint8Array(iv.length + ciphertext.byteLength);
+                combined.set(iv, 0);
+                combined.set(new Uint8Array(ciphertext), iv.length);
+                return btoa(String.fromCharCode(...combined));
+            } catch (e) { return ''; }
+        }
+        async function decryptSASLPassword(cipherB64) {
+            if (!cipherB64) return '';
+            try {
+                const key = await getOrCreateCryptoKey();
+                if (!key) return '';
+                const combined = new Uint8Array(atob(cipherB64).split('').map(c => c.charCodeAt(0)));
+                if (combined.length < 13) return '';
+                const iv = combined.slice(0, 12);
+                const ciphertext = combined.slice(12);
+                const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
+                return new TextDecoder().decode(decrypted);
+            } catch (e) { return ''; }
+        }
+        let sendRateLimitQueue = [];
+        let sendRateLimitTimer = null;
+        const SEND_RATE_LIMIT_MS = 350;
+        const SEND_RATE_BURST = 4;
+        let sendRateBurstCount = 0;
+        let sendRateWindowStart = 0;
+        let sendRateDroppedCount = 0;
+        function enqueueSend(message) {
+            if (sendRateLimitQueue.length > 20) {
+                sendRateDroppedCount++;
+                if (sendRateDroppedCount <= 1) writeToScreen("var(--clr-warning)", "消息发送过快, 已丢弃部分消息", statusChannel, "*");
+                writeToLog("!SYS", "ERR", `Rate limit dropped message (${sendRateDroppedCount} total dropped)`);
+                return;
+            }
+            sendRateLimitQueue.push(message);
+            if (!sendRateLimitTimer) flushSendQueue();
+        }
+        function flushSendQueue() {
+            if (sendRateLimitTimer) { clearTimeout(sendRateLimitTimer); sendRateLimitTimer = null; }
+            if (sendRateLimitQueue.length === 0) return;
+            const now = Date.now();
+            if (now - sendRateWindowStart > 5000) { sendRateBurstCount = 0; sendRateWindowStart = now; }
+            if (sendRateBurstCount >= SEND_RATE_BURST) {
+                const delay = SEND_RATE_LIMIT_MS;
+                sendRateLimitTimer = setTimeout(() => { sendRateLimitTimer = null; sendRateBurstCount = 0; sendRateWindowStart = Date.now(); flushSendQueue(); }, delay);
+                return;
+            }
+            const message = sendRateLimitQueue.shift();
+            sendRateBurstCount++;
+            doSend(message);
+            if (sendRateLimitQueue.length > 0) {
+                const delay = sendRateBurstCount >= SEND_RATE_BURST ? SEND_RATE_LIMIT_MS : 100;
+                sendRateLimitTimer = setTimeout(() => { sendRateLimitTimer = null; flushSendQueue(); }, delay);
+            }
+        }
         let typingLastSent = 0;
         const TYPING_THROTTLE_MS = 3000;
         let typingInputTimer = null;
@@ -2794,20 +2873,22 @@
             warning.classList.add('visible');
             setTimeout(() => { if (warning) warning.classList.remove('visible'); }, 6000);
         }
-        function saveSettings() {
+        async function saveSettings() {
             try {
+                const rawPassword = document.getElementById('saslPasswordInput') ? document.getElementById('saslPasswordInput').value : '';
+                const encryptedPassword = rawPassword ? await encryptSASLPassword(rawPassword) : '';
                 const settings = {
                     wsUrl: document.getElementById('wsUrl').value,
                     nickname: document.getElementById('nickInput').value,
                     channel: document.getElementById('channelInput').value,
                     autoReconnect: document.getElementById('autoReconnect').checked,
                     saslAccount: document.getElementById('saslAccountInput') ? document.getElementById('saslAccountInput').value : '',
-                    saslPassword: document.getElementById('saslPasswordInput') ? document.getElementById('saslPasswordInput').value : ''
+                    saslPasswordEncrypted: encryptedPassword
                 };
                 localStorage.setItem('ircSettings', JSON.stringify(settings));
             } catch (e) { writeToLog("!SYS", "ERR", `Failed to save settings: ${e.message}`); }
         }
-        function loadSettings() {
+        async function loadSettings() {
             try {
                 const settings = JSON.parse(localStorage.getItem('ircSettings') || '{}');
                 if (settings.wsUrl) document.getElementById('wsUrl').value = settings.wsUrl;
@@ -2819,6 +2900,10 @@
                 }
                 if (settings.saslAccount && document.getElementById('saslAccountInput')) document.getElementById('saslAccountInput').value = settings.saslAccount;
                 if (settings.saslPassword && document.getElementById('saslPasswordInput')) document.getElementById('saslPasswordInput').value = settings.saslPassword;
+                if (settings.saslPasswordEncrypted && document.getElementById('saslPasswordInput')) {
+                    const decrypted = await decryptSASLPassword(settings.saslPasswordEncrypted);
+                    if (decrypted) document.getElementById('saslPasswordInput').value = decrypted;
+                }
             } catch (e) { writeToLog("!SYS", "ERR", `Failed to load settings: ${e.message}`); }
         }
         function getServerConfigs() {
@@ -3549,8 +3634,10 @@
             }
             if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
                 reconnectAttempts++;
-                const delay = reconnectDelay * reconnectAttempts;
-                writeToLog("!SYS", "RECON", `Attempt ${reconnectAttempts}/${maxReconnectAttempts} scheduled in ${Math.floor(delay / 1000)}s`);
+                const baseDelay = reconnectDelay * reconnectAttempts;
+                const jitter = Math.random() * 2000;
+                const delay = baseDelay + jitter;
+                writeToLog("!SYS", "RECON", `Attempt ${reconnectAttempts}/${maxReconnectAttempts} scheduled in ${Math.floor(delay / 1000)}s (base=${Math.floor(baseDelay / 1000)}s + jitter=${Math.floor(jitter / 1000)}s)`);
                 if (reconnectTimer) clearTimeout(reconnectTimer);
                 reconnectTimer = setTimeout(() => {
                     reconnectTimer = null;
@@ -3590,8 +3677,8 @@
                     } catch (e) { writeToLog("!SYS", "ERR", `Error cleaning up previous connection: ${e.message}`); }
                     websocket = null;
                 }
-                writeToLog("!SYS", "WS", `Creating new WebSocket → ${wsUri}`);
-                websocket = new WebSocket(wsUri);
+                writeToLog("!SYS", "WS", `Creating new WebSocket → ${wsUri} [sub-protocol: text.ircv3.net]`);
+                websocket = new WebSocket(wsUri, "text.ircv3.net");
                 websocket.binaryType = 'blob';
                 if (connectTimeout) clearTimeout(connectTimeout);
                 connectTimeout = setTimeout(() => {
