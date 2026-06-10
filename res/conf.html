@@ -1,39 +1,881 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 
-<!-- head -->
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  ARKFUTURE // CONF.HTML — 赛博终端 · 配置文件中心           ║
+  ║  "Access Granted — Configuration Matrix Loaded"              ║
+  ╚══════════════════════════════════════════════════════════════╝
+-->
+
 <head>
-    <title>常用连接</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ARKFUTURE 配置文件下载中心 — 匿名与安全服务器配置">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>配置文件中心 | ARKFUTURE</title>
+
+  <!-- Google Fonts: Orbitron 标题 + Rajdhani 正文（与现有主题一致） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- 行内 CSS — 赛博终端风格，与 theme0/theme1 设计语言一致 -->
+  <style>
+    /* ============================================================
+       CSS 自定义属性 · 赛博霓虹色彩体系
+       与 theme0.css / theme1.css 保持一致的调色板
+       ============================================================ */
+    :root {
+      --neon-cyan:    #00F0FF;
+      --neon-magenta: #B026FF;
+      --neon-green:   #00FF88;
+      --neon-orange:  #FF9E00;
+      --neon-red:     #FF003C;
+      --neon-yellow:  #F0FF00;
+
+      --bg-deep:      #06060f;
+      --bg-surface:   #0a0a1a;
+      --bg-card:      #0d0d20;
+      --border-color: #1a1a35;
+
+      --text-primary: #E0E0FF;
+      --text-dim:     rgba(224, 224, 255, 0.55);
+      --text-bright:  #FFFFFF;
+
+      --glow-cyan:    0 0 7px var(--neon-cyan), 0 0 20px rgba(0, 240, 255, 0.3), 0 0 40px rgba(0, 240, 255, 0.1);
+      --glow-magenta: 0 0 7px var(--neon-magenta), 0 0 20px rgba(176, 38, 255, 0.3), 0 0 40px rgba(176, 38, 255, 0.1);
+      --glow-green:   0 0 7px var(--neon-green), 0 0 20px rgba(0, 255, 136, 0.3), 0 0 40px rgba(0, 255, 136, 0.1);
+      --glow-orange:  0 0 7px var(--neon-orange), 0 0 20px rgba(255, 158, 0, 0.2);
+
+      --font-display: 'Orbitron', monospace;
+      --font-body:    'Rajdhani', sans-serif;
+
+      --scanline-opacity: 0.04;
+      --grid-opacity: 0.06;
+    }
+
+    /* ============================================================
+       全局重置
+       ============================================================ */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--neon-cyan) var(--bg-deep);
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb {
+      background: var(--neon-cyan);
+      border-radius: 3px;
+      box-shadow: var(--glow-cyan);
+    }
+
+    /* ============================================================
+       Body · 赛博网格背景 + 扫描线
+       ============================================================ */
+    body {
+      font-family: var(--font-body);
+      background:
+        /* 径向光晕 */
+        radial-gradient(ellipse at 15% 20%, rgba(0, 240, 255, 0.04) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 80%, rgba(176, 38, 255, 0.04) 0%, transparent 45%),
+        /* 深色基底 */
+        linear-gradient(180deg, #06060f 0%, #0a0a1f 100%),
+        /* 网格线 */
+        repeating-linear-gradient(0deg,
+          rgba(0, 240, 255, var(--grid-opacity)) 0px,
+          rgba(0, 240, 255, var(--grid-opacity)) 1px,
+          transparent 1px,
+          transparent 40px),
+        repeating-linear-gradient(90deg,
+          rgba(0, 240, 255, var(--grid-opacity)) 0px,
+          rgba(0, 240, 255, var(--grid-opacity)) 1px,
+          transparent 1px,
+          transparent 40px);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      line-height: 1.7;
+      font-size: 1.05rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 扫描线叠层 */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 240, 255, var(--scanline-opacity)) 2px,
+        rgba(0, 240, 255, var(--scanline-opacity)) 4px);
+      pointer-events: none;
+      z-index: 9999;
+      animation: scanlines 8s linear infinite;
+    }
+
+    @keyframes scanlines {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(4px); }
+    }
+
+    /* ============================================================
+       粒子背景 Canvas
+       ============================================================ */
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       布局容器
+       ============================================================ */
+    .cyber-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 900px;
+      margin: 30px 20px 60px;
+      padding: 0 10px;
+    }
+
+    /* ============================================================
+       Header · 终端标题栏
+       ============================================================ */
+    .cyber-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 30px 20px 25px;
+      border: 2px solid var(--neon-cyan);
+      border-radius: 6px;
+      background: var(--bg-surface);
+      box-shadow:
+        inset 0 0 60px rgba(0, 240, 255, 0.05),
+        var(--glow-cyan);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 标题栏角落装饰 */
+    .cyber-header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 20px; height: 20px;
+      border-top: 2px solid var(--neon-magenta);
+      border-left: 2px solid var(--neon-magenta);
+      box-shadow: 0 0 10px var(--neon-magenta);
+    }
+    .cyber-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 20px; height: 20px;
+      border-bottom: 2px solid var(--neon-magenta);
+      border-right: 2px solid var(--neon-magenta);
+      box-shadow: 0 0 10px var(--neon-magenta);
+    }
+
+    /* 终端顶部栏 */
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+    }
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .terminal-dot--red    { background: #FF5F57; box-shadow: 0 0 6px #FF5F57; }
+    .terminal-dot--yellow { background: #FFBD2E; box-shadow: 0 0 6px #FFBD2E; }
+    .terminal-dot--green  { background: #28CA41; box-shadow: 0 0 6px #28CA41; }
+    .terminal-title {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-left: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .cyber-header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 700;
+      color: var(--neon-cyan);
+      text-shadow: var(--glow-cyan);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      animation: glitch-text 3s infinite;
+    }
+
+    @keyframes glitch-text {
+      0%, 93%, 97%, 100% { transform: translate(0); }
+      94% { transform: translate(-2px, 1px); }
+      95% { transform: translate(2px, -1px); }
+      96% { transform: translate(-1px, -1px); }
+    }
+
+    .cyber-header .subtitle {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      color: var(--neon-magenta);
+      text-shadow: var(--glow-magenta);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    /* ============================================================
+       分隔线装饰
+       ============================================================ */
+    .cyber-divider {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin: 30px 0;
+      opacity: 0.7;
+    }
+    .cyber-divider__line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+    }
+    .cyber-divider__diamond {
+      width: 8px;
+      height: 8px;
+      background: var(--neon-cyan);
+      transform: rotate(45deg);
+      box-shadow: var(--glow-cyan);
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       卡片通用样式
+       ============================================================ */
+    .cyber-card {
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-card);
+      padding: 28px 30px;
+      margin-bottom: 24px;
+      position: relative;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .cyber-card:hover {
+      border-color: rgba(0, 240, 255, 0.4);
+      box-shadow:
+        inset 0 0 40px rgba(0, 240, 255, 0.03),
+        0 0 30px rgba(0, 240, 255, 0.08);
+    }
+
+    .cyber-card__title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--neon-cyan);
+      text-shadow: var(--glow-cyan);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cyber-card__title::before {
+      content: '>';
+      color: var(--neon-green);
+      text-shadow: var(--glow-green);
+      font-weight: 700;
+    }
+
+    /* ============================================================
+       介绍说明区
+       ============================================================ */
+    .intro-text p {
+      margin-bottom: 10px;
+      padding-left: 12px;
+      border-left: 2px solid rgba(0, 240, 255, 0.3);
+      color: var(--text-dim);
+      font-size: 0.98rem;
+      transition: border-color 0.3s ease, color 0.3s ease;
+    }
+    .intro-text p:hover {
+      border-left-color: var(--neon-cyan);
+      color: var(--text-primary);
+    }
+    .intro-text .highlight {
+      color: var(--neon-orange);
+      text-shadow: 0 0 8px rgba(255, 158, 0, 0.5);
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       配置文件列表 · 终端表格风格
+       ============================================================ */
+    .config-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-body);
+    }
+    .config-table thead th {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--neon-yellow);
+      text-shadow: 0 0 10px rgba(240, 255, 0, 0.3);
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--neon-cyan);
+      text-align: left;
+    }
+    .config-table tbody tr {
+      border-bottom: 1px solid rgba(26, 26, 53, 0.6);
+      transition: background 0.25s ease, transform 0.25s ease;
+    }
+    .config-table tbody tr:hover {
+      background: rgba(0, 240, 255, 0.04);
+      transform: translateX(4px);
+    }
+    .config-table tbody td {
+      padding: 14px 16px;
+      vertical-align: middle;
+    }
+    .config-table tbody td:first-child {
+      font-weight: 600;
+      color: var(--text-bright);
+      letter-spacing: 0.5px;
+    }
+    .config-table tbody td:first-child::before {
+      content: '└ ';
+      color: var(--neon-cyan);
+      opacity: 0.6;
+    }
+    .config-table a {
+      color: var(--neon-cyan);
+      text-decoration: none;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      position: relative;
+      transition: color 0.2s ease, text-shadow 0.2s ease;
+      word-break: break-all;
+    }
+    .config-table a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 0;
+      height: 1px;
+      background: var(--neon-cyan);
+      box-shadow: var(--glow-cyan);
+      transition: width 0.3s ease;
+    }
+    .config-table a:hover {
+      color: #FFFFFF;
+      text-shadow: var(--glow-cyan);
+    }
+    .config-table a:hover::after {
+      width: 100%;
+    }
+    .config-table a:focus-visible {
+      outline: 2px solid var(--neon-cyan);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* Badge 标签 */
+    .badge {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 3px;
+      border: 1px solid;
+      margin-right: 6px;
+    }
+    .badge--debian {
+      color: var(--neon-red);
+      border-color: var(--neon-red);
+      box-shadow: 0 0 6px rgba(255, 0, 60, 0.3);
+    }
+    .badge--irc {
+      color: var(--neon-green);
+      border-color: var(--neon-green);
+      box-shadow: 0 0 6px rgba(0, 255, 136, 0.3);
+    }
+    .badge--net {
+      color: var(--neon-orange);
+      border-color: var(--neon-orange);
+      box-shadow: 0 0 6px rgba(255, 158, 0, 0.3);
+    }
+    .badge--game {
+      color: var(--neon-magenta);
+      border-color: var(--neon-magenta);
+      box-shadow: 0 0 6px rgba(176, 38, 255, 0.3);
+    }
+    .badge--other {
+      color: var(--neon-yellow);
+      border-color: var(--neon-yellow);
+      box-shadow: 0 0 6px rgba(240, 255, 0, 0.3);
+    }
+
+    /* ============================================================
+       审查呼吁区
+       ============================================================ */
+    .review-card {
+      border: 1px solid var(--neon-magenta);
+      border-radius: 6px;
+      background: var(--bg-card);
+      padding: 24px 30px;
+      box-shadow: inset 0 0 40px rgba(176, 38, 255, 0.04), 0 0 20px rgba(176, 38, 255, 0.08);
+      position: relative;
+    }
+    .review-card::before {
+      content: '[ ! ]';
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      background: var(--bg-deep);
+      padding: 0 8px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--neon-magenta);
+      text-shadow: var(--glow-magenta);
+      letter-spacing: 2px;
+      font-size: 0.75rem;
+    }
+    .review-card p {
+      color: var(--text-dim);
+      font-style: italic;
+      line-height: 1.8;
+    }
+    .review-card .emphasis {
+      color: var(--neon-magenta);
+      text-shadow: var(--glow-magenta);
+      font-weight: 600;
+      font-style: normal;
+      font-family: var(--font-display);
+      letter-spacing: 1px;
+      font-size: 0.85rem;
+    }
+
+    /* ============================================================
+       Footer
+       ============================================================ */
+    .cyber-footer {
+      text-align: center;
+      padding: 25px 20px;
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+    .cyber-footer span {
+      color: var(--neon-cyan);
+      text-shadow: var(--glow-cyan);
+    }
+
+    /* ============================================================
+       响应式适配
+       ============================================================ */
+    @media (max-width: 768px) {
+      body {
+        font-size: 0.95rem;
+      }
+      .cyber-container {
+        margin: 15px 10px 40px;
+        padding: 0;
+      }
+      .cyber-header {
+        padding: 20px 15px 18px;
+      }
+      .cyber-card,
+      .review-card {
+        padding: 20px 16px;
+      }
+      .config-table thead {
+        display: none; /* 小屏幕隐藏表头，用 data-label 替代 */
+      }
+      .config-table tbody tr {
+        display: block;
+        margin-bottom: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 12px;
+      }
+      .config-table tbody td {
+        display: block;
+        padding: 6px 0;
+        text-align: left;
+      }
+      .config-table tbody td:first-child {
+        font-size: 1.05rem;
+        border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+        margin-bottom: 6px;
+        padding-bottom: 8px;
+      }
+      .config-table tbody td:first-child::before {
+        content: '';
+      }
+      .config-table tbody td::before {
+        content: attr(data-label) ': ';
+        font-family: var(--font-display);
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+        color: var(--neon-yellow);
+        text-transform: uppercase;
+        display: inline-block;
+        width: 90px;
+      }
+      .config-table tbody tr:hover {
+        transform: none;
+      }
+      .cyber-divider {
+        margin: 20px 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cyber-header h1 {
+        font-size: 1.4rem;
+        letter-spacing: 1px;
+      }
+      .terminal-bar {
+        gap: 5px;
+      }
+      .terminal-dot {
+        width: 8px; height: 8px;
+      }
+      .intro-text p {
+        font-size: 0.9rem;
+      }
+    }
+
+    /* ============================================================
+       打印样式
+       ============================================================ */
+    @media print {
+      body::after,
+      #particle-canvas { display: none; }
+      body {
+        background: #fff;
+        color: #000;
+      }
+      .cyber-header,
+      .cyber-card,
+      .review-card {
+        border: 1px solid #ccc;
+        box-shadow: none;
+      }
+      .config-table a {
+        color: #000;
+        text-decoration: underline;
+      }
+    }
+  </style>
 </head>
 
-<!-- body -->
 <body>
-    <div>
-        <h2 class="tit">配置文件连接</h2>
-        <p>这个条目是我们的配置文件的连接</p>
-        <p>请下载后修改成您的配置后使用</p>
-        <p>同时也请您审阅我们的配置文件, 给我们提出修改建议</p>
-        <p>配置文件基于Debian最新版本的软件配置</p>
-        <p>请单机下载</p>
 
-        <div>
-            <h2>名称 支持的软件版本</h2>
-            <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/i2p-tor/">i2pd & tor</a><br>
-            <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/inspircd/">inspircd</a><br>
-            <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/ergoircd/">ergoircd</a><br>
-            <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/hybridircd/">hybridircd</a><br>
-            <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/ngircd/">ngircd</a><br>
-            <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/irssi/">irssi</a><br>
-            <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/suricata/">Suricata</a><br>
-            <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/minecraft/">minecraftServer</a><br>
-            <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/other/">other conf</a><br>
-        </div>
+  <!-- 动态粒子背景 -->
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
-        <h2>同时也请您查看并审查我们的相关服务器配置文件,给我们提出好的匿名及安全的意见和建议</h2>
+  <!-- 主体容器 -->
+  <main class="cyber-container">
 
+    <!-- ══════════ HEADER · 终端标题 ══════════ -->
+    <header class="cyber-header" role="banner">
+      <div class="terminal-bar" aria-hidden="true">
+        <span class="terminal-dot terminal-dot--red"></span>
+        <span class="terminal-dot terminal-dot--yellow"></span>
+        <span class="terminal-dot terminal-dot--green"></span>
+        <span class="terminal-title">root@arkfuture:~/config#</span>
+      </div>
+      <h1 data-glitch="配置文件中心">配置文件中心</h1>
+      <p class="subtitle">Configuration Matrix // Debian-Based</p>
+    </header>
+
+    <!-- ══════════ 装饰分隔线 ══════════ -->
+    <div class="cyber-divider" aria-hidden="true">
+      <span class="cyber-divider__line"></span>
+      <span class="cyber-divider__diamond"></span>
+      <span class="cyber-divider__line"></span>
     </div>
+
+    <!-- ══════════ 说明卡片 ══════════ -->
+    <section class="cyber-card" aria-labelledby="intro-heading">
+      <h2 class="cyber-card__title" id="intro-heading">说明 / Instructions</h2>
+      <div class="intro-text">
+        <p>本页面提供 <span class="highlight">ARKFUTURE</span> 所有服务器配置文件的下载入口。</p>
+        <p>配置文件均基于 <span class="highlight">Debian 最新稳定版</span> 制作，请<strong>下载后修改为您的实际配置</strong>后再使用。</p>
+        <p>欢迎审阅我们的配置文件，并通过 GitHub Issue 或 Pull Request 提出<span class="highlight">匿名及安全方面的修改建议</span>。</p>
+        <p>点击下方链接即可跳转至对应的 GitHub 目录。</p>
+      </div>
+    </section>
+
+    <!-- ══════════ 配置文件列表 ══════════ -->
+    <section class="cyber-card" aria-labelledby="config-heading">
+      <h2 class="cyber-card__title" id="config-heading">配置文件索引 / Config Index</h2>
+
+      <table class="config-table" role="table">
+        <caption class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
+          ARKFUTURE 配置文件下载列表，包含软件名称、类型和 GitHub 链接
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">软件 / Software</th>
+            <th scope="col">类型</th>
+            <th scope="col">配置文件路径</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="软件">i2pd & Tor</td>
+            <td data-label="类型"><span class="badge badge--net">匿名网络</span></td>
+            <td data-label="路径">
+              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/i2p-tor/"
+                 target="_blank" rel="noopener noreferrer"
+                 title="前往 i2pd & Tor 配置目录（新窗口打开）">
+                /config/i2p-tor/
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="软件">InspIRCd</td>
+            <td data-label="类型"><span class="badge badge--irc">IRC 服务器</span></td>
+            <td data-label="路径">
+              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/inspircd/"
+                 target="_blank" rel="noopener noreferrer"
+                 title="前往 InspIRCd 配置目录（新窗口打开）">
+                /config/inspircd/
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="软件">ErgoIRCd</td>
+            <td data-label="类型"><span class="badge badge--irc">IRC 服务器</span></td>
+            <td data-label="路径">
+              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/ergoircd/"
+                 target="_blank" rel="noopener noreferrer"
+                 title="前往 ErgoIRCd 配置目录（新窗口打开）">
+                /config/ergoircd/
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="软件">HybridIRCd</td>
+            <td data-label="类型"><span class="badge badge--irc">IRC 服务器</span></td>
+            <td data-label="路径">
+              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/hybridircd/"
+                 target="_blank" rel="noopener noreferrer"
+                 title="前往 HybridIRCd 配置目录（新窗口打开）">
+                /config/hybridircd/
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="软件">ngIRCd</td>
+            <td data-label="类型"><span class="badge badge--irc">IRC 服务器</span></td>
+            <td data-label="路径">
+              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/ngircd/"
+                 target="_blank" rel="noopener noreferrer"
+                 title="前往 ngIRCd 配置目录（新窗口打开）">
+                /config/ngircd/
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="软件">Irssi</td>
+            <td data-label="类型"><span class="badge badge--irc">IRC 客户端</span></td>
+            <td data-label="路径">
+              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/irssi/"
+                 target="_blank" rel="noopener noreferrer"
+                 title="前往 Irssi 配置目录（新窗口打开）">
+                /config/irssi/
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="软件">Suricata</td>
+            <td data-label="类型"><span class="badge badge--net">网络安全</span></td>
+            <td data-label="路径">
+              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/suricata/"
+                 target="_blank" rel="noopener noreferrer"
+                 title="前往 Suricata 配置目录（新窗口打开）">
+                /config/suricata/
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="软件">Minecraft Server</td>
+            <td data-label="类型"><span class="badge badge--game">游戏服务</span></td>
+            <td data-label="路径">
+              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/minecraft/"
+                 target="_blank" rel="noopener noreferrer"
+                 title="前往 Minecraft Server 配置目录（新窗口打开）">
+                /config/minecraft/
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="软件">Other Configs</td>
+            <td data-label="类型"><span class="badge badge--other">其他配置</span></td>
+            <td data-label="路径">
+              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/other/"
+                 target="_blank" rel="noopener noreferrer"
+                 title="前往其他配置目录（新窗口打开）">
+                /config/other/
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ══════════ 审查呼吁卡片 ══════════ -->
+    <section class="review-card" aria-labelledby="review-heading">
+      <h2 class="cyber-card__title" id="review-heading">安全审查 / Security Audit</h2>
+      <p>
+        我们诚挚邀请您审查以上<span class="emphasis">服务器配置文件</span>，
+        并就<span class="emphasis">匿名性、安全性、隐私保护</span>等方面提出宝贵意见和建议。
+      </p>
+      <p style="margin-top:8px;">
+        请通过
+        <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/issues"
+           target="_blank" rel="noopener noreferrer"
+           style="color:var(--neon-cyan);text-decoration:underline;text-underline-offset:2px;">
+          GitHub Issues
+        </a>
+        提交反馈，感谢您的贡献。
+      </p>
+    </section>
+
+    <!-- ══════════ FOOTER ══════════ -->
+    <footer class="cyber-footer" role="contentinfo">
+      <p>&copy; 2025–2026 <span>ARKFUTURE</span> &mdash; Released under MIT License</p>
+      <p style="margin-top:4px;">System: Debian GNU/Linux  &bull;  Connection: <span style="color:var(--neon-green);">Secure</span></p>
+    </footer>
+
+  </main>
+
+  <!-- ══════════ 粒子背景脚本 ══════════ -->
+  <script>
+    (function() {
+      'use strict';
+
+      var canvas = document.getElementById('particle-canvas');
+      if (!canvas) return;
+
+      var ctx = canvas.getContext('2d');
+      var particles = [];
+      var maxParticles = 60;
+      var w, h;
+
+      function resize() {
+        w = canvas.width  = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      // 粒子类
+      function Particle() {
+        this.reset();
+      }
+      Particle.prototype.reset = function() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.radius = Math.random() * 1.8 + 0.5;
+        this.opacity = Math.random() * 0.5 + 0.15;
+        this.color = Math.random() < 0.5 ? '0, 240, 255' : '176, 38, 255'; // cyan or magenta
+      };
+      Particle.prototype.update = function() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < -10 || this.x > w + 10 || this.y < -10 || this.y > h + 10) {
+          this.reset();
+        }
+      };
+      Particle.prototype.draw = function() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + this.color + ', ' + this.opacity + ')';
+        ctx.fill();
+      };
+
+      // 初始化粒子
+      for (var i = 0; i < maxParticles; i++) {
+        particles.push(new Particle());
+      }
+
+      // 连线阈值
+      var linkDist = 140;
+
+      function drawLines() {
+        var i, j, p1, p2, dx, dy, dist;
+        for (i = 0; i < particles.length; i++) {
+          p1 = particles[i];
+          for (j = i + 1; j < particles.length; j++) {
+            p2 = particles[j];
+            dx = p1.x - p2.x;
+            dy = p1.y - p2.y;
+            dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < linkDist) {
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              var alpha = (1 - dist / linkDist) * 0.12;
+              ctx.strokeStyle = 'rgba(0, 240, 255, ' + alpha + ')';
+              ctx.lineWidth = 0.6;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, w, h);
+        var i;
+        for (i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw();
+        }
+        drawLines();
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+  </script>
+
 </body>
 </html>
