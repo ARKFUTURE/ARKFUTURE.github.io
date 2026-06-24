@@ -8,15 +8,18 @@
     </head>
     <body>
         <outline text="CyberSec POC/EXP/News">
-            <outline text="exploitdb" type="rss" htmlUrl="https://exploit-db.com/" xmlUrl="https://exploit-db.com/rss.xml"/>
-            <outline text="Sploitus" type="rss" htmlUrl="https://sploitus.com/" xmlUrl="https://sploitus.com/rss"/>
-            <outline text="tenable" type="rss" htmlUrl="https://tenable.com/" xmlUrl="https://tenable.com/security/research/feed"/>
-            <outline text="seclists" type="rss" htmlUrl="https://seclists.org/" xmlUrl="http://seclists.org/rss/fulldisclosure.rss"/>
-            <outline text="zerodayinitiative" type="rss" htmlUrl="https://zerodayinitiative.com/" xmlUrl="https://zerodayinitiative.com/rss/published/"/>
-            <outline text="secaffairs(news)" type="rss" htmlUrl="https://securityaffairs.com" xmlUrl="https://securityaffairs.com/feed"/>
-            <outline text="darkreading(news)" type="rss" htmlUrl="https://darkreading.com/" xmlUrl="https://darkreading.com/rss.xml"/>
-            <outline text="hackthebox(news)" type="rss" htmlUrl="https://hackthebox.com/" xmlUrl="https://hackthebox.com/rss/blog/all"/>
-            <outline text="hackernews(news)" type="rss" htmlUrl="https://news.ycombinator.com/" xmlUrl="https://news.ycombinator.com/rss"/>
+            <outline text="exploitdb[vuln]" type="rss" htmlUrl="https://exploit-db.com" xmlUrl="https://exploit-db.com/rss.xml"/>
+            <outline text="Sploitus[vuln]" type="rss" htmlUrl="https://sploitus.com" xmlUrl="https://sploitus.com/rss"/>
+            <outline text="tenable[vuln]" type="rss" htmlUrl="https://tenable.com" xmlUrl="https://tenable.com/security/research/feed"/>
+            <outline text="seclists[vuln]" type="rss" htmlUrl="https://seclists.org" xmlUrl="http://seclists.org/rss/fulldisclosure.rss"/>
+            <outline text="zerodayinitiative[vuln]" type="rss" htmlUrl="https://zerodayinitiative.com" xmlUrl="https://zerodayinitiative.com/rss/published"/>
+            <outline text="secaffairs[news]" type="rss" htmlUrl="https://securityaffairs.com" xmlUrl="https://securityaffairs.com/feed"/>
+            <outline text="darkreading[news]" type="rss" htmlUrl="https://darkreading.com" xmlUrl="https://darkreading.com/rss.xml"/>
+            <outline text="thehackernews[news]" type="rss" htmlUrl="https://thehackernews.com" xmlUrl="https://feeds.feedburner.com/TheHackersNews"/>
+            <outline text="bleepingComputer[news]" type="rss" htmlUrl="https://www.bleepingcomputer.com" xmlUrl="https://www.bleepingcomputer.com/feed"/>
+            <outline text="securityweek[news]" type="rss" htmlUrl="https://www.securityweek.com" xmlUrl="https://www.securityweek.com/feed"/>
+            <outline text="hackthebox[news]" type="rss" htmlUrl="https://hackthebox.com" xmlUrl="https://hackthebox.com/rss/blog/all"/>
+            <outline text="hackernews[news]" type="rss" htmlUrl="https://news.ycombinator.com" xmlUrl="https://news.ycombinator.com/rss"/>
         </outline>
     </body>
 </opml>
