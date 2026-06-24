@@ -7,7 +7,7 @@
         <ownerName>ARKFUTURE</ownerName>
     </head>
     <body>
-        <outline text="CyberSec POC/EXP/News">
+        <outline text="CyberSec">
             <outline text="exploitdb[vuln]" type="rss" htmlUrl="https://exploit-db.com" xmlUrl="https://exploit-db.com/rss.xml"/>
             <outline text="Sploitus[vuln]" type="rss" htmlUrl="https://sploitus.com" xmlUrl="https://sploitus.com/rss"/>
             <outline text="tenable[vuln]" type="rss" htmlUrl="https://tenable.com" xmlUrl="https://tenable.com/security/research/feed"/>
