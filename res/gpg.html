@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -772,13 +772,13 @@
 
     <div class="section-header admin">
       <span class="section-tag admin-tag">[ ADMIN ]</span>
-      <span class="section-label">管理员公钥</span>
+      <span class="section-label">Admin Keys</span>
     </div>
     <div class="admin-grid" id="adminGrid"></div>
 
     <div class="section-header user">
       <span class="section-tag user-tag">[ USER ]</span>
-      <span class="section-label">团队成员公钥</span>
+      <span class="section-label">Team Member Keys</span>
     </div>
     <div class="user-grid" id="userGrid"></div>
 
@@ -872,7 +872,7 @@ GQ9Wx0fcjQk=
       try {
         publicKey = await openpgp.readKey({ armoredKey: armorText.trim() });
       } catch (e) {
-        throw new Error('无法解析 PGP 公钥: ' + e.message);
+        throw new Error('Unable to parse PGP public key: ' + e.message);
       }
 
       const keyIdHex = publicKey.getKeyID().toHex();
@@ -946,7 +946,7 @@ GQ9Wx0fcjQk=
       const cardClass = isAdmin ? 'admin-card' : 'user-card';
       const roleTagClass = isAdmin ? 'root' : 'user-role';
       const roleTagText = isAdmin ? '[ROOT]' : '[user]';
-      const roleIcon = isAdmin ? '🔑' : '👤';
+      const roleIcon = isAdmin ? '[A]' : '[U]';
 
       return `
     <div class="key-card ${cardClass}" style="opacity:0;transform:translateY(20px);">
@@ -958,11 +958,11 @@ GQ9Wx0fcjQk=
       <div class="card-info">
         <span class="info-label">Key ID:</span><span class="info-value keyid">${escapeHTML(parsed.keyId)}</span><br>
         <span class="info-label">Type:</span><span class="info-value">${escapeHTML(parsed.type)}</span><br>
-        <span class="info-label">Fingerprint:</span><a class="info-value fingerprint" href="${searchBaseUrl}${escapeHTML(parsed.fingerprintRaw)}" target="_blank" rel="noopener noreferrer" title="在 keys.openpgp.org 查询此密钥">${escapeHTML(parsed.fingerprint)}</a><br>
+        <span class="info-label">Fingerprint:</span><a class="info-value fingerprint" href="${searchBaseUrl}${escapeHTML(parsed.fingerprintRaw)}" target="_blank" rel="noopener noreferrer" title="Search this key on keys.openpgp.org">${escapeHTML(parsed.fingerprint)}</a><br>
         <span class="info-label">Created:</span><span class="info-value">${escapeHTML(parsed.created)}</span><br>
         <span class="info-label">Expires:</span><span class="info-value">${escapeHTML(parsed.expires)}</span><br>
         ${parsed.email
-          ? `<span class="info-label">UID:</span><a class="info-value email" href="${searchBaseUrl}${escapeHTML(parsed.email)}" target="_blank" rel="noopener noreferrer" title="在 keys.openpgp.org 查询此邮箱">${escapeHTML(parsed.uid)}</a>`
+          ? `<span class="info-label">UID:</span><a class="info-value email" href="${searchBaseUrl}${escapeHTML(parsed.email)}" target="_blank" rel="noopener noreferrer" title="Search this email on keys.openpgp.org">${escapeHTML(parsed.uid)}</a>`
           : `<span class="info-label">UID:</span><span class="info-value">${escapeHTML(parsed.uid)}</span>`
         }
       </div>
@@ -977,10 +977,10 @@ GQ9Wx0fcjQk=
         <div class="armor-content">${escapeHTML(parsed.armor)}</div>
       </div>
       <button class="copy-btn" data-armor-index="${index}">
-        <span class="copy-icon">📋</span> COPY ARMOR
+        <span class="copy-icon">[C]</span> COPY ARMOR
       </button>
       <button class="download-btn" data-download-index="${index}">
-        <span class="dl-icon">💾</span> DOWNLOAD .ASC
+        <span class="dl-icon">[D]</span> DOWNLOAD .ASC
       </button>
     </div>`;
     }
@@ -990,14 +990,14 @@ GQ9Wx0fcjQk=
       const cardClass = 'error-card';
       const roleTagClass = isAdmin ? 'root' : 'user-role';
       const roleTagText = isAdmin ? '[ROOT]' : '[user]';
-      const roleIcon = isAdmin ? '🔑' : '👤';
+      const roleIcon = isAdmin ? '[A]' : '[U]';
 
       return `
     <div class="key-card ${cardClass}" style="opacity:0;transform:translateY(20px);">
       <div class="card-header">
         <span class="role-tag ${roleTagClass}">${roleTagText}</span>
         <span class="role-icon">${roleIcon}</span>
-        <span class="card-name">⚠ PARSE ERROR</span>
+        <span class="card-name">PARSE ERROR</span>
       </div>
       <div class="card-info">
         <span class="info-label">Error:</span><span class="info-value error-msg">${escapeHTML(errorMsg)}</span>
@@ -1008,12 +1008,12 @@ GQ9Wx0fcjQk=
             <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
             &nbsp;RAW INPUT
           </span>
-          <span>⚠</span>
+          <span>[!]</span>
         </div>
         <div class="armor-content">${escapeHTML(armorText)}</div>
       </div>
       <button class="copy-btn" data-armor-index="${index}">
-        <span class="copy-icon">📋</span> COPY RAW
+        <span class="copy-icon">[C]</span> COPY RAW
       </button>
     </div>`;
     }
@@ -1078,7 +1078,7 @@ GQ9Wx0fcjQk=
           navigator.clipboard.writeText(armorText).then(() => {
             this.classList.add('copied');
             const originalHTML = this.innerHTML;
-            this.innerHTML = '<span class="copy-icon">✅</span> COPIED ✓';
+            this.innerHTML = '<span class="copy-icon">[OK]</span> COPIED';
             setTimeout(() => {
               this.classList.remove('copied');
               this.innerHTML = originalHTML;
@@ -1094,7 +1094,7 @@ GQ9Wx0fcjQk=
               document.execCommand('copy');
               this.classList.add('copied');
               const originalHTML = this.innerHTML;
-              this.innerHTML = '<span class="copy-icon">✅</span> COPIED ✓';
+              this.innerHTML = '<span class="copy-icon">[OK]</span> COPIED';
               setTimeout(() => {
                 this.classList.remove('copied');
                 this.innerHTML = originalHTML;
@@ -1139,7 +1139,7 @@ GQ9Wx0fcjQk=
     window.addEventListener('load', () => {
       if (typeof openpgp === 'undefined') {
         document.getElementById('adminGrid').innerHTML =
-          '<div class="key-card error-card" style="opacity:1;transform:none;"><div class="card-info"><span class="info-value error-msg">⚠ OpenPGP.js CDN 加载失败，请检查网络连接后刷新页面。</span></div></div>';
+          '<div class="key-card error-card" style="opacity:1;transform:none;"><div class="card-info"><span class="info-value error-msg">OpenPGP.js CDN failed to load. Please check your network connection and refresh the page.</span></div></div>';
         return;
       }
       initPage();
