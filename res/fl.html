@@ -18,7 +18,7 @@
     <style>
         /* ============================================================
        fl.html 专用样式 — 快速搜索页面
-       命名沿用项目 BEM 规范：fl- 为页面前缀
+       命名沿用项目 BEM 规范:fl- 为页面前缀
        ============================================================ */
 
         /* ---- 页面容器 ---- */
@@ -343,14 +343,14 @@
         <!-- ========== Hero ========== -->
         <header class="fl-hero">
             <h1 class="fl-hero__title">⚡ 快速搜索</h1>
-            <p class="fl-hero__subtitle">把搜索内容/参数放到框里，点击搜索按钮即可</p>
+            <p class="fl-hero__subtitle">把搜索内容/参数放到框里, 点击搜索按钮即可</p>
             <p class="fl-hero__note">新增连接搜索参数失效 联系邮箱: pbp9wdep2@mozmail.com</p>
         </header>
 
         <!-- ========== 使用提示 ========== -->
         <div class="fl-notice">
-            💡 提示：在输入框中输入关键词，点击对应按钮在新标签页打开搜索结果。
-            支持 Baidu · Bing · Google · DuckDuckGo · Ecosia · Yandex 等主流引擎，以及 Tor / XDCC / 学术搜索等专用渠道。
+            💡 提示:在输入框中输入关键词, 点击对应按钮在新标签页打开搜索结果.
+            支持 Baidu · Bing · Google · DuckDuckGo · Yandex 等主流引擎, 以及 Tor / XDCC / 学术搜索等专用渠道.
         </div>
 
         <!-- ========== 搜索引擎 ========== -->
@@ -369,11 +369,6 @@
 
                 <form class="fl-search-card" method="GET" action="https://www.google.com/search" target="_blank">
                     <input class="fl-search-card__input" type="text" name="q" autocomplete="off" placeholder="谷歌 / Google">
-                    <button class="fl-search-card__btn" type="submit">搜索</button>
-                </form>
-
-                <form class="fl-search-card" method="GET" action="https://www.ecosia.org/search" target="_blank">
-                    <input class="fl-search-card__input" type="text" name="q" autocomplete="off" placeholder="公益搜索 / Ecosia">
                     <button class="fl-search-card__btn" type="submit">搜索</button>
                 </form>
 
@@ -483,7 +478,7 @@
                         <input class="fl-search-card__input" type="text" name="search" autocomplete="off" placeholder="Linux 发行版软件包搜索">
                         <button class="fl-search-card__btn" type="submit">搜索</button>
                     </div>
-                    <input class="fl-search-card__extra-input" type="text" name="inrepo" autocomplete="off" placeholder="查找系统，如: debian_13">
+                    <input class="fl-search-card__extra-input" type="text" name="inrepo" autocomplete="off" placeholder="查找系统, 如: debian_13">
                 </form>
 
                 <form class="fl-search-card fl-search-card--stack" method="GET" action="https://packages.msys2.org/search" target="_blank">
@@ -542,7 +537,7 @@
         <section class="fl-section">
             <h2 class="fl-section__heading">📻 电台搜索</h2>
             <div class="fl-search-grid">
-                <form class="fl-search-card fl-search-card--stack" method="GET" action="http://fi1.api.radio-browser.info/xml/stations/search" target="_blank">
+                <form class="fl-search-card fl-search-card--stack" method="GET" action="http://api.radio-browser.info/xml/stations/search" target="_blank">
                     <div class="fl-search-card__row">
                         <input class="fl-search-card__input" type="text" name="name" autocomplete="off" placeholder="电台名字搜索">
                         <button class="fl-search-card__btn" type="submit">搜索</button>
@@ -550,7 +545,7 @@
                     <input class="fl-search-card__extra-input" type="text" name="order" autocomplete="off" placeholder="混沌搜索 (搜啥都行)">
                 </form>
 
-                <form class="fl-search-card" method="GET" action="http://fi1.api.radio-browser.info/xml/stations/byuuid" target="_blank">
+                <form class="fl-search-card" method="GET" action="http://api.radio-browser.info/xml/stations/byuuid" target="_blank">
                     <input class="fl-search-card__input" type="text" name="uuids" autocomplete="off" placeholder="UUID 搜索">
                     <button class="fl-search-card__btn" type="submit">搜索</button>
                 </form>
@@ -575,7 +570,7 @@
         <section class="fl-section">
             <h2 class="fl-section__heading" style="color:var(--neon-blue);border-bottom-color:rgba(0,240,255,0.2);">🔗 常用连接</h2>
             <p style="color:var(--text-dim);font-size:0.88rem;margin-bottom:1rem;">
-                展示一些常用链接，为随时随地使用而准备。所有链接均为公开资源，右击 → 复制链接即可使用。
+                展示一些常用链接, 为随时随地使用而准备.所有链接均为公开资源, 右击 → 复制链接即可使用.
             </p>
 
             <div class="fl-links-grid">
