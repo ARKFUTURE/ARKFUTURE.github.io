@@ -15,7 +15,7 @@ echo "自动生成证书,如需要使用自己的证书,请替换key.pem和cert.
 openssl req -x509 -newkey rsa:4096 -sha256 -days 360 -nodes -keyout key.pem -out cert.pem -subj "/CN=irc.arkfuture.irc" -addext "extendedKeyUsage = serverAuth"
 cd /etc/inspircd/conf
 curl -L -O https://arkfuture.github.io/config/inspircd/conf/modules.conf
-curl -L -O https://arkfuture.github.io/config/inspircd/conf/helpop.conf
+curl -L -O https://arkfuture.github.io/config/inspircd/conf/help.conf
 curl -L -O https://arkfuture.github.io/config/inspircd/conf/opers.conf
 curl -L -O https://arkfuture.github.io/config/inspircd/conf/ascii.conf
 curl -L -O https://arkfuture.github.io/config/inspircd/conf/links.conf

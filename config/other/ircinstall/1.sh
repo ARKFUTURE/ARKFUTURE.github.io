@@ -16,7 +16,7 @@ mkdir txt
 curl -L -O https://arkfuture.github.io/config/inspircd/inspircd.conf
 cd /etc/inspircd/conf
 curl -L -O https://arkfuture.github.io/config/inspircd/conf/modules.conf
-curl -L -O https://arkfuture.github.io/config/inspircd/conf/helpop.conf
+curl -L -O https://arkfuture.github.io/config/inspircd/conf/help.conf
 curl -L -O https://arkfuture.github.io/config/inspircd/conf/opers.conf
 curl -L -O https://arkfuture.github.io/config/inspircd/conf/ascii.conf
 curl -L -O https://arkfuture.github.io/config/inspircd/conf/links.conf
