@@ -1,13 +1,13 @@
-image: debian:stable
-
 pages:
   stage: deploy
+  image: debian:stable
   script:
     - apt-get update && apt-get full-upgrade -y
-    - apt-get install -y ca-certificates
+    - echo "更新完成"
     - mkdir .public
     - cp -r * .public
     - mv .public public
+    - echo "page完成"
   artifacts:
     paths:
       - public
