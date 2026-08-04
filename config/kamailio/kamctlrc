@@ -1,176 +1,171 @@
-## The Kamailio configuration file for the control tools.
+## Kamailio 控制工具(kamctl 和 kamdbctl)的配置文件.
 ##
-## Here you can set variables used in the kamctl and kamdbctl setup
-## scripts. Per default all variables here are commented out, the control tools
-## will use their internal default values.
+## 您可以在此处设置 kamctl 和 kamdbctl 设置脚本中使用的变量.
+## 默认情况下，此处所有变量均被注释掉，控制工具将使用其内部默认值.
 
-## the SIP domain
+## SIP 域名
 SIP_DOMAIN=IP/Doman
 
-## chrooted directory
+## chroot 目录
 # CHROOT_DIR="/path/to/chrooted/directory"
 
-## database type: MYSQL, PGSQL, ORACLE, DB_BERKELEY, DBTEXT, or SQLITE
-## by default none is loaded
+## 数据库类型:MYSQL, PGSQL, ORACLE, DB_BERKELEY, DBTEXT, 或 SQLITE
+## 默认不加载任何类型
 ##
-## If you want to setup a database with kamdbctl, you must at least specify
-## this parameter.
+## 如果您想使用 kamdbctl 设置数据库，则必须至少指定此参数.
 DBENGINE=MYSQL
 
-## database host
+## 数据库主机
 DBHOST=localhost
 
-## database port
+## 数据库端口
 DBPORT=3306
 
-## database name (for ORACLE this is TNS name)
+## 数据库名称(对于 ORACLE 来说，这是 TNS 名称)
 DBNAME=kamailio
 
-## database path used by dbtext, db_berkeley or sqlite
+## dbtext、db_berkeley 或 sqlite 使用的数据库路径
 # DB_PATH="/usr/local/etc/kamailio/dbtext"
 
-## database read/write user
+## 数据库读/写用户
 DBRWUSER="kamailio"
 
-## password for database read/write user
+## 数据库读/写用户的密码
 DBRWPW="KA@12345678"
 
-## database read only user
+## 数据库只读用户
 DBROUSER="kamailioro"
 
-## password for database read only user
+## 数据库只读用户的密码
 DBROPW="KARO@12345678"
 
-## database access host (from where is kamctl used)
+## 数据库访问主机(从何处使用 kamctl)
 # DBACCESSHOST=192.168.0.1
 
-## database host for super user (useful for specifying a local socket or virtual hostname)
-# defaults to value of DBHOST when not set
+## 超级用户的数据库主机(用于指定本地套接字或虚拟主机名)
+## 如果未设置，则默认使用 DBHOST 的值
 # DBROOTHOST="localhost"
 
-## database port for super user (on some DB specifying the port will force TCP connections)
-# default value will depend on client DB tool
+## 超级用户的数据库端口(在某些数据库上，指定端口将强制使用 TCP 连接)
+## 默认值取决于客户端数据库工具
 # DBROOTPORT=""
 
-## database super user (for ORACLE this is 'scheme-creator' user)
+## 数据库超级用户(对于 ORACLE，这是‘方案创建者’用户)
 DBROOTUSER="root"
 
-## password for database super user
-## - important: this is insecure, targeting the use only for automatic testing
-## - known to work for: mysql
+## 数据库超级用户的密码
+## - 重要提示:此方式不安全，仅用于自动化测试场景
+## - 已知适用于:mysql
 DBROOTPW="ROOT@12345678"
 
-## option to ask confirmation for all database creation steps
+## 询问确认所有数据库创建步骤的选项
 # DBINITASK=yes
 
-## database character set (used by MySQL when creating database)
+## 数据库字符集(MySQL 创建数据库时使用)
 CHARSET="utf8mb4"
 
-## user name column
+## 用户名列名
 # USERCOL="username"
 
 
-## SQL definitions
-## If you change this definitions here, then you must change them
-## in db/schema/entities.xml too.
-## FIXME
+## SQL 定义
+## 如果您在此处更改这些定义，则必须在 db/schema/entities.xml 中也进行相应更改.
+##
+## 待修复
 
 # FOREVER="2030-05-28 21:32:15"
 # DEFAULT_Q="1.0"
 
 
-## Program to calculate a message-digest fingerprint
+## 用于计算消息摘要指纹的程序
 # MD5="md5sum"
 
-## awk tool
+## awk 工具
 # AWK="awk"
 
-## gdb tool
+## gdb 工具
 # GDB="gdb"
 
-## If you use a system with a grep and egrep that is not 100% gnu grep compatible,
-## e.g. solaris, install the gnu grep (ggrep) and specify this below.
+## 如果您使用的系统(例如 Solaris)中的 grep 和 egrep 并非 100% 兼容 GNU grep，
+## 请安装 GNU grep (ggrep) 并在下方指定.
 ##
-## grep tool
+## grep 工具
 # GREP="grep"
 
-## egrep tool
+## egrep 工具
 # EGREP="egrep"
 
-## sed tool
+## sed 工具
 # SED="sed"
 
-## tail tool
+## tail 工具
 # LAST_LINE="tail -n 1"
 
-## expr tool
+## expr 工具
 # EXPR="expr"
 
 
-## Describe what additional tables to install. Valid values for the variables
-## below are yes/no/ask. With ask (default) it will interactively ask the user
-## for an answer, while yes/no allow for automated, unassisted installs.
+## 描述要安装哪些额外的表.以下变量的有效值为 yes/no/ask.
+## 使用 ask(默认值)时会交互式询问用户答案，而使用 yes/no 则允许自动化、无人值守的安装.
 
-## If to install tables for the modules in the EXTRA_MODULES variable.
-# INSTALL_EXTRA_TABLES=ask
+## 是否安装 EXTRA_MODULES 变量中模块的表.
+INSTALL_EXTRA_TABLES=yes
 
-## If to install presence related tables.
-# INSTALL_PRESENCE_TABLES=ask
+## 是否安装 Presence 相关表.
+INSTALL_PRESENCE_TABLES=yes
 
-## If to install uid modules related tables.
-# INSTALL_DBUID_TABLES=ask
+## 是否安装 uid 模块相关表.
+INSTALL_DBUID_TABLES=yes
 
-## Define what module tables should be installed.
-## If you use the postgres database and want to change the installed tables, then you
-## must also adjust the STANDARD_TABLES or EXTRA_TABLES variable accordingly in the
-## kamdbctl.base script.
+## 定义应安装哪些模块表.
+## 如果您使用 PostgreSQL 数据库并希望更改已安装的表，则还必须相应地调整
+## kamdbctl.base 脚本中的 STANDARD_TABLES 或 EXTRA_TABLES 变量.
 
-## Kamailio standard modules
+## Kamailio 标准模块
 STANDARD_MODULES="standard acc lcr domain group permissions registrar usrloc msilo
-                   alias_db uri_db speeddial avpops auth_db pdt dialog dispatcher
-                   dialplan"
+                  alias_db uri_db speeddial avpops auth_db pdt dialog dispatcher
+                  dialplan"
 
-## Kamailio extra modules
-EXTRA_MODULES="imc cpl siptrace domainpolicy carrierroute userblocklist htable purple sca"
+## Kamailio 额外模块
+EXTRA_MODULES="imc cpl siptrace carrierroute userblocklist htable sca"
 
 
-## type of aliases used: DB - database aliases; UL - usrloc aliases
-## - default: none
+## 别名类型:DB - 数据库别名; UL - 用户定位(usrloc)别名
+## - 默认值:无
 # ALIASES_TYPE="DB"
 
-## control engine: RPCFIFO
-## - default RPCFIFO
+## 控制引擎:RPCFIFO
+## - 默认值为 RPCFIFO
 # CTLENGINE="RPCFIFO"
 
-## path to FIFO file for engine RPCFIFO
+## 引擎 RPCFIFO 的 FIFO 文件路径
 # RPCFIFOPATH="/run/kamailio/kamailio_rpc.fifo"
 
-## check ACL names; default on (1); off (0)
+## 检查 ACL 名称;默认开启 (1);关闭 (0)
 # VERIFY_ACL=1
 
-## ACL names - if VERIFY_ACL is set, only the ACL names from below list
-## are accepted
+## ACL 名称 - 如果设置了 VERIFY_ACL，则只接受以下列表中的 ACL 名称
 # ACL_GROUPS="local ld int voicemail free-pstn"
 
-## check if user exists (used by some commands such as acl);
-## - default on (1); off (0)
+## 检查用户是否存在(被某些命令使用，例如 acl);
+## - 默认开启 (1);关闭 (0)
 # VERIFY_USER=1
 
-## verbose - debug purposes - default '0'
+## 详细输出 - 调试目的 - 默认值为 '0'
 # VERBOSE=1
 
-## do (1) or don't (0) store plaintext passwords
-## in the subscriber table - default '1'
+## 是否在 subscriber 表中存储明文密码
+## 1 为存储，0 为不存储 - 默认值为 '1'
 STORE_PLAINTEXT_PW=1
 
-## Kamailio START Options
-## PID file path - default is: /run/kamailio/kamailio.pid
+## Kamailio 启动选项
+## PID 文件路径 - 默认路径为:/run/kamailio/kamailio.pid
 # PID_FILE=/run/kamailio/kamailio.pid
 
-## Kamailio Startup Configuration File
-## Default is: kamailio.cfg
+## Kamailio 启动配置文件
+## 默认文件为:kamailio.cfg
 # STARTUP_CONFIG_FILE=kamailio.cfg
 
-## Extra start options - default is: not set
-## example: start Kamailio with 64MB shared memory: STARTOPTIONS="-m 64"
+## 额外的启动选项 - 默认不设置
+## 示例:使用 64MB 共享内存启动 Kamailio:STARTOPTIONS="-m 64"
 # STARTOPTIONS=

@@ -3,13 +3,13 @@
     <!-- <hostname>ARKFUTURE</hostname> -->
     <location>ARKFUTURE Radio Server</location>
     <admin>arkfuture@i2pmail.org</admin>
-    <fileserve>1</fileserve>
+
 
     <!-- 限制 -->
     <limits>
         <clients>100000</clients>
         <sources>10</sources>
-        <queue-size>102400</queue-size>
+        <queue-size>524288</queue-size>
         <client-timeout>30</client-timeout>
         <header-timeout>15</header-timeout>
         <source-timeout>10</source-timeout>
@@ -17,13 +17,14 @@
         <burst-size>65536</burst-size>
     </limits>
 
+
     <!-- 验证 -->
     <authentication>
-        <source-password>hackme</source-password>
-        <relay-password>hackme</relay-password>
+        <source-password>password</source-password>
+        <relay-password>password</relay-password>
 
         <admin-user>admin</admin-user>
-        <admin-password>hackme</admin-password>
+        <admin-password>password</admin-password>
     </authentication>
 
     
@@ -38,11 +39,10 @@
 
     <!-- TCP端口监听 -->
     <listen-socket>
-        <port>5080</port>
+        <port>5050</port>
         <!-- <ssl>1</ssl> -->
         <!-- <shoutcast-mount>/stream</shoutcast-mount> -->
     </listen-socket>
-
 
 
     <!-- HTTP头 -->
@@ -72,24 +72,17 @@
     -->
    
 
-
     <!-- 音频流专属设置 -->
     <mount type="default">
         <public>0</public>
-        <!-- <intro>/example_intro.ogg</intro> -->
-        <http-headers>
-                <header name="foo" value="bar" />
-        </http-headers>
+        <!-- <intro>/example_intro.ogg</intro> --> <!-- 播放前导音频文件 -->
     </mount>
 
     <mount type="normal">
         <mount-name>/1</mount-name> <!-- 主流路径 -->
-
         <username>user1</username> <!-- 源用户名 -->
         <password>qwertyuiop</password> <!-- 源密码 -->
-        
-        <!-- <intro>/example_intro.ogg</intro> --> <!-- 播放前导音频文件 -->
-
+        <!-- <intro>/example_intro.ogg</intro> -->
         <fallback-mount>/2</fallback-mount> <!-- 主流断开时切换到的备用流 -->
         <fallback-override>1</fallback-override>
         <fallback-when-full>1</fallback-when-full>
@@ -97,17 +90,25 @@
 
     <mount type="normal">
         <mount-name>/2</mount-name>
-
         <username>user2</username>
         <password>asdfghjkl</password>
+        <fallback-mount>/3</fallback-mount>
+        <fallback-override>1</fallback-override>
+        <fallback-when-full>1</fallback-when-full>
     </mount>
 
     <mount type="normal">
         <mount-name>/3</mount-name>
-
         <username>user3</username>
         <password>zxcvbnm</password>
+        <fallback-mount>/1</fallback-mount>
+        <fallback-override>1</fallback-override>
+        <fallback-when-full>1</fallback-when-full>
     </mount>
+
+
+    <!-- 文件服务 -->
+    <fileserve>1</fileserve>
 
 
     <!-- 路径 -->
@@ -123,6 +124,7 @@
         <!-- <ssl-allowed-ciphers>ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS</ssl-allowed-ciphers> -->
     </paths>
 
+
     <!-- 日志 -->
     <logging>
         <accesslog>access.log</accesslog>
@@ -132,6 +134,7 @@
         <logsize>10000</logsize>
         <!-- <logarchive>1</logarchive> -->
     </logging>
+
 
     <!-- 安全 -->
     <security>

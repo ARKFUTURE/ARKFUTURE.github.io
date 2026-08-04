@@ -15,8 +15,8 @@ SOCKSPort 127.0.0.1:9050
 # 自带网桥设置 设置后为1后 Tor 将获取"Bridge"配置行中列出的每个桥接器的描述符 并自动连接到它们
 UseBridges 1
 # 前置代理设置
-#HTTPSProxy 127.0.0.1:8787
-#Socks5Proxy 127.0.0.1:1080
+#HTTPSProxy 127.0.0.1:5554
+#Socks5Proxy 127.0.0.1:5554
 
 ##### 基础设置
 Log notice file /var/log/tor/notices.log
@@ -45,5 +45,4 @@ HiddenServiceDir /var/lib/tor/inspircd/
 HiddenServicePort 6697 127.0.0.1:6697
 
 ##### 网桥 一行一个 格式已给出
-Bridge obfs4 
-Bridge obfs4 
+Bridge obfs4 82.169.168.141:993 E8ED405E47A477D92D9EFB201FADF28FF7FBAF5D cert=pQ85WWBwVZIjurCRaoeTsF7vhUhFyU1gMPd/kEEOq8w+sKAn1aWAbnIbX0MD84lP4KVZJw iat-mode=0
