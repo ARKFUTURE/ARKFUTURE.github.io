@@ -3,7 +3,7 @@
 # # INSPircd配置
 * 基本配置: https://arkfuture.github.io/config/inspircd/inspircd.conf
 * 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/inspircd
-* 安装: https://arkfuture.github.io/config/other/ircinstall/install.sh
+* 安装: https://arkfuture.github.io/config/inspircd/install.sh
 # # ERGOircd配置
 * 基本配置: https://arkfuture.github.io/config/hybridircd/ircd.conf
 * 文件夹: https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/hybridircds
