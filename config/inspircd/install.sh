@@ -102,6 +102,7 @@ curl -L --anyauth https://ARKFUTURE.github.io/config/anope/hostserv.conf > /etc/
 echo "配置anope-完成"
 cd ~
 clear
+
 ###### 说明 ######
 echo "输出配置信息"
 echo "INSPIRCD配置信息: $(head -n 1 /etc/inspircd/inspircd.conf)"
