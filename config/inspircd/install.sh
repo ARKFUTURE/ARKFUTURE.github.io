@@ -11,7 +11,7 @@ echo "现在是root用户权限"
 sleep 3
 
 ###### 环境变量 ######
-read -p "请输入您的域名,用来替换内嵌的域名: " domand
+read -p "请输入您的域名,用来替换内嵌的域名: " domaind
 
 ###### 安装依赖 ######
 echo "安装依赖"
@@ -63,7 +63,7 @@ mkdir conf txt
 curl -L -O https://arkfuture.github.io/config/inspircd/inspircd.conf
 echo "自动生成证书,如需要使用自己的证书,请替换key.pem和cert.pem中的内容为自己的证书即可"
 openssl req -x509 -newkey rsa:4096 -sha512 -days 360 -nodes -keyout key.pem -out cert.pem -subj "/CN=$domand" -addext "extendedKeyUsage = serverAuth"
-sed -i "s|irc.arkfuture.irc|$domand|g" inspircd.conf
+sed -i "s|irc.arkfuture.irc|$domaind|g" inspircd.conf
 sed -i "$(( $(wc -l < inspircd.conf) - 1 ))s/^#//" inspircd.conf
 cd /etc/inspircd/conf
 curl -L -O https://arkfuture.github.io/config/inspircd/conf/modules.conf
