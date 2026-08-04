@@ -187,7 +187,7 @@ Chinese:
 
 获取TLS证书的最简单方式是使用Certbot从Let's Encrypt申请. 具体操作取决于您是否已在80端口运行Web服务器:
 
-    如果已运行,请遵循Certbot官网的指南；
+    如果已运行,请遵循Certbot官网的指南;
     如果未运行,可使用命令 certbot certonly --standalone --preferred-challenges http -d example.com (将example.com 替换为您的域名). 
 
 证书存储路径:成功申请后,证书将保存在/etc/letsencrypt/live/example.com 目录下(替换为您的域名). 
