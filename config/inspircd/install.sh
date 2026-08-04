@@ -36,6 +36,7 @@ elif [ "$version" == "2" ]; then
     echo "正在下载INSPIRCD-ARKFUTURE-FULL软件包"
     apt update && apt install -y wget
     echo "此软件包是已经编译了第三方插件的软件包,拥有gnutls-SSL支持,且使用了其他插件"
+    echo "使用此软件包,需要您自行启用modules.conf中的TLS/SSL功能"
     curl -L -o inspircd.deb https://github.com/ARKFUTURE/inspircd-package-builder/releases/download/260706/inspircd_deb12u1_amd64.deb
     echo "校验,请对比官网所给出的sha256sum"
     sha256sum inspircd.deb
