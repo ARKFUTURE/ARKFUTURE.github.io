@@ -12,6 +12,8 @@ sleep 3
 
 ###### 环境变量 ######
 read -p "请输入您的域名,用来替换内嵌的域名: " domaind
+domaind=${domaind:-irc.arkfuture.irc}
+domain=$(echo "$domain" | xargs)
 
 ###### 安装依赖 ######
 echo "安装依赖"
