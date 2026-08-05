@@ -21,7 +21,7 @@ DBHOST=localhost
 ## 数据库端口
 DBPORT=3306
 
-## 数据库名称(对于 ORACLE 来说，这是 TNS 名称)
+## 数据库名称
 DBNAME=kamailio
 
 ## dbtext、db_berkeley 或 sqlite 使用的数据库路径
@@ -50,7 +50,7 @@ DBROPW="KARO@12345678"
 ## 默认值取决于客户端数据库工具
 # DBROOTPORT=""
 
-## 数据库超级用户(对于 ORACLE，这是‘方案创建者’用户)
+## 数据库超级用户
 DBROOTUSER="root"
 
 ## 数据库超级用户的密码
@@ -71,8 +71,7 @@ CHARSET="utf8mb4"
 ## SQL 定义
 ## 如果您在此处更改这些定义，则必须在 db/schema/entities.xml 中也进行相应更改.
 ##
-## 待修复
-
+## 需修改
 # FOREVER="2030-05-28 21:32:15"
 # DEFAULT_Q="1.0"
 
