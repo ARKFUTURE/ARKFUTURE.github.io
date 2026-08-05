@@ -11,9 +11,6 @@
 -- 改root密码
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'ROOT@12345678';
 
--- 建库
-CREATE DATABASE kamailio CHARACTER SET utf8mb4;
-
 -- 建读写账号
 CREATE USER 'kamailio'@'localhost' IDENTIFIED BY 'KA@12345678';
 GRANT ALL PRIVILEGES ON kamailio.* TO 'kamailio'@'localhost';
