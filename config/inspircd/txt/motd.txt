@@ -30,7 +30,7 @@
 \c{magenta,black}→---------- 其他说明 ----------\c
 \c{pink}* 请仔细阅读 /RULES, 使用本网络即表示同意相关条款\c
 \c{pink}* 命令参考: \c{yellow}https://www.geekshed.net/commands/\c
-\c{pink}* 安全建议反馈: 请发邮件至：s3rs38i7j@mozmail.com, 采纳建议将会有奖励\c
-\c{pink}* 滥用问题反馈: 请发邮件至：s3rs38i7j@mozmail.com
-\c{pink}* 被K线/G线屏蔽: 请发邮件至：s3rs38i7j@mozmail.com
+\c{pink}* 安全建议反馈: 请发邮件至：arkfuture@i2pmail.org, 采纳建议将会有奖励\c
+\c{pink}* 滥用问题反馈: 请发邮件至：arkfuture@i2pmail.org
+\c{pink}* 被K线/G线屏蔽: 请发邮件至：arkfuture@i2pmail.org
 \c{pink}* 路由及连接: ARKFUTURE 并未连接至其他服务器

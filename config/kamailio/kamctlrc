@@ -31,13 +31,13 @@ DBNAME=kamailio
 DBRWUSER="kamailio"
 
 ## 数据库读/写用户的密码
-DBRWPW="KA@12345678"
+DBRWPW="QskAYU@8DdaYbGAZptAZ"
 
 ## 数据库只读用户
 DBROUSER="kamailioro"
 
 ## 数据库只读用户的密码
-DBROPW="KARO@12345678"
+DBROPW="vjYN7mbwPpdfa4Jutasp"
 
 ## 数据库访问主机(从何处使用 kamctl)
 # DBACCESSHOST=192.168.0.1
@@ -56,7 +56,7 @@ DBROOTUSER="root"
 ## 数据库超级用户的密码
 ## - 重要提示:此方式不安全，仅用于自动化测试场景
 ## - 已知适用于:mysql
-DBROOTPW="ROOT@12345678"
+DBROOTPW="wbCXfATYXVeMpMXJWkG5"
 
 ## 询问确认所有数据库创建步骤的选项
 # DBINITASK=yes
