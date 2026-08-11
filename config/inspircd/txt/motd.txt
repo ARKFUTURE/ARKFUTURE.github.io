@@ -1,6 +1,5 @@
 \c{magenta,black}→----------欢迎\c
-\c07\bWelcome to \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E 
-\b此服务为 \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E \c12N\c13E\c14T\c \b的重要组成部分\c
+\c07\bWelcome to \c03A\c04R\c05K\c06F\c07U\c08T\c09U\c10R\c11E
 
 \c{cyan,black}→---------- 匿名承诺 ----------\c
 \b 我们注重匿名性,添加好友请谨慎鉴别,我们的匿名方法及匿名建议:
