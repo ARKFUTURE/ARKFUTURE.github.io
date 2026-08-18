@@ -65,7 +65,7 @@ footer a:hover{color:var(--cyan)}
       <div class="search-row">
         <div class="search-box">
           <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg>
-          <input id="q" type="text" autocomplete="off" placeholder="输入关键词搜索" maxlength="500">
+          <input id="q" type="text" autocomplete="off" placeholder="输入搜索项搜索" maxlength="500">
         </div>
         <button id="go" type="submit">搜索</button>
       </div>
@@ -87,47 +87,47 @@ footer a:hover{color:var(--cyan)}
 <script>
 const DATA = {
   '搜索引擎': {
-    '百度': ['https://www.baidu.com/s?wd={q}', '关键词'],
-    '必应': ['https://cn.bing.com/search?q={q}', '关键词'],
-    '谷歌': ['https://www.google.com/search?q={q}', '关键词'],
-    'Yandex': ['https://yandex.com/search?text={q}', '关键词'],
-    'DuckDuckGo': ['https://duckduckgo.com/?q={q}', '关键词'],
-    'Qwant': ['https://qwant.com/?q={q}', '关键词'],
-    'Shodan': ['https://www.shodan.io/search?query={q}', '关键词']
+    '百度': ['https://www.baidu.com/s?wd={q}', '搜索项'],
+    '必应': ['https://cn.bing.com/search?q={q}', '搜索项'],
+    '谷歌': ['https://www.google.com/search?q={q}', '搜索项'],
+    'Yandex': ['https://yandex.com/search?text={q}', '搜索项'],
+    'DuckDuckGo': ['https://duckduckgo.com/?q={q}', '搜索项'],
+    'Qwant': ['https://qwant.com/?q={q}', '搜索项'],
+    'Shodan': ['https://www.shodan.io/search?query={q}', '搜索项']
   },
   'DARKNET搜索': {
-    'TorDex': ['http://tordexu73joywapk2txdr54jed4imqledpcvcuf75qsas2gwdgksvnyd.onion/search?query={q}', '关键词'],
-    'OnDex': ['http://ondexcylxxxq6vcc62l3r2m6rypohvvymsvqeadhln5mjo73pf6ksjad.onion?query={q}', '关键词'],
-    'TOR.LINK': ['https://tor.link/?q={q}', '关键词'],
-    'OnionLand': ['https://onionlandsearchengine.net/search?q={q}', '关键词'],
-    'I2P': ['https://i2psearch.com/search?q={q}', '关键词']
+    'TorDex': ['http://tordexu73joywapk2txdr54jed4imqledpcvcuf75qsas2gwdgksvnyd.onion/search?query={q}', '搜索项'],
+    'OnDex': ['http://ondexcylxxxq6vcc62l3r2m6rypohvvymsvqeadhln5mjo73pf6ksjad.onion?query={q}', '搜索项'],
+    'TOR.LINK': ['https://tor.link/?q={q}', '搜索项'],
+    'OnionLand': ['https://onionlandsearchengine.net/search?q={q}', '搜索项'],
+    'I2P': ['https://i2psearch.com/search?q={q}', '搜索项']
   },
   'XDCC搜索': {
-    'xdcc.eu': ['https://www.xdcc.eu/search.php?searchkey={q}', '关键词'],
-    'NIBL': ['https://nibl.co.uk/search?query={q}', '关键词'],
-    'animk': ['https://xdcc.animk.info/?search={q}', '关键词'],
-    'lib.rs': ['https://lib.rs/search?q={q}', '关键词'],
-    'sunxdcc': ['https://sunxdcc.com/deliver.php?sterm={q}&page={p}&name={n}', '关键词', '页数', '名称'],
-    'skull': ['https://skullxdcc.com/ws.php?sterm={q}', '关键词'],
-    'xdcc.rocks': ['https://www.xdcc.rocks/search/?searchword={q}', '关键词'],
-    'xdcc-search': ['https://xdcc-search.com/?q={q}', '关键词']
+    'xdcc.eu': ['https://www.xdcc.eu/search.php?searchkey={q}', '搜索项'],
+    'NIBL': ['https://nibl.co.uk/search?query={q}', '搜索项'],
+    'animk': ['https://xdcc.animk.info/?search={q}', '搜索项'],
+    'lib.rs': ['https://lib.rs/search?q={q}', '搜索项'],
+    'sunxdcc': ['https://sunxdcc.com/deliver.php?sterm={q}&page={p}&name={n}', '搜索项', '页数', '名称'],
+    'skull': ['https://skullxdcc.com/ws.php?sterm={q}', '搜索项'],
+    'xdcc.rocks': ['https://www.xdcc.rocks/search/?searchword={q}', '搜索项'],
+    'xdcc-search': ['https://xdcc-search.com/?q={q}', '搜索项']
   },
   '软件包搜索': {
-    'repology': ['https://repology.org/projects/?search={q}&inrepo={p}', '关键词', '查找系统'],
-    'msys2': ['https://packages.msys2.org/search?q={q}&t=pkg', '关键词']
+    'repology': ['https://repology.org/projects/?search={a}&maintainer={b}&category={c}&inrepo={d}&notinrepo={e}&repos={f}&families={g}&repos_newest={h}&families_newest={i}', '软件包名', '维护者', '软件分类', '仓库中存在', '仓库中缺失', '仓库来源', '仓库家族', '拥有最新版的仓库', '拥有最新版的家族'],
+    'msys2': ['https://packages.msys2.org/search?q={q}&t=pkg', '搜索项']
   },
   '学术/论文搜索': {
-    'Scirp': ['https://www.scirp.org/journal/articles.aspx?searchcode={q}', '关键词'],
-    'Scielo': ['https://search.scielo.org/?q={q}', '关键词'],
-    'Arxiv': ['https://arxiv.org/search/?query={q}', '关键词']
+    'Scirp': ['https://www.scirp.org/journal/articles.aspx?searchcode={q}', '搜索项'],
+    'Scielo': ['https://search.scielo.org/?q={q}', '搜索项'],
+    'Arxiv': ['https://arxiv.org/search/?query={q}', '搜索项']
   },
   '英汉词典': {
-    '金山词霸': ['https://www.iciba.com/word?w={q}', '关键词'],
-    'WordNet': ['http://wordnetweb.princeton.edu/perl/webwn?s={q}', '关键词'],
-    'Urban Dictionary': ['https://www.urbandictionary.com/define.php?term={q}', '关键词']
+    '金山词霸': ['https://www.iciba.com/word?w={q}', '搜索项'],
+    'WordNet': ['http://wordnetweb.princeton.edu/perl/webwn?s={q}', '搜索项'],
+    'Urban Dictionary': ['https://www.urbandictionary.com/define.php?term={q}', '搜索项']
   },
   '电台搜索': {
-    'radio-browser 名字': ['http://de1.api.radio-browser.info/xml/stations/search?name={q}&order={p}', '关键词', '排序方式'],
+    'radio-browser 名字': ['http://de1.api.radio-browser.info/xml/stations/search?name={q}&order={p}', '搜索项', '排序方式'],
     'radio-browser UUID': ['http://de1.api.radio-browser.info/xml/stations/byuuid?uuids={q}', 'UUID']
   },
   '视频逃逸': {
