@@ -257,12 +257,12 @@ function refresh(){
       const group = document.createElement('div');
       group.className = 'pgroup';
       const label = document.createElement('label');
-      label.textContent = ph.label + ': ';
+      label.textContent = ph.label + ' ';
       const input = document.createElement('input');
       input.type = 'text';
       input.autocomplete = 'off';
       input.maxLength = 200;
-      input.placeholder = '可选';
+      input.placeholder = '可选项';
       input.dataset.ph = ph.name;
       group.appendChild(label);
       group.appendChild(input);
