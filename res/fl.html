@@ -309,6 +309,31 @@ form.addEventListener('submit', function(ev){
   renderBoxes();
   renderLinks();
   refresh();
+  const urlParams = new URLSearchParams(location.search);
+  const urlQ = (urlParams.get('q') || '').trim();
+  if(urlQ && curEng){
+    const urlE = (urlParams.get('e') || '').trim();
+    if(urlE){
+      let found = null;
+      Object.keys(DATA).forEach(cat=>{
+        const list = DATA[cat];
+        if(list && typeof list === 'object' && list[urlE]){
+          found = {cat, name: urlE};
+        }
+      });
+      if(found){
+        const e0 = parseEntry(DATA[found.cat][found.name]);
+        if(e0.phs.length > 0){
+          curEng = {name: found.name, tpl: e0.tpl, phs: e0.phs, cat: found.cat};
+          refresh();
+        }
+      }
+    }
+    q.value = urlQ;
+    const values = {};
+    values[curEng.phs[0].name] = urlQ;
+    window.open(buildUrl(curEng.tpl, values), '_blank');
+  }
 })();
 </script>
 </body>
