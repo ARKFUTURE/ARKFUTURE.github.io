@@ -205,7 +205,7 @@ function renderBoxes(){
       b.type = 'button';
       b.className = 'eng' + (curEng && curEng.name === name && curEng.cat === cat ? ' on' : '');
       b.textContent = name;
-      b.title = e.tpl + (e.phs.length > 1 ? '(参数：' + e.phs.slice(1).map(p=> p.label).join(' / ') + ')' : '');
+      b.title = e.tpl + (e.phs.length > 1 ? '(参数: ' + e.phs.slice(1).map(p=> p.label).join(' / ') + ')' : '');
       b.onclick = ()=>{ curEng = {name, tpl: e.tpl, phs: e.phs, cat}; refresh(); };
       engs.appendChild(b);
     });
@@ -257,7 +257,7 @@ function refresh(){
       const group = document.createElement('div');
       group.className = 'pgroup';
       const label = document.createElement('label');
-      label.textContent = ph.label + '：';
+      label.textContent = ph.label + ': ';
       const input = document.createElement('input');
       input.type = 'text';
       input.autocomplete = 'off';
