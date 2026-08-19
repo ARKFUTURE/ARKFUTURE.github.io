@@ -2201,7 +2201,7 @@
                     <div class="settings-group">
                         <label for="channelInput">Channel</label>
                         <div class="settings-group__row">
-                            <input type="text" id="channelInput" value="#arkfuture_studio" placeholder="#channel">
+                            <input type="text" id="channelInput" value="" placeholder="#channel">
                             <button class="btn" onclick="joinChannel()" id="joinChannelBtn" disabled
                                     style="padding:5px 10px;font-size:11px;white-space:nowrap;">Join</button>
                         </div>
@@ -2305,6 +2305,7 @@
 </body>
 <script>	(function () {
         'use strict';
+        const ttPolicy = typeof trustedTypes !== 'undefined' && trustedTypes.createPolicy ? trustedTypes.createPolicy('irc-tt-policy', { createHTML: (s) => s }) : null;
         let nickname = "";
         let channelName = "";
         let wsUrl = "";
@@ -2917,7 +2918,7 @@
             const select = document.getElementById('serverSelect');
             if (!select) return;
             const configs = getServerConfigs();
-            select.innerHTML = '<option value="">-- 选择配置 --</option>';
+            select.innerHTML = ttPolicy ? ttPolicy.createHTML('<option value="">-- 选择配置 --</option>') : '<option value="">-- 选择配置 --</option>';
             configs.forEach((cfg, idx) => {
                 const opt = document.createElement('option');
                 opt.value = idx;
@@ -3330,7 +3331,7 @@
                 tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;margin-right:2px;";
                 const sep = document.createTextNode(" ");
                 const msgSpan = document.createElement("span");
-                msgSpan.innerHTML = renderedMessage;
+                msgSpan.innerHTML = ttPolicy ? ttPolicy.createHTML(renderedMessage) : renderedMessage;
                 pre.appendChild(tsSpan);
                 pre.appendChild(nickSpan);
                 pre.appendChild(sep);
@@ -3340,7 +3341,7 @@
                 tsSpan.textContent = displayTime + " ";
                 tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;";
                 const msgSpan = document.createElement("span");
-                msgSpan.innerHTML = renderedMessage;
+                msgSpan.innerHTML = ttPolicy ? ttPolicy.createHTML(renderedMessage) : renderedMessage;
                 pre.appendChild(tsSpan);
                 pre.appendChild(msgSpan);
             }
@@ -3357,7 +3358,7 @@
             const utcTime = now.toISOString().substring(11, 19);
             const p = document.createElement("p");
             p.style.color = "var(--clr-font)";
-            p.innerHTML = "[" + utcTime + "] " + mircAndLinkify(rawText);
+            p.innerHTML = ttPolicy ? ttPolicy.createHTML("[" + utcTime + "] " + mircAndLinkify(rawText)) : "[" + utcTime + "] " + mircAndLinkify(rawText);
             const output = statusChannel.content;
             output.appendChild(p);
             while (output.children.length > 500) output.removeChild(output.children[0]);
