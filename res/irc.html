@@ -94,6 +94,7 @@
             --clr-accent: var(--c-yellow);
             --clr-secondary: var(--c-magenta);
             --clr-text-dim: var(--tx-secondary);
+            --ts-color: #7e8fa8;
         }
 
 
@@ -1093,6 +1094,39 @@
         .log-controls {
             display: flex;
             gap: 6px;
+            align-items: center;
+        }
+
+        .log-view-switch {
+            display: flex;
+            gap: 4px;
+            margin-right: 4px;
+            padding: 2px;
+            border: 1px solid rgba(0, 240, 255, .12);
+            border-radius: var(--radius-sm);
+            background: rgba(0, 240, 255, .04);
+        }
+
+        .log-view-switch .log-view-btn {
+            padding: 2px 8px;
+            border: none;
+            border-radius: 3px;
+            background: transparent;
+            color: var(--tx-muted);
+            cursor: pointer;
+            font-size: var(--font-size-xs);
+            font-family: var(--font-mono);
+            transition: var(--transition);
+        }
+
+        .log-view-switch .log-view-btn:hover {
+            color: var(--c-cyan);
+        }
+
+        .log-view-switch .log-view-btn.active {
+            background: var(--c-cyan);
+            color: #002b33;
+            font-weight: 600;
         }
 
         .log-controls button {
@@ -1141,36 +1175,50 @@
             background: #2a2a2a;
         }
 
-        .log-time {
+        .irc-ts {
             font-family: var(--font-mono);
-            color: #7a7a7a;
-            font-size: 0.8em;
+            font-size: 11px;
+            color: var(--ts-color);
+            letter-spacing: 0.2px;
+            margin-right: 6px;
+            user-select: text;
+            opacity: 0.9;
         }
 
         .log-dir {
             font-family: var(--font-mono);
             font-weight: 700;
+            font-size: 11px;
+            margin-right: 6px;
+            user-select: text;
         }
 
         .log-dir.dir-send {
-            color: #4ec9b0;
+            color: #ff9f43;
         }
 
         .log-dir.dir-recv {
-            color: #569cd6;
+            color: #2dd4bf;
         }
 
         .log-dir.dir-sys {
-            color: #c586c0;
+            color: #94a3b8;
+        }
+
+        .log-dir.dir-err {
+            color: #ff4d6d;
         }
 
         .log-module {
             font-family: var(--font-mono);
             font-weight: 600;
+            font-size: 11px;
+            margin-right: 6px;
+            user-select: text;
         }
 
         .log-msg {
-            color: #e0e0e0;
+            opacity: 0.88;
         }
 
         #logOutput:empty::before {
@@ -2216,21 +2264,21 @@
                     </div>
 
                     <div class="server-config-section" id="serverConfigSection">
-                        <h4>服务器配置</h4>
+                        <h4>Server Config</h4>
                         <div class="server-select-row">
                             <select id="serverSelect" onchange="loadServerConfig()">
-                                <option value="">-- 选择配置 --</option>
+                                <option value="">-- Select Config --</option>
                             </select>
-                            <button class="server-btn-sm" onclick="saveServerConfig()" title="保存当前配置">保存</button>
-                            <button class="server-btn-sm danger" onclick="deleteServerConfig()" title="删除选中配置">删除</button>
+                            <button class="server-btn-sm" onclick="saveServerConfig()" title="Save current config">Save</button>
+                            <button class="server-btn-sm danger" onclick="deleteServerConfig()" title="Delete selected config">Delete</button>
                         </div>
                     </div>
                     <div class="fav-channel-section" id="favChannelSection">
-                        <h4>收藏频道</h4>
+                        <h4>Favorite Channels</h4>
                         <div class="fav-channel-list" id="favChannelList"></div>
                         <div class="fav-channel-input-row">
                             <input type="text" id="favChannelInput" placeholder="#channel" onkeydown="if(event.key==='Enter')addFavoriteChannel()">
-                            <button class="server-btn-sm" onclick="addFavoriteChannel()">添加</button>
+                            <button class="server-btn-sm" onclick="addFavoriteChannel()">Add</button>
                         </div>
                     </div>
 
@@ -2254,13 +2302,17 @@
                     <div class="log-header">
                         <span>WebSocket Debug Log</span>
                         <div class="log-controls">
+                            <div class="log-view-switch">
+                                <button class="log-view-btn active" id="logViewFormat" onclick="setLogView('format')">Formatted</button>
+                                <button class="log-view-btn" id="logViewRaw" onclick="setLogView('raw')">Raw</button>
+                            </div>
                             <button onclick="clearLog()">Clear</button>
                             <button onclick="toggleLog()">Close</button>
                         </div>
                     </div>
                     <div id="logOutput"></div>
                     <div class="log-search-bar" id="logSearchBar">
-                        <input type="text" id="logSearchInput" placeholder="搜索日志... (Ctrl+F)" oninput="searchLog()" onkeydown="if(event.key==='Escape')clearLogSearch()">
+                        <input type="text" id="logSearchInput" placeholder="Search log... (Ctrl+F)" oninput="searchLog()" onkeydown="if(event.key==='Escape')clearLogSearch()">
                         <span class="search-count" id="searchCount"></span>
                         <button class="search-clear" onclick="clearLogSearch()">&times;</button>
                     </div>
@@ -2307,6 +2359,7 @@
         'use strict';
         const ttPolicy = typeof trustedTypes !== 'undefined' && trustedTypes.createPolicy ? trustedTypes.createPolicy('irc-tt-policy', { createHTML: (s) => s }) : null;
         let nickname = "";
+        let nickCollisionCount = 0;
         let channelName = "";
         let wsUrl = "";
         let channels, channelContents, contentsWrapper, emptyState, input;
@@ -2475,7 +2528,7 @@
         function enqueueSend(message) {
             if (sendRateLimitQueue.length > 20) {
                 sendRateDroppedCount++;
-                if (sendRateDroppedCount <= 1) writeToScreen("var(--clr-warning)", "消息发送过快, 已丢弃部分消息", statusChannel, "*");
+                if (sendRateDroppedCount <= 1) writeToScreen("var(--clr-warning)", "Message rate too high, some messages dropped", statusChannel, "*");
                 writeToLog("!SYS", "ERR", `Rate limit dropped message (${sendRateDroppedCount} total dropped)`);
                 return;
             }
@@ -2509,7 +2562,7 @@
             'ERROR': '#ff4472', 'WARN': '#f5d742', 'WARNING': '#f5d742', 'INFO': '#00e5ff',
             'DEBUG': '#7c8f9e', 'OPEN': '#00e676', 'CLOSE': '#ff9100',
             'CLIENT→SERVER': '#00bcd4', 'SERVER→CLIENT': '#ce93d8', 'SERVER': '#ce93d8',
-            'IRC': '#69f0ae', 'CAP': '#40c4ff', 'NOTICE': '#ffd740', 'PING': '#a5d6a7',
+            'IRC': '#69f0ae', 'CAP': '#b388ff', 'NOTICE': '#ffd740', 'PING': '#a5d6a7',
             'PING/PONG': '#a5d6a7', 'KEEP-ALIVE': '#81c784', 'RECONNECT': '#ffab40',
             'PM': '#ea80fc', 'SETTINGS': '#8c9eff', 'TAB': '#4dd0e1', 'SYSTEM': '#b0bec5',
             'PART': '#ff8a65', 'WEBSOCKET': '#40c4ff', 'MSGTAG': '#82b1ff', 'SASL': '#ffab40',
@@ -2519,7 +2572,8 @@
             'REPLY': '#a5d6a7', 'FAIL': '#ef5350', 'MULTILINE': '#b39ddb',
             'RAW': '#78909c', 'SYS': '#b0bec5', 'ERR': '#ff4472', 'WS': '#40c4ff',
             'RECON': '#ffab40', 'TYPE': '#ffcc80', 'CHATHIST': '#81d4fa',
-            'LABEL': '#90caf9', 'MLINE': '#b39ddb'
+            'LABEL': '#90caf9', 'MLINE': '#b39ddb',
+            'WAM': '#ffb74d', 'RK': '#ff8a65', 'DB': '#78909c', 'SYSLOG': '#b0bec5'
         };
         const DefaultPrefixMap = {
             '!': { symbol: '!', name: 'owner', color: '#330000' },
@@ -2538,6 +2592,11 @@
                 if (key.toLowerCase() === lowerName) return value;
             }
             return null;
+        }
+        function formatTimestamp(date) {
+            const d = date ? new Date(date) : new Date();
+            const p = (n) => String(n).padStart(2, "0");
+            return p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
         }
         function htmlEscape(text) {
             if (!text) return "";
@@ -2634,7 +2693,7 @@
                 if (tag) return tag;
                 if (!txt) return "";
                 return txt.replace(/https?:\/\/[^\s<>{}|\\^`[\]]+/g, escapedUrl => {
-                    const rawUrl = escapedUrl.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#039;/g, "'");
+                    const rawUrl = escapedUrl.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/[.,;:!?)]+$/, '');
                     const safeUrl = sanitizeUrl(rawUrl);
                     if (!safeUrl) return escapedUrl;
                     const lowerUrl = safeUrl.toLowerCase();
@@ -2706,46 +2765,86 @@
             if (!_logOutputEl) _logOutputEl = document.getElementById('logOutput');
             return _logOutputEl;
         }
-        function writeToLog(direction, module, message) {
-            const logOutput = getLogOutput();
-            const now = new Date();
-            const ts = now.toISOString().replace('T', ' ').substring(0, 23) + 'Z';
-            const fullMessage = `[${ts}] [${direction}][${module}] ${message}`;
-            if (logOutput) {
-                const line = document.createElement('span');
-                line.className = 'log-line';
-                const timeSpan = document.createElement('span');
-                timeSpan.className = 'log-time';
-                timeSpan.textContent = `[${ts}]`;
-                line.appendChild(timeSpan);
-                const dirSpan = document.createElement('span');
-                if (direction === '↑TX') {
-                    dirSpan.className = 'log-dir dir-send';
-                } else if (direction === '↓RX') {
-                    dirSpan.className = 'log-dir dir-recv';
-                } else {
-                    dirSpan.className = 'log-dir dir-sys';
-                }
-                dirSpan.textContent = `[${direction}]`;
-                line.appendChild(dirSpan);
+        function renderLogEntry(entry) {
+            const line = document.createElement('span');
+            line.className = 'log-line';
+            const mod = String(entry.module || 'SYS').toUpperCase();
+            if (logViewMode === 'raw') {
+                line.textContent = entry.message || '';
+                return line;
+            }
+            const ts = formatTimestamp(new Date(entry.timestamp || Date.now()));
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'irc-ts';
+            timeSpan.textContent = '[' + ts + ']';
+            line.appendChild(timeSpan);
+            const dir = String(entry.direction || 'SYS').toUpperCase();
+            const dirSpan = document.createElement('span');
+            dirSpan.className = 'log-dir';
+            const dirLower = dir.toLowerCase();
+            if (dirLower.indexOf('tx') !== -1 || dirLower.indexOf('send') !== -1) dirSpan.classList.add('dir-send');
+            else if (dirLower.indexOf('rx') !== -1 || dirLower.indexOf('recv') !== -1) dirSpan.classList.add('dir-recv');
+            else if (dirLower.indexOf('err') !== -1 || dirLower.indexOf('fail') !== -1) dirSpan.classList.add('dir-err');
+            else dirSpan.classList.add('dir-sys');
+            dirSpan.textContent = '[' + dir + ']';
+            line.appendChild(dirSpan);
+            const isRaw = mod === 'RAW';
+            let msgColor = 'var(--tx-secondary)';
+            if (!isRaw) {
+                const modColor = LOG_COLORS[mod] || '#8fa3b8';
+                msgColor = modColor;
                 const modSpan = document.createElement('span');
-                const mod = module.toUpperCase();
                 modSpan.className = 'log-module';
-                modSpan.textContent = `[${module}]`;
-                modSpan.style.color = LOG_COLORS[mod] || '#e0e0e0';
+                modSpan.style.color = modColor;
+                modSpan.textContent = '[' + mod + ']';
                 line.appendChild(modSpan);
-                const msgSpan = document.createElement('span');
-                msgSpan.className = 'log-msg';
-                msgSpan.textContent = message;
-                const modColor = LOG_COLORS[mod] || '#e0e0e0';
-                msgSpan.style.color = modColor;
-                msgSpan.style.opacity = '0.78';
-                line.appendChild(msgSpan);
-                logOutput.appendChild(line);
+            }
+            const msgSpan = document.createElement('span');
+            msgSpan.className = 'log-msg';
+            msgSpan.style.color = msgColor;
+            msgSpan.textContent = entry.message || '';
+            line.appendChild(msgSpan);
+            return line;
+        }
+        let logBuffer = [];
+        const LOG_BUFFER_MAX = 1000;
+        let logViewMode = 'format';
+        function shouldShowInView(entry) {
+            const isRaw = String(entry.module || '').toUpperCase() === 'RAW';
+            return logViewMode === 'raw' ? isRaw : !isRaw;
+        }
+        function renderLogView() {
+            const logOutput = getLogOutput();
+            if (!logOutput) return;
+            logOutput.replaceChildren();
+            for (const entry of logBuffer) {
+                if (!shouldShowInView(entry)) continue;
+                logOutput.appendChild(renderLogEntry(entry));
+                while (logOutput.children.length > 500) logOutput.removeChild(logOutput.firstChild);
+            }
+            requestAnimationFrame(() => logOutput.scrollTop = logOutput.scrollHeight);
+        }
+        function setLogView(mode) {
+            if (mode !== 'format' && mode !== 'raw') return;
+            logViewMode = mode;
+            const fmtBtn = document.getElementById('logViewFormat');
+            const rawBtn = document.getElementById('logViewRaw');
+            if (fmtBtn) fmtBtn.classList.toggle('active', mode === 'format');
+            if (rawBtn) rawBtn.classList.toggle('active', mode === 'raw');
+            renderLogView();
+            clearLogSearch();
+        }
+        function writeToLog(direction, module, message) {
+            const entry = { timestamp: Date.now(), direction: direction || 'SYS', module: module || 'SYS', message: message || '' };
+            logBuffer.push(entry);
+            while (logBuffer.length > LOG_BUFFER_MAX) logBuffer.shift();
+            const logOutput = getLogOutput();
+            if (logOutput && shouldShowInView(entry)) {
+                logOutput.appendChild(renderLogEntry(entry));
                 while (logOutput.children.length > 500) logOutput.removeChild(logOutput.firstChild);
                 requestAnimationFrame(() => logOutput.scrollTop = logOutput.scrollHeight);
             }
-                        storeLogMessage({ timestamp: Date.now(), channel: '', direction: direction, module: module, message: message, rawData: fullMessage });
+            storeLogMessage({ timestamp: entry.timestamp, channel: '', direction: entry.direction, module: entry.module, message: entry.message });
         }
         function updateConnectionStatus(status) {
             const statusEl = document.getElementById('connectionStatus');
@@ -2754,13 +2853,13 @@
             statusEl.classList.remove('connected', 'connecting', 'disconnected');
             if (status === 'connected') {
                 statusEl.classList.add('connected');
-                statusText.textContent = `已连接 (${nickname})`;
+                statusText.textContent = `Connected (${nickname})`;
             } else if (status === 'connecting') {
                 statusEl.classList.add('connecting');
-                statusText.textContent = '连接中...';
+                statusText.textContent = 'Connecting...';
             } else {
                 statusEl.classList.add('disconnected');
-                statusText.textContent = '未连接';
+                statusText.textContent = 'Disconnected';
             }
         }
         function toggleSettings() {
@@ -2824,8 +2923,10 @@
             }
         }
         function clearLog() {
+            logBuffer = [];
             const logOutput = document.getElementById('logOutput');
             if (logOutput) logOutput.replaceChildren();
+            clearLogSearch();
         }
         function searchLog() {
             const input = document.getElementById('logSearchInput');
@@ -2854,8 +2955,8 @@
         function showPrivateChatList() {
             const privateChats = [];
             channelMap.forEach((channel, name) => { if (channel.isPrivate) privateChats.push(name); });
-            if (privateChats.length === 0) writeToScreen("var(--clr-info)", "当前没有私聊会话", statusChannel, "*");
-            else writeToScreen("var(--clr-info)", `私聊会话列表 (${privateChats.length}): ${privateChats.join(', ')}`, statusChannel, "*");
+            if (privateChats.length === 0) writeToScreen("var(--clr-info)", "No private chat sessions", statusChannel, "*");
+            else writeToScreen("var(--clr-info)", `Private chat list (${privateChats.length}): ${privateChats.join(', ')}`, statusChannel, "*");
             writeToLog("!SYS", "PM", `Private chat list: ${privateChats.join(', ') || 'none'}`);
         }
         function showSSLWarning(url) {
@@ -2868,7 +2969,7 @@
                 link.textContent = link.href;
             } else {
                 link.href = '#';
-                link.textContent = '请先在WebSocket地址栏输入服务器地址';
+                link.textContent = 'Enter a server address in the WebSocket URL field first';
             }
             warning.classList.add('visible');
             setTimeout(() => { if (warning) warning.classList.remove('visible'); }, 6000);
@@ -2917,16 +3018,16 @@
             const select = document.getElementById('serverSelect');
             if (!select) return;
             const configs = getServerConfigs();
-            select.innerHTML = ttPolicy ? ttPolicy.createHTML('<option value="">-- 选择配置 --</option>') : '<option value="">-- 选择配置 --</option>';
+            select.innerHTML = ttPolicy ? ttPolicy.createHTML('<option value="">-- Select Config --</option>') : '<option value="">-- Select Config --</option>';
             configs.forEach((cfg, idx) => {
                 const opt = document.createElement('option');
                 opt.value = idx;
-                opt.textContent = cfg.name || ('配置 ' + (idx + 1));
+                opt.textContent = cfg.name || ('Config ' + (idx + 1));
                 select.appendChild(opt);
             });
         }
         function saveServerConfig() {
-            const name = prompt('请输入配置名称:', '');
+            const name = prompt('Enter config name:', '');
             if (!name || !name.trim()) return;
             const url = document.getElementById('wsUrl') ? document.getElementById('wsUrl').value : '';
             const nick = document.getElementById('nickInput') ? document.getElementById('nickInput').value : '';
@@ -2982,7 +3083,7 @@
             const configs = getServerConfigs();
             const idx = parseInt(select.value);
             const name = configs[idx] ? configs[idx].name : '';
-            if (!confirm('确定删除配置 "' + name + '" 吗？')) return;
+            if (!confirm('Delete config "' + name + '"?')) return;
             configs.splice(idx, 1);
             saveServerConfigsList(configs);
             refreshServerSelect();
@@ -3099,16 +3200,16 @@
         }
         function openPrivateChat(targetNick) {
             if (!targetNick || targetNick === nickname) {
-                writeToScreen("var(--clr-warning)", "不能与自己私聊", statusChannel, "*");
+                writeToScreen("var(--clr-warning)", "Cannot open a private chat with yourself", statusChannel, "*");
                 return;
             }
             let pmChannel = findChannel(targetNick);
             if (!pmChannel) {
-                pmChannel = new Tab_Create(targetNick, `与 ${targetNick} 的私聊`, false);
+                pmChannel = new Tab_Create(targetNick, `Private chat with ${targetNick}`, false);
                 pmChannel.isPrivate = true;
                 if (pmChannel.button) pmChannel.button.classList.add('private');
                 writeToLog("!SYS", "PM", `Opening private chat with: ${targetNick}`);
-                writeToScreen("var(--clr-green)", `私聊会话已建立: ${targetNick}`, statusChannel, "*");
+                writeToScreen("var(--clr-green)", `Private chat created: ${targetNick}`, statusChannel, "*");
             }
             Tab_Show(targetNick);
         }
@@ -3162,7 +3263,7 @@
             evt.stopPropagation();
             const channelName = evt.currentTarget.value;
             if (channelName === "Status") {
-                writeToScreen("var(--clr-warning)", "Status频道是系统状态窗口, 不能关闭", statusChannel, "*");
+                writeToScreen("var(--clr-warning)", "Status channel is the system status window and cannot be closed", statusChannel, "*");
                 writeToLog("!SYS", "ERR", "Attempted to close the Status tab — blocked");
                 return;
             }
@@ -3216,7 +3317,7 @@
             user.appendChild(tmp);
             tmp = document.createElement("p");
             tmp.textContent = nick;
-            tmp.title = "点击与 " + nick + " 私聊";
+            tmp.title = "Click to private chat with " + nick;
             tmp.style.cursor = "pointer";
             tmp.addEventListener("click", e => { e.stopPropagation(); openPrivateChat(nick); });
             user.appendChild(tmp);
@@ -3294,7 +3395,7 @@
                 if (nickEl && nickEl.textContent === nick) {
                     if (isAway) {
                         li.style.opacity = '0.5';
-                        li.title = `${nick} (离开中)`;
+                        li.title = `${nick} (away)`;
                     } else {
                         li.style.opacity = '';
                         li.title = '';
@@ -3312,22 +3413,19 @@
             if (serverTime) {
                 try {
                     const d = new Date(serverTime);
-                    if (!isNaN(d.getTime())) displayTime = d.toISOString().substring(11, 19);
+                    if (!isNaN(d.getTime())) displayTime = formatTimestamp(d);
                 } catch (e) { }
             }
-            if (!displayTime) {
-                const now = new Date();
-                displayTime = now.toISOString().substring(11, 19);
-            }
+            if (!displayTime) displayTime = formatTimestamp();
             if (username && username !== "" && username !== "*" && username !== "-") {
                 const nickSpan = document.createElement("span");
                 nickSpan.className = "clickable-username";
-                nickSpan.title = "点击与 " + username + " 私聊";
+                nickSpan.title = "Click to private chat with " + username;
                 nickSpan.textContent = username;
                 nickSpan.addEventListener("click", () => openPrivateChat(username));
                 const tsSpan = document.createElement("span");
-                tsSpan.textContent = displayTime + " ";
-                tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;margin-right:2px;";
+                tsSpan.className = "irc-ts";
+                tsSpan.textContent = "[" + displayTime + "]";
                 const sep = document.createTextNode(" ");
                 const msgSpan = document.createElement("span");
                 msgSpan.innerHTML = ttPolicy ? ttPolicy.createHTML(renderedMessage) : renderedMessage;
@@ -3337,8 +3435,8 @@
                 pre.appendChild(msgSpan);
             } else {
                 const tsSpan = document.createElement("span");
-                tsSpan.textContent = displayTime + " ";
-                tsSpan.style.cssText = "color:var(--tx-muted);font-size:11px;";
+                tsSpan.className = "irc-ts";
+                tsSpan.textContent = "[" + displayTime + "]";
                 const msgSpan = document.createElement("span");
                 msgSpan.innerHTML = ttPolicy ? ttPolicy.createHTML(renderedMessage) : renderedMessage;
                 pre.appendChild(tsSpan);
@@ -3354,10 +3452,10 @@
         function writeMotdLine(rawText) {
             if (!statusChannel || !statusChannel.content) return;
             const now = new Date();
-            const utcTime = now.toISOString().substring(11, 19);
+            const tStr = formatTimestamp(now);
             const p = document.createElement("p");
             p.style.color = "var(--clr-font)";
-            p.innerHTML = ttPolicy ? ttPolicy.createHTML("[" + utcTime + "] " + mircAndLinkify(rawText)) : "[" + utcTime + "] " + mircAndLinkify(rawText);
+            p.innerHTML = ttPolicy ? ttPolicy.createHTML("<span class=\"irc-ts\">[" + tStr + "]</span> " + mircAndLinkify(rawText)) : "<span class=\"irc-ts\">[" + tStr + "]</span> " + mircAndLinkify(rawText);
             const output = statusChannel.content;
             output.appendChild(p);
             while (output.children.length > 500) output.removeChild(output.children[0]);
@@ -3426,7 +3524,7 @@
                 const newCursorPos = words.join(' ').length;
                 input.setSelectionRange(newCursorPos, newCursorPos);
             } else if (matches.length > 1) {
-                writeToScreen("var(--clr-info)", `匹配: ${matches.map(m => m[1]).join(', ')}`, activeChannel, "*");
+                writeToScreen("var(--clr-info)", `Matches: ${matches.map(m => m[1]).join(', ')}`, activeChannel, "*");
             }
         }
         function pushHistory(msg) {
@@ -3456,7 +3554,7 @@
                 doSend("JOIN " + targetChannel);
             } else {
                 writeToLog("!SYS", "ERR", `JOIN requested but not connected — target: ${targetChannel}`);
-                writeToScreen("var(--clr-warning)", "未连接, 无法加入频道", statusChannel, "*");
+                writeToScreen("var(--clr-warning)", "Not connected, cannot join channel", statusChannel, "*");
             }
         }
         function toggleConnection() {
@@ -3488,7 +3586,7 @@
             const reconnectCheckbox = document.getElementById('autoReconnect');
             const connectBtn = document.getElementById('connectBtn');
             if (!wsUrlInput || !nickInput || !channelInput || !connectBtn) {
-                alert("界面元素加载错误, 请刷新页面重试");
+                alert("UI elements failed to load, please refresh the page and retry");
                 writeToLog("!SYS", "ERR", 'doConnect: critical UI elements missing');
                 return;
             }
@@ -3502,6 +3600,7 @@
             saslPassword = saslPasswordInput ? saslPasswordInput.value.trim() : "";
             saslEnabled = !!(saslAccount && saslPassword);
             saslPending = false;
+            nickCollisionCount = 0;
             if (saslEnabled) writeToLog("!SYS", "SASL", `SASL PLAIN enabled for account: ${saslAccount}`);
             ircv3ActiveCaps.clear();
             capLsBuffer = "";
@@ -3521,7 +3620,7 @@
             batchCleanupTimers.clear();
             if (!validateWsUrl(wsUrl)) {
                 writeToLog("!SYS", "ERR", `Invalid WebSocket URL: "${wsUrl}"`);
-                alert("WebSocket地址格式错误!必须以 ws:// 或 wss:// 开头");
+                alert("Invalid WebSocket URL! Must start with ws:// or wss://");
                 return;
             }
             if (!nickname) {
@@ -3535,7 +3634,7 @@
                 nickInput.focus();
                 nickInput.select();
                 setTimeout(() => nickInput.classList.remove('input-error'), 1200);
-                connectBtn.textContent = '连接';
+                connectBtn.textContent = 'Connect';
                 connectBtn.disabled = false;
                 wsUrlInput.disabled = false;
                 nickInput.disabled = false;
@@ -3548,7 +3647,7 @@
             if (!isAutoReconnect) reconnectAttempts = 0;
             wsUrlInput.disabled = true;
             nickInput.disabled = true;
-            connectBtn.textContent = '连接中...';
+            connectBtn.textContent = 'Connecting...';
             connectBtn.disabled = true;
             isDisconnecting = false;
             saveSettings();
@@ -3587,7 +3686,7 @@
             if (wsUrlInput) wsUrlInput.disabled = false;
             if (nickInput) nickInput.disabled = false;
             if (connectBtn) {
-                connectBtn.textContent = '连接';
+                connectBtn.textContent = 'Connect';
                 connectBtn.disabled = false;
                 connectBtn.classList.remove('disconnect');
             }
@@ -3616,10 +3715,10 @@
             let disconnectMessage = "DISCONNECTED";
             let logMessage = "[SYSTEM] Connection closed";
             if (reason === "user" || wasUserDisconnect) {
-                disconnectMessage = "用户主动断开连接";
+                disconnectMessage = "Disconnected by user";
                 logMessage = "[SYSTEM] User-initiated disconnect";
             } else if (reason === "error") {
-                disconnectMessage = "连接异常断开";
+                disconnectMessage = "Connection lost unexpectedly";
                 logMessage = "[SYSTEM] Connection dropped abnormally";
             }
             writeToScreen("var(--clr-font)", disconnectMessage, statusChannel, "");
@@ -3650,7 +3749,7 @@
                 writeToLog("!SYS", "RECON", "Max attempts reached — giving up");
                 autoReconnect = false;
                 updateAutoReconnectMenuItem();
-                alert('自动重连失败, 请检查网络或服务器设置');
+                alert('Auto-reconnect failed, check network or server settings');
             }
             isDisconnecting = false;
             if (channelContents) channelContents.replaceChildren();
@@ -3704,7 +3803,7 @@
                 writeToLog("!SYS", "ERR", `WebSocket creation failed: ${e.message}`);
                 onDisconnect();
                 if (wsUrl && wsUrl.startsWith('wss://')) showSSLWarning(wsUrl);
-                alert(`连接失败: ${e.message}\n\n如果是SSL证书错误, 请点击"SSL帮助"查看解决方案`);
+                alert(`Connection failed: ${e.message}\n\nIf this is an SSL certificate error, click "SSL Help" for solutions`);
             }
         }
         function onClose(evt) {
@@ -3765,11 +3864,11 @@
                 recvCount = 0;
                 writeToScreen("var(--clr-font)", "CONNECTED", statusChannel, "");
                 writeToLog("!SYS", "WS", `WebSocket connected: ${wsUrl}`);
-                writeToLog("!SYS", "SYS", `Session started at ${sessionStartTime.toISOString()}`);
+                writeToLog("!SYS", "SYS", `Session started at ${formatTimestamp(sessionStartTime)}`);
                 updateConnectionStatus('connected');
                 const connectBtn = document.getElementById('connectBtn');
                 if (connectBtn) {
-                    connectBtn.textContent = '断开';
+                    connectBtn.textContent = 'Disconnect';
                     connectBtn.disabled = false;
                     connectBtn.classList.add('disconnect');
                 }
@@ -3825,7 +3924,7 @@
                         updateConnectionStatus('disconnected');
                     }
                     writeToLog("!SYS", "ERR", `WebSocket not connected — cannot send: ${message.trim()}`);
-                    writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
+                    writeToScreen("var(--clr-red)", "Not connected, message not sent", statusChannel, "");
                     return;
                 }
             } else {
@@ -3834,7 +3933,7 @@
                     updateConnectionStatus('disconnected');
                 }
                 writeToLog("!SYS", "ERR", `WebSocket is null — cannot send: ${message.trim()}`);
-                writeToScreen("var(--clr-red)", "未连接, 消息未发送", statusChannel, "");
+                writeToScreen("var(--clr-red)", "Not connected, message not sent", statusChannel, "");
                 return;
             }
             if (!message.endsWith('\r\n')) message += '\r\n';
@@ -3844,7 +3943,7 @@
                 writeToLog("↑TX", "RAW", `${message.trim()}`);
             } catch (e) {
                 writeToLog("!SYS", "ERR", `Failed to send message: ${e.message}`);
-                writeToScreen("var(--clr-red)", "发送失败: " + e.message, statusChannel, "");
+                writeToScreen("var(--clr-red)", "Send failed: " + e.message, statusChannel, "");
                 if (isConnected) {
                     isConnected = false;
                     updateConnectionStatus('disconnected');
@@ -3909,7 +4008,7 @@
                     fn(nick, data, msgTags);
                     return;
                 }
-                if (!isNaN(parseInt(data[1]))) {
+                if (/^\d+$/.test(data[1])) {
                     let text = "";
                     if (data.length > 3) {
                         let first = data[3];
@@ -3927,70 +4026,71 @@
             if (!data || data.length < 6) return;
             const target = data[3], user = data[4], host = data[5];
             const realname = data.slice(7).join(' ').replace(/^:/, '');
-            writeToScreen("var(--clr-info)", `[WHOIS] ${target} (${user}@${host}) — 真名: ${realname}`, statusChannel, "*");
+            writeToScreen("var(--clr-info)", `[WHOIS] ${target} (${user}@${host}) - Real name: ${realname}`, statusChannel, "*");
         });
         Commands.set("312", (nick, data) => {
             if (!data || data.length < 5) return;
             const target = data[3], server = data[4];
             const serverInfo = data.slice(5).join(' ').replace(/^:/, '');
-            writeToScreen("var(--clr-info)", `[WHOIS] ${target} 服务器: ${server} (${serverInfo})`, statusChannel, "*");
+            writeToScreen("var(--clr-info)", `[WHOIS] ${target} Server: ${server} (${serverInfo})`, statusChannel, "*");
         });
         Commands.set("313", (nick, data) => {
             if (!data || data.length < 4) return;
-            writeToScreen("var(--clr-gold)", `[WHOIS] ${data[3]} 是 IRC 管理员`, statusChannel, "*");
+            writeToScreen("var(--clr-gold)", `[WHOIS] ${data[3]} is an IRC operator`, statusChannel, "*");
         });
         Commands.set("317", (nick, data) => {
             if (!data || data.length < 5) return;
             const target = data[3], idleSec = parseInt(data[4]) || 0;
             const idleMin = Math.floor(idleSec / 60), idleSecs = idleSec % 60;
-            writeToScreen("var(--clr-info)", `[WHOIS] ${target} 已闲置: ${idleMin}分${idleSecs}秒`, statusChannel, "*");
+            writeToScreen("var(--clr-info)", `[WHOIS] ${target} Idle: ${idleMin}m ${idleSecs}s`, statusChannel, "*");
         });
         Commands.set("318", (nick, data) => {
             if (!data || data.length < 4) return;
-            writeToScreen("var(--clr-text-dim)", `[WHOIS] ${data[3]} 的信息结束`, statusChannel, "*");
+            writeToScreen("var(--clr-text-dim)", `[WHOIS] End of WHOIS info for ${data[3]}`, statusChannel, "*");
             writeToLog("↓RX", "IRC", `RPL_ENDOFWHOIS: ${data[3]}`);
         });
         Commands.set("319", (nick, data) => {
             if (!data || data.length < 5) return;
             const target = data[3], chans = data.slice(4).join(' ').replace(/^:/, '');
-            writeToScreen("var(--clr-info)", `[WHOIS] ${target} 在频道: ${chans}`, statusChannel, "*");
+            writeToScreen("var(--clr-info)", `[WHOIS] ${target} Channels: ${chans}`, statusChannel, "*");
         });
         Commands.set("330", (nick, data) => {
             if (!data || data.length < 5) return;
-            writeToScreen("var(--clr-green)", `[WHOIS] ${data[3]} 已登录账号: ${data[4]}`, statusChannel, "*");
+            writeToScreen("var(--clr-green)", `[WHOIS] ${data[3]} is logged in as: ${data[4]}`, statusChannel, "*");
         });
         Commands.set("321", (nick, data) => {
-            writeToScreen("var(--clr-info)", `频道列表:`, statusChannel, "*");
+            writeToScreen("var(--clr-info)", `Channel list:`, statusChannel, "*");
         });
         Commands.set("322", (nick, data) => {
             if (!data || data.length < 6) return;
             const chanName = data[3], userCount = data[4], topic = data.slice(5).join(' ').replace(/^:/, '');
-            writeToScreen("var(--clr-font)", `  ${chanName} [${userCount}人] ${topic}`, statusChannel, "*");
+            writeToScreen("var(--clr-font)", `  ${chanName} [${userCount} users] ${topic}`, statusChannel, "*");
         });
         Commands.set("323", (nick, data) => {
-            writeToScreen("var(--clr-text-dim)", `频道列表结束`, statusChannel, "*");
+            writeToScreen("var(--clr-text-dim)", `End of channel list`, statusChannel, "*");
         });
         Commands.set("730", (nick, data) => {
             if (!data || data.length < 4) return;
             const targets = data.slice(3).join(' ').replace(/^:/, '');
-            writeToScreen("var(--clr-green)", `[MONITOR] 上线: ${targets}`, statusChannel, "*");
+            writeToScreen("var(--clr-green)", `[MONITOR] Online: ${targets}`, statusChannel, "*");
         });
         Commands.set("731", (nick, data) => {
             if (!data || data.length < 4) return;
             const targets = data.slice(3).join(' ').replace(/^:/, '');
-            writeToScreen("var(--clr-text-dim)", `[MONITOR] 下线: ${targets}`, statusChannel, "*");
+            writeToScreen("var(--clr-text-dim)", `[MONITOR] Offline: ${targets}`, statusChannel, "*");
         });
         Commands.set("732", (nick, data) => {
             if (!data || data.length < 4) return;
-            writeToScreen("var(--clr-info)", `[MONITOR] 监控列表: ${data.slice(3).join(' ').replace(/^:/, '')}`, statusChannel, "*");
+            writeToScreen("var(--clr-info)", `[MONITOR] Watch list: ${data.slice(3).join(' ').replace(/^:/, '')}`, statusChannel, "*");
         });
-        Commands.set("733", (nick, data) => writeToScreen("var(--clr-text-dim)", `[MONITOR] 监控列表结束`, statusChannel, "*"));
+        Commands.set("733", (nick, data) => writeToScreen("var(--clr-text-dim)", `[MONITOR] End of watch list`, statusChannel, "*"));
         Commands.set("734", (nick, data) => {
             if (!data || data.length < 4) return;
-            writeToScreen("var(--clr-red)", `[MONITOR] 监控列表已满: ${data.slice(3).join(' ').replace(/^:/, '')}`, statusChannel, "*");
+            writeToScreen("var(--clr-red)", `[MONITOR] Watch list full: ${data.slice(3).join(' ').replace(/^:/, '')}`, statusChannel, "*");
         });
         Commands.set("CAP", (nick, data) => {
             if (!data || data.length < 4) return;
+            if (!data[0].startsWith(':')) data.unshift('');
             const target = data[2], subCommand = data[3].toUpperCase();
             let isMultiline = false, capsStartIdx = 4;
             if (subCommand === "LS" && data[4] === "*") { isMultiline = true; capsStartIdx = 5; }
@@ -4011,7 +4111,7 @@
                 }
                 const allCaps = capLsBuffer;
                 capLsBuffer = "";
-                writeToScreen("var(--clr-info)", `服务器支持的能力: ${allCaps}`, statusChannel, "*");
+                writeToScreen("var(--clr-info)", `Server capabilities: ${allCaps}`, statusChannel, "*");
                 const availableCaps = allCaps.split(' ').map(c => c.trim().split('=')[0].toLowerCase()).filter(c => c);
                 const wantedCaps = ["message-tags", "server-time", "sasl", "away-notify", "chghost", "account-tag", "account-notify", "extended-join", "echo-message", "multi-prefix", "userhost-in-names", "cap-notify", "setname", "batch", "labeled-response", "chathistory", "invite-notify", "draft/multiline", "whox"];
                 const requestedCaps = wantedCaps.filter(cap => availableCaps.includes(cap.toLowerCase())).join(' ');
@@ -4042,7 +4142,7 @@
                 if (ircv3ActiveCaps.has('invite-notify')) ircv3InviteNotify = true;
                 if (ircv3ActiveCaps.has('draft/multiline')) ircv3Multiline = true;
                 if (ircv3ActiveCaps.has('whox')) ircv3Whox = true;
-                writeToScreen("var(--clr-green)", `已启用能力: ${ackedList.join(', ') || '(无)'}`, statusChannel, "*");
+                writeToScreen("var(--clr-green)", `Enabled capabilities: ${ackedList.join(', ') || '(none)'}`, statusChannel, "*");
                 if (ircv3ActiveCaps.has('sasl') && saslEnabled && saslAccount && saslPassword) {
                     writeToLog("!SYS", "SASL", `Starting PLAIN auth for: ${saslAccount}`);
                     saslPending = true;
@@ -4052,15 +4152,15 @@
                     sendRegistration();
                 }
             } else if (subCommand === "NAK") {
-                writeToScreen("var(--clr-warning)", `能力被拒绝: ${caps || '(无)'}`, statusChannel, "*");
+                writeToScreen("var(--clr-warning)", `Capabilities rejected: ${caps || '(none)'}`, statusChannel, "*");
                 doSend("CAP END");
                 sendRegistration();
             } else if (subCommand === "LIST") {
-                writeToScreen("var(--clr-info)", `当前启用的能力: ${caps || '(无)'}`, statusChannel, "*");
+                writeToScreen("var(--clr-info)", `Currently enabled capabilities: ${caps || '(none)'}`, statusChannel, "*");
             } else if (subCommand === "NEW") {
-                writeToScreen("var(--clr-info)", `服务器新增能力: ${caps}`, statusChannel, "*");
+                writeToScreen("var(--clr-info)", `Server added capabilities: ${caps}`, statusChannel, "*");
             } else if (subCommand === "DEL") {
-                writeToScreen("var(--clr-warning)", `服务器移除能力: ${caps}`, statusChannel, "*");
+                writeToScreen("var(--clr-warning)", `Server removed capabilities: ${caps}`, statusChannel, "*");
                 caps.split(' ').map(c => c.trim().toLowerCase()).filter(c => c).forEach(cap => ircv3ActiveCaps.delete(cap));
             }
         });
@@ -4084,57 +4184,57 @@
         Commands.set("900", (nick, data) => {
             if (!data || data.length < 4) return;
             const accountName = data.length >= 5 ? data[4].replace(/^:/, '') : (data[3] || '');
-            writeToScreen("var(--clr-green)", `已登录账号: ${accountName}`, statusChannel, "*");
+            writeToScreen("var(--clr-green)", `Logged in as: ${accountName}`, statusChannel, "*");
             if (accountName && accountName !== '*') saslAccount = accountName;
         });
-        Commands.set("901", (nick, data) => writeToScreen("var(--clr-warning)", `账号已登出`, statusChannel, "*"));
+        Commands.set("901", (nick, data) => writeToScreen("var(--clr-warning)", `Account logged out`, statusChannel, "*"));
         Commands.set("902", (nick, data) => {
             const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'Nick locked';
-            writeToScreen("var(--clr-red)", `SASL 错误: 昵称已锁定 — ${msg}`, statusChannel, "*");
+            writeToScreen("var(--clr-red)", `SASL error: nickname locked - ${msg}`, statusChannel, "*");
             saslPending = false;
             doSend("CAP END");
             sendRegistration();
         });
         Commands.set("903", (nick, data) => {
-            writeToScreen("var(--clr-green)", `SASL 认证成功!`, statusChannel, "*");
+            writeToScreen("var(--clr-green)", `SASL authentication successful!`, statusChannel, "*");
             saslPending = false;
             doSend("CAP END");
             sendRegistration();
         });
         Commands.set("904", (nick, data) => {
             const msg = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'Authentication failed';
-            writeToScreen("var(--clr-red)", `SASL 认证失败: ${msg}`, statusChannel, "*");
+            writeToScreen("var(--clr-red)", `SASL authentication failed: ${msg}`, statusChannel, "*");
             saslPending = false;
             doSend("CAP END");
             sendRegistration();
         });
         Commands.set("905", (nick, data) => {
-            writeToScreen("var(--clr-red)", `SASL 数据过长`, statusChannel, "*");
+            writeToScreen("var(--clr-red)", `SASL data too long`, statusChannel, "*");
             saslPending = false;
             doSend("CAP END");
             sendRegistration();
         });
         Commands.set("906", (nick, data) => {
-            writeToScreen("var(--clr-warning)", `SASL 认证已中止`, statusChannel, "*");
+            writeToScreen("var(--clr-warning)", `SASL authentication aborted`, statusChannel, "*");
             saslPending = false;
             doSend("CAP END");
             sendRegistration();
         });
-        Commands.set("907", (nick, data) => writeToScreen("var(--clr-warning)", `已经完成 SASL 认证`, statusChannel, "*"));
+        Commands.set("907", (nick, data) => writeToScreen("var(--clr-warning)", `SASL authentication already completed`, statusChannel, "*"));
         Commands.set("908", (nick, data) => {
             const mechs = data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '';
-            writeToScreen("var(--clr-info)", `支持的 SASL 机制: ${mechs}`, statusChannel, "*");
+            writeToScreen("var(--clr-info)", `Supported SASL mechanisms: ${mechs}`, statusChannel, "*");
         });
         Commands.set("CHGHOST", (nick, data) => {
             if (!data || data.length < 4) return;
             const newIdent = data[2], newHost = data[3].replace(/^:/, '');
-            const isSelf = (nick === nickname);
-            if (isSelf) writeToScreen("var(--clr-info)", `你的主机信息已更新: ${newIdent}@${newHost}`, statusChannel, "*");
+            const isSelf = nick.toLowerCase() === nickname.toLowerCase();
+            if (isSelf) writeToScreen("var(--clr-info)", `Your host info updated: ${newIdent}@${newHost}`, statusChannel, "*");
             else {
                 channelMap.forEach(channel => {
                     if (!channel.users) return;
                     if (channel.users.some(u => u[1] === nick)) {
-                        writeToScreen("var(--clr-text-dim)", `${nick} 的主机已变更为 ${newIdent}@${newHost}`, channel, "*");
+                        writeToScreen("var(--clr-text-dim)", `${nick}'s host changed to ${newIdent}@${newHost}`, channel, "*");
                     }
                 });
             }
@@ -4142,22 +4242,22 @@
         });
         Commands.set("ACCOUNT", (nick, data) => {
             if (!data || data.length < 3) return;
-            const accountName = data[2].replace(/^:/, ''), isSelf = (nick === nickname);
+            const accountName = data[2].replace(/^:/, ''), isSelf = nick.toLowerCase() === nickname.toLowerCase();
             if (accountName === '*') {
-                if (isSelf) writeToScreen("var(--clr-warning)", `你已退出账号登录`, statusChannel, "*");
+                if (isSelf) writeToScreen("var(--clr-warning)", `You are now logged out`, statusChannel, "*");
                 else {
                     channelMap.forEach(channel => {
                         if (!channel.users) return;
-                        if (channel.users.some(u => u[1] === nick)) writeToScreen("var(--clr-text-dim)", `${nick} 已退出账号`, channel, "*");
+                        if (channel.users.some(u => u[1] === nick)) writeToScreen("var(--clr-text-dim)", `${nick} logged out`, channel, "*");
                     });
                 }
                 writeToLog("↓RX", "IRC", `${nick}: logged out`);
             } else {
-                if (isSelf) writeToScreen("var(--clr-green)", `你已登录账号: ${accountName}`, statusChannel, "*");
+                if (isSelf) writeToScreen("var(--clr-green)", `You are now logged in as: ${accountName}`, statusChannel, "*");
                 else {
                     channelMap.forEach(channel => {
                         if (!channel.users) return;
-                        if (channel.users.some(u => u[1] === nick)) writeToScreen("var(--clr-info)", `${nick} 已登录账号: ${accountName}`, channel, "*");
+                        if (channel.users.some(u => u[1] === nick)) writeToScreen("var(--clr-info)", `${nick} logged in as: ${accountName}`, channel, "*");
                     });
                 }
                 writeToLog("↓RX", "IRC", `${nick}: logged in as ${accountName}`);
@@ -4165,18 +4265,18 @@
         });
         Commands.set("SETNAME", (nick, data) => {
             if (!data || data.length < 3) return;
-            const newRealname = data.slice(2).join(' ').replace(/^:/, ''), isSelf = (nick === nickname);
-            if (isSelf) writeToScreen("var(--clr-info)", `你的真名已更新为: ${newRealname}`, statusChannel, "*");
+            const newRealname = data.slice(2).join(' ').replace(/^:/, ''), isSelf = nick.toLowerCase() === nickname.toLowerCase();
+            if (isSelf) writeToScreen("var(--clr-info)", `Your real name updated to: ${newRealname}`, statusChannel, "*");
             else {
                 channelMap.forEach(channel => {
                     if (!channel.users) return;
-                    if (channel.users.some(u => u[1] === nick)) writeToScreen("var(--clr-text-dim)", `${nick} 更新了真名: ${newRealname}`, channel, "*");
+                    if (channel.users.some(u => u[1] === nick)) writeToScreen("var(--clr-text-dim)", `${nick} updated real name: ${newRealname}`, channel, "*");
                 });
             }
             writeToLog("↓RX", "IRC", `${nick} → "${newRealname}"`);
         });
         Commands.set("AWAY", (nick, data) => {
-            const isSelf = (nick === nickname);
+            const isSelf = nick.toLowerCase() === nickname.toLowerCase();
             let reason = "";
             if (data && data.length >= 3) {
                 reason = data.slice(2).join(' ');
@@ -4184,14 +4284,14 @@
             }
             const isSettingAway = reason.length > 0;
             if (isSelf) {
-                if (isSettingAway) writeToScreen("var(--clr-warning)", `你已设置离开状态: ${reason}`, statusChannel, "*");
-                else writeToScreen("var(--clr-info)", `你已取消离开状态`, statusChannel, "*");
+                if (isSettingAway) writeToScreen("var(--clr-warning)", `You are now away: ${reason}`, statusChannel, "*");
+                else writeToScreen("var(--clr-info)", `You are no longer away`, statusChannel, "*");
             } else {
                 channelMap.forEach(channel => {
                     if (!channel.userlist || !channel.users) return;
                     if (channel.users.some(u => u[1] === nick)) {
-                        if (isSettingAway) writeToScreen("var(--clr-text-dim)", `${nick} 离开 (${reason || '忙碌'})`, channel, "*");
-                        else writeToScreen("var(--clr-info)", `${nick} 回来了`, channel, "*");
+                        if (isSettingAway) writeToScreen("var(--clr-text-dim)", `${nick} is away (${reason || 'busy'})`, channel, "*");
+                        else writeToScreen("var(--clr-info)", `${nick} is back`, channel, "*");
                         updateUserAwayStatus(nick, channel, isSettingAway);
                     }
                 });
@@ -4200,10 +4300,10 @@
         });
         Commands.set("301", (nick, data) => {
             if (!data || data.length < 5) return;
-            writeToScreen("var(--clr-text-dim)", `${data[3]} 正在离开: ${data.slice(4).join(' ').replace(/^:/, '')}`, statusChannel, "*");
+            writeToScreen("var(--clr-text-dim)", `${data[3]} is leaving: ${data.slice(4).join(' ').replace(/^:/, '')}`, statusChannel, "*");
         });
-        Commands.set("305", (nick, data) => writeToScreen("var(--clr-info)", `✓ ${data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '你不再处于离开状态'}`, activeChannel || statusChannel, "*"));
-        Commands.set("306", (nick, data) => writeToScreen("var(--clr-warning)", `✓ ${data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : '你已标记为离开状态'}`, activeChannel || statusChannel, "*"));
+        Commands.set("305", (nick, data) => writeToScreen("var(--clr-info)", `✓ ${data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'You are no longer away'}`, activeChannel || statusChannel, "*"));
+        Commands.set("306", (nick, data) => writeToScreen("var(--clr-warning)", `✓ ${data && data.length >= 4 ? data.slice(3).join(' ').replace(/^:/, '') : 'You are now marked as away'}`, activeChannel || statusChannel, "*"));
         Commands.set("001", (nick, data) => {
             if (channelName) {
                 writeToLog("↓RX", "IRC", `RPL_WELCOME — auto-joining: ${channelName}`);
@@ -4218,7 +4318,10 @@
                     function _insertBatch() {
                         const _end = Math.min(_i + 10, logs.length);
                         for (; _i < _end; _i++) {
-                            writeToLog(logs[_i].direction || "DB", logs[_i].module || "DB", logs[_i].rawData || logs[_i].message);
+                            const _le = logs[_i];
+                            let _msg = _le.message || (_le.rawData ? _le.rawData.replace(/^\[[^\]]*\]\s*\[[^\]]*\]\[[^\]]*\]\s*/, '') : '');
+                            _msg = _msg.replace(/^\[[^\]]*\]\s*\[[^\]]*\]\[[^\]]*\]\s*/, '');
+                            writeToLog(_le.direction || "DB", _le.module || "DB", _msg);
                         }
                         if (_i < logs.length) requestAnimationFrame(_insertBatch);
                     }
@@ -4291,7 +4394,7 @@
                 userEl.appendChild(prefixP);
                 const nickP = document.createElement("p");
                 nickP.textContent = nickName;
-                nickP.title = "点击与 " + nickName + " 私聊";
+                nickP.title = "Click to private chat with " + nickName;
                 nickP.style.cursor = "pointer";
                 nickP.addEventListener("click", ((n) => (e) => { e.stopPropagation(); openPrivateChat(n); })(nickName));
                 userEl.appendChild(nickP);
@@ -4303,14 +4406,22 @@
             writeToLog("↓RX", "IRC", `RPL_ENDOFNAMES: ${data[3]} total=${channel.users.length}`);
         });
         Commands.set("432", (nick, data) => {
-            writeToScreen("var(--clr-warning)", "❌ 昵称包含非法字符,请用 /nick 新昵称 重新设置", statusChannel, "*");
+            writeToScreen("var(--clr-warning)", "❌ Nickname contains invalid characters, use /nick <newnick> to set a new one", statusChannel, "*");
         });
         Commands.set("433", (nick, data) => {
-            writeToScreen("var(--clr-warning)", "❌ 昵称已被占用,请用 /nick 新昵称 重新设置", statusChannel, "*");
+            if (nickCollisionCount < 5) {
+                nickCollisionCount++;
+                nickname = nickname + "_";
+                doSend("NICK " + nickname);
+                writeToLog("↓RX", "IRC", `Nickname taken, retry ${nickCollisionCount}: NICK ${nickname}`);
+            } else {
+                writeToLog("↓RX", "IRC", "Nickname taken, giving up after 5 attempts");
+                writeToScreen("var(--clr-warning)", "Nickname in use, auto-retry failed 5 times, use /nick <newnick> to set manually", statusChannel, "*");
+            }
         });
         Commands.set("477", (nick, data) => {
             if (!data || data.length < 4) return;
-            writeToScreen("var(--clr-red)", `错误: ${data[3].substring(1)}`, statusChannel, "*");
+            writeToScreen("var(--clr-red)", `Error: ${data[3].startsWith(':') ? data[3].substring(1) : data[3]}`, statusChannel, "*");
         });
         Commands.set("375", (nick, data) => {
             if (!data || data.length < 3) return;
@@ -4344,8 +4455,8 @@
                 const channel = findChannel(serverChannelName);
                 if (!channel) return;
                 channelInsertUser(nick, channel, " ");
-                if (joinAccount) writeToScreen("var(--clr-green)", `${nick} 加入频道 (账号: ${joinAccount})`, channel, "*");
-                else writeToScreen("var(--clr-green)", `${nick} 加入频道`, channel, "*");
+                if (joinAccount) writeToScreen("var(--clr-green)", `${nick} joined the channel (account: ${joinAccount})`, channel, "*");
+                else writeToScreen("var(--clr-green)", `${nick} joined the channel`, channel, "*");
             } else {
                 let channel = findChannel(serverChannelName);
                 if (channel) {
@@ -4359,7 +4470,7 @@
                     }
                 } else channel = new Tab_Create(serverChannelName, "", true);
                 channelName = serverChannelName;
-                writeToScreen("var(--clr-green)", `你已加入频道 ${serverChannelName}`, channel, "*");
+                writeToScreen("var(--clr-green)", `You joined the channel ${serverChannelName}`, channel, "*");
                 setTimeout(() => {
                     requestChatHistory(serverChannelName, 50);
                     requestWho(serverChannelName);
@@ -4376,10 +4487,10 @@
                 for (let i = 5; i < data.length; i++) text += " " + data[i];
             }
             if (data[3] !== nickname) {
-                if (Channel_RemoveUser(data[3], channel)) writeToScreen("var(--clr-red)", `${data[3]} 被 ${nick} 踢出 (原因: ${text || '无'})`, channel, "*");
+                if (Channel_RemoveUser(data[3], channel)) writeToScreen("var(--clr-red)", `${data[3]} was kicked by ${nick} (reason: ${text || 'none'})`, channel, "*");
             } else {
                 Channel_Destroy(data[2]);
-                writeToScreen("var(--clr-red)", `你被 ${nick} 踢出 ${data[2]} (原因: ${text || '无'})`, statusChannel, "");
+                writeToScreen("var(--clr-red)", `You were kicked by ${nick} from ${data[2]} (reason: ${text || 'none'})`, statusChannel, "");
             }
             writeToLog("↓RX", "IRC", `KICK: ${data[2]} kicked=${data[3]} by=${nick}`);
         });
@@ -4389,7 +4500,7 @@
             if (!channel) return;
             let text = data[3];
             for (let i = 4; i < data.length; i++) text += " " + data[i];
-            writeToScreen("var(--clr-blue)", `${nick} 设置模式: ${text}`, channel, "*");
+            writeToScreen("var(--clr-blue)", `${nick} set modes: ${text}`, channel, "*");
             if (!PrefixChars || !PrefixChars[0] || data[3].length < 1) return;
             const modeString = data[3];
             let paramIndex = 4, adding = true;
@@ -4413,12 +4524,12 @@
         Commands.set("NICK", (nick, data) => {
             if (!data || data.length < 3) return;
             let newnick = data[2].replace(/^:/, '');
-            const isSelf = (nick === nickname);
+            const isSelf = nick.toLowerCase() === nickname.toLowerCase();
             if (isSelf) nickname = newnick;
             channelMap.forEach((channel, name) => {
                 if (Channel_RenameUser(nick, newnick, channel)) {
-                    if (isSelf) writeToScreen("var(--clr-green)", `你现在的新昵称是 ${newnick}`, channel, "*");
-                    else writeToScreen("var(--clr-green)", `${nick} 更名为 ${newnick}`, channel, "*");
+                    if (isSelf) writeToScreen("var(--clr-green)", `You are now known as ${newnick}`, channel, "*");
+                    else writeToScreen("var(--clr-green)", `${nick} is now known as ${newnick}`, channel, "*");
                 }
             });
             writeToLog("↓RX", "IRC", `NICK: ${nick} → ${newnick}${isSelf ? ' (self)' : ''}`);
@@ -4437,10 +4548,10 @@
             const isSelf = data[0].startsWith(":" + nickname + "!") || data[0].toLowerCase().startsWith(":" + nickname.toLowerCase() + "!");
             if (isSelf) {
                 Channel_Destroy(channel.name);
-                writeToScreen("var(--clr-green)", `你已离开频道 ${channel.name}${partReason ? ' (' + partReason + ')' : ''}`, statusChannel, "");
+                writeToScreen("var(--clr-green)", `You left the channel ${channel.name}${partReason ? ' (' + partReason + ')' : ''}`, statusChannel, "");
                 writeToLog("↓RX", "IRC", `Self parted: ${partChannel}${partReason ? ' reason: ' + partReason : ''}`);
             } else {
-                if (Channel_RemoveUser(nick, channel)) writeToScreen("var(--clr-green)", `${nick} 离开频道${partReason ? ' (' + partReason + ')' : ''}`, channel, "*");
+                if (Channel_RemoveUser(nick, channel)) writeToScreen("var(--clr-green)", `${nick} left the channel${partReason ? ' (' + partReason + ')' : ''}`, channel, "*");
                 writeToLog("↓RX", "IRC", `User parted: ${nick} ← ${partChannel}${partReason ? ' reason: ' + partReason : ''}`);
             }
         });
@@ -4448,28 +4559,28 @@
             if (!data || data.length < 4) return;
             let channel = findChannel(data[2]);
             if (!channel || !channel.topic) return;
-            let text = data[3].substring(1);
+            let text = data[3].startsWith(':') ? data[3].substring(1) : data[3];
             for (let i = 4; i < data.length; i++) text += " " + data[i];
             channel.topic.textContent = text || "No topic set";
-            writeToScreen("var(--clr-blue)", `${nick} 设置主题为: ${text}`, channel, "*");
+            writeToScreen("var(--clr-blue)", `${nick} set the topic to: ${text}`, channel, "*");
             writeToLog("↓RX", "IRC", `TOPIC: ${data[2]} topic="${text}" by ${nick}`);
         });
         Commands.set("QUIT", (nick, data) => {
             let quitReason = "";
             if (data && data.length >= 3) quitReason = data.slice(2).join(' ').replace(/^:/, '').trim();
             channelMap.forEach((channel, name) => {
-                if (Channel_RemoveUser(nick, channel)) writeToScreen("var(--clr-purple)", `${nick} 退出IRC${quitReason ? ' (' + quitReason + ')' : ''}`, channel, "*");
+                if (Channel_RemoveUser(nick, channel)) writeToScreen("var(--clr-purple)", `${nick} quit IRC${quitReason ? ' (' + quitReason + ')' : ''}`, channel, "*");
             });
             writeToLog("↓RX", "IRC", `QUIT: ${nick}${quitReason ? ' reason: ' + quitReason : ''}`);
         });
         Commands.set("PRIVMSG", (nick, data, msgTags) => {
             if (!data || data.length < 4) return;
-            let target = data[2], text = data[3].substring(1);
+            let target = data[2], text = data[3].startsWith(':') ? data[3].substring(1) : data[3];
             for (let i = 4; i < data.length; i++) text += " " + data[i];
             let channel;
-            if (nick !== nickname && text.toLowerCase().includes(nickname.toLowerCase()) && document.hidden && 'Notification' in window && Notification.permission === 'granted') {
+            if (nick.toLowerCase() !== nickname.toLowerCase() && text.toLowerCase().includes(nickname.toLowerCase()) && document.hidden && 'Notification' in window && Notification.permission === 'granted') {
                 try {
-                    const notif = new Notification('IRC: 你被提到了', { body: nick + ': ' + text.substring(0, 120), icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="%2300f0ff"/></svg>' });
+                    const notif = new Notification('IRC: You were mentioned', { body: nick + ': ' + text.substring(0, 120), icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="%2300f0ff"/></svg>' });
                     notif.onclick = function () { window.focus(); if (channel) Tab_Show(channel.name); };
                 } catch (e) { }
             }
@@ -4480,7 +4591,7 @@
             if (isPrivateMessage) {
                 channel = findChannel(nick);
                 if (!channel) {
-                    channel = new Tab_Create(nick, `与 ${nick} 的私聊`, false);
+                    channel = new Tab_Create(nick, `Private chat with ${nick}`, false);
                     channel.isPrivate = true;
                     if (channel.button) channel.button.classList.add('private');
                     writeToLog("↓RX", "PM", `Incoming PM from ${nick}`);
@@ -4508,11 +4619,11 @@
             if (!data || data.length < 4) return;
             let channel = findChannel(data[2]);
             if (!channel) channel = statusChannel;
-            let text = data[3].substring(1);
+            let text = data[3].startsWith(':') ? data[3].substring(1) : data[3];
             for (let i = 4; i < data.length; i++) text += " " + data[i];
             nick = data[0].substring(1).split("!")[0];
             const serverTime = msgTags && msgTags.get('time') || null;
-            writeToScreen("var(--clr-blue)", `通知 ${nick}: ${text}`, channel, "-", serverTime);
+            writeToScreen("var(--clr-blue)", `Notice ${nick}: ${text}`, channel, "-", serverTime);
             writeToLog("↓RX", "IRC", `${nick}: ${text}`);
         });
         Commands.set("TAGMSG", (nick, data, msgTags) => {
@@ -4529,7 +4640,7 @@
             if (msgTags && msgTags.has('+react')) {
                 const reaction = msgTags.get('+react'), replyTo = msgTags.get('+reply') || '';
                 const channel = findChannel(displayTarget) || statusChannel;
-                if (channel) writeToScreen("var(--clr-text-dim)", `${nick} 回应了 ${reaction}${replyTo ? ' (msgid:' + replyTo + ')' : ''}`, channel, "*");
+                if (channel) writeToScreen("var(--clr-text-dim)", `${nick} reacted with ${reaction}${replyTo ? ' (msgid:' + replyTo + ')' : ''}`, channel, "*");
                 writeToLog("↓RX", "REACT", `${nick} → ${displayTarget}: ${reaction}`);
             }
         });
@@ -4565,7 +4676,7 @@
             try {
                 if (batch.type === 'CHATHISTORY' || batch.type === 'chathistory') {
                     const channelName = batch.params[0] || '', ch = findChannel(channelName);
-                    if (ch) writeToScreen("var(--clr-text-dim)", `── 历史消息 (${batch.messages.length}条) ──`, ch, "*");
+                    if (ch) writeToScreen("var(--clr-text-dim)", `-- History (${batch.messages.length} messages) --`, ch, "*");
                     for (const msg of batch.messages) processLine(msg);
                 } else {
                     for (const msg of batch.messages) processLine(msg);
@@ -4575,7 +4686,7 @@
         Commands.set("FAIL", (nick, data) => {
             if (!data || data.length < 3) return;
             const command = data[2] || '', code = data[3] || '', msg = data.slice(4).join(' ').replace(/^:/, '');
-            writeToScreen("var(--clr-warning)", `[${command}] 失败 (${code}): ${msg}`, statusChannel, "*");
+            writeToScreen("var(--clr-warning)", `[${command}] failed (${code}): ${msg}`, statusChannel, "*");
             writeToLog("↓RX", "IRC", `${command} ${code}: ${msg}`);
         });
         Commands.set("INVITE", (nick, data) => {
@@ -4584,18 +4695,18 @@
             const isSelf = invitedNick.toLowerCase() === nickname.toLowerCase();
             if (isSelf) {
                 const targetCh = findChannel(inviteChannel) || statusChannel;
-                writeToScreen("var(--clr-green)", `🔔 ${nick} 邀请你加入 ${inviteChannel},输入 /join ${inviteChannel} 加入`, targetCh, "*");
-                if (targetCh !== statusChannel) writeToScreen("var(--clr-green)", `🔔 ${nick} 邀请你加入 ${inviteChannel}`, statusChannel, "*");
+                writeToScreen("var(--clr-green)", `🔔 ${nick} invited you to ${inviteChannel}, type /join ${inviteChannel} to join`, targetCh, "*");
+                if (targetCh !== statusChannel) writeToScreen("var(--clr-green)", `🔔 ${nick} invited you to ${inviteChannel}`, statusChannel, "*");
                 writeToLog("↓RX", "IRC", `You were invited to ${inviteChannel} by ${nick}`);
             } else {
                 const ch = findChannel(inviteChannel) || statusChannel;
-                writeToScreen("var(--clr-text-dim)", `${nick} 邀请 ${invitedNick} 加入 ${inviteChannel}`, ch, "*");
+                writeToScreen("var(--clr-text-dim)", `${nick} invited ${invitedNick} to ${inviteChannel}`, ch, "*");
                 writeToLog("↓RX", "IRC", `${nick} invited ${invitedNick} to ${inviteChannel}`);
             }
         });
         Commands.set("341", (nick, data) => {
             if (!data || data.length < 4) return;
-            writeToScreen("var(--clr-info)", `已向 ${data[3]} 发送邀请${data.length >= 5 ? ' 加入 ' + data[4].replace(/^:/, '') : ''}`, statusChannel, "*");
+            writeToScreen("var(--clr-info)", `Invite sent to ${data[3]}${data.length >= 5 ? ' to join ' + data[4].replace(/^:/, '') : ''}`, statusChannel, "*");
         });
         Commands.set("352", (nick, data) => {
             if (!data || data.length < 8) return;
@@ -4654,9 +4765,9 @@
                 if (state.status === 'active' || state.status === 'paused') activeTypers.push(nick);
             });
             if (activeTypers.length === 0) el.textContent = '';
-            else if (activeTypers.length === 1) el.textContent = `✎ ${activeTypers[0]} 正在输入...`;
-            else if (activeTypers.length <= 3) el.textContent = `✎ ${activeTypers.join('、')} 正在输入...`;
-            else el.textContent = `✎ ${activeTypers.length} 人正在输入...`;
+            else if (activeTypers.length === 1) el.textContent = `✎ ${activeTypers[0]} is typing...`;
+            else if (activeTypers.length <= 3) el.textContent = `✎ ${activeTypers.join(', ')} are typing...`;
+            else el.textContent = `✎ ${activeTypers.length} people are typing...`;
         }
         function setRemoteTypingState(nick, target, status) {
             if (!remoteTypingState.has(target)) remoteTypingState.set(target, new Map());
@@ -4749,7 +4860,7 @@
         }
         function sendRegistration() {
             doSend("NICK " + nickname);
-            doSend("USER websocket * * :WebSocket User");
+            doSend("USER " + nickname + " * * :" + nickname);
             writeToLog("↑TX", "IRC", `Registration: NICK=${nickname}`);
         }
         function handleInputBlur() {
@@ -4784,13 +4895,13 @@
             let text = input ? input.value.trim() : "";
             if (!text || !activeChannel) return;
             if (!isConnected) {
-                writeToScreen("var(--clr-warning)", "未连接,无法发送消息", activeChannel || statusChannel, "*");
+                writeToScreen("var(--clr-warning)", "Not connected, cannot send message", activeChannel || statusChannel, "*");
                 return;
             }
             if (text[0] === "/") {
                 if (text.indexOf("/me ") === 0) {
                     if (activeChannel.name === "Status") {
-                        writeToScreen("var(--clr-warning)", "Status 是系统状态窗口,无法发送消息.", activeChannel, "*");
+                        writeToScreen("var(--clr-warning)", "Status is the system status window, cannot send messages.", activeChannel, "*");
                         if (input) { input.value = ""; updateCharCount(); }
                         return;
                     }
@@ -4805,7 +4916,7 @@
                         const targetNick = parts[0], msgText = parts.slice(1).join(' ');
                         let pmChannel = findChannel(targetNick);
                         if (!pmChannel) {
-                            pmChannel = new Tab_Create(targetNick, `与 ${targetNick} 的私聊`, false);
+                            pmChannel = new Tab_Create(targetNick, `Private chat with ${targetNick}`, false);
                             pmChannel.isPrivate = true;
                             if (pmChannel.button) pmChannel.button.classList.add('private');
                         }
@@ -4817,68 +4928,68 @@
                         });
                         writeToLog("↑TX", "PM", `You → ${targetNick}: ${msgText}`);
                         pushHistory(text);
-                    } else writeToScreen("var(--clr-warning)", "用法: /msg <昵称> <消息>", activeChannel, "*");
+                    } else writeToScreen("var(--clr-warning)", "Usage: /msg <nick> <message>", activeChannel, "*");
                 } else if (text.indexOf("/away") === 0) {
                     const awayMsg = text.substring(5).trim();
                     if (awayMsg) {
                         doSend("AWAY :" + awayMsg + "\r\n");
-                        writeToScreen("var(--clr-warning)", `已设置离开状态: ${awayMsg}`, activeChannel, "*");
+                        writeToScreen("var(--clr-warning)", `Away message set: ${awayMsg}`, activeChannel, "*");
                     } else {
                         doSend("AWAY\r\n");
-                        writeToScreen("var(--clr-info)", `已取消离开状态`, activeChannel, "*");
+                        writeToScreen("var(--clr-info)", `Away status cleared`, activeChannel, "*");
                     }
                     pushHistory(text);
                 } else if (text.indexOf("/whois ") === 0) {
                     const whoisNick = text.substring(7).trim();
                     if (whoisNick) {
                         doSend("WHOIS " + whoisNick + "\r\n");
-                        writeToScreen("var(--clr-info)", `正在查询: ${whoisNick}`, activeChannel, "*");
-                    } else writeToScreen("var(--clr-warning)", "用法: /whois <昵称>", activeChannel, "*");
+                        writeToScreen("var(--clr-info)", `Querying WHOIS: ${whoisNick}`, activeChannel, "*");
+                    } else writeToScreen("var(--clr-warning)", "Usage: /whois <nick>", activeChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/list") === 0) {
                     const listFilter = text.substring(5).trim();
                     doSend(listFilter ? `LIST ${listFilter}\r\n` : "LIST\r\n");
-                    writeToScreen("var(--clr-info)", `正在获取频道列表...`, statusChannel, "*");
+                    writeToScreen("var(--clr-info)", `Fetching channel list...`, statusChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/nick ") === 0) {
                     const newNick = text.substring(6).trim();
-                    if (newNick && validateNickname(newNick)) doSend("NICK " + newNick + "\r\n");
-                    else writeToScreen("var(--clr-warning)", "用法: /nick <新昵称>", activeChannel, "*");
+                    if (newNick && validateNickname(newNick)) { nickname = newNick; nickCollisionCount = 0; doSend("NICK " + newNick + "\r\n"); }
+                    else writeToScreen("var(--clr-warning)", "Usage: /nick <newnick>", activeChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/topic") === 0) {
                     const topicText = text.substring(6).trim();
                     const topicTarget = activeChannel.name !== 'Status' ? activeChannel.name : null;
-                    if (!topicTarget) writeToScreen("var(--clr-warning)", "请在频道窗口中使用 /topic", activeChannel, "*");
+                    if (!topicTarget) writeToScreen("var(--clr-warning)", "Use /topic inside a channel window", activeChannel, "*");
                     else if (topicText) doSend(`TOPIC ${topicTarget} :${topicText}\r\n`);
                     else {
                         doSend(`TOPIC ${topicTarget}\r\n`);
-                        writeToScreen("var(--clr-info)", `正在查询 ${topicTarget} 的主题...`, activeChannel, "*");
+                        writeToScreen("var(--clr-info)", `Fetching topic for ${topicTarget}...`, activeChannel, "*");
                     }
                     pushHistory(text);
                 } else if (text.indexOf("/kick ") === 0) {
                     const kickParts = text.substring(6).split(' ');
-                    const kickNick = kickParts[0], kickReason = kickParts.slice(1).join(' ') || '无原因';
+                    const kickNick = kickParts[0], kickReason = kickParts.slice(1).join(' ') || 'no reason';
                     const kickChannel = activeChannel.name;
                     if (kickChannel.startsWith('#') && kickNick) doSend(`KICK ${kickChannel} ${kickNick} :${kickReason}\r\n`);
-                    else writeToScreen("var(--clr-warning)", "用法: /kick <昵称> [原因]", activeChannel, "*");
+                    else writeToScreen("var(--clr-warning)", "Usage: /kick <nick> [reason]", activeChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/mode ") === 0) {
                     const modeArgs = text.substring(6).trim();
                     doSend(`MODE ${modeArgs}\r\n`);
-                    writeToScreen("var(--clr-info)", `发送: MODE ${modeArgs}`, activeChannel, "*");
+                    writeToScreen("var(--clr-info)", `Sent: MODE ${modeArgs}`, activeChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/join ") === 0) {
                     let joinTarget = text.substring(6).trim();
                     if (joinTarget && !joinTarget.startsWith('#')) joinTarget = '#' + joinTarget;
                     if (joinTarget) doSend("JOIN " + joinTarget + "\r\n");
-                    else writeToScreen("var(--clr-warning)", "用法: /join <#频道名>", activeChannel, "*");
+                    else writeToScreen("var(--clr-warning)", "Usage: /join <#channel>", activeChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/part") === 0) {
                     const partArgs = text.substring(5).trim();
                     const partTarget = partArgs.startsWith('#') ? partArgs.split(' ')[0] : activeChannel.name;
                     const partMsg = partArgs.startsWith('#') ? partArgs.substring(partTarget.length).trim() : partArgs;
                     if (partTarget && partTarget.startsWith('#')) doSend(`PART ${partTarget}${partMsg ? ' :' + partMsg : ''}\r\n`);
-                    else writeToScreen("var(--clr-warning)", "请在频道窗口中使用 /part", activeChannel, "*");
+                    else writeToScreen("var(--clr-warning)", "Use /part inside a channel window", activeChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/quit") === 0) {
                     const quitMsg = text.substring(5).trim() || 'Bye!';
@@ -4894,8 +5005,8 @@
                     const invNick = invArgs[0], invChannel = invArgs[1] || (activeChannel && activeChannel.name !== 'Status' ? activeChannel.name : '');
                     if (invNick && invChannel) {
                         doSend(`INVITE ${invNick} ${invChannel}\r\n`);
-                        writeToScreen("var(--clr-info)", `向 ${invNick} 发送邀请加入 ${invChannel}...`, activeChannel, "*");
-                    } else writeToScreen("var(--clr-warning)", "用法: /invite <昵称> [#频道]", activeChannel, "*");
+                        writeToScreen("var(--clr-info)", `Sending invite to ${invNick} to join ${invChannel}...`, activeChannel, "*");
+                    } else writeToScreen("var(--clr-warning)", "Usage: /invite <nick> [#channel]", activeChannel, "*");
                     pushHistory(text);
                 } else if (text.indexOf("/chathistory") === 0) {
                     const chArgs = text.substring(12).trim().split(' ');
@@ -4903,33 +5014,33 @@
                     if (!chTarget && activeChannel && activeChannel.name !== 'Status') chTarget = activeChannel.name;
                     if (chTarget) {
                         requestChatHistory(chTarget, chCount);
-                        writeToScreen("var(--clr-info)", `正在拉取 ${chTarget} 的历史消息 (${chCount}条)...`, activeChannel, "*");
-                    } else writeToScreen("var(--clr-warning)", "用法: /chathistory [#频道] [数量]", activeChannel, "*");
+                        writeToScreen("var(--clr-info)", `Fetching history for ${chTarget} (${chCount} messages)...`, activeChannel, "*");
+                    } else writeToScreen("var(--clr-warning)", "Usage: /chathistory [#channel] [count]", activeChannel, "*");
                     pushHistory(text);
                 } else if (text === "/caps") {
-                    writeToScreen("var(--clr-info)", `已启用的 IRCv3 能力: ${[...ircv3ActiveCaps].join(', ') || '(无)'}`, activeChannel, "*");
+                    writeToScreen("var(--clr-info)", `Enabled IRCv3 capabilities: ${[...ircv3ActiveCaps].join(', ') || '(none)'}`, activeChannel, "*");
                     pushHistory(text);
                 } else if (text === "/help") {
                     const helpMsg = [
-                        "== 可用命令 ==",
-                        "/me <动作> — 发送动作消息",
-                        "/msg <nick> <消息> — 私聊消息",
-                        "/away [原因] — 设置/取消离开状态",
-                        "/whois <nick> — 查询用户信息",
-                        "/nick <新昵称> — 更改昵称",
-                        "/join <#频道> — 加入频道",
-                        "/part [#频道] — 离开当前或指定频道",
-                        "/topic [主题] — 查询或设置频道主题",
-                        "/kick <nick> [原因] — 踢出用户",
-                        "/mode <参数> — 设置模式",
-                        "/list [过滤] — 获取频道列表",
-                        "/invite <nick> [#频道] — 邀请用户加入频道",
-                        "/monitor + nick — 监控用户上下线",
-                        "/monitor - nick — 取消监控",
-                        "/monitor l — 查看监控列表",
-                        "/chathistory [#频道] [数量] — 拉取历史消息",
-                        "/caps — 查看已启用的 IRCv3 能力",
-                        "/quit [消息] — 退出 IRC",
+                        "== Available Commands ==",
+                        "/me <action> - Send an action message",
+                        "/msg <nick> <message> - Send a private message",
+                        "/away [reason] - Set or clear away status",
+                        "/whois <nick> - Look up user info",
+                        "/nick <newnick> - Change your nickname",
+                        "/join <#channel> - Join a channel",
+                        "/part [#channel] - Leave the current or given channel",
+                        "/topic [topic] - View or set the channel topic",
+                        "/kick <nick> [reason] - Kick a user",
+                        "/mode <params> - Set modes",
+                        "/list [filter] - Get the channel list",
+                        "/invite <nick> [#channel] - Invite a user to a channel",
+                        "/monitor + nick - Watch a user's online status",
+                        "/monitor - nick - Stop watching a user",
+                        "/monitor l - List watched users",
+                        "/chathistory [#channel] [count] - Fetch message history",
+                        "/caps - Show enabled IRCv3 capabilities",
+                        "/quit [message] - Quit IRC",
                     ].join('<br>');
                     writeToScreen("var(--clr-info)", helpMsg, activeChannel, "*");
                 } else {
@@ -4941,7 +5052,7 @@
             } else {
                 const target = activeChannel.name;
                 if (target === "Status") {
-                    writeToScreen("var(--clr-warning)", "Status 是系统状态窗口,无法发送消息.请使用 /join #频道 加入频道,或使用 /msg 昵称 内容 与用户私聊.", activeChannel, "*");
+                    writeToScreen("var(--clr-warning)", "Status is the system status window, cannot send messages. Use /join #channel to join a channel, or /msg <nick> <message> to chat privately.", activeChannel, "*");
                     if (input) { input.value = ""; updateCharCount(); }
                     return;
                 }
@@ -5048,6 +5159,10 @@
         window.deleteServerConfig = deleteServerConfig;
         window.addFavoriteChannel = addFavoriteChannel;
         window.removeFavoriteChannel = removeFavoriteChannel;
+        window.writeToLog = writeToLog;
+        window.renderLogEntry = renderLogEntry;
+        window.setLogView = setLogView;
+        window.formatTimestamp = formatTimestamp;
     })();</script>
 
 </html>
