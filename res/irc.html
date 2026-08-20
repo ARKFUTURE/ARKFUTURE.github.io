@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" version="3.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' ws: wss:; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' data:; require-trusted-types-for 'script';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' ws: wss:; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' data:; require-trusted-types-for 'script'; trusted-types irc-tt-policy;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="ARKFUTURE-NET IRC">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -2745,8 +2745,7 @@
                 while (logOutput.children.length > 500) logOutput.removeChild(logOutput.firstChild);
                 requestAnimationFrame(() => logOutput.scrollTop = logOutput.scrollHeight);
             }
-            console.log(fullMessage);
-            storeLogMessage({ timestamp: Date.now(), channel: '', direction: direction, module: module, message: message, rawData: fullMessage });
+                        storeLogMessage({ timestamp: Date.now(), channel: '', direction: direction, module: module, message: message, rawData: fullMessage });
         }
         function updateConnectionStatus(status) {
             const statusEl = document.getElementById('connectionStatus');
@@ -2826,7 +2825,7 @@
         }
         function clearLog() {
             const logOutput = document.getElementById('logOutput');
-            if (logOutput) logOutput.innerHTML = '';
+            if (logOutput) logOutput.replaceChildren();
         }
         function searchLog() {
             const input = document.getElementById('logSearchInput');
@@ -3000,7 +2999,7 @@
             const listEl = document.getElementById('favChannelList');
             if (!listEl) return;
             const channels = getFavoriteChannels();
-            listEl.innerHTML = '';
+            listEl.replaceChildren();
             channels.forEach(function (ch) {
                 const tag = document.createElement('span');
                 tag.className = 'fav-channel-tag';
@@ -3561,8 +3560,8 @@
             writeToLog("!SYS", "SYS", `Auto-reconnect: ${autoReconnect} | Attempt: ${reconnectAttempts + 1}`);
             statusChannel = null;
             activeChannel = null;
-            channels.innerHTML = '';
-            channelContents.innerHTML = '';
+            channels.replaceChildren();
+            channelContents.replaceChildren();
             channelMap.clear();
             contentsWrapper.classList.remove('hidden');
             contentsWrapper.classList.add('visible');
@@ -3596,7 +3595,7 @@
             if (joinChannelBtn) joinChannelBtn.disabled = true;
             const inputContainer = document.getElementById('inputContainer');
             if (inputContainer) inputContainer.style.display = 'none';
-            if (channels) channels.innerHTML = '';
+            if (channels) channels.replaceChildren();
             updateConnectionStatus('disconnected');
             if (typingInputTimer) { clearTimeout(typingInputTimer); typingInputTimer = null; }
             typingLastSent = 0;
@@ -3626,7 +3625,7 @@
             writeToScreen("var(--clr-font)", disconnectMessage, statusChannel, "");
             writeToLog("!SYS", "SYS", logMessage);
             if (wasUserDisconnect) {
-                if (channelContents) channelContents.innerHTML = '';
+                if (channelContents) channelContents.replaceChildren();
                 channelMap.clear();
                 activeChannel = null;
                 statusChannel = new Tab_Create("Status", "System Status", false);
@@ -3654,7 +3653,7 @@
                 alert('自动重连失败, 请检查网络或服务器设置');
             }
             isDisconnecting = false;
-            if (channelContents) channelContents.innerHTML = '';
+            if (channelContents) channelContents.replaceChildren();
             channelMap.clear();
             activeChannel = null;
             statusChannel = new Tab_Create("Status", "System Status", false);
@@ -4298,7 +4297,7 @@
                 userEl.appendChild(nickP);
                 frag.appendChild(userEl);
             }
-            channel.userlist.innerHTML = "";
+            channel.userlist.replaceChildren();
             channel.userlist.appendChild(frag);
             channel.names_end = true;
             writeToLog("↓RX", "IRC", `RPL_ENDOFNAMES: ${data[3]} total=${channel.users.length}`);
