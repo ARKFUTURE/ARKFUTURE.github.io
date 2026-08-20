@@ -1,11 +1,14 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
 # 权证金丝雀(金丝雀安全说明) | Warrant Canary
 
----
+- ---
 ## 中文 | Chinese
 * * [UTF-8]
 * * 自签署日起, 每次更新Warrant Canary警告信都将进行数字签名.
 ```
-第[26-2+1-19]号签名警告信: 截至签署日, 无事件或传票
+第[26-2+1-20]号签名警告信: 截至签署日, 无事件或传票
 
 尊敬的成员们, 我们(ARKFUTURE), 在此郑重声明, 截至当前签署日, 我们尚未接收到任何来自政府机构, 法律机构或其他第三方实体的法律命令或要求, 以获取, 披露或分享我们团队成员的个人信息, 通信记录或任何形式的任何数据.
 
@@ -24,12 +27,12 @@ ARKFUTURE始终将成员的隐私和数据安全视为最高优先级.我们坚�
 此消息由ARKFUTURE-administrator密钥环中的ARKFUTURE的首要负责人<T>签名
 ```
 
----
+- ---
 ## English | 英文
 * * [UTF-8]
 * * Starting from the date of signing, each updated Warrant Canary warning letter will be digitally signed.
 ```
-Signed Warning Letter No. [26-2+1-19]: As of the date of signing, no events or subpoenas
+Signed Warning Letter No. [26-2+1-20]: As of the date of signing, no events or subpoenas
 
 Dear Members, We, ARKFUTURE, hereby solemnly declare that, as of the current date of signing, we have not received any legal order or demand from any government agency, legal authority, or other third-party entity seeking to obtain, disclose, or share the personal information, communication records, or any data in any form of our team members.
 
@@ -48,7 +51,7 @@ Please rest assured that ARKFUTURE will continue to devote itself to building a 
 This message is signed by ARKFUTURE's principal person in charge <T> under the ARKFUTURE-administrator keyring.
 ```
 
----
+- ---
 ## 签署者 | Signed with
 ```
 T  (2026-2029) [NEW]
@@ -57,3 +60,11 @@ GPG KEY MIRROR: https://keys.openpgp.org/vks/v1/by-fingerprint/4467D7037C67C0206
 gpg --keyserver hkps://keys.openpgp.org --recv-keys 4467D7037C67C0206C91215AA5C24403D9622291
 ```
 
+-----BEGIN PGP SIGNATURE-----
+
+iJEEARYKADkWIQREZ9cDfGfAIGyRIVqlwkQD2WIikQUCaobnSBsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDEACgkQpcJEA9liIpG1hAEAse3nC535iWbP+5koXC6s
+GNWAsEeTvFQi/r0WESaEYncBANvgnDCwuM6oJ+WH+oRdFL2VPeqXtYj97upFuiXQ
+q5gD
+=Vpxb
+-----END PGP SIGNATURE-----
