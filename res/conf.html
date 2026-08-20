@@ -1,881 +1,818 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
-<!--
-  ╔══════════════════════════════════════════════════════════════╗
-  ║  ARKFUTURE // CONF.HTML — 赛博终端 · 配置文件中心           ║
-  ║  "Access Granted — Configuration Matrix Loaded"              ║
-  ╚══════════════════════════════════════════════════════════════╝
--->
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="ARKFUTURE 配置文件下载中心 — 匿名与安全服务器配置">
-  <meta name="theme-color" content="#0a0a0f">
-  <title>配置文件中心 | ARKFUTURE</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ARKFUTURE 服务器配置文件下载">
+<meta name="theme-color" content="#05060f">
+<title>配置索引 | ARKFUTURE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ARKFUTURE 配置页 — 霓虹赛博朋克主题
+   Single-file build · data-driven DOM · accessibility-first
+   ============================================================ */
+:root {
+  --neon-cyan: #00F0FF;
+  --neon-magenta: #B026FF;
+  --neon-green: #00FF88;
+  --neon-orange: #FF9E00;
+  --neon-yellow: #F0FF00;
+  --neon-red: #FF3B5C;
 
-  <!-- Google Fonts: Orbitron 标题 + Rajdhani 正文（与现有主题一致） -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  --bg-deep: #05060f;
+  --bg-surface: #080a18;
+  --bg-card: #0b0d1e;
+  --border-color: #141832;
+  --border-bright: rgba(0, 240, 255, 0.35);
 
-  <!-- 行内 CSS — 赛博终端风格，与 theme0/theme1 设计语言一致 -->
-  <style>
-    /* ============================================================
-       CSS 自定义属性 · 赛博霓虹色彩体系
-       与 theme0.css / theme1.css 保持一致的调色板
-       ============================================================ */
-    :root {
-      --neon-cyan:    #00F0FF;
-      --neon-magenta: #B026FF;
-      --neon-green:   #00FF88;
-      --neon-orange:  #FF9E00;
-      --neon-red:     #FF003C;
-      --neon-yellow:  #F0FF00;
+  --text-primary: #DCE3FF;
+  --text-dim: rgba(220, 227, 255, 0.55);
+  --text-bright: #FFFFFF;
 
-      --bg-deep:      #06060f;
-      --bg-surface:   #0a0a1a;
-      --bg-card:      #0d0d20;
-      --border-color: #1a1a35;
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
 
-      --text-primary: #E0E0FF;
-      --text-dim:     rgba(224, 224, 255, 0.55);
-      --text-bright:  #FFFFFF;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --radius: 10px;
+  --radius-lg: 16px;
 
-      --glow-cyan:    0 0 7px var(--neon-cyan), 0 0 20px rgba(0, 240, 255, 0.3), 0 0 40px rgba(0, 240, 255, 0.1);
-      --glow-magenta: 0 0 7px var(--neon-magenta), 0 0 20px rgba(176, 38, 255, 0.3), 0 0 40px rgba(176, 38, 255, 0.1);
-      --glow-green:   0 0 7px var(--neon-green), 0 0 20px rgba(0, 255, 136, 0.3), 0 0 40px rgba(0, 255, 136, 0.1);
-      --glow-orange:  0 0 7px var(--neon-orange), 0 0 20px rgba(255, 158, 0, 0.2);
+  --glow-cyan: 0 0 6px rgba(0, 240, 255, 0.55), 0 0 18px rgba(0, 240, 255, 0.22);
+  --glow-magenta: 0 0 6px rgba(176, 38, 255, 0.55), 0 0 18px rgba(176, 38, 255, 0.22);
+  --glow-green: 0 0 6px rgba(0, 255, 136, 0.55), 0 0 18px rgba(0, 255, 136, 0.22);
+  --glow-orange: 0 0 6px rgba(255, 158, 0, 0.5), 0 0 16px rgba(255, 158, 0, 0.2);
+  --glow-yellow: 0 0 6px rgba(240, 255, 0, 0.5), 0 0 16px rgba(240, 255, 0, 0.18);
+  --glow-red: 0 0 6px rgba(255, 59, 92, 0.5), 0 0 16px rgba(255, 59, 92, 0.2);
 
-      --font-display: 'Orbitron', monospace;
-      --font-body:    'Rajdhani', sans-serif;
+  --grid-opacity: 0.05;
+  --scanline-opacity: 0.035;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
 
-      --scanline-opacity: 0.04;
-      --grid-opacity: 0.06;
-    }
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    /* ============================================================
-       全局重置
-       ============================================================ */
-    *,
-    *::before,
-    *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+html {
+  scroll-behavior: smooth;
+}
 
-    html {
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: var(--neon-cyan) var(--bg-deep);
-    }
+body {
+  font-family: var(--font-body);
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  background:
+    radial-gradient(ellipse at 12% 15%, rgba(0, 240, 255, 0.06) 0%, transparent 48%),
+    radial-gradient(ellipse at 88% 82%, rgba(176, 38, 255, 0.06) 0%, transparent 48%),
+    radial-gradient(ellipse at 50% -10%, rgba(0, 255, 136, 0.04) 0%, transparent 55%),
+    linear-gradient(180deg, #05060f 0%, #0a0c20 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow-x: hidden;
+}
 
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg-deep); }
-    ::-webkit-scrollbar-thumb {
-      background: var(--neon-cyan);
-      border-radius: 3px;
-      box-shadow: var(--glow-cyan);
-    }
+/* Cyber grid overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 240, 255, var(--grid-opacity)) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(90deg, rgba(0, 240, 255, var(--grid-opacity)) 0 1px, transparent 1px 40px);
+  pointer-events: none;
+  z-index: 0;
+}
 
-    /* ============================================================
-       Body · 赛博网格背景 + 扫描线
-       ============================================================ */
-    body {
-      font-family: var(--font-body);
-      background:
-        /* 径向光晕 */
-        radial-gradient(ellipse at 15% 20%, rgba(0, 240, 255, 0.04) 0%, transparent 45%),
-        radial-gradient(ellipse at 85% 80%, rgba(176, 38, 255, 0.04) 0%, transparent 45%),
-        /* 深色基底 */
-        linear-gradient(180deg, #06060f 0%, #0a0a1f 100%),
-        /* 网格线 */
-        repeating-linear-gradient(0deg,
-          rgba(0, 240, 255, var(--grid-opacity)) 0px,
-          rgba(0, 240, 255, var(--grid-opacity)) 1px,
-          transparent 1px,
-          transparent 40px),
-        repeating-linear-gradient(90deg,
-          rgba(0, 240, 255, var(--grid-opacity)) 0px,
-          rgba(0, 240, 255, var(--grid-opacity)) 1px,
-          transparent 1px,
-          transparent 40px);
-      background-attachment: fixed;
-      color: var(--text-primary);
-      line-height: 1.7;
-      font-size: 1.05rem;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      overflow-x: hidden;
-    }
+/* Scanline sweep */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(0, 240, 255, var(--scanline-opacity)) 3px 4px);
+  pointer-events: none;
+  z-index: 10;
+  animation: scan 7s linear infinite;
+}
 
-    /* 扫描线叠层 */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(0deg,
-        transparent,
-        transparent 2px,
-        rgba(0, 240, 255, var(--scanline-opacity)) 2px,
-        rgba(0, 240, 255, var(--scanline-opacity)) 4px);
-      pointer-events: none;
-      z-index: 9999;
-      animation: scanlines 8s linear infinite;
-    }
+@keyframes scan {
+  from { transform: translateY(0); }
+  to { transform: translateY(4px); }
+}
 
-    @keyframes scanlines {
-      0%   { transform: translateY(0); }
-      100% { transform: translateY(4px); }
-    }
+#particle-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
 
-    /* ============================================================
-       粒子背景 Canvas
-       ============================================================ */
-    #particle-canvas {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
+::selection {
+  background: rgba(0, 240, 255, 0.25);
+  color: #fff;
+}
 
-    /* ============================================================
-       布局容器
-       ============================================================ */
-    .cyber-container {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 900px;
-      margin: 30px 20px 60px;
-      padding: 0 10px;
-    }
+:focus-visible {
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
 
-    /* ============================================================
-       Header · 终端标题栏
-       ============================================================ */
-    .cyber-header {
-      text-align: center;
-      margin-bottom: 30px;
-      padding: 30px 20px 25px;
-      border: 2px solid var(--neon-cyan);
-      border-radius: 6px;
-      background: var(--bg-surface);
-      box-shadow:
-        inset 0 0 60px rgba(0, 240, 255, 0.05),
-        var(--glow-cyan);
-      position: relative;
-      overflow: hidden;
-    }
+.container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1000px;
+  padding: var(--space-6) var(--space-5) var(--space-7);
+}
 
-    /* 标题栏角落装饰 */
-    .cyber-header::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 20px; height: 20px;
-      border-top: 2px solid var(--neon-magenta);
-      border-left: 2px solid var(--neon-magenta);
-      box-shadow: 0 0 10px var(--neon-magenta);
-    }
-    .cyber-header::after {
-      content: '';
-      position: absolute;
-      bottom: 0; right: 0;
-      width: 20px; height: 20px;
-      border-bottom: 2px solid var(--neon-magenta);
-      border-right: 2px solid var(--neon-magenta);
-      box-shadow: 0 0 10px var(--neon-magenta);
-    }
+/* Accessibility helper */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
-    /* 终端顶部栏 */
-    .terminal-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 18px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(0, 240, 255, 0.15);
-    }
-    .terminal-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-    .terminal-dot--red    { background: #FF5F57; box-shadow: 0 0 6px #FF5F57; }
-    .terminal-dot--yellow { background: #FFBD2E; box-shadow: 0 0 6px #FFBD2E; }
-    .terminal-dot--green  { background: #28CA41; box-shadow: 0 0 6px #28CA41; }
-    .terminal-title {
-      font-family: var(--font-body);
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      margin-left: 6px;
-      letter-spacing: 0.5px;
-    }
+/* Hero */
+.hero {
+  text-align: center;
+  padding: var(--space-7) var(--space-5) var(--space-6);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background:
+    linear-gradient(180deg, rgba(11, 13, 30, 0.92), rgba(8, 10, 24, 0.92)),
+    radial-gradient(ellipse at 50% 0%, rgba(0, 240, 255, 0.08), transparent 60%);
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.08), inset 0 0 80px rgba(0, 240, 255, 0.03);
+  position: relative;
+  overflow: hidden;
+}
 
-    .cyber-header h1 {
-      font-family: var(--font-display);
-      font-size: clamp(1.8rem, 4vw, 2.5rem);
-      font-weight: 700;
-      color: var(--neon-cyan);
-      text-shadow: var(--glow-cyan);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-      animation: glitch-text 3s infinite;
-    }
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--neon-magenta);
+  filter: drop-shadow(0 0 8px rgba(176, 38, 255, 0.6));
+}
+.hero::before {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+}
+.hero::after {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
+}
 
-    @keyframes glitch-text {
-      0%, 93%, 97%, 100% { transform: translate(0); }
-      94% { transform: translate(-2px, 1px); }
-      95% { transform: translate(2px, -1px); }
-      96% { transform: translate(-1px, -1px); }
-    }
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--neon-green);
+  text-shadow: var(--glow-green);
+  margin-bottom: var(--space-4);
+  animation: blink 2.4s var(--ease) infinite;
+}
 
-    .cyber-header .subtitle {
-      font-family: var(--font-display);
-      font-size: 0.8rem;
-      color: var(--neon-magenta);
-      text-shadow: var(--glow-magenta);
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      opacity: 0.9;
-    }
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
 
-    /* ============================================================
-       分隔线装饰
-       ============================================================ */
-    .cyber-divider {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin: 30px 0;
-      opacity: 0.7;
-    }
-    .cyber-divider__line {
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
-    }
-    .cyber-divider__diamond {
-      width: 8px;
-      height: 8px;
-      background: var(--neon-cyan);
-      transform: rotate(45deg);
-      box-shadow: var(--glow-cyan);
-      flex-shrink: 0;
-    }
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5.2vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.5), 0 0 32px rgba(0, 240, 255, 0.2);
+  margin-bottom: var(--space-3);
+}
 
-    /* ============================================================
-       卡片通用样式
-       ============================================================ */
-    .cyber-card {
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      background: var(--bg-card);
-      padding: 28px 30px;
-      margin-bottom: 24px;
-      position: relative;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-    .cyber-card:hover {
-      border-color: rgba(0, 240, 255, 0.4);
-      box-shadow:
-        inset 0 0 40px rgba(0, 240, 255, 0.03),
-        0 0 30px rgba(0, 240, 255, 0.08);
-    }
+.hero .subtitle {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--neon-magenta);
+  text-shadow: var(--glow-magenta);
+}
 
-    .cyber-card__title {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--neon-cyan);
-      text-shadow: var(--glow-cyan);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .cyber-card__title::before {
-      content: '>';
-      color: var(--neon-green);
-      text-shadow: var(--glow-green);
-      font-weight: 700;
-    }
+.badge-line {
+  margin-top: var(--space-5);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
 
-    /* ============================================================
-       介绍说明区
-       ============================================================ */
-    .intro-text p {
-      margin-bottom: 10px;
-      padding-left: 12px;
-      border-left: 2px solid rgba(0, 240, 255, 0.3);
-      color: var(--text-dim);
-      font-size: 0.98rem;
-      transition: border-color 0.3s ease, color 0.3s ease;
-    }
-    .intro-text p:hover {
-      border-left-color: var(--neon-cyan);
-      color: var(--text-primary);
-    }
-    .intro-text .highlight {
-      color: var(--neon-orange);
-      text-shadow: 0 0 8px rgba(255, 158, 0, 0.5);
-      font-weight: 600;
-    }
+.badge {
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.25s var(--ease);
+}
+.badge:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.05);
+}
 
-    /* ============================================================
-       配置文件列表 · 终端表格风格
-       ============================================================ */
-    .config-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: var(--font-body);
-    }
-    .config-table thead th {
-      font-family: var(--font-display);
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--neon-yellow);
-      text-shadow: 0 0 10px rgba(240, 255, 0, 0.3);
-      padding: 12px 16px;
-      border-bottom: 2px solid var(--neon-cyan);
-      text-align: left;
-    }
-    .config-table tbody tr {
-      border-bottom: 1px solid rgba(26, 26, 53, 0.6);
-      transition: background 0.25s ease, transform 0.25s ease;
-    }
-    .config-table tbody tr:hover {
-      background: rgba(0, 240, 255, 0.04);
-      transform: translateX(4px);
-    }
-    .config-table tbody td {
-      padding: 14px 16px;
-      vertical-align: middle;
-    }
-    .config-table tbody td:first-child {
-      font-weight: 600;
-      color: var(--text-bright);
-      letter-spacing: 0.5px;
-    }
-    .config-table tbody td:first-child::before {
-      content: '└ ';
-      color: var(--neon-cyan);
-      opacity: 0.6;
-    }
-    .config-table a {
-      color: var(--neon-cyan);
-      text-decoration: none;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      position: relative;
-      transition: color 0.2s ease, text-shadow 0.2s ease;
-      word-break: break-all;
-    }
-    .config-table a::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: -1px;
-      width: 0;
-      height: 1px;
-      background: var(--neon-cyan);
-      box-shadow: var(--glow-cyan);
-      transition: width 0.3s ease;
-    }
-    .config-table a:hover {
-      color: #FFFFFF;
-      text-shadow: var(--glow-cyan);
-    }
-    .config-table a:hover::after {
-      width: 100%;
-    }
-    .config-table a:focus-visible {
-      outline: 2px solid var(--neon-cyan);
-      outline-offset: 3px;
-      border-radius: 2px;
-    }
+/* Neon text color system (driven by JS data) */
+.type-cyan { color: var(--neon-cyan); text-shadow: var(--glow-cyan); }
+.type-green { color: var(--neon-green); text-shadow: var(--glow-green); }
+.type-orange { color: var(--neon-orange); text-shadow: var(--glow-orange); }
+.type-magenta { color: var(--neon-magenta); text-shadow: var(--glow-magenta); }
+.type-yellow { color: var(--neon-yellow); text-shadow: var(--glow-yellow); }
+.type-red { color: var(--neon-red); text-shadow: var(--glow-red); }
 
-    /* Badge 标签 */
-    .badge {
-      display: inline-block;
-      font-family: var(--font-display);
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 3px;
-      border: 1px solid;
-      margin-right: 6px;
-    }
-    .badge--debian {
-      color: var(--neon-red);
-      border-color: var(--neon-red);
-      box-shadow: 0 0 6px rgba(255, 0, 60, 0.3);
-    }
-    .badge--irc {
-      color: var(--neon-green);
-      border-color: var(--neon-green);
-      box-shadow: 0 0 6px rgba(0, 255, 136, 0.3);
-    }
-    .badge--net {
-      color: var(--neon-orange);
-      border-color: var(--neon-orange);
-      box-shadow: 0 0 6px rgba(255, 158, 0, 0.3);
-    }
-    .badge--game {
-      color: var(--neon-magenta);
-      border-color: var(--neon-magenta);
-      box-shadow: 0 0 6px rgba(176, 38, 255, 0.3);
-    }
-    .badge--other {
-      color: var(--neon-yellow);
-      border-color: var(--neon-yellow);
-      box-shadow: 0 0 6px rgba(240, 255, 0, 0.3);
-    }
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: var(--space-6) 0;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.5), transparent);
+}
+.divider__core {
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  background: var(--neon-cyan);
+  box-shadow: var(--glow-cyan);
+}
 
-    /* ============================================================
-       审查呼吁区
-       ============================================================ */
-    .review-card {
-      border: 1px solid var(--neon-magenta);
-      border-radius: 6px;
-      background: var(--bg-card);
-      padding: 24px 30px;
-      box-shadow: inset 0 0 40px rgba(176, 38, 255, 0.04), 0 0 20px rgba(176, 38, 255, 0.08);
-      position: relative;
-    }
-    .review-card::before {
-      content: '[ ! ]';
-      position: absolute;
-      top: -12px;
-      left: 20px;
-      background: var(--bg-deep);
-      padding: 0 8px;
-      font-family: var(--font-display);
-      font-weight: 700;
-      color: var(--neon-magenta);
-      text-shadow: var(--glow-magenta);
-      letter-spacing: 2px;
-      font-size: 0.75rem;
-    }
-    .review-card p {
-      color: var(--text-dim);
-      font-style: italic;
-      line-height: 1.8;
-    }
-    .review-card .emphasis {
-      color: var(--neon-magenta);
-      text-shadow: var(--glow-magenta);
-      font-weight: 600;
-      font-style: normal;
-      font-family: var(--font-display);
-      letter-spacing: 1px;
-      font-size: 0.85rem;
-    }
+/* Card system */
+.card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: rgba(11, 13, 30, 0.85);
+  padding: var(--space-6) var(--space-6) var(--space-5);
+  margin-bottom: var(--space-5);
+  transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.card:hover {
+  border-color: var(--border-bright);
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.06), inset 0 0 60px rgba(0, 240, 255, 0.02);
+}
 
-    /* ============================================================
-       Footer
-       ============================================================ */
-    .cyber-footer {
-      text-align: center;
-      padding: 25px 20px;
-      margin-top: 10px;
-      font-size: 0.78rem;
-      color: var(--text-dim);
-      letter-spacing: 1px;
-    }
-    .cyber-footer span {
-      color: var(--neon-cyan);
-      text-shadow: var(--glow-cyan);
-    }
+.card__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--neon-cyan);
+  text-shadow: var(--glow-cyan);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.18);
+}
+.card__title::before {
+  content: '>';
+  color: var(--neon-green);
+  text-shadow: var(--glow-green);
+  font-weight: 900;
+}
 
-    /* ============================================================
-       响应式适配
-       ============================================================ */
-    @media (max-width: 768px) {
-      body {
-        font-size: 0.95rem;
-      }
-      .cyber-container {
-        margin: 15px 10px 40px;
-        padding: 0;
-      }
-      .cyber-header {
-        padding: 20px 15px 18px;
-      }
-      .cyber-card,
-      .review-card {
-        padding: 20px 16px;
-      }
-      .config-table thead {
-        display: none; /* 小屏幕隐藏表头，用 data-label 替代 */
-      }
-      .config-table tbody tr {
-        display: block;
-        margin-bottom: 12px;
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        padding: 12px;
-      }
-      .config-table tbody td {
-        display: block;
-        padding: 6px 0;
-        text-align: left;
-      }
-      .config-table tbody td:first-child {
-        font-size: 1.05rem;
-        border-bottom: 1px solid rgba(0, 240, 255, 0.15);
-        margin-bottom: 6px;
-        padding-bottom: 8px;
-      }
-      .config-table tbody td:first-child::before {
-        content: '';
-      }
-      .config-table tbody td::before {
-        content: attr(data-label) ': ';
-        font-family: var(--font-display);
-        font-size: 0.65rem;
-        letter-spacing: 1px;
-        color: var(--neon-yellow);
-        text-transform: uppercase;
-        display: inline-block;
-        width: 90px;
-      }
-      .config-table tbody tr:hover {
-        transform: none;
-      }
-      .cyber-divider {
-        margin: 20px 0;
-      }
-    }
+/* Intro list */
+.intro-list {
+  list-style: none;
+  display: grid;
+  gap: var(--space-3);
+}
+.intro-list li {
+  position: relative;
+  padding-left: var(--space-5);
+  color: var(--text-dim);
+  font-size: 0.98rem;
+  transition: color 0.25s var(--ease);
+}
+.intro-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 12px;
+  height: 2px;
+  background: var(--neon-cyan);
+  box-shadow: var(--glow-cyan);
+  transition: width 0.25s var(--ease);
+}
+.intro-list li:hover {
+  color: var(--text-primary);
+}
+.intro-list li:hover::before {
+  width: 20px;
+}
+.intro-list strong {
+  color: var(--neon-orange);
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(255, 158, 0, 0.4);
+}
 
-    @media (max-width: 480px) {
-      .cyber-header h1 {
-        font-size: 1.4rem;
-        letter-spacing: 1px;
-      }
-      .terminal-bar {
-        gap: 5px;
-      }
-      .terminal-dot {
-        width: 8px; height: 8px;
-      }
-      .intro-text p {
-        font-size: 0.9rem;
-      }
-    }
+/* Config table */
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.config-table thead th {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--neon-yellow);
+  text-shadow: var(--glow-yellow);
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 2px solid rgba(0, 240, 255, 0.4);
+}
+.config-table tbody td {
+  padding: var(--space-4);
+  border-bottom: 1px solid rgba(20, 24, 50, 0.6);
+  vertical-align: middle;
+  transition: background 0.25s var(--ease);
+}
+.config-table tbody tr {
+  transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.config-table tbody tr:hover {
+  background: rgba(0, 240, 255, 0.04);
+}
+.config-table tbody tr:hover td:first-child {
+  transform: translateX(4px);
+}
 
-    /* ============================================================
-       打印样式
-       ============================================================ */
-    @media print {
-      body::after,
-      #particle-canvas { display: none; }
-      body {
-        background: #fff;
-        color: #000;
-      }
-      .cyber-header,
-      .cyber-card,
-      .review-card {
-        border: 1px solid #ccc;
-        box-shadow: none;
-      }
-      .config-table a {
-        color: #000;
-        text-decoration: underline;
-      }
-    }
-  </style>
+.config-name {
+  font-weight: 600;
+  color: var(--text-bright);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.config-desc {
+  color: var(--text-dim);
+  font-size: 0.94rem;
+  max-width: 340px;
+}
+.type-tag {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.config-link {
+  color: var(--neon-cyan);
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  word-break: break-all;
+  position: relative;
+  transition: color 0.2s var(--ease), text-shadow 0.2s var(--ease);
+}
+.config-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: var(--neon-cyan);
+  box-shadow: var(--glow-cyan);
+  transition: width 0.3s var(--ease);
+}
+.config-link:hover {
+  color: #ffffff;
+  text-shadow: var(--glow-cyan);
+}
+.config-link:hover::after {
+  width: 100%;
+}
+
+/* Audit card */
+.audit {
+  border: 1px solid rgba(176, 38, 255, 0.35);
+  background:
+    linear-gradient(180deg, rgba(16, 12, 30, 0.9), rgba(11, 13, 30, 0.9)),
+    radial-gradient(ellipse at 50% 0%, rgba(176, 38, 255, 0.07), transparent 60%);
+  box-shadow: 0 0 28px rgba(176, 38, 255, 0.07);
+}
+.audit .card__title {
+  color: var(--neon-magenta);
+  text-shadow: var(--glow-magenta);
+  border-bottom-color: rgba(176, 38, 255, 0.2);
+}
+.audit p {
+  color: var(--text-dim);
+  line-height: 1.9;
+  font-size: 0.98rem;
+}
+.audit .emphasis {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+  color: var(--neon-magenta);
+  text-shadow: var(--glow-magenta);
+}
+.audit a {
+  color: var(--neon-cyan);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: text-shadow 0.2s var(--ease);
+}
+.audit a:hover {
+  text-shadow: var(--glow-cyan);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: var(--space-5) var(--space-4);
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  letter-spacing: 1.5px;
+}
+.footer .accent {
+  color: var(--neon-cyan);
+  text-shadow: var(--glow-cyan);
+}
+.footer .status {
+  color: var(--neon-green);
+  text-shadow: var(--glow-green);
+}
+.footer .heartbeat {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--neon-green);
+  box-shadow: var(--glow-green);
+  animation: pulse 2s var(--ease) infinite;
+  margin-right: var(--space-1);
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.6; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body {
+    font-size: 0.95rem;
+  }
+  .container {
+    padding: var(--space-4) var(--space-3) var(--space-6);
+  }
+  .hero {
+    padding: var(--space-6) var(--space-4) var(--space-5);
+  }
+  .card {
+    padding: var(--space-5) var(--space-4) var(--space-4);
+  }
+  .config-name {
+    white-space: normal;
+  }
+  .config-table thead {
+    display: none;
+  }
+  .config-table tbody tr {
+    display: block;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  .config-table tbody tr:hover {
+    transform: none;
+  }
+  .config-table tbody tr:hover td:first-child {
+    transform: none;
+  }
+  .config-table tbody td {
+    display: block;
+    padding: var(--space-2) 0;
+    border: none;
+  }
+  .config-table tbody td::before {
+    content: attr(data-label) ': ';
+    display: inline-block;
+    width: 84px;
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--neon-yellow);
+  }
+  .config-name {
+    display: block;
+    font-size: 1.02rem;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+}
+
+/* Reduced motion: disable decorative animation */
+@media (prefers-reduced-motion: reduce) {
+  body::after,
+  #particle-canvas {
+    display: none;
+  }
+  .eyebrow,
+  .footer .heartbeat {
+    animation: none;
+  }
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+</style>
 </head>
-
 <body>
+<canvas id="particle-canvas" aria-hidden="true"></canvas>
+<main class="container" id="app"></main>
+<script>
+(function () {
+  'use strict';
 
-  <!-- 动态粒子背景 -->
-  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  /* ============================================================
+   * DATA LAYER — single source of truth for all editable content.
+   * Add / remove / reorder entries here; DOM rebuilds itself.
+   * ============================================================ */
 
-  <!-- 主体容器 -->
-  <main class="cyber-container">
+  var BASE_URL = 'https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main';
 
-    <!-- ══════════ HEADER · 终端标题 ══════════ -->
-    <header class="cyber-header" role="banner">
-      <div class="terminal-bar" aria-hidden="true">
-        <span class="terminal-dot terminal-dot--red"></span>
-        <span class="terminal-dot terminal-dot--yellow"></span>
-        <span class="terminal-dot terminal-dot--green"></span>
-        <span class="terminal-title">root@arkfuture:~/config#</span>
-      </div>
-      <h1 data-glitch="配置文件中心">配置文件中心</h1>
-      <p class="subtitle">Configuration Matrix // Debian-Based</p>
-    </header>
+  var INTRO = {
+    title: '使用说明',
+    lines: [
+      '本页面提供所有 <strong>ARKFUTURE</strong> 服务器配置文件的下载入口。',
+      '所有配置均基于 <strong>最新 Debian 稳定版</strong> 构建。下载后请按自身环境修改调整。',
+      '欢迎审阅这些文件。可通过 GitHub Issue 或 Pull Request 提交 <strong>匿名性与安全建议</strong>。',
+      '点击下方任意链接即可跳转到对应的 GitHub 目录。'
+    ]
+  };
 
-    <!-- ══════════ 装饰分隔线 ══════════ -->
-    <div class="cyber-divider" aria-hidden="true">
-      <span class="cyber-divider__line"></span>
-      <span class="cyber-divider__diamond"></span>
-      <span class="cyber-divider__line"></span>
-    </div>
+  var CONFIG = {
+    title: '配置索引',
+    caption: 'ARKFUTURE 配置文件下载列表，包含软件名称、类型与 GitHub 链接',
+    columns: ['软件', '类型', '说明', '配置路径'],
+    items: [
+      { name: 'i2pd & Tor', tag: '匿名网络', color: 'cyan', description: '匿名网络栈 - i2pd 路由与 Tor 中继配置', path: '/config/i2p-tor/' },
+      { name: 'InspIRCd', tag: 'IRC 服务端', color: 'green', description: '模块化 Internet Relay Chat 服务端守护进程', path: '/config/inspircd/' },
+      { name: 'ErgoIRCd', tag: 'IRC 服务端', color: 'green', description: '使用 Go 编写的轻量易用 IRC 服务端', path: '/config/ergoircd/' },
+      { name: 'HybridIRCd', tag: 'IRC 服务端', color: 'green', description: '高性能混合型 IRC 服务端', path: '/config/hybridircd/' },
+      { name: 'ngIRCd', tag: 'IRC 服务端', color: 'green', description: '轻量级 Internet Relay Chat 守护进程', path: '/config/ngircd/' },
+      { name: 'Irssi', tag: 'IRC 客户端', color: 'orange', description: '模块化文本模式 IRC 客户端', path: '/config/irssi/' },
+      { name: 'Suricata', tag: '网络安全', color: 'cyan', description: '高性能网络入侵检测 / 防御（IDS / IPS）引擎', path: '/config/suricata/' },
+      { name: 'Minecraft Server', tag: '游戏服务端', color: 'magenta', description: 'Minecraft 服务器配置', path: '/config/minecraft/' },
+      { name: 'Other Configs', tag: '其他', color: 'yellow', description: '其他杂项服务器配置', path: '/config/other/' }
+    ]
+  };
 
-    <!-- ══════════ 说明卡片 ══════════ -->
-    <section class="cyber-card" aria-labelledby="intro-heading">
-      <h2 class="cyber-card__title" id="intro-heading">说明 / Instructions</h2>
-      <div class="intro-text">
-        <p>本页面提供 <span class="highlight">ARKFUTURE</span> 所有服务器配置文件的下载入口。</p>
-        <p>配置文件均基于 <span class="highlight">Debian 最新稳定版</span> 制作，请<strong>下载后修改为您的实际配置</strong>后再使用。</p>
-        <p>欢迎审阅我们的配置文件，并通过 GitHub Issue 或 Pull Request 提出<span class="highlight">匿名及安全方面的修改建议</span>。</p>
-        <p>点击下方链接即可跳转至对应的 GitHub 目录。</p>
-      </div>
-    </section>
+  var AUDIT = {
+    title: '安全审计',
+    textPrefix: '我们诚邀您审阅这些',
+    textEmphasis: '服务器配置文件',
+    textSuffix: '，并针对匿名性、安全性与隐私提出反馈。',
+    ctaPrefix: '可通过',
+    ctaLinkText: 'GitHub Issues',
+    ctaLinkUrl: 'https://github.com/ARKFUTURE/ARKFUTURE.github.io/issues',
+    ctaSuffix: '提交反馈。感谢您的贡献。'
+  };
 
-    <!-- ══════════ 配置文件列表 ══════════ -->
-    <section class="cyber-card" aria-labelledby="config-heading">
-      <h2 class="cyber-card__title" id="config-heading">配置文件索引 / Config Index</h2>
+  /* ============================================================
+   * RENDER LAYER — pure functions building DOM from data
+   * ============================================================ */
 
-      <table class="config-table" role="table">
-        <caption class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
-          ARKFUTURE 配置文件下载列表，包含软件名称、类型和 GitHub 链接
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col">软件 / Software</th>
-            <th scope="col">类型</th>
-            <th scope="col">配置文件路径</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td data-label="软件">i2pd & Tor</td>
-            <td data-label="类型"><span class="badge badge--net">匿名网络</span></td>
-            <td data-label="路径">
-              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/i2p-tor/"
-                 target="_blank" rel="noopener noreferrer"
-                 title="前往 i2pd & Tor 配置目录（新窗口打开）">
-                /config/i2p-tor/
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td data-label="软件">InspIRCd</td>
-            <td data-label="类型"><span class="badge badge--irc">IRC 服务器</span></td>
-            <td data-label="路径">
-              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/inspircd/"
-                 target="_blank" rel="noopener noreferrer"
-                 title="前往 InspIRCd 配置目录（新窗口打开）">
-                /config/inspircd/
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td data-label="软件">ErgoIRCd</td>
-            <td data-label="类型"><span class="badge badge--irc">IRC 服务器</span></td>
-            <td data-label="路径">
-              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/ergoircd/"
-                 target="_blank" rel="noopener noreferrer"
-                 title="前往 ErgoIRCd 配置目录（新窗口打开）">
-                /config/ergoircd/
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td data-label="软件">HybridIRCd</td>
-            <td data-label="类型"><span class="badge badge--irc">IRC 服务器</span></td>
-            <td data-label="路径">
-              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/hybridircd/"
-                 target="_blank" rel="noopener noreferrer"
-                 title="前往 HybridIRCd 配置目录（新窗口打开）">
-                /config/hybridircd/
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td data-label="软件">ngIRCd</td>
-            <td data-label="类型"><span class="badge badge--irc">IRC 服务器</span></td>
-            <td data-label="路径">
-              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/ngircd/"
-                 target="_blank" rel="noopener noreferrer"
-                 title="前往 ngIRCd 配置目录（新窗口打开）">
-                /config/ngircd/
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td data-label="软件">Irssi</td>
-            <td data-label="类型"><span class="badge badge--irc">IRC 客户端</span></td>
-            <td data-label="路径">
-              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/irssi/"
-                 target="_blank" rel="noopener noreferrer"
-                 title="前往 Irssi 配置目录（新窗口打开）">
-                /config/irssi/
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td data-label="软件">Suricata</td>
-            <td data-label="类型"><span class="badge badge--net">网络安全</span></td>
-            <td data-label="路径">
-              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/suricata/"
-                 target="_blank" rel="noopener noreferrer"
-                 title="前往 Suricata 配置目录（新窗口打开）">
-                /config/suricata/
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td data-label="软件">Minecraft Server</td>
-            <td data-label="类型"><span class="badge badge--game">游戏服务</span></td>
-            <td data-label="路径">
-              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/minecraft/"
-                 target="_blank" rel="noopener noreferrer"
-                 title="前往 Minecraft Server 配置目录（新窗口打开）">
-                /config/minecraft/
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td data-label="软件">Other Configs</td>
-            <td data-label="类型"><span class="badge badge--other">其他配置</span></td>
-            <td data-label="路径">
-              <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/tree/main/config/other/"
-                 target="_blank" rel="noopener noreferrer"
-                 title="前往其他配置目录（新窗口打开）">
-                /config/other/
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+  function el(tag, attrs, children) {
+    var node = document.createElement(tag);
+    if (attrs) {
+      Object.keys(attrs).forEach(function (key) {
+        if (key === 'class') node.className = attrs[key];
+        else if (key === 'html') node.innerHTML = attrs[key];
+        else if (key === 'text') node.textContent = attrs[key];
+        else node.setAttribute(key, attrs[key]);
+      });
+    }
+    (children || []).forEach(function (child) {
+      if (child) node.appendChild(child);
+    });
+    return node;
+  }
 
-    <!-- ══════════ 审查呼吁卡片 ══════════ -->
-    <section class="review-card" aria-labelledby="review-heading">
-      <h2 class="cyber-card__title" id="review-heading">安全审查 / Security Audit</h2>
-      <p>
-        我们诚挚邀请您审查以上<span class="emphasis">服务器配置文件</span>，
-        并就<span class="emphasis">匿名性、安全性、隐私保护</span>等方面提出宝贵意见和建议。
-      </p>
-      <p style="margin-top:8px;">
-        请通过
-        <a href="https://github.com/ARKFUTURE/ARKFUTURE.github.io/issues"
-           target="_blank" rel="noopener noreferrer"
-           style="color:var(--neon-cyan);text-decoration:underline;text-underline-offset:2px;">
-          GitHub Issues
-        </a>
-        提交反馈，感谢您的贡献。
-      </p>
-    </section>
+  function renderIntro() {
+    var list = el('ul', { class: 'intro-list' });
+    INTRO.lines.forEach(function (line) {
+      var li = el('li');
+      li.innerHTML = line;
+      list.appendChild(li);
+    });
+    return el('section', { class: 'card', 'aria-labelledby': 'instructions-heading' }, [
+      el('h2', { class: 'card__title', id: 'instructions-heading', text: INTRO.title }),
+      list
+    ]);
+  }
 
-    <!-- ══════════ FOOTER ══════════ -->
-    <footer class="cyber-footer" role="contentinfo">
-      <p>&copy; 2025–2026 <span>ARKFUTURE</span> &mdash; Released under MIT License</p>
-      <p style="margin-top:4px;">System: Debian GNU/Linux  &bull;  Connection: <span style="color:var(--neon-green);">Secure</span></p>
-    </footer>
+  function renderConfig() {
+    var head = el('thead');
+    var headRow = el('tr');
+    CONFIG.columns.forEach(function (col, idx) {
+      headRow.appendChild(el('th', { scope: 'col', text: col }));
+    });
+    head.appendChild(headRow);
 
-  </main>
+    var body = el('tbody');
+    CONFIG.items.forEach(function (item) {
+      var row = el('tr');
 
-  <!-- ══════════ 粒子背景脚本 ══════════ -->
-  <script>
-    (function() {
-      'use strict';
+      var nameTd = el('td', { class: 'config-name', 'data-label': CONFIG.columns[0], text: item.name });
+      row.appendChild(nameTd);
 
-      var canvas = document.getElementById('particle-canvas');
-      if (!canvas) return;
+      var typeTd = el('td', { 'data-label': CONFIG.columns[1] });
+      typeTd.appendChild(el('span', { class: 'type-tag type-' + item.color, text: item.tag }));
+      row.appendChild(typeTd);
 
-      var ctx = canvas.getContext('2d');
-      var particles = [];
-      var maxParticles = 60;
-      var w, h;
+      var descTd = el('td', { class: 'config-desc', 'data-label': CONFIG.columns[2], text: item.description });
+      row.appendChild(descTd);
 
-      function resize() {
-        w = canvas.width  = window.innerWidth;
-        h = canvas.height = window.innerHeight;
-      }
-      window.addEventListener('resize', resize);
-      resize();
+      var linkTd = el('td', { 'data-label': CONFIG.columns[3] });
+      linkTd.appendChild(el('a', {
+        class: 'config-link',
+        href: BASE_URL + item.path,
+        target: '_blank',
+        rel: 'noopener noreferrer',
+        text: item.path
+      }));
+      row.appendChild(linkTd);
 
-      // 粒子类
-      function Particle() {
-        this.reset();
-      }
-      Particle.prototype.reset = function() {
-        this.x = Math.random() * w;
-        this.y = Math.random() * h;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-        this.radius = Math.random() * 1.8 + 0.5;
-        this.opacity = Math.random() * 0.5 + 0.15;
-        this.color = Math.random() < 0.5 ? '0, 240, 255' : '176, 38, 255'; // cyan or magenta
+      body.appendChild(row);
+    });
+
+    return el('section', { class: 'card', 'aria-labelledby': 'config-heading' }, [
+      el('h2', { class: 'card__title', id: 'config-heading', text: CONFIG.title }),
+      el('table', { class: 'config-table' }, [
+        el('caption', { class: 'sr-only', text: CONFIG.caption }),
+        head,
+        body
+      ])
+    ]);
+  }
+
+  function renderAudit() {
+    var textP = el('p', { class: 'audit-text' });
+    textP.appendChild(document.createTextNode(AUDIT.textPrefix));
+    textP.appendChild(el('span', { class: 'emphasis', text: AUDIT.textEmphasis }));
+    textP.appendChild(document.createTextNode(AUDIT.textSuffix));
+
+    var ctaP = el('p', { class: 'audit-cta' });
+    ctaP.appendChild(document.createTextNode(AUDIT.ctaPrefix));
+    ctaP.appendChild(el('a', {
+      href: AUDIT.ctaLinkUrl,
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      text: AUDIT.ctaLinkText
+    }));
+    ctaP.appendChild(document.createTextNode(AUDIT.ctaSuffix));
+
+    return el('section', { class: 'card audit', 'aria-labelledby': 'audit-heading' }, [
+      el('h2', { class: 'card__title', id: 'audit-heading', text: AUDIT.title }),
+      textP,
+      ctaP
+    ]);
+  }
+
+  function build() {
+    var app = document.getElementById('app');
+    var frag = document.createDocumentFragment();
+    frag.appendChild(renderIntro());
+    frag.appendChild(renderConfig());
+    frag.appendChild(renderAudit());
+    app.appendChild(frag);
+  }
+
+  /* ============================================================
+   * PARTICLE FX — ambient neon network (respects reduced motion)
+   * ============================================================ */
+
+  function initParticles() {
+    var canvas = document.getElementById('particle-canvas');
+    if (!canvas) return;
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var max = 50;
+    var linkDist = 140;
+    var w, h;
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function makeParticle() {
+      return {
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        r: Math.random() * 1.8 + 0.5,
+        o: Math.random() * 0.5 + 0.12,
+        c: Math.random() < 0.5 ? '0, 240, 255' : '176, 38, 255'
       };
-      Particle.prototype.update = function() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < -10 || this.x > w + 10 || this.y < -10 || this.y > h + 10) {
-          this.reset();
+    }
+
+    var i, j;
+    for (i = 0; i < max; i++) particles.push(makeParticle());
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      for (i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < -10 || p.x > w + 10 || p.y < -10 || p.y > h + 10) {
+          particles[i] = p = makeParticle();
         }
-      };
-      Particle.prototype.draw = function() {
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + this.color + ', ' + this.opacity + ')';
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + p.c + ', ' + p.o + ')';
         ctx.fill();
-      };
-
-      // 初始化粒子
-      for (var i = 0; i < maxParticles; i++) {
-        particles.push(new Particle());
-      }
-
-      // 连线阈值
-      var linkDist = 140;
-
-      function drawLines() {
-        var i, j, p1, p2, dx, dy, dist;
-        for (i = 0; i < particles.length; i++) {
-          p1 = particles[i];
-          for (j = i + 1; j < particles.length; j++) {
-            p2 = particles[j];
-            dx = p1.x - p2.x;
-            dy = p1.y - p2.y;
-            dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < linkDist) {
-              ctx.beginPath();
-              ctx.moveTo(p1.x, p1.y);
-              ctx.lineTo(p2.x, p2.y);
-              var alpha = (1 - dist / linkDist) * 0.12;
-              ctx.strokeStyle = 'rgba(0, 240, 255, ' + alpha + ')';
-              ctx.lineWidth = 0.6;
-              ctx.stroke();
-            }
+        for (j = i + 1; j < particles.length; j++) {
+          var q = particles[j];
+          var dx = p.x - q.x;
+          var dy = p.y - q.y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < linkDist) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.strokeStyle = 'rgba(0, 240, 255, ' + ((1 - dist / linkDist) * 0.12) + ')';
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
           }
         }
       }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
 
-      function animate() {
-        ctx.clearRect(0, 0, w, h);
-        var i;
-        for (i = 0; i < particles.length; i++) {
-          particles[i].update();
-          particles[i].draw();
-        }
-        drawLines();
-        requestAnimationFrame(animate);
-      }
-      animate();
-    })();
-  </script>
-
+  build();
+  initParticles();
+})();
+</script>
 </body>
 </html>
