@@ -594,8 +594,7 @@
         .connection-status.connecting {
             border-color: rgba(255, 215, 64, .4);
             color: var(--c-yellow);
-            cursor: default;
-            pointer-events: none;
+            cursor: pointer;
             animation: pulse 1.2s ease infinite;
         }
 
@@ -3558,7 +3557,7 @@
             }
         }
         function toggleConnection() {
-            if (isConnected) {
+            if (isConnected || (websocket && websocket.readyState === WebSocket.OPEN)) {
                 writeToLog("!SYS", "SYS", 'User requested disconnect — disabling auto-reconnect');
                 autoReconnect = false;
                 updateAutoReconnectMenuItem();
@@ -3576,6 +3575,24 @@
                         websocket.close(1000, "User disconnected");
                     } catch (e) { writeToLog("!SYS", "ERR", `Exception while closing WebSocket: ${e.message}`); }
                 }
+            } else if (websocket && websocket.readyState === WebSocket.CONNECTING) {
+                writeToLog("!SYS", "SYS", 'User requested cancel while connecting — aborting pending connection');
+                autoReconnect = false;
+                updateAutoReconnectMenuItem();
+                isDisconnecting = true;
+                if (connectTimeout) { clearTimeout(connectTimeout); connectTimeout = null; }
+                if (websocket) {
+                    try {
+                        websocket.onclose = null;
+                        websocket.onerror = null;
+                        websocket.onopen = null;
+                        websocket.onmessage = null;
+                        writeToLog("!SYS", "SYS", 'Aborting pending WebSocket connection (code 1000 — user cancelled)');
+                        websocket.close(1000, "User cancelled");
+                    } catch (e) { writeToLog("!SYS", "ERR", `Exception while aborting pending connection: ${e.message}`); }
+                }
+                websocket = null;
+                onDisconnect("user", false);
             } else { reconnectAttempts = 0; doConnect(); }
         }
         function doConnect(isAutoReconnect) {
@@ -3647,8 +3664,9 @@
             if (!isAutoReconnect) reconnectAttempts = 0;
             wsUrlInput.disabled = true;
             nickInput.disabled = true;
-            connectBtn.textContent = 'Connecting...';
-            connectBtn.disabled = true;
+            connectBtn.textContent = 'Cancel';
+            connectBtn.disabled = false;
+            connectBtn.classList.add('disconnect');
             isDisconnecting = false;
             saveSettings();
             updateConnectionStatus('connecting');
