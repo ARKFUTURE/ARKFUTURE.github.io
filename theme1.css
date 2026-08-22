@@ -931,6 +931,90 @@ section,
 }
 
 /* ═══════════════════════════════════
+   ▌ FRIENDS — 友情链接 (终端节点)
+   ═══════════════════════════════════ */
+
+.friends__body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--cyber-card);
+  border: 1px solid var(--cyber-border);
+  border-left: 3px solid var(--neon-yellow);
+  position: relative;
+}
+
+/* 右上角终端标签 */
+.friends__body::before {
+  content: 'NET.LINK';
+  position: absolute;
+  top: -1px;
+  right: 12px;
+  font-family: var(--font-display);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  background: var(--cyber-card);
+  padding: 0 6px;
+  transform: translateY(-50%);
+}
+
+/* 友链按钮（a 标签）— 终端斜切按钮 */
+.friends__link {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 6px 16px;
+  color: var(--neon-cyan);
+  border: 1px solid var(--neon-cyan);
+  background: transparent;
+  text-transform: uppercase;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  transition: all .2s;
+}
+
+.friends__link:hover {
+  background: rgba(0, 240, 255, .1);
+  box-shadow: var(--glow-cyan);
+  text-shadow: var(--glow-cyan);
+}
+
+/* 按钮形态不显示全局 a::after 下划线动画 */
+.friends__link::after,
+.friends__badge::after {
+  display: none;
+}
+
+/* 88x31 图片按钮（img 标签） */
+.friends__badge {
+  display: inline-block;
+  line-height: 0;
+}
+
+.friends__badge img {
+  width: 88px;
+  height: 31px;
+  border: 1px solid var(--cyber-border);
+  transition: all .2s;
+}
+
+.friends__badge:hover img {
+  border-color: var(--neon-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+@media (max-width: 640px) {
+  .friends__body {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+}
+
+/* ═══════════════════════════════════
    ▌ END OF THEME1
    ▌ ARKFUTURE // NEON_GRID v2.0
    ▌ "Stay hungry. Stay foolish. Stay cyber."

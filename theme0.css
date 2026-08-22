@@ -515,3 +515,86 @@ a:hover::after {
     width: 100% !important;
   }
 }
+
+/* ============================================================
+   友情链接区块 — friends
+   ============================================================ */
+.friends {
+  margin: 2rem 0;
+}
+
+.friends__heading {
+  font-size: 1.6rem;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin: 1.2rem 0;
+  color: var(--neon-blue);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+  padding-bottom: 0.4rem;
+}
+
+.friends__body {
+  background: rgba(20, 20, 48, 0.75);
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* 友链按钮（a 标签） */
+.friends__link {
+  display: inline-block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  color: var(--neon-blue);
+  border: 1px solid var(--neon-blue);
+  padding: 6px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.friends__link:hover {
+  color: var(--neon-green);
+  border-color: var(--neon-green);
+  text-shadow: 0 0 6px var(--neon-green);
+}
+
+/* 按钮形态不显示全局 a::after 下划线动画 */
+.friends__link::after,
+.friends__badge::after {
+  display: none;
+}
+
+/* 88x31 图片按钮（img 标签） */
+.friends__badge {
+  display: inline-block;
+  line-height: 0;
+}
+
+.friends__badge img {
+  width: 88px;
+  height: 31px;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.friends__badge:hover img {
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+  .friends__heading {
+    font-size: 1.3rem;
+  }
+  .friends__body {
+    padding: 1rem;
+  }
+}

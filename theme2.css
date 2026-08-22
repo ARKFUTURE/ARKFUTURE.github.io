@@ -1012,3 +1012,131 @@
     }
   }
 }
+
+/* ══════════════════════════════════════════
+   FRIENDS · 友情链接 🍬
+   ══════════════════════════════════════════ */
+@layer components {
+  .friends__heading {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    letter-spacing: 0.01em;
+    color: var(--text-dark);
+    margin: var(--s12) 0 var(--s4);
+    padding-bottom: var(--s2);
+    position: relative;
+    display: inline-block;
+    text-wrap: balance;
+  }
+
+  .friends__heading::before {
+    content: '💗';
+    margin-right: var(--s2);
+    font-size: 0.8em;
+    display: inline-block;
+    animation: heartBeat 1.5s ease-in-out infinite;
+  }
+
+  .friends__heading::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--strawberry-300), var(--cream-lavender-300), var(--peach-200));
+    background-size: 200% 100%;
+    animation: rainbowFlow 3s linear infinite;
+  }
+
+  .friends__body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s3);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border-radius: var(--r-xl);
+    padding: var(--s8) var(--s10);
+    margin-bottom: var(--s6);
+    border: 1.5px solid var(--border-candy);
+    border-top: 3px solid var(--peach-200);
+    box-shadow: var(--shadow-candy), inset 0 1px 0 rgba(255,255,255,0.8);
+    position: relative;
+    overflow: hidden;
+    transition:
+      translate 0.4s var(--ease-bounce),
+      box-shadow 0.4s ease,
+      border-color 0.4s ease;
+  }
+
+  .friends__body:hover {
+    translate: 0 -6px;
+    border-color: var(--border-love);
+    box-shadow: var(--shadow-love), 0 0 0 3px rgba(255,120,160,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+  }
+
+  /* 友链按钮（a 标签）— 糖果渐变药丸 */
+  .friends__link {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    padding: var(--s2) var(--s6);
+    border-radius: var(--r-pill);
+    color: #fff;
+    background: linear-gradient(135deg, var(--strawberry-400), var(--cream-lavender-300));
+    box-shadow: 0 4px 16px rgba(255,120,160,0.25);
+    position: relative;
+    overflow: hidden;
+    transition:
+      all 0.3s var(--ease-bounce),
+      box-shadow 0.3s ease;
+  }
+
+  .friends__link::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.6s ease;
+  }
+
+  .friends__link:hover::before { left: 120%; }
+
+  .friends__link:hover {
+    translate: 0 -3px;
+    scale: 1.04;
+    box-shadow: 0 8px 28px rgba(255,120,160,0.35), 0 0 0 3px rgba(255,120,160,0.08);
+  }
+
+  /* 88x31 图片按钮（img 标签） */
+  .friends__badge {
+    display: inline-block;
+    line-height: 0;
+  }
+
+  .friends__badge img {
+    width: 88px;
+    height: 31px;
+    border-radius: var(--r-sm);
+    border: 1.5px solid var(--border-candy);
+    transition: all 0.3s var(--ease-bounce), box-shadow 0.3s ease;
+  }
+
+  .friends__badge:hover img {
+    border-color: var(--border-love);
+    box-shadow: 0 4px 16px rgba(255,120,160,0.25);
+  }
+}
+
+@media (max-width: 640px) {
+  .friends__body {
+    padding: var(--s5) var(--s5);
+    border-radius: var(--r-lg);
+  }
+}
