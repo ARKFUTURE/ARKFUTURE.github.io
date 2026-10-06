@@ -273,17 +273,31 @@ function refresh(){
   }
 }
 function buildUrl(tpl, values){
-  let url = tpl;
-  Object.keys(values).forEach(ph=>{
-    const v = values[ph];
-    if(v !== undefined && v !== null && String(v).trim() !== ''){
-      url = url.split('{' + ph + '}').join(encodeURIComponent(String(v).trim()));
-    }
+  const hi = tpl.indexOf('#');
+  const hash = hi < 0 ? '' : tpl.slice(hi);
+  const str = hi < 0 ? tpl : tpl.slice(0, hi);
+  const qi = str.indexOf('?');
+  const base = qi < 0 ? str : str.slice(0, qi);
+  const query = qi < 0 ? '' : str.slice(qi + 1);
+  const parts = [];
+  query.split('&').forEach(seg=>{
+    if(!seg) return;
+    const filled = seg.replace(/\{([^{}]+)\}/g, (m, name)=>{
+      const v = values[name];
+      return v === undefined || v === null || String(v).trim() === '' ? m : encodeURIComponent(String(v).trim());
+    });
+    if(filled.indexOf('{') >= 0) return;
+    parts.push(filled);
   });
-  url = url.replace(/[?&][^=&]*=\{[^{}]*\}/g, '');
-  url = url.replace(/[?&]/, '?');
-  url = url.replace(/[?&]$/, '');
-  return url;
+  return base + (parts.length > 0 ? '?' + parts.join('&') : '') + hash;
+}
+function openSearch(url){
+  const w = window.open(url, '_blank');
+  if(w){
+    w.opener = null;
+  } else {
+    location.replace(url);
+  }
 }
 form.addEventListener('submit', function(ev){
   ev.preventDefault();
@@ -295,7 +309,7 @@ form.addEventListener('submit', function(ev){
   extraWrap.querySelectorAll('input').forEach(inp=>{
     values[inp.dataset.ph] = inp.value;
   });
-  window.open(buildUrl(curEng.tpl, values), '_blank');
+  openSearch(buildUrl(curEng.tpl, values));
 });
 (function init(){
   const firstCat = Object.keys(DATA)[0];
@@ -332,7 +346,7 @@ form.addEventListener('submit', function(ev){
     q.value = urlQ;
     const values = {};
     values[curEng.phs[0].name] = urlQ;
-    window.open(buildUrl(curEng.tpl, values), '_blank');
+    openSearch(buildUrl(curEng.tpl, values));
   }
 })();
 </script>
