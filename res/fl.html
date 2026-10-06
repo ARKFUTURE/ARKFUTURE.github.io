@@ -237,10 +237,13 @@ function renderLinks(){
     entries.forEach(([name, url])=>{
       const a = document.createElement('a');
       a.href = url;
-      a.target = '_blank';
-      a.rel = 'noopener';
       a.textContent = name;
       a.title = url;
+      a.addEventListener('click', ev=>{
+        if(ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+        ev.preventDefault();
+        jumpTo(url);
+      });
       card.appendChild(a);
     });
     gridEl.appendChild(card);
@@ -291,7 +294,7 @@ function buildUrl(tpl, values){
   });
   return base + (parts.length > 0 ? '?' + parts.join('&') : '') + hash;
 }
-function openSearch(url){
+function jumpTo(url){
   if(!url) return;
   location.assign(url);
 }
@@ -319,7 +322,7 @@ form.addEventListener('submit', function(ev){
   extraWrap.querySelectorAll('input').forEach(inp=>{
     values[inp.dataset.ph] = inp.value;
   });
-  openSearch(buildUrl(curEng.tpl, values));
+  jumpTo(buildUrl(curEng.tpl, values));
 });
 q.addEventListener('input', syncUrl);
 (function init(){
@@ -357,11 +360,11 @@ q.addEventListener('input', syncUrl);
     q.value = urlQ;
     const values = {};
     values[curEng.phs[0].name] = urlQ;
-    openSearch(buildUrl(curEng.tpl, values));
+    jumpTo(buildUrl(curEng.tpl, values));
   }
 })();
 </script>
 </body>
 </html>
 
-<!-- 提交版本: v1.0 -->
+<!-- 提交版本: v1.1 -->
