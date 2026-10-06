@@ -206,7 +206,7 @@ function renderBoxes(){
       b.className = 'eng' + (curEng && curEng.name === name && curEng.cat === cat ? ' on' : '');
       b.textContent = name;
       b.title = e.tpl + (e.phs.length > 1 ? '(参数: ' + e.phs.slice(1).map(p=> p.label).join(' / ') + ')' : '');
-      b.onclick = ()=>{ curEng = {name, tpl: e.tpl, phs: e.phs, cat}; refresh(); };
+      b.onclick = ()=>{ curEng = {name, tpl: e.tpl, phs: e.phs, cat}; refresh(); syncUrl(); };
       engs.appendChild(b);
     });
     box.appendChild(head);
@@ -299,6 +299,20 @@ function openSearch(url){
     location.replace(url);
   }
 }
+let urlTimer = 0;
+function syncUrl(){
+  clearTimeout(urlTimer);
+  urlTimer = setTimeout(()=>{
+    const params = new URLSearchParams();
+    const kw = q.value.trim();
+    if(kw) params.set('q', kw);
+    if(curEng) params.set('e', curEng.name);
+    const qs = params.toString();
+    try{
+      history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
+    }catch(err){}
+  }, 200);
+}
 form.addEventListener('submit', function(ev){
   ev.preventDefault();
   if(!curEng) return;
@@ -311,6 +325,7 @@ form.addEventListener('submit', function(ev){
   });
   openSearch(buildUrl(curEng.tpl, values));
 });
+q.addEventListener('input', syncUrl);
 (function init(){
   const firstCat = Object.keys(DATA)[0];
   const first = firstCat && Object.keys(DATA[firstCat] || {})[0];
