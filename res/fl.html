@@ -88,51 +88,51 @@ footer a:hover{color:var(--cyan)}
 <script>
 const DATA = {
   'Search Engines': {
-    'Baidu': ['https://www.baidu.com/s?wd={q}', 'Search term'],
-    'Bing': ['https://cn.bing.com/search?q={q}', 'Search term'],
-    'Google': ['https://www.google.com/search?q={q}', 'Search term'],
-    'Yandex': ['https://yandex.com/search?text={q}', 'Search term'],
-    'DuckDuckGo': ['https://duckduckgo.com/?q={q}', 'Search term'],
-    'Qwant': ['https://qwant.com/?q={q}', 'Search term'],
-    'Shodan': ['https://www.shodan.io/search?query={q}', 'Search term']
+    'Baidu': ['https://www.baidu.com/s?wd={a}', 'Search term'],
+    'Bing': ['https://cn.bing.com/search?q={a}', 'Search term'],
+    'Google': ['https://www.google.com/search?q={a}', 'Search term'],
+    'Yandex': ['https://yandex.com/search?text={a}', 'Search term'],
+    'DuckDuckGo': ['https://duckduckgo.com/?q={a}', 'Search term'],
+    'Qwant': ['https://qwant.com/?q={a}', 'Search term'],
+    'Shodan': ['https://www.shodan.io/search?query={a}', 'Search term']
   },
   'Darknet Search': {
-    'TorDex': ['http://tordexu73joywapk2txdr54jed4imqledpcvcuf75qsas2gwdgksvnyd.onion/search?query={q}', 'Search term'],
-    'OnDex': ['http://ondexcylxxxq6vcc62l3r2m6rypohvvymsvqeadhln5mjo73pf6ksjad.onion?query={q}', 'Search term'],
-    'TOR.LINK': ['https://tor.link/?q={q}', 'Search term'],
-    'OnionLand': ['https://onionlandsearchengine.net/search?q={q}', 'Search term'],
-    'I2P': ['https://i2psearch.com/search?q={q}', 'Search term']
+    'TorDex': ['http://tordexu73joywapk2txdr54jed4imqledpcvcuf75qsas2gwdgksvnyd.onion/search?query={a}', 'Search term'],
+    'OnDex': ['http://ondexcylxxxq6vcc62l3r2m6rypohvvymsvqeadhln5mjo73pf6ksjad.onion?query={a}', 'Search term'],
+    'TOR.LINK': ['https://tor.link/?q={a}', 'Search term'],
+    'OnionLand': ['https://onionlandsearchengine.net/search?q={a}', 'Search term'],
+    'I2P': ['https://i2psearch.com/search?q={a}', 'Search term']
   },
   'XDCC Search': {
-    'xdcc.eu': ['https://www.xdcc.eu/search.php?searchkey={q}', 'Search term'],
-    'NIBL': ['https://nibl.co.uk/search?query={q}', 'Search term'],
-    'animk': ['https://xdcc.animk.info/?search={q}', 'Search term'],
-    'lib.rs': ['https://lib.rs/search?q={q}', 'Search term'],
-    'sunxdcc': ['https://sunxdcc.com/deliver.php?sterm={q}&page={p}&name={n}', 'Search term', 'Page', 'Name'],
-    'skull': ['https://skullxdcc.com/ws.php?sterm={q}', 'Search term'],
-    'xdcc.rocks': ['https://www.xdcc.rocks/search/?searchword={q}', 'Search term'],
-    'xdcc-search': ['https://xdcc-search.com/?q={q}', 'Search term']
+    'xdcc.eu': ['https://www.xdcc.eu/search.php?searchkey={a}', 'Search term'],
+    'NIBL': ['https://nibl.co.uk/search?query={a}', 'Search term'],
+    'animk': ['https://xdcc.animk.info/?search={a}', 'Search term'],
+    'lib.rs': ['https://lib.rs/search?q={a}', 'Search term'],
+    'sunxdcc': ['https://sunxdcc.com/deliver.php?sterm={a}&page={p}&name={n}', 'Search term', 'Page', 'Name'],
+    'skull': ['https://skullxdcc.com/ws.php?sterm={a}', 'Search term'],
+    'xdcc.rocks': ['https://www.xdcc.rocks/search/?searchword={a}', 'Search term'],
+    'xdcc-search': ['https://xdcc-search.com/?q={a}', 'Search term']
   },
   'Package Search': {
     'repology': ['https://repology.org/projects/?search={a}&maintainer={b}&category={c}&inrepo={d}&notinrepo={e}&repos={f}&families={g}&repos_newest={h}&families_newest={i}', 'Package name', 'Maintainer', 'Category', 'In repository', 'Missing in repository', 'Repository', 'Repository family', 'Repositories with newest version', 'Families with newest version'],
-    'msys2': ['https://packages.msys2.org/search?q={q}&t=pkg', 'Search term']
+    'msys2': ['https://packages.msys2.org/search?q={a}&t=pkg', 'Search term']
   },
   'Academic / Paper Search': {
-    'Scirp': ['https://www.scirp.org/journal/articles.aspx?searchcode={q}', 'Search term'],
-    'Scielo': ['https://search.scielo.org/?q={q}', 'Search term'],
-    'Arxiv': ['https://arxiv.org/search/?query={q}', 'Search term']
+    'Scirp': ['https://www.scirp.org/journal/articles.aspx?searchcode={a}', 'Search term'],
+    'Scielo': ['https://search.scielo.org/?q={a}', 'Search term'],
+    'Arxiv': ['https://arxiv.org/search/?query={a}', 'Search term']
   },
   'Dictionaries': {
-    'iCIBA': ['https://www.iciba.com/word?w={q}', 'Search term'],
-    'WordNet': ['http://wordnetweb.princeton.edu/perl/webwn?s={q}', 'Search term'],
-    'Urban Dictionary': ['https://www.urbandictionary.com/define.php?term={q}', 'Search term']
+    'iCIBA': ['https://www.iciba.com/word?w={a}', 'Search term'],
+    'WordNet': ['http://wordnetweb.princeton.edu/perl/webwn?s={a}', 'Search term'],
+    'Urban Dictionary': ['https://www.urbandictionary.com/define.php?term={a}', 'Search term']
   },
   'Radio Search': {
-    'radio-browser Name': ['http://de1.api.radio-browser.info/xml/stations/search?name={q}&order={p}', 'Search term', 'Sort order'],
-    'radio-browser UUID': ['http://de1.api.radio-browser.info/xml/stations/byuuid?uuids={q}', 'UUID']
+    'radio-browser Name': ['http://de1.api.radio-browser.info/xml/stations/search?name={a}&order={b}', 'Search term', 'Sort order'],
+    'radio-browser UUID': ['http://de1.api.radio-browser.info/xml/stations/byuuid?uuids={a}', 'UUID']
   },
   'Video Bypass': {
-    'Video Parser': ['https://jx.xmflv.com/?url={q}', 'Video URL']
+    'Video Parser': ['https://jx.xmflv.com/?url={a}', 'Video URL']
   }
 };
 const LINKS = {
