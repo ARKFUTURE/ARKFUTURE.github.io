@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>快速搜索</title>
+<title>Quick Search</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
@@ -59,26 +59,26 @@ footer a:hover{color:var(--cyan)}
 </head>
 <body>
 <div class="wrap">
-  <h2 class="big-title">快速搜索</h2>
+  <h2 class="big-title">Quick Search</h2>
   <div class="panel">
     <form id="searchForm" method="GET">
       <div class="search-row">
         <div class="search-box">
           <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg>
-          <input id="q" type="text" autocomplete="off" placeholder="输入搜索项搜索" maxlength="500">
+          <input id="q" type="text" autocomplete="off" placeholder="Enter a keyword to search" maxlength="500">
         </div>
-        <button id="go" type="submit">搜索</button>
+        <button id="go" type="submit">Search</button>
       </div>
       <div class="extra" id="extraWrap"></div>
     </form>
     <div class="cat-boxes" id="catBoxes"></div>
   </div>
   <div class="links">
-    <h2 class="big-title">常用链接</h2>
+    <h2 class="big-title">Quick Links</h2>
     <div class="grid" id="linkGrid"></div>
   </div>
   <footer>
-    <p>方舟未来 | 方舟未来工作室/集团/团队 | 方舟实验室</p>
+    <p>ARKFUTURE | ARKFUTURE STUDIO/GROUP/TEAM | ARK LAB</p>
     <p>Copyright &copy; 2020-&infin; <a href="/index.html">ARKFUTURE</a> | <a href="arkfuturestudio.html">ARKFUTURE STUDIO/GROUP/TEAM</a> | <a href="arklab.html">ARK LAB</a>. All rights reserved.</p>
     <p>All trademarks and resources are the property of their respective owners.</p>
     <p>----ALL by ARKFUTURE Management and Operation Working Group</p>
@@ -86,56 +86,56 @@ footer a:hover{color:var(--cyan)}
 </div>
 <script>
 const DATA = {
-  '搜索引擎': {
-    '百度': ['https://www.baidu.com/s?wd={q}', '搜索项'],
-    '必应': ['https://cn.bing.com/search?q={q}', '搜索项'],
-    '谷歌': ['https://www.google.com/search?q={q}', '搜索项'],
-    'Yandex': ['https://yandex.com/search?text={q}', '搜索项'],
-    'DuckDuckGo': ['https://duckduckgo.com/?q={q}', '搜索项'],
-    'Qwant': ['https://qwant.com/?q={q}', '搜索项'],
-    'Shodan': ['https://www.shodan.io/search?query={q}', '搜索项']
+  'Search Engines': {
+    'Baidu': ['https://www.baidu.com/s?wd={q}', 'Search term'],
+    'Bing': ['https://cn.bing.com/search?q={q}', 'Search term'],
+    'Google': ['https://www.google.com/search?q={q}', 'Search term'],
+    'Yandex': ['https://yandex.com/search?text={q}', 'Search term'],
+    'DuckDuckGo': ['https://duckduckgo.com/?q={q}', 'Search term'],
+    'Qwant': ['https://qwant.com/?q={q}', 'Search term'],
+    'Shodan': ['https://www.shodan.io/search?query={q}', 'Search term']
   },
-  'DARKNET搜索': {
-    'TorDex': ['http://tordexu73joywapk2txdr54jed4imqledpcvcuf75qsas2gwdgksvnyd.onion/search?query={q}', '搜索项'],
-    'OnDex': ['http://ondexcylxxxq6vcc62l3r2m6rypohvvymsvqeadhln5mjo73pf6ksjad.onion?query={q}', '搜索项'],
-    'TOR.LINK': ['https://tor.link/?q={q}', '搜索项'],
-    'OnionLand': ['https://onionlandsearchengine.net/search?q={q}', '搜索项'],
-    'I2P': ['https://i2psearch.com/search?q={q}', '搜索项']
+  'Darknet Search': {
+    'TorDex': ['http://tordexu73joywapk2txdr54jed4imqledpcvcuf75qsas2gwdgksvnyd.onion/search?query={q}', 'Search term'],
+    'OnDex': ['http://ondexcylxxxq6vcc62l3r2m6rypohvvymsvqeadhln5mjo73pf6ksjad.onion?query={q}', 'Search term'],
+    'TOR.LINK': ['https://tor.link/?q={q}', 'Search term'],
+    'OnionLand': ['https://onionlandsearchengine.net/search?q={q}', 'Search term'],
+    'I2P': ['https://i2psearch.com/search?q={q}', 'Search term']
   },
-  'XDCC搜索': {
-    'xdcc.eu': ['https://www.xdcc.eu/search.php?searchkey={q}', '搜索项'],
-    'NIBL': ['https://nibl.co.uk/search?query={q}', '搜索项'],
-    'animk': ['https://xdcc.animk.info/?search={q}', '搜索项'],
-    'lib.rs': ['https://lib.rs/search?q={q}', '搜索项'],
-    'sunxdcc': ['https://sunxdcc.com/deliver.php?sterm={q}&page={p}&name={n}', '搜索项', '页数', '名称'],
-    'skull': ['https://skullxdcc.com/ws.php?sterm={q}', '搜索项'],
-    'xdcc.rocks': ['https://www.xdcc.rocks/search/?searchword={q}', '搜索项'],
-    'xdcc-search': ['https://xdcc-search.com/?q={q}', '搜索项']
+  'XDCC Search': {
+    'xdcc.eu': ['https://www.xdcc.eu/search.php?searchkey={q}', 'Search term'],
+    'NIBL': ['https://nibl.co.uk/search?query={q}', 'Search term'],
+    'animk': ['https://xdcc.animk.info/?search={q}', 'Search term'],
+    'lib.rs': ['https://lib.rs/search?q={q}', 'Search term'],
+    'sunxdcc': ['https://sunxdcc.com/deliver.php?sterm={q}&page={p}&name={n}', 'Search term', 'Page', 'Name'],
+    'skull': ['https://skullxdcc.com/ws.php?sterm={q}', 'Search term'],
+    'xdcc.rocks': ['https://www.xdcc.rocks/search/?searchword={q}', 'Search term'],
+    'xdcc-search': ['https://xdcc-search.com/?q={q}', 'Search term']
   },
-  '软件包搜索': {
-    'repology': ['https://repology.org/projects/?search={a}&maintainer={b}&category={c}&inrepo={d}&notinrepo={e}&repos={f}&families={g}&repos_newest={h}&families_newest={i}', '软件包名', '维护者', '软件分类', '仓库中存在', '仓库中缺失', '仓库来源', '仓库家族', '拥有最新版的仓库', '拥有最新版的家族'],
-    'msys2': ['https://packages.msys2.org/search?q={q}&t=pkg', '搜索项']
+  'Package Search': {
+    'repology': ['https://repology.org/projects/?search={a}&maintainer={b}&category={c}&inrepo={d}&notinrepo={e}&repos={f}&families={g}&repos_newest={h}&families_newest={i}', 'Package name', 'Maintainer', 'Category', 'In repository', 'Missing in repository', 'Repository', 'Repository family', 'Repositories with newest version', 'Families with newest version'],
+    'msys2': ['https://packages.msys2.org/search?q={q}&t=pkg', 'Search term']
   },
-  '学术/论文搜索': {
-    'Scirp': ['https://www.scirp.org/journal/articles.aspx?searchcode={q}', '搜索项'],
-    'Scielo': ['https://search.scielo.org/?q={q}', '搜索项'],
-    'Arxiv': ['https://arxiv.org/search/?query={q}', '搜索项']
+  'Academic / Paper Search': {
+    'Scirp': ['https://www.scirp.org/journal/articles.aspx?searchcode={q}', 'Search term'],
+    'Scielo': ['https://search.scielo.org/?q={q}', 'Search term'],
+    'Arxiv': ['https://arxiv.org/search/?query={q}', 'Search term']
   },
-  '英汉词典': {
-    '金山词霸': ['https://www.iciba.com/word?w={q}', '搜索项'],
-    'WordNet': ['http://wordnetweb.princeton.edu/perl/webwn?s={q}', '搜索项'],
-    'Urban Dictionary': ['https://www.urbandictionary.com/define.php?term={q}', '搜索项']
+  'Dictionaries': {
+    'iCIBA': ['https://www.iciba.com/word?w={q}', 'Search term'],
+    'WordNet': ['http://wordnetweb.princeton.edu/perl/webwn?s={q}', 'Search term'],
+    'Urban Dictionary': ['https://www.urbandictionary.com/define.php?term={q}', 'Search term']
   },
-  '电台搜索': {
-    'radio-browser 名字': ['http://de1.api.radio-browser.info/xml/stations/search?name={q}&order={p}', '搜索项', '排序方式'],
+  'Radio Search': {
+    'radio-browser Name': ['http://de1.api.radio-browser.info/xml/stations/search?name={q}&order={p}', 'Search term', 'Sort order'],
     'radio-browser UUID': ['http://de1.api.radio-browser.info/xml/stations/byuuid?uuids={q}', 'UUID']
   },
-  '视频逃逸': {
-    '视频解析': ['https://jx.xmflv.com/?url={q}', '视频链接']
+  'Video Bypass': {
+    'Video Parser': ['https://jx.xmflv.com/?url={q}', 'Video URL']
   }
 };
 const LINKS = {
-  '操作系统': {
+  'Operating Systems': {
     'ParrotSec': 'https://parrotsec.org',
     'BlackArch': 'https://blackarch.org',
     'Debian': 'https://www.debian.org',
@@ -144,18 +144,18 @@ const LINKS = {
     'ImmortalWrt': 'https://firmware-selector.immortalwrt.org',
     'UUP dump': 'https://uupdump.net'
   },
-  'NTP 授时': {
-    '国家授时中心 NTP': 'http://ntp.ntsc.ac.cn',
-    '中国 NTP 快速授时': 'http://cn.ntp.org.cn',
-    '教育网专用 NTP': 'http://edu.ntp.org.cn'
+  'NTP Time': {
+    'National Time Service Center NTP': 'http://ntp.ntsc.ac.cn',
+    'China NTP Fast Time': 'http://cn.ntp.org.cn',
+    'CERNET NTP': 'http://edu.ntp.org.cn'
   },
   'Tracker': {
     'OpenTracker': 'http://opentrackr.org',
     'TrackersList': 'https://trackerslist.com'
   },
   'DNS': {
-    '阿里云 DoT': 'tls://dns.alidns.com',
-    '腾讯云 DoT': 'tls://dot.pub',
+    'Alibaba Cloud DoT': 'tls://dns.alidns.com',
+    'Tencent Cloud DoT': 'tls://dot.pub',
     'Cloudflare DoT': 'tls://1dot1dot1dot1.cloudflare-dns.com',
     'Cloudflare DoH': 'https://1.0.0.1/dns-query',
     'OpenDNS DoH': 'https://doh.opendns.com/dns-query'
@@ -197,7 +197,7 @@ function renderBoxes(){
     if(entries.length === 0){
       const empty = document.createElement('span');
       empty.style.cssText = 'font-size:.7rem;color:#666680';
-      empty.textContent = '暂无搜索项';
+      empty.textContent = 'No search engines';
       engs.appendChild(empty);
     }
     entries.forEach(([name, e])=>{
@@ -205,7 +205,7 @@ function renderBoxes(){
       b.type = 'button';
       b.className = 'eng' + (curEng && curEng.name === name && curEng.cat === cat ? ' on' : '');
       b.textContent = name;
-      b.title = e.tpl + (e.phs.length > 1 ? '(参数: ' + e.phs.slice(1).map(p=> p.label).join(' / ') + ')' : '');
+      b.title = e.tpl + (e.phs.length > 1 ? '(Params: ' + e.phs.slice(1).map(p=> p.label).join(' / ') + ')' : '');
       b.onclick = ()=>{ curEng = {name, tpl: e.tpl, phs: e.phs, cat}; refresh(); syncUrl(); };
       engs.appendChild(b);
     });
@@ -231,7 +231,7 @@ function renderLinks(){
     if(entries.length === 0){
       const empty = document.createElement('span');
       empty.style.cssText = 'font-size:.72rem;color:#666680';
-      empty.textContent = '暂无链接';
+      empty.textContent = 'No links';
       card.appendChild(empty);
     }
     entries.forEach(([name, url])=>{
@@ -265,7 +265,7 @@ function refresh(){
       input.type = 'text';
       input.autocomplete = 'off';
       input.maxLength = 200;
-      input.placeholder = '此参数为可选项';
+      input.placeholder = 'This parameter is optional';
       input.dataset.ph = ph.name;
       group.appendChild(label);
       group.appendChild(input);
@@ -367,4 +367,4 @@ q.addEventListener('input', syncUrl);
 </body>
 </html>
 
-<!-- 提交版本: v1.1 -->
+<!-- Commit version: v1.2 -->
