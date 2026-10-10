@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- update time 2026/10/06 | version v1.2 -->
+<!-- update time 2026/10/10 | version v1.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -94,14 +94,114 @@ const DATA = {
     'Yandex': ['https://yandex.com/search?text={a}', 'Search term'],
     'DuckDuckGo': ['https://duckduckgo.com/?q={a}', 'Search term'],
     'Qwant': ['https://qwant.com/?q={a}', 'Search term'],
-    'Shodan': ['https://www.shodan.io/search?query={a}', 'Search term']
+    'Brave': ['https://search.brave.com/search?q={a}', 'Search term'],
+    'Startpage': ['https://www.startpage.com/sp/search?query={a}', 'Search term'],
+    'Mojeek': ['https://www.mojeek.com/search?q={a}', 'Search term'],
+    'Ecosia': ['https://www.ecosia.org/search?q={a}', 'Search term']
+  },
+  'Code Search': {
+    'GitHub Code': ['https://github.com/search?q={a}&type=code', 'Search term'],
+    'Sourcegraph': ['https://sourcegraph.com/search?q={a}', 'Search term'],
+    'grep.app': ['https://grep.app/search?q={a}', 'Search term'],
+    'searchcode': ['https://searchcode.com/?q={a}', 'Search term'],
+    'Debian Codesearch': ['https://codesearch.debian.net/search?q={a}', 'Search term']
+  },
+  'Dev Docs / API': {
+    'cppreference': ['https://en.cppreference.com/w/index.php?search={a}', 'Search term'],
+    'MS Learn EN': ['https://learn.microsoft.com/en-us/search/?terms={a}', 'Search term'],
+    'MS Learn ZH': ['https://learn.microsoft.com/zh-cn/search/?terms={a}', 'Search term'],
+    'MDN': ['https://developer.mozilla.org/en-US/search?q={a}', 'Search term'],
+    'Stack Overflow': ['https://stackoverflow.com/search?q={a}', 'Search term'],
+    'Mankier': ['https://www.mankier.com/search?q={a}', 'Search term'],
+    'DevDocs': ['https://devdocs.io/#q={a}', 'Search term']
+  },
+  'Vulnerability': {
+    'Exploit-DB': ['https://www.exploit-db.com/search?q={a}', 'Search term'],
+    'NVD': ['https://nvd.nist.gov/vuln/search/results?query={a}', 'Search term'],
+    'MITRE CVE': ['https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword={a}', 'Keyword'],
+    'Sploitus': ['https://sploitus.com/?query={a}', 'Search term']
+  },
+  'Threat Intel': {
+    'VirusTotal': ['https://www.virustotal.com/gui/search/{a}', 'Hash, URL, domain or IP'],
+    'URLScan': ['https://urlscan.io/search/#{a}', 'Domain, URL or IP'],
+    'Hybrid Analysis': ['https://www.hybrid-analysis.com/search?query={a}', 'Search term'],
+    'ThreatFox': ['https://threatfox.abuse.ch/browse.php?search={a}', 'Search term'],
+    'MalwareBazaar': ['https://bazaar.abuse.ch/browse.php?search={a}', 'Search term'],
+    'GreyNoise': ['https://viz.greynoise.io/query/?gnql={a}', 'GNQL query'],
+    'AlienVault OTX': ['https://otx.alienvault.com/browse/?q={a}', 'Search term']
+  },
+  'Asset / Network': {
+    'Shodan': ['https://www.shodan.io/search?query={a}', 'Search term'],
+    'Censys': ['https://search.censys.io/search?resource=hosts&q={a}', 'Search term'],
+    'ZoomEye': ['https://www.zoomeye.org/searchResult?q={a}', 'Search term'],
+    'crt.sh': ['https://crt.sh/?q={a}', 'Domain or keyword'],
+    'BGP.HE.Net': ['https://bgp.he.net/search?search%5Bsearch%5D={a}&commit=Search', 'IP, ASN or domain'],
+    'ICANN Lookup': ['https://lookup.icann.org/en/lookup?name={a}', 'Domain name'],
+    'ipinfo': ['https://ipinfo.io/{a}', 'IP address'],
+    'SecurityTrails': ['https://securitytrails.com/domain/{a}', 'Domain name'],
+    'PublicWWW': ['https://publicwww.com/websites/{a}/', 'Source code snippet']
+  },
+  'Package Search': {
+    'repology': ['https://repology.org/projects/?search={a}&maintainer={b}&category={c}&inrepo={d}&notinrepo={e}&repos={f}&families={g}&repos_newest={h}&families_newest={i}', 'Package name', 'Maintainer', 'Category', 'In repository', 'Missing in repository', 'Repository', 'Repository family', 'Repositories with newest version', 'Families with newest version'],
+    'msys2': ['https://packages.msys2.org/search?q={a}&t=pkg', 'Search term'],
+    'pkgs.org': ['https://pkgs.org/search/?q={a}', 'Package name'],
+    'AUR': ['https://aur.archlinux.org/packages?K={a}', 'Package name'],
+    'Arch': ['https://archlinux.org/packages/?q={a}', 'Package name'],
+    'Debian': ['https://packages.debian.org/search?keywords={a}', 'Package name'],
+    'Ubuntu': ['https://packages.ubuntu.com/search?keywords={a}', 'Package name']
+  },
+  'Language Packages': {
+    'PyPI': ['https://pypi.org/search/?q={a}', 'Package name'],
+    'npm': ['https://www.npmjs.com/search?q={a}', 'Package name'],
+    'crates.io': ['https://crates.io/search?q={a}', 'Package name'],
+    'NuGet': ['https://www.nuget.org/packages?q={a}', 'Package name'],
+    'Go Packages': ['https://pkg.go.dev/search?q={a}', 'Package name'],
+    'Chocolatey': ['https://community.chocolatey.org/packages?q={a}', 'Package name']
+  },
+  'Academic / Paper Search': {
+    'Google Scholar': ['https://scholar.google.com/scholar?q={a}', 'Search term'],
+    'Semantic Scholar': ['https://www.semanticscholar.org/search?q={a}', 'Search term'],
+    'DBLP': ['https://dblp.org/search?q={a}', 'Search term'],
+    'Baidu Xueshu': ['https://xueshu.baidu.com/s?wd={a}', 'Search term'],
+    'Wanfang': ['https://s.wanfangdata.com.cn/paper?q={a}', 'Search term'],
+    'PubMed': ['https://pubmed.ncbi.nlm.nih.gov/?term={a}', 'Search term'],
+    'Arxiv': ['https://arxiv.org/search/?query={a}', 'Search term'],
+    'Scielo': ['https://search.scielo.org/?q={a}', 'Search term'],
+    'Scirp': ['https://www.scirp.org/journal/articles.aspx?searchcode={a}', 'Search term']
+  },
+  'Open Access / Books': {
+    'Open Library': ['https://openlibrary.org/search?q={a}', 'Search term'],
+    'CORE': ['https://core.ac.uk/search?q={a}', 'Search term'],
+    'Papers with Code': ['https://paperswithcode.com/search?q_meta={a}', 'Search term']
+  },
+  'Dictionaries': {
+    'iCIBA': ['https://www.iciba.com/word?w={a}', 'Word'],
+    'Wiktionary': ['https://en.wiktionary.org/w/index.php?search={a}', 'Word'],
+    'Etymonline': ['https://www.etymonline.com/search?q={a}', 'Word'],
+    'WordNet': ['http://wordnetweb.princeton.edu/perl/webwn?s={a}', 'Word'],
+    'Urban Dictionary': ['https://www.urbandictionary.com/define.php?term={a}', 'Term'],
+    'dict.cc': ['https://www.dict.cc/?s={a}', 'Word'],
+    'Thesaurus': ['https://www.thesaurus.com/browse/{a}', 'Word'],
+    'Jisho': ['https://jisho.org/search/{a}', 'Japanese word']
+  },
+  'Chinese Dictionaries': {
+    'Youdao': ['https://dict.youdao.com/result?word={a}&lang=en', 'Word'],
+    'Baidu Hanyu': ['https://hanyu.baidu.com/s?wd={a}&ptype=zici', 'Word'],
+    'Zdic': ['https://www.zdic.net/search?word={a}', 'Word']
+  },
+  'Media / Archive': {
+    'Internet Archive': ['https://archive.org/search?query={a}', 'Search term'],
+    'Wayback Machine': ['https://web.archive.org/web/*/{a}', 'URL to look up'],
+    'TMDB': ['https://www.themoviedb.org/search?query={a}', 'Search term'],
+    'MusicBrainz': ['https://musicbrainz.org/search?query={a}&type=release', 'Search term'],
+    'Discogs': ['https://www.discogs.com/search/?q={a}', 'Search term']
   },
   'Tor Search': {
     'TorDex': ['http://tordexu73joywapk2txdr54jed4imqledpcvcuf75qsas2gwdgksvnyd.onion/search?query={a}', 'Search term'],
     'OnDex': ['http://ondexcylxxxq6vcc62l3r2m6rypohvvymsvqeadhln5mjo73pf6ksjad.onion?query={a}', 'Search term'],
     'TOR.LINK': ['https://tor.link/?q={a}', 'Search term'],
     'OnionLand': ['https://onionlandsearchengine.net/search?q={a}', 'Search term']
-    },
+  },
   'I2P Search': {
     'I2P': ['https://i2psearch.com/search?q={a}', 'Search term']
   },
@@ -114,20 +214,6 @@ const DATA = {
     'skull': ['https://skullxdcc.com/ws.php?sterm={a}', 'Search term'],
     'xdcc.rocks': ['https://www.xdcc.rocks/search/?searchword={a}', 'Search term'],
     'xdcc-search': ['https://xdcc-search.com/?q={a}', 'Search term']
-  },
-  'Package Search': {
-    'repology': ['https://repology.org/projects/?search={a}&maintainer={b}&category={c}&inrepo={d}&notinrepo={e}&repos={f}&families={g}&repos_newest={h}&families_newest={i}', 'Package name', 'Maintainer', 'Category', 'In repository', 'Missing in repository', 'Repository', 'Repository family', 'Repositories with newest version', 'Families with newest version'],
-    'msys2': ['https://packages.msys2.org/search?q={a}&t=pkg', 'Search term']
-  },
-  'Academic / Paper Search': {
-    'Scirp': ['https://www.scirp.org/journal/articles.aspx?searchcode={a}', 'Search term'],
-    'Scielo': ['https://search.scielo.org/?q={a}', 'Search term'],
-    'Arxiv': ['https://arxiv.org/search/?query={a}', 'Search term']
-  },
-  'Dictionaries': {
-    'iCIBA': ['https://www.iciba.com/word?w={a}', 'Search term'],
-    'WordNet': ['http://wordnetweb.princeton.edu/perl/webwn?s={a}', 'Search term'],
-    'Urban Dictionary': ['https://www.urbandictionary.com/define.php?term={a}', 'Search term']
   },
   'Radio Search': {
     'radio-browser Name': ['http://de1.api.radio-browser.info/xml/stations/search?name={a}&order={b}', 'Search term', 'Sort order'],
@@ -164,7 +250,7 @@ const LINKS = {
     'OpenDNS DoH': 'https://doh.opendns.com/dns-query'
   },
   'MIRROR': {
-  'Certnet': 'https://mirrors.cernet.edu.cn/'
+    'Certnet': 'https://mirrors.cernet.edu.cn/'
   }
 };
 const boxEl = document.getElementById('catBoxes');
@@ -212,7 +298,7 @@ function renderBoxes(){
       b.className = 'eng' + (curEng && curEng.name === name && curEng.cat === cat ? ' on' : '');
       b.textContent = name;
       b.title = e.tpl + (e.phs.length > 1 ? '(Params: ' + e.phs.slice(1).map(p=> p.label).join(' / ') + ')' : '');
-      b.onclick = ()=>{ curEng = {name, tpl: e.tpl, phs: e.phs, cat}; refresh(); syncUrl(); };
+      b.onclick = ()=>{ curEng = {name, tpl: e.tpl, phs: e.phs, cat}; refresh(); syncUrl(); focusInput(); };
       engs.appendChild(b);
     });
     box.appendChild(head);
@@ -283,26 +369,44 @@ function refresh(){
 }
 function buildUrl(tpl, values){
   const hi = tpl.indexOf('#');
-  const hash = hi < 0 ? '' : tpl.slice(hi);
+  let hash = hi < 0 ? '' : tpl.slice(hi);
   const str = hi < 0 ? tpl : tpl.slice(0, hi);
   const qi = str.indexOf('?');
-  const base = qi < 0 ? str : str.slice(0, qi);
+  let base = qi < 0 ? str : str.slice(0, qi);
   const query = qi < 0 ? '' : str.slice(qi + 1);
+  const val = name=>{
+    const v = values[name];
+    return v === undefined || v === null || String(v).trim() === '' ? null : String(v).trim();
+  };
+  const fillQ = s=> s.replace(/\{([^{}]+)\}/g, (m, name)=>{
+    const v = val(name);
+    return v === null ? m : encodeURIComponent(v);
+  });
+  const fillP = s=> s.replace(/\/?\{([^{}]+)\}/g, (m, name)=>{
+    const v = val(name);
+    if(v === null) return '';
+    const enc = encodeURIComponent(v).replace(/%2F/gi, '/').replace(/%3A/gi, ':');
+    return m.charAt(0) === '/' ? '/' + enc : enc;
+  });
   const parts = [];
   query.split('&').forEach(seg=>{
     if(!seg) return;
-    const filled = seg.replace(/\{([^{}]+)\}/g, (m, name)=>{
-      const v = values[name];
-      return v === undefined || v === null || String(v).trim() === '' ? m : encodeURIComponent(String(v).trim());
-    });
+    const filled = fillQ(seg);
     if(filled.indexOf('{') >= 0) return;
     parts.push(filled);
   });
+  base = fillP(base);
+  hash = fillP(hash);
   return base + (parts.length > 0 ? '?' + parts.join('&') : '') + hash;
 }
 function jumpTo(url){
   if(!url) return;
   location.assign(url);
+}
+function focusInput(){
+  if(window.matchMedia && !window.matchMedia('(hover: hover)').matches) return;
+  q.focus();
+  q.select();
 }
 let urlTimer = 0;
 function syncUrl(){
@@ -340,7 +444,6 @@ q.addEventListener('input', syncUrl);
       curEng = {name: first, tpl: e0.tpl, phs: e0.phs, cat: firstCat};
     }
   }
-  renderBoxes();
   renderLinks();
   refresh();
   const urlParams = new URLSearchParams(location.search);
