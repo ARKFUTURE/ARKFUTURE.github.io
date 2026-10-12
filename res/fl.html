@@ -94,6 +94,10 @@ const DATA = {
     'Yandex': ['https://yandex.com/search?text={a}', 'Search term'],
     'DuckDuckGo': ['https://duckduckgo.com/?q={a}', 'Search term'],
     'Qwant': ['https://qwant.com/?q={a}', 'Search term'],
+    'Brave': ['https://search.brave.com/search?q={a}', 'Search term'],
+    'Startpage': ['https://www.startpage.com/sp/search?query={a}', 'Search term'],
+    'Mojeek': ['https://www.mojeek.com/search?q={a}', 'Search term'],
+    'Ecosia': ['https://www.ecosia.org/search?q={a}', 'Search term'],
     'Shodan': ['https://www.shodan.io/search?query={a}', 'Search term']
   },
   'Tor Search': {
@@ -101,7 +105,7 @@ const DATA = {
     'OnDex': ['http://ondexcylxxxq6vcc62l3r2m6rypohvvymsvqeadhln5mjo73pf6ksjad.onion?query={a}', 'Search term'],
     'TOR.LINK': ['https://tor.link/?q={a}', 'Search term'],
     'OnionLand': ['https://onionlandsearchengine.net/search?q={a}', 'Search term']
-    },
+  },
   'I2P Search': {
     'I2P': ['https://i2psearch.com/search?q={a}', 'Search term']
   },
@@ -117,7 +121,29 @@ const DATA = {
   },
   'Package Search': {
     'repology': ['https://repology.org/projects/?search={a}&maintainer={b}&category={c}&inrepo={d}&notinrepo={e}&repos={f}&families={g}&repos_newest={h}&families_newest={i}', 'Package name', 'Maintainer', 'Category', 'In repository', 'Missing in repository', 'Repository', 'Repository family', 'Repositories with newest version', 'Families with newest version'],
-    'msys2': ['https://packages.msys2.org/search?q={a}&t=pkg', 'Search term']
+    'msys2': ['https://packages.msys2.org/search?q={a}&t=pkg', 'Search term'],
+    'pkgs.org': ['https://pkgs.org/search/?q={a}', 'Package name'],
+    'AUR': ['https://aur.archlinux.org/packages?K={a}', 'Package name'],
+    'Arch': ['https://archlinux.org/packages/?q={a}', 'Package name'],
+    'Debian': ['https://packages.debian.org/search?keywords={a}', 'Package name'],
+    'Ubuntu': ['https://packages.ubuntu.com/search?keywords={a}', 'Package name']
+  },
+  'Vulnerability': {
+    'Exploit-DB': ['https://www.exploit-db.com/search?q={a}', 'Search term'],
+    'NVD': ['https://nvd.nist.gov/vuln/search/results?query={a}', 'Search term'],
+    'MITRE CVE': ['https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword={a}', 'Keyword'],
+    'Sploitus': ['https://sploitus.com/?query={a}', 'Search term']
+  },
+  'Asset / Network': {
+    'Shodan': ['https://www.shodan.io/search?query={a}', 'Search term'],
+    'Censys': ['https://search.censys.io/search?resource=hosts&q={a}', 'Search term'],
+    'ZoomEye': ['https://www.zoomeye.org/searchResult?q={a}', 'Search term'],
+    'crt.sh': ['https://crt.sh/?q={a}', 'Domain or keyword'],
+    'BGP.HE.Net': ['https://bgp.he.net/search?search%5Bsearch%5D={a}&commit=Search', 'IP, ASN or domain'],
+    'ICANN Lookup': ['https://lookup.icann.org/en/lookup?name={a}', 'Domain name'],
+    'ipinfo': ['https://ipinfo.io/{a}', 'IP address'],
+    'SecurityTrails': ['https://securitytrails.com/domain/{a}', 'Domain name'],
+    'PublicWWW': ['https://publicwww.com/websites/{a}/', 'Source code snippet']
   },
   'Academic / Paper Search': {
     'Scirp': ['https://www.scirp.org/journal/articles.aspx?searchcode={a}', 'Search term'],
