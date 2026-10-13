@@ -569,24 +569,6 @@ body::after {
     gap: var(--sp-3);
 }
 
-.drawer__blocks {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--sp-3);
-    align-items: start;
-}
-
-.drawer__block {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-2);
-    padding: var(--sp-3);
-    background: rgba(18, 18, 43, .5);
-    border: 1px solid var(--bd-subtle);
-    border-radius: var(--r-md);
-    min-width: 0;
-}
-
 .drawer__actions {
     grid-column: 1 / -1;
     display: flex;
@@ -623,8 +605,7 @@ body::after {
     color: rgba(255, 215, 64, .75);
 }
 
-.field__input,
-.select {
+.field__input {
     width: 100%;
     padding: 6px 9px;
     font-family: var(--font-mono);
@@ -640,8 +621,7 @@ body::after {
     color: var(--tx-faint);
 }
 
-.field__input:focus,
-.select:focus {
+.field__input:focus {
     border-color: rgba(0, 240, 255, .55);
     background: rgba(8, 8, 22, .95);
     box-shadow: 0 0 0 3px rgba(0, 240, 255, .07);
@@ -662,68 +642,6 @@ body::after {
     display: flex;
     gap: var(--sp-1);
     align-items: center;
-}
-
-.block__title {
-    font-family: var(--font-ui);
-    font-size: var(--fs-xs);
-    font-weight: 700;
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
-    color: var(--tx-muted);
-}
-
-.row {
-    display: flex;
-    gap: var(--sp-2);
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.taglist {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 5px;
-    min-height: 22px;
-}
-
-.taglist__empty {
-    font-size: var(--fs-xs);
-    letter-spacing: .4px;
-    color: var(--tx-faint);
-    padding: 2px 0;
-}
-
-.tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 6px 2px 9px;
-    font-size: var(--fs-xs);
-    color: var(--c-cyan);
-    background: rgba(0, 240, 255, .08);
-    border: 1px solid rgba(0, 240, 255, .2);
-    border-radius: var(--r-pill);
-}
-
-.tag__x {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 13px;
-    height: 13px;
-    font-size: 12px;
-    line-height: 1;
-    color: var(--tx-muted);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: color var(--t-fast), background var(--t-fast);
-}
-
-.tag__x:hover {
-    color: #fff;
-    background: var(--c-red);
 }
 
 .workspace {
@@ -1549,30 +1467,9 @@ body::after {
                 </div>
                 </div>
 
-                <div class="drawer__blocks">
-                <div class="drawer__block">
-                    <div class="block__title">Server Config</div>
-                    <div class="row">
-                        <select class="select" id="serverSelect" onchange="loadServerConfig()" style="flex:1 1 auto;min-width:0;">
-                            <option value="">-- Select Config --</option>
-                        </select>
-                        <button class="btn btn--sm" onclick="saveServerConfig()" title="Save current config">Save</button>
-                        <button class="btn btn--sm is-danger" onclick="deleteServerConfig()" title="Delete selected config">Delete</button>
-                    </div>
-                </div>
-
-                <div class="drawer__block">
-                    <div class="block__title">Favorite Channels</div>
-                    <div class="taglist" id="favChannelList"></div>
-                    <div class="row">
-                        <input class="field__input" type="text" id="favChannelInput" placeholder="#channel" style="flex:1 1 auto;min-width:0;" onkeydown="if(event.key==='Enter')addFavoriteChannel()" spellcheck="false">
-                        <button class="btn btn--sm" onclick="addFavoriteChannel()">Add</button>
-                    </div>
-                </div>
-                </div>
-
                 <input type="checkbox" id="autoReconnect" style="display:none;">
                 <div class="drawer__actions">
+                    <button class="btn btn--sm" onclick="clearChatHistory()" title="Clear cached chat history from this browser">Clear History</button>
                     <button class="btn btn--go" id="connectBtn" onclick="toggleConnection()">Connect</button>
                 </div>
             </div>
@@ -1670,10 +1567,22 @@ body::after {
         connectTimeout: 30000,
         logBufferMax: 1000,
         logDomMax: 500,
+        logRestore: 200,
         msgDomMax: 200,
         motdDomMax: 500,
         dbMax: 5500,
         dbKeep: 5000,
+        historyRestore: 200,
+        chatHistoryMax: 2000,
+        typingActivePause: 6000,
+        typingIdlePause: 30000,
+        sendWindowMs: 5000,
+        sendQueueDelay: 100,
+        errorShakeMs: 1200,
+        reconnectJitterMs: 2000,
+        batchStaleMs: 60000,
+        logReplayDelay: 800,
+        notifyBodyMax: 120,
         sendRateLimitMs: 350,
         sendRateBurst: 4,
         sendQueueMax: 20,
@@ -1748,6 +1657,8 @@ body::after {
         messageHistory: [],
         historyIndex: -1,
         isDisconnecting: false,
+        restoringHistory: false,
+        historyPruning: false,
         menuClickListener: null,
         sessionStartTime: null,
         sentCount: 0,
@@ -2019,13 +1930,18 @@ body::after {
     const Store = {
         openDB() {
             return new Promise((resolve, reject) => {
-                const req = indexedDB.open('irc_logs', 1);
+                const req = indexedDB.open('irc_logs', 2);
                 req.onupgradeneeded = e => {
                     const db = e.target.result;
                     if (!db.objectStoreNames.contains('messages')) {
                         const store = db.createObjectStore('messages', { keyPath: 'id', autoIncrement: true });
                         store.createIndex('timestamp', 'timestamp', { unique: false });
                         store.createIndex('channel', 'channel', { unique: false });
+                    }
+                    if (!db.objectStoreNames.contains('history')) {
+                        const hs = db.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
+                        hs.createIndex('channel', 'channel', { unique: false });
+                        hs.createIndex('timestamp', 'timestamp', { unique: false });
                     }
                 };
                 req.onsuccess = e => { S.db = e.target.result; resolve(S.db); };
@@ -2068,6 +1984,77 @@ body::after {
                     req.onerror = () => resolve([]);
                 } catch (e) { resolve([]); }
             });
+        },
+        putHistory(channel, username, text, color, timestamp) {
+            if (!S.db || typeof IDBKeyRange === 'undefined') return;
+            try {
+                const tx = S.db.transaction('history', 'readwrite');
+                const store = tx.objectStore('history');
+                store.add({
+                    channel: channel,
+                    username: username || '',
+                    text: text || '',
+                    color: color || 'var(--clr-font)',
+                    timestamp: timestamp || Date.now()
+                });
+            } catch (e) { }
+            this.pruneHistory(channel);
+        },
+        pruneHistory(channel) {
+            if (S.historyPruning || !S.db || typeof IDBKeyRange === 'undefined') return;
+            S.historyPruning = true;
+            const done = () => { S.historyPruning = false; };
+            try {
+                const store = S.db.transaction('history', 'readwrite').objectStore('history');
+                const countReq = store.index('channel').count(IDBKeyRange.only(channel));
+                countReq.onerror = done;
+                countReq.onsuccess = () => {
+                    const excess = countReq.result - LIMITS.chatHistoryMax;
+                    if (excess <= 0) { done(); return; }
+                    const delStore = S.db.transaction('history', 'readwrite').objectStore('history');
+                    const cursorReq = delStore.index('channel').openCursor(IDBKeyRange.only(channel), 'next');
+                    let deleted = 0;
+                    cursorReq.onerror = done;
+                    cursorReq.onsuccess = ev => {
+                        const cursor = ev.target.result;
+                        if (cursor && deleted < excess) { cursor.delete(); deleted++; cursor.continue(); }
+                        else done();
+                    };
+                };
+            } catch (e) { done(); }
+        },
+        recentHistory(channel, limit) {
+            return new Promise(resolve => {
+                if (!S.db || typeof IDBKeyRange === 'undefined') { resolve([]); return; }
+                try {
+                    const store = S.db.transaction('history', 'readonly').objectStore('history');
+                    const out = [];
+                    const req = store.index('channel').openCursor(IDBKeyRange.only(channel), 'prev');
+                    req.onsuccess = ev => {
+                        const cursor = ev.target.result;
+                        if (cursor && out.length < limit) { out.unshift(cursor.value); cursor.continue(); }
+                        else resolve(out);
+                    };
+                    req.onerror = () => resolve([]);
+                } catch (e) { resolve([]); }
+            });
+        },
+        clearStore(name) {
+            return new Promise(resolve => {
+                if (!S.db) { resolve(false); return; }
+                try {
+                    const tx = S.db.transaction(name, 'readwrite');
+                    tx.objectStore(name).clear();
+                    tx.oncomplete = () => resolve(true);
+                    tx.onerror = () => resolve(false);
+                } catch (e) { resolve(false); }
+            });
+        },
+        clearHistoryDB() {
+            return this.clearStore('history');
+        },
+        clearLogDB() {
+            return this.clearStore('messages');
         },
         async cryptoKey() {
             if (S.saslCryptoKey) return S.saslCryptoKey;
@@ -2135,141 +2122,6 @@ body::after {
                     if (plain) el('saslPasswordInput').value = plain;
                 }
             } catch (e) { Log.write('!SYS', 'ERR', 'Failed to load settings: ' + e.message); }
-        },
-        serverConfigs() {
-            try { return JSON.parse(localStorage.getItem('ircServerConfigs') || '[]'); }
-            catch (e) { return []; }
-        },
-        writeServerConfigs(list) { localStorage.setItem('ircServerConfigs', JSON.stringify(list)); },
-        refreshServerSelect() {
-            const select = el('serverSelect');
-            if (!select) return;
-            const configs = this.serverConfigs();
-            setHTML(select, '<option value="">-- Select Config --</option>');
-            configs.forEach((cfg, idx) => {
-                const opt = document.createElement('option');
-                opt.value = idx;
-                opt.textContent = cfg.name || ('Config ' + (idx + 1));
-                select.appendChild(opt);
-            });
-        },
-        saveServerConfig() {
-            const name = prompt('Enter config name:', '');
-            if (!name || !name.trim()) return;
-            const configs = this.serverConfigs();
-            const value = {
-                name: name.trim(),
-                url: el('wsUrl') ? el('wsUrl').value : '',
-                nickname: el('nickInput') ? el('nickInput').value : '',
-                channel: el('channelInput') ? el('channelInput').value : '',
-                saslAccount: el('saslAccountInput') ? el('saslAccountInput').value : '',
-                saslPassword: el('saslPasswordInput') ? el('saslPasswordInput').value : '',
-                autoReconnect: el('autoReconnect') ? el('autoReconnect').checked : false
-            };
-            const idx = configs.findIndex(c => c.name === value.name);
-            if (idx >= 0) configs[idx] = value;
-            else configs.push(value);
-            this.writeServerConfigs(configs);
-            this.refreshServerSelect();
-            this.saveSettings();
-            Log.write('!SYS', 'SYS', 'Server config "' + value.name + '" saved');
-        },
-        loadServerConfig() {
-            const select = el('serverSelect');
-            if (!select || select.value === '') return;
-            const cfg = this.serverConfigs()[parseInt(select.value, 10)];
-            if (!cfg) return;
-            if (S.isConnected) {
-                Log.write('!SYS', 'SYS', 'Switching server config — auto-disconnecting...');
-                S.autoReconnect = false;
-                if (el('autoReconnect')) el('autoReconnect').checked = false;
-                UI.refreshAutoReconnectItem();
-                S.isDisconnecting = true;
-                if (S.websocket) {
-                    try { if (S.websocket.readyState === WebSocket.OPEN) S.websocket.send('QUIT :Switching server config\r\n'); } catch (e) { }
-                    try { S.websocket.close(1000, 'Switching config'); } catch (e) { }
-                }
-                Log.write('!SYS', 'SYS', 'Config fields filled; disconnect in progress');
-            }
-            if (cfg.url) el('wsUrl').value = cfg.url;
-            if (cfg.nickname) el('nickInput').value = cfg.nickname;
-            if (cfg.channel) el('channelInput').value = cfg.channel;
-            if (cfg.saslAccount && el('saslAccountInput')) el('saslAccountInput').value = cfg.saslAccount;
-            if (cfg.saslPassword && el('saslPasswordInput')) el('saslPasswordInput').value = cfg.saslPassword;
-            if (cfg.autoReconnect !== undefined) {
-                el('autoReconnect').checked = cfg.autoReconnect;
-                S.autoReconnect = cfg.autoReconnect;
-            }
-            Log.write('!SYS', 'SYS', 'Server config "' + cfg.name + '" loaded');
-            this.saveSettings();
-        },
-        deleteServerConfig() {
-            const select = el('serverSelect');
-            if (!select || select.value === '') return;
-            const configs = this.serverConfigs();
-            const idx = parseInt(select.value, 10);
-            const name = configs[idx] ? configs[idx].name : '';
-            if (!confirm('Delete config "' + name + '"?')) return;
-            configs.splice(idx, 1);
-            this.writeServerConfigs(configs);
-            this.refreshServerSelect();
-            Log.write('!SYS', 'SYS', 'Server config "' + name + '" deleted');
-        },
-        favoriteChannels() {
-            try { return JSON.parse(localStorage.getItem('ircFavoriteChannels') || '[]'); }
-            catch (e) { return []; }
-        },
-        writeFavorites(list) { localStorage.setItem('ircFavoriteChannels', JSON.stringify(list)); },
-        refreshFavorites() {
-            const listEl = el('favChannelList');
-            if (!listEl) return;
-            listEl.replaceChildren();
-            const list = this.favoriteChannels();
-            if (!list.length) {
-                const hint = document.createElement('span');
-                hint.className = 'taglist__empty';
-                hint.textContent = 'No favorite channels yet';
-                listEl.appendChild(hint);
-                return;
-            }
-            list.forEach(ch => {
-                const tag = document.createElement('span');
-                tag.className = 'tag';
-                tag.textContent = ch;
-                const x = document.createElement('span');
-                x.className = 'tag__x';
-                x.textContent = '\u00d7';
-                x.addEventListener('click', () => this.removeFavorite(ch));
-                tag.appendChild(x);
-                listEl.appendChild(tag);
-            });
-        },
-        addFavorite() {
-            const input = el('favChannelInput');
-            if (!input) return;
-            let ch = input.value.trim();
-            if (!ch) return;
-            if (!Util.isChannel(ch)) ch = Util.chanPrefix() + ch;
-            const list = this.favoriteChannels();
-            if (list.indexOf(ch) >= 0) { input.value = ''; return; }
-            list.push(ch);
-            this.writeFavorites(list);
-            this.refreshFavorites();
-            input.value = '';
-            Log.write('!SYS', 'SYS', 'Favorite channel added: ' + ch);
-        },
-        removeFavorite(ch) {
-            this.writeFavorites(this.favoriteChannels().filter(c => c !== ch));
-            this.refreshFavorites();
-            Log.write('!SYS', 'SYS', 'Favorite channel removed: ' + ch);
-        },
-        autoJoinFavorites() {
-            if (!S.isConnected) return;
-            this.favoriteChannels().forEach(ch => {
-                if (ch && Util.isChannel(ch) && !Util.equal(ch, S.channelName)) {
-                    setTimeout(() => Net.send('JOIN ' + ch), 300);
-                }
-            });
         }
     };
 
@@ -2380,6 +2232,11 @@ body::after {
             const out = this.output();
             if (out) out.replaceChildren();
             this.clearSearch();
+            Store.clearLogDB().then(ok => {
+                this.write('!SYS', 'SYS', ok
+                    ? 'Debug log cleared (memory + IndexedDB)'
+                    : 'Debug log cleared (memory only - IndexedDB unavailable)');
+            });
         },
         search() {
             const input = el('logSearchInput');
@@ -2521,6 +2378,7 @@ body::after {
             };
             S.channelMap.set(name, channel);
             S.activeChannel = channel;
+            this.restore(name);
             this.show(name);
             Log.write('!SYS', 'TAB', 'Tab created: "' + name + '" | users: ' + !!withUsers + ' | total: ' + S.channelMap.size);
             return channel;
@@ -2713,6 +2571,24 @@ body::after {
             out.appendChild(p);
             while (out.children.length > LIMITS.msgDomMax) out.removeChild(out.children[0]);
             requestAnimationFrame(() => out.scrollTop = out.scrollHeight);
+            if (!S.restoringHistory && channel.name) {
+                let tsMs = Date.now();
+                if (serverTime) {
+                    const parsed = new Date(serverTime).getTime();
+                    if (!isNaN(parsed)) tsMs = parsed;
+                }
+                Store.putHistory(channel.name, username || '', message || '', color, tsMs);
+            }
+        },
+        async restore(name) {
+            if (!S.db) return;
+            const ch = S.channelMap.get(name);
+            if (!ch) return;
+            const rows = await Store.recentHistory(name, LIMITS.historyRestore);
+            if (!rows || !rows.length) return;
+            S.restoringHistory = true;
+            rows.forEach(r => this.write(r.color, r.text, ch, r.username, new Date(r.timestamp).toISOString()));
+            S.restoringHistory = false;
         },
         writeMotd(rawText) {
             if (!S.statusChannel || !S.statusChannel.messages) return;
@@ -2785,7 +2661,7 @@ body::after {
                 const timer = setTimeout(() => {
                     const s = S.remoteTyping.get(target);
                     if (s) { s.delete(nick); this.updateUI(target); }
-                }, status === 'active' ? 6000 : 30000);
+                }, status === 'active' ? LIMITS.typingActivePause : LIMITS.typingIdlePause);
                 state.set(nick, { status: status, timer: timer });
             }
             if (S.activeChannel && S.activeChannel.name === target) this.updateUI(target);
@@ -2836,7 +2712,7 @@ body::after {
             if (S.sendQueueTimer) { clearTimeout(S.sendQueueTimer); S.sendQueueTimer = null; }
             if (!S.sendQueue.length) return;
             const now = Date.now();
-            if (now - S.sendWindowStart > 5000) { S.sendBurstCount = 0; S.sendWindowStart = now; }
+            if (now - S.sendWindowStart > LIMITS.sendWindowMs) { S.sendBurstCount = 0; S.sendWindowStart = now; }
             if (S.sendBurstCount >= LIMITS.sendRateBurst) {
                 S.sendQueueTimer = setTimeout(() => {
                     S.sendQueueTimer = null;
@@ -2849,7 +2725,7 @@ body::after {
             this.send(S.sendQueue.shift());
             S.sendBurstCount++;
             if (S.sendQueue.length) {
-                const delay = S.sendBurstCount >= LIMITS.sendRateBurst ? LIMITS.sendRateLimitMs : 100;
+                const delay = S.sendBurstCount >= LIMITS.sendRateBurst ? LIMITS.sendRateLimitMs : LIMITS.sendQueueDelay;
                 S.sendQueueTimer = setTimeout(() => { S.sendQueueTimer = null; this.flushQueue(); }, delay);
             }
         },
@@ -2911,7 +2787,7 @@ body::after {
                 return;
             }
             if (!S.nickname) {
-                S.nickname = 'Guest_' + Util.randomString(6);
+                S.nickname = 'Guest_' + Util.randomString(5);
                 nickInput.value = S.nickname;
                 Log.write('!SYS', 'SYS', 'Nickname was empty — auto-generated: ' + S.nickname);
             }
@@ -2920,7 +2796,7 @@ body::after {
                 nickInput.classList.add('is-error');
                 nickInput.focus();
                 nickInput.select();
-                setTimeout(() => nickInput.classList.remove('is-error'), 1200);
+                setTimeout(() => nickInput.classList.remove('is-error'), LIMITS.errorShakeMs);
                 connectBtn.textContent = 'Connect';
                 connectBtn.disabled = false;
                 wsUrlInput.disabled = false;
@@ -3193,7 +3069,7 @@ body::after {
             if (S.autoReconnect && S.reconnectAttempts < LIMITS.maxReconnectAttempts) {
                 S.reconnectAttempts++;
                 const base = LIMITS.reconnectDelay * S.reconnectAttempts;
-                const jitter = Math.random() * 2000;
+                const jitter = Math.random() * LIMITS.reconnectJitterMs;
                 const delay = base + jitter;
                 Log.write('!SYS', 'RECON', 'Attempt ' + S.reconnectAttempts + '/' + LIMITS.maxReconnectAttempts + ' scheduled in ' + Math.floor(delay / 1000) + 's');
                 S.reconnectTimer = setTimeout(() => {
@@ -3276,6 +3152,16 @@ body::after {
             const checkbox = el('autoReconnect');
             const item = document.querySelector('.menu__item[data-act="auto-reconnect"]');
             if (item && checkbox) item.classList.toggle('is-on', checkbox.checked);
+        },
+        async clearHistory() {
+            if (typeof window.confirm === 'function' && !window.confirm('Clear all cached chat history? This cannot be undone.')) return;
+            const ok = await Store.clearHistoryDB();
+            S.channelMap.forEach(ch => { if (ch.messages) ch.messages.replaceChildren(); });
+            S.restoringHistory = true;
+            Chan.write('var(--clr-info)', ok
+                ? 'Chat history cache cleared (' + S.channelMap.size + ' channels)'
+                : 'Failed to clear chat history cache', S.statusChannel, '*');
+            S.restoringHistory = false;
         },
         showSSLWarning(url) {
             const warning = el('sslWarning');
@@ -3697,7 +3583,7 @@ body::after {
                                 S.batchBuffer.delete(ref);
                                 S.batchCleanupTimers.delete(ref);
                             }
-                        }, 60000));
+                        }, LIMITS.batchStaleMs));
                         return;
                     }
                 }
@@ -4085,9 +3971,8 @@ body::after {
             Log.write('\u2193RX', 'IRC', 'RPL_WELCOME — auto-joining: ' + S.channelName);
             Net.send('JOIN ' + S.channelName);
         } else Log.write('\u2193RX', 'IRC', 'RPL_WELCOME — no auto-join configured');
-        Store.autoJoinFavorites();
         setTimeout(async () => {
-            const logs = await Store.recentLogs(200);
+            const logs = await Store.recentLogs(LIMITS.logRestore);
             if (logs.length && S.statusChannel) {
                 Chan.write('var(--clr-text-dim)', '── Session restored ──', S.statusChannel, '*');
                 let i = 0;
@@ -4103,7 +3988,7 @@ body::after {
                 };
                 requestAnimationFrame(insert);
             }
-        }, 800);
+        }, LIMITS.logReplayDelay);
     });
     const ISUPPORT_FLAGS = ['SAFELIST', 'UTF8ONLY', 'EXCEPTS', 'INVEX', 'WALLVOICES', 'WHOX'];
     C.set('005', (nick, data) => {
@@ -4343,7 +4228,7 @@ body::after {
         if (!Util.equal(nick, S.nickname) && Util.canon(text).includes(Util.canon(S.nickname)) && document.hidden && 'Notification' in window && Notification.permission === 'granted') {
             try {
                 const notif = new Notification('IRC: You were mentioned', {
-                    body: nick + ': ' + text.substring(0, 120),
+                    body: nick + ': ' + text.substring(0, LIMITS.notifyBodyMax),
                     icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="%2300f0ff"/></svg>'
                 });
                 notif.onclick = () => { window.focus(); if (channel) Chan.show(channel.name); };
@@ -4427,7 +4312,7 @@ body::after {
                     S.batchBuffer.delete(ref);
                     S.batchCleanupTimers.delete(ref);
                 }
-            }, 60000));
+            }, LIMITS.batchStaleMs));
             Log.write('!SYS', 'BATCH', 'Start: ref=' + ref + ' type=' + type);
         } else if (refStr.startsWith('-')) {
             const ref = refStr.substring(1);
@@ -4543,8 +4428,6 @@ body::after {
             }
         });
 
-        Store.refreshServerSelect();
-        Store.refreshFavorites();
         applyUrlParams();
         if (!el('wsUrl').value) el('wsUrl').value = DEFAULT_WS_URL;
         if (!el('channelInput').value) el('channelInput').value = DEFAULT_CHANNEL;
@@ -4585,6 +4468,7 @@ body::after {
     window.toggleSettings = () => UI.toggleSettings();
     window.toggleLog = () => Log.toggle();
     window.clearLog = () => Log.clear();
+    window.clearChatHistory = () => UI.clearHistory();
     window.showPrivateChatList = () => Chan.listPrivate();
     window.showSSLWarning = () => UI.showSSLWarning();
     window.toggleAutoReconnect = () => UI.toggleAutoReconnect();
@@ -4600,11 +4484,6 @@ body::after {
     window.requestWho = target => IRC.requestWho(target);
     window.searchLog = () => Log.search();
     window.clearLogSearch = () => Log.clearSearch();
-    window.saveServerConfig = () => Store.saveServerConfig();
-    window.loadServerConfig = () => Store.loadServerConfig();
-    window.deleteServerConfig = () => Store.deleteServerConfig();
-    window.addFavoriteChannel = () => Store.addFavorite();
-    window.removeFavoriteChannel = ch => Store.removeFavorite(ch);
     window.writeToLog = (direction, module, message) => Log.write(direction, module, message);
     window.renderLogEntry = entry => Log.renderEntry(entry);
     window.setLogView = mode => Log.setView(mode);
