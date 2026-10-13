@@ -1661,6 +1661,7 @@ body::after {
     const setHTML = (el, html) => { el.innerHTML = ttPolicy ? ttPolicy.createHTML(html) : html; };
 
     const DEFAULT_WS_URL = 'wss://irc.arkfuture.top:8097';
+    const DEFAULT_CHANNEL = '#arkfuture_studio';
 
     const LIMITS = {
         maxReconnectAttempts: 5,
@@ -1900,6 +1901,23 @@ body::after {
             });
         },
         byteLength: str => new TextEncoder().encode(str).length,
+        randomString(n) {
+            const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const len = chars.length;
+            const limit = Math.floor(256 / len) * len;
+            const csrng = (typeof crypto !== 'undefined' && crypto && crypto.getRandomValues)
+                ? crypto.getRandomValues.bind(crypto) : null;
+            let out = '';
+            while (out.length < n) {
+                const buf = new Uint8Array((n - out.length) * 2 + 8);
+                if (csrng) csrng(buf);
+                else for (let i = 0; i < buf.length; i++) buf[i] = Math.floor(Math.random() * 256);
+                for (let i = 0; i < buf.length && out.length < n; i++) {
+                    if (buf[i] < limit) out += chars[buf[i] % len];
+                }
+            }
+            return out;
+        },
         splitMessage(message) {
             if (!message) return [''];
             const isPrivmsg = message.toLowerCase().startsWith('privmsg ');
@@ -2893,7 +2911,7 @@ body::after {
                 return;
             }
             if (!S.nickname) {
-                S.nickname = 'Guest_' + Math.floor(Math.random() * 9000 + 1000);
+                S.nickname = 'Guest_' + Util.randomString(6);
                 nickInput.value = S.nickname;
                 Log.write('!SYS', 'SYS', 'Nickname was empty — auto-generated: ' + S.nickname);
             }
@@ -4529,6 +4547,7 @@ body::after {
         Store.refreshFavorites();
         applyUrlParams();
         if (!el('wsUrl').value) el('wsUrl').value = DEFAULT_WS_URL;
+        if (!el('channelInput').value) el('channelInput').value = DEFAULT_CHANNEL;
 
         if (window.frameElement) {
             const caption = el('caption');
