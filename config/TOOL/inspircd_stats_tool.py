@@ -863,7 +863,7 @@ def serve(port):
         print("端口 %d 无法绑定:%s" % (port, exc))
         print("请修改文件顶部的 LOCAL_PORT,或用命令行参数指定端口:python irc_stats_dashboard.py 8080")
         return
-    print("监控台已启动 (Ctrl+C 停止)" % port)
+    print("监控台已启动 (Ctrl+C 停止) %d" % port)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
