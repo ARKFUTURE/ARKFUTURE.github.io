@@ -746,9 +746,9 @@ INDEX_HTML = HTML_PAGE.encode("utf-8")
 LOCAL_PORT = 6666
 FETCH_TIMEOUT = 8
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else LOCAL_PORT
-SERVER_URL = "http://127.0.0.1:7654/stats"
-SERVER_USER = "arkfutureadmin"
-SERVER_PASSWORD = "zomAmcCrUpLOgCCYuZFcCWHohvZv"
+SERVER_URL = "https://X/stats"
+SERVER_USER = ""
+SERVER_PASSWORD = ""
 
 
 def xml_to_obj(elem):
